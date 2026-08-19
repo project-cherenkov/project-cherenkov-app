@@ -4,10 +4,6 @@ An Indonesian OSN (olympiad) editorial archive — informatics, physics, and
 astronomy proofs, each paired with a working interactive visualization.
 Indexed by **principle** and **error type**, not by chapter.
 
-This is **Phase 1**: a public, no-login archive. Phase 2 (accounts + a
-study planner for TKA/UTBK prep) is architected but not built — see
-[`docs/phase-2-architecture.md`](./docs/phase-2-architecture.md).
-
 ## Stack
 
 Next.js (App Router) + TypeScript · Tailwind CSS + shadcn/ui-style
