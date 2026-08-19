@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* KaTeX's own stylesheet is intentionally NOT imported here — it's imported
+   inside components/site/math.tsx instead, so it only ships to pages that
+   actually render math (Non-Functional Requirements §8: code-split KaTeX
+   per editorial page rather than loading it globally). */
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-cherenkov-offwhite text-slate-900 antialiased;
+  }
+
+  /* Visible keyboard focus everywhere, including on the viz sliders/canvas
+     controls — non-functional requirement §8 calls out keyboard operability
+     explicitly. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-cherenkov-offwhite;
+  }
+
+  ::selection {
+    @apply bg-cherenkov-pink text-slate-900;
+  }
+}
+
+@layer utilities {
+  /* Code-styled section labels (readme.md, archive.log, about.md) — the
+     catournament.org-style visual precedent named in spec §4. */
+  .label-code {
+    @apply font-mono text-xs uppercase tracking-wider text-slate-500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

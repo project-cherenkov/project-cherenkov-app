@@ -1,0 +1,84 @@
+{
+  "site": {
+    "name": "Cherenkov",
+    "tagline": "[PLACEHOLDER — one-line concept explainer, not yet written]"
+  },
+  "nav": {
+    "home": "Home",
+    "archive": "Archive",
+    "about": "About",
+    "repo": "GitHub"
+  },
+  "home": {
+    "eyebrow": "readme.md",
+    "heroTitle": "[PLACEHOLDER — hero headline TBD]",
+    "heroBody": "[PLACEHOLDER — hero subhead / concept explainer TBD. One line: what Cherenkov is and who it's for.]",
+    "ctaArchive": "Browse the archive",
+    "ctaAbout": "Read the philosophy",
+    "recentHeading": "requirements.txt — recent editorials",
+    "recentEmpty": "No editorials published yet."
+  },
+  "archive": {
+    "eyebrow": "archive.log",
+    "title": "Archive",
+    "description": "Indexed by principle and error type — not by chapter.",
+    "filters": {
+      "subject": "Subject",
+      "principle": "Principle",
+      "errorType": "Error type",
+      "allSubjects": "All subjects",
+      "allPrinciples": "All principles",
+      "allErrorTypes": "All error types",
+      "clear": "Clear filters"
+    },
+    "empty": "No editorials match these filters.",
+    "count": "{count, plural, =0 {No editorials} one {# editorial} other {# editorials}}"
+  },
+  "editorial": {
+    "sections": {
+      "hook": "The hook",
+      "problem": "The problem",
+      "idea": "The idea",
+      "interactive": "Try it",
+      "proof": "Full proof",
+      "tags": "Tags"
+    },
+    "principleLabel": "Principle",
+    "errorTypeLabel": "Error type",
+    "byAuthor": "Written by {author}",
+    "vizMissing": "[PLACEHOLDER — this editorial has no interactive visualization configured, which conflicts with the site's non-negotiable rule. Flagged for review.]",
+    "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default — move the tag in the MDX body to reposition it.",
+    "backToArchive": "Back to archive"
+  },
+  "viz": {
+    "play": "Play",
+    "pause": "Pause",
+    "stepBack": "Step back",
+    "stepForward": "Step forward",
+    "reset": "Reset",
+    "scrub": "Scrub through steps",
+    "stepCounter": "Step {current} of {total}",
+    "transitCurve": "Transit light curve (schematic)"
+  },
+  "about": {
+    "eyebrow": "about.md",
+    "title": "About",
+    "philosophyPlaceholder": "[PLACEHOLDER — philosophy / identity copy TBD]",
+    "teamHeading": "Team",
+    "teamPlaceholder": "[PLACEHOLDER — team bios TBD]",
+    "repoHeading": "Source",
+    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file — see the commit history and contribute on GitHub."
+  },
+  "footer": {
+    "tagline": "[PLACEHOLDER — footer tagline TBD]",
+    "madeBy": "A public-repo project by the Cherenkov team."
+  },
+  "phase2": {
+    "comingSoon": "Coming soon",
+    "loginTitle": "Log in",
+    "signupTitle": "Sign up",
+    "plannerTitle": "Study planner",
+    "comingSoonBody": "Accounts and the study planner aren't built yet — everything in the archive is free to use without one.",
+    "backHome": "Back to Cherenkov"
+  }
+}

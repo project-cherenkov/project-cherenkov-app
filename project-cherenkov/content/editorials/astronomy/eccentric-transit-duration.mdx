@@ -1,0 +1,83 @@
+---
+title: "Eccentric Orbits Have Uneven Transits — Here's Why"
+subject: astronomy
+hook: "A planet doesn't cross its star's disc at the same speed everywhere in its orbit — eccentricity decides how fast."
+tags: ["exoplanets", "transit-photometry", "keplers-second-law"]
+principle: "keplers-second-law-and-transit-duration"
+errorType: "assuming-constant-orbital-speed"
+vizEngine: "orbital-sandbox"
+vizConfig:
+  eccentricity: 0.3
+  semiMajorAxisPx: 130
+  periodSeconds: 6
+  massRatio: 0.05
+  transitDepth: 0.015
+  eccentricityRange: [0, 0.8]
+  massRatioRange: [0, 0.15]
+publishedAt: "2026-08-01"
+author: "PLACEHOLDER Author Name"
+---
+
+## The problem
+
+Two planets, same orbital period, same star, same planet-to-star size
+ratio — one on a circular orbit, one on an eccentric one. Do their transits
+(the dip in starlight while the planet crosses the star's disc) last the
+same amount of time? It's tempting to say yes, since "same period, same
+sizes" sounds like it should fix everything else. It doesn't.
+
+## The idea
+
+A planet on an eccentric orbit does **not** move at constant angular speed
+— it moves fastest near periapsis (closest approach) and slowest near
+apoapsis (farthest point). That's Kepler's second law: equal areas swept in
+equal times. If a transit happens to occur near periapsis, the planet is
+whipping through that part of its orbit and crosses the star's disc
+quickly. Near apoapsis, it dawdles, and the same disc-crossing takes
+longer.
+
+The sandbox below assumes the simplest case — a transit aligned with
+periapsis — and shows the same eccentricity value driving both the orbit
+shape and the transit light curve underneath it. Push eccentricity up and
+watch the dip narrow.
+
+<Interactive />
+
+## Full proof
+
+**Setup.** Mean anomaly $M$ increases uniformly in time by definition:
+$M = nt$, where $n = 2\pi/T$ is the mean motion and $T$ is the orbital
+period. Kepler's equation relates $M$ to the eccentric anomaly $E$:
+
+$$M = E - e\sin E \implies \frac{dM}{dE} = 1 - e\cos E$$
+
+**Modeling convention.** Treat a transit as the planet crossing a fixed
+window of eccentric anomaly $[-\Delta E, \Delta E]$ centered on periapsis
+($E = 0$) — a simplification. (A real transit is a fixed window of *true*
+anomaly — the star's actual angular size as seen from the planet — not
+eccentric anomaly; the two only agree to leading order for small $\Delta E$,
+which is the regime a distant star's disc puts us in anyway.) This is
+exactly the convention the interactive above computes.
+
+**Duration.** Because $M$ is uniform in time, the time spent between
+$E=-\Delta E$ and $E=\Delta E$ is:
+
+$$\Delta t = \frac{\Delta M}{n} = \frac{1}{n}\int_{-\Delta E}^{\Delta E} (1 - e\cos E)\, dE$$
+
+For small $\Delta E$, $\cos E \approx 1$ across the whole window, giving:
+
+$$\Delta t \approx \frac{2\Delta E(1-e)}{n} = \frac{\Delta E (1-e)\, T}{\pi} \qquad \blacksquare$$
+
+**Consequence.** For a periapsis-aligned transit, duration shrinks linearly
+toward zero as $e \to 1$ — the planet is moving fastest exactly where the
+transit happens. Flip the alignment to apoapsis and the sign of the effect
+flips too: eccentricity would *lengthen* the transit instead.
+
+**Where it breaks in practice.** The error this editorial is filed under —
+assuming constant orbital speed — is really two errors that compound: (1)
+forgetting that speed varies around an eccentric orbit at all, and (2)
+even granting that, assuming the *transit* necessarily lands at periapsis.
+Real transiting systems can have any argument of periapsis, and duration
+depends on both — this sandbox fixes the alignment to periapsis to isolate
+just the eccentricity effect cleanly. Don't reach for the formula above on
+a system where periapsis-alignment isn't actually given.

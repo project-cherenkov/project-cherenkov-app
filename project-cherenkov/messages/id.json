@@ -1,0 +1,84 @@
+{
+  "site": {
+    "name": "Cherenkov",
+    "tagline": "[PLACEHOLDER — penjelasan konsep satu baris, belum ditulis]"
+  },
+  "nav": {
+    "home": "Beranda",
+    "archive": "Arsip",
+    "about": "Tentang",
+    "repo": "GitHub"
+  },
+  "home": {
+    "eyebrow": "readme.md",
+    "heroTitle": "[PLACEHOLDER — judul utama belum ditentukan]",
+    "heroBody": "[PLACEHOLDER — penjelasan konsep di hero, belum ditulis. Satu kalimat: apa itu Cherenkov dan untuk siapa.]",
+    "ctaArchive": "Jelajahi arsip",
+    "ctaAbout": "Baca filosofinya",
+    "recentHeading": "requirements.txt — edisi terbaru",
+    "recentEmpty": "Belum ada edisi yang diterbitkan."
+  },
+  "archive": {
+    "eyebrow": "archive.log",
+    "title": "Arsip",
+    "description": "Diindeks berdasarkan prinsip dan jenis kesalahan — bukan berdasarkan bab.",
+    "filters": {
+      "subject": "Bidang",
+      "principle": "Prinsip",
+      "errorType": "Jenis kesalahan",
+      "allSubjects": "Semua bidang",
+      "allPrinciples": "Semua prinsip",
+      "allErrorTypes": "Semua jenis kesalahan",
+      "clear": "Hapus filter"
+    },
+    "empty": "Tidak ada edisi yang cocok dengan filter ini.",
+    "count": "{count, plural, other {# edisi}}"
+  },
+  "editorial": {
+    "sections": {
+      "hook": "Pembuka",
+      "problem": "Soal",
+      "idea": "Ide",
+      "interactive": "Coba sendiri",
+      "proof": "Pembuktian lengkap",
+      "tags": "Tag"
+    },
+    "principleLabel": "Prinsip",
+    "errorTypeLabel": "Jenis kesalahan",
+    "byAuthor": "Ditulis oleh {author}",
+    "vizMissing": "[PLACEHOLDER — edisi ini belum punya visualisasi interaktif, bertentangan dengan aturan wajib situs. Ditandai untuk ditinjau.]",
+    "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default — pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
+    "backToArchive": "Kembali ke arsip"
+  },
+  "viz": {
+    "play": "Putar",
+    "pause": "Jeda",
+    "stepBack": "Mundur satu langkah",
+    "stepForward": "Maju satu langkah",
+    "reset": "Atur ulang",
+    "scrub": "Geser antar langkah",
+    "stepCounter": "Langkah {current} dari {total}",
+    "transitCurve": "Kurva cahaya transit (skematik)"
+  },
+  "about": {
+    "eyebrow": "about.md",
+    "title": "Tentang",
+    "philosophyPlaceholder": "[PLACEHOLDER — teks filosofi/identitas belum ditulis]",
+    "teamHeading": "Tim",
+    "teamPlaceholder": "[PLACEHOLDER — bio tim belum ditulis]",
+    "repoHeading": "Sumber",
+    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git — lihat riwayat commit dan berkontribusi di GitHub."
+  },
+  "footer": {
+    "tagline": "[PLACEHOLDER — tagline footer belum ditulis]",
+    "madeBy": "Proyek repo publik oleh tim Cherenkov."
+  },
+  "phase2": {
+    "comingSoon": "Segera hadir",
+    "loginTitle": "Masuk",
+    "signupTitle": "Daftar",
+    "plannerTitle": "Rencana belajar",
+    "comingSoonBody": "Akun dan rencana belajar belum dibuat — semua isi arsip bisa diakses gratis tanpa akun.",
+    "backHome": "Kembali ke Cherenkov"
+  }
+}
