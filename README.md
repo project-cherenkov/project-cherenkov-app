@@ -34,9 +34,19 @@ If your editor complains that `#content` can't be found, or a fresh clone
 fails to type-check, run `pnpm generate` once to produce `.velite/`
 directly.
 
-Phase 1 needs **no environment variables** — there's no database or auth
-yet, content is just git-committed MDX. See `.env.example` for what Phase
-2 will eventually need.
+Core Phase 1 needs **no environment variables** — there's no database or
+auth yet, content is just git-committed MDX. Two optional additions do use
+env vars; see `.env.example` for the full list and defaults:
+
+- **Keystatic** (`/keystatic`, in-site editing): with no env vars set, it
+  runs in local-storage mode against your working copy — nothing extra to
+  configure. `KEYSTATIC_GITHUB_CLIENT_ID`/`_SECRET`/`_SECRET` and
+  `KEYSTATIC_GITHUB_REPO` switch it to GitHub-storage mode for production.
+- **Vercel Blob** (team-photo upload, `app/api/team-photo/route.ts`): needs
+  `BLOB_READ_WRITE_TOKEN` from a Vercel Blob store. Without it, the upload
+  route returns a clear 503 rather than failing at Blob's own API.
+
+See `.env.example` for what Phase 2 will eventually need.
 
 ## Project structure
 

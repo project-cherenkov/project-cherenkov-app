@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
-import "../globals.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -42,17 +41,19 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
 
+  // <html>/<body> now live in app/layout.tsx (the actual App Router root
+  // layout) — see the comment there for why. This layout no longer renders
+  // them itself; `lang={locale}` moves there too since it can't be set
+  // dynamically per-locale from the real root, but every route under this
+  // segment sets it via next-intl's own <html lang> handling in
+  // NextIntlClientProvider is not applicable here — see note below.
   return (
-    <html lang={locale}>
-      <body className="font-sans">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-          </div>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+      </div>
+    </NextIntlClientProvider>
   );
 }
