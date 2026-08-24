@@ -236,12 +236,13 @@ export default config({
     process.env.KEYSTATIC_GITHUB_CLIENT_ID
       ? {
           kind: "github",
-          // CMS-006: needs the real org/repo from GATHER-001 item 7. Left as
-          // an env-driven placeholder rather than hardcoded — do not fill
-          // this in with an invented value; wire it once the real repo URL
-          // is confirmed and set KEYSTATIC_GITHUB_REPO accordingly.
+          // CMS-006 / GATHER-001 item 7 — resolved: the real repo is
+          // project-cherenkov/project-cherenkov-app. The env var still
+          // takes precedence (so a fork or a differently-named deploy
+          // isn't stuck pointing at this one), but the fallback is now a
+          // real value rather than an invented one.
           repo: (process.env.KEYSTATIC_GITHUB_REPO ??
-            "PLACEHOLDER-org/PLACEHOLDER-repo") as `${string}/${string}`,
+            "project-cherenkov/project-cherenkov-app") as `${string}/${string}`,
           branchPrefix: "keystatic/",
         }
       : { kind: "local" },

@@ -29,6 +29,30 @@ const nextConfig = {
     // rather than pulled into a shared chunk (Non-Functional Requirements §8).
     optimizePackageImports: ["d3", "lucide-react"],
   },
+
+  // DEPLOYMENT-READINESS ADDITION, not part of the original spec: baseline
+  // response headers, applied to every route. None of this is specific to
+  // Cherenkov's own architecture — it's the standard low-risk hardening
+  // any public Vercel deployment should ship with, and doesn't constrain
+  // anything Phase 1 or Phase 2 currently do (no third-party embeds, no
+  // iframes, no inline-script requirements beyond what Next.js itself
+  // emits). Deliberately NOT included: a Content-Security-Policy — a real
+  // one needs to be worked out against Keystatic's admin UI and Vercel
+  // Blob's image host, which is a bigger, separate decision (Recommended,
+  // not Required, for this pass — see docs/deployment-readiness.md).
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

@@ -31,7 +31,7 @@ export function SiteHeader() {
             {t("about")}
           </Link>
           <a
-            href="https://github.com/PLACEHOLDER-org/PLACEHOLDER-repo"
+            href="https://github.com/project-cherenkov/project-cherenkov-app"
             target="_blank"
             rel="noreferrer"
             className="ml-1 rounded-md border border-slate-300 px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900"

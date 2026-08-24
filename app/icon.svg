@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    DEPLOYMENT-READINESS ADDITION, not part of the original spec — no
+    favicon existed at all (browsers fall back to a blank/default tab
+    icon). This is a functional placeholder, not a logo decision: it
+    reuses the header's own dot mark (components/site/header.tsx) and the
+    ALREADY-DECIDED cherenkov-blue-pastel color from tailwind.config.ts
+    (#5BCEFA) — it does not invent new branding, and should be swapped
+    for a real mark once typography/identity (tailwind.config.ts's own
+    PLACEHOLDER comment) is decided.
+  -->
+  <circle cx="16" cy="16" r="14" fill="#EFFFFB" stroke="#5BCEFA" stroke-width="2" />
+  <circle cx="16" cy="16" r="6" fill="#5BCEFA" />
+</svg>

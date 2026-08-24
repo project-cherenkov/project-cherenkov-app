@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { siteUrl } from "@/lib/site";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -20,8 +21,25 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "site" });
   return {
-    title: t("name"),
+    metadataBase: new URL(siteUrl),
+    title: { default: t("name"), template: `%s — ${t("name")}` },
     description: t("tagline"),
+    openGraph: {
+      title: t("name"),
+      description: t("tagline"),
+      locale,
+      alternateLocale: routing.locales.filter((l) => l !== locale),
+      type: "website",
+    },
+    // DEPLOYMENT-READINESS DEFAULT, not part of the original spec: every
+    // page is noindex/nofollow for now. messages/*.json still has several
+    // "[PLACEHOLDER — ...]" strings (heroTitle, tagline, philosophy, team
+    // bios) — t("tagline") above literally becomes the page's <meta
+    // name="description">, so search engines would index that placeholder
+    // text verbatim today. Flip this once real hero/tagline/about copy
+    // (README's "Open questions" list) is in — search the codebase for
+    // this comment when that happens, nothing else needs to change.
+    robots: { index: false, follow: false },
   };
 }
 

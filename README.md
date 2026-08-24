@@ -154,6 +154,14 @@ add a matching `messages/<locale>.json`.
 Built for Vercel. Push to GitHub, import the repo in Vercel, no
 environment variables needed for Phase 1. Every PR gets a preview deploy.
 
+## Deployment readiness
+
+The public archive is deployable as-is (see "Deploying" above — no env
+vars required). Before a real public launch, see
+`docs/deployment-readiness.md` for what's been hardened (the CMS admin
+surface was unauthenticated by default; now gated), what's still
+placeholder content, and what needs a real decision rather than a guess.
+
 ## Open questions (flagged, not guessed)
 
 These were left as clearly-marked placeholders rather than decided
@@ -166,8 +174,11 @@ instance:
 - **`principle` / `errorType` taxonomy.** Left as free strings in
   `velite.config.ts` on purpose. Once there are enough real editorials to
   see the actual vocabulary, tighten them to a fixed `enum`.
-- **Repo URL.** `components/site/header.tsx` and `app/[locale]/about/page.tsx`
-  link to a placeholder GitHub URL — update once the real repo exists.
+- **Repo visibility.** Now points at the real repo
+  (`github.com/project-cherenkov/project-cherenkov-app`), but it's
+  private — the About page's "built in the open" copy and the header's
+  public GitHub link both currently promise access a public visitor
+  won't have. See `docs/deployment-readiness.md` §5 item 2.
 - **Author names.** All three example editorials use
   `"PLACEHOLDER Author Name"`.
 - **Hero/footer copy.** `messages/*.json` has several

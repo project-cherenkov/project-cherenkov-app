@@ -48,14 +48,14 @@ export default async function AboutPage() {
 
       <h2 className="label-code mt-10">{t("repoHeading")}</h2>
       <p className="mt-2 text-slate-700">{t("repoBody")}</p>
-      {/* PLACEHOLDER: repo URL — Section 12 open question, not provided yet */}
+      {/* Repo URL confirmed — see docs/deployment-readiness.md re: this repo being private. */}
       <a
-        href="https://github.com/PLACEHOLDER-org/PLACEHOLDER-repo"
+        href="https://github.com/project-cherenkov/project-cherenkov-app"
         target="_blank"
         rel="noreferrer"
         className="mt-2 inline-block text-cherenkov-blue-pastel underline"
       >
-        github.com/PLACEHOLDER-org/PLACEHOLDER-repo
+        github.com/project-cherenkov/project-cherenkov-app
       </a>
     </div>
   );
