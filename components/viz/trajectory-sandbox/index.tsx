@@ -57,8 +57,8 @@ export function TrajectorySandbox({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>();
-  const lastFrameRef = useRef<number>();
+  const rafRef = useRef<number>(undefined);
+  const lastFrameRef = useRef<number>(undefined);
 
   useEffect(() => {
     const el = containerRef.current;
