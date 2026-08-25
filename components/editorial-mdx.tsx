@@ -2,8 +2,11 @@
 
 import { useMemo, type ComponentType } from "react";
 import * as runtime from "react/jsx-runtime";
+import type { Editorial } from "#content";
 
 import { VizEngine } from "@/components/viz/viz-engine";
+
+type VizEditorial = Pick<Editorial, "vizEngine" | "vizConfig">;
 
 // Velite compiles each editorial's MDX `body` to a JS module source string,
 // not a component — this is the small runtime Velite's own docs point
@@ -27,9 +30,7 @@ export function EditorialMDX({
   vizConfig,
 }: {
   code: string;
-  vizEngine: string;
-  vizConfig: Record<string, unknown>;
-}) {
+} & VizEditorial) {
   const Component = useMDXComponent(code);
   return (
     <Component

@@ -87,7 +87,7 @@ export default async function EditorialPage({
         <EditorialMDX
           code={editorial.body}
           vizEngine={editorial.vizEngine}
-          vizConfig={editorial.vizConfig as Record<string, unknown>}
+          vizConfig={editorial.vizConfig}
         />
       </div>
 
