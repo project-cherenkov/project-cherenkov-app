@@ -45,7 +45,7 @@ export function TrajectorySandbox({
 }: {
   config: TrajectorySandboxConfig;
 }) {
-  const physics = PHYSICS_FUNCTIONS[config.physicsType];
+  const physics = PHYSICS_FUNCTIONS[config.physicsType]!;
 
   const [speed, setSpeed] = useState(config.initial.speed);
   const [angleDeg, setAngleDeg] = useState(config.initial.angleDeg);
