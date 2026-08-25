@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
@@ -46,7 +45,6 @@ export function TrajectorySandbox({
 }: {
   config: TrajectorySandboxConfig;
 }) {
-  const t = useTranslations("viz");
   const physics = PHYSICS_FUNCTIONS[config.physicsType];
 
   const [speed, setSpeed] = useState(config.initial.speed);
@@ -104,7 +102,6 @@ export function TrajectorySandbox({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, flightTime]);
 
   // Draw.
