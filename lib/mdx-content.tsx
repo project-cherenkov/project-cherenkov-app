@@ -8,7 +8,7 @@ import * as runtime from "react/jsx-runtime";
 // projects to for turning that string back into something renderable.
 function useMDXComponent(
   code: string,
-): ComponentType<{ components?: Record<string, ComponentType<any>> }> {
+): ComponentType<{ components?: Record<string, ComponentType<Record<string, unknown>>> }> {
   return useMemo(() => {
     const fn = new Function(code);
     return fn({ ...runtime }).default;
@@ -20,7 +20,7 @@ export function MDXContent({
   components,
 }: {
   code: string;
-  components?: Record<string, ComponentType<any>>;
+  components?: Record<string, ComponentType<Record<string, unknown>>>;
 }) {
   const Component = useMDXComponent(code);
   return <Component components={components} />;

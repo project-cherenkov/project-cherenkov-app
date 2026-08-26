@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getEditorial } from "@/lib/content";
-import { MDXContent } from "@/lib/mdx-content";
+import { EditorialMDX } from "@/components/editorial-mdx";
 import { VizEngine } from "@/components/viz/viz-engine";
 // Imported here, not in app/globals.css — KaTeX's CSS should only ship to
 // pages that actually render math (Non-Functional Requirements §8).
@@ -84,15 +84,10 @@ export default async function EditorialPage({
       })()}
 
       <div className="prose prose-slate mt-8 max-w-none">
-        <MDXContent
+        <EditorialMDX
           code={editorial.body}
-          components={{
-            Interactive: () => (
-              <div className="not-prose my-8">
-                <VizEngine editorial={editorial} />
-              </div>
-            ),
-          }}
+          vizEngine={editorial.vizEngine}
+          vizConfig={editorial.vizConfig}
         />
       </div>
 

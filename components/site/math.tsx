@@ -17,6 +17,5 @@ export function Math({ children, display = false, className }: MathProps) {
     output: "html",
   });
 
-  // eslint-disable-next-line react/no-danger -- KaTeX's own sanitized output
   return <span className={className} dangerouslySetInnerHTML={{ __html: html }} />;
 }

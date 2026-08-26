@@ -1,108 +1,152 @@
-# Cherenkov
+# **Project Cherenkov**
 
-An Indonesian OSN (olympiad) editorial archive — informatics, physics, and
-astronomy proofs, each paired with a working interactive visualization.
-Indexed by **principle** and **error type**, not by chapter.
+## **Table of Contents**
 
-## Stack
+1. [Short Description](#i-short-description)
+2. [Tech Stack & Hosting](#ii-tech-stack--hosting)
+3. [Project Structure](#iii-project-structure)
+4. [Getting Started](#iv-getting-started)
+5. [Content Model — Writing an Editorial](#v-content-model--writing-an-editorial)
+6. [Editing Content in the Browser (Keystatic)](#vi-editing-content-in-the-browser-keystatic)
+7. [Internationalization](#vii-internationalization)
+8. [Deploying](#viii-deploying)
+9. [FAQ](#ix-faq)
+10. [Open Questions & Known Placeholders](#x-open-questions--known-placeholders)
 
-Next.js (App Router) + TypeScript · Tailwind CSS + shadcn/ui-style
-primitives · MDX content compiled with [Velite](https://velite.js.org) ·
-KaTeX (via `remark-math`/`rehype-katex`, compiled to static markup at
-build time) · D3 (scales only) + Canvas 2D for the visualizations ·
-`next-intl` for i18n (`id`/`en`) · pnpm.
+---
 
-## Getting started
+## **I. Short Description**
+
+Project Cherenkov is an Indonesian OSN (olympiad) editorial archive spanning **informatics, physics, and astronomy**. Each editorial is a rigorous, self-contained write-up of one idea — a proof, a derivation, a technique — and every editorial ships paired with a **working interactive visualization**, not a decorative one: the visualization is how the idea is explored, not an illustration bolted on afterward.
+
+The archive is indexed by **principle** (the general idea an editorial teaches) and **error type** (the specific mistake it corrects), deliberately **not** by subject chapter — the goal is to let someone arrive because they made a specific mistake or want to understand a specific idea, not because they're browsing a syllabus.
+
+This repo is **Phase 1**: a public, no-login editorial archive. Browse, read, and interact with every visualization with zero accounts needed — see [Section V](#v-content-model--writing-an-editorial) for exactly what an editorial is made of. **Phase 2** (accounts + a study planner for working through three years of school material toward the TKA/UTBK exam) is architected but not built — see `docs/phase-2-architecture.md`. Nothing in this repo depends on Phase 2 existing.
+
+Content is git-committed MDX, not stored in a database: there is no CRUD backend for editorials, only files under `content/editorials/`, compiled at build time. Editing happens either by editing those files directly, or through an in-site CMS layer ([Section VI](#vi-editing-content-in-the-browser-keystatic)) that writes back to the same files.
+
+---
+
+## **II. Tech Stack & Hosting**
+
+| Layer | Choice | Why |
+| --- | --- | --- |
+| **Framework** | [Next.js](https://nextjs.org/) 15 (App Router) + TypeScript | Server-rendered pages for content that should be crawlable and fast on a first load, with the App Router's per-route code splitting keeping each editorial's (potentially heavy) visualization out of every other page's bundle. |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) + hand-rolled shadcn/ui-style primitives (`components/ui/`) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for color/spacing, rather than scattering hex values through components. |
+| **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Gives every editorial a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time — a malformed editorial fails the build instead of shipping broken. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
+| **Math typesetting** | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML **at build time**, so a reader's browser never runs math-rendering JS or reflows the page after load. |
+| **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Three purpose-built engines (`components/viz/`) — a graph/array stepper, a trajectory sandbox, and an orbital sandbox — dispatched by `vizEngine` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
+| **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section VII](#vii-internationalization). |
+| **CMS** | [Keystatic](https://keystatic.com/) | In-site editing at `/keystatic`, mirroring `velite.config.ts`'s schema field-for-field (`keystatic.config.ts`). Local-storage mode in development, GitHub-storage mode (real OAuth-backed auth) in production — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
+| **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
+| **Package manager** | [pnpm](https://pnpm.io) | — |
+
+**Hosting:** [Vercel](https://vercel.com). Framework-detected automatically for Next.js — no `vercel.json` needed. Full step-by-step in [Section VIII](#viii-deploying).
+
+**Phase 2 stack (already in `package.json`, not wired into any running code path yet):** [Neon](https://neon.tech/) (serverless Postgres) + [Drizzle ORM](https://orm.drizzle.team/) + [Better Auth](https://www.better-auth.com/). These exist in dependencies now purely so Phase 2 doesn't start from a blank `package.json` — see `docs/phase-2-architecture.md` for the actual plan. Nothing in Phase 1 imports any of them.
+
+---
+
+## **III. Project Structure**
+
+```text
+app/[locale]/                    routes (everything is locale-prefixed)
+  archive/                       archive listing, filterable by subject/principle/errorType
+  archive/[subject]/[slug]/      one editorial's page
+  about/                         team + repo link
+  login/ signup/ planner/        Phase 2 placeholders ("coming soon")
+app/keystatic/                   Keystatic admin UI (gated in production — Section VI)
+app/api/keystatic/               Keystatic's own API route (gated in production)
+app/api/team-photo/              Vercel Blob upload endpoint (gated in production)
+app/robots.ts, app/sitemap.ts    generated from the same content query every page uses
+app/icon.svg                     favicon
+components/
+  ui/                            hand-rolled shadcn/ui-style primitives
+  site/                          header, footer, cards, filters, team-photo uploader
+  viz/                           the three visualization engines + shared playback controls
+content/editorials/<subject>/    the actual archive content (MDX)
+content/team/                    Keystatic-managed team singleton (About page)
+lib/content.ts                   all querying/filtering of editorials goes through here —
+                                  pages never import Velite's #content directly
+lib/team.ts                      reads the Keystatic team singleton for the About page
+lib/admin-guard.ts               single source of truth for whether /keystatic and the
+                                  team-photo routes are reachable (Section VI)
+lib/site.ts                      shared absolute site URL for sitemap/robots/Open Graph
+messages/{id,en}.json            UI strings
+docs/phase-2-architecture.md     Phase 2 plan (not implemented)
+docs/deployment-readiness.md     what's been hardened for production, what's still
+                                  placeholder, what needs a real decision (Section VIII)
+```
+
+---
+
+## **IV. Getting Started**
 
 Requires Node 20+ and [pnpm](https://pnpm.io).
 
 ```bash
+git clone https://github.com/project-cherenkov/project-cherenkov-app.git
+cd project-cherenkov-app
 pnpm install
 pnpm dev
 ```
 
-Velite watches `content/` and regenerates `.velite/` automatically while
-`pnpm dev` is running (it starts both `next dev` and `velite dev`
-together) — you don't need to run it separately. `pnpm build` runs
-Velite once, then Next.
+| Script | Does |
+| --- | --- |
+| `pnpm dev` | Runs `next dev` and `velite dev` together (via `concurrently`) — Velite watches `content/` and regenerates its output automatically, nothing to run separately. |
+| `pnpm build` | `velite build && next build` — a full production build. |
+| `pnpm generate` | `velite build` on its own. Run this once after a fresh clone if your editor complains that `#content` can't be found, or if a typecheck fails before you've ever run `pnpm dev`. |
+| `pnpm lint` | `next lint`. |
+| `pnpm typecheck` | `tsc --noEmit`. Also depends on `.velite/` existing — run `pnpm generate` first if this is the very first command you run after cloning. |
+| `pnpm start` | Serves an already-built app (`next start`). |
 
-If your editor complains that `#content` can't be found, or a fresh clone
-fails to type-check, run `pnpm generate` once to produce `.velite/`
-directly.
+### Environment variables
 
-Core Phase 1 needs **no environment variables** — there's no database or
-auth yet, content is just git-committed MDX. Two optional additions do use
-env vars; see `.env.example` for the full list and defaults:
+**Phase 1's core archive needs none of these.** There's no database or auth yet; content is git-committed MDX and the whole thing runs with a bare `pnpm install && pnpm dev`. Everything below is optional, and each one degrades cleanly when unset rather than crashing. Full detail and current defaults live in `.env.example`.
 
-- **Keystatic** (`/keystatic`, in-site editing): with no env vars set, it
-  runs in local-storage mode against your working copy — nothing extra to
-  configure. `KEYSTATIC_GITHUB_CLIENT_ID`/`_SECRET`/`_SECRET` and
-  `KEYSTATIC_GITHUB_REPO` switch it to GitHub-storage mode for production.
-- **Vercel Blob** (team-photo upload, `app/api/team-photo/route.ts`): needs
-  `BLOB_READ_WRITE_TOKEN` from a Vercel Blob store. Without it, the upload
-  route returns a clear 503 rather than failing at Blob's own API.
+| Variable | Required? | Purpose |
+| --- | --- | --- |
+| `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
+| `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. Generate with `openssl rand -base64 32`. |
+| `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. |
+| `BLOB_READ_WRITE_TOKEN` | Optional | Powers the team-photo upload path. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. |
+| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it in Vercel once you have a real domain. |
 
-See `.env.example` for what Phase 2 will eventually need.
+`.env.example` also documents the Phase 2 variables (`DATABASE_URL`, `BETTER_AUTH_SECRET`, OAuth provider credentials) — none of them do anything yet.
 
-## Project structure
-
-```
-app/[locale]/                    routes (everything is locale-prefixed)
-  archive/[subject]/[slug]/      one editorial's page
-  login/ signup/ planner/        Phase 2 placeholders ("coming soon")
-components/
-  ui/                            hand-rolled shadcn/ui-style primitives
-  site/                          header, footer, cards, filters
-  viz/                           the three visualization engines
-content/editorials/<subject>/    the actual archive content (MDX)
-lib/content.ts                   all querying/filtering of editorials goes
-                                  through here — pages never import
-                                  Velite's #content directly
-messages/{id,en}.json            UI strings
-docs/phase-2-architecture.md     Phase 2 plan (not implemented)
-```
-
-## Writing an editorial
-
-Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter:
-
-```yaml
 ---
-title: "A clear, specific title"
-subject: informatics # informatics | physics | astronomy
-hook: "One sentence that makes someone want to read on."
-tags: ["short", "lowercase", "tags"]
-principle: "the-general-idea-this-teaches" # free text, see note below
-errorType: "the-mistake-this-corrects" # free text, optional
-vizEngine: graph-array-stepper # graph-array-stepper | trajectory-sandbox | orbital-sandbox
-vizConfig: { ... } # shape depends on vizEngine — see below
-publishedAt: "2026-08-01"
-author: "Your name"
----
-```
 
-Body is regular Markdown/MDX. Use `$...$` for inline math and `$$...$$`
-for display math — it's compiled to static KaTeX HTML at build time, so
-there's no math-rendering JS shipped to the reader.
+## **V. Content Model — Writing an Editorial**
 
-Place `<Interactive />` on its own line wherever the visualization should
-sit — typically between "the idea" and "the full proof." **If you forget
-it, the site still shows the visualization** (right after the hook,
-with a small notice) rather than silently publishing an editorial with
-no interactive — but placing it yourself gives you control over where it
-lands, which reads better.
+Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter is validated by `velite.config.ts` at build time:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `title` | string, ≤120 chars | — |
+| `subject` | `"informatics"` \| `"physics"` \| `"astronomy"` | Must match the folder it's in — the three Keystatic collections enforce this structurally (see [Section VI](#vi-editing-content-in-the-browser-keystatic)). |
+| `hook` | string, ≤280 chars | One sentence that makes someone want to read on. |
+| `tags` | string[] | Short, lowercase. |
+| `principle` | string | The general idea this editorial teaches. **Free text on purpose** — see [Section X](#x-open-questions--known-placeholders). |
+| `errorType` | string, optional | The specific mistake this editorial corrects. Also free text. |
+| `vizEngine` | `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"none"` | Which of the three engines to render. `"none"` is a legal schema value but a flagged content error in the UI — see FAQ C. |
+| `vizConfig` | object, shape depends on `vizEngine` | See the three tables below. |
+| `publishedAt` | ISO date | — |
+| `author` | string | — |
+| body | MDX | Everything after the frontmatter. |
+| `slug` | *(derived, not frontmatter)* | Taken from the filename, not the title — retitling a published piece never silently changes its URL. |
+
+Body is regular Markdown/MDX. Use `$...$` for inline math and `$$...$$` for display math — it's compiled to static KaTeX HTML at build time (see [Section II](#ii-tech-stack--hosting)), so there's no math-rendering JS shipped to the reader.
+
+Place `<Interactive />` on its own line wherever the visualization should sit — typically between "the idea" and "the full proof." **If you forget it, the visualization still renders** (right after the hook, with a small notice) rather than silently publishing an editorial with no interactive — see FAQ B for exactly why it's built this way. Placing the tag yourself just gives you control over where it lands, which reads better.
 
 Three real, complete examples to copy from:
-- `content/editorials/informatics/binary-search-on-answer.mdx` (graph-array-stepper)
-- `content/editorials/physics/projectile-range-symmetry.mdx` (trajectory-sandbox)
-- `content/editorials/astronomy/eccentric-transit-duration.mdx` (orbital-sandbox)
+- `content/editorials/informatics/binary-search-on-answer.mdx` (`graph-array-stepper`)
+- `content/editorials/physics/projectile-range-symmetry.mdx` (`trajectory-sandbox`)
+- `content/editorials/astronomy/eccentric-transit-duration.mdx` (`orbital-sandbox`)
 
 ### `vizConfig` by engine
 
-**`graph-array-stepper`** — an array with precomputed steps (pointers,
-highlighted cells, a one-line note per step). Frontmatter is static data,
-not code, so there's no literal "step function" — you write out each
-step's state directly:
+**`graph-array-stepper`** — an array with precomputed steps (pointers, highlighted cells, a one-line note per step). Frontmatter is static data, not code, so there's no literal "step function": you write out each step's state directly.
 
 ```yaml
 vizConfig:
@@ -113,12 +157,7 @@ vizConfig:
       note: "What's happening at this step."
 ```
 
-**`trajectory-sandbox`** — adjustable initial speed/angle, animated on a
-canvas. `physicsType` selects a named physics function from a small
-registry in `components/viz/trajectory-sandbox/index.tsx` (same reason as
-above — frontmatter can't hold a real function). Currently only
-`"projectile"` exists; adding a new scenario means adding one entry to
-that registry.
+**`trajectory-sandbox`** — adjustable initial speed/angle, animated on a canvas. `physicsType` selects a named physics function from a small registry in `components/viz/trajectory-sandbox/index.tsx` (same reason as above: frontmatter can't hold a real function). Currently only `"projectile"` exists; adding a new scenario means adding one entry to that registry.
 
 ```yaml
 vizConfig:
@@ -129,10 +168,7 @@ vizConfig:
   angleRange: [5, 85]
 ```
 
-**`orbital-sandbox`** — eccentricity + mass ratio sliders driving a
-Kepler-accurate orbit and a simplified, clearly-labeled-as-schematic
-transit light curve (periapsis-aligned transit; see the astronomy example
-for the derivation and its stated limits).
+**`orbital-sandbox`** — eccentricity + mass ratio sliders driving a Kepler-accurate orbit and a simplified, clearly-labeled-as-schematic transit light curve (periapsis-aligned transit; see the astronomy example for the derivation and its stated limits).
 
 ```yaml
 vizConfig:
@@ -143,54 +179,112 @@ vizConfig:
   transitDepth: 0.015 # optional, default 0.01
 ```
 
-## i18n
+---
 
-Locales live in `messages/id.json` and `messages/en.json`, same keys in
-both. To add a locale: add it to `i18n/routing.ts`'s `locales` array and
-add a matching `messages/<locale>.json`.
+## **VI. Editing Content in the Browser (Keystatic)**
 
-## Deploying
+`/keystatic` mirrors `velite.config.ts`'s schema field-for-field: three collections (one per subject, each hardcoded to its own `content/editorials/<subject>/*` path, so a folder/frontmatter subject mismatch is structurally impossible) plus a `team` singleton backing the About page's team list.
 
-Built for Vercel. Push to GitHub, import the repo in Vercel, no
-environment variables needed for Phase 1. Every PR gets a preview deploy.
+**Two storage modes**, chosen automatically by whether `KEYSTATIC_GITHUB_CLIENT_ID` is set (`keystatic.config.ts`):
 
-## Deployment readiness
+- **Local** (default, no env vars): edits write straight to your working copy on disk. This is the right mode for local development, and the only mode local development needs.
+- **GitHub** (`KEYSTATIC_GITHUB_CLIENT_ID`/`_SECRET`/`KEYSTATIC_GITHUB_REPO` set): edits go through a real GitHub OAuth flow and land as commits against the repo, gated by the logged-in user's actual GitHub repo permissions.
 
-The public archive is deployable as-is (see "Deploying" above — no env
-vars required). Before a real public launch, see
-`docs/deployment-readiness.md` for what's been hardened (the CMS admin
-surface was unauthenticated by default; now gated), what's still
-placeholder content, and what needs a real decision rather than a guess.
+**On a deployed build, `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` are only reachable in GitHub-storage mode** — `lib/admin-guard.ts` returns a 404 for all three otherwise, enforced at the edge in `middleware.ts`. See FAQ A for why: local-storage mode has no authentication of its own, and a deployed server's filesystem doesn't persist writes between requests anyway, so leaving it reachable in production would serve a live-looking but non-functional CMS to any visitor — and separately, would leave the team-photo upload endpoint open to the entire internet the moment `BLOB_READ_WRITE_TOKEN` exists.
 
-## Open questions (flagged, not guessed)
+Until a GitHub OAuth App is set up for real, editing content in production means editing MDX files directly and pushing — exactly how it already works without Keystatic at all.
 
-These were left as clearly-marked placeholders rather than decided
-unilaterally — search the codebase for `PLACEHOLDER` to find every
-instance:
+---
 
-- **Typography.** No typeface has been chosen. `tailwind.config.ts`
-  currently falls back to the system font stack so nothing renders
-  broken — swap `fontFamily.sans` there once it's decided.
-- **`principle` / `errorType` taxonomy.** Left as free strings in
-  `velite.config.ts` on purpose. Once there are enough real editorials to
-  see the actual vocabulary, tighten them to a fixed `enum`.
-- **Repo visibility.** Now points at the real repo
-  (`github.com/project-cherenkov/project-cherenkov-app`), but it's
-  private — the About page's "built in the open" copy and the header's
-  public GitHub link both currently promise access a public visitor
-  won't have. See `docs/deployment-readiness.md` §5 item 2.
-- **Author names.** All three example editorials use
-  `"PLACEHOLDER Author Name"`.
-- **Hero/footer copy.** `messages/*.json` has several
-  `[PLACEHOLDER — ... ]` strings for copy that wasn't provided (hero
-  headline, taglines, about-page philosophy and team bios).
-- **OAuth provider(s) for Phase 2** — see
-  `docs/phase-2-architecture.md`.
-- **Spec conflict, flagged not resolved:** the build spec states every
-  published editorial *must* ship a working interactive visualization,
-  but its own frontmatter schema allows `vizEngine: none`. This repo
-  keeps `"none"` as a valid schema value (so nothing here silently
-  forecloses the option) but treats it as a flagged content error in the
-  UI rather than a legitimate state — see the comment in
-  `velite.config.ts` and `components/viz/viz-engine.tsx`. Confirm which
-  rule should actually win.
+## **VII. Internationalization**
+
+Locales live in `messages/id.json` and `messages/en.json`, same keys in both, loaded via `i18n/request.ts`. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`) — `id` is the default locale but still gets its own `/id` prefix rather than living at the bare root.
+
+To add a locale: add it to `i18n/routing.ts`'s `locales` array and add a matching `messages/<locale>.json`.
+
+---
+
+## **VIII. Deploying**
+
+The public archive is deployable as-is, with **zero required environment variables**.
+
+1. **Push to GitHub.** Already done — this repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) (currently private — see [Section X](#x-open-questions--known-placeholders) for what that means for the site's own "built in the open" copy).
+2. **Import the repo in [Vercel](https://vercel.com/new).** Next.js is auto-detected; no `vercel.json` or custom build command needed.
+3. **Deploy.** No environment variables are required for this step — the archive, i18n, and MDX pipeline all work with none set.
+4. *(Optional)* **Set `NEXT_PUBLIC_SITE_URL`** in the Vercel project's environment variables once you have a real domain, so the sitemap and Open Graph tags stop pointing at `localhost`.
+5. **Every PR gets its own preview deploy** automatically (Vercel's default behavior for a connected repo) — nothing extra to configure.
+6. **CI runs independently of Vercel.** `.github/workflows/ci.yml` runs install → `pnpm generate` → lint → typecheck → build on every push/PR, so a broken build is visible on GitHub even before Vercel finishes its own deploy.
+
+**Before a real public launch** (as opposed to a working preview), read `docs/deployment-readiness.md` and resolve:
+
+- The placeholder hero/tagline/about copy in `messages/*.json` — until it's real, every page ships with `robots: { index: false, follow: false }` on purpose (`app/[locale]/layout.tsx`), so search engines don't index placeholder text.
+- The repo-visibility mismatch noted in [Section X](#x-open-questions--known-placeholders).
+- Whether/when to set up a real GitHub OAuth App so `/keystatic` becomes reachable in production (Section VI).
+
+None of the above block deploying the code today — they block treating the result as a finished public launch rather than a working preview.
+
+---
+
+## **IX. FAQ**
+
+### **A. "Why does `/keystatic` 404 on Vercel until I set up GitHub OAuth?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+Local-storage Keystatic — the default, with no env vars set — has no authentication of its own; it's built to be run by whoever is already running `pnpm dev` on their own machine. Nothing stopped it from being reachable on a real deployment too, which is a problem for two separate reasons: a serverless deployment's filesystem doesn't persist writes between requests, so `/keystatic` would present a live-looking but non-functional editing UI to anyone who found the URL; and independently, `app/api/team-photo/route.ts` is a public `POST` endpoint the moment `BLOB_READ_WRITE_TOKEN` is set, regardless of Keystatic's own storage mode.
+
+`lib/admin-guard.ts` closes both at once: on a deployed build (`NODE_ENV === "production"`, which Vercel sets for both preview and production deploys), `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` all 404 unless `KEYSTATIC_GITHUB_CLIENT_ID` is set — at which point GitHub OAuth plus the logged-in user's actual repo permissions become the real access control. Local `pnpm dev` is unaffected either way.
+
+</details>
+
+### **B. "I forgot to add `<Interactive />` to my editorial — what happens?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+The visualization still renders — right after the hook, with a small notice — rather than the editorial silently publishing with no interactive at all. Every published editorial is supposed to ship a working visualization (see FAQ C for the one exception), so the fallback errs toward "show it somewhere" over "fail silently." Placing `<Interactive />` yourself just controls *where* it lands, which reads better than the automatic placement.
+
+</details>
+
+### **C. "Why can `vizEngine` still be `"none"` if every editorial is supposed to have a visualization?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+This is a flagged, unresolved conflict between two parts of the original build spec, not an oversight: one line states every published editorial *must* ship a working interactive visualization; the frontmatter schema section of the same spec lists `"none"` as a legal `vizEngine` value. `velite.config.ts` keeps `"none"` as valid at the schema level — so nothing here silently forecloses the option — but `lib/content.ts`'s `hasMissingViz()` treats it as a flagged content error the UI surfaces, not a legitimate published state. Which rule should actually win is still an open question; see [Section X](#x-open-questions--known-placeholders).
+
+</details>
+
+### **D. "Why are `principle` and `errorType` free text instead of a fixed list?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+The taxonomy isn't finalized yet, and there isn't enough real content to know what the actual vocabulary should be — tightening these to a `z.enum([...])` in `velite.config.ts` before that's known would mean guessing at categories rather than deriving them from what actually gets written. Once there are enough real editorials to see the real vocabulary, `velite.config.ts` is the only file that needs to change.
+
+</details>
+
+### **E. "The About page says the project is 'built in the open' but the repo is private — is that a bug?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+Not a bug — a flagged, unresolved mismatch. The About page's copy and the header's public GitHub link both currently point at `github.com/project-cherenkov/project-cherenkov-app`, which is real but private, so a visitor who isn't a collaborator can't actually open it. This wasn't silently fixed by guessing at intent (make the repo public? change the copy?) — see [Section X](#x-open-questions--known-placeholders) and `docs/deployment-readiness.md` for the two ways to resolve it.
+
+</details>
+
+---
+
+## **X. Open Questions & Known Placeholders**
+
+These were left as clearly-marked placeholders rather than decided unilaterally — search the codebase for `PLACEHOLDER` to find every instance:
+
+- **Typography.** No typeface has been chosen. `tailwind.config.ts` currently falls back to the system font stack so nothing renders broken — swap `fontFamily.sans` there once it's decided.
+- **`principle` / `errorType` taxonomy** — see FAQ D.
+- **Repo visibility.** The repo is private, but the About page's "built in the open" copy and the header's public GitHub link both promise access a public visitor won't have — see FAQ E. Resolve by making the repo public before launch, or by adjusting that copy/link.
+- **Author names.** All three example editorials use `"PLACEHOLDER Author Name"`.
+- **Hero/footer copy.** `messages/*.json` has several `[PLACEHOLDER — ...]` strings for copy that wasn't provided (hero headline, taglines, about-page philosophy and team bios) — this is also why every page currently ships `noindex` (see [Section VIII](#viii-deploying)).
+- **OAuth provider(s) for Phase 2** — see `docs/phase-2-architecture.md`.
+- **`vizEngine: "none"` spec conflict** — see FAQ C.
+- **Team-photo upload authentication, once Keystatic's admin surface is enabled in production.** Enabling GitHub-storage mode makes `/keystatic` itself OAuth-gated, but `/api/team-photo` has no per-request session check of its own — see `docs/deployment-readiness.md` for the residual risk and the recommended (not yet implemented) fix.
