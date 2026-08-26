@@ -28,4 +28,10 @@ jobs:
       - run: pnpm generate
       - run: pnpm lint
       - run: pnpm typecheck
+      # TEST-001: no Phase 2 env vars configured here on purpose — every
+      # required test (spec §8) is a pure unit test or exercises real
+      # fail-closed behavior (lib/auth-guard.ts) rather than needing a live
+      # Postgres connection. See docs/phase-3-architecture.md for what a
+      # future integration-test tier against a real database would need.
+      - run: pnpm test
       - run: pnpm build

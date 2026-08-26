@@ -74,11 +74,52 @@
     "madeBy": "A public-repo project by the Cherenkov team."
   },
   "phase2": {
-    "comingSoon": "Coming soon",
-    "loginTitle": "Log in",
-    "signupTitle": "Sign up",
-    "plannerTitle": "Study planner",
-    "comingSoonBody": "Accounts and the study planner aren't built yet — everything in the archive is free to use without one.",
-    "backHome": "Back to Cherenkov"
+    "login": {
+      "title": "Log in",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Log in",
+      "googleButton": "Continue with Google",
+      "orDivider": "or",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign up",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "signup": {
+      "title": "Sign up",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign up",
+      "googleButton": "Continue with Google",
+      "orDivider": "or",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "planner": {
+      "overviewHeading": "Your progress",
+      "generatePlanPrompt": "You don't have a study plan yet.",
+      "generatePlanBody": "Pick your target exam date and we'll spread every topic evenly between now and then.",
+      "examDateLabel": "Target exam date",
+      "generateButton": "Generate plan",
+      "regenerateButton": "Regenerate plan",
+      "statusDone": "Done",
+      "statusInProgress": "In progress",
+      "statusNotStarted": "Not started",
+      "scheduledForPrefix": "Scheduled for",
+      "backToPlanner": "Back to planner",
+      "openEditorial": "Read the editorial",
+      "noEditorial": "No editorial linked yet"
+    },
+    "quiz": {
+      "startButton": "Take the quiz",
+      "submit": "Submit answers",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "retake": "Retake quiz",
+      "scoreLabel": "You scored {score}%",
+      "questionCounter": "Question {current} of {total}"
+    }
   }
 }

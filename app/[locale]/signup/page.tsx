@@ -1,7 +1,6 @@
-import { getTranslations } from "next-intl/server";
-import { ComingSoon } from "@/components/site/coming-soon";
+import { SignupForm } from "@/components/auth/signup-form";
 
-export default async function SignupPage() {
-  const t = await getTranslations("phase2");
-  return <ComingSoon title={t("signupTitle")} />;
+export default function SignupPage() {
+  const googleEnabled = Boolean(process.env.GOOGLE_CLIENT_ID);
+  return <SignupForm googleEnabled={googleEnabled} />;
 }

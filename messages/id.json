@@ -74,11 +74,52 @@
     "madeBy": "Proyek repo publik oleh tim Cherenkov."
   },
   "phase2": {
-    "comingSoon": "Segera hadir",
-    "loginTitle": "Masuk",
-    "signupTitle": "Daftar",
-    "plannerTitle": "Rencana belajar",
-    "comingSoonBody": "Akun dan rencana belajar belum dibuat — semua isi arsip bisa diakses gratis tanpa akun.",
-    "backHome": "Kembali ke Cherenkov"
+    "login": {
+      "title": "Masuk",
+      "emailLabel": "Email",
+      "passwordLabel": "Kata sandi",
+      "submit": "Masuk",
+      "googleButton": "Lanjutkan dengan Google",
+      "orDivider": "atau",
+      "noAccount": "Belum punya akun?",
+      "signupLink": "Daftar",
+      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "signup": {
+      "title": "Daftar",
+      "nameLabel": "Nama",
+      "emailLabel": "Email",
+      "passwordLabel": "Kata sandi",
+      "submit": "Daftar",
+      "googleButton": "Lanjutkan dengan Google",
+      "orDivider": "atau",
+      "hasAccount": "Sudah punya akun?",
+      "loginLink": "Masuk",
+      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "planner": {
+      "overviewHeading": "Progres kamu",
+      "generatePlanPrompt": "Kamu belum punya rencana belajar.",
+      "generatePlanBody": "Pilih tanggal ujian targetmu dan kami akan membagi rata semua topik dari sekarang sampai hari itu.",
+      "examDateLabel": "Tanggal ujian target",
+      "generateButton": "Buat rencana",
+      "regenerateButton": "Buat ulang rencana",
+      "statusDone": "Selesai",
+      "statusInProgress": "Sedang berjalan",
+      "statusNotStarted": "Belum dimulai",
+      "scheduledForPrefix": "Dijadwalkan untuk",
+      "backToPlanner": "Kembali ke rencana belajar",
+      "openEditorial": "Baca pembahasan",
+      "noEditorial": "Belum ada pembahasan terkait"
+    },
+    "quiz": {
+      "startButton": "Kerjakan kuis",
+      "submit": "Kirim jawaban",
+      "correct": "Benar",
+      "incorrect": "Salah",
+      "retake": "Ulangi kuis",
+      "scoreLabel": "Skor kamu {score}%",
+      "questionCounter": "Soal {current} dari {total}"
+    }
   }
 }

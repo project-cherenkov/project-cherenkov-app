@@ -2,8 +2,21 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { isAdminSurfaceEnabled } from "./lib/admin-guard";
+import { hasValidSession } from "./lib/auth-guard";
 
 const intlMiddleware = createIntlMiddleware(routing);
+
+// COMPATIBILITY FIX (phase-2 patch application): hasValidSession() (via
+// lib/auth-guard.ts) imports the full Better Auth server instance
+// (lib/auth.ts), not just a lightweight cookie check. Better Auth's server
+// build pulls in Node-only code (its telemetry module uses dynamic code
+// evaluation), which the default Edge middleware runtime rejects at build
+// time ("Dynamic Code Evaluation ... not allowed in Edge Runtime"). Next.js
+// 15.5 stabilized Node.js as a middleware runtime option — opting in here
+// keeps auth-guard.ts's real getSession() DB check (rather than trading it
+// for a cookie-presence-only check), at the cost of middleware no longer
+// running on the Edge network for this project.
+export const runtime = "nodejs";
 
 // The CMS "write surface" as a whole — see lib/admin-guard.ts for exactly
 // why these routes are gated together as one unit, not individually.
@@ -12,6 +25,35 @@ const ADMIN_SURFACE_PREFIXES = ["/keystatic", "/api/keystatic", "/api/team-photo
 function isAdminSurfacePath(pathname: string): boolean {
   return ADMIN_SURFACE_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
+// AUTH-002: the study-planner "gated surface", alongside (not replacing)
+// ADMIN_SURFACE_PREFIXES above. Every /[locale]/planner path must carry a
+// valid Better Auth session — spec §2, §5, §6.
+const PLANNER_GATED_PREFIXES = ["/planner"];
+
+// Strips a leading /<locale> segment if present, so the planner check works
+// the same way whether the request already has a locale prefix
+// (/id/planner) or not (a bare /planner request that next-intl's own
+// middleware would otherwise locale-prefix first).
+function stripLocalePrefix(pathname: string): {
+  locale: string | null;
+  rest: string;
+} {
+  for (const locale of routing.locales) {
+    if (pathname === `/${locale}`) return { locale, rest: "/" };
+    if (pathname.startsWith(`/${locale}/`)) {
+      return { locale, rest: pathname.slice(`/${locale}`.length) };
+    }
+  }
+  return { locale: null, rest: pathname };
+}
+
+function isPlannerPath(pathname: string): boolean {
+  const { rest } = stripLocalePrefix(pathname);
+  return PLANNER_GATED_PREFIXES.some(
+    (prefix) => rest === prefix || rest.startsWith(`${prefix}/`),
   );
 }
 
@@ -25,7 +67,7 @@ function isAdminSurfacePath(pathname: string): boolean {
 // four admin route/page files individually) keeps the gate in one place,
 // keeps this a "smallest coherent change," and runs the check at the edge
 // before a request ever reaches Keystatic's own handler.
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isAdminSurfacePath(pathname)) {
@@ -35,10 +77,27 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Every other /api route (none exist today beyond the two above) stays
-  // excluded from locale-prefixing, exactly as before.
+  // Every other /api route (/api/auth/** as of AUTH-001, plus the two
+  // admin-surface ones above) stays excluded from locale-prefixing, exactly
+  // as before.
   if (pathname.startsWith("/api")) {
     return NextResponse.next();
+  }
+
+  // AUTH-002: planner-auth branch. Redirect, don't render partial data and
+  // don't 404 (spec §2, §5, §6) — checked before intlMiddleware so a bare
+  // /planner request (no locale prefix yet) is caught in the same pass as a
+  // locale-prefixed one, in one redirect instead of two.
+  if (isPlannerPath(pathname)) {
+    const authed = await hasValidSession(request);
+    if (!authed) {
+      const { locale } = stripLocalePrefix(pathname);
+      const loginUrl = new URL(
+        `/${locale ?? routing.defaultLocale}/login`,
+        request.url,
+      );
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return intlMiddleware(request);
