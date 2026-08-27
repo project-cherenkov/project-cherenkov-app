@@ -17,11 +17,11 @@
 
 ## **I. Short Description**
 
-Project Cherenkov is an Indonesian OSN (olympiad) editorial archive spanning **informatics, physics, and astronomy**. Each editorial is a rigorous, self-contained write-up of one idea — a proof, a derivation, a technique — and every editorial ships paired with a **working interactive visualization**, not a decorative one: the visualization is how the idea is explored, not an illustration bolted on afterward.
+Project Cherenkov is an Indonesian OSN (olympiad) editorial archive and study planner spanning **informatics, physics, and astronomy**. Each editorial is a rigorous, self-contained write-up of one idea — a proof, a derivation, a technique — and every editorial ships paired with a **working interactive visualization**, not a decorative one: the visualization is how the idea is explored, not an illustration bolted on afterward.
 
 The archive is indexed by **principle** (the general idea an editorial teaches) and **error type** (the specific mistake it corrects), deliberately **not** by subject chapter — the goal is to let someone arrive because they made a specific mistake or want to understand a specific idea, not because they're browsing a syllabus.
 
-This repo is **Phase 1**: a public, no-login editorial archive. Browse, read, and interact with every visualization with zero accounts needed — see [Section V](#v-content-model--writing-an-editorial) for exactly what an editorial is made of. **Phase 2** (accounts + a study planner for working through three years of school material toward the TKA/UTBK exam) is architected but not built — see `docs/phase-2-architecture.md`. Nothing in this repo depends on Phase 2 existing.
+This repo contains **Phase 1** (the public archive) and the implemented **Phase 2** account and study-planner layer. Visitors can browse, read, and interact with the archive without an account; signed-in users can generate a study plan, track progress through quiz attempts, and open topic pages. Phase 3 adaptive scheduling remains planned but is not implemented — see `docs/phase-3-architecture.md`.
 
 Content is git-committed MDX, not stored in a database: there is no CRUD backend for editorials, only files under `content/editorials/`, compiled at build time. Editing happens either by editing those files directly, or through an in-site CMS layer ([Section VI](#vi-editing-content-in-the-browser-keystatic)) that writes back to the same files.
 
@@ -41,9 +41,16 @@ Content is git-committed MDX, not stored in a database: there is no CRUD backend
 | **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | **Package manager** | [pnpm](https://pnpm.io) | — |
 
-**Hosting:** [Vercel](https://vercel.com). Framework-detected automatically for Next.js — no `vercel.json` needed. Full step-by-step in [Section VIII](#viii-deploying).
+**Hosting:** [Vercel](https://vercel.com). The current deployment is available at [project-cherenkov-app.vercel.app](https://project-cherenkov-app.vercel.app/). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section VIII](#viii-deploying) for deployment details.
 
-**Phase 2 stack (already in `package.json`, not wired into any running code path yet):** [Neon](https://neon.tech/) (serverless Postgres) + [Drizzle ORM](https://orm.drizzle.team/) + [Better Auth](https://www.better-auth.com/). These exist in dependencies now purely so Phase 2 doesn't start from a blank `package.json` — see `docs/phase-2-architecture.md` for the actual plan. Nothing in Phase 1 imports any of them.
+| Layer | Choice | Why |
+| --- | --- | --- |
+| **Database** | [Neon](https://neon.tech/) serverless Postgres | Stores accounts, study plans, topics, quiz questions, and quiz attempts. |
+| **ORM and migrations** | [Drizzle ORM](https://orm.drizzle.team/) | Defines the database schema in TypeScript and manages migrations. |
+| **Authentication** | [Better Auth](https://www.better-auth.com/) | Provides email/password authentication; Google OAuth is optional when both Google credentials are configured. |
+| **Planner and quizzes** | `lib/planner*.ts` and `lib/quiz*.ts` | Implements plan generation, progress tracking, quiz scoring, and server actions. |
+
+Phase 3 adaptive scheduling remains a design document in `docs/phase-3-architecture.md`.
 
 ---
 
@@ -54,7 +61,9 @@ app/[locale]/                    routes (everything is locale-prefixed)
   archive/                       archive listing, filterable by subject/principle/errorType
   archive/[subject]/[slug]/      one editorial's page
   about/                         team + repo link
-  login/ signup/ planner/        Phase 2 placeholders ("coming soon")
+  login/ signup/                 Better Auth email/password forms
+  planner/                       authenticated plan overview and generation
+  planner/[subject]/[chapter]/   topic status, linked editorial, and quiz
 app/keystatic/                   Keystatic admin UI (gated in production — Section VI)
 app/api/keystatic/               Keystatic's own API route (gated in production)
 app/api/team-photo/              Vercel Blob upload endpoint (gated in production)
@@ -72,8 +81,14 @@ lib/team.ts                      reads the Keystatic team singleton for the Abou
 lib/admin-guard.ts               single source of truth for whether /keystatic and the
                                   team-photo routes are reachable (Section VI)
 lib/site.ts                      shared absolute site URL for sitemap/robots/Open Graph
+lib/auth.ts, lib/auth-guard.ts   Better Auth configuration and session checks
+lib/planner*.ts, lib/quiz*.ts    plan generation, progress, scoring, and actions
+lib/db/                          Drizzle schema and lazy Neon database client
 messages/{id,en}.json            UI strings
-docs/phase-2-architecture.md     Phase 2 plan (not implemented)
+drizzle/                         generated migration output (created by Drizzle Kit)
+scripts/                          topic and example quiz-question seed scripts
+docs/phase-2-architecture.md     implemented Phase 2 decisions and data model
+docs/phase-3-architecture.md     Phase 3 adaptive-scheduling plan (not implemented)
 docs/deployment-readiness.md     what's been hardened for production, what's still
                                   placeholder, what needs a real decision (Section VIII)
 ```
@@ -96,13 +111,18 @@ pnpm dev
 | `pnpm dev` | Runs `next dev` and `velite dev` together (via `concurrently`) — Velite watches `content/` and regenerates its output automatically, nothing to run separately. |
 | `pnpm build` | `velite build && next build` — a full production build. |
 | `pnpm generate` | `velite build` on its own. Run this once after a fresh clone if your editor complains that `#content` can't be found, or if a typecheck fails before you've ever run `pnpm dev`. |
-| `pnpm lint` | `next lint`. |
+| `pnpm lint` | Runs the configured Next.js lint command. |
 | `pnpm typecheck` | `tsc --noEmit`. Also depends on `.velite/` existing — run `pnpm generate` first if this is the very first command you run after cloning. |
+| `pnpm test` | Runs the Vitest test suite once. |
+| `pnpm test:watch` | Runs Vitest in watch mode. |
+| `pnpm db:generate` | Generates Drizzle migrations from `lib/db/schema.ts`; requires `DATABASE_URL` for Drizzle Kit. |
+| `pnpm db:migrate` | Applies Drizzle migrations; requires `DATABASE_URL`. |
+| `pnpm db:seed` | Generates Velite output, then seeds topics and one example quiz question per editorial; requires `DATABASE_URL`. |
 | `pnpm start` | Serves an already-built app (`next start`). |
 
 ### Environment variables
 
-**Phase 1's core archive needs none of these.** There's no database or auth yet; content is git-committed MDX and the whole thing runs with a bare `pnpm install && pnpm dev`. Everything below is optional, and each one degrades cleanly when unset rather than crashing. Full detail and current defaults live in `.env.example`.
+**The public archive needs none of the account variables below.** Accounts, planner pages, quizzes, and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero database configuration. Full detail and current defaults live in `.env.example`.
 
 | Variable | Required? | Purpose |
 | --- | --- | --- |
@@ -110,9 +130,13 @@ pnpm dev
 | `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. Generate with `openssl rand -base64 32`. |
 | `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. |
 | `BLOB_READ_WRITE_TOKEN` | Optional | Powers the team-photo upload path. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it in Vercel once you have a real domain. |
+| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or replace it with the eventual custom domain. |
+| `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public archive or CI's unit tests. |
+| `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. |
+| `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional | Enables the "Continue with Google" buttons and Google OAuth. Email/password remains available without these. |
 
-`.env.example` also documents the Phase 2 variables (`DATABASE_URL`, `BETTER_AUTH_SECRET`, OAuth provider credentials) — none of them do anything yet.
+The account variables are not needed to browse the archive. Without `DATABASE_URL`, requests to authenticated Phase 2 features fail closed as unauthenticated rather than making the public archive unavailable.
 
 ---
 
@@ -140,6 +164,7 @@ Body is regular Markdown/MDX. Use `$...$` for inline math and `$$...$$` for disp
 Place `<Interactive />` on its own line wherever the visualization should sit — typically between "the idea" and "the full proof." **If you forget it, the visualization still renders** (right after the hook, with a small notice) rather than silently publishing an editorial with no interactive — see FAQ B for exactly why it's built this way. Placing the tag yourself just gives you control over where it lands, which reads better.
 
 Three real, complete examples to copy from:
+
 - `content/editorials/informatics/binary-search-on-answer.mdx` (`graph-array-stepper`)
 - `content/editorials/physics/projectile-range-symmetry.mdx` (`trajectory-sandbox`)
 - `content/editorials/astronomy/eccentric-transit-duration.mdx` (`orbital-sandbox`)
@@ -206,14 +231,14 @@ To add a locale: add it to `i18n/routing.ts`'s `locales` array and add a matchin
 
 ## **VIII. Deploying**
 
-The public archive is deployable as-is, with **zero required environment variables**.
+The public archive is deployed on Vercel at [project-cherenkov-app.vercel.app](https://project-cherenkov-app.vercel.app/). It can be deployed with **zero required environment variables** for the archive-only experience.
 
-1. **Push to GitHub.** Already done — this repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) (currently private — see [Section X](#x-open-questions--known-placeholders) for what that means for the site's own "built in the open" copy).
-2. **Import the repo in [Vercel](https://vercel.com/new).** Next.js is auto-detected; no `vercel.json` or custom build command needed.
-3. **Deploy.** No environment variables are required for this step — the archive, i18n, and MDX pipeline all work with none set.
-4. *(Optional)* **Set `NEXT_PUBLIC_SITE_URL`** in the Vercel project's environment variables once you have a real domain, so the sitemap and Open Graph tags stop pointing at `localhost`.
+1. **Push to GitHub.** This repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) (currently private — see [Section X](#x-open-questions--known-placeholders) for what that means for the site's own "built in the open" copy).
+2. **Import the repo in [Vercel](https://vercel.com/new).** Next.js is auto-detected; no `vercel.json` or custom build command is needed.
+3. **Deploy.** No environment variables are required for the archive, i18n, or MDX pipeline.
+4. **Set `NEXT_PUBLIC_SITE_URL`** to `https://project-cherenkov-app.vercel.app` (or the eventual custom domain) in Vercel so the sitemap and Open Graph metadata use the deployed origin instead of `localhost`.
 5. **Every PR gets its own preview deploy** automatically (Vercel's default behavior for a connected repo) — nothing extra to configure.
-6. **CI runs independently of Vercel.** `.github/workflows/ci.yml` runs install → `pnpm generate` → lint → typecheck → build on every push/PR, so a broken build is visible on GitHub even before Vercel finishes its own deploy.
+6. **CI runs independently of Vercel.** `.github/workflows/ci.yml` runs install → `pnpm generate` → lint → typecheck → test → build on every push/PR, so a broken build or failing test is visible on GitHub as well as through Vercel's deployment checks.
 
 **Before a real public launch** (as opposed to a working preview), read `docs/deployment-readiness.md` and resolve:
 
@@ -285,6 +310,8 @@ These were left as clearly-marked placeholders rather than decided unilaterally 
 - **Repo visibility.** The repo is private, but the About page's "built in the open" copy and the header's public GitHub link both promise access a public visitor won't have — see FAQ E. Resolve by making the repo public before launch, or by adjusting that copy/link.
 - **Author names.** All three example editorials use `"PLACEHOLDER Author Name"`.
 - **Hero/footer copy.** `messages/*.json` has several `[PLACEHOLDER — ...]` strings for copy that wasn't provided (hero headline, taglines, about-page philosophy and team bios) — this is also why every page currently ships `noindex` (see [Section VIII](#viii-deploying)).
-- **OAuth provider(s) for Phase 2** — see `docs/phase-2-architecture.md`.
+- **Google OAuth deployment setup.** Google is the selected optional provider;
+  the OAuth credentials and callback configuration still need to be created
+  before enabling that sign-in path in a deployed environment.
 - **`vizEngine: "none"` spec conflict** — see FAQ C.
 - **Team-photo upload authentication, once Keystatic's admin surface is enabled in production.** Enabling GitHub-storage mode makes `/keystatic` itself OAuth-gated, but `/api/team-photo` has no per-request session check of its own — see `docs/deployment-readiness.md` for the residual risk and the recommended (not yet implemented) fix.
