@@ -1,6 +1,7 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
+import { isAdminEmail } from "@/lib/admin-guard";
 
 // BLOB-002 (team-photo path) + BLOB-004 (upload constraints).
 //
@@ -34,6 +35,12 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Authentication required." },
       { status: 401 },
+    );
+  }
+  if (!isAdminEmail(user.email)) {
+    return NextResponse.json(
+      { error: "Content editor authorization required." },
+      { status: 403 },
     );
   }
 

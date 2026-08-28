@@ -18,7 +18,7 @@ export default async function ArchivePage({
 }) {
   const params = await searchParams;
   const t = await getTranslations("archive");
-  const facets = getArchiveFacets();
+  const facets = getArchiveFacets(params);
   const results = filterEditorials(params);
 
   return (

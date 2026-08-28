@@ -7,6 +7,24 @@ const VALID = {
   initial: { speed: 20, angleDeg: 45 },
 };
 
+describe("isTrajectorySandboxConfig", () => {
+  it("accepts a valid config", () => {
+    expect(isTrajectorySandboxConfig(VALID)).toBe(true);
+  });
+
+  it("rejects a missing initial state", () => {
+    const { initial: _initial, ...withoutInitial } = VALID;
+    expect(isTrajectorySandboxConfig(withoutInitial)).toBe(false);
+  });
+
+  it("rejects malformed initial values and ranges", () => {
+    expect(
+      isTrajectorySandboxConfig({ ...VALID, initial: { speed: "fast", angleDeg: 45 } }),
+    ).toBe(false);
+    expect(isTrajectorySandboxConfig({ ...VALID, angleRange: [85, 5] })).toBe(false);
+  });
+});
+
 // ARCH-001 / TICKET-02 required test: an unrecognized physicsType must not
 // pass the guard — previously it did, and crashed TrajectorySandbox's
 // non-null PHYSICS_FUNCTIONS lookup at render time.

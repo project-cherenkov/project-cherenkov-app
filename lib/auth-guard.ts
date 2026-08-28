@@ -50,7 +50,12 @@ export interface SessionUser {
 // (lib/quiz-actions.ts, lib/planner-actions.ts) also calls this directly and
 // rejects on null, rather than trusting that middleware ran.
 export async function getCurrentUser(): Promise<SessionUser | null> {
-  const session = await getSessionFromHeaders(await nextHeaders());
+  let session: Awaited<ReturnType<typeof auth.api.getSession>>;
+  try {
+    session = await getSessionFromHeaders(await nextHeaders());
+  } catch {
+    return null;
+  }
   if (!session) return null;
   return {
     id: session.user.id,

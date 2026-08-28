@@ -96,6 +96,10 @@ export default async function middleware(request: NextRequest) {
         `/${locale ?? routing.defaultLocale}/login`,
         request.url,
       );
+      loginUrl.searchParams.set(
+        "next",
+        `${pathname}${request.nextUrl.search}`,
+      );
       return NextResponse.redirect(loginUrl);
     }
   }

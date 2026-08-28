@@ -54,7 +54,7 @@ rather than forking the content.
 /[locale]/login                     — Better Auth sign-in
 /[locale]/signup                    — Better Auth sign-up
 /[locale]/planner                   — overview: progress across all 3 subjects
-/[locale]/planner/[subject]/[chapter]  — per-chapter progress + linked editorials
+/[locale]/planner/[subject]/[chapter]  — per-topic progress + linked editorials; the final segment contains the topic ID
 /api/auth/[...all]                  — Better Auth's catch-all handler
 ```
 

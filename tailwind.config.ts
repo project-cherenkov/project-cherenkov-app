@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 // Design tokens straight from the Identity spec (Section 4 of the build spec).
 // Keep all Cherenkov brand colors here — never hardcode a hex in a component.
@@ -55,7 +56,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [typography],
 };
 
 export default config;

@@ -33,8 +33,14 @@ export function scoreAnswers(
   const keysById = new Map(answerKeys.map((k) => [k.id, k]));
   const scored: ScoredAnswer[] = [];
   const invalid: SubmittedAnswer[] = [];
+  const seenQuestionIds = new Set<string>();
 
   for (const answer of submitted) {
+    if (seenQuestionIds.has(answer.questionId)) {
+      invalid.push(answer);
+      continue;
+    }
+    seenQuestionIds.add(answer.questionId);
     const key = keysById.get(answer.questionId);
     if (
       !key ||
@@ -105,7 +111,9 @@ export async function submitQuizAttemptCore(
     return { scoredAnswers: [], score: 0, rejected: invalid };
   }
 
-  const score = computeTopicScore(scored);
+  // Partial answers remain valid for feedback, but mastery must reflect the
+  // complete topic rather than only the questions answered in this request.
+  const score = scored.filter((answer) => answer.correct).length / answerKeys.length;
   await deps.insertAttempt({ userId, topicId: input.topicId, score });
   await deps.onAttemptRecorded?.(userId, input.topicId);
 

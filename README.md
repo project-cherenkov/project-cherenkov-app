@@ -63,7 +63,7 @@ app/[locale]/                    routes (everything is locale-prefixed)
   about/                         team + repo link
   login/ signup/                 Better Auth email/password forms
   planner/                       authenticated plan overview and generation
-  planner/[subject]/[chapter]/   topic status, linked editorial, and quiz
+  planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (chapter segment contains topic ID)
 app/keystatic/                   Keystatic admin UI (gated in production — Section VI)
 app/api/keystatic/               Keystatic's own API route (gated in production)
 app/api/team-photo/              Vercel Blob upload endpoint (gated in production)
@@ -314,4 +314,4 @@ These were left as clearly-marked placeholders rather than decided unilaterally 
   the OAuth credentials and callback configuration still need to be created
   before enabling that sign-in path in a deployed environment.
 - **`vizEngine: "none"` spec conflict** — see FAQ C.
-- **Team-photo upload authentication, once Keystatic's admin surface is enabled in production.** Enabling GitHub-storage mode makes `/keystatic` itself OAuth-gated, but `/api/team-photo` has no per-request session check of its own — see `docs/deployment-readiness.md` for the residual risk and the recommended (not yet implemented) fix.
+- **Team-photo upload authorization, once Keystatic's admin surface is enabled in production.** Enabling GitHub-storage mode makes `/keystatic` itself OAuth-gated; `/api/team-photo` additionally requires an authenticated email listed in `ADMIN_EMAILS`.

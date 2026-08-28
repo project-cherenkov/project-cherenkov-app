@@ -24,5 +24,21 @@ export function isGraphArrayStepperConfig(
 ): config is GraphArrayStepperConfig {
   if (!config || typeof config !== "object") return false;
   const c = config as Record<string, unknown>;
-  return Array.isArray(c.array) && Array.isArray(c.steps);
+  return (
+    Array.isArray(c.array) &&
+    c.array.every((value) => typeof value === "number" && Number.isFinite(value)) &&
+    Array.isArray(c.steps) &&
+    c.steps.length > 0 &&
+    c.steps.every((step) => {
+      if (!step || typeof step !== "object") return false;
+      const pointers = (step as Record<string, unknown>).pointers;
+      return (
+        pointers !== null &&
+        typeof pointers === "object" &&
+        Object.values(pointers).every(
+          (index) => typeof index === "number" && Number.isInteger(index),
+        )
+      );
+    })
+  );
 }

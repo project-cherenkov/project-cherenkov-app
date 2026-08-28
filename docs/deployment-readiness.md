@@ -76,7 +76,7 @@ GitHub-storage path that wasn't actually wired to enforce anything).
   GitHub OAuth + repo permissions become the real access control for
   `/keystatic` itself.
 - **What this does *not* fix:** once you do configure GitHub-storage mode
-  in production, `/api/team-photo` itself still has no per-request session
+  in production, `/api/team-photo` itself also checks the current session
   check — it becomes reachable to anyone who has the URL, not just people
   logged into Keystatic. Adding that is a **Recommended**, not Required,
   follow-up (§7) — it needs an actual design decision (share Keystatic's

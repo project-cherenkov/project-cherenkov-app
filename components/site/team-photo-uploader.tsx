@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 
-// Admin-only helper used alongside /keystatic (BLOB-002). Not gated by any
-// auth of its own — the same trust boundary as /keystatic's local-storage
-// mode in dev; production access control is whatever fronts /keystatic
-// itself once CMS-006's github-storage path is wired in, not this widget's
-// concern. Uploads a file to /api/team-photo (which enforces type/size
-// before calling Blob's put()) and surfaces the resulting URL for the
-// editor to paste into the team singleton's photoUrl field.
+// Admin-only helper used alongside /keystatic (BLOB-002). Uploads a file to
+// /api/team-photo, which enforces editor authorization and file constraints
+// before calling Blob's put(), then surfaces the URL for the editor to paste
+// into the team singleton's photoUrl field.
 export function TeamPhotoUploader() {
   const [status, setStatus] = useState<"idle" | "uploading" | "done" | "error">("idle");
   const [url, setUrl] = useState<string | null>(null);

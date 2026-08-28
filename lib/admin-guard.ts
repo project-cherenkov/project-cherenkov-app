@@ -13,9 +13,8 @@
 //   1. /keystatic would serve a fully-functional-looking CMS UI to any
 //      visitor, whose edits silently vanish (serverless filesystems don't
 //      persist), which is confusing at best.
-//   2. app/api/team-photo/route.ts is a public POST endpoint the moment
-//      BLOB_READ_WRITE_TOKEN is set — anyone on the internet could upload
-//      files to your Blob store, regardless of Keystatic's storage mode.
+//   2. app/api/team-photo/route.ts needs its own caller authorization because
+//      the middleware gate only answers whether the surface is enabled.
 //
 // Conservative decision (flagged, not silently chosen): once
 // KEYSTATIC_GITHUB_CLIENT_ID is set, GitHub OAuth + repo write access
@@ -28,4 +27,15 @@
 export function isAdminSurfaceEnabled(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
   return Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID);
+}
+
+// Team-photo authorization is deliberately explicit and independent of the
+// CMS surface toggle. Values are comma-separated emails, normalized so the
+// deployment setting is not sensitive to whitespace or casing.
+export function isAdminEmail(email: string): boolean {
+  const allowed = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+  return allowed.includes(email.trim().toLowerCase());
 }

@@ -9,7 +9,9 @@ import {
   jsonb,
   numeric,
   date,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // ===========================================================================
 // Better Auth core tables — user, session, account, verification
@@ -124,7 +126,11 @@ export const topics = pgTable("topics", {
   // (spec §4). Nullable: a planner topic can exist before its editorial is
   // published.
   editorialSlug: text("editorial_slug"),
-});
+}, (table) => [
+  uniqueIndex("topics_editorial_slug_unique")
+    .on(table.editorialSlug)
+    .where(sql`${table.editorialSlug} is not null`),
+]);
 
 export const quizQuestions = pgTable("quiz_questions", {
   id: uuid("id").primaryKey().defaultRandom(),

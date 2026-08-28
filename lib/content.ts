@@ -43,13 +43,15 @@ export function filterEditorials(filters: ArchiveFilters): Editorial[] {
 
 // Archive is indexed by principle + error type, not by chapter (spec §1) —
 // these power the filter dropdowns in components/site/archive-filters.tsx.
-export function getArchiveFacets() {
-  const all = getAllEditorials();
+export function getArchiveFacets(filters: ArchiveFilters = {}) {
+  const forSubject = filterEditorials({ principle: filters.principle, errorType: filters.errorType });
+  const forPrinciple = filterEditorials({ subject: filters.subject, errorType: filters.errorType });
+  const forErrorType = filterEditorials({ subject: filters.subject, principle: filters.principle });
   return {
-    subjects: uniqueSorted(all.map((e) => e.subject)),
-    principles: uniqueSorted(all.map((e) => e.principle)),
+    subjects: uniqueSorted(forSubject.map((e) => e.subject)),
+    principles: uniqueSorted(forPrinciple.map((e) => e.principle)),
     errorTypes: uniqueSorted(
-      all.map((e) => e.errorType).filter((v): v is string => Boolean(v)),
+      forErrorType.map((e) => e.errorType).filter((v): v is string => Boolean(v)),
     ),
   };
 }

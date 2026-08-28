@@ -71,18 +71,13 @@ describe("PlanOverview — render paths", () => {
     expect(html).toContain("Scheduled for 2026-06-01");
     expect(html).toContain("Regenerate plan");
     expect(html).toContain(
-      '/id/planner/informatics/monotonic-predicate-search',
+      "/id/planner/informatics/t1",
     );
     // The empty-state prompt should not leak into the populated state.
     expect(html).not.toContain("You don&#x27;t have a study plan yet.");
   });
 
-  // ROBUST-003 / TICKET-06 required test: a chapter value containing
-  // URL-meaningful characters must not break the generated link — it's
-  // seeded from each editorial's free-text `principle` field
-  // (velite.config.ts), so nothing guarantees it arrives already
-  // URL-safe.
-  it("URL-encodes a chapter value containing special characters", () => {
+  it("uses the topic ID rather than the display chapter in the URL", () => {
     const html = renderToStaticMarkup(
       <PlanOverview
         labels={labels}
@@ -90,9 +85,9 @@ describe("PlanOverview — render paths", () => {
         locale="id"
         items={[
           {
-            topicId: "t3",
+            topicId: "topic/with special characters",
             subject: "informatics",
-            chapter: "two words/with a slash",
+            chapter: "Display chapter can contain anything",
             title: "An Editorial With Free-Text Principle",
             status: "not_started",
             scheduledFor: "2026-06-03",
@@ -103,10 +98,8 @@ describe("PlanOverview — render paths", () => {
     );
 
     expect(html).toContain(
-      `/id/planner/informatics/${encodeURIComponent("two words/with a slash")}`,
+      `/id/planner/informatics/${encodeURIComponent("topic/with special characters")}`,
     );
-    // The raw, unencoded slash must not appear inside the href — it would
-    // split the URL into an unintended extra path segment.
-    expect(html).not.toContain("informatics/two words/with a slash");
+    expect(html).not.toContain("Display chapter can contain anything");
   });
 });

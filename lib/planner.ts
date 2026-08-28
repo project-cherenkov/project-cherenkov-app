@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { quizAttempts, topics, studyPlans, planItems } from "@/lib/db/schema";
 
@@ -52,7 +52,8 @@ export async function getTopicStatus(
     .from(quizAttempts)
     .where(
       and(eq(quizAttempts.userId, userId), eq(quizAttempts.topicId, topicId)),
-    );
+    )
+    .orderBy(desc(quizAttempts.attemptedAt), desc(quizAttempts.id));
 
   return deriveStatusFromAttempts(attempts);
 }
@@ -71,7 +72,8 @@ export async function getAllProgress(
         attemptedAt: quizAttempts.attemptedAt,
       })
       .from(quizAttempts)
-      .where(eq(quizAttempts.userId, userId)),
+      .where(eq(quizAttempts.userId, userId))
+      .orderBy(desc(quizAttempts.attemptedAt), desc(quizAttempts.id)),
   ]);
 
   const attemptsByTopic = new Map<string, AttemptRecord[]>();
@@ -89,15 +91,10 @@ export async function getAllProgress(
     }));
 }
 
-// PLANNER-003 route lookup: /[locale]/planner/[subject]/[chapter] resolves
-// `chapter` against topics.chapter directly (docs/phase-2-architecture.md:
-// "topics ... mirrors the archive's subject/principle taxonomy" — chapter
-// is seeded from each editorial's `principle`, free text on purpose per
-// keystatic.config.ts, not guaranteed to already be URL-safe — see
-// ROBUST-003 / TICKET-06: components/planner/plan-overview.tsx encodes
-// `chapter` with encodeURIComponent() when building the link, and the
-// lookup here compares against the decoded value the browser sends, so no
-// matching decode step is needed on this side).
+// PLANNER-003 route lookup: the final URL segment is a topic UUID. The route
+// keeps its existing `[chapter]` folder for URL compatibility, but never
+// resolves by `topics.chapter`, which is a free-text display label and may
+// legitimately collide between editorials.
 export const VALID_SUBJECTS = ["informatics", "physics", "astronomy"] as const;
 export type Subject = (typeof VALID_SUBJECTS)[number];
 
@@ -105,16 +102,16 @@ export function isValidSubject(value: string): value is Subject {
   return (VALID_SUBJECTS as readonly string[]).includes(value);
 }
 
-export async function getTopicBySubjectAndChapter(
+export async function getTopicBySubjectAndId(
   subject: string,
-  chapter: string,
+  topicId: string,
 ): Promise<Topic | null> {
   if (!isValidSubject(subject)) return null;
 
   const [topic] = await db
     .select()
     .from(topics)
-    .where(and(eq(topics.subject, subject), eq(topics.chapter, chapter)))
+    .where(and(eq(topics.subject, subject), eq(topics.id, topicId)))
     .limit(1);
 
   return topic ?? null;

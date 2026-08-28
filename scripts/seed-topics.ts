@@ -19,6 +19,7 @@ import { getAllEditorials } from "../lib/content";
 import { deriveTopicsFromEditorials } from "../lib/seed/derive-topics";
 import { db } from "../lib/db";
 import { topics } from "../lib/db/schema";
+import { sql } from "drizzle-orm";
 
 async function main() {
   const editorials = getAllEditorials();
@@ -30,7 +31,19 @@ async function main() {
   }
 
   for (const topic of derived) {
-    await db.insert(topics).values(topic);
+    await db
+      .insert(topics)
+      .values(topic)
+      .onConflictDoUpdate({
+        target: topics.editorialSlug,
+        targetWhere: sql`${topics.editorialSlug} is not null`,
+        set: {
+          subject: topic.subject,
+          chapter: topic.chapter,
+          title: topic.title,
+          order: topic.order,
+        },
+      });
   }
 
   console.log(

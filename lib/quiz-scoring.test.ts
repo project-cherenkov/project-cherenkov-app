@@ -114,6 +114,17 @@ describe("scoreAnswers — validation and partial submissions", () => {
     expect(computeTopicScore(scored)).toBe(0.5);
   });
 
+  it("rejects duplicate question IDs instead of counting them twice", () => {
+    const { scored, invalid } = scoreAnswers(ANSWER_KEYS, [
+      { questionId: "q1", selectedChoiceIndex: 2 },
+      { questionId: "q1", selectedChoiceIndex: 2 },
+      { questionId: "q3", selectedChoiceIndex: 2 },
+    ]);
+    expect(scored).toHaveLength(2);
+    expect(invalid).toHaveLength(1);
+    expect(computeTopicScore(scored)).toBe(0.5);
+  });
+
   it("submitQuizAttemptCore records nothing when every answer is invalid", async () => {
     const { deps, inserted } = makeFakeDeps(ANSWER_KEYS);
 
@@ -124,5 +135,18 @@ describe("scoreAnswers — validation and partial submissions", () => {
 
     expect(result.scoredAnswers).toHaveLength(0);
     expect(inserted).toHaveLength(0);
+  });
+});
+
+describe("submitQuizAttemptCore — partial submissions do not grant mastery", () => {
+  it("stores the score against all topic questions", async () => {
+    const { deps, inserted } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [{ questionId: "q1", selectedChoiceIndex: 2 }],
+    });
+
+    expect(inserted[0]?.score).toBeCloseTo(1 / ANSWER_KEYS.length);
   });
 });
