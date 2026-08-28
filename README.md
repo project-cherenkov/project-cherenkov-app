@@ -33,7 +33,7 @@ Content is git-committed MDX, not stored in a database: there is no CRUD backend
 | --- | --- | --- |
 | **Framework** | [Next.js](https://nextjs.org/) 15 (App Router) + TypeScript | Server-rendered pages for content that should be crawlable and fast on a first load, with the App Router's per-route code splitting keeping each editorial's (potentially heavy) visualization out of every other page's bundle. |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) + hand-rolled shadcn/ui-style primitives (`components/ui/`) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for color/spacing, rather than scattering hex values through components. |
-| **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Gives every editorial a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time — a malformed editorial fails the build instead of shipping broken. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
+| **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Gives every editorial a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualization-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
 | **Math typesetting** | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML **at build time**, so a reader's browser never runs math-rendering JS or reflows the page after load. |
 | **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Three purpose-built engines (`components/viz/`) — a graph/array stepper, a trajectory sandbox, and an orbital sandbox — dispatched by `vizEngine` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
 | **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section VII](#vii-internationalization). |
@@ -115,7 +115,7 @@ pnpm dev
 | `pnpm typecheck` | `tsc --noEmit`. Also depends on `.velite/` existing — run `pnpm generate` first if this is the very first command you run after cloning. |
 | `pnpm test` | Runs the Vitest test suite once. |
 | `pnpm test:watch` | Runs Vitest in watch mode. |
-| `pnpm db:generate` | Generates Drizzle migrations from `lib/db/schema.ts`; requires `DATABASE_URL` for Drizzle Kit. |
+| `pnpm db:generate` | Generates Drizzle migrations from `lib/db/schema.ts`; does not require a database connection. |
 | `pnpm db:migrate` | Applies Drizzle migrations; requires `DATABASE_URL`. |
 | `pnpm db:seed` | Generates Velite output, then seeds topics and one example quiz question per editorial; requires `DATABASE_URL`. |
 | `pnpm start` | Serves an already-built app (`next start`). |
@@ -129,7 +129,8 @@ pnpm dev
 | `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. Generate with `openssl rand -base64 32`. |
 | `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. |
-| `BLOB_READ_WRITE_TOKEN` | Optional | Powers the team-photo upload path. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. |
+| `ADMIN_EMAILS` | Required for team-photo uploads | Comma-separated email allow-list for content editors. The upload route requires both an authenticated session and a matching email. |
+| `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the team-photo upload path after authorization succeeds. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. |
 | `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or replace it with the eventual custom domain. |
 | `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public archive or CI's unit tests. |
 | `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. |
@@ -257,9 +258,9 @@ None of the above block deploying the code today — they block treating the res
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-Local-storage Keystatic — the default, with no env vars set — has no authentication of its own; it's built to be run by whoever is already running `pnpm dev` on their own machine. Nothing stopped it from being reachable on a real deployment too, which is a problem for two separate reasons: a serverless deployment's filesystem doesn't persist writes between requests, so `/keystatic` would present a live-looking but non-functional editing UI to anyone who found the URL; and independently, `app/api/team-photo/route.ts` is a public `POST` endpoint the moment `BLOB_READ_WRITE_TOKEN` is set, regardless of Keystatic's own storage mode.
+Local-storage Keystatic — the default, with no env vars set — has no authentication of its own; it's built to be run by whoever is already running `pnpm dev` on their own machine. Nothing stopped it from being reachable on a real deployment too, which is a problem for two separate reasons: a serverless deployment's filesystem doesn't persist writes between requests, so `/keystatic` would present a live-looking but non-functional editing UI to anyone who found the URL; and independently, the team-photo route needs its own session and `ADMIN_EMAILS` authorization regardless of Keystatic's storage mode.
 
-`lib/admin-guard.ts` closes both at once: on a deployed build (`NODE_ENV === "production"`, which Vercel sets for both preview and production deploys), `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` all 404 unless `KEYSTATIC_GITHUB_CLIENT_ID` is set — at which point GitHub OAuth plus the logged-in user's actual repo permissions become the real access control. Local `pnpm dev` is unaffected either way.
+`lib/admin-guard.ts` closes the deployment exposure at the edge: on a deployed build (`NODE_ENV === "production"`, which Vercel sets for both preview and production deploys), `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` all 404 unless `KEYSTATIC_GITHUB_CLIENT_ID` is set. The team-photo handler then separately requires an authenticated user whose email appears in `ADMIN_EMAILS`. Local `pnpm dev` is unaffected by the production surface gate.
 
 </details>
 
