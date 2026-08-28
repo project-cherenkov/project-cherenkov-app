@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
+import NextLink from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
 
 export function SiteHeader() {
@@ -41,12 +42,12 @@ export function SiteHeader() {
           >
             {t("about")}
           </Link>
-          <a
+          <NextLink
             href="/keystatic"
             className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900"
           >
             {t("edit")}
-          </a>
+          </NextLink>
           <a
             href="https://github.com/project-cherenkov/project-cherenkov-app"
             target="_blank"
