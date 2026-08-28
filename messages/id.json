@@ -129,6 +129,16 @@
       "questionCounter": "Soal {current} dari {total}",
       "submitErrorUnauthenticated": "Sesi Anda telah berakhir. Silakan masuk kembali dan coba lagi.",
       "submitErrorGeneric": "Terjadi kesalahan saat mengirim jawaban Anda. Silakan coba lagi."
+    },
+    "authErrors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi internet Anda dan coba lagi.",
+      "notConfigured": "Masuk dengan Google belum diaktifkan untuk deployment ini. Gunakan email dan kata sandi sebagai gantinya.",
+      "misconfigured": "Server mengalami masalah konfigurasi saat memulai proses masuk dengan Google. Coba lagi nanti atau hubungi admin situs.",
+      "denied": "Proses masuk dengan Google dibatalkan sebelum selesai.",
+      "accountExists": "Akun dengan email ini sudah terdaftar menggunakan metode masuk yang berbeda. Masuk dengan email dan kata sandi sebagai gantinya.",
+      "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
+      "server": "Server menolak permintaan masuk dengan Google. Silakan coba lagi.",
+      "unknown": "Terjadi kesalahan saat masuk dengan Google. Silakan coba lagi."
     }
   },
   "error": {

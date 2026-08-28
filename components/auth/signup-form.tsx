@@ -1,42 +1,93 @@
 "use client";
 
-import { useState, useTransition, type FormEvent } from "react";
+import { useEffect, useState, useTransition, type FormEvent } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link, useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { signUp, signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
 
 export interface SignupFormProps {
   googleEnabled: boolean;
 }
 
+// AUTH-003: see lib/auth-error-messages.ts for why sign-in failures are
+// classified into a specific, translated message rather than one generic
+// fallback — this mirrors login-form.tsx's handling exactly, since
+// sign-up and sign-in via Google are the same underlying call.
 export function SignupForm({ googleEnabled }: SignupFormProps) {
   const t = useTranslations("phase2.signup");
+  const tErrors = useTranslations("phase2.authErrors");
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [isGooglePending, setIsGooglePending] = useState(false);
+
+  // Covers the OAuth round-trip failure mode: the browser left for Google
+  // and came back with `?error=...` on the URL — either the user declined
+  // consent, or Better Auth's callback handler rejected the result (e.g.
+  // this Google account's email is already registered via email/password).
+  // Only meant to catch an error already present when the page loads, not
+  // to react to every later search-param change.
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (!errorParam) return;
+    setError(tErrors(classifyCallbackError(errorParam)));
+    router.replace(pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     startTransition(async () => {
-      const result = await signUp.email({ email, password, name });
-      if (result.error) {
-        setError(result.error.message ?? t("genericError"));
-        return;
+      try {
+        const result = await signUp.email({ email, password, name });
+        if (result.error) {
+          setError(result.error.message ?? t("genericError"));
+          return;
+        }
+        router.push("/planner");
+      } catch (err) {
+        // The request never got a structured response to read a per-field
+        // error out of at all — e.g. offline, or the deployment's own API
+        // route unreachable. Better Auth's own message above still takes
+        // priority; this only fires when there wasn't one to show.
+        setError(tErrors(classifyAuthError(err)));
       }
-      router.push("/planner");
     });
   }
 
-  function handleGoogle() {
+  async function handleGoogle() {
     // Sign-up and sign-in via Google are the same Better Auth call —
     // signIn.social() creates the account on first use.
-    void signIn.social({ provider: "google", callbackURL: `/${locale}/planner` });
+    setError(null);
+    setIsGooglePending(true);
+    try {
+      const result = await signIn.social({
+        provider: "google",
+        callbackURL: `/${locale}/planner`,
+      });
+      // A successful call redirects the browser to Google before this
+      // promise ever resolves — reaching here with an error means our own
+      // server rejected the request before any redirect happened at all
+      // (the failure mode the bare `void signIn.social(...)` used to
+      // swallow completely).
+      if (result?.error) {
+        setError(tErrors(classifyAuthError(result.error)));
+        setIsGooglePending(false);
+      }
+    } catch (err) {
+      setError(tErrors(classifyAuthError(err)));
+      setIsGooglePending(false);
+    }
   }
 
   return (
@@ -90,7 +141,12 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
           <p className="text-center text-xs uppercase tracking-wide text-slate-400">
             {t("orDivider")}
           </p>
-          <Button variant="outline" type="button" onClick={handleGoogle}>
+          <Button
+            variant="outline"
+            type="button"
+            onClick={handleGoogle}
+            disabled={isGooglePending}
+          >
             {t("googleButton")}
           </Button>
         </div>

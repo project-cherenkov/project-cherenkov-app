@@ -129,6 +129,16 @@
       "questionCounter": "Question {current} of {total}",
       "submitErrorUnauthenticated": "Your session has expired. Please log back in and try again.",
       "submitErrorGeneric": "Something went wrong submitting your answers. Please try again."
+    },
+    "authErrors": {
+      "network": "Couldn't reach the server. Check your internet connection and try again.",
+      "notConfigured": "Google sign-in isn't set up for this deployment yet. Use email and password instead.",
+      "misconfigured": "The server hit a configuration problem starting Google sign-in. Please try again later or contact the site admin.",
+      "denied": "Google sign-in was cancelled before it finished.",
+      "accountExists": "An account with this email already exists using a different sign-in method. Log in with your email and password instead.",
+      "rateLimited": "Too many attempts. Please wait a moment and try again.",
+      "server": "The server rejected the Google sign-in request. Please try again.",
+      "unknown": "Something went wrong signing in with Google. Please try again."
     }
   },
   "error": {
