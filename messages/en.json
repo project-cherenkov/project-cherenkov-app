@@ -7,7 +7,12 @@
     "home": "Home",
     "archive": "Archive",
     "about": "About",
-    "repo": "GitHub"
+    "repo": "GitHub",
+    "edit": "Edit",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "myPlan": "My Plan",
+    "logout": "Log Out"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -67,7 +72,9 @@
     "teamHeading": "Team",
     "teamPlaceholder": "[PLACEHOLDER — team bios TBD]",
     "repoHeading": "Source",
-    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file — see the commit history and contribute on GitHub."
+    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file — see the commit history and contribute on GitHub.",
+    "contactHeading": "Contact",
+    "contactPlaceholder": "[PLACEHOLDER — contact inquiries TBD]"
   },
   "footer": {
     "tagline": "[PLACEHOLDER — footer tagline TBD]",

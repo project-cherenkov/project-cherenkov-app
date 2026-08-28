@@ -285,9 +285,23 @@ export default config({
       path: "content/team/",
       format: { data: "json" },
       schema: {
+        professionalContact: fields.object({
+          email: fields.text({
+            label: "Email",
+            description: "Team-wide contact email for general and press inquiries.",
+          }),
+          label: fields.text({
+            label: "Label",
+            description: "Optional label, e.g. 'General & press inquiries'.",
+          }),
+        }),
         members: fields.array(
           fields.object({
             name: fields.text({ label: "Name", validation: { isRequired: true } }),
+            role: fields.text({
+              label: "Role",
+              description: "e.g. Founder — Astronomy",
+            }),
             bioEn: fields.text({ label: "Bio (English)", multiline: true }),
             bioId: fields.text({ label: "Bio (Indonesian)", multiline: true }),
             // Populated by pasting the URL returned from the team-photo
@@ -296,6 +310,10 @@ export default config({
               label: "Photo URL",
               description:
                 "Upload a photo via /keystatic/team-photo first, then paste the returned Blob URL here.",
+            }),
+            personalContact: fields.text({
+              label: "Personal Contact",
+              description: "Personal email or secondary contact handle.",
             }),
           }),
           { label: "Team members", itemLabel: (props) => props.fields.name.value || "Member" },

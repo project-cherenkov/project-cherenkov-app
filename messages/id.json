@@ -7,7 +7,12 @@
     "home": "Beranda",
     "archive": "Arsip",
     "about": "Tentang",
-    "repo": "GitHub"
+    "repo": "GitHub",
+    "edit": "Edit",
+    "login": "Masuk",
+    "signup": "Daftar",
+    "myPlan": "Rencana Saya",
+    "logout": "Keluar"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -67,7 +72,9 @@
     "teamHeading": "Tim",
     "teamPlaceholder": "[PLACEHOLDER — bio tim belum ditulis]",
     "repoHeading": "Sumber",
-    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git — lihat riwayat commit dan berkontribusi di GitHub."
+    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git — lihat riwayat commit dan berkontribusi di GitHub.",
+    "contactHeading": "Kontak",
+    "contactPlaceholder": "[PLACEHOLDER — informasi kontak belum ditulis]"
   },
   "footer": {
     "tagline": "[PLACEHOLDER — tagline footer belum ditulis]",
