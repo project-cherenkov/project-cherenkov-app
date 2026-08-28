@@ -76,8 +76,14 @@ export function PlanOverview({
             {/* Plain <a>, not next-intl's Link: keeps this component free of
                 any router/navigation context dependency (see the
                 generatePlanForm comment above) — a real client-side
-                transition isn't essential for this list. */}
-            <a href={`/${locale}/planner/${item.subject}/${item.chapter}`}>
+                transition isn't essential for this list.
+                ROBUST-003 / TICKET-06: item.subject/item.chapter are
+                encoded — chapter is seeded from each editorial's free-text
+                `principle` field (velite.config.ts), so it isn't
+                guaranteed to already be a URL-safe slug. */}
+            <a
+              href={`/${locale}/planner/${encodeURIComponent(item.subject)}/${encodeURIComponent(item.chapter)}`}
+            >
               {item.title}
             </a>
             <span>{statusLabel(item.status, labels)}</span>

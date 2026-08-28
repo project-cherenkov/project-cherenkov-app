@@ -38,6 +38,9 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   const [activeTab, setActiveTab] = useState("0");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [score, setScore] = useState<number | null>(null);
+  const [submitError, setSubmitError] = useState<
+    "unauthenticated" | "no_valid_answers" | null
+  >(null);
   const [isPending, startTransition] = useTransition();
 
   if (questions.length === 0) return null;
@@ -47,6 +50,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   }
 
   function handleSubmit() {
+    setSubmitError(null);
     startTransition(async () => {
       const submitted = Object.entries(answers).map(
         ([questionId, selectedChoiceIndex]) => ({
@@ -58,6 +62,14 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
       if (result.ok) {
         setFeedback(result.results);
         setScore(result.score);
+      } else {
+        // UX-001 / TICKET-07: previously this branch did nothing — the
+        // pending state cleared and the user got no indication anything
+        // had gone wrong. `unauthenticated` (a real scenario if the
+        // session expires mid-quiz) gets its own message pointing at
+        // re-login; any other reason falls back to a generic retry
+        // prompt.
+        setSubmitError(result.reason);
       }
     });
   }
@@ -66,6 +78,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
     setAnswers({});
     setFeedback(null);
     setScore(null);
+    setSubmitError(null);
     setActiveTab("0");
   }
 
@@ -132,6 +145,13 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
         </Tabs>
 
         <div className="mt-4">
+          {submitError ? (
+            <p role="alert" className="mb-2 text-sm text-red-600">
+              {submitError === "unauthenticated"
+                ? t("submitErrorUnauthenticated")
+                : t("submitErrorGeneric")}
+            </p>
+          ) : null}
           {feedback === null ? (
             <Button
               onClick={handleSubmit}

@@ -119,7 +119,14 @@
       "incorrect": "Salah",
       "retake": "Ulangi kuis",
       "scoreLabel": "Skor kamu {score}%",
-      "questionCounter": "Soal {current} dari {total}"
+      "questionCounter": "Soal {current} dari {total}",
+      "submitErrorUnauthenticated": "Sesi Anda telah berakhir. Silakan masuk kembali dan coba lagi.",
+      "submitErrorGeneric": "Terjadi kesalahan saat mengirim jawaban Anda. Silakan coba lagi."
     }
+  },
+  "error": {
+    "heading": "Terjadi kesalahan",
+    "body": "Terjadi kesalahan tak terduga saat menampilkan halaman ini. Anda dapat mencoba lagi, atau kembali ke arsip.",
+    "retry": "Coba lagi"
   }
 }

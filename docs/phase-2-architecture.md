@@ -1,9 +1,17 @@
-# Phase 2 architecture — study planner (not built)
+# Phase 2 architecture — study planner
+
+> **DOC-001 / TICKET-08 status update:** Phase 2 is built — accounts,
+> Better Auth, Drizzle/Neon, the planner routes, and quiz scoring all exist,
+> are wired into `middleware.ts`, and are exercised by the test suite. The
+> "not built" framing this doc originally had was stale; the sketch below
+> is kept for its historical design intent, but treat `README.md` and
+> `docs/phase-3-architecture.md` (which opens with "Phase 2 (this repo, as
+> built)...") as the accurate description of what actually shipped.
 
 Phase 1 (this repo, as scaffolded) is a public, no-login editorial archive.
-Nothing below is implemented — this is a plan to build against later, so a
-Phase 1 decision doesn't quietly close off Phase 2. Nothing here should
-change how Phase 1 works.
+This document was originally written before Phase 2 existed, as a plan to
+build against later, so a Phase 1 decision didn't quietly close off Phase 2.
+Nothing here changes how Phase 1 works.
 
 ## What Phase 2 adds
 

@@ -1,5 +1,6 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth-guard";
 
 // BLOB-002 (team-photo path) + BLOB-004 (upload constraints).
 //
@@ -22,6 +23,20 @@ const ALLOWED_TYPES = new Set([
 ]);
 
 export async function POST(request: Request) {
+  // SEC-001 / TICKET-04: a per-request session check, independent of
+  // middleware.ts's isAdminSurfaceEnabled() env-level gate (which answers
+  // "is the admin surface turned on at all", not "is *this caller*
+  // authenticated"). Checked before touching the request body or calling
+  // Blob's put(), same fail-closed getCurrentUser() every other per-user
+  // Server Action already uses (lib/quiz-actions.ts, lib/planner-actions.ts).
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Authentication required." },
+      { status: 401 },
+    );
+  }
+
   const form = await request.formData();
   const file = form.get("file");
 

@@ -119,7 +119,14 @@
       "incorrect": "Incorrect",
       "retake": "Retake quiz",
       "scoreLabel": "You scored {score}%",
-      "questionCounter": "Question {current} of {total}"
+      "questionCounter": "Question {current} of {total}",
+      "submitErrorUnauthenticated": "Your session has expired. Please log back in and try again.",
+      "submitErrorGeneric": "Something went wrong submitting your answers. Please try again."
     }
+  },
+  "error": {
+    "heading": "Something went wrong",
+    "body": "An unexpected error occurred while rendering this page. You can try again, or head back to the archive.",
+    "retry": "Try again"
   }
 }

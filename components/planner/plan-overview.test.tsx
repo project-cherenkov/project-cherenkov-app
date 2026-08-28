@@ -76,4 +76,37 @@ describe("PlanOverview — render paths", () => {
     // The empty-state prompt should not leak into the populated state.
     expect(html).not.toContain("You don&#x27;t have a study plan yet.");
   });
+
+  // ROBUST-003 / TICKET-06 required test: a chapter value containing
+  // URL-meaningful characters must not break the generated link — it's
+  // seeded from each editorial's free-text `principle` field
+  // (velite.config.ts), so nothing guarantees it arrives already
+  // URL-safe.
+  it("URL-encodes a chapter value containing special characters", () => {
+    const html = renderToStaticMarkup(
+      <PlanOverview
+        labels={labels}
+        hasPlan={true}
+        locale="id"
+        items={[
+          {
+            topicId: "t3",
+            subject: "informatics",
+            chapter: "two words/with a slash",
+            title: "An Editorial With Free-Text Principle",
+            status: "not_started",
+            scheduledFor: "2026-06-03",
+          },
+        ]}
+        generatePlanForm={<button>Regenerate plan</button>}
+      />,
+    );
+
+    expect(html).toContain(
+      `/id/planner/informatics/${encodeURIComponent("two words/with a slash")}`,
+    );
+    // The raw, unencoded slash must not appear inside the href — it would
+    // split the URL into an unintended extra path segment.
+    expect(html).not.toContain("informatics/two words/with a slash");
+  });
 });

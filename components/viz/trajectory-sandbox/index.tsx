@@ -4,47 +4,21 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
+import { PHYSICS_FUNCTIONS } from "./physics-functions";
 import type { TrajectorySandboxConfig } from "./types";
 
 const SCRUB_STEPS = 200;
 const CANVAS_HEIGHT = 240;
 const PADDING_PX = 24;
 
-interface Initial {
-  speed: number;
-  angleDeg: number;
-}
-
-// Named-function registry — see the comment in types.ts for why vizConfig
-// can't hold a literal function. Add a new scenario by adding a key here.
-const PHYSICS_FUNCTIONS: Record<
-  string,
-  {
-    position: (t: number, initial: Initial, gravity: number) => { x: number; y: number };
-    flightTime: (initial: Initial, gravity: number) => number;
-  }
-> = {
-  projectile: {
-    position: (t, initial, gravity) => {
-      const theta = (initial.angleDeg * Math.PI) / 180;
-      const x = initial.speed * Math.cos(theta) * t;
-      const y = Math.max(
-        initial.speed * Math.sin(theta) * t - 0.5 * gravity * t * t,
-        0,
-      );
-      return { x, y };
-    },
-    flightTime: (initial, gravity) =>
-      (2 * initial.speed * Math.sin((initial.angleDeg * Math.PI) / 180)) /
-      gravity,
-  },
-};
-
 export function TrajectorySandbox({
   config,
 }: {
   config: TrajectorySandboxConfig;
 }) {
+  // Safe: isTrajectorySandboxConfig (types.ts) validates config.physicsType
+  // against PHYSICS_TYPE_KEYS before a config ever reaches this component
+  // (see viz-engine.tsx's dispatch), so this lookup can never miss here.
   const physics = PHYSICS_FUNCTIONS[config.physicsType]!;
 
   const [speed, setSpeed] = useState(config.initial.speed);

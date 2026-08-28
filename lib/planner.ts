@@ -92,8 +92,12 @@ export async function getAllProgress(
 // PLANNER-003 route lookup: /[locale]/planner/[subject]/[chapter] resolves
 // `chapter` against topics.chapter directly (docs/phase-2-architecture.md:
 // "topics ... mirrors the archive's subject/principle taxonomy" — chapter
-// is seeded from each editorial's `principle`, an already URL-safe slug —
-// see lib/seed/derive-topics.ts).
+// is seeded from each editorial's `principle`, free text on purpose per
+// keystatic.config.ts, not guaranteed to already be URL-safe — see
+// ROBUST-003 / TICKET-06: components/planner/plan-overview.tsx encodes
+// `chapter` with encodeURIComponent() when building the link, and the
+// lookup here compares against the decoded value the browser sends, so no
+// matching decode step is needed on this side).
 export const VALID_SUBJECTS = ["informatics", "physics", "astronomy"] as const;
 export type Subject = (typeof VALID_SUBJECTS)[number];
 
