@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 
 // AUTH-002. Google button visibility is decided server-side (GOOGLE_CLIENT_ID
@@ -5,5 +6,10 @@ import { LoginForm } from "@/components/auth/login-form";
 // graceful-degradation pattern already used for Keystatic's GitHub OAuth.
 export default function LoginPage() {
   const googleEnabled = Boolean(process.env.GOOGLE_CLIENT_ID);
-  return <LoginForm googleEnabled={googleEnabled} />;
+  return (
+    <Suspense>
+      <LoginForm googleEnabled={googleEnabled} />
+    </Suspense>
+  );
 }
+

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
 import { ArchiveFilters } from "@/components/site/archive-filters";
@@ -27,11 +28,13 @@ export default async function ArchivePage({
       <p className="mt-2 text-slate-600">{t("description")}</p>
 
       <div className="mt-6">
-        <ArchiveFilters
-          subjects={facets.subjects}
-          principles={facets.principles}
-          errorTypes={facets.errorTypes}
-        />
+        <Suspense>
+          <ArchiveFilters
+            subjects={facets.subjects}
+            principles={facets.principles}
+            errorTypes={facets.errorTypes}
+          />
+        </Suspense>
       </div>
 
       <p className="mt-4 label-code">{t("count", { count: results.length })}</p>
