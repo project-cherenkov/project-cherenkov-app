@@ -26,12 +26,20 @@ describe("generatePlan — targetExamDate validation", () => {
     expect(result).toEqual({ ok: false, reason: "invalid_date" });
   });
 
+  it("rejects a date in the past", async () => {
+    const result = await generatePlan("2020-01-01");
+    expect(result).toEqual({ ok: false, reason: "invalid_date" });
+  });
+
   it("passes a well-formed ISO date through to the auth check", async () => {
     // No DATABASE_URL in this test environment, so a validly-formatted
-    // date should fail closed as unauthenticated (lib/auth-guard.ts),
+    // future date should fail closed as unauthenticated (lib/auth-guard.ts),
     // never as invalid_date and never by throwing.
     delete process.env.DATABASE_URL;
-    const result = await generatePlan("2026-06-05");
+    const futureIsoDate = new Date(Date.now() + 86_400_000)
+      .toISOString()
+      .slice(0, 10);
+    const result = await generatePlan(futureIsoDate);
     expect(result).toEqual({ ok: false, reason: "unauthenticated" });
   });
 });

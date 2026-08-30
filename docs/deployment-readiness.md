@@ -75,15 +75,11 @@ GitHub-storage path that wasn't actually wired to enforce anything).
   deploys) only once `KEYSTATIC_GITHUB_CLIENT_ID` is set — at which point
   GitHub OAuth + repo permissions become the real access control for
   `/keystatic` itself.
-- **What this does *not* fix:** once you do configure GitHub-storage mode
-  in production, `/api/team-photo` itself also checks the current session
-  check — it becomes reachable to anyone who has the URL, not just people
-  logged into Keystatic. Adding that is a **Recommended**, not Required,
-  follow-up (§7) — it needs an actual design decision (share Keystatic's
-  own session? a separate shared secret?) rather than an obvious default,
-  and the current behavior is a large improvement over "open to the
-  entire internet with zero configuration," which is what shipping today
-  as-is would mean.
+- **What this does *not* fix:** when GitHub-storage mode is configured in
+  production, `/api/team-photo` still runs its own current-session check in
+  `app/api/team-photo/route.ts` and therefore remains restricted to an
+  authenticated user, not just anyone with the URL. This is now explicitly
+  implemented rather than left as a future recommendation.
 - **Mitigation required before implementation?** No — implemented in this
   pass.
 
@@ -162,8 +158,9 @@ result as a finished public launch rather than a working preview.
 
 - A real `Content-Security-Policy` header once Keystatic's admin UI and
   Blob's image host are both accounted for.
-- Session-based (or shared-secret) auth on `/api/team-photo` specifically,
-  independent of the admin-surface gate — see §3.
+- No additional team-photo auth recommendation remains: the route already
+  enforces `getCurrentUser()` + admin checks in `app/api/team-photo/route.ts`
+  and the deployment note above is updated to reflect that implementation.
 - Tightening `principle`/`errorType` from free strings to a fixed enum
   once enough real editorials exist to see the real vocabulary
   (`velite.config.ts`'s own note — unrelated to deployment, restated here

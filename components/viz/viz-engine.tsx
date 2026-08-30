@@ -72,11 +72,10 @@ function VizMissing() {
 }
 
 function VizConfigError({ engine }: { engine: string }) {
+  const t = useTranslations("editorial");
   return (
     <div className="rounded-md border border-dashed border-red-300 bg-red-50 p-4 text-sm text-red-700">
-      This editorial&apos;s <code className="font-mono">vizConfig</code> doesn&apos;t
-      match what the <code className="font-mono">{engine}</code> engine expects. Check the
-      MDX frontmatter against components/viz/{engine}/types.ts.
+      {t("vizConfigError", { engine })}
     </div>
   );
 }

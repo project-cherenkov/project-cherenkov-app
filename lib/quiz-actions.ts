@@ -1,13 +1,18 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { quizQuestions, quizAttempts } from "@/lib/db/schema";
+import { quizQuestions, quizAttempts, studyPlans, planItems } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { syncPlanItemCompletion } from "@/lib/planner-sync";
+import {
+  syncPlanItemCompletion,
+  syncPlanItemCompletionCore,
+  type PlanSyncDeps,
+} from "@/lib/planner-sync";
 import {
   submitQuizAttemptCore,
   type QuizAttemptDeps,
+  type QuizAttemptTxDeps,
   type SubmitQuizAttemptInput,
 } from "@/lib/quiz-scoring";
 
@@ -44,6 +49,90 @@ const realDeps: QuizAttemptDeps = {
   // derived status (via lib/planner-sync.ts) — never a client-controlled
   // flag.
   onAttemptRecorded: syncPlanItemCompletion,
+  async transaction(callback) {
+    return db.transaction(async (tx) => {
+      const txDeps: QuizAttemptTxDeps = {
+        async getAnswerKeys(topicId) {
+          const rows = await tx
+            .select({
+              id: quizQuestions.id,
+              correctChoiceIndex: quizQuestions.correctChoiceIndex,
+              choices: quizQuestions.choices,
+            })
+            .from(quizQuestions)
+            .where(eq(quizQuestions.topicId, topicId));
+
+          return rows.map((r) => ({
+            id: r.id,
+            correctChoiceIndex: r.correctChoiceIndex,
+            choiceCount: r.choices.length,
+          }));
+        },
+        async insertAttempt(row) {
+          await tx.insert(quizAttempts).values(row);
+        },
+        onAttemptRecorded: async (userId, topicId) => {
+          const txSyncDeps: PlanSyncDeps = {
+            async getStatus(userId, topicId) {
+              const attempts = await tx
+                .select({
+                  score: quizAttempts.score,
+                  attemptedAt: quizAttempts.attemptedAt,
+                })
+                .from(quizAttempts)
+                .where(
+                  and(
+                    eq(quizAttempts.userId, userId),
+                    eq(quizAttempts.topicId, topicId),
+                  ),
+                )
+                .orderBy(quizAttempts.attemptedAt, quizAttempts.id);
+
+              const [mostRecent] = [...attempts].sort(
+                (a, b) =>
+                  +new Date(b.attemptedAt).getTime() -
+                  +new Date(a.attemptedAt).getTime(),
+              );
+
+              if (!mostRecent) return "not_started";
+              return mostRecent.score >= 0.8 ? "done" : "in_progress";
+            },
+            async getUserPlanId(userId) {
+              const [plan] = await tx
+                .select({ id: studyPlans.id })
+                .from(studyPlans)
+                .where(eq(studyPlans.userId, userId))
+                .limit(1);
+              return plan?.id ?? null;
+            },
+            async getPlanItem(planId, topicId) {
+              const [item] = await tx
+                .select({ id: planItems.id, completedAt: planItems.completedAt })
+                .from(planItems)
+                .where(
+                  and(
+                    eq(planItems.planId, planId),
+                    eq(planItems.topicId, topicId),
+                  ),
+                )
+                .limit(1);
+              return item ?? null;
+            },
+            async markComplete(planItemId) {
+              await tx
+                .update(planItems)
+                .set({ completedAt: new Date() })
+                .where(eq(planItems.id, planItemId));
+            },
+          };
+
+          await syncPlanItemCompletionCore(txSyncDeps, userId, topicId);
+        },
+      };
+
+      return callback(txDeps);
+    });
+  },
 };
 
 // QUIZ-001. quiz_questions.correct_choice_index is only ever fetched here,

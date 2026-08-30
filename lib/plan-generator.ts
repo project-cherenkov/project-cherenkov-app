@@ -1,6 +1,21 @@
 export interface PlanTopic {
   id: string;
+  subject: "informatics" | "physics" | "astronomy";
   order: number;
+}
+
+const SUBJECT_ORDER: Record<PlanTopic["subject"], number> = {
+  informatics: 0,
+  physics: 1,
+  astronomy: 2,
+};
+
+function comparePlanTopics(a: PlanTopic, b: PlanTopic): number {
+  const subjectDiff = SUBJECT_ORDER[a.subject] - SUBJECT_ORDER[b.subject];
+  if (subjectDiff !== 0) return subjectDiff;
+  const orderDiff = a.order - b.order;
+  if (orderDiff !== 0) return orderDiff;
+  return a.id.localeCompare(b.id);
 }
 
 export interface GeneratedPlanItem {
@@ -8,15 +23,27 @@ export interface GeneratedPlanItem {
   scheduledFor: string; // "YYYY-MM-DD"
 }
 
+function parseLocalDate(isoDate: string): Date {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function formatLocalDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function addDays(isoDate: string, days: number): string {
-  const d = new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
+  const d = parseLocalDate(isoDate);
+  d.setDate(d.getDate() + days);
+  return formatLocalDate(d);
 }
 
 function daysBetween(startIso: string, endIso: string): number {
-  const start = new Date(`${startIso}T00:00:00Z`).getTime();
-  const end = new Date(`${endIso}T00:00:00Z`).getTime();
+  const start = parseLocalDate(startIso).getTime();
+  const end = parseLocalDate(endIso).getTime();
   return Math.round((end - start) / 86_400_000);
 }
 
@@ -41,7 +68,7 @@ export function generatePlanItems(
   targetExamDate: string,
   today: string,
 ): GeneratedPlanItem[] {
-  const ordered = [...topics].sort((a, b) => a.order - b.order);
+  const ordered = [...topics].sort(comparePlanTopics);
   const n = ordered.length;
   if (n === 0) return [];
 
@@ -65,7 +92,7 @@ export interface ExistingPlanRef {
   id: string;
 }
 
-export interface PlanGenerationDeps {
+export interface PlanGenerationTxDeps {
   getAllTopics: () => Promise<PlanTopic[]>;
   getExistingPlan: (userId: string) => Promise<ExistingPlanRef | null>;
   insertPlan: (userId: string, targetExamDate: string) => Promise<string>;
@@ -75,6 +102,12 @@ export interface PlanGenerationDeps {
     planId: string,
     items: GeneratedPlanItem[],
   ) => Promise<void>;
+}
+
+export interface PlanGenerationDeps extends PlanGenerationTxDeps {
+  transaction?: <T>(
+    callback: (tx: PlanGenerationTxDeps) => Promise<T>,
+  ) => Promise<T>;
 }
 
 export type GeneratePlanCoreResult =
@@ -92,6 +125,17 @@ export async function generateOrRegeneratePlanCore(
   targetExamDate: string,
   today: string,
 ): Promise<GeneratePlanCoreResult> {
+  if (deps.transaction) {
+    return deps.transaction(async (txDeps) =>
+      generateOrRegeneratePlanCore(
+        { ...txDeps, transaction: undefined },
+        userId,
+        targetExamDate,
+        today,
+      ),
+    );
+  }
+
   const allTopics = await deps.getAllTopics();
   if (allTopics.length === 0) {
     return { ok: false, reason: "no_topics" };

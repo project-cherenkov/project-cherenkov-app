@@ -30,6 +30,16 @@ export function deriveStatusFromAttempts(
 
 export type Topic = typeof topics.$inferSelect;
 
+function compareTopicsBySubjectOrder(a: Topic, b: Topic): number {
+  const subjectOrder = ["informatics", "physics", "astronomy"] as const;
+  const subjectDiff =
+    subjectOrder.indexOf(a.subject) - subjectOrder.indexOf(b.subject);
+  if (subjectDiff !== 0) return subjectDiff;
+  const orderDiff = a.order - b.order;
+  if (orderDiff !== 0) return orderDiff;
+  return a.id.localeCompare(b.id);
+}
+
 export interface TopicWithStatus {
   topic: Topic;
   status: TopicStatus;
@@ -84,7 +94,7 @@ export async function getAllProgress(
   }
 
   return [...allTopics]
-    .sort((a, b) => a.order - b.order)
+    .sort(compareTopicsBySubjectOrder)
     .map((topic) => ({
       topic,
       status: deriveStatusFromAttempts(attemptsByTopic.get(topic.id) ?? []),

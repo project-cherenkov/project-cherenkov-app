@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { generatePlan } from "@/lib/planner-actions";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,21 @@ export function GeneratePlanForm({
   const [examDate, setExamDate] = useState(defaultExamDate ?? "");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("phase2.planner");
   const router = useRouter();
+
+  function mapError(reason: "invalid_date" | "no_topics" | "unauthenticated") {
+    switch (reason) {
+      case "invalid_date":
+        return t("generateErrorInvalidDate");
+      case "no_topics":
+        return t("generateErrorNoTopics");
+      case "unauthenticated":
+        return t("generateErrorUnauthenticated");
+      default:
+        return t("generateErrorGeneric");
+    }
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,7 +52,7 @@ export function GeneratePlanForm({
     startTransition(async () => {
       const result = await generatePlan(examDate);
       if (!result.ok) {
-        setError(result.reason);
+        setError(mapError(result.reason));
         return;
       }
       // The Server Action mutated server state — refresh so the Server

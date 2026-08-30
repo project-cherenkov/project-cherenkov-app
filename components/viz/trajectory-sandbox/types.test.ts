@@ -23,6 +23,11 @@ describe("isTrajectorySandboxConfig", () => {
     ).toBe(false);
     expect(isTrajectorySandboxConfig({ ...VALID, angleRange: [85, 5] })).toBe(false);
   });
+
+  it("rejects angles above 90 degrees", () => {
+    expect(isTrajectorySandboxConfig({ ...VALID, initial: { speed: 20, angleDeg: 91 } })).toBe(false);
+    expect(isTrajectorySandboxConfig({ ...VALID, angleRange: [5, 95] })).toBe(false);
+  });
 });
 
 // ARCH-001 / TICKET-02 required test: an unrecognized physicsType must not

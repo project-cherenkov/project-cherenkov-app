@@ -122,20 +122,20 @@ pnpm dev
 
 ### Environment variables
 
-**The public archive needs none of the account variables below.** Accounts, planner pages, quizzes, and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero database configuration. Full detail and current defaults live in `.env.example`.
+**The public archive needs none of the account variables below.** Accounts, planner pages, quizzes, and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero database configuration. Full detail and current defaults live in `.env.example`; the short version below is the deployment-oriented summary.
 
-| Variable | Required? | Purpose |
-| --- | --- | --- |
-| `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
-| `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. Generate with `openssl rand -base64 32`. |
-| `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. |
-| `ADMIN_EMAILS` | Required for team-photo uploads | Comma-separated email allow-list for content editors. The upload route requires both an authenticated session and a matching email. |
-| `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the team-photo upload path after authorization succeeds. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or replace it with the eventual custom domain. |
-| `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public archive or CI's unit tests. |
-| `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. |
-| `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional | Enables the "Continue with Google" buttons and Google OAuth. Email/password remains available without these. |
+| Variable | Required? | Purpose | How to get it (summary) |
+| --- | --- | --- | --- |
+| `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). | Create a GitHub OAuth App under GitHub → Settings → Developer settings → OAuth Apps; set the homepage to your deployed URL and the callback to `https://<your-domain>/api/keystatic/github/oauth/callback`. |
+| `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. | Run `openssl rand -base64 32` and paste the result. |
+| `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. | Usually leave unset; set only if you are using a fork or different repo name. |
+| `ADMIN_EMAILS` | Required for team-photo uploads | Comma-separated email allow-list for content editors. The upload route requires both an authenticated session and a matching email. | Add a comma-separated list such as `editor@example.com, second-editor@example.com` in Vercel's environment variables. |
+| `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the team-photo upload path after authorization succeeds. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it to the project, and let Vercel create the env var automatically. |
+| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or replace it with the eventual custom domain. | Use the deployed origin, e.g. `https://project-cherenkov-app.vercel.app` or your custom domain in Vercel. |
+| `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public archive or CI's unit tests. | Create a Neon project and copy the connection string from Neon → Connection Details. |
+| `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. | Run `openssl rand -base64 32` and paste the result. |
+| `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. | Set to your deployed origin, usually `https://project-cherenkov-app.vercel.app`. |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional | Enables the "Continue with Google" buttons and Google OAuth. Email/password remains available without these. | Create a Google OAuth web client in Google Cloud Console and add the callback URL `https://<your-domain>/api/auth/callback/google`. |
 
 The account variables are not needed to browse the archive. Without `DATABASE_URL`, requests to authenticated Phase 2 features fail closed as unauthenticated rather than making the public archive unavailable.
 

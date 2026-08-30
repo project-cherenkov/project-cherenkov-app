@@ -52,6 +52,7 @@
     "errorTypeLabel": "Error type",
     "byAuthor": "Written by {author}",
     "vizMissing": "[PLACEHOLDER — this editorial has no interactive visualization configured, which conflicts with the site's non-negotiable rule. Flagged for review.]",
+    "vizConfigError": "This editorial's vizConfig doesn't match what the {engine} engine expects. Check the MDX frontmatter against the engine's type guard.",
     "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default — move the tag in the MDX body to reposition it.",
     "backToArchive": "Back to archive"
   },
@@ -111,6 +112,10 @@
       "examDateLabel": "Target exam date",
       "generateButton": "Generate plan",
       "regenerateButton": "Regenerate plan",
+      "generateErrorInvalidDate": "Please choose a date from today onward.",
+      "generateErrorNoTopics": "No study topics are available yet.",
+      "generateErrorUnauthenticated": "Your session has expired. Please log back in and try again.",
+      "generateErrorGeneric": "Something went wrong generating your plan. Please try again.",
       "statusDone": "Done",
       "statusInProgress": "In progress",
       "statusNotStarted": "Not started",

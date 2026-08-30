@@ -52,6 +52,7 @@
     "errorTypeLabel": "Jenis kesalahan",
     "byAuthor": "Ditulis oleh {author}",
     "vizMissing": "[PLACEHOLDER — edisi ini belum punya visualisasi interaktif, bertentangan dengan aturan wajib situs. Ditandai untuk ditinjau.]",
+    "vizConfigError": "Konfigurasi vizConfig edisi ini tidak sesuai dengan yang diharapkan oleh mesin {engine}. Periksa frontmatter MDX terhadap type guard mesin terkait.",
     "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default — pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
     "backToArchive": "Kembali ke arsip"
   },
@@ -111,6 +112,10 @@
       "examDateLabel": "Tanggal ujian target",
       "generateButton": "Buat rencana",
       "regenerateButton": "Buat ulang rencana",
+      "generateErrorInvalidDate": "Pilih tanggal mulai dari hari ini atau masa depan.",
+      "generateErrorNoTopics": "Belum ada topik studi yang tersedia.",
+      "generateErrorUnauthenticated": "Sesi Anda telah berakhir. Silakan masuk kembali dan coba lagi.",
+      "generateErrorGeneric": "Terjadi kesalahan saat membuat rencana Anda. Silakan coba lagi.",
       "statusDone": "Selesai",
       "statusInProgress": "Sedang berjalan",
       "statusNotStarted": "Belum dimulai",

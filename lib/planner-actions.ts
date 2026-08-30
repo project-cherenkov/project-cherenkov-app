@@ -1,12 +1,13 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { studyPlans, planItems, topics } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth-guard";
 import {
   generateOrRegeneratePlanCore,
   type PlanGenerationDeps,
+  type PlanGenerationTxDeps,
 } from "@/lib/plan-generator";
 
 export type GeneratePlanResult =
@@ -24,17 +25,29 @@ export type GeneratePlanResult =
 // toISOString() for a malformed string.
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+function parseLocalDate(value: string): Date {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function isValidIsoDate(value: string): boolean {
   if (!ISO_DATE_RE.test(value)) return false;
-  const d = new Date(`${value}T00:00:00Z`);
+  const d = parseLocalDate(value);
   if (Number.isNaN(d.getTime())) return false;
-  // Reject e.g. "2026-02-30", which Date silently rolls over to March 2.
-  return d.toISOString().slice(0, 10) === value;
+  const normalized = [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, "0"),
+    String(d.getDate()).padStart(2, "0"),
+  ].join("-");
+  return normalized === value;
 }
 
 const realDeps: PlanGenerationDeps = {
   async getAllTopics() {
-    return db.select({ id: topics.id, order: topics.order }).from(topics);
+    return db
+      .select({ id: topics.id, subject: topics.subject, order: topics.order })
+      .from(topics)
+      .orderBy(asc(topics.subject), asc(topics.order), asc(topics.id));
   },
   async getExistingPlan(userId) {
     const [row] = await db
@@ -70,6 +83,54 @@ const realDeps: PlanGenerationDeps = {
       })),
     );
   },
+  async transaction(callback) {
+    return db.transaction(async (tx) => {
+      const txDeps: PlanGenerationTxDeps = {
+        async getAllTopics() {
+          return tx
+            .select({ id: topics.id, subject: topics.subject, order: topics.order })
+            .from(topics)
+            .orderBy(asc(topics.subject), asc(topics.order), asc(topics.id));
+        },
+        async getExistingPlan(userId) {
+          const [row] = await tx
+            .select({ id: studyPlans.id })
+            .from(studyPlans)
+            .where(eq(studyPlans.userId, userId))
+            .limit(1);
+          return row ?? null;
+        },
+        async insertPlan(userId, targetExamDate) {
+          const [row] = await tx
+            .insert(studyPlans)
+            .values({ userId, targetExamDate })
+            .returning({ id: studyPlans.id });
+          return row!.id;
+        },
+        async updatePlan(planId, targetExamDate) {
+          await tx
+            .update(studyPlans)
+            .set({ targetExamDate, generatedAt: new Date() })
+            .where(eq(studyPlans.id, planId));
+        },
+        async deletePlanItems(planId) {
+          await tx.delete(planItems).where(eq(planItems.planId, planId));
+        },
+        async insertPlanItems(planId, items) {
+          if (items.length === 0) return;
+          await tx.insert(planItems).values(
+            items.map((item) => ({
+              planId,
+              topicId: item.topicId,
+              scheduledFor: item.scheduledFor,
+            })),
+          );
+        },
+      };
+
+      return callback(txDeps);
+    });
+  },
 };
 
 // PLANNER-002. Handles both "Generate plan" and "Regenerate plan" (spec
@@ -90,10 +151,17 @@ export async function generatePlan(
     return { ok: false, reason: "invalid_date" };
   }
 
+  const today = [
+    new Date().getFullYear(),
+    String(new Date().getMonth() + 1).padStart(2, "0"),
+    String(new Date().getDate()).padStart(2, "0"),
+  ].join("-");
+  if (targetExamDate < today) {
+    return { ok: false, reason: "invalid_date" };
+  }
+
   const user = await getCurrentUser();
   if (!user) return { ok: false, reason: "unauthenticated" };
-
-  const today = new Date().toISOString().slice(0, 10);
   const result = await generateOrRegeneratePlanCore(
     realDeps,
     user.id,

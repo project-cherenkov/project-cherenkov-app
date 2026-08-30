@@ -8,11 +8,11 @@ import {
 } from "./plan-generator";
 
 const FIVE_TOPICS: PlanTopic[] = [
-  { id: "t1", order: 0 },
-  { id: "t2", order: 1 },
-  { id: "t3", order: 2 },
-  { id: "t4", order: 3 },
-  { id: "t5", order: 4 },
+  { id: "t1", subject: "informatics", order: 0 },
+  { id: "t2", subject: "informatics", order: 1 },
+  { id: "t3", subject: "informatics", order: 2 },
+  { id: "t4", subject: "informatics", order: 3 },
+  { id: "t5", subject: "informatics", order: 4 },
 ];
 
 // spec §8 required test: "Plan generation is deterministic and even —
@@ -30,6 +30,25 @@ describe("generatePlanItems — determinism and even distribution", () => {
     expect(items).toHaveLength(FIVE_TOPICS.length);
     const topicIds = items.map((i) => i.topicId).sort();
     expect(topicIds).toEqual(FIVE_TOPICS.map((t) => t.id).sort());
+  });
+
+  it("sorts by subject before order when topic order restarts per subject", () => {
+    const mixed: PlanTopic[] = [
+      { id: "physics-2", subject: "physics", order: 1 },
+      { id: "informatics-1", subject: "informatics", order: 0 },
+      { id: "physics-1", subject: "physics", order: 0 },
+      { id: "astronomy-1", subject: "astronomy", order: 0 },
+      { id: "informatics-2", subject: "informatics", order: 1 },
+    ];
+
+    const items = generatePlanItems(mixed, "2026-06-05", "2026-06-01");
+    expect(items.map((item) => item.topicId)).toEqual([
+      "informatics-1",
+      "informatics-2",
+      "physics-1",
+      "physics-2",
+      "astronomy-1",
+    ]);
   });
 
   it("spreads topics evenly across a window at least as long as the topic count", () => {

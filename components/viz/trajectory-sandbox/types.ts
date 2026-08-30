@@ -52,8 +52,12 @@ export function isTrajectorySandboxConfig(
     typeof angleDeg === "number" &&
     Number.isFinite(angleDeg) &&
     angleDeg >= 0 &&
-    angleDeg <= 180 &&
-    (c.speedRange === undefined || isRange(c.speedRange)) &&
-    (c.angleRange === undefined || isRange(c.angleRange))
+    angleDeg <= 90 &&
+    (c.speedRange === undefined ||
+      (isRange(c.speedRange) && c.speedRange[0] > 0)) &&
+    (c.angleRange === undefined ||
+      (isRange(c.angleRange) &&
+        c.angleRange[0] >= 0 &&
+        c.angleRange[1] <= 90))
   );
 }

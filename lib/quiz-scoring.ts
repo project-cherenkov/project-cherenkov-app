@@ -73,18 +73,20 @@ export interface SubmitQuizAttemptInput {
   answers: SubmittedAnswer[];
 }
 
-export interface QuizAttemptDeps {
+export interface QuizAttemptTxDeps {
   getAnswerKeys: (topicId: string) => Promise<QuizQuestionAnswerKey[]>;
   insertAttempt: (row: {
     userId: string;
     topicId: string;
     score: number;
   }) => Promise<void>;
-  // Optional: PLANNER-002's completed_at auto-sync (decision #8). Injected
-  // rather than imported directly so this module has no dependency on the
-  // planner module, and so tests can assert it was (or wasn't) called
-  // without needing a real plan to exist.
   onAttemptRecorded?: (userId: string, topicId: string) => Promise<void>;
+}
+
+export interface QuizAttemptDeps extends QuizAttemptTxDeps {
+  transaction?: <T>(
+    callback: (tx: QuizAttemptTxDeps) => Promise<T>,
+  ) => Promise<T>;
 }
 
 export interface SubmitQuizAttemptResult {
@@ -103,6 +105,16 @@ export async function submitQuizAttemptCore(
   userId: string,
   input: SubmitQuizAttemptInput,
 ): Promise<SubmitQuizAttemptResult> {
+  if (deps.transaction) {
+    return deps.transaction(async (txDeps) =>
+      submitQuizAttemptCore(
+        { ...txDeps, transaction: undefined },
+        userId,
+        input,
+      ),
+    );
+  }
+
   const answerKeys = await deps.getAnswerKeys(input.topicId);
   const { scored, invalid } = scoreAnswers(answerKeys, input.answers);
 
