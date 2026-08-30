@@ -53,11 +53,28 @@ function getAuth(): Auth {
   return cached;
 }
 
-// Proxy so call sites keep writing `auth.handler(...)` / `auth.api.getSession(...)`
-// exactly as Better Auth's own docs show, while construction stays deferred
-// to first real use (getAuth() above).
-export const auth: Auth = new Proxy({} as Auth, {
-  get(_target, prop, receiver) {
-    return Reflect.get(getAuth(), prop, receiver);
+type AuthHandler = (request: Request) => Promise<Response>;
+
+// Better Auth's Next.js adapter accepts either:
+// 1) an object with a `handler` function, or
+// 2) a function itself.
+// The library's runtime check uses `"handler" in auth`, so the exported value
+// must explicitly expose `handler` on the object itself. The rest of the
+// instance remains lazily proxied so env reads happen only on first real use.
+const authHandler: AuthHandler = (request) => getAuth().handler(request);
+
+export const auth: Auth & { handler: AuthHandler } = new Proxy(
+  { handler: authHandler } as Auth & { handler: AuthHandler },
+  {
+    get(target, prop, receiver) {
+      if (prop === "handler") {
+        return Reflect.get(target, prop, receiver);
+      }
+      return Reflect.get(getAuth(), prop, receiver);
+    },
+    has(target, prop) {
+      if (prop === "handler") return true;
+      return Reflect.has(getAuth(), prop) || Reflect.has(target, prop);
+    },
   },
-});
+);

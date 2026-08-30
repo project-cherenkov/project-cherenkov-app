@@ -106,6 +106,36 @@ pnpm install
 pnpm dev
 ```
 
+### Stopping the app properly
+
+`pnpm dev` starts both the Next.js server and the Velite content watcher. If you close the terminal with Ctrl+C repeatedly, a stale Node process can sometimes remain listening on a port, which is why you may later see warnings like `Port 3000 is in use, using available port 3001 instead`.
+
+If that happens, stop the old process before relaunching the app:
+
+```powershell
+Get-NetTCPConnection -LocalPort 3000,3001,3002 -ErrorAction SilentlyContinue | Format-Table -AutoSize
+```
+
+Then terminate the owning process ID:
+
+```powershell
+Stop-Process -Id <PID> -Force
+```
+
+After that, start the app again:
+
+```bash
+pnpm dev
+```
+
+If you want to force a specific port, run:
+
+```bash
+npx next dev -p 3000
+```
+
+or any other port you prefer. If the port is still busy, the app will continue to choose the next free one unless you first stop the process holding that port.
+
 | Script | Does |
 | --- | --- |
 | `pnpm dev` | Runs `next dev` and `velite dev` together (via `concurrently`) — Velite watches `content/` and regenerates its output automatically, nothing to run separately. |
