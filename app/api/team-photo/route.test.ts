@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { POST } from "./route";
+import { POST, sanitizeBlobPathSegment } from "./route";
 
 // SEC-001 / TICKET-04 required test: an unauthenticated POST to
 // /api/team-photo must be rejected before any file handling or Blob call,
@@ -37,5 +37,17 @@ describe("POST /api/team-photo — requires authentication", () => {
   it("never returns 200 for an unauthenticated request", async () => {
     const response = await POST(makeRequest());
     expect(response.status).not.toBe(200);
+  });
+});
+
+describe("sanitizeBlobPathSegment", () => {
+  it("removes path traversal and unsafe filename characters", () => {
+    expect(sanitizeBlobPathSegment("../../team photo?.jpg")).toBe(
+      "team-photo.jpg",
+    );
+    expect(sanitizeBlobPathSegment("..\\..\\avatar.png")).toBe(
+      "avatar.png",
+    );
+    expect(sanitizeBlobPathSegment("    ")).toBe("upload");
   });
 });
