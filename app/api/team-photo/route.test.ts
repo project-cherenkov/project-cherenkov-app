@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { POST, sanitizeBlobPathSegment } from "./route";
+import { POST } from "./route";
+import { sanitizeBlobPathSegment } from "./sanitize";
 
 // SEC-001 / TICKET-04 required test: an unauthenticated POST to
 // /api/team-photo must be rejected before any file handling or Blob call,

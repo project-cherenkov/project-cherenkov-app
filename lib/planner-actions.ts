@@ -26,7 +26,14 @@ export type GeneratePlanResult =
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 function parseLocalDate(value: string): Date {
-  const [year, month, day] = value.split("-").map(Number);
+  const parts = value.split("-");
+  if (parts.length !== 3) {
+    return new Date(NaN);
+  }
+
+  const year = Number(parts[0]);
+  const month = Number(parts[1]);
+  const day = Number(parts[2]);
   return new Date(year, month - 1, day);
 }
 

@@ -24,7 +24,14 @@ export interface GeneratedPlanItem {
 }
 
 function parseLocalDate(isoDate: string): Date {
-  const [year, month, day] = isoDate.split("-").map(Number);
+  const parts = isoDate.split("-");
+  if (parts.length !== 3) {
+    return new Date(NaN);
+  }
+
+  const year = Number(parts[0]);
+  const month = Number(parts[1]);
+  const day = Number(parts[2]);
   return new Date(year, month - 1, day);
 }
 
