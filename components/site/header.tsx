@@ -1,14 +1,27 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import NextLink from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
 
+const localeOptions = [
+  { code: "en", label: "EN", flag: "🇬🇧" },
+  { code: "id", label: "ID", flag: "🇮🇩" },
+] as const;
+
 export function SiteHeader() {
   const t = useTranslations("nav");
+  const currentLocale = useLocale();
+  const pathname = usePathname();
   const { data: session } = useSession();
   const router = useRouter();
+
+  function getLocaleHref(targetLocale: "en" | "id") {
+    const localeSegmentPattern = new RegExp(`^/${currentLocale}(?=/|$)`);
+    const pathWithoutLocale = pathname.replace(localeSegmentPattern, "") || "/";
+    return `/${targetLocale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+  }
 
   async function handleSignOut() {
     await signOut();
@@ -18,7 +31,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-cherenkov-offwhite/90 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <span
             aria-hidden
@@ -30,6 +43,29 @@ export function SiteHeader() {
         </Link>
 
         <nav className="flex flex-wrap items-center gap-1 font-mono text-xs uppercase tracking-wide">
+          <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white/70 p-1 shadow-sm">
+            {localeOptions.map(({ code, label, flag }) => {
+              const href = getLocaleHref(code);
+              const isActive = code === currentLocale;
+
+              return (
+                <Link
+                  key={code}
+                  href={href}
+                  className={[
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 transition-colors",
+                    isActive
+                      ? "bg-slate-900 text-white"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+                  ].join(" ")}
+                  aria-label={`Switch language to ${label}`}
+                >
+                  <span aria-hidden="true">{flag}</span>
+                  <span className="font-semibold leading-none">{label}</span>
+                </Link>
+              );
+            })}
+          </div>
           <Link
             href="/archive"
             className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900"

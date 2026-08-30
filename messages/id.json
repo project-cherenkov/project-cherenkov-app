@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "[PLACEHOLDER — penjelasan konsep satu baris, belum ditulis]"
+    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi — setiap bukti dipasangkan dengan visualisasi yang benar-benar bisa Anda manipulasi."
   },
   "nav": {
     "home": "Beranda",
@@ -16,8 +16,8 @@
   },
   "home": {
     "eyebrow": "readme.md",
-    "heroTitle": "[PLACEHOLDER — judul utama belum ditentukan]",
-    "heroBody": "[PLACEHOLDER — penjelasan konsep di hero, belum ditulis. Satu kalimat: apa itu Cherenkov dan untuk siapa.]",
+    "heroTitle": "Ide yang tampak jelas.",
+    "heroBody": "Setiap editorial ditulis oleh seseorang yang sedang bersaing di bidang itu, bukan oleh pengajar dari luar. Instagram membawa pancingan — ide yang mengejutkan, dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap, dan visualisasi interaktif yang benar-benar bisa Anda manipulasi, bukan hanya dibaca.",
     "ctaArchive": "Jelajahi arsip",
     "ctaAbout": "Baca filosofinya",
     "recentHeading": "requirements.txt — edisi terbaru",
@@ -69,7 +69,7 @@
   "about": {
     "eyebrow": "about.md",
     "title": "Tentang",
-    "philosophyPlaceholder": "[PLACEHOLDER — teks filosofi/identitas belum ditulis]",
+    "philosophyPlaceholder": "Observatorium neutrino tidak pernah melihat neutrino secara langsung — ia melewati materi biasa hampir setiap saat. Yang terdeteksi adalah kilatan cahaya yang ditinggalkan neutrino pada saat-saat langka saat ia berinteraksi, dan kilatan itu cukup untuk melacak kembali asalnya. Itu inti proyek ini. Penalaran yang memecahkan masalah sulit biasanya tak terlihat — mudah diabaikan tanpa sadar ia pernah hadir. Visualisasi adalah kilatan itu: saat penalaran itu menjadi sesuatu yang bisa Anda lihat dan lacak sendiri.",
     "teamHeading": "Tim",
     "teamPlaceholder": "[PLACEHOLDER — bio tim belum ditulis]",
     "repoHeading": "Sumber",
@@ -78,7 +78,7 @@
     "contactPlaceholder": "[PLACEHOLDER — informasi kontak belum ditulis]"
   },
   "footer": {
-    "tagline": "[PLACEHOLDER — tagline footer belum ditulis]",
+    "tagline": "Ide yang tampak jelas.",
     "madeBy": "Proyek repo publik oleh tim Cherenkov."
   },
   "phase2": {

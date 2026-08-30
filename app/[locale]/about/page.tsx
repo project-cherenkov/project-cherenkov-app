@@ -12,7 +12,14 @@ export default async function AboutPage() {
       <p className="label-code">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-slate-900">{t("title")}</h1>
 
-      <p className="mt-6 text-slate-700">{t("philosophyPlaceholder")}</p>
+      <div className="mt-6 space-y-4 text-cherenkov-ink/80">
+        {t("philosophyPlaceholder")
+          .split(/\n\s*\n/)
+          .filter(Boolean)
+          .map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+      </div>
 
       <h2 className="label-code mt-10">{t("teamHeading")}</h2>
       {members.length === 0 ? (

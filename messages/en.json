@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "[PLACEHOLDER — one-line concept explainer, not yet written]"
+    "tagline": "Interactive olympiad editorials for informatics, physics, and astronomy — every proof paired with a visualization you can actually manipulate."
   },
   "nav": {
     "home": "Home",
@@ -16,8 +16,8 @@
   },
   "home": {
     "eyebrow": "readme.md",
-    "heroTitle": "[PLACEHOLDER — hero headline TBD]",
-    "heroBody": "[PLACEHOLDER — hero subhead / concept explainer TBD. One line: what Cherenkov is and who it's for.]",
+    "heroTitle": "The idea, made visible.",
+    "heroBody": "Each editorial is written by someone competing in that subject, not teaching it from the outside. Instagram carries the hook — the surprising idea, in a few seconds. This site carries the rest: the full proof, and an interactive visualization you can actually manipulate rather than just read.",
     "ctaArchive": "Browse the archive",
     "ctaAbout": "Read the philosophy",
     "recentHeading": "requirements.txt — recent editorials",
@@ -69,7 +69,7 @@
   "about": {
     "eyebrow": "about.md",
     "title": "About",
-    "philosophyPlaceholder": "[PLACEHOLDER — philosophy / identity copy TBD]",
+    "philosophyPlaceholder": "Neutrino observatories never see a neutrino directly — it passes through ordinary matter almost every time. What gets detected is the flash of light the neutrino leaves behind on the rare occasion it does interact, and that flash is enough to trace it back to where it came from. That's the idea behind this project. The reasoning that cracks a hard problem is usually invisible — easy to read past without noticing it was ever there. The visualization is the flash: the moment that reasoning becomes something you can see and trace for yourself.",
     "teamHeading": "Team",
     "teamPlaceholder": "[PLACEHOLDER — team bios TBD]",
     "repoHeading": "Source",
@@ -78,7 +78,7 @@
     "contactPlaceholder": "[PLACEHOLDER — contact inquiries TBD]"
   },
   "footer": {
-    "tagline": "[PLACEHOLDER — footer tagline TBD]",
+    "tagline": "The idea, made visible.",
     "madeBy": "A public-repo project by the Cherenkov team."
   },
   "phase2": {

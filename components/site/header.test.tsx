@@ -11,6 +11,7 @@ vi.mock("@/lib/auth-client", () => ({
 }));
 
 vi.mock("next-intl", () => ({
+  useLocale: () => "en",
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
       archive: "Archive",
@@ -32,6 +33,7 @@ vi.mock("@/i18n/routing", () => ({
       {children}
     </a>
   ),
+  usePathname: () => "/en/about",
   useRouter: () => ({
     push: vi.fn(),
     refresh: vi.fn(),
@@ -75,5 +77,18 @@ describe("SiteHeader — session awareness", () => {
     expect(html).toContain("Log Out");
     expect(html).not.toContain("Log In");
     expect(html).not.toContain("Sign Up");
+  });
+
+  it("renders both locale options with flags and locale labels", () => {
+    mockUseSession.mockReturnValue({ data: null });
+
+    const html = renderToStaticMarkup(<SiteHeader />);
+
+    expect(html).toContain("🇬🇧");
+    expect(html).toContain("EN");
+    expect(html).toContain("🇮🇩");
+    expect(html).toContain("ID");
+    expect(html).toContain('href="/id/about"');
+    expect(html).toContain('href="/en/about"');
   });
 });

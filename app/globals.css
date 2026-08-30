@@ -10,21 +10,28 @@
 @layer base {
   :root {
     color-scheme: light;
+    --background: 165 100% 97%;
+    --foreground: 205 66% 13%;
+    --primary: 197 94% 67%;
+    --primary-alt: 201 100% 77%;
+    --secondary: 348 79% 81%;
+    --secondary-alt: 327 100% 89%;
+    --card: 0 0% 100%;
   }
 
   body {
-    @apply bg-cherenkov-offwhite text-slate-900 antialiased;
+    @apply bg-cherenkov-cream text-cherenkov-ink antialiased;
   }
 
   /* Visible keyboard focus everywhere, including on the viz sliders/canvas
      controls — non-functional requirement §8 calls out keyboard operability
      explicitly. */
   :focus-visible {
-    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-cherenkov-offwhite;
+    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-cherenkov-cream;
   }
 
   ::selection {
-    @apply bg-cherenkov-pink text-slate-900;
+    @apply bg-cherenkov-pink text-cherenkov-ink;
   }
 }
 

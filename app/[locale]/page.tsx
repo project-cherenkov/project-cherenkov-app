@@ -12,10 +12,10 @@ export default async function HomePage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
       <p className="label-code">{t("eyebrow")}</p>
-      <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+      <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-cherenkov-ink sm:text-5xl">
         {t("heroTitle")}
       </h1>
-      <p className="mt-4 max-w-xl text-lg text-slate-600">{t("heroBody")}</p>
+      <p className="mt-4 max-w-xl text-lg text-cherenkov-ink/80">{t("heroBody")}</p>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/archive" className={buttonVariants({ size: "lg" })}>

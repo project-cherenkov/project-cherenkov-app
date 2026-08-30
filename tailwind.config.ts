@@ -14,18 +14,24 @@ const config: Config = {
     extend: {
       colors: {
         cherenkov: {
-          blue: "#8AD7FF",
-          "blue-pastel": "#5BCEFA",
-          pink: "#FFC8E6",
-          "pink-pastel": "#F5A9B8",
+          blue: "#5BCEFA",
+          "blue-alt": "#8AD7FF",
+          "blue-pastel": "#8AD7FF",
+          pink: "#F5A9B8",
+          "pink-alt": "#FFC8E6",
+          "pink-pastel": "#FFC8E6",
+          cream: "#EFFFFB",
+          white: "#FFFFFF",
+          ink: "#0B2436",
           offwhite: "#EFFFFB",
         },
       },
       fontFamily: {
-        // PLACEHOLDER: no typeface has been chosen yet (see Open Questions §12).
-        // Using the system UI stack so nothing renders broken in the meantime —
-        // swap these two lines out once type is decided, nothing else should
-        // need to change.
+        // Blue and white are literal to Cherenkov radiation (the glow emitted when
+        // a charged particle outruns light's own speed in a transparent medium);
+        // pink signals the project's approachable, non-intimidating character.
+        // The ink color isn't from brand intent — it's there purely so text stays
+        // readable on the pastel backgrounds.
         sans: [
           "system-ui",
           "-apple-system",
