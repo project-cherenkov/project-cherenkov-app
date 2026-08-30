@@ -10,9 +10,9 @@ export default async function AboutPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
       <p className="label-code">{t("eyebrow")}</p>
-      <h1 className="mt-2 text-3xl font-bold text-slate-900">{t("title")}</h1>
+      <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
-      <div className="mt-6 space-y-4 text-cherenkov-ink/80">
+      <div className="mt-6 space-y-4 text-foreground/80">
         {t("philosophyPlaceholder")
           .split(/\n\s*\n/)
           .filter(Boolean)
@@ -26,7 +26,7 @@ export default async function AboutPage() {
         // No entries in content/team/ yet — keep the existing placeholder
         // copy rather than rendering an empty list. This text is a COPY-001
         // concern (gated on GATHER-001), untouched here.
-        <p className="mt-2 text-slate-700">{t("teamPlaceholder")}</p>
+        <p className="mt-2 text-slate-700 dark:text-slate-200">{t("teamPlaceholder")}</p>
       ) : (
         <ul className="mt-4 grid gap-6 sm:grid-cols-2">
           {members.map((member) => {
@@ -44,13 +44,13 @@ export default async function AboutPage() {
                   <div className="h-16 w-16 flex-none rounded-full bg-cherenkov-blue/20" />
                 )}
                 <div>
-                  <p className="font-semibold text-slate-900">{member.name}</p>
+                  <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (
-                    <p className="font-mono text-xs uppercase tracking-wide text-slate-500">
+                    <p className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
                       {member.role}
                     </p>
                   )}
-                  {bio && <p className="mt-1 text-sm text-slate-700">{bio}</p>}
+                  {bio && <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{bio}</p>}
                   {member.personalContact && (
                     <a
                       href={`mailto:${member.personalContact}`}
@@ -67,7 +67,7 @@ export default async function AboutPage() {
       )}
 
       <h2 className="label-code mt-10">{t("repoHeading")}</h2>
-      <p className="mt-2 text-slate-700">{t("repoBody")}</p>
+      <p className="mt-2 text-slate-700 dark:text-slate-200">{t("repoBody")}</p>
       {/* Repo URL confirmed — see docs/deployment-readiness.md re: this repo being private. */}
       <a
         href="https://github.com/project-cherenkov/project-cherenkov-app"
@@ -82,7 +82,7 @@ export default async function AboutPage() {
       {professionalContact?.email ? (
         <div className="mt-2">
           {professionalContact.label ? (
-            <p className="text-slate-700">{professionalContact.label}</p>
+            <p className="text-slate-700 dark:text-slate-200">{professionalContact.label}</p>
           ) : null}
           <a
             href={`mailto:${professionalContact.email}`}
@@ -92,7 +92,7 @@ export default async function AboutPage() {
           </a>
         </div>
       ) : (
-        <p className="mt-2 text-slate-700">{t("contactPlaceholder")}</p>
+        <p className="mt-2 text-slate-700 dark:text-slate-200">{t("contactPlaceholder")}</p>
       )}
     </div>
   );

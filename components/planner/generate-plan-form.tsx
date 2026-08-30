@@ -78,7 +78,7 @@ export function GeneratePlanForm({
         {hasPlan ? labels.regenerateButton : labels.generateButton}
       </Button>
       {error ? (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           {error}
         </p>
       ) : null}

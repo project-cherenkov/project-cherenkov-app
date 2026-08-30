@@ -110,7 +110,7 @@ export function GraphArrayStepper({
                     x={cellWidth / 2}
                     y={16}
                     textAnchor="middle"
-                    className="fill-slate-500 font-mono text-[10px] uppercase"
+                    className="fill-slate-500 dark:fill-slate-400 font-mono text-[10px] uppercase"
                   >
                     {pointersByIndex.get(i)!.join("/")}
                   </text>
@@ -121,7 +121,7 @@ export function GraphArrayStepper({
         </svg>
       </div>
 
-      {step?.note && <p className="text-sm text-slate-600">{step.note}</p>}
+      {step?.note && <p className="text-sm text-slate-600 dark:text-slate-300">{step.note}</p>}
 
       <PlaybackControls
         current={stepIndex}

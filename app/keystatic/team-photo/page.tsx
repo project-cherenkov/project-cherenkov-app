@@ -11,8 +11,8 @@ import { TeamPhotoUploader } from "@/components/site/team-photo-uploader";
 export default function TeamPhotoUploadPage() {
   return (
     <div className="mx-auto max-w-xl px-4 py-10">
-      <h1 className="text-xl font-bold text-slate-900">Team photo upload</h1>
-      <p className="mt-2 text-sm text-slate-600">
+      <h1 className="text-xl font-bold text-foreground">Team photo upload</h1>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
         Upload a photo, then paste the returned URL into the team
         singleton&apos;s Photo URL field in{" "}
         <Link href="/keystatic" className="underline">

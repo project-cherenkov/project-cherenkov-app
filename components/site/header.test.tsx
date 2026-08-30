@@ -36,12 +36,15 @@ vi.mock("next-intl", () => ({
 }));
 
 vi.mock("@/i18n/routing", () => ({
-  Link: ({ href, children, ...props }: any) => (
-    <a href={href} {...props}>
+  Link: ({ href, locale, children, ...props }: any) => (
+    <a
+      href={locale ? `/${locale}${href === "/" ? "" : href}` : href}
+      {...props}
+    >
       {children}
     </a>
   ),
-  usePathname: () => "/en/about",
+  usePathname: () => "/about",
   useRouter: () => ({
     push: vi.fn(),
     refresh: vi.fn(),

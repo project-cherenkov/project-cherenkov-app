@@ -37,7 +37,7 @@ export default async function EditorialPage({
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link href="/archive" className="label-code hover:text-slate-700">
+      <Link href="/archive" className="label-code hover:text-slate-700 dark:hover:text-slate-200">
         ← {t("backToArchive")}
       </Link>
 
@@ -55,10 +55,10 @@ export default async function EditorialPage({
         )}
       </div>
 
-      <h1 className="mt-3 text-3xl font-bold text-slate-900">
+      <h1 className="mt-3 text-3xl font-bold text-foreground">
         {editorial.title}
       </h1>
-      <p className="mt-2 text-lg text-slate-600">{editorial.hook}</p>
+      <p className="mt-2 text-lg text-slate-600 dark:text-slate-300">{editorial.hook}</p>
       <p className="mt-1 text-xs text-slate-400">
         {t("byAuthor", { author: editorial.author })}
       </p>
@@ -83,7 +83,7 @@ export default async function EditorialPage({
         );
       })()}
 
-      <div className="prose prose-slate mt-8 max-w-none">
+      <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
         <EditorialMDX
           code={editorial.body}
           vizEngine={editorial.vizEngine}
@@ -96,7 +96,7 @@ export default async function EditorialPage({
         {editorial.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-[11px] text-slate-700"
+            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-[11px] text-slate-700 dark:text-slate-200"
           >
             {tag}
           </span>

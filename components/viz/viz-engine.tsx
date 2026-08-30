@@ -65,7 +65,7 @@ function VizSkeleton() {
 function VizMissing() {
   const t = useTranslations("editorial");
   return (
-    <div className="rounded-md border border-dashed border-cherenkov-pink-pastel bg-cherenkov-pink/20 p-4 text-sm text-slate-700">
+    <div className="rounded-md border border-dashed border-cherenkov-pink-pastel bg-cherenkov-pink/20 p-4 text-sm text-slate-700 dark:text-slate-200">
       {t("vizMissing")}
     </div>
   );

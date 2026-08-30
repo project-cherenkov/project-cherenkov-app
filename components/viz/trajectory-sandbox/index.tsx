@@ -172,7 +172,7 @@ export function TrajectorySandbox({
         <canvas ref={canvasRef} className="w-full" />
       </div>
 
-      <p className="font-mono text-xs text-slate-500">
+      <p className="font-mono text-xs text-slate-500 dark:text-slate-400">
         range ≈ {maxRange.toFixed(1)} m · max height ≈ {maxHeight.toFixed(1)} m
       </p>
 

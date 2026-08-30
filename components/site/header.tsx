@@ -19,12 +19,6 @@ export function SiteHeader() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  function getLocaleHref(targetLocale: "en" | "id") {
-    const localeSegmentPattern = new RegExp(`^/${currentLocale}(?=/|$)`);
-    const pathWithoutLocale = pathname.replace(localeSegmentPattern, "") || "/";
-    return `/${targetLocale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-  }
-
   async function handleSignOut() {
     await signOut();
     router.push("/");
@@ -104,13 +98,13 @@ export function SiteHeader() {
 
             <div className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70">
               {localeOptions.map(({ code, label, flag }) => {
-                const href = getLocaleHref(code);
                 const isActive = code === currentLocale;
 
                 return (
                   <Link
                     key={code}
-                    href={href}
+                    href={pathname}
+                    locale={code}
                     className={[
                       "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 transition-colors",
                       isActive

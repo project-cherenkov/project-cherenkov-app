@@ -112,7 +112,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
 
   return (
     <div className="mx-auto max-w-sm py-12">
-      <h1 className="mb-6 text-2xl font-semibold text-slate-900">
+      <h1 className="mb-6 text-2xl font-semibold text-foreground">
         {t("title")}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -147,7 +147,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
           />
         </label>
         {error ? (
-          <p role="alert" className="text-sm text-red-600">
+          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
             {error}
           </p>
         ) : null}
@@ -172,7 +172,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
         </div>
       ) : null}
 
-      <p className="mt-6 text-sm text-slate-600">
+      <p className="mt-6 text-sm text-slate-600 dark:text-slate-300">
         {t("hasAccount")}{" "}
         <Link href="/login" className="underline">
           {t("loginLink")}
