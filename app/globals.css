@@ -17,17 +17,36 @@
     --secondary: 348 79% 81%;
     --secondary-alt: 327 100% 89%;
     --card: 0 0% 100%;
+    --border: 210 20% 88%;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 205 40% 8%;
+    --foreground: 165 60% 94%;
+    --primary: 197 70% 58%;
+    --primary-alt: 201 70% 68%;
+    --secondary: 348 55% 68%;
+    --secondary-alt: 327 65% 76%;
+    --card: 205 35% 12%;
+    --border: 205 25% 22%;
   }
 
   body {
-    @apply bg-cherenkov-cream text-cherenkov-ink antialiased;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
   }
 
   /* Visible keyboard focus everywhere, including on the viz sliders/canvas
      controls — non-functional requirement §8 calls out keyboard operability
      explicitly. */
   :focus-visible {
-    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-cherenkov-cream;
+    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-background;
   }
 
   ::selection {

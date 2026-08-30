@@ -336,7 +336,6 @@ Not a bug — a flagged, unresolved mismatch. The About page's copy and the head
 
 These were left as clearly-marked placeholders rather than decided unilaterally — search the codebase for `PLACEHOLDER` to find every instance:
 
-- **Typography.** No typeface has been chosen. `tailwind.config.ts` currently falls back to the system font stack so nothing renders broken — swap `fontFamily.sans` there once it's decided.
 - **`principle` / `errorType` taxonomy** — see FAQ D.
 - **Repo visibility.** The repo is private, but the About page's "built in the open" copy and the header's public GitHub link both promise access a public visitor won't have — see FAQ E. Resolve by making the repo public before launch, or by adjusting that copy/link.
 - **Author names.** All three example editorials use `"PLACEHOLDER Author Name"`.

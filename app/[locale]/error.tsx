@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { ErrorState } from "@/components/site/error-state";
 
 // TICKET-01 / ARCH-002: baseline catch-all error boundary. Next.js's App
 // Router requires error.tsx to be a Client Component; it replaces this
@@ -23,12 +23,14 @@ export default function LocaleError({
   const t = useTranslations("error");
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-2xl font-bold text-slate-900">{t("heading")}</h1>
-      <p className="mt-3 text-slate-700">{t("body")}</p>
-      <Button className="mt-6" onClick={() => reset()}>
-        {t("retry")}
-      </Button>
+    <div className="flex min-h-screen items-center justify-center">
+      <ErrorState
+        eyebrow="error.log"
+        heading={t("heading")}
+        body={t("body")}
+        ctaLabel={t("retry")}
+        onRetry={reset}
+      />
     </div>
   );
 }

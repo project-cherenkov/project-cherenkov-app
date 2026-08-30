@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
+import { themeColors } from "@/lib/theme-colors";
 import type { OrbitalSandboxConfig } from "./types";
 
 const SCRUB_STEPS = 200;
@@ -139,21 +140,21 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     const starOffset = { x: -massRatio * planetOffset.x, y: -massRatio * planetOffset.y };
 
     // Orbit ellipse (centered on the barycenter at canvas center).
-    ctx.strokeStyle = "#cbd5e1";
+    ctx.strokeStyle = themeColors.grid;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.ellipse(cx, cy, a * fit, b * fit, 0, 0, Math.PI * 2);
     ctx.stroke();
 
     // Star.
-    ctx.fillStyle = "#FFC8E6";
+    ctx.fillStyle = themeColors.pinkAlt;
     ctx.beginPath();
     ctx.arc(cx + starOffset.x * fit, cy + starOffset.y * fit, 9, 0, Math.PI * 2);
     ctx.fill();
 
     // Planet.
-    ctx.fillStyle = "#5BCEFA";
-    ctx.strokeStyle = "#8AD7FF";
+    ctx.fillStyle = themeColors.blue;
+    ctx.strokeStyle = themeColors.blueAlt;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(cx + planetOffset.x * fit, cy + planetOffset.y * fit, 6, 0, Math.PI * 2);
@@ -194,7 +195,7 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
         <svg width={width} height={LIGHT_CURVE_HEIGHT} className="w-full">
           <polyline
             fill="none"
-            stroke="#8AD7FF"
+            stroke={themeColors.blueAlt}
             strokeWidth={2}
             points={lightCurve
               .map((p, i) => {
@@ -213,7 +214,7 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
             x2={(scrubValue / SCRUB_STEPS) * width}
             y1={0}
             y2={LIGHT_CURVE_HEIGHT}
-            stroke="#FFC8E6"
+            stroke={themeColors.pinkAlt}
             strokeWidth={2}
           />
         </svg>

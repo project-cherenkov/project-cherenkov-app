@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
+import { themeColors } from "@/lib/theme-colors";
 import { PHYSICS_FUNCTIONS } from "./physics-functions";
 import type { TrajectorySandboxConfig } from "./types";
 
@@ -109,7 +110,7 @@ export function TrajectorySandbox({
     });
 
     // Ground.
-    ctx.strokeStyle = "#cbd5e1";
+    ctx.strokeStyle = themeColors.grid;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(0, groundY);
@@ -118,7 +119,7 @@ export function TrajectorySandbox({
 
     // Path (dashed, full flight preview).
     ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = "#5BCEFA";
+    ctx.strokeStyle = themeColors.blue;
     ctx.lineWidth = 2;
     ctx.beginPath();
     const samples = 60;
@@ -133,8 +134,8 @@ export function TrajectorySandbox({
 
     // Marker at current sim time.
     const markerPos = toPx(physics.position(simTime, initial, config.gravity));
-    ctx.fillStyle = "#FFC8E6";
-    ctx.strokeStyle = "#8AD7FF";
+    ctx.fillStyle = themeColors.pinkAlt;
+    ctx.strokeStyle = themeColors.blueAlt;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(markerPos.x, markerPos.y, 7, 0, Math.PI * 2);

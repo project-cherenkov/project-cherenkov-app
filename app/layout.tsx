@@ -1,5 +1,17 @@
 import type { ReactNode } from "react";
+import { Space_Grotesk, Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
 
 // NECESSARY FIX, not part of the original spec: Next.js App Router requires
 // every route to resolve to a root layout that renders <html>/<body>.
@@ -25,8 +37,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   // routes. Minor, documented tradeoff — not present before this change,
   // since there was previously no route outside [locale] to expose it.
   return (
-    <html lang="en">
-      <body className="font-sans">{children}</body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
+    >
+      <body className="font-sans bg-background text-foreground antialiased">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

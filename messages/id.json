@@ -150,5 +150,10 @@
     "heading": "Terjadi kesalahan",
     "body": "Terjadi kesalahan tak terduga saat menampilkan halaman ini. Anda dapat mencoba lagi, atau kembali ke arsip.",
     "retry": "Coba lagi"
+  },
+  "notFound": {
+    "heading": "Halaman tidak ditemukan",
+    "body": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+    "cta": "Kembali ke beranda"
   }
 }

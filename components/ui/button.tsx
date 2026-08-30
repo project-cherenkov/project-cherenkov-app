@@ -11,9 +11,10 @@ const buttonVariants = cva(
         default:
           "bg-cherenkov-blue text-slate-900 hover:bg-cherenkov-blue-pastel",
         outline:
-          "border border-slate-300 bg-transparent hover:bg-slate-100",
-        ghost: "bg-transparent hover:bg-slate-100",
-        link: "bg-transparent underline-offset-4 hover:underline p-0 h-auto",
+          "border border-border bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground",
+        ghost:
+          "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground",
+        link: "bg-transparent underline-offset-4 hover:underline p-0 h-auto text-foreground",
       },
       size: {
         default: "h-10 px-4 py-2",

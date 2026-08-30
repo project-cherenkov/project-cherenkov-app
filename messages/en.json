@@ -150,5 +150,10 @@
     "heading": "Something went wrong",
     "body": "An unexpected error occurred while rendering this page. You can try again, or head back to the archive.",
     "retry": "Try again"
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "body": "The page you are looking for doesn't exist or has been moved.",
+    "cta": "Back to home"
   }
 }
