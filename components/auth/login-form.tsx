@@ -45,7 +45,12 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
   useEffect(() => {
     const errorParam = searchParams.get("error");
     if (!errorParam) return;
-    setError(tErrors(classifyCallbackError(errorParam)));
+    const reason = classifyCallbackError(errorParam);
+    console.error("[auth] Google OAuth callback failed", {
+      errorParam,
+      reason,
+    });
+    setError(tErrors(reason));
     router.replace(pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +75,12 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
         // error out of at all — e.g. offline, or the deployment's own API
         // route unreachable. Better Auth's own message above still takes
         // priority; this only fires when there wasn't one to show.
-        setError(tErrors(classifyAuthError(err)));
+        const reason = classifyAuthError(err);
+        console.error("[auth] Email/password sign-in request failed", {
+          reason,
+          err,
+        });
+        setError(tErrors(reason));
       }
     });
   }
@@ -92,11 +102,21 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
       // (the failure mode the bare `void signIn.social(...)` used to
       // swallow completely).
       if (result?.error) {
-        setError(tErrors(classifyAuthError(result.error)));
+        const reason = classifyAuthError(result.error);
+        console.error("[auth] Google social sign-in was rejected by our API", {
+          reason,
+          result,
+        });
+        setError(tErrors(reason));
         setIsGooglePending(false);
       }
     } catch (err) {
-      setError(tErrors(classifyAuthError(err)));
+      const reason = classifyAuthError(err);
+      console.error("[auth] Google social sign-in crashed before redirect", {
+        reason,
+        err,
+      });
+      setError(tErrors(reason));
       setIsGooglePending(false);
     }
   }
