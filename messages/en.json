@@ -79,7 +79,11 @@
   },
   "footer": {
     "tagline": "The idea, made visible.",
-    "madeBy": "A public-repo project by the Cherenkov team."
+    "madeBy": "A public-repo project by the Cherenkov team.",
+    "license": "License",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "contact": "Contact"
   },
   "phase2": {
     "login": {

@@ -51,13 +51,20 @@ export default async function AboutPage() {
                     </p>
                   )}
                   {bio && <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{bio}</p>}
-                  {member.personalContact && (
-                    <a
-                      href={`mailto:${member.personalContact}`}
-                      className="mt-1.5 inline-block font-mono text-xs text-cherenkov-blue-pastel underline"
-                    >
-                      {member.personalContact}
-                    </a>
+                  {member.personalContacts.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                      {member.personalContacts.map((contact) => (
+                        <a
+                          key={`${member.name}-${contact.label}-${contact.value}`}
+                          href={contact.href}
+                          target={contact.href.startsWith("http") ? "_blank" : undefined}
+                          rel={contact.href.startsWith("http") ? "noreferrer" : undefined}
+                          className="inline-block font-mono text-xs text-cherenkov-blue-pastel underline"
+                        >
+                          {contact.value}
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
               </li>

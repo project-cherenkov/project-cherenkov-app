@@ -58,6 +58,40 @@ describe("lib/team — getTeam", () => {
       bioId: "Indonesian Bio",
       photoUrl: "https://blob.vercel-storage.com/photo.jpg",
       personalContact: "test@example.com",
+      personalContacts: [{ label: "Email", href: "mailto:test@example.com", value: "test@example.com" }],
+    });
+  });
+
+  it("maps multiple personal contact links for each member", async () => {
+    reader.singletons.team.read.mockResolvedValueOnce({
+      professionalContact: {
+        email: "projectcherenkov@gmail.com",
+        label: "General inquiries",
+      },
+      members: [
+        {
+          name: "Member One",
+          role: "Research",
+          bioEn: "English Bio",
+          bioId: "Bio Indonesia",
+          photoUrl: "https://example.com/photo.jpg",
+          personalContact: "member1@example.com",
+          personalContacts: [
+            { label: "Email", href: "mailto:member1@example.com", value: "member1@example.com" },
+            { label: "Instagram", href: "https://instagram.com/member1", value: "@member1" },
+          ],
+        },
+      ],
+    });
+
+    const result = await getTeam();
+    expect(result.members[0]).toMatchObject({
+      name: "Member One",
+      personalContact: "member1@example.com",
+      personalContacts: [
+        { label: "Email", href: "mailto:member1@example.com", value: "member1@example.com" },
+        { label: "Instagram", href: "https://instagram.com/member1", value: "@member1" },
+      ],
     });
   });
 
@@ -89,6 +123,7 @@ describe("lib/team — getTeam", () => {
       bioId: "",
       photoUrl: null,
       personalContact: undefined,
+      personalContacts: [],
     });
   });
 });

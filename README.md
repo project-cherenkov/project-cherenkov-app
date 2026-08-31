@@ -11,13 +11,22 @@
 7. [Internationalization](#vii-internationalization)
 8. [Deploying](#viii-deploying)
 9. [FAQ](#ix-faq)
-10. [Open Questions & Known Placeholders](#x-open-questions--known-placeholders)
+10. [Current Status & Known Placeholders](#x-current-status--known-placeholders)
 
 ---
 
 ## **I. Short Description**
 
 Project Cherenkov is an Indonesian OSN (olympiad) editorial archive and study planner spanning **informatics, physics, and astronomy**. Each editorial is a rigorous, self-contained write-up of one idea — a proof, a derivation, a technique — and every editorial ships paired with a **working interactive visualization**, not a decorative one: the visualization is how the idea is explored, not an illustration bolted on afterward.
+
+## **Legal & Contact**
+
+- License: [LICENSE](LICENSE)
+- Terms: [TERMS.md](TERMS.md)
+- Privacy: [PRIVACY.md](PRIVACY.md)
+- Project contact: projectcherenkov@gmail.com
+
+These documents are intentionally kept in dedicated files instead of burying them inside the README. The public website should also link to the relevant pages in its footer or About section for users to find them easily.
 
 The archive is indexed by **principle** (the general idea an editorial teaches) and **error type** (the specific mistake it corrects), deliberately **not** by subject chapter — the goal is to let someone arrive because they made a specific mistake or want to understand a specific idea, not because they're browsing a syllabus.
 
@@ -41,7 +50,7 @@ Content is git-committed MDX, not stored in a database: there is no CRUD backend
 | **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | **Package manager** | [pnpm](https://pnpm.io) | — |
 
-**Hosting:** [Vercel](https://vercel.com). The current deployment is available at [project-cherenkov-app.vercel.app](https://project-cherenkov-app.vercel.app/). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section VIII](#viii-deploying) for deployment details.
+**Hosting:** [Vercel](https://vercel.com). The live deployment is available at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section VIII](#viii-deploying) for deployment details.
 
 | Layer | Choice | Why |
 | --- | --- | --- |
@@ -262,22 +271,21 @@ To add a locale: add it to `i18n/routing.ts`'s `locales` array and add a matchin
 
 ## **VIII. Deploying**
 
-The public archive is deployed on Vercel at [project-cherenkov-app.vercel.app](https://project-cherenkov-app.vercel.app/). It can be deployed with **zero required environment variables** for the archive-only experience.
+The public archive is deployed on Vercel at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). It can be deployed with **zero required environment variables** for the archive-only experience.
 
-1. **Push to GitHub.** This repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) (currently private — see [Section X](#x-open-questions--known-placeholders) for what that means for the site's own "built in the open" copy).
+1. **Push to GitHub.** This repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) and is public.
 2. **Import the repo in [Vercel](https://vercel.com/new).** Next.js is auto-detected; no `vercel.json` or custom build command is needed.
 3. **Deploy.** No environment variables are required for the archive, i18n, or MDX pipeline.
 4. **Set `NEXT_PUBLIC_SITE_URL`** to `https://project-cherenkov-app.vercel.app` (or the eventual custom domain) in Vercel so the sitemap and Open Graph metadata use the deployed origin instead of `localhost`.
 5. **Every PR gets its own preview deploy** automatically (Vercel's default behavior for a connected repo) — nothing extra to configure.
 6. **CI runs independently of Vercel.** `.github/workflows/ci.yml` runs install → `pnpm generate` → lint → typecheck → test → build on every push/PR, so a broken build or failing test is visible on GitHub as well as through Vercel's deployment checks.
 
-**Before a real public launch** (as opposed to a working preview), read `docs/deployment-readiness.md` and resolve:
+**Before a fully polished public launch**, read `docs/deployment-readiness.md` and resolve:
 
-- The placeholder hero/tagline/about copy in `messages/*.json` — until it's real, every page ships with `robots: { index: false, follow: false }` on purpose (`app/[locale]/layout.tsx`), so search engines don't index placeholder text.
-- The repo-visibility mismatch noted in [Section X](#x-open-questions--known-placeholders).
+- The remaining placeholder hero/tagline/about copy in `messages/*.json` — until it's real, every page ships with `robots: { index: false, follow: false }` on purpose (`app/[locale]/layout.tsx`), so search engines don't index placeholder text.
 - Whether/when to set up a real GitHub OAuth App so `/keystatic` becomes reachable in production (Section VI).
 
-None of the above block deploying the code today — they block treating the result as a finished public launch rather than a working preview.
+The public repo and public deployment are both live; the remaining blockers are content polish and the production CMS gate, not whether the app is already deployed.
 
 ---
 
@@ -321,27 +329,21 @@ The taxonomy isn't finalized yet, and there isn't enough real content to know wh
 
 </details>
 
-### **E. "The About page says the project is 'built in the open' but the repo is private — is that a bug?"**
+### **E. "Does the site still have placeholder copy or a repo mismatch?"**
 
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-Not a bug — a flagged, unresolved mismatch. The About page's copy and the header's public GitHub link both currently point at `github.com/project-cherenkov/project-cherenkov-app`, which is real but private, so a visitor who isn't a collaborator can't actually open it. This wasn't silently fixed by guessing at intent (make the repo public? change the copy?) — see [Section X](#x-open-questions--known-placeholders) and `docs/deployment-readiness.md` for the two ways to resolve it.
+The repository is public and the live site is deployed at `https://project-cherenkov-app.vercel.app/en`, so the repo-visibility mismatch described in older docs is no longer current. The app still intentionally keeps `robots: { index: false, follow: false }` on deployed pages while a few hero/about strings are still placeholder copy, which is why the site is public but not yet fully polished for a final launch.
 
 </details>
 
----
+## **X. Current Status & Known Placeholders**
 
-## **X. Open Questions & Known Placeholders**
+- The repo is public at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app).
+- The live deployment is at [`project-cherenkov-app.vercel.app/en`](https://project-cherenkov-app.vercel.app/en).
+- The language-prefixed route is active, so the default locale is served under `/en` rather than at the bare site root.
+- A few content strings remain placeholder copy in `messages/*.json`, and the the locale layout keeps the site `noindex`/`nofollow` until those are finalized.
+- Keystatic stays gated behind GitHub OAuth in deployed builds, and `/keystatic` remains unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` is configured.
 
-These were left as clearly-marked placeholders rather than decided unilaterally — search the codebase for `PLACEHOLDER` to find every instance:
-
-- **`principle` / `errorType` taxonomy** — see FAQ D.
-- **Repo visibility.** The repo is private, but the About page's "built in the open" copy and the header's public GitHub link both promise access a public visitor won't have — see FAQ E. Resolve by making the repo public before launch, or by adjusting that copy/link.
-- **Author names.** All three example editorials use `"PLACEHOLDER Author Name"`.
-- **Hero/footer copy.** `messages/*.json` has several `[PLACEHOLDER — ...]` strings for copy that wasn't provided (hero headline, taglines, about-page philosophy and team bios) — this is also why every page currently ships `noindex` (see [Section VIII](#viii-deploying)).
-- **Google OAuth deployment setup.** Google is the selected optional provider;
-  the OAuth credentials and callback configuration still need to be created
-  before enabling that sign-in path in a deployed environment.
-- **`vizEngine: "none"` spec conflict** — see FAQ C.
-- **Team-photo upload authorization, once Keystatic's admin surface is enabled in production.** Enabling GitHub-storage mode makes `/keystatic` itself OAuth-gated; `/api/team-photo` additionally requires an authenticated email listed in `ADMIN_EMAILS`.
+This is the current state of the repo: public codebase, public deployment, placeholder content still being finalized, and production admin access still behind the GitHub OAuth gate.

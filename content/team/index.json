@@ -1,7 +1,133 @@
 {
   "professionalContact": {
-    "email": "",
-    "label": ""
+    "email": "projectcherenkov@gmail.com",
+    "label": "General inquiries & project contact"
   },
-  "members": []
+  "members": [
+    {
+      "name": "Member 1",
+      "role": "Placeholder role",
+      "bioEn": "Add a short bio here.",
+      "bioId": "Tambahkan bio singkat di sini.",
+      "photoUrl": null,
+      "personalContact": "member1@example.com",
+      "personalContacts": [
+        {
+          "label": "Email",
+          "href": "mailto:member1@example.com",
+          "value": "member1@example.com"
+        },
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com/member1",
+          "value": "@member1"
+        },
+        {
+          "label": "LinkedIn",
+          "href": "https://linkedin.com/in/member1",
+          "value": "linkedin.com/in/member1"
+        }
+      ]
+    },
+    {
+      "name": "Member 2",
+      "role": "Placeholder role",
+      "bioEn": "Add a short bio here.",
+      "bioId": "Tambahkan bio singkat di sini.",
+      "photoUrl": null,
+      "personalContact": "member2@example.com",
+      "personalContacts": [
+        {
+          "label": "Email",
+          "href": "mailto:member2@example.com",
+          "value": "member2@example.com"
+        },
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com/member2",
+          "value": "@member2"
+        },
+        {
+          "label": "LinkedIn",
+          "href": "https://linkedin.com/in/member2",
+          "value": "linkedin.com/in/member2"
+        }
+      ]
+    },
+    {
+      "name": "Member 3",
+      "role": "Placeholder role",
+      "bioEn": "Add a short bio here.",
+      "bioId": "Tambahkan bio singkat di sini.",
+      "photoUrl": null,
+      "personalContact": "member3@example.com",
+      "personalContacts": [
+        {
+          "label": "Email",
+          "href": "mailto:member3@example.com",
+          "value": "member3@example.com"
+        },
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com/member3",
+          "value": "@member3"
+        },
+        {
+          "label": "LinkedIn",
+          "href": "https://linkedin.com/in/member3",
+          "value": "linkedin.com/in/member3"
+        }
+      ]
+    },
+    {
+      "name": "Member 4",
+      "role": "Placeholder role",
+      "bioEn": "Add a short bio here.",
+      "bioId": "Tambahkan bio singkat di sini.",
+      "photoUrl": null,
+      "personalContact": "member4@example.com",
+      "personalContacts": [
+        {
+          "label": "Email",
+          "href": "mailto:member4@example.com",
+          "value": "member4@example.com"
+        },
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com/member4",
+          "value": "@member4"
+        },
+        {
+          "label": "LinkedIn",
+          "href": "https://linkedin.com/in/member4",
+          "value": "linkedin.com/in/member4"
+        }
+      ]
+    },
+    {
+      "name": "Member 5",
+      "role": "Placeholder role",
+      "bioEn": "Add a short bio here.",
+      "bioId": "Tambahkan bio singkat di sini.",
+      "photoUrl": null,
+      "personalContact": "member5@example.com",
+      "personalContacts": [
+        {
+          "label": "Email",
+          "href": "mailto:member5@example.com",
+          "value": "member5@example.com"
+        },
+        {
+          "label": "Instagram",
+          "href": "https://instagram.com/member5",
+          "value": "@member5"
+        },
+        {
+          "label": "LinkedIn",
+          "href": "https://linkedin.com/in/member5",
+          "value": "linkedin.com/in/member5"
+        }
+      ]
+    }
+  ]
 }

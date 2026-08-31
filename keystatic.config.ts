@@ -312,9 +312,21 @@ export default config({
                 "Upload a photo via /keystatic/team-photo first, then paste the returned Blob URL here.",
             }),
             personalContact: fields.text({
-              label: "Personal Contact",
-              description: "Personal email or secondary contact handle.",
+              label: "Primary personal email",
+              description: "Primary personal email or secondary contact handle.",
             }),
+            personalContacts: fields.array(
+              fields.object({
+                label: fields.text({ label: "Label", validation: { isRequired: true } }),
+                href: fields.text({ label: "URL or mailto link", validation: { isRequired: true } }),
+                value: fields.text({ label: "Display text", validation: { isRequired: true } }),
+              }),
+              {
+                label: "Personal contact links",
+                description: "Extra links such as Instagram, LinkedIn, or secondary email.",
+                itemLabel: (props) => props.fields.label.value || "Contact",
+              },
+            ),
           }),
           { label: "Team members", itemLabel: (props) => props.fields.name.value || "Member" },
         ),

@@ -7,6 +7,12 @@ import keystaticConfig from "@/keystatic.config";
 // default; nothing here invents names or bios.
 const reader = createReader(process.cwd(), keystaticConfig);
 
+export interface PersonalContactLink {
+  label: string;
+  href: string;
+  value: string;
+}
+
 export interface TeamMember {
   name: string;
   role?: string;
@@ -14,6 +20,7 @@ export interface TeamMember {
   bioId: string;
   photoUrl: string | null;
   personalContact?: string;
+  personalContacts: PersonalContactLink[];
 }
 
 export interface ProfessionalContact {
@@ -40,14 +47,38 @@ export async function getTeam(): Promise<TeamData> {
         }
       : undefined;
 
-  const members = (team.members || []).map((m) => ({
-    name: m.name,
-    role: m.role || undefined,
-    bioEn: m.bioEn || "",
-    bioId: m.bioId || "",
-    photoUrl: m.photoUrl || null,
-    personalContact: m.personalContact || undefined,
-  }));
+  const members = (team.members || []).map((m) => {
+    const explicitLinks = Array.isArray((m as { personalContacts?: PersonalContactLink[] }).personalContacts)
+      ? ((m as { personalContacts?: PersonalContactLink[] }).personalContacts ?? []).filter(
+          (link) => Boolean(link?.label && link?.href && link?.value),
+        )
+      : [];
+
+    const fallbackContact = m.personalContact?.trim() ? m.personalContact.trim() : undefined;
+    const mergedLinks = [
+      ...(fallbackContact ? [{ label: "Email", href: `mailto:${fallbackContact}`, value: fallbackContact }] : []),
+      ...explicitLinks,
+    ];
+    const seen = new Set<string>();
+    const personalContacts = mergedLinks.filter((link) => {
+      const dedupeKey = `${link.label.toLowerCase()}::${link.href.toLowerCase()}::${link.value.toLowerCase()}`;
+      if (seen.has(dedupeKey)) {
+        return false;
+      }
+      seen.add(dedupeKey);
+      return true;
+    });
+
+    return {
+      name: m.name,
+      role: m.role || undefined,
+      bioEn: m.bioEn || "",
+      bioId: m.bioId || "",
+      photoUrl: m.photoUrl || null,
+      personalContact: fallbackContact,
+      personalContacts,
+    };
+  });
 
   return {
     professionalContact,

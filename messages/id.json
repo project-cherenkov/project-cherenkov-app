@@ -79,7 +79,11 @@
   },
   "footer": {
     "tagline": "Ide yang tampak jelas.",
-    "madeBy": "Proyek repo publik oleh tim Cherenkov."
+    "madeBy": "Proyek repo publik oleh tim Cherenkov.",
+    "license": "Lisensi",
+    "terms": "Syarat",
+    "privacy": "Privasi",
+    "contact": "Kontak"
   },
   "phase2": {
     "login": {
