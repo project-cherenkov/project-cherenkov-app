@@ -48,8 +48,8 @@ export async function getTeam(): Promise<TeamData> {
       : undefined;
 
   const members = (team.members || []).map((m) => {
-    const explicitLinks = Array.isArray((m as { personalContacts?: PersonalContactLink[] }).personalContacts)
-      ? ((m as { personalContacts?: PersonalContactLink[] }).personalContacts ?? []).filter(
+    const explicitLinks = Array.isArray((m as { personalContacts?: ReadonlyArray<PersonalContactLink> }).personalContacts)
+      ? ((m as { personalContacts?: ReadonlyArray<PersonalContactLink> }).personalContacts ?? []).filter(
           (link) => Boolean(link?.label && link?.href && link?.value),
         )
       : [];
