@@ -5,6 +5,13 @@ import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Pure so it can be unit-tested directly, without rendering ThemeToggle
+// (which needs a real React render pass for its hooks — see
+// theme-toggle.test.tsx).
+export function nextTheme(current: string | undefined) {
+  return current === "dark" ? "light" : "dark";
+}
+
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -14,7 +21,7 @@ export function ThemeToggle() {
   }, []);
 
   function toggleTheme() {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    setTheme(nextTheme(resolvedTheme));
   }
 
   return (

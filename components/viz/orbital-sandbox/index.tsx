@@ -6,26 +6,18 @@ import { useTranslations } from "next-intl";
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
 import { themeColors } from "@/lib/theme-colors";
+import {
+  fluxAt,
+  orbitGeometry,
+  planetOffsetAt,
+  transitHalfWidthSeconds,
+} from "./physics-functions";
 import type { OrbitalSandboxConfig } from "./types";
 
 const SCRUB_STEPS = 200;
 const CANVAS_HEIGHT = 220;
 const LIGHT_CURVE_HEIGHT = 64;
 const PADDING_PX = 20;
-// Schematic angular half-width (in eccentric anomaly, radians) of the
-// star's disc as seen from the planet at periapsis. Not derived from real
-// stellar/planet radii — this sandbox doesn't model those — chosen so the
-// transit dip is comfortably visible across the eccentricity range.
-const TRANSIT_ANGULAR_HALF_WIDTH = 0.22;
-
-// Kepler's equation M = E - e sin(E), solved for E via Newton–Raphson.
-function solveEccentricAnomaly(meanAnomaly: number, e: number): number {
-  let E = meanAnomaly;
-  for (let i = 0; i < 8; i++) {
-    E = E - (E - e * Math.sin(E) - meanAnomaly) / (1 - e * Math.cos(E));
-  }
-  return E;
-}
 
 export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
   const t = useTranslations("viz");
@@ -73,45 +65,28 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     };
   }, [isPlaying, config.periodSeconds]);
 
-  const a = config.semiMajorAxisPx;
-  const b = a * Math.sqrt(1 - eccentricity ** 2);
-  const c = a * eccentricity;
-  const meanMotion = (2 * Math.PI) / config.periodSeconds;
+  const { a, b, c, meanMotion } = orbitGeometry(
+    config.semiMajorAxisPx,
+    eccentricity,
+    config.periodSeconds,
+  );
 
-  function planetOffsetAt(time: number) {
-    const M = meanMotion * time;
-    const E = solveEccentricAnomaly(M, eccentricity);
-    // Position relative to the focus the star sits at.
-    return { x: a * Math.cos(E) - c, y: b * Math.sin(E) };
-  }
-
-  // Simplified transit model: assumes the transit is periapsis-aligned
-  // (a common simplifying convention in intro problems) and viewed
-  // edge-on. Real transit timing/duration also depends on argument of
-  // periapsis, impact parameter, and inclination — none of which this
-  // sandbox models. What IS physically real here: transit duration
-  // shrinking as eccentricity grows, because the planet moves fastest
-  // near periapsis (Kepler's second law) — dM/dE = 1 − e·cos(E).
-  const transitHalfWidthSeconds =
-    (TRANSIT_ANGULAR_HALF_WIDTH * (1 - eccentricity) * config.periodSeconds) /
-    (2 * Math.PI);
-
-  function fluxAt(time: number) {
-    const distToPeriapsis = Math.min(time, config.periodSeconds - time);
-    if (distToPeriapsis > transitHalfWidthSeconds) return 1;
-    const x = distToPeriapsis / transitHalfWidthSeconds;
-    const dipShape = 0.5 * (1 + Math.cos(Math.PI * x)); // smooth ingress/egress
-    return 1 - transitDepth * dipShape;
-  }
+  const halfWidthSeconds = transitHalfWidthSeconds(
+    eccentricity,
+    config.periodSeconds,
+  );
 
   const lightCurve = useMemo(() => {
     const samples = 160;
     return Array.from({ length: samples + 1 }, (_, i) => {
       const time = (config.periodSeconds * i) / samples;
-      return { time, flux: fluxAt(time) };
+      return {
+        time,
+        flux: fluxAt(time, config.periodSeconds, halfWidthSeconds, transitDepth),
+      };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eccentricity, transitDepth, config.periodSeconds, transitHalfWidthSeconds]);
+  }, [eccentricity, transitDepth, config.periodSeconds, halfWidthSeconds]);
 
   // Draw orbit + star + planet.
   useEffect(() => {
@@ -136,30 +111,12 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     const cx = width / 2;
     const cy = CANVAS_HEIGHT / 2;
 
-    const planetOffset = planetOffsetAt(simTime);
+    const planetOffset = planetOffsetAt(simTime, eccentricity, { a, b, c, meanMotion });
     const starOffset = { x: -massRatio * planetOffset.x, y: -massRatio * planetOffset.y };
 
-    // Orbit ellipse (centered on the barycenter at canvas center).
-    ctx.strokeStyle = themeColors.grid;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, a * fit, b * fit, 0, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Star.
-    ctx.fillStyle = themeColors.pinkAlt;
-    ctx.beginPath();
-    ctx.arc(cx + starOffset.x * fit, cy + starOffset.y * fit, 9, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Planet.
-    ctx.fillStyle = themeColors.blue;
-    ctx.strokeStyle = themeColors.blueAlt;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(cx + planetOffset.x * fit, cy + planetOffset.y * fit, 6, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+    drawOrbitEllipse(ctx, cx, cy, a * fit, b * fit);
+    drawStar(ctx, cx + starOffset.x * fit, cy + starOffset.y * fit);
+    drawPlanet(ctx, cx + planetOffset.x * fit, cy + planetOffset.y * fit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, simTime, eccentricity, massRatio, a, b, c, meanMotion]);
 
@@ -197,17 +154,7 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
             fill="none"
             stroke={themeColors.blueAlt}
             strokeWidth={2}
-            points={lightCurve
-              .map((p, i) => {
-                const x = (i / (lightCurve.length - 1)) * width;
-                const y =
-                  LIGHT_CURVE_HEIGHT * 0.15 +
-                  (1 - (p.flux - (1 - transitDepth)) / transitDepth) *
-                    LIGHT_CURVE_HEIGHT *
-                    0.7;
-                return `${x},${y}`;
-              })
-              .join(" ")}
+            points={lightCurvePoints(lightCurve, width, transitDepth)}
           />
           <line
             x1={(scrubValue / SCRUB_STEPS) * width}
@@ -244,6 +191,59 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
       />
     </div>
   );
+}
+
+function drawOrbitEllipse(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  radiusX: number,
+  radiusY: number,
+) {
+  // Centered on the barycenter at canvas center.
+  ctx.strokeStyle = themeColors.grid;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, radiusX, radiusY, 0, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawStar(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = themeColors.pinkAlt;
+  ctx.beginPath();
+  ctx.arc(x, y, 9, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawPlanet(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = themeColors.blue;
+  ctx.strokeStyle = themeColors.blueAlt;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+}
+
+// SVG polyline points for the transit light curve, one per lightCurve
+// sample, scaled to the plot's width/height and the config's transit
+// depth.
+function lightCurvePoints(
+  lightCurve: { time: number; flux: number }[],
+  width: number,
+  transitDepth: number,
+): string {
+  return lightCurve
+    .map((p, i) => {
+      const x = (i / (lightCurve.length - 1)) * width;
+      const y =
+        LIGHT_CURVE_HEIGHT * 0.15 +
+        (1 - (p.flux - (1 - transitDepth)) / transitDepth) *
+          LIGHT_CURVE_HEIGHT *
+          0.7;
+      return `${x},${y}`;
+    })
+    .join(" ");
 }
 
 function SliderField({

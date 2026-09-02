@@ -12,7 +12,7 @@ vi.mock("next-themes", () => ({
   }),
 }));
 
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle, nextTheme } from "./theme-toggle";
 
 describe("ThemeToggle", () => {
   beforeEach(() => {
@@ -24,18 +24,19 @@ describe("ThemeToggle", () => {
     const html = renderToStaticMarkup(<ThemeToggle />);
     expect(html).toContain('aria-label="Toggle theme"');
   });
+});
 
-  it("calls setTheme with dark when currently light", () => {
-    mockResolvedTheme = "light";
-    const element = ThemeToggle();
-    element.props.onClick();
-    expect(mockSetTheme).toHaveBeenCalledWith("dark");
+// nextTheme is the pure logic ThemeToggle's click handler delegates to.
+// Tested directly rather than through ThemeToggle itself, which needs a
+// real React render pass (renderToStaticMarkup, above) for its hooks to
+// work — calling the component as a plain function bypasses React's
+// dispatcher and throws "Invalid hook call".
+describe("nextTheme", () => {
+  it("flips to dark when currently light", () => {
+    expect(nextTheme("light")).toBe("dark");
   });
 
-  it("calls setTheme with light when currently dark", () => {
-    mockResolvedTheme = "dark";
-    const element = ThemeToggle();
-    element.props.onClick();
-    expect(mockSetTheme).toHaveBeenCalledWith("light");
+  it("flips to light when currently dark", () => {
+    expect(nextTheme("dark")).toBe("light");
   });
 });
