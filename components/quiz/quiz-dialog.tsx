@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { submitQuizAttempt } from "@/lib/quiz-actions";
+import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import type { PublicQuizQuestion } from "@/lib/quiz";
 
 export interface QuizDialogProps {
@@ -113,7 +114,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                     total: questions.length,
                   })}
                 </p>
-                <p className="mb-3 font-medium">{question.prompt}</p>
+                <MarkdownText text={question.prompt} className="mb-3 font-medium" />
                 <div className="flex flex-col gap-2">
                   {question.choices.map((choice, choiceIndex) => (
                     <label key={choiceIndex} className="flex items-center gap-2 text-sm">
@@ -124,7 +125,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                         onChange={() => selectAnswer(question.id, choiceIndex)}
                         disabled={feedback !== null}
                       />
-                      {choice}
+                      <MarkdownText text={choice} inline />
                     </label>
                   ))}
                 </div>

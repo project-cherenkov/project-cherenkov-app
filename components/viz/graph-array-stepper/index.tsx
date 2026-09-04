@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
+import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import type { GraphArrayStepperConfig } from "./types";
 
 const STEP_INTERVAL_MS = 900;
@@ -121,7 +122,9 @@ export function GraphArrayStepper({
         </svg>
       </div>
 
-      {step?.note && <p className="text-sm text-slate-600 dark:text-slate-300">{step.note}</p>}
+      {step?.note && (
+        <MarkdownText text={step.note} className="text-sm text-slate-600 dark:text-slate-300" />
+      )}
 
       <PlaybackControls
         current={stepIndex}

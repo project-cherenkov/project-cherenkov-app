@@ -20,7 +20,14 @@ export const runtime = "nodejs";
 
 // The CMS "write surface" as a whole — see lib/admin-guard.ts for exactly
 // why these routes are gated together as one unit, not individually.
-const ADMIN_SURFACE_PREFIXES = ["/keystatic", "/api/keystatic", "/api/team-photo"];
+// "/keystatic/scene-builder" needs no separate entry here — it's already
+// covered by the existing "/keystatic" prefix.
+const ADMIN_SURFACE_PREFIXES = [
+  "/keystatic",
+  "/api/keystatic",
+  "/api/team-photo",
+  "/api/scene-builder",
+];
 
 function isAdminSurfacePath(pathname: string): boolean {
   return ADMIN_SURFACE_PREFIXES.some(

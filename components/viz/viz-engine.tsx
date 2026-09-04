@@ -7,6 +7,7 @@ import type { Editorial } from "#content";
 import { isGraphArrayStepperConfig } from "./graph-array-stepper/types";
 import { isTrajectorySandboxConfig } from "./trajectory-sandbox/types";
 import { isOrbitalSandboxConfig } from "./orbital-sandbox/types";
+import { isComposedSceneConfig } from "./composed-scene/types";
 
 // Each engine is its own dynamic import (ssr: false — they're all
 // canvas/SVG + browser APIs like ResizeObserver) so an editorial page only
@@ -23,6 +24,10 @@ const TrajectorySandbox = dynamic(
 );
 const OrbitalSandbox = dynamic(
   () => import("./orbital-sandbox").then((m) => m.OrbitalSandbox),
+  { ssr: false, loading: () => <VizSkeleton /> },
+);
+const ComposedScene = dynamic(
+  () => import("./composed-scene").then((m) => m.ComposedScene),
   { ssr: false, loading: () => <VizSkeleton /> },
 );
 
@@ -47,6 +52,12 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
         return <VizConfigError engine={editorial.vizEngine} />;
       }
       return <OrbitalSandbox config={editorial.vizConfig} />;
+
+    case "composed-scene":
+      if (!isComposedSceneConfig(editorial.vizConfig)) {
+        return <VizConfigError engine={editorial.vizEngine} />;
+      }
+      return <ComposedScene config={editorial.vizConfig} />;
 
     case "none":
     default:

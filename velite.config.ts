@@ -17,10 +17,14 @@ import rehypeKatex from "rehype-katex";
 // the archive/editorial UI treats it as a content error rather than a
 // legitimate state — see `lib/content.ts`. Flag this back to confirm which
 // rule wins before Phase 1 ships for real.
-const vizEngines = [
+// Exported (only change beyond adding "composed-scene" itself) so
+// velite.config.test.ts can assert against the schema directly rather than
+// only via a full `pnpm generate` build-time check.
+export const vizEngines = [
   "graph-array-stepper",
   "trajectory-sandbox",
   "orbital-sandbox",
+  "composed-scene",
   "none",
 ] as const;
 
