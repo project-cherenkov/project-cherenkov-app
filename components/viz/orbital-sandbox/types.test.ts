@@ -68,6 +68,21 @@ describe("isOrbitalSandboxConfig", () => {
     );
   });
 
+  it("rejects an invalid eccentricityRange upper bound", () => {
+    expect(
+      isOrbitalSandboxConfig({ ...VALID, eccentricityRange: [0, 1] }),
+    ).toBe(false);
+    expect(
+      isOrbitalSandboxConfig({ ...VALID, eccentricityRange: [0, 1.2] }),
+    ).toBe(false);
+  });
+
+  it("rejects a negative massRatioRange lower bound", () => {
+    expect(
+      isOrbitalSandboxConfig({ ...VALID, massRatioRange: [-0.1, 0.2] }),
+    ).toBe(false);
+  });
+
   it("rejects a non-object config", () => {
     expect(isOrbitalSandboxConfig(null)).toBe(false);
     expect(isOrbitalSandboxConfig(42)).toBe(false);

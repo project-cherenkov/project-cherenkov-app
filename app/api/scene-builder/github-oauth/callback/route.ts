@@ -16,6 +16,10 @@ interface GithubTokenResponse {
   error_description?: string;
 }
 
+function isSafeReturnTo(value: string | null | undefined): boolean {
+  return !!value && value.startsWith("/") && !value.startsWith("//");
+}
+
 export async function GET(request: Request) {
   // Same per-request session+admin check as the start route and the
   // write-back route (NFR-4) — this callback still runs in the browser
@@ -34,7 +38,10 @@ export async function GET(request: Request) {
   const state = requestUrl.searchParams.get("state") ?? undefined;
   const cookieHeader = request.headers.get("cookie") ?? "";
   const stateCookie = readCookie(cookieHeader, GITHUB_OAUTH_STATE_COOKIE);
-  const returnTo = readCookie(cookieHeader, GITHUB_RETURN_TO_COOKIE) ?? "/keystatic/scene-builder";
+  const storedReturnTo = readCookie(cookieHeader, GITHUB_RETURN_TO_COOKIE);
+  const returnTo = isSafeReturnTo(storedReturnTo)
+    ? storedReturnTo
+    : "/keystatic/scene-builder";
 
   // CSRF check: the state GitHub echoes back must match the one this app
   // minted and stashed in a cookie only it could have set.

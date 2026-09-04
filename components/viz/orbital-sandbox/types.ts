@@ -19,6 +19,20 @@ export interface OrbitalSandboxConfig {
 // divisors or scale factors elsewhere in index.tsx. massRatio, when
 // present, must be non-negative (a negative mass ratio has no physical
 // meaning here).
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isRange(value: unknown): value is [number, number] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    isFiniteNumber(value[0]) &&
+    isFiniteNumber(value[1]) &&
+    value[0] <= value[1]
+  );
+}
+
 export function isOrbitalSandboxConfig(
   config: unknown,
 ): config is OrbitalSandboxConfig {
@@ -36,6 +50,16 @@ export function isOrbitalSandboxConfig(
   }
   if (typeof c.periodSeconds !== "number" || c.periodSeconds <= 0) {
     return false;
+  }
+  if (c.eccentricityRange !== undefined) {
+    if (!isRange(c.eccentricityRange)) return false;
+    if (c.eccentricityRange[0] < 0 || c.eccentricityRange[1] >= 1) {
+      return false;
+    }
+  }
+  if (c.massRatioRange !== undefined) {
+    if (!isRange(c.massRatioRange)) return false;
+    if (c.massRatioRange[0] < 0) return false;
   }
   if (c.massRatio !== undefined) {
     if (typeof c.massRatio !== "number" || c.massRatio < 0) return false;

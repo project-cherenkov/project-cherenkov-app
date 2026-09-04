@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +36,7 @@ type Feedback = { questionId: string; correct: boolean }[];
 // doesn't need to avoid that context the way PlanOverview deliberately does.
 export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   const t = useTranslations("phase2.quiz");
+  const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState("0");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -63,6 +65,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
       if (result.ok) {
         setFeedback(result.results);
         setScore(result.score);
+        router.refresh();
       } else {
         // UX-001 / TICKET-07: previously this branch did nothing — the
         // pending state cleared and the user got no indication anything

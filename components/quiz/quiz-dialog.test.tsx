@@ -9,6 +9,10 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
+
 // QuizDialog's own <Dialog> doesn't force itself open, and Radix's
 // Dialog.Content is wrapped in Portal+Presence — closed by default, it
 // renders nothing at all into renderToStaticMarkup's output, regardless of
