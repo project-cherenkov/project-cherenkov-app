@@ -16,7 +16,7 @@ interface GithubTokenResponse {
   error_description?: string;
 }
 
-function isSafeReturnTo(value: string | null | undefined): boolean {
+function isSafeReturnTo(value: string | null | undefined): value is string {
   return !!value && value.startsWith("/") && !value.startsWith("//");
 }
 

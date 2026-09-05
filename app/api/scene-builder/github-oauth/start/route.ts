@@ -9,7 +9,7 @@ import {
 
 const OAUTH_COOKIE_MAX_AGE_SECONDS = 600; // matches scene-builder-oauth.ts's 10-minute state TTL
 
-function isSafeReturnTo(value: string | null): boolean {
+function isSafeReturnTo(value: string | null): value is string {
   return !!value && value.startsWith("/") && !value.startsWith("//");
 }
 
