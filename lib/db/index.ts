@@ -1,5 +1,5 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { Pool } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema";
 
 type Database = ReturnType<typeof drizzle<typeof schema>>;
@@ -24,8 +24,8 @@ function getDb(): Database {
     );
   }
 
-  const sql = neon(url);
-  cached = drizzle(sql, { schema });
+  const pool = new Pool({ connectionString: url });
+  cached = drizzle(pool, { schema });
   return cached;
 }
 

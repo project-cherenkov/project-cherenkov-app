@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { submitQuizAttempt } from "@/lib/quiz-actions";
+import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import type { PublicQuizQuestion } from "@/lib/quiz";
 
 export interface QuizDialogProps {
@@ -34,6 +36,7 @@ type Feedback = { questionId: string; correct: boolean }[];
 // doesn't need to avoid that context the way PlanOverview deliberately does.
 export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   const t = useTranslations("phase2.quiz");
+  const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState("0");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -62,6 +65,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
       if (result.ok) {
         setFeedback(result.results);
         setScore(result.score);
+        router.refresh();
       } else {
         // UX-001 / TICKET-07: previously this branch did nothing — the
         // pending state cleared and the user got no indication anything
@@ -113,7 +117,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                     total: questions.length,
                   })}
                 </p>
-                <p className="mb-3 font-medium">{question.prompt}</p>
+                <MarkdownText text={question.prompt} className="mb-3 font-medium" />
                 <div className="flex flex-col gap-2">
                   {question.choices.map((choice, choiceIndex) => (
                     <label key={choiceIndex} className="flex items-center gap-2 text-sm">
@@ -124,7 +128,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                         onChange={() => selectAnswer(question.id, choiceIndex)}
                         disabled={feedback !== null}
                       />
-                      {choice}
+                      <MarkdownText text={choice} inline />
                     </label>
                   ))}
                 </div>

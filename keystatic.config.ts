@@ -63,7 +63,7 @@ import { config, collection, singleton, fields } from "@keystatic/core";
 //   VizConfigError, exactly as it does today without Keystatic at all. No
 //   regression versus the pre-Keystatic status quo; just short of what
 //   decision #1 hoped to add.
-function vizConfigObject() {
+function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
   return fields.object({
     // --- graph-array-stepper ---
     array: fields.array(fields.number({ label: "Value" }), {
@@ -155,6 +155,27 @@ function vizConfigObject() {
       label: "Mass ratio slider range [min, max]",
       itemLabel: (props) => String(props.value ?? ""),
     }),
+  }, {
+    // composed-scene's vizConfig (SceneElement[]/SceneControl[]/SceneStep[],
+    // per components/viz/composed-scene/types.ts) doesn't fit this
+    // superset-of-scalar-fields object — it's authored visually instead.
+    //
+    // SCENE-009: updated from SCENE-002's original placeholder now that
+    // SCENE-008 ships real, direct write-back (no more copy-paste step,
+    // unlike photoUrl's field hint above it in this file — that field
+    // still expects a pasted URL because team-photo never got a
+    // write-back route of its own). The URL embeds this collection's
+    // fixed `subject` (A-1's "carrying subject+slug as context"); `slug`
+    // can't be embedded the same way — Keystatic's field descriptions in
+    // this codebase are static per-collection strings, evaluated once at
+    // config-definition time, not per-document (confirmed by every other
+    // description in this file, including photoUrl's, being a plain
+    // string) — so slug is filled in on the scene builder page itself,
+    // which has its own fallback subject/slug form for exactly this case.
+    description:
+      `For vizEngine: composed-scene, build the scene at ` +
+      `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug> ` +
+      `— saving there writes vizEngine and vizConfig into this exact file directly.`,
   });
 }
 
@@ -207,11 +228,12 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
         { label: "Graph / array stepper", value: "graph-array-stepper" },
         { label: "Trajectory sandbox", value: "trajectory-sandbox" },
         { label: "Orbital sandbox", value: "orbital-sandbox" },
+        { label: "Composed scene", value: "composed-scene" },
         { label: "None", value: "none" },
       ],
       defaultValue: "none",
     }),
-    vizConfig: vizConfigObject(),
+    vizConfig: vizConfigObject(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
     author: fields.text({ label: "Author", validation: { isRequired: true } }),
     // Explicit, author-set slug — see decision #3. Velite derives its own

@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { NextRequest } from "next/server";
 import middleware from "../middleware";
 
@@ -51,5 +51,43 @@ describe("middleware — /planner requires auth", () => {
     const response = await middleware(makeRequest("/id/archive"));
     const location = response?.headers.get("location");
     expect(location ? new URL(location).pathname : null).not.toBe("/id/login");
+  });
+});
+
+// SCENE-003 required test (spec §11): "/api/scene-builder" joins the
+// existing admin-surface gate, matching "/keystatic" and "/api/team-photo"'s
+// existing behavior exactly — a production build with no
+// KEYSTATIC_GITHUB_CLIENT_ID set 404s the whole write surface.
+// "/keystatic/scene-builder" needs no separate ADMIN_SURFACE_PREFIXES entry
+// (already covered by the existing "/keystatic" prefix) — asserted here
+// anyway since the acceptance criterion is about observed behavior, not
+// just the prefixes array.
+describe("middleware — admin surface gate covers /api/scene-builder", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("404s /api/scene-builder in production without KEYSTATIC_GITHUB_CLIENT_ID", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("KEYSTATIC_GITHUB_CLIENT_ID", "");
+
+    const response = await middleware(makeRequest("/api/scene-builder"));
+    expect(response?.status).toBe(404);
+  });
+
+  it("404s /keystatic/scene-builder in production without KEYSTATIC_GITHUB_CLIENT_ID", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("KEYSTATIC_GITHUB_CLIENT_ID", "");
+
+    const response = await middleware(makeRequest("/keystatic/scene-builder"));
+    expect(response?.status).toBe(404);
+  });
+
+  it("lets /api/scene-builder through (not a 404) once KEYSTATIC_GITHUB_CLIENT_ID is set", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("KEYSTATIC_GITHUB_CLIENT_ID", "test-client-id");
+
+    const response = await middleware(makeRequest("/api/scene-builder"));
+    expect(response?.status).not.toBe(404);
   });
 });

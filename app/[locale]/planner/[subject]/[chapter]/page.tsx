@@ -5,6 +5,11 @@ import { getTopicBySubjectAndId, getTopicStatus } from "@/lib/planner";
 import { getQuizQuestionsForTopic } from "@/lib/quiz";
 import { ChapterView } from "@/components/planner/chapter-view";
 import { QuizDialog } from "@/components/quiz/quiz-dialog";
+// MD-002: QuizDialog's prompt/choices now render through the shared
+// Markdown+KaTeX renderer — imported per-page here, not globally, matching
+// app/[locale]/archive/[subject]/[slug]/page.tsx's existing pattern for the
+// same stylesheet (spec's code-splitting rule).
+import "katex/dist/katex.min.css";
 
 // PLANNER-003. Route shape reserved since Phase 1 (see the prior placeholder's
 // own comment, now replaced) — resolves against lib/planner.ts's
