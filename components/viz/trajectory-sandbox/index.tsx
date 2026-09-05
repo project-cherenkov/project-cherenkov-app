@@ -95,13 +95,8 @@ export function TrajectorySandbox({
     ctx.clearRect(0, 0, width, CANVAS_HEIGHT);
 
     const maxRange = physics.position(flightTime, initial, config.gravity).x;
-    const maxHeight = physics.position(flightTime / 2, initial, config.gravity).y;
     const plotW = width - PADDING_PX * 2;
-    const plotH = CANVAS_HEIGHT - PADDING_PX * 2;
-    const scale = Math.min(
-      plotW / Math.max(maxRange, 1),
-      plotH / Math.max(maxHeight * 1.25, 1),
-    );
+    const scale = plotW / Math.max(maxRange, 1);
 
     const groundY = CANVAS_HEIGHT - PADDING_PX;
     const toPx = (p: { x: number; y: number }) => ({

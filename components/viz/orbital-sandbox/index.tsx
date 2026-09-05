@@ -114,7 +114,11 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     const planetOffset = planetOffsetAt(simTime, eccentricity, { a, b, c, meanMotion });
     const starOffset = { x: -massRatio * planetOffset.x, y: -massRatio * planetOffset.y };
 
-    drawOrbitEllipse(ctx, cx, cy, a * fit, b * fit);
+    // The star sits at one focus of the ellipse. The ellipse's geometric
+    // centre is displaced from that focus by c = a·e along the major axis.
+    // Shift the ellipse left by c·fit so its right focus aligns with the
+    // star's periapsis position (Kepler's first law).
+    drawOrbitEllipse(ctx, cx - c * fit, cy, a * fit, b * fit);
     drawStar(ctx, cx + starOffset.x * fit, cy + starOffset.y * fit);
     drawPlanet(ctx, cx + planetOffset.x * fit, cy + planetOffset.y * fit);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -98,10 +98,9 @@ describe("SiteHeader — session awareness", () => {
 
     const html = renderToStaticMarkup(<SiteHeader />);
 
-    expect(html).toContain("🇬🇧");
     expect(html).toContain("EN");
-    expect(html).toContain("🇮🇩");
     expect(html).toContain("ID");
+    expect(html).toContain("<svg");
     expect(html).toContain('href="/id/about"');
     expect(html).toContain('href="/en/about"');
   });
