@@ -8,10 +8,11 @@
 4. [Getting Started](#iv-getting-started)
 5. [Content Model — Writing an Editorial](#v-content-model--writing-an-editorial)
 6. [Editing Content in the Browser (Keystatic)](#vi-editing-content-in-the-browser-keystatic)
-7. [Internationalization](#vii-internationalization)
-8. [Deploying](#viii-deploying)
-9. [FAQ](#ix-faq)
-10. [Current Status & Known Placeholders](#x-current-status--known-placeholders)
+7. [Composed Scenes & the Scene Builder](#vii-composed-scenes--the-scene-builder)
+8. [Internationalization](#viii-internationalization)
+9. [Deploying](#ix-deploying)
+10. [FAQ](#x-faq)
+11. [Current Status & Open Questions](#xi-current-status--open-questions)
 
 ---
 
@@ -44,13 +45,13 @@ Content is git-committed MDX, not stored in a database: there is no CRUD backend
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) + hand-rolled shadcn/ui-style primitives (`components/ui/`) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for color/spacing, rather than scattering hex values through components. |
 | **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Gives every editorial a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualization-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
 | **Math typesetting** | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML **at build time**, so a reader's browser never runs math-rendering JS or reflows the page after load. |
-| **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Three purpose-built engines (`components/viz/`) — a graph/array stepper, a trajectory sandbox, and an orbital sandbox — dispatched by `vizEngine` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
-| **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section VII](#vii-internationalization). |
+| **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Four engines (`components/viz/`), dispatched by `vizEngine` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)): three purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox) plus `composed-scene`, a generic, template-driven engine with its own in-browser authoring tool — see [Section VII](#vii-composed-scenes--the-scene-builder). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
+| **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section VIII](#viii-internationalization). |
 | **CMS** | [Keystatic](https://keystatic.com/) | In-site editing at `/keystatic`, mirroring `velite.config.ts`'s schema field-for-field (`keystatic.config.ts`). Local-storage mode in development, GitHub-storage mode (real OAuth-backed auth) in production — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | **Package manager** | [pnpm](https://pnpm.io) | — |
 
-**Hosting:** [Vercel](https://vercel.com). The live deployment is available at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section VIII](#viii-deploying) for deployment details.
+**Hosting:** [Vercel](https://vercel.com). The live deployment is available at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section IX](#ix-deploying) for deployment details.
 
 | Layer | Choice | Why |
 | --- | --- | --- |
@@ -73,33 +74,44 @@ app/[locale]/                    routes (everything is locale-prefixed)
   login/ signup/                 Better Auth email/password forms
   planner/                       authenticated plan overview and generation
   planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (chapter segment contains topic ID)
+  error.tsx, not-found.tsx       locale-scoped error and 404 pages
 app/keystatic/                   Keystatic admin UI (gated in production — Section VI)
+app/keystatic/scene-builder/     the composed-scene authoring tool's page (Section VII)
 app/api/keystatic/               Keystatic's own API route (gated in production)
 app/api/team-photo/              Vercel Blob upload endpoint (gated in production)
+app/api/scene-builder/           composed-scene write-back route + its own GitHub OAuth
+                                  flow (gated in production — Section VII)
 app/robots.ts, app/sitemap.ts    generated from the same content query every page uses
 app/icon.svg                     favicon
 components/
   ui/                            hand-rolled shadcn/ui-style primitives
   site/                          header, footer, cards, filters, team-photo uploader
-  viz/                           the three visualization engines + shared playback controls
+  site/scene-builder/            the scene builder's palette/inspector/timeline UI (Section VII)
+  viz/                           the four visualization engines + shared playback controls
+  viz/composed-scene/            the composed-scene engine: element templates + renderer
 content/editorials/<subject>/    the actual archive content (MDX)
 content/team/                    Keystatic-managed team singleton (About page)
 lib/content.ts                   all querying/filtering of editorials goes through here —
                                   pages never import Velite's #content directly
 lib/team.ts                      reads the Keystatic team singleton for the About page
-lib/admin-guard.ts               single source of truth for whether /keystatic and the
-                                  team-photo routes are reachable (Section VI)
+lib/admin-guard.ts               single source of truth for whether /keystatic, the
+                                  team-photo route, and the scene-builder routes are
+                                  reachable (Section VI)
 lib/site.ts                      shared absolute site URL for sitemap/robots/Open Graph
 lib/auth.ts, lib/auth-guard.ts   Better Auth configuration and session checks
 lib/planner*.ts, lib/quiz*.ts    plan generation, progress, scoring, and actions
+lib/scene-builder-*.ts           composed-scene frontmatter write-back, its dedicated
+                                  GitHub OAuth flow, and its GitHub API client (Section VII)
 lib/db/                          Drizzle schema and lazy Neon database client
 messages/{id,en}.json            UI strings
 drizzle/                         generated migration output (created by Drizzle Kit)
 scripts/                          topic and example quiz-question seed scripts
 docs/phase-2-architecture.md     implemented Phase 2 decisions and data model
 docs/phase-3-architecture.md     Phase 3 adaptive-scheduling plan (not implemented)
-docs/deployment-readiness.md     what's been hardened for production, what's still
-                                  placeholder, what needs a real decision (Section VIII)
+docs/deployment-readiness.md     what's been hardened for production, what still needs
+                                  a real decision (Section IX) — written before the
+                                  scene builder existed, so treat it as historical
+                                  context rather than the current file/dependency list
 ```
 
 ---
@@ -165,8 +177,8 @@ or any other port you prefer. If the port is still busy, the app will continue t
 
 | Variable | Required? | Purpose | How to get it (summary) |
 | --- | --- | --- | --- |
-| `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). | Create a GitHub OAuth App under GitHub → Settings → Developer settings → OAuth Apps; set the homepage to your deployed URL and the callback to `https://<your-domain>/api/keystatic/github/oauth/callback`. |
-| `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. | Run `openssl rand -base64 32` and paste the result. |
+| `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` | Optional | Switches Keystatic from local-storage mode to GitHub-storage mode. Without it, `/keystatic` edits your local working copy directly — nothing to configure. **Also controls whether `/keystatic` is reachable at all once deployed** — see [Section VI](#vi-editing-content-in-the-browser-keystatic). The scene builder ([Section VII](#vii-composed-scenes--the-scene-builder)) reuses the same two vars to drive its own, separate GitHub OAuth flow — no additional vars needed for that. | Create a GitHub OAuth App under GitHub → Settings → Developer settings → OAuth Apps; set the homepage to your deployed URL and the callback to `https://<your-domain>/api/keystatic/github/oauth/callback`. |
+| `KEYSTATIC_SECRET` | Optional | Required alongside the two above for GitHub-storage mode. Also signs the scene builder's own short-lived GitHub-token cookie (Section VII). | Run `openssl rand -base64 32` and paste the result. |
 | `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic commits to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. | Usually leave unset; set only if you are using a fork or different repo name. |
 | `ADMIN_EMAILS` | Required for team-photo uploads | Comma-separated email allow-list for content editors. The upload route requires both an authenticated session and a matching email. | Add a comma-separated list such as `editor@example.com, second-editor@example.com` in Vercel's environment variables. |
 | `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the team-photo upload path after authorization succeeds. Without it, that route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it to the project, and let Vercel create the env var automatically. |
@@ -190,10 +202,10 @@ Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter is validate
 | `subject` | `"informatics"` \| `"physics"` \| `"astronomy"` | Must match the folder it's in — the three Keystatic collections enforce this structurally (see [Section VI](#vi-editing-content-in-the-browser-keystatic)). |
 | `hook` | string, ≤280 chars | One sentence that makes someone want to read on. |
 | `tags` | string[] | Short, lowercase. |
-| `principle` | string | The general idea this editorial teaches. **Free text on purpose** — see [Section X](#x-open-questions--known-placeholders). |
+| `principle` | string | The general idea this editorial teaches. **Free text on purpose** — see [Section XI](#xi-current-status--open-questions). |
 | `errorType` | string, optional | The specific mistake this editorial corrects. Also free text. |
-| `vizEngine` | `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"none"` | Which of the three engines to render. `"none"` is a legal schema value but a flagged content error in the UI — see FAQ C. |
-| `vizConfig` | object, shape depends on `vizEngine` | See the three tables below. |
+| `vizEngine` | `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"composed-scene"` \| `"none"` | Which engine to render. The first three are hand-written per visualization type; `composed-scene` is authored visually rather than by hand — see [Section VII](#vii-composed-scenes--the-scene-builder). `"none"` is a legal schema value but a flagged content error in the UI — see FAQ C. |
+| `vizConfig` | object, shape depends on `vizEngine` | See the engine-by-engine notes below. |
 | `publishedAt` | ISO date | — |
 | `author` | string | — |
 | body | MDX | Everything after the frontmatter. |
@@ -244,6 +256,8 @@ vizConfig:
   transitDepth: 0.015 # optional, default 0.01
 ```
 
+**`composed-scene`** — the fourth, general-purpose engine: a scene made of reusable element templates (shapes, curves, text, a slider-bound marker, an array-with-pointers widget) instead of one bespoke renderer per visualization type. Its `vizConfig` is a structured object (canvas size, elements, optional controls, optional steps) that's impractical to hand-write in frontmatter — it's authored visually instead, at `/keystatic/scene-builder`. See [Section VII](#vii-composed-scenes--the-scene-builder) for the full shape and the authoring workflow.
+
 ---
 
 ## **VI. Editing Content in the Browser (Keystatic)**
@@ -255,13 +269,90 @@ vizConfig:
 - **Local** (default, no env vars): edits write straight to your working copy on disk. This is the right mode for local development, and the only mode local development needs.
 - **GitHub** (`KEYSTATIC_GITHUB_CLIENT_ID`/`_SECRET`/`KEYSTATIC_GITHUB_REPO` set): edits go through a real GitHub OAuth flow and land as commits against the repo, gated by the logged-in user's actual GitHub repo permissions.
 
-**On a deployed build, `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` are only reachable in GitHub-storage mode** — `lib/admin-guard.ts` returns a 404 for all three otherwise, enforced at the edge in `middleware.ts`. See FAQ A for why: local-storage mode has no authentication of its own, and a deployed server's filesystem doesn't persist writes between requests anyway, so leaving it reachable in production would serve a live-looking but non-functional CMS to any visitor — and separately, would leave the team-photo upload endpoint open to the entire internet the moment `BLOB_READ_WRITE_TOKEN` exists.
+**On a deployed build, `/keystatic`, `/api/keystatic/*`, `/api/team-photo`, and `/api/scene-builder/*` are only reachable in GitHub-storage mode** — `lib/admin-guard.ts` returns a 404 for all of them otherwise, enforced at the edge in `middleware.ts` (`/keystatic/scene-builder`, the scene builder's own page, needs no separate entry there — it already falls under the `/keystatic` prefix). See FAQ A for why: local-storage mode has no authentication of its own, and a deployed server's filesystem doesn't persist writes between requests anyway, so leaving it reachable in production would serve a live-looking but non-functional CMS to any visitor — and separately, would leave the team-photo upload endpoint open to the entire internet the moment `BLOB_READ_WRITE_TOKEN` exists.
 
 Until a GitHub OAuth App is set up for real, editing content in production means editing MDX files directly and pushing — exactly how it already works without Keystatic at all.
 
 ---
 
-## **VII. Internationalization**
+## **VII. Composed Scenes & the Scene Builder**
+
+The three engines in [Section V](#v-content-model--writing-an-editorial) are each hand-written for one kind of visualization. `composed-scene` is a fourth, general-purpose engine for whatever those three don't already cover: instead of bespoke render code, an author assembles a scene from a fixed library of reusable **element templates**, and the engine (`components/viz/composed-scene/`) interprets that data at render time on a Canvas 2D surface — the same code-splitting and dynamic-import treatment as the other three engines in `components/viz/viz-engine.tsx`.
+
+None of the three example editorials use it yet — it's a newer complement to the fixed engines, not a replacement for them.
+
+### The `vizConfig` shape
+
+```yaml
+vizConfig:
+  canvas: { widthPx: 400, heightPx: 240 }
+  elements:
+    - id: sun
+      templateId: shape-circle
+      label: "Sun"
+      params: { x: 60, y: 60, radius: 20, color: blue }
+  controls:                    # optional
+    - id: radius-slider
+      kind: slider
+      label: "Radius"
+      bindsTo: { elementId: sun, paramKey: radius }
+      min: 5
+      max: 60
+  steps:                       # optional — omitted entirely means a static scene
+    - note: "What's happening at this step (Markdown + KaTeX)."
+      overrides:
+        sun: { radius: 30 }   # only the params that change this step
+```
+
+- **`canvas`** — a fixed design-space width/height in pixels that every element's coordinates are authored against; `ComposedScene` derives one uniform scale factor from the actual rendered container width (the same approach `trajectory-sandbox` already uses for its own `toPx()`), so a scene composed at one size still renders correctly at another.
+- **`elements`** (required, 1–12 — `MAX_ELEMENTS` in `components/viz/composed-scene/types.ts`) — each has a stable `id`, a `templateId` naming one of the eleven registered templates below, an optional author-facing `label`, and a `params` object matching that template's own declared parameter schema.
+- **`controls`** (optional) — sliders or toggles bound to one element's one param via `bindsTo: { elementId, paramKey }`; a slider can only bind to a numeric param, a toggle only to a boolean one.
+- **`steps`** (optional, 0–20 — `MAX_STEPS`) — the same authoring shape as `graph-array-stepper`'s `steps`, generalized: each step is an optional Markdown/KaTeX `note` plus sparse per-element `overrides` (only the params that change need to be listed; anything omitted keeps that element's base `params` value).
+
+### The eleven element templates
+
+Registered in `components/viz/composed-scene/element-templates.ts` (`ELEMENT_TEMPLATES`) — adding a new one means adding one entry there, never a schema change:
+
+| Template ID | What it draws |
+| --- | --- |
+| `shape-circle` | A filled circle (position, radius, color). |
+| `shape-rect` | A filled rectangle (position, width, height, color). |
+| `shape-line` | A straight line between two points. |
+| `shape-arrow` | A line with an arrowhead at its second point. |
+| `text-label` | Literal display text — never evaluated as an expression or formula. |
+| `curve-linear` / `curve-quadratic` / `curve-sine` | Named curve shapes between/around control points. |
+| `curve-points` | A polyline through 2–4 author-placed points. |
+| `slider-marker` | A small marker styled specifically as "the thing a slider moves" (distinct from `shape-circle` mainly so the builder's palette carries an obvious "bind a slider to this" card). |
+| `array-pointers` | An array-with-pointers widget (up to 8 cells, up to 3 named pointers, one highlighted index) — a bounded, Canvas-rendered adaptation of `graph-array-stepper`'s own array visual, for composing it alongside other elements in one scene. |
+
+Every param on every template is a number, a bounded select, a boolean, or short plain text — deliberately never a freeform formula/expression field, so a scene can never encode arbitrary logic.
+
+### Validation
+
+`isComposedSceneConfig` (`components/viz/composed-scene/types.ts`) is the single guard used everywhere a `composed-scene` config is trusted: by `viz-engine.tsx` before rendering a published editorial, by `lib/scene-builder-write.ts` before writing anything back to a file, and by the scene builder UI itself before enabling its "Save" button — so what counts as valid is defined once, not reimplemented per call site. It checks the same things the other three engines' guards check: every `templateId` must be registered, every param present must match its template's declared type and bounds, and every `elementId` a control or step references must actually exist.
+
+### The authoring tool: `/keystatic/scene-builder`
+
+A three-pane UI (`components/site/scene-builder/`) for composing a scene without hand-writing YAML:
+
+- **Palette** — add an element from any of the eleven templates (disabled once the 12-element cap is hit).
+- **Canvas preview + timeline** — a live `ComposedScene` render of the current draft, plus a step-by-step timeline editor for adding/reordering/removing steps.
+- **Inspector** — edit the selected element's label and params, bind/unbind sliders and toggles, and edit the current step's per-element overrides.
+
+Reached from a specific editorial's `vizConfig` field description inside `/keystatic` itself (pre-filled with that editorial's `?subject=&slug=`), or directly, with its own subject/slug fields as a fallback for retargeting a draft in progress.
+
+**Saving** posts the composed draft to `POST /api/scene-builder`, which requires both an authenticated session and an email in `ADMIN_EMAILS` (the same authorization `/api/team-photo` uses), then rewrites only the target editorial's `vizEngine` and `vizConfig` frontmatter keys — the MDX body and every other frontmatter key are left untouched (verified byte-for-byte against the three real example editorials in `scene-builder-write.test.ts`'s round-trip suite). Which storage path it writes to is chosen by the same signal Keystatic itself uses:
+
+- **Local** (default, no env vars): writes the change straight to the target file on disk.
+- **GitHub** (`KEYSTATIC_GITHUB_CLIENT_ID` set): commits the change to a brand-new branch (`keystatic/scene-builder-<slug>-<timestamp>`) off the repository's default branch. **This does not open or merge a pull request automatically** — the author still opens a PR on GitHub to actually publish the change.
+
+GitHub mode needs its own authorization step first, via a **dedicated GitHub OAuth flow** (`app/api/scene-builder/github-oauth/{start,callback}/route.ts`, `lib/scene-builder-oauth.ts`) — deliberately separate from both Keystatic's own admin-UI session and Better Auth's session, so that a temporary, deployment-mode-specific OAuth token never needs a schema migration onto the durable user/session tables. It reuses the already-configured `KEYSTATIC_GITHUB_CLIENT_ID`/`KEYSTATIC_GITHUB_CLIENT_SECRET`/`KEYSTATIC_SECRET` env vars rather than provisioning new ones, and keeps the resulting GitHub access token in its own short-lived (1 hour), HMAC-signed, `httpOnly` cookie.
+
+**Access is gated the same way as the rest of the CMS write surface**: `/keystatic/scene-builder`, `/api/scene-builder/*`, and the OAuth routes all fall under `middleware.ts`'s admin-surface gate (Section VI), so on a deployed build they 404 together with `/keystatic` unless `KEYSTATIC_GITHUB_CLIENT_ID` is set — and `/api/scene-builder`'s own handler separately re-checks the caller's session and `ADMIN_EMAILS` membership per request, the same defense-in-depth pattern `/api/team-photo` uses.
+
+---
+
+## **VIII. Internationalization**
 
 Locales live in `messages/id.json` and `messages/en.json`, same keys in both, loaded via `i18n/request.ts`. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`) — `id` is the default locale but still gets its own `/id` prefix rather than living at the bare root.
 
@@ -269,7 +360,7 @@ To add a locale: add it to `i18n/routing.ts`'s `locales` array and add a matchin
 
 ---
 
-## **VIII. Deploying**
+## **IX. Deploying**
 
 The public archive is deployed on Vercel at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). It can be deployed with **zero required environment variables** for the archive-only experience.
 
@@ -282,14 +373,14 @@ The public archive is deployed on Vercel at [project-cherenkov-app.vercel.app/en
 
 **Before a fully polished public launch**, read `docs/deployment-readiness.md` and resolve:
 
-- The remaining placeholder hero/tagline/about copy in `messages/*.json` — until it's real, every page ships with `robots: { index: false, follow: false }` on purpose (`app/[locale]/layout.tsx`), so search engines don't index placeholder text.
-- Whether/when to set up a real GitHub OAuth App so `/keystatic` becomes reachable in production (Section VI).
+- The team bios and contact details in `messages/*.json` still need to be written — until they are, every page ships with `robots: { index: false, follow: false }` on purpose (`app/[locale]/layout.tsx`). The hero, tagline, and about/philosophy copy are already finished.
+- Whether/when to set up a real GitHub OAuth App so `/keystatic` (and `/keystatic/scene-builder`, Section VII) becomes reachable in production (Section VI).
 
 The public repo and public deployment are both live; the remaining blockers are content polish and the production CMS gate, not whether the app is already deployed.
 
 ---
 
-## **IX. FAQ**
+## **X. FAQ**
 
 ### **A. "Why does `/keystatic` 404 on Vercel until I set up GitHub OAuth?"**
 
@@ -298,7 +389,7 @@ The public repo and public deployment are both live; the remaining blockers are 
 
 Local-storage Keystatic — the default, with no env vars set — has no authentication of its own; it's built to be run by whoever is already running `pnpm dev` on their own machine. Nothing stopped it from being reachable on a real deployment too, which is a problem for two separate reasons: a serverless deployment's filesystem doesn't persist writes between requests, so `/keystatic` would present a live-looking but non-functional editing UI to anyone who found the URL; and independently, the team-photo route needs its own session and `ADMIN_EMAILS` authorization regardless of Keystatic's storage mode.
 
-`lib/admin-guard.ts` closes the deployment exposure at the edge: on a deployed build (`NODE_ENV === "production"`, which Vercel sets for both preview and production deploys), `/keystatic`, `/api/keystatic/*`, and `/api/team-photo` all 404 unless `KEYSTATIC_GITHUB_CLIENT_ID` is set. The team-photo handler then separately requires an authenticated user whose email appears in `ADMIN_EMAILS`. Local `pnpm dev` is unaffected by the production surface gate.
+`lib/admin-guard.ts` closes the deployment exposure at the edge: on a deployed build (`NODE_ENV === "production"`, which Vercel sets for both preview and production deploys), `/keystatic`, `/api/keystatic/*`, `/api/team-photo`, and `/api/scene-builder/*` (Section VII) all 404 unless `KEYSTATIC_GITHUB_CLIENT_ID` is set. The team-photo and scene-builder handlers then separately require an authenticated user whose email appears in `ADMIN_EMAILS`. Local `pnpm dev` is unaffected by the production surface gate.
 
 </details>
 
@@ -316,7 +407,7 @@ The visualization still renders — right after the hook, with a small notice �
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-This is a flagged, unresolved conflict between two parts of the original build spec, not an oversight: one line states every published editorial *must* ship a working interactive visualization; the frontmatter schema section of the same spec lists `"none"` as a legal `vizEngine` value. `velite.config.ts` keeps `"none"` as valid at the schema level — so nothing here silently forecloses the option — but `lib/content.ts`'s `hasMissingViz()` treats it as a flagged content error the UI surfaces, not a legitimate published state. Which rule should actually win is still an open question; see [Section X](#x-open-questions--known-placeholders).
+This is a flagged, unresolved conflict between two parts of the original build spec, not an oversight: one line states every published editorial *must* ship a working interactive visualization; the frontmatter schema section of the same spec lists `"none"` as a legal `vizEngine` value. `velite.config.ts` keeps `"none"` as valid at the schema level — so nothing here silently forecloses the option — but `lib/content.ts`'s `hasMissingViz()` treats it as a flagged content error the UI surfaces, not a legitimate published state. Which rule should actually win is still an open question; see [Section XI](#xi-current-status--open-questions).
 
 </details>
 
@@ -329,21 +420,22 @@ The taxonomy isn't finalized yet, and there isn't enough real content to know wh
 
 </details>
 
-### **E. "Does the site still have placeholder copy or a repo mismatch?"**
+### **E. "Is there still a repo mismatch, and is the site ready to be indexed?"**
 
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-The repository is public and the live site is deployed at `https://project-cherenkov-app.vercel.app/en`, so the repo-visibility mismatch described in older docs is no longer current. The app still intentionally keeps `robots: { index: false, follow: false }` on deployed pages while a few hero/about strings are still placeholder copy, which is why the site is public but not yet fully polished for a final launch.
+The repository is public and the live site is deployed at `https://project-cherenkov-app.vercel.app/en`, so the repo-visibility mismatch described in older docs is no longer current. The site still intentionally keeps `robots: { index: false, follow: false }` on deployed pages (`app/[locale]/layout.tsx`): the hero, tagline, and about/philosophy copy in `messages/*.json` are finished, but the team bios and contact details there are not yet written, so the site is public but not yet ready for a final, indexed launch.
 
 </details>
 
-## **X. Current Status & Known Placeholders**
+## **XI. Current Status & Open Questions**
 
 - The repo is public at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app).
 - The live deployment is at [`project-cherenkov-app.vercel.app/en`](https://project-cherenkov-app.vercel.app/en).
 - The language-prefixed route is active, so the default locale is served under `/en` rather than at the bare site root.
-- A few content strings remain placeholder copy in `messages/*.json`, and the the locale layout keeps the site `noindex`/`nofollow` until those are finalized.
-- Keystatic stays gated behind GitHub OAuth in deployed builds, and `/keystatic` remains unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` is configured.
+- The team bios and contact details in `messages/*.json` still need to be written, and the locale layout keeps the site `noindex`/`nofollow` until those are finalized.
+- Keystatic and the scene builder (Section VII) both stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` is configured.
+- The `vizEngine: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
 
-This is the current state of the repo: public codebase, public deployment, placeholder content still being finalized, and production admin access still behind the GitHub OAuth gate.
+This is the current state of the repo: public codebase, public deployment, a couple of about-page fields still being written, and production admin access still behind the GitHub OAuth gate.
