@@ -5,6 +5,27 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // BUGFIX (production edit surface was unreachable — see chat thread):
+  // keystatic.config.ts branches its `storage` field on whether GitHub
+  // mode is configured, and that file is bundled into the BROWSER too
+  // (app/keystatic/keystatic.ts, a "use client" component, imports it
+  // directly). The underlying signal, KEYSTATIC_GITHUB_CLIENT_ID, is a
+  // server-only var — Next never inlines a value for it into client code,
+  // so the browser always saw `undefined` there regardless of what was
+  // actually configured on the server, and always fell back to `local`
+  // storage client-side while the server correctly ran `github` mode.
+  // That mismatch is why /keystatic never showed a "Sign in with GitHub"
+  // screen, and why every collection/singleton load failed.
+  //
+  // Fix: mirror the same boolean into a client-visible var, computed here
+  // at build time (where the real server env var IS available) rather
+  // than as a second value someone has to remember to set and keep in
+  // sync in Vercel. One source of truth: KEYSTATIC_GITHUB_CLIENT_ID.
+  env: {
+    NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED: process.env.KEYSTATIC_GITHUB_CLIENT_ID
+      ? "1"
+      : "",
+  },
   // Velite writes generated content types/data into .velite/ at dev/build
   // time. It's run alongside Next via `concurrently` in package.json's
   // "dev"/"build" scripts, NOT through Velite's Next.js plugin hook — kept

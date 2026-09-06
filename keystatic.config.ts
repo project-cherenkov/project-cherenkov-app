@@ -253,21 +253,43 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
   };
 }
 
+// BUGFIX (production edit surface was unreachable — see chat thread): this
+// file is imported by app/keystatic/keystatic.ts, which is a "use client"
+// component, so keystatic.config.ts — including whatever branches the
+// `storage` field on — is bundled into the BROWSER, not just the server.
+//
+// The previous check here was `process.env.KEYSTATIC_GITHUB_CLIENT_ID ? ... `.
+// That env var is server-only (not NEXT_PUBLIC_-prefixed), so Next.js never
+// inlines a value for it into client bundles — in the browser the reference
+// is always `undefined`, so the ternary always took the `local` branch,
+// no matter what was actually configured server-side. Net effect in
+// production: the server's API route correctly ran in `github` mode, but
+// the browser's Keystatic app always believed it was in `local` mode —
+// never showed a "Sign in with GitHub" screen (local mode needs none),
+// and sent local-mode-shaped requests that the github-mode server handler
+// couldn't fulfill, surfacing as an instant 404 with a plain-text "Not
+// Found" body (collections) or a stuck spinner (the Team singleton).
+//
+// Fix: branch on a NEXT_PUBLIC_ flag instead, so client and server agree.
+// This flag is a plain boolean toggle, not a secret — safe to expose. The
+// real KEYSTATIC_GITHUB_CLIENT_ID/SECRET stay server-only; they're read
+// again below (still server-side only) to build the actual storage config.
+const useGithubStorage = Boolean(process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED);
+
 export default config({
-  storage:
-    process.env.KEYSTATIC_GITHUB_CLIENT_ID
-      ? {
-          kind: "github",
-          // CMS-006 / GATHER-001 item 7 — resolved: the real repo is
-          // project-cherenkov/project-cherenkov-app. The env var still
-          // takes precedence (so a fork or a differently-named deploy
-          // isn't stuck pointing at this one), but the fallback is now a
-          // real value rather than an invented one.
-          repo: (process.env.KEYSTATIC_GITHUB_REPO ??
-            "project-cherenkov/project-cherenkov-app") as `${string}/${string}`,
-          branchPrefix: "keystatic/",
-        }
-      : { kind: "local" },
+  storage: useGithubStorage
+    ? {
+        kind: "github",
+        // CMS-006 / GATHER-001 item 7 — resolved: the real repo is
+        // project-cherenkov/project-cherenkov-app. The env var still
+        // takes precedence (so a fork or a differently-named deploy
+        // isn't stuck pointing at this one), but the fallback is now a
+        // real value rather than an invented one.
+        repo: (process.env.KEYSTATIC_GITHUB_REPO ??
+          "project-cherenkov/project-cherenkov-app") as `${string}/${string}`,
+        branchPrefix: "keystatic/",
+      }
+    : { kind: "local" },
   collections: {
     astronomyEditorials: collection({
       label: "Editorials — Astronomy",
