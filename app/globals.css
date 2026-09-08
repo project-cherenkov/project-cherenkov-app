@@ -10,7 +10,7 @@
 @layer base {
   :root {
     color-scheme: light;
-    --background: 165 100% 97%;
+    --background: 210 0% 100%;
     --foreground: 205 66% 13%;
     --primary: 197 94% 67%;
     --primary-alt: 201 100% 77%;
@@ -22,14 +22,14 @@
 
   .dark {
     color-scheme: dark;
-    --background: 205 40% 8%;
-    --foreground: 165 60% 94%;
-    --primary: 197 70% 58%;
+    --background: 211 0% 15%;
+    --foreground: 210 0% 100%;
+    --primary: 100 100% 100%;
     --primary-alt: 201 70% 68%;
     --secondary: 348 55% 68%;
     --secondary-alt: 327 65% 76%;
-    --card: 205 35% 12%;
-    --border: 205 25% 22%;
+    --card: 210 0% 12%;
+    --border: 210 0% 22%;
   }
 
   body {
