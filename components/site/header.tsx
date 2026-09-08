@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import NextLink from "next/link";
@@ -7,38 +9,9 @@ import { useSession, signOut } from "@/lib/auth-client";
 import { Github } from "lucide-react";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 
-function FlagGB() {
-  return (
-    <svg className="h-3 w-4 rounded-[1px] shadow-sm" viewBox="0 0 60 30" aria-hidden="true">
-      <clipPath id="gb-s">
-        <path d="M0,0 v30 h60 v-30 z" />
-      </clipPath>
-      <clipPath id="gb-t">
-        <path d="M30,15 h30 v15 z m0,0 h-30 v-15 z m0,0 h-30 v15 z m0,0 h30 v-15 z" />
-      </clipPath>
-      <g clipPath="url(#gb-s)">
-        <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
-        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
-        <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#gb-t)" stroke="#C8102E" strokeWidth="4" />
-        <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
-        <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
-      </g>
-    </svg>
-  );
-}
-
-function FlagID() {
-  return (
-    <svg className="h-3 w-4 rounded-[1px] border border-slate-300/50 shadow-sm" viewBox="0 0 3 2" aria-hidden="true">
-      <rect width="3" height="1" fill="#E70011" />
-      <rect y="1" width="3" height="1" fill="#FFFFFF" />
-    </svg>
-  );
-}
-
 const localeOptions = [
-  { code: "en", label: "EN", Flag: FlagGB },
-  { code: "id", label: "ID", Flag: FlagID },
+  { code: "en", label: "EN", flag: "🇬🇧" },
+  { code: "id", label: "ID", flag: "🇮🇩" },
 ] as const;
 
 export function SiteHeader() {
@@ -47,6 +20,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   async function handleSignOut() {
     await signOut();
@@ -54,10 +28,25 @@ export function SiteHeader() {
     router.refresh();
   }
 
+  const navItems = [
+    { href: "/archive", label: t("archive"), isExternal: false },
+    { href: "/about", label: t("about"), isExternal: false },
+    { href: "/keystatic", label: t("edit"), isExternal: true },
+    ...(session
+      ? [
+          { href: "/planner", label: t("myPlan"), isExternal: false },
+          { onClick: handleSignOut, label: t("logout"), isButton: true },
+        ]
+      : [
+          { href: "/login", label: t("login"), isExternal: false },
+          { href: "/signup", label: t("signup"), isExternal: false },
+        ]),
+  ];
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur overflow-visible">
+      <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6 overflow-visible">
+        <Link href="/" className="flex items-center gap-2 z-10">
           <span
             aria-hidden
             className="h-2.5 w-2.5 rounded-full bg-cherenkov-blue-pastel"
@@ -67,66 +56,68 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <nav className="flex flex-wrap items-center gap-1 font-mono text-xs uppercase tracking-wide">
-            <Link
-              href="/archive"
-              className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
-              {t("archive")}
-            </Link>
-            <Link
-              href="/about"
-              className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
-              {t("about")}
-            </Link>
-            <NextLink
-              href="/keystatic"
-              className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
-              {t("edit")}
-            </NextLink>
+        <div className="flex items-center gap-2 overflow-visible">
+          {/* Desktop Navigation: Full Bookmarks (md+) */}
+          <nav className="hidden md:flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20">
+            {navItems.map((item, index) => {
+              const isActive = item.href ? pathname === item.href : false;
 
-            {session ? (
-              <>
-                <Link
-                  href="/planner"
-                  className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-                >
-                  {t("myPlan")}
+              const bookmarkStyle = [
+                "group relative -mt-2 inline-flex h-28 w-24 items-center justify-center p-2 pt-4 transition-transform duration-300 esa focus:outline-none",
+                isActive ? "translate-y-9 z-30" : "z-20 hover:translate-y-9",
+              ].join(" ");
+
+              const content = (
+                <>
+                  <Image
+                    src="/mbantul2.png"
+                    alt=""
+                    fill
+                    sizes="96px"
+                    priority
+                    className="object-fill pointer-events-none drop-shadow-md"
+                  />
+                  <span className="relative z-10 text-center font-bold text-white dark:text-slate-100 text-[11px] leading-tight px-1 pb-3">
+                    {item.label}
+                  </span>
+                </>
+              );
+
+              if (item.isButton) {
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={item.onClick}
+                    className={bookmarkStyle}
+                  >
+                    {content}
+                  </button>
+                );
+              }
+
+              if (item.isExternal) {
+                return (
+                  <NextLink key={item.href} href={item.href} className={bookmarkStyle}>
+                    {content}
+                  </NextLink>
+                );
+              }
+
+              return (
+                <Link key={item.href} href={item.href} className={bookmarkStyle}>
+                  {content}
                 </Link>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="cursor-pointer rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-                >
-                  {t("logout")}
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-                >
-                  {t("login")}
-                </Link>
-                <Link
-                  href="/signup"
-                  className="rounded-md px-3 py-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-                >
-                  {t("signup")}
-                </Link>
-              </>
-            )}
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-1.5 font-mono text-xs">
+          {/* Controls Right */}
+          <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible">
             <ThemeToggle />
 
             <div className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70">
-              {localeOptions.map(({ code, label, Flag }) => {
+              {localeOptions.map(({ code, label, flag }) => {
                 const isActive = code === currentLocale;
 
                 return (
@@ -135,14 +126,14 @@ export function SiteHeader() {
                     href={pathname}
                     locale={code}
                     className={[
-                      "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 transition-colors",
+                      "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 transition-colors text-xs",
                       isActive
                         ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white",
                     ].join(" ")}
                     aria-label={`Switch language to ${label}`}
                   >
-                    <Flag />
+                    <span aria-hidden="true">{flag}</span>
                     <span className="font-semibold leading-none">{label}</span>
                   </Link>
                 );
@@ -154,13 +145,94 @@ export function SiteHeader() {
               target="_blank"
               rel="noreferrer"
               aria-label={t("repo")}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border p-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+              className="hidden sm:inline-flex h-8 w-8 items-center justify-center rounded-md border border-border p-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
             >
               <Github className="h-4 w-4" aria-hidden />
             </a>
+
+            {/* Single Bookmark Menu Toggle (Mobile Only) */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle Mobile Navigation"
+              className={[
+                "group relative md:hidden -mt-2 inline-flex h-20 w-16 items-center justify-center p-1 pt-3 transition-transform duration-300 linear focus:outline-none z-30",
+                mobileMenuOpen ? "translate-y-5" : "hover:translate-y-2",
+              ].join(" ")}
+            >
+              <Image
+                src="/mbantul2.png"
+                alt=""
+                fill
+                sizes="64px"
+                priority
+                className="object-fill pointer-events-none drop-shadow-md"
+              />
+              <span className="relative z-10 text-center font-mono font-bold text-white dark:text-slate-100 text-[10px] uppercase tracking-widest leading-none pb-2">
+                MENU
+              </span>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
+          <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
+            {navItems.map((item, index) => {
+              const isActive = item.href ? pathname === item.href : false;
+
+              const linkClasses = [
+                "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",
+                isActive
+                  ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                  : "text-foreground hover:bg-accent hover:text-accent-foreground",
+              ].join(" ");
+
+              if (item.isButton) {
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      item.onClick?.();
+                    }}
+                    className={`${linkClasses} w-full text-left`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              }
+
+              if (item.isExternal) {
+                return (
+                  <NextLink
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={linkClasses}
+                  >
+                    {item.label}
+                  </NextLink>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={linkClasses}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
