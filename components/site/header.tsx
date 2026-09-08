@@ -14,6 +14,19 @@ const localeOptions = [
   { code: "id", label: "ID", flag: "🇮🇩" },
 ] as const;
 
+type NavItem =
+  | {
+      href: string;
+      label: string;
+      isExternal?: boolean;
+      isButton?: false;
+    }
+  | {
+      label: string;
+      isButton: true;
+      onClick: () => void | Promise<void>;
+    };
+
 export function SiteHeader() {
   const t = useTranslations("nav");
   const currentLocale = useLocale();
@@ -28,14 +41,14 @@ export function SiteHeader() {
     router.refresh();
   }
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { href: "/archive", label: t("archive"), isExternal: false },
     { href: "/about", label: t("about"), isExternal: false },
     { href: "/keystatic", label: t("edit"), isExternal: true },
     ...(session
       ? [
           { href: "/planner", label: t("myPlan"), isExternal: false },
-          { onClick: handleSignOut, label: t("logout"), isButton: true },
+          { onClick: handleSignOut, label: t("logout"), isButton: true as const },
         ]
       : [
           { href: "/login", label: t("login"), isExternal: false },
@@ -60,7 +73,7 @@ export function SiteHeader() {
           {/* Desktop Navigation: Full Bookmarks (md+) */}
           <nav className="hidden md:flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20">
             {navItems.map((item, index) => {
-              const isActive = item.href ? pathname === item.href : false;
+              const isActive = !item.isButton && pathname === item.href;
 
               const bookmarkStyle = [
                 "group relative -mt-2 inline-flex h-28 w-24 items-center justify-center p-2 pt-4 transition-transform duration-300 esa focus:outline-none",
@@ -181,7 +194,7 @@ export function SiteHeader() {
         <div className="md:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
           <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
             {navItems.map((item, index) => {
-              const isActive = item.href ? pathname === item.href : false;
+              const isActive = !item.isButton && pathname === item.href;
 
               const linkClasses = [
                 "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",

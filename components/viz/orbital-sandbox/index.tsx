@@ -121,7 +121,6 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     drawOrbitEllipse(ctx, cx - c * fit, cy, a * fit, b * fit);
     drawStar(ctx, cx + starOffset.x * fit, cy + starOffset.y * fit);
     drawPlanet(ctx, cx + planetOffset.x * fit, cy + planetOffset.y * fit);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, simTime, eccentricity, massRatio, a, b, c, meanMotion]);
 
   const scrubValue = Math.round((simTime / config.periodSeconds) * SCRUB_STEPS);
