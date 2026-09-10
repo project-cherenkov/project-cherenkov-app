@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
@@ -14,19 +14,6 @@ const localeOptions = [
   { code: "id", label: "ID", flag: "🇮🇩" },
 ] as const;
 
-type NavItem =
-  | {
-      href: string;
-      label: string;
-      isExternal?: boolean;
-      isButton?: false;
-    }
-  | {
-      label: string;
-      isButton: true;
-      onClick: () => void | Promise<void>;
-    };
-
 export function SiteHeader() {
   const t = useTranslations("nav");
   const currentLocale = useLocale();
@@ -35,20 +22,33 @@ export function SiteHeader() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  /* Lock body scroll when mobileMenuOpen is true */
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   async function handleSignOut() {
     await signOut();
     router.push("/");
     router.refresh();
   }
 
-  const navItems: NavItem[] = [
+  const navItems = [
     { href: "/archive", label: t("archive"), isExternal: false },
     { href: "/about", label: t("about"), isExternal: false },
     { href: "/keystatic", label: t("edit"), isExternal: true },
     ...(session
       ? [
           { href: "/planner", label: t("myPlan"), isExternal: false },
-          { onClick: handleSignOut, label: t("logout"), isButton: true as const },
+          { onClick: handleSignOut, label: t("logout"), isButton: true },
         ]
       : [
           { href: "/login", label: t("login"), isExternal: false },
@@ -59,7 +59,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur overflow-visible">
       <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6 overflow-visible">
-        <Link href="/" className="flex items-center gap-2 z-10">
+        <Link href="/" className="flex items-center gap-2 z-10 shrink-0">
           <span
             aria-hidden
             className="h-2.5 w-2.5 rounded-full bg-cherenkov-blue-pastel"
@@ -70,13 +70,13 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-2 overflow-visible">
-          {/* Desktop Navigation: Full Bookmarks (md+) */}
-          <nav className="hidden md:flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20">
+          {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
+          <nav className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0">
             {navItems.map((item, index) => {
-              const isActive = !item.isButton && pathname === item.href;
+              const isActive = item.href ? pathname === item.href : false;
 
               const bookmarkStyle = [
-                "group relative -mt-2 inline-flex h-28 w-24 items-center justify-center p-2 pt-4 transition-transform duration-300 esa focus:outline-none",
+                "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus:outline-none",
                 isActive ? "translate-y-9 z-30" : "z-20 hover:translate-y-9",
               ].join(" ");
 
@@ -126,7 +126,7 @@ export function SiteHeader() {
           </nav>
 
           {/* Controls Right */}
-          <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible">
+          <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
             <ThemeToggle />
 
             <div className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70">
@@ -163,13 +163,13 @@ export function SiteHeader() {
               <Github className="h-4 w-4" aria-hidden />
             </a>
 
-            {/* Single Bookmark Menu Toggle (Mobile Only) */}
+            {/* Single Bookmark Menu Toggle: Displays at 856px or smaller */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label="Toggle Mobile Navigation"
+              aria-label="Toggle Navigation"
               className={[
-                "group relative md:hidden -mt-2 inline-flex h-20 w-16 items-center justify-center p-1 pt-3 transition-transform duration-300 linear focus:outline-none z-30",
+                "group relative min-[857px]:hidden -mt-2 inline-flex h-20 w-16 items-center justify-center p-1 pt-3 transition-transform duration-300 ease-out focus:outline-none z-30",
                 mobileMenuOpen ? "translate-y-5" : "hover:translate-y-2",
               ].join(" ")}
             >
@@ -189,12 +189,12 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile/Tablet Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
+        <div className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
           <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
             {navItems.map((item, index) => {
-              const isActive = !item.isButton && pathname === item.href;
+              const isActive = item.href ? pathname === item.href : false;
 
               const linkClasses = [
                 "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",
