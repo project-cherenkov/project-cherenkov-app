@@ -235,7 +235,7 @@ export function SiteHeader() {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={item.href!}
                   onClick={() => setMobileMenuOpen(false)}
                   className={linkClasses}
                 >
