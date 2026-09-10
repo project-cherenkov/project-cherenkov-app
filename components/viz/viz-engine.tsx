@@ -8,6 +8,7 @@ import { isGraphArrayStepperConfig } from "./graph-array-stepper/types";
 import { isTrajectorySandboxConfig } from "./trajectory-sandbox/types";
 import { isOrbitalSandboxConfig } from "./orbital-sandbox/types";
 import { isComposedSceneConfig } from "./composed-scene/types";
+import { isProgrammableSceneConfig } from "./programmable-scene/types";
 
 // Each engine is its own dynamic import (ssr: false — they're all
 // canvas/SVG + browser APIs like ResizeObserver) so an editorial page only
@@ -28,6 +29,15 @@ const OrbitalSandbox = dynamic(
 );
 const ComposedScene = dynamic(
   () => import("./composed-scene").then((m) => m.ComposedScene),
+  { ssr: false, loading: () => <VizSkeleton /> },
+);
+// PROG-006: this dynamic import is what keeps Blockly (a large,
+// authoring-only dependency, pulled in transitively by
+// components/site/scene-builder/block-editor.tsx) out of every reader-facing
+// bundle — ProgrammableScene itself never imports block-editor.tsx, so a
+// reader's editorial-page chunk for this engine never reaches it either.
+const ProgrammableScene = dynamic(
+  () => import("./programmable-scene").then((m) => m.ProgrammableScene),
   { ssr: false, loading: () => <VizSkeleton /> },
 );
 
@@ -58,6 +68,12 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
         return <VizConfigError engine={editorial.vizEngine} />;
       }
       return <ComposedScene config={editorial.vizConfig} />;
+
+    case "programmable-scene":
+      if (!isProgrammableSceneConfig(editorial.vizConfig)) {
+        return <VizConfigError engine={editorial.vizEngine} />;
+      }
+      return <ProgrammableScene config={editorial.vizConfig} />;
 
     case "none":
     default:

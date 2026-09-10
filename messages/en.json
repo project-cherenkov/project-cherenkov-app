@@ -64,7 +64,8 @@
     "reset": "Reset",
     "scrub": "Scrub through steps",
     "stepCounter": "Step {current} of {total}",
-    "transitCurve": "Transit light curve (schematic)"
+    "transitCurve": "Transit light curve (schematic)",
+    "programmableSceneBudgetNotice": "This scene is taking too long to compute — showing the last frame that finished in time."
   },
   "about": {
     "eyebrow": "about.md",

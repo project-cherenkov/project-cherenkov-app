@@ -4,6 +4,7 @@ import { SceneBuilderApp } from "@/components/site/scene-builder/scene-builder-a
 interface SceneBuilderSearchParams {
   subject?: string;
   slug?: string;
+  engine?: string;
 }
 
 // Deliberately placed under /keystatic (excluded from the locale-prefix
@@ -14,19 +15,27 @@ interface SceneBuilderSearchParams {
 // vizConfig field description (SCENE-009) with ?subject=&slug= already
 // filled in; the fields inside SceneBuilderApp are the fallback for
 // reaching this page directly.
+//
+// PROG-005: ?engine= forwards which engine that editorial already uses
+// (composed-scene or programmable-scene) so the builder opens directly in
+// the right mode, the same "carry context from the specific editorial"
+// idea A-1 already established for subject/slug — SceneBuilderApp still
+// defaults to composed-scene when this is absent or unrecognized.
 export default async function SceneBuilderPage({
   searchParams,
 }: {
   searchParams: Promise<SceneBuilderSearchParams>;
 }) {
   const params = await searchParams;
+  const initialEngine = params.engine === "programmable-scene" ? "programmable-scene" : undefined;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-xl font-bold text-foreground">Scene builder</h1>
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
         Compose a <code className="font-mono">composed-scene</code> visualization from reusable
-        element templates, preview it live, and save it into an editorial&apos;s{" "}
+        element templates, or a <code className="font-mono">programmable-scene</code> program from
+        blocks, preview it live, and save it into an editorial&apos;s{" "}
         <code className="font-mono">vizConfig</code> from{" "}
         <Link href="/keystatic" className="underline">
           /keystatic
@@ -34,7 +43,11 @@ export default async function SceneBuilderPage({
         .
       </p>
       <div className="mt-6">
-        <SceneBuilderApp initialSubject={params.subject} initialSlug={params.slug} />
+        <SceneBuilderApp
+          initialSubject={params.subject}
+          initialSlug={params.slug}
+          initialEngine={initialEngine}
+        />
       </div>
     </div>
   );

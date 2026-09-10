@@ -8,11 +8,23 @@ import { vizEngines } from "./velite.config";
 // (see the implementation report) and passed; this test keeps that
 // coverage exercised on every run without needing a committed fixture MDX
 // file just for the test.
+// Schema-level check for SCENE-002's only change to this file (the
+// vizEngines tuple) — a full `pnpm generate` build-time check against a
+// composed-scene fixture file was also run manually during implementation
+// (see the implementation report) and passed; this test keeps that
+// coverage exercised on every run without needing a committed fixture MDX
+// file just for the test.
+//
+// PROG-004 added "programmable-scene" to the same tuple, the same way.
 describe("velite.config vizEngines", () => {
   const schema = s.enum(vizEngines);
 
   it("accepts composed-scene", () => {
     expect(schema.safeParse("composed-scene").success).toBe(true);
+  });
+
+  it("accepts programmable-scene", () => {
+    expect(schema.safeParse("programmable-scene").success).toBe(true);
   });
 
   it("still accepts all four pre-existing values, unchanged", () => {

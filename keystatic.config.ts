@@ -156,9 +156,11 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
       itemLabel: (props) => String(props.value ?? ""),
     }),
   }, {
-    // composed-scene's vizConfig (SceneElement[]/SceneControl[]/SceneStep[],
-    // per components/viz/composed-scene/types.ts) doesn't fit this
-    // superset-of-scalar-fields object — it's authored visually instead.
+    // Neither composed-scene's vizConfig (SceneElement[]/SceneControl[]/
+    // SceneStep[]) nor programmable-scene's (a recursive ProgramNode tree,
+    // components/viz/programmable-scene/types.ts) fits this
+    // superset-of-scalar-fields object — both are authored visually
+    // instead, at the same scene builder tool.
     //
     // SCENE-009: updated from SCENE-002's original placeholder now that
     // SCENE-008 ships real, direct write-back (no more copy-paste step,
@@ -172,10 +174,26 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
     // description in this file, including photoUrl's, being a plain
     // string) — so slug is filled in on the scene builder page itself,
     // which has its own fallback subject/slug form for exactly this case.
+    //
+    // PROG-004: for vizEngine: programmable-scene specifically, the scene
+    // builder's own write-back route (lib/scene-builder-write.ts,
+    // app/api/scene-builder/route.ts) is hardcoded to composed-scene and
+    // was NOT extended as part of this feature — it's outside this
+    // feature's own §4 Repository Impact file list, and adding a second,
+    // structurally different config shape to that route's validation is a
+    // large enough change to warrant its own review rather than folding in
+    // here. So today, building a program at the scene builder produces (and
+    // structurally validates) a real ProgramNode tree, but publishing it
+    // still requires hand-placing the result into this file's frontmatter
+    // rather than clicking Save — see the implementation report's
+    // Deviations section for the full reasoning.
     description:
-      `For vizEngine: composed-scene, build the scene at ` +
-      `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug> ` +
-      `— saving there writes vizEngine and vizConfig into this exact file directly.`,
+      `For vizEngine: composed-scene or programmable-scene, build the scene at ` +
+      `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug>. ` +
+      `composed-scene: saving there writes vizEngine and vizConfig into this exact ` +
+      `file directly. programmable-scene: the builder validates and previews the ` +
+      `program, but does not yet write it back automatically — copy its compiled ` +
+      `output into vizConfig by hand for now.`,
   });
 }
 
@@ -229,6 +247,7 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
         { label: "Trajectory sandbox", value: "trajectory-sandbox" },
         { label: "Orbital sandbox", value: "orbital-sandbox" },
         { label: "Composed scene", value: "composed-scene" },
+        { label: "Programmable scene", value: "programmable-scene" },
         { label: "None", value: "none" },
       ],
       defaultValue: "none",

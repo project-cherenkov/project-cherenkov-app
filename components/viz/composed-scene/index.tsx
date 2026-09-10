@@ -8,36 +8,18 @@ import { Slider } from "@/components/ui/slider";
 import { setupCanvasForDpr } from "@/components/viz/shared/canvas-dpr";
 import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import { ELEMENT_TEMPLATES } from "./element-templates";
-import type { ResolvedParams, ScaleFns } from "./element-templates";
-import type { ComposedSceneConfig, SceneControl, SceneStep } from "./types";
+import type { ScaleFns } from "./element-templates";
+import { renderElements, resolveElementParams } from "./render-elements";
+import type { ComposedSceneConfig } from "./types";
+
+// Re-exported from render-elements.ts (PROG-002 extraction) so
+// index.test.tsx's existing `import { ComposedScene, resolveElementParams }
+// from "./index"` keeps working unmodified — moving *where* a function
+// lives isn't a change to the public interface composed-scene's own tests
+// depend on.
+export { resolveElementParams };
 
 const STEP_INTERVAL_MS = 900; // matches graph-array-stepper's own autoplay cadence
-
-// Effective params for one element: base params < current timeline step's
-// overrides < live control values. Controls always win — they're the
-// "what the reader is touching right now" layer, the same precedence
-// trajectory-sandbox effectively gives its own speed/angle sliders over
-// `config.initial`. Pure and exported (rather than an inline closure)
-// specifically so this — the actual novel logic ComposedScene adds beyond
-// "loop and call render()" — is unit-testable without a DOM, the same way
-// components/site/theme-toggle.tsx exports its own pure `nextTheme` logic
-// alongside the component for direct testing.
-export function resolveElementParams(
-  elementId: string,
-  baseParams: ResolvedParams,
-  currentStep: SceneStep | undefined,
-  controls: SceneControl[] | undefined,
-  controlValues: Record<string, number | boolean>,
-): ResolvedParams {
-  const stepOverrides = currentStep?.overrides[elementId] ?? {};
-  const merged: ResolvedParams = { ...baseParams, ...stepOverrides };
-  for (const control of controls ?? []) {
-    if (control.bindsTo.elementId !== elementId) continue;
-    const value = controlValues[control.id];
-    if (value !== undefined) merged[control.bindsTo.paramKey] = value;
-  }
-  return merged;
-}
 
 // Merges the two rendering patterns FR-3/FR-4/A-2 both call for in one
 // component: continuous, slider/control-driven rendering (like
@@ -129,22 +111,12 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
     const ctx = setupCanvasForDpr(canvas, width, renderedHeight);
     if (!ctx) return;
 
-    for (const element of config.elements) {
-      const template = ELEMENT_TEMPLATES[element.templateId];
-      // Defensive only: isComposedSceneConfig (types.ts) already rejects
-      // any unrecognized templateId before a config reaches this
-      // component (mirrors viz-engine.tsx's guard-then-render dispatch for
-      // the other three engines).
-      if (!template) continue;
-      const resolved = resolveElementParams(
-        element.id,
-        element.params,
-        currentStep,
-        config.controls,
-        controlValues,
-      );
-      template.render(ctx, resolved, scale);
-    }
+    // Defensive only: isComposedSceneConfig (types.ts) already rejects any
+    // unrecognized templateId before a config reaches this component
+    // (mirrors viz-engine.tsx's guard-then-render dispatch for the other
+    // engines) — renderElements' own per-element template lookup below is
+    // just belt-and-suspenders for the same reason it always was.
+    renderElements(ctx, config.elements, config.controls, controlValues, currentStep, scale);
   }, [config, width, renderedHeight, scale, currentStep, controlValues]);
 
   function clampStep(next: number) {

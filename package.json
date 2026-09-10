@@ -5,7 +5,7 @@
   "description": "Project Cherenkov — Indonesian OSN (informatics/physics/astronomy) editorial archive with interactive visualizations.",
   "scripts": {
     "dev": "concurrently -n next,velite -c blue,green \"next dev\" \"velite dev\"",
-    "build": "velite build && next build",
+    "build": "velite build && next build && tsx scripts/check-blockly-bundle-isolation.ts",
     "generate": "velite build",
     "start": "next start",
     "lint": "next lint",
@@ -25,6 +25,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "@vercel/blob": "^2.8.0",
     "better-auth": "~1.4.22",
+    "blockly": "^13.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",

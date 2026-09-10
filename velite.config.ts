@@ -25,6 +25,7 @@ export const vizEngines = [
   "trajectory-sandbox",
   "orbital-sandbox",
   "composed-scene",
+  "programmable-scene",
   "none",
 ] as const;
 

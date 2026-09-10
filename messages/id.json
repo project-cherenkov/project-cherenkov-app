@@ -64,7 +64,8 @@
     "reset": "Atur ulang",
     "scrub": "Geser antar langkah",
     "stepCounter": "Langkah {current} dari {total}",
-    "transitCurve": "Kurva cahaya transit (skematik)"
+    "transitCurve": "Kurva cahaya transit (skematik)",
+    "programmableSceneBudgetNotice": "Adegan ini butuh waktu terlalu lama untuk dihitung — menampilkan bingkai terakhir yang selesai tepat waktu."
   },
   "about": {
     "eyebrow": "about.md",

@@ -58,4 +58,33 @@ describe("VizEngine dispatch", () => {
     );
     expect(html).toContain("vizConfigError");
   });
+
+  // PROG-004: the fifth engine, added the same way composed-scene (the
+  // fourth) was — see this file's own comments above, unchanged, for why
+  // renderToStaticMarkup can't observe the engine's own DOM here.
+  it("renders VizConfigError, not the engine or VizMissing, for an invalid programmable-scene config", () => {
+    const html = renderToStaticMarkup(
+      <VizEngine
+        editorial={{ vizEngine: "programmable-scene", vizConfig: { not: "a valid program" } }}
+      />,
+    );
+    expect(html).toContain("vizConfigError");
+    expect(html).not.toContain("vizMissing");
+  });
+
+  it("does not fall through to VizConfigError/VizMissing for a valid programmable-scene config", () => {
+    const html = renderToStaticMarkup(
+      <VizEngine
+        editorial={{
+          vizEngine: "programmable-scene",
+          vizConfig: {
+            canvas: { widthPx: 320, heightPx: 200 },
+            program: { kind: "sequence", body: [] },
+          },
+        }}
+      />,
+    );
+    expect(html).not.toContain("vizConfigError");
+    expect(html).not.toContain("vizMissing");
+  });
 });

@@ -57,7 +57,12 @@ export interface ElementTemplate {
   ) => void;
 }
 
-const COLOR_OPTIONS = ["blue", "blueAlt", "pink", "pinkAlt", "grid"] as const;
+// Exported (only change beyond its own definition) so
+// block-editor.tsx's program_literal_color block can offer the same
+// palette as a value block, without duplicating or hardcoding the list a
+// second time (PROG-005) — small, necessary, and directly related to
+// wiring that one block correctly.
+export const COLOR_OPTIONS = ["blue", "blueAlt", "pink", "pinkAlt", "grid"] as const;
 
 function resolveColor(value: unknown): string {
   const key = typeof value === "string" ? value : "blue";

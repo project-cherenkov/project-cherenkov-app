@@ -1,0 +1,43 @@
+---
+title: "Programmable Scene Fixture: A Single Circle"
+subject: informatics
+hook: "The smallest possible programmable-scene program — one emitElement, nothing else — used to prove the engine round-trips end to end."
+tags: ["fixture", "programmable-scene"]
+principle: "programmable-scene-engine-round-trip"
+errorType: "n/a-implementation-fixture"
+vizEngine: "programmable-scene"
+vizConfig:
+  canvas: { widthPx: 320, heightPx: 200 }
+  program:
+    kind: sequence
+    body:
+      - kind: emitElement
+        templateId: shape-circle
+        params:
+          x: { kind: literal, value: 160 }
+          y: { kind: literal, value: 100 }
+          radius: { kind: literal, value: 30 }
+          color: { kind: literal, value: blue }
+publishedAt: "2026-09-09"
+author: "PLACEHOLDER Author Name"
+---
+
+## What this is
+
+A hand-built fixture, not a real proof-of-error editorial — PROG-004's own
+acceptance criterion calls for exactly this: "a hand-built fixture
+editorial with a trivial program (e.g., one `emitElement` of a
+`shape-circle`) round-trips and renders via a local dev build." This file
+is that fixture, committed so the round-trip stays exercised by an ordinary
+`pnpm generate` / `pnpm build` rather than a one-off manual check that
+nothing re-runs later.
+
+The program itself does the least a `programmable-scene` program can do:
+one top-level `emitElement` drawing a single blue circle, no variables, no
+control flow, no reader-facing controls.
+
+<Interactive />
+
+This fixture is expected to be superseded (or removed) once a real
+programmable-scene editorial exists to exercise the engine end to end
+instead.
