@@ -118,7 +118,7 @@ export function SiteHeader() {
               }
 
               return (
-                <Link key={item.href} href={item.href} className={bookmarkStyle}>
+                <Link key={item.href} href={item.href!} className={bookmarkStyle}>
                   {content}
                 </Link>
               );
