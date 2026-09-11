@@ -41,39 +41,40 @@ const ProgrammableScene = dynamic(
   { ssr: false, loading: () => <VizSkeleton /> },
 );
 
-type VizEditorial = Pick<Editorial, "vizEngine" | "vizConfig">;
+type VizEditorial = Pick<Editorial, "vizConfig">;
 
 export function VizEngine({ editorial }: { editorial: VizEditorial }) {
-  switch (editorial.vizEngine) {
+  const { discriminant, value } = editorial.vizConfig;
+  switch (discriminant) {
     case "graph-array-stepper":
-      if (!isGraphArrayStepperConfig(editorial.vizConfig)) {
-        return <VizConfigError engine={editorial.vizEngine} />;
+      if (!isGraphArrayStepperConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
       }
-      return <GraphArrayStepper config={editorial.vizConfig} />;
+      return <GraphArrayStepper config={value} />;
 
     case "trajectory-sandbox":
-      if (!isTrajectorySandboxConfig(editorial.vizConfig)) {
-        return <VizConfigError engine={editorial.vizEngine} />;
+      if (!isTrajectorySandboxConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
       }
-      return <TrajectorySandbox config={editorial.vizConfig} />;
+      return <TrajectorySandbox config={value} />;
 
     case "orbital-sandbox":
-      if (!isOrbitalSandboxConfig(editorial.vizConfig)) {
-        return <VizConfigError engine={editorial.vizEngine} />;
+      if (!isOrbitalSandboxConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
       }
-      return <OrbitalSandbox config={editorial.vizConfig} />;
+      return <OrbitalSandbox config={value} />;
 
     case "composed-scene":
-      if (!isComposedSceneConfig(editorial.vizConfig)) {
-        return <VizConfigError engine={editorial.vizEngine} />;
+      if (!isComposedSceneConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
       }
-      return <ComposedScene config={editorial.vizConfig} />;
+      return <ComposedScene config={value} />;
 
     case "programmable-scene":
-      if (!isProgrammableSceneConfig(editorial.vizConfig)) {
-        return <VizConfigError engine={editorial.vizEngine} />;
+      if (!isProgrammableSceneConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
       }
-      return <ProgrammableScene config={editorial.vizConfig} />;
+      return <ProgrammableScene config={value} />;
 
     case "none":
     default:

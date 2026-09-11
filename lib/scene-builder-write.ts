@@ -51,15 +51,15 @@ export interface WriteSceneConfigDeps {
   contentRoot?: string;
 }
 
-// Rewrites exactly two frontmatter keys (vizEngine, vizConfig) and leaves
-// everything else — including the MDX body — untouched. Verified
+// Rewrites exactly one frontmatter key (vizConfig with discriminant and value)
+// and leaves everything else — including the MDX body — untouched. Verified
 // empirically against the three real cited editorials (see
 // scene-builder-write.test.ts's round-trip suite) before writing this:
 // gray-matter's stringify reproduces the body byte-for-byte and every
 // other frontmatter key deep-equal (NFR-3 / R2).
 function applyVizConfig(raw: string, vizConfig: ComposedSceneConfig): string {
   const parsed = matter(raw);
-  const nextData = { ...parsed.data, vizEngine: "composed-scene", vizConfig };
+  const nextData = { ...parsed.data, vizConfig: { discriminant: "composed-scene", value: vizConfig } };
   return matter.stringify(parsed.content, nextData);
 }
 

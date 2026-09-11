@@ -5,19 +5,20 @@ hook: "The smallest possible programmable-scene program — one emitElement, not
 tags: ["fixture", "programmable-scene"]
 principle: "programmable-scene-engine-round-trip"
 errorType: "n/a-implementation-fixture"
-vizEngine: "programmable-scene"
 vizConfig:
-  canvas: { widthPx: 320, heightPx: 200 }
-  program:
-    kind: sequence
-    body:
-      - kind: emitElement
-        templateId: shape-circle
-        params:
-          x: { kind: literal, value: 160 }
-          y: { kind: literal, value: 100 }
-          radius: { kind: literal, value: 30 }
-          color: { kind: literal, value: blue }
+  discriminant: programmable-scene
+  value:
+    canvas: { widthPx: 320, heightPx: 200 }
+    program:
+      kind: sequence
+      body:
+        - kind: emitElement
+          templateId: shape-circle
+          params:
+            x: { kind: literal, value: 160 }
+            y: { kind: literal, value: 100 }
+            radius: { kind: literal, value: 30 }
+            color: { kind: literal, value: blue }
 publishedAt: "2026-09-09"
 author: "PLACEHOLDER Author Name"
 ---

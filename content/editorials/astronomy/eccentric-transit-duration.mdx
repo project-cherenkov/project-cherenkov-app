@@ -5,15 +5,16 @@ hook: "A planet doesn't cross its star's disc at the same speed everywhere in it
 tags: ["exoplanets", "transit-photometry", "keplers-second-law"]
 principle: "keplers-second-law-and-transit-duration"
 errorType: "assuming-constant-orbital-speed"
-vizEngine: "orbital-sandbox"
 vizConfig:
-  eccentricity: 0.3
-  semiMajorAxisPx: 130
-  periodSeconds: 6
-  massRatio: 0.05
-  transitDepth: 0.015
-  eccentricityRange: [0, 0.8]
-  massRatioRange: [0, 0.15]
+  discriminant: orbital-sandbox
+  value:
+    eccentricity: 0.3
+    semiMajorAxisPx: 130
+    periodSeconds: 6
+    massRatio: 0.05
+    transitDepth: 0.015
+    eccentricityRange: [0, 0.8]
+    massRatioRange: [0, 0.15]
 publishedAt: "2026-08-01"
 author: "PLACEHOLDER Author Name"
 ---

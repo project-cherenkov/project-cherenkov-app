@@ -6,7 +6,7 @@ import type { Editorial } from "#content";
 
 import { VizEngine } from "@/components/viz/viz-engine";
 
-type VizEditorial = Pick<Editorial, "vizEngine" | "vizConfig">;
+type VizEditorial = Pick<Editorial, "vizConfig">;
 
 // Velite compiles each editorial's MDX `body` to a JS module source string,
 // not a component — this is the small runtime Velite's own docs point
@@ -26,7 +26,6 @@ function useMDXComponent(
 // map here — inside a "use client" module — we avoid that constraint.
 export function EditorialMDX({
   code,
-  vizEngine,
   vizConfig,
 }: {
   code: string;
@@ -37,7 +36,7 @@ export function EditorialMDX({
       components={{
         Interactive: () => (
           <div className="not-prose my-8">
-            <VizEngine editorial={{ vizEngine, vizConfig }} />
+            <VizEngine editorial={{ vizConfig }} />
           </div>
         ),
       }}

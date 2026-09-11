@@ -66,5 +66,5 @@ function uniqueSorted(values: string[]): string[] {
 // silently render nothing, treat "none" as a flagged content error the UI
 // surfaces instead of hiding.
 export function hasMissingViz(editorial: Editorial): boolean {
-  return editorial.vizEngine === "none";
+  return editorial.vizConfig.discriminant === "none";
 }

@@ -22,7 +22,7 @@ describe("VizEngine dispatch", () => {
   it("renders VizConfigError, not the engine or VizMissing, for an invalid composed-scene config", () => {
     const html = renderToStaticMarkup(
       <VizEngine
-        editorial={{ vizEngine: "composed-scene", vizConfig: { not: "a valid scene" } }}
+        editorial={{ vizConfig: { discriminant: "composed-scene", value: { not: "a valid scene" } } }}
       />,
     );
     expect(html).toContain("vizConfigError");
@@ -33,12 +33,14 @@ describe("VizEngine dispatch", () => {
     const html = renderToStaticMarkup(
       <VizEngine
         editorial={{
-          vizEngine: "composed-scene",
           vizConfig: {
-            canvas: { widthPx: 320, heightPx: 200 },
-            elements: [
-              { id: "el-1", templateId: "shape-circle", params: { x: 40, y: 40, radius: 10 } },
-            ],
+            discriminant: "composed-scene",
+            value: {
+              canvas: { widthPx: 320, heightPx: 200 },
+              elements: [
+                { id: "el-1", templateId: "shape-circle", params: { x: 40, y: 40, radius: 10 } },
+              ],
+            },
           },
         }}
       />,
@@ -47,14 +49,18 @@ describe("VizEngine dispatch", () => {
     expect(html).not.toContain("vizMissing");
   });
 
-  it("still renders VizMissing for vizEngine: none, unaffected by the new case", () => {
-    const html = renderToStaticMarkup(<VizEngine editorial={{ vizEngine: "none", vizConfig: {} }} />);
+  it("still renders VizMissing for vizConfig.discriminant: none, unaffected by the new case", () => {
+    const html = renderToStaticMarkup(
+      <VizEngine editorial={{ vizConfig: { discriminant: "none", value: {} } }} />,
+    );
     expect(html).toContain("vizMissing");
   });
 
   it("still renders VizConfigError for an invalid trajectory-sandbox config, unaffected by the new case", () => {
     const html = renderToStaticMarkup(
-      <VizEngine editorial={{ vizEngine: "trajectory-sandbox", vizConfig: { not: "valid" } }} />,
+      <VizEngine
+        editorial={{ vizConfig: { discriminant: "trajectory-sandbox", value: { not: "valid" } } }}
+      />,
     );
     expect(html).toContain("vizConfigError");
   });
@@ -65,7 +71,9 @@ describe("VizEngine dispatch", () => {
   it("renders VizConfigError, not the engine or VizMissing, for an invalid programmable-scene config", () => {
     const html = renderToStaticMarkup(
       <VizEngine
-        editorial={{ vizEngine: "programmable-scene", vizConfig: { not: "a valid program" } }}
+        editorial={{
+          vizConfig: { discriminant: "programmable-scene", value: { not: "a valid program" } },
+        }}
       />,
     );
     expect(html).toContain("vizConfigError");
@@ -76,10 +84,12 @@ describe("VizEngine dispatch", () => {
     const html = renderToStaticMarkup(
       <VizEngine
         editorial={{
-          vizEngine: "programmable-scene",
           vizConfig: {
-            canvas: { widthPx: 320, heightPx: 200 },
-            program: { kind: "sequence", body: [] },
+            discriminant: "programmable-scene",
+            value: {
+              canvas: { widthPx: 320, heightPx: 200 },
+              program: { kind: "sequence", body: [] },
+            },
           },
         }}
       />,

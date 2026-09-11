@@ -5,22 +5,23 @@ hook: "Binary search doesn't need a sorted array — it needs a predicate that f
 tags: ["binary-search", "monotonic-predicate", "searching"]
 principle: "monotonic-predicate-search"
 errorType: "assumed-sortedness-instead-of-monotonicity"
-vizEngine: "graph-array-stepper"
 vizConfig:
-  array: [2, 4, 6, 8, 10, 12, 14, 16]
-  steps:
-    - pointers: { lo: 0, hi: 7, mid: 3 }
-      highlight: [3]
-      note: "mid = 3 → array[3] = 8 < 10, so index 3 isn't the answer. Search the right half: lo = 4."
-    - pointers: { lo: 4, hi: 7, mid: 5 }
-      highlight: [5]
-      note: "mid = 5 → array[5] = 12 ≥ 10. Index 5 is a valid candidate — remember it, then keep searching left: hi = 4."
-    - pointers: { lo: 4, hi: 4, mid: 4 }
-      highlight: [4]
-      note: "mid = 4 → array[4] = 10 ≥ 10. A better candidate — remember it, then keep searching left: hi = 3."
-    - pointers: { lo: 4, hi: 3 }
-      highlight: [4]
-      note: "lo (4) has crossed hi (3) — the search is over. The best candidate found was index 4."
+  discriminant: graph-array-stepper
+  value:
+    array: [2, 4, 6, 8, 10, 12, 14, 16]
+    steps:
+      - pointers: { lo: 0, hi: 7, mid: 3 }
+        highlight: [3]
+        note: "mid = 3 → array[3] = 8 < 10, so index 3 isn't the answer. Search the right half: lo = 4."
+      - pointers: { lo: 4, hi: 7, mid: 5 }
+        highlight: [5]
+        note: "mid = 5 → array[5] = 12 ≥ 10. Index 5 is a valid candidate — remember it, then keep searching left: hi = 4."
+      - pointers: { lo: 4, hi: 4, mid: 4 }
+        highlight: [4]
+        note: "mid = 4 → array[4] = 10 ≥ 10. A better candidate — remember it, then keep searching left: hi = 3."
+      - pointers: { lo: 4, hi: 3 }
+        highlight: [4]
+        note: "lo (4) has crossed hi (3) — the search is over. The best candidate found was index 4."
 publishedAt: "2026-08-01"
 author: "PLACEHOLDER Author Name"
 ---

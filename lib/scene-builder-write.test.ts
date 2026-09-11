@@ -101,7 +101,7 @@ describe("writeSceneConfig — local mode round-trip against real content", () =
   }
 
   for (const { subject, slug } of realFiles) {
-    it(`rewrites only vizEngine/vizConfig in ${subject}/${slug}.mdx, byte-identical body, all other frontmatter deep-equal`, async () => {
+    it(`rewrites only vizConfig in ${subject}/${slug}.mdx, byte-identical body, all other frontmatter deep-equal`, async () => {
       const { tmpRoot: root, originalRaw } = setUpTmpCopy(subject, slug);
       const newVizConfig = validConfig();
 
@@ -120,13 +120,12 @@ describe("writeSceneConfig — local mode round-trip against real content", () =
       // R2/NFR-3: body byte-identical.
       expect(after.content).toBe(before.content);
 
-      // Every other frontmatter key deep-equal; only vizEngine/vizConfig changed.
-      const beforeKeys = Object.keys(before.data).filter((k) => k !== "vizEngine" && k !== "vizConfig");
+      // Every other frontmatter key deep-equal; only vizConfig changed.
+      const beforeKeys = Object.keys(before.data).filter((k) => k !== "vizConfig");
       for (const key of beforeKeys) {
         expect(after.data[key]).toEqual(before.data[key]);
       }
-      expect(after.data.vizEngine).toBe("composed-scene");
-      expect(after.data.vizConfig).toEqual(newVizConfig);
+      expect(after.data.vizConfig).toEqual({ discriminant: "composed-scene", value: newVizConfig });
     });
   }
 

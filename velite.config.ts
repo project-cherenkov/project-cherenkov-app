@@ -42,8 +42,12 @@ const editorials = defineCollection({
       tags: s.array(s.string()),
       principle: s.string(), // open string — see note above
       errorType: s.string().optional(), // open string — see note above
-      vizEngine: s.enum(vizEngines),
-      vizConfig: s.record(s.string(), s.unknown()).default({}),
+      vizConfig: s
+        .object({
+          discriminant: s.enum(vizEngines),
+          value: s.record(s.string(), s.unknown()).default({}),
+        })
+        .default({ discriminant: "none", value: {} }),
       publishedAt: s.isodate(),
       author: s.string(),
       // Full proof + prose body, compiled to a renderable MDX component.

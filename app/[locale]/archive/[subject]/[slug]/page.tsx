@@ -69,7 +69,7 @@ export default async function EditorialPage({
         // engine ("none") already gets VizEngine's own message; this notice
         // is only for "the engine IS configured but nobody placed the tag."
         const forgotToEmbedTag =
-          !embedsInteractive && editorial.vizEngine !== "none";
+          !embedsInteractive && editorial.vizConfig.discriminant !== "none";
         if (embedsInteractive) return null;
         return (
           <div className="not-prose my-8">
@@ -86,7 +86,6 @@ export default async function EditorialPage({
       <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
         <EditorialMDX
           code={editorial.body}
-          vizEngine={editorial.vizEngine}
           vizConfig={editorial.vizConfig}
         />
       </div>
