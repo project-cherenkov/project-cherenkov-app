@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { POST, matchesImageMagicBytes } from "./route";
+import { POST } from "./route";
+import { matchesImageMagicBytes } from "./magic-bytes";
 import { sanitizeBlobPathSegment } from "./sanitize";
 
 // SEC-001 / TICKET-04 required test: an unauthenticated POST to
