@@ -16,6 +16,13 @@
           "value": "LinkedIn"
         }
       ]
+    },
+    {
+      "name": "placeholder",
+      "role": "the holder of place",
+      "bioEn": "I am the holder of place, the place of the holder",
+      "personalContact": "example@gmail.com",
+      "personalContacts": []
     }
   ]
 }
