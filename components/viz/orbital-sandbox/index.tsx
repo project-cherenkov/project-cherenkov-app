@@ -112,6 +112,21 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     const cy = CANVAS_HEIGHT / 2;
 
     const planetOffset = planetOffsetAt(simTime, eccentricity, { a, b, c, meanMotion });
+    // CH-08 (architect audit round 1): this is a small-mass-ratio
+    // approximation, not an exact barycenter-consistent relation. The exact
+    // two-body relation for a star wobbling around a fixed barycenter is
+    // `r_star = -[M_planet / (M_star + M_planet)] · r_planet` (with the
+    // planet then drawn at `r_star + r_planet`, not just `r_planet`);
+    // using `massRatio` (M_planet / M_star) in place of
+    // `massRatio / (1 + massRatio)` is exact only as massRatio → 0.  At the
+    // UI's allowed maximum (massRatio up to 0.2) the drawn planet-star
+    // separation ends up about 20% larger than the ellipse's own semi-major
+    // axis, and the true barycenter isn't exactly stationary. This is
+    // intentional for now: it's purely cosmetic (doesn't affect the
+    // planet's own orbital path or the transit light curve, both
+    // independently verified correct), and this visualization is meant to
+    // illustrate the radial-velocity/astrometric wobble concept
+    // qualitatively, not to support quantitative wobble-amplitude claims.
     const starOffset = { x: -massRatio * planetOffset.x, y: -massRatio * planetOffset.y };
 
     // The star sits at one focus of the ellipse. The ellipse's geometric

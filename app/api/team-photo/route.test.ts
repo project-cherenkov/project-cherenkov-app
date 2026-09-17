@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { POST } from "./route";
+import { POST, matchesImageMagicBytes } from "./route";
 import { sanitizeBlobPathSegment } from "./sanitize";
 
 // SEC-001 / TICKET-04 required test: an unauthenticated POST to
@@ -38,6 +38,24 @@ describe("POST /api/team-photo — requires authentication", () => {
   it("never returns 200 for an unauthenticated request", async () => {
     const response = await POST(makeRequest());
     expect(response.status).not.toBe(200);
+  });
+});
+
+// CH-07 (architect audit round 1): a spoofed `Content-Type` alone must not
+// be enough to pass validation — the actual bytes must match a known image
+// signature too.
+describe("matchesImageMagicBytes", () => {
+  it("accepts real PNG, JPEG, GIF, and WEBP signatures", () => {
+    expect(matchesImageMagicBytes(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))).toBe(true);
+    expect(matchesImageMagicBytes(new Uint8Array([0xff, 0xd8, 0xff, 0xe0]))).toBe(true);
+    expect(matchesImageMagicBytes(new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]))).toBe(true);
+    const webp = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50]);
+    expect(matchesImageMagicBytes(webp)).toBe(true);
+  });
+
+  it("rejects a non-image file with a spoofed image Content-Type", () => {
+    const fakeBytes = new TextEncoder().encode("<html><body>not an image</body></html>");
+    expect(matchesImageMagicBytes(fakeBytes)).toBe(false);
   });
 });
 

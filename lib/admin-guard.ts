@@ -24,9 +24,22 @@
 // wrong for your situation (e.g. you want local-storage mode reachable on
 // a preview deploy), override by setting KEYSTATIC_GITHUB_CLIENT_ID, or
 // relax this function — don't route around it silently.
+// CH-03 (architect audit round 1): lib/scene-builder-oauth.ts's `secret()`
+// silently fell back to a hardcoded, publicly-known string
+// ("dev-insecure-scene-builder-secret") whenever KEYSTATIC_SECRET was
+// unset, and nothing enforced that KEYSTATIC_SECRET was actually set once
+// GitHub-storage mode (KEYSTATIC_GITHUB_CLIENT_ID) made that signing path
+// reachable — a deployment could enable GitHub-mode admin access while
+// every signed OAuth-state/GitHub-token cookie was signed with a secret
+// readable directly from this repository's own source. Fail closed
+// instead: once KEYSTATIC_GITHUB_CLIENT_ID is set, KEYSTATIC_SECRET must
+// also be set, or the admin surface stays disabled exactly as if neither
+// were set. This does not change the existing NODE_ENV !== "production"
+// dev-mode branch below, which is documented and intentional.
 export function isAdminSurfaceEnabled(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
-  return Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID);
+  if (!process.env.KEYSTATIC_GITHUB_CLIENT_ID) return false;
+  return Boolean(process.env.KEYSTATIC_SECRET);
 }
 
 // Team-photo authorization is deliberately explicit and independent of the

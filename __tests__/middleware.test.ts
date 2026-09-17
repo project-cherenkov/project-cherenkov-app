@@ -83,11 +83,24 @@ describe("middleware — admin surface gate covers /api/scene-builder", () => {
     expect(response?.status).toBe(404);
   });
 
-  it("lets /api/scene-builder through (not a 404) once KEYSTATIC_GITHUB_CLIENT_ID is set", async () => {
+  it("lets /api/scene-builder through (not a 404) once KEYSTATIC_GITHUB_CLIENT_ID and KEYSTATIC_SECRET are both set", async () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("KEYSTATIC_GITHUB_CLIENT_ID", "test-client-id");
+    // CH-03 (architect audit round 1): isAdminSurfaceEnabled() now also
+    // requires KEYSTATIC_SECRET once KEYSTATIC_GITHUB_CLIENT_ID is set —
+    // see lib/admin-guard.ts and lib/admin-guard.test.ts.
+    vi.stubEnv("KEYSTATIC_SECRET", "test-secret");
 
     const response = await middleware(makeRequest("/api/scene-builder"));
     expect(response?.status).not.toBe(404);
+  });
+
+  it("still 404s /api/scene-builder in production when KEYSTATIC_GITHUB_CLIENT_ID is set but KEYSTATIC_SECRET is not (CH-03)", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("KEYSTATIC_GITHUB_CLIENT_ID", "test-client-id");
+    vi.stubEnv("KEYSTATIC_SECRET", "");
+
+    const response = await middleware(makeRequest("/api/scene-builder"));
+    expect(response?.status).toBe(404);
   });
 });

@@ -129,6 +129,36 @@ describe("writeSceneConfig — local mode round-trip against real content", () =
     });
   }
 
+  // CH-02 (architect audit round 1): the only prior coverage for this write
+  // path used real fixtures that all started on `vizConfig.discriminant:
+  // "composed-scene"` already, or used a synthetic GitHub-mode fixture with
+  // no discriminant at all — neither actually proves the write path
+  // *changes* the discriminant when converting an editorial that starts on
+  // a different engine. This synthetic fixture starts on
+  // "trajectory-sandbox" and asserts the save actually switches it.
+  it("switches vizConfig.discriminant when converting from a different engine", async () => {
+    tmpRoot = mkdtempSync(join(tmpdir(), "scene-builder-test-switch-"));
+    const dir = join(tmpRoot, "content", "editorials", "physics");
+    mkdirSync(dir, { recursive: true });
+    const originalRaw = matter.stringify("Body content here.\n", {
+      title: "Switch me",
+      vizConfig: { discriminant: "trajectory-sandbox", value: { physicsType: "projectile" } },
+    });
+    writeFileSync(join(dir, "switch-me.mdx"), originalRaw, "utf8");
+
+    const newVizConfig = validConfig();
+    const result = await writeSceneConfig(
+      { subject: "physics", slug: "switch-me", vizConfig: newVizConfig },
+      { contentRoot: tmpRoot },
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok || result.mode !== "local") throw new Error("expected a local-mode success result");
+    const after = matter(readFileSync(result.path, "utf8"));
+    expect(after.data.vizConfig).toEqual({ discriminant: "composed-scene", value: newVizConfig });
+    expect(after.data.title).toBe("Switch me");
+  });
+
   it("returns 404 when the target file doesn't exist", async () => {
     const root = mkdtempSync(join(tmpdir(), "scene-builder-test-empty-"));
     try {
@@ -218,8 +248,12 @@ describe("writeSceneConfig — GitHub mode", () => {
     // preserves the original body/frontmatter, same as local mode.
     const committedRaw = Buffer.from(putCall[3].contentBase64, "base64").toString("utf8");
     const parsed = matter(committedRaw);
-    expect(parsed.data.vizEngine).toBe("composed-scene");
-    expect(parsed.data.vizConfig).toEqual(validConfig());
+    // CH-01/CH-02 (architect audit round 1): vizConfig.discriminant is the
+    // sole engine selector — there is no separate `vizEngine` frontmatter
+    // key (see keystatic.config.ts and applyVizConfig in
+    // lib/scene-builder-write.ts, which has only ever written this exact
+    // {discriminant, value} shape).
+    expect(parsed.data.vizConfig).toEqual({ discriminant: "composed-scene", value: validConfig() });
     expect(parsed.data.title).toBe("Test");
     expect(parsed.content).toBe("Body content here.\n");
   });

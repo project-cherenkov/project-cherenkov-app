@@ -24,6 +24,14 @@ export const GITHUB_RETURN_TO_COOKIE = "scene_builder_gh_return_to";
 const TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour — "short-lived" per the design note above
 const STATE_TTL_MS = 10 * 60 * 1000; // just long enough to complete the GitHub redirect round trip
 
+// CH-03 (architect audit round 1): the fallback below is dev-only. In any
+// production deployment, lib/admin-guard.ts's isAdminSurfaceEnabled() now
+// requires KEYSTATIC_SECRET to be set whenever KEYSTATIC_GITHUB_CLIENT_ID
+// is set, so this code path is unreachable in production without a real
+// secret configured. The fallback string only still matters for
+// `pnpm dev`, where isAdminSurfaceEnabled() is unconditionally true and a
+// contributor may not have provisioned a real KEYSTATIC_SECRET yet — never
+// rely on it, or on this fallback, for a deployed environment.
 function secret(): string {
   return process.env.KEYSTATIC_SECRET ?? "dev-insecure-scene-builder-secret";
 }

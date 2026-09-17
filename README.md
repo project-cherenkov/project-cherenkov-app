@@ -45,7 +45,7 @@ Content is git-committed MDX, not stored in a database: there is no CRUD backend
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) + hand-rolled shadcn/ui-style primitives (`components/ui/`) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for color/spacing, rather than scattering hex values through components. |
 | **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Gives every editorial a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualization-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
 | **Math typesetting** | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML **at build time**, so a reader's browser never runs math-rendering JS or reflows the page after load. |
-| **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Four engines (`components/viz/`), dispatched by `vizEngine` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)): three purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox) plus `composed-scene`, a generic, template-driven engine with its own in-browser authoring tool — see [Section VII](#vii-composed-scenes--the-scene-builder). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
+| **Visualizations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Five engines (`components/viz/`), dispatched by `vizConfig.discriminant` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)): three purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox) plus `composed-scene`, a generic, template-driven engine with its own in-browser authoring tool, and `programmable-scene`, a sandboxed Blockly-authored program tree — see [Section VII](#vii-composed-scenes--the-scene-builder). D3 is used narrowly for its scale math, not as a full charting layer, since each engine's rendering is bespoke. |
 | **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section VIII](#viii-internationalization). |
 | **CMS** | [Keystatic](https://keystatic.com/) | In-site editing at `/keystatic`, mirroring `velite.config.ts`'s schema field-for-field (`keystatic.config.ts`). Local-storage mode in development, GitHub-storage mode (real OAuth-backed auth) in production — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
 | **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself — see [Section VI](#vi-editing-content-in-the-browser-keystatic). |
@@ -204,8 +204,7 @@ Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter is validate
 | `tags` | string[] | Short, lowercase. |
 | `principle` | string | The general idea this editorial teaches. **Free text on purpose** — see [Section XI](#xi-current-status--open-questions). |
 | `errorType` | string, optional | The specific mistake this editorial corrects. Also free text. |
-| `vizEngine` | `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"composed-scene"` \| `"none"` | Which engine to render. The first three are hand-written per visualization type; `composed-scene` is authored visually rather than by hand — see [Section VII](#vii-composed-scenes--the-scene-builder). `"none"` is a legal schema value but a flagged content error in the UI — see FAQ C. |
-| `vizConfig` | object, shape depends on `vizEngine` | See the engine-by-engine notes below. |
+| `vizConfig` | `{ discriminant, value }` | `discriminant` is `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"composed-scene"` \| `"programmable-scene"` \| `"none"` — which engine to render. `value` is that engine's own config object; see the engine-by-engine notes below. The first three engines are hand-written per visualization type; `composed-scene` and `programmable-scene` are authored visually rather than by hand — see [Section VII](#vii-composed-scenes--the-scene-builder). `"none"` is a legal schema value but a flagged content error in the UI — see FAQ C. There is no separate `vizEngine` frontmatter key — `discriminant` is the sole engine selector, in both the real content files and the Keystatic CMS field config. |
 | `publishedAt` | ISO date | — |
 | `author` | string | — |
 | body | MDX | Everything after the frontmatter. |
@@ -227,36 +226,44 @@ Three real, complete examples to copy from:
 
 ```yaml
 vizConfig:
-  array: [2, 4, 6, 8, 10]
-  steps:
-    - pointers: { lo: 0, hi: 4, mid: 2 }
-      highlight: [2]
-      note: "What's happening at this step."
+  discriminant: graph-array-stepper
+  value:
+    array: [2, 4, 6, 8, 10]
+    steps:
+      - pointers: { lo: 0, hi: 4, mid: 2 }
+        highlight: [2]
+        note: "What's happening at this step."
 ```
 
 **`trajectory-sandbox`** — adjustable initial speed/angle, animated on a canvas. `physicsType` selects a named physics function from a small registry in `components/viz/trajectory-sandbox/index.tsx` (same reason as above: frontmatter can't hold a real function). Currently only `"projectile"` exists; adding a new scenario means adding one entry to that registry.
 
 ```yaml
 vizConfig:
-  physicsType: projectile
-  gravity: 9.8
-  initial: { speed: 20, angleDeg: 45 }
-  speedRange: [5, 40] # optional slider bounds
-  angleRange: [5, 85]
+  discriminant: trajectory-sandbox
+  value:
+    physicsType: projectile
+    gravity: 9.8
+    initial: { speed: 20, angleDeg: 45 }
+    speedRange: [5, 40] # optional slider bounds
+    angleRange: [5, 85]
 ```
 
 **`orbital-sandbox`** — eccentricity + mass ratio sliders driving a Kepler-accurate orbit and a simplified, clearly-labeled-as-schematic transit light curve (periapsis-aligned transit; see the astronomy example for the derivation and its stated limits).
 
 ```yaml
 vizConfig:
-  eccentricity: 0.3
-  semiMajorAxisPx: 130
-  periodSeconds: 6
-  massRatio: 0.05 # optional, default 0.05
-  transitDepth: 0.015 # optional, default 0.01
+  discriminant: orbital-sandbox
+  value:
+    eccentricity: 0.3
+    semiMajorAxisPx: 130
+    periodSeconds: 6
+    massRatio: 0.05 # optional, default 0.05
+    transitDepth: 0.015 # optional, default 0.01
 ```
 
-**`composed-scene`** — the fourth, general-purpose engine: a scene made of reusable element templates (shapes, curves, text, a slider-bound marker, an array-with-pointers widget) instead of one bespoke renderer per visualization type. Its `vizConfig` is a structured object (canvas size, elements, optional controls, optional steps) that's impractical to hand-write in frontmatter — it's authored visually instead, at `/keystatic/scene-builder`. See [Section VII](#vii-composed-scenes--the-scene-builder) for the full shape and the authoring workflow.
+**`composed-scene`** — a fourth, general-purpose engine: a scene made of reusable element templates (shapes, curves, text, a slider-bound marker, an array-with-pointers widget) instead of one bespoke renderer per visualization type. Its `vizConfig.value` is a structured object (canvas size, elements, optional controls, optional steps) that's impractical to hand-write in frontmatter — it's authored visually instead, at `/keystatic/scene-builder`. See [Section VII](#vii-composed-scenes--the-scene-builder) for the full shape and the authoring workflow.
+
+**`programmable-scene`** — a fifth engine: a scene authored as a small, sandboxed *program* (a recursive `ProgramNode` tree — see `components/viz/programmable-scene/types.ts`) rather than a static config, built visually with a Blockly-based block editor at the same `/keystatic/scene-builder` tool. The interpreter (`components/viz/programmable-scene/interpreter.ts`) has no `eval`/`Function` usage and runs under bounded operation/repeat/element counts. **Publishing isn't wired up yet**: the scene builder validates and previews the compiled program, but its "Save" button is disabled for this engine — for now, copy the compiled program tree by hand into `vizConfig.value` (with `vizConfig.discriminant: programmable-scene`), using `ProgramNode`'s type definition as the shape reference.
 
 ---
 
@@ -283,25 +290,29 @@ None of the three example editorials use it yet — it's a newer complement to t
 
 ### The `vizConfig` shape
 
+As with every other engine (see [Section V](#v-content-model--writing-an-editorial)), `vizConfig` is `{ discriminant: "composed-scene", value: {...} }` — the shape below is `value`:
+
 ```yaml
 vizConfig:
-  canvas: { widthPx: 400, heightPx: 240 }
-  elements:
-    - id: sun
-      templateId: shape-circle
-      label: "Sun"
-      params: { x: 60, y: 60, radius: 20, color: blue }
-  controls:                    # optional
-    - id: radius-slider
-      kind: slider
-      label: "Radius"
-      bindsTo: { elementId: sun, paramKey: radius }
-      min: 5
-      max: 60
-  steps:                       # optional — omitted entirely means a static scene
-    - note: "What's happening at this step (Markdown + KaTeX)."
-      overrides:
-        sun: { radius: 30 }   # only the params that change this step
+  discriminant: composed-scene
+  value:
+    canvas: { widthPx: 400, heightPx: 240 }
+    elements:
+      - id: sun
+        templateId: shape-circle
+        label: "Sun"
+        params: { x: 60, y: 60, radius: 20, color: blue }
+    controls:                    # optional
+      - id: radius-slider
+        kind: slider
+        label: "Radius"
+        bindsTo: { elementId: sun, paramKey: radius }
+        min: 5
+        max: 60
+    steps:                       # optional — omitted entirely means a static scene
+      - note: "What's happening at this step (Markdown + KaTeX)."
+        overrides:
+          sun: { radius: 30 }   # only the params that change this step
 ```
 
 - **`canvas`** — a fixed design-space width/height in pixels that every element's coordinates are authored against; `ComposedScene` derives one uniform scale factor from the actual rendered container width (the same approach `trajectory-sandbox` already uses for its own `toPx()`), so a scene composed at one size still renders correctly at another.
@@ -341,7 +352,7 @@ A three-pane UI (`components/site/scene-builder/`) for composing a scene without
 
 Reached from a specific editorial's `vizConfig` field description inside `/keystatic` itself (pre-filled with that editorial's `?subject=&slug=`), or directly, with its own subject/slug fields as a fallback for retargeting a draft in progress.
 
-**Saving** posts the composed draft to `POST /api/scene-builder`, which requires both an authenticated session and an email in `ADMIN_EMAILS` (the same authorization `/api/team-photo` uses), then rewrites only the target editorial's `vizEngine` and `vizConfig` frontmatter keys — the MDX body and every other frontmatter key are left untouched (verified byte-for-byte against the three real example editorials in `scene-builder-write.test.ts`'s round-trip suite). Which storage path it writes to is chosen by the same signal Keystatic itself uses:
+**Saving** posts the composed draft to `POST /api/scene-builder`, which requires both an authenticated session and an email in `ADMIN_EMAILS` (the same authorization `/api/team-photo` uses), then rewrites only the target editorial's `vizConfig` frontmatter key (`{ discriminant: "composed-scene", value: <the composed draft> }`) — the MDX body and every other frontmatter key are left untouched (verified byte-for-byte against the three real example editorials in `scene-builder-write.test.ts`'s round-trip suite). Which storage path it writes to is chosen by the same signal Keystatic itself uses:
 
 - **Local** (default, no env vars): writes the change straight to the target file on disk.
 - **GitHub** (`KEYSTATIC_GITHUB_CLIENT_ID` set): commits the change to a brand-new branch (`keystatic/scene-builder-<slug>-<timestamp>`) off the repository's default branch. **This does not open or merge a pull request automatically** — the author still opens a PR on GitHub to actually publish the change.
@@ -402,12 +413,12 @@ The visualization still renders — right after the hook, with a small notice �
 
 </details>
 
-### **C. "Why can `vizEngine` still be `"none"` if every editorial is supposed to have a visualization?"**
+### **C. "Why can `vizConfig.discriminant` still be `"none"` if every editorial is supposed to have a visualization?"**
 
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-This is a flagged, unresolved conflict between two parts of the original build spec, not an oversight: one line states every published editorial *must* ship a working interactive visualization; the frontmatter schema section of the same spec lists `"none"` as a legal `vizEngine` value. `velite.config.ts` keeps `"none"` as valid at the schema level — so nothing here silently forecloses the option — but `lib/content.ts`'s `hasMissingViz()` treats it as a flagged content error the UI surfaces, not a legitimate published state. Which rule should actually win is still an open question; see [Section XI](#xi-current-status--open-questions).
+This is a flagged, unresolved conflict between two parts of the original build spec, not an oversight: one line states every published editorial *must* ship a working interactive visualization; the frontmatter schema section of the same spec lists `"none"` as a legal `vizConfig.discriminant` value. `velite.config.ts` keeps `"none"` as valid at the schema level — so nothing here silently forecloses the option — but `lib/content.ts`'s `hasMissingViz()` treats it as a flagged content error the UI surfaces, not a legitimate published state. Which rule should actually win is still an open question; see [Section XI](#xi-current-status--open-questions).
 
 </details>
 
@@ -436,6 +447,6 @@ The repository is public and the live site is deployed at `https://project-chere
 - The language-prefixed route is active, so the default locale is served under `/en` rather than at the bare site root.
 - The team bios and contact details in `messages/*.json` still need to be written, and the locale layout keeps the site `noindex`/`nofollow` until those are finalized.
 - Keystatic and the scene builder (Section VII) both stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` is configured.
-- The `vizEngine: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
+- The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
 
 This is the current state of the repo: public codebase, public deployment, a couple of about-page fields still being written, and production admin access still behind the GitHub OAuth gate.

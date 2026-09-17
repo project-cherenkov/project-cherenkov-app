@@ -3,15 +3,31 @@ import { config, collection, singleton, fields } from "@keystatic/core";
 // Mirrors velite.config.ts field-for-field (spec §11 CMS-002). If either
 // schema changes, the other must change with it — there is no automated
 // sync between them (flagged as a MEDIUM risk in the architect spec, §9).
+// keystatic.config.test.ts is the automated check that catches drift going
+// forward: it constructs a real reader against this config and asserts it
+// can read every real content/editorials/**/*.mdx file (CH-01).
 //
-// This file's shape was arrived at empirically, via the CMS-007 round-trip
-// check (reading every real content/editorials/**/*.mdx file through
-// Keystatic's own reader, not just eyeballing the API), against the
-// installed @keystatic/core 0.6.8. Two of the architect spec's named
-// design decisions did not survive that check and were replaced — see the
-// DEVIATION comments at vizConfigObject() and its pointers field below for
-// exactly what changed and why. Everything else (decisions #2–#5) matches
-// the spec as written.
+// CH-01 (architect audit round 1): this file's `vizConfig` field previously
+// diverged from velite.config.ts's actual schema — velite.config.ts
+// requires `vizConfig: { discriminant: <engine>, value: {...} }`, but this
+// file bound `vizConfig` directly to a flat superset-of-fields object and
+// kept the engine selector in a separate top-level `vizEngine` field. That
+// mismatch made Keystatic's reader reject every real editorial ("Key on
+// object value 'discriminant' is not allowed"), confirmed live against the
+// repository's own content. The stale in-code claim that this was already
+// verified via a "CMS-007 round-trip check" was wrong — it was not; the
+// real check is keystatic.config.test.ts, added alongside this fix.
+//
+// Fix: `vizConfig` is now itself `fields.object({ discriminant, value })`,
+// structurally matching velite.config.ts one-to-one — `discriminant` is a
+// plain nested fields.select() (not fields.conditional(), which serializes
+// to the same `{discriminant, value}` shape but rejects the flat keys a
+// generic `value` object needs to carry; a plain nested object field
+// round-trips the real content correctly). The former standalone
+// `vizEngine` field is removed — `vizConfig.discriminant` is now the sole
+// source of truth for which engine an editorial uses, matching
+// velite.config.ts and every real content file. Everything else below
+// (decisions #2–#5) still matches the original spec as written.
 //
 //   2. Three separate collections (one per subject), each hardcoded to its
 //      own content/editorials/<subject>/* path, instead of one collection
@@ -25,45 +41,43 @@ import { config, collection, singleton, fields } from "@keystatic/core";
 //      piece must never silently change its URL.
 //   4. principle / errorType stay free-text, not fields.select — the
 //      taxonomy is still an open question (velite.config.ts's own comment).
-//   5. vizEngine's select includes "none" as a legal value, matching
-//      velite.config.ts today, even though it is flagged there as
+//   5. vizConfig.discriminant's select includes "none" as a legal value,
+//      matching velite.config.ts today, even though it is flagged there as
 //      conflicting with spec §1. Not this task's call to resolve.
 
-// Superset object covering every field used by any of the three viz
-// engines (spec §7's table), all optional. Each real file only populates
-// the subset relevant to its own vizEngine.
+// Superset object covering every field used by any of the four
+// scalar-configured viz engines (spec §7's table), all optional. Each real
+// file only populates the subset relevant to its own engine. This object
+// becomes `vizConfig.value` below — see vizConfigObject()'s comment for why
+// it's nested that way.
 //
 // DEVIATION from spec §3 decision #1 ("vizConfig uses fields.conditional —
-// one typed sub-schema per engine — so a mismatched vizEngine/vizConfig
-// pairing is rejected at authoring time"). Found via the CMS-007
-// round-trip check, not assumed:
+// one typed sub-schema per engine — so a mismatched engine/vizConfig
+// pairing is rejected at authoring time"). Found via the round-trip check
+// (keystatic.config.test.ts, added for CH-01 — see below), not assumed:
 //
-//   fields.conditional() in @keystatic/core 0.6.8 serializes its value on
-//   disk as `{ discriminant: <value>, value: {...} }`, NOT flattened into
-//   the parent key. Binding it directly to `vizConfig` requires every
-//   file's frontmatter to look like
-//   `vizConfig: { discriminant: "trajectory-sandbox", value: { gravity: 9.8 } }`.
-//   Every real file instead has the FLAT shape
-//   `vizConfig: { physicsType: "projectile", gravity: 9.8, ... }` — which
-//   is also exactly what velite.config.ts's
-//   `vizConfig: s.record(s.string(), s.unknown())` expects and what all
-//   three viz engines' runtime type guards (isTrajectorySandboxConfig,
-//   etc.) check against. Using fields.conditional made Keystatic's reader
-//   reject every existing editorial: "Must only contain keys 'discriminant'
-//   and 'value', not 'physicsType'".
+//   fields.conditional() in @keystatic/core 0.6.8 flattens each branch's
+//   own fields directly under `value` on disk — it can't accept a plain,
+//   mostly-untyped object (the real shape of `value`, per
+//   velite.config.ts's `s.record(s.string(), s.unknown())`) as a branch's
+//   field set. Expressing this superset as a conditional's branches would
+//   mean going back to decision #1's original per-engine typed
+//   sub-schemas, which runs into the same problem the spec itself already
+//   flagged: an editorial using a field this superset doesn't yet
+//   anticipate becomes unrepresentable rather than merely unvalidated.
 //
 //   The spec's own decision table already named the alternative: "Generic
 //   fields.object({}) field ... simpler, but defers all validation to
 //   production." That is the actual tradeoff shipped here — a single
 //   fields.object() containing every engine's fields as optional. The
 //   practical loss versus decision #1's original intent: authoring
-//   `vizEngine: "orbital-sandbox"` with `gravity` (a trajectory-sandbox
+//   `discriminant: "orbital-sandbox"` with `gravity` (a trajectory-sandbox
 //   field) instead of `eccentricity` set is NOT rejected at authoring
 //   time — it still only surfaces as production's existing
 //   VizConfigError, exactly as it does today without Keystatic at all. No
 //   regression versus the pre-Keystatic status quo; just short of what
 //   decision #1 hoped to add.
-function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
+function vizConfigValueObject() {
   return fields.object({
     // --- graph-array-stepper ---
     array: fields.array(fields.number({ label: "Value" }), {
@@ -155,12 +169,38 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
       label: "Mass ratio slider range [min, max]",
       itemLabel: (props) => String(props.value ?? ""),
     }),
+  });
+}
+
+// CH-01 fix: `vizConfig` is now a `{ discriminant, value }` object matching
+// velite.config.ts's real schema exactly, instead of a flat object with a
+// separate top-level `vizEngine` selector. `discriminant` is the sole
+// source of truth for which engine an editorial uses — there is no longer
+// a standalone `vizEngine` frontmatter key (see the file-level CH-01
+// comment above, and lib/scene-builder-write.ts, which already only ever
+// wrote this exact `{discriminant, value}` shape and never touched a
+// `vizEngine` key — see CH-02).
+function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
+  return fields.object({
+    discriminant: fields.select({
+      label: "Visualization engine",
+      options: [
+        { label: "Graph / array stepper", value: "graph-array-stepper" },
+        { label: "Trajectory sandbox", value: "trajectory-sandbox" },
+        { label: "Orbital sandbox", value: "orbital-sandbox" },
+        { label: "Composed scene", value: "composed-scene" },
+        { label: "Programmable scene", value: "programmable-scene" },
+        { label: "None", value: "none" },
+      ],
+      defaultValue: "none",
+    }),
+    value: vizConfigValueObject(),
   }, {
-    // Neither composed-scene's vizConfig (SceneElement[]/SceneControl[]/
-    // SceneStep[]) nor programmable-scene's (a recursive ProgramNode tree,
-    // components/viz/programmable-scene/types.ts) fits this
-    // superset-of-scalar-fields object — both are authored visually
-    // instead, at the same scene builder tool.
+    // Neither composed-scene's vizConfig.value (SceneElement[]/
+    // SceneControl[]/SceneStep[]) nor programmable-scene's (a recursive
+    // ProgramNode tree, components/viz/programmable-scene/types.ts) fits
+    // vizConfigValueObject()'s superset-of-scalar-fields shape — both are
+    // authored visually instead, at the same scene builder tool.
     //
     // SCENE-009: updated from SCENE-002's original placeholder now that
     // SCENE-008 ships real, direct write-back (no more copy-paste step,
@@ -175,8 +215,8 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
     // string) — so slug is filled in on the scene builder page itself,
     // which has its own fallback subject/slug form for exactly this case.
     //
-    // PROG-004: for vizEngine: programmable-scene specifically, the scene
-    // builder's own write-back route (lib/scene-builder-write.ts,
+    // PROG-004: for discriminant: programmable-scene specifically, the
+    // scene builder's own write-back route (lib/scene-builder-write.ts,
     // app/api/scene-builder/route.ts) is hardcoded to composed-scene and
     // was NOT extended as part of this feature — it's outside this
     // feature's own §4 Repository Impact file list, and adding a second,
@@ -188,12 +228,12 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
     // rather than clicking Save — see the implementation report's
     // Deviations section for the full reasoning.
     description:
-      `For vizEngine: composed-scene or programmable-scene, build the scene at ` +
+      `For discriminant: composed-scene or programmable-scene, build the scene at ` +
       `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug>. ` +
-      `composed-scene: saving there writes vizEngine and vizConfig into this exact ` +
-      `file directly. programmable-scene: the builder validates and previews the ` +
-      `program, but does not yet write it back automatically — copy its compiled ` +
-      `output into vizConfig by hand for now.`,
+      `composed-scene: saving there writes discriminant and value into this exact ` +
+      `vizConfig field directly. programmable-scene: the builder validates and ` +
+      `previews the program, but does not yet write it back automatically — copy ` +
+      `its compiled output into vizConfig.value by hand for now.`,
   });
 }
 
@@ -239,18 +279,6 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     errorType: fields.text({
       label: "Error type",
       description: "Free text, optional — see principle's note.",
-    }),
-    vizEngine: fields.select({
-      label: "Visualization engine",
-      options: [
-        { label: "Graph / array stepper", value: "graph-array-stepper" },
-        { label: "Trajectory sandbox", value: "trajectory-sandbox" },
-        { label: "Orbital sandbox", value: "orbital-sandbox" },
-        { label: "Composed scene", value: "composed-scene" },
-        { label: "Programmable scene", value: "programmable-scene" },
-        { label: "None", value: "none" },
-      ],
-      defaultValue: "none",
     }),
     vizConfig: vizConfigObject(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),

@@ -24,19 +24,41 @@ export function isGraphArrayStepperConfig(
 ): config is GraphArrayStepperConfig {
   if (!config || typeof config !== "object") return false;
   const c = config as Record<string, unknown>;
+  if (
+    !Array.isArray(c.array) ||
+    !c.array.every((value) => typeof value === "number" && Number.isFinite(value))
+  ) {
+    return false;
+  }
+  // CH-09 (architect audit round 1): every pointer/highlight index must be
+  // in-bounds against `array`. Previously only checked "is an integer,"
+  // which let an out-of-range index (e.g. 12 against a 6-element array)
+  // pass validation and reach the renderer, where it silently failed to
+  // draw instead of being rejected at this content-safety boundary.
+  const arrayLength = c.array.length;
+  const isInBounds = (index: number) => index >= 0 && index < arrayLength;
   return (
-    Array.isArray(c.array) &&
-    c.array.every((value) => typeof value === "number" && Number.isFinite(value)) &&
     Array.isArray(c.steps) &&
     c.steps.length > 0 &&
     c.steps.every((step) => {
       if (!step || typeof step !== "object") return false;
-      const pointers = (step as Record<string, unknown>).pointers;
+      const stepRecord = step as Record<string, unknown>;
+      const pointers = stepRecord.pointers;
+      if (
+        pointers === null ||
+        typeof pointers !== "object" ||
+        !Object.values(pointers).every(
+          (index) => typeof index === "number" && Number.isInteger(index) && isInBounds(index),
+        )
+      ) {
+        return false;
+      }
+      const highlight = stepRecord.highlight;
+      if (highlight === undefined) return true;
       return (
-        pointers !== null &&
-        typeof pointers === "object" &&
-        Object.values(pointers).every(
-          (index) => typeof index === "number" && Number.isInteger(index),
+        Array.isArray(highlight) &&
+        highlight.every(
+          (index) => typeof index === "number" && Number.isInteger(index) && isInBounds(index),
         )
       );
     })

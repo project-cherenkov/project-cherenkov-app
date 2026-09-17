@@ -59,9 +59,17 @@ export function scoreAnswers(
   return { scored, invalid };
 }
 
-// Fraction correct among ANSWERED questions only — spec §6's partial-failure
-// rule: unanswered questions are never penalized, and no partial-topic score
-// is fabricated for questions the user never attempted.
+// CH-04 (architect audit round 1): this docstring previously claimed
+// "unanswered questions are never penalized" (spec §6's original
+// partial-failure rule), but that is NOT what production scoring actually
+// does — `submitQuizAttemptCore` below intentionally divides by
+// `answerKeys.length` (the full topic's question count), not by the number
+// of questions actually answered, "because mastery must reflect the
+// complete topic" (see the comment at that line). `computeTopicScore` is
+// not called anywhere outside its own test — it is a fraction-of-ANSWERED-
+// questions calculation, useful only as a distinct, clearly-labeled metric
+// (e.g. in-dialog "how many of the ones you tried did you get right?"
+// feedback) and must not be read as describing the persisted mastery score.
 export function computeTopicScore(scored: ScoredAnswer[]): number {
   if (scored.length === 0) return 0;
   const correctCount = scored.filter((a) => a.correct).length;
