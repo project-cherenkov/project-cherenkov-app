@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { getTeam } from "@/lib/team";
+import { getTeam, resolveMemberBio } from "@/lib/team";
 
 export default async function AboutPage() {
   const t = await getTranslations("about");
@@ -30,7 +30,9 @@ export default async function AboutPage() {
       ) : (
         <ul className="mt-4 grid gap-6 sm:grid-cols-2">
           {members.map((member) => {
-            const bio = locale === "id" ? member.bioId : member.bioEn;
+            // See lib/team.ts's resolveMemberBio comment for why this
+            // isn't a plain `locale === "id" ? bioId : bioEn` lookup.
+            const bio = resolveMemberBio(member, locale);
             return (
               <li key={member.name} className="flex gap-4">
                 {member.photoUrl ? (

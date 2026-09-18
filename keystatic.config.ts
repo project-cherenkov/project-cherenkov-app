@@ -20,14 +20,9 @@ import { config, collection, singleton, fields } from "@keystatic/core";
 //
 // Fix: `vizConfig` is now itself `fields.object({ discriminant, value })`,
 // structurally matching velite.config.ts one-to-one — `discriminant` is a
-// plain nested fields.select() (not fields.conditional(), which serializes
-// to the same `{discriminant, value}` shape but rejects the flat keys a
-// generic `value` object needs to carry; a plain nested object field
-// round-trips the real content correctly). The former standalone
-// `vizEngine` field is removed — `vizConfig.discriminant` is now the sole
-// source of truth for which engine an editorial uses, matching
-// velite.config.ts and every real content file. Everything else below
-// (decisions #2–#5) still matches the original spec as written.
+// plain nested fields.select() matching every real content file.
+// Everything else below (decisions #2–#5) still matches the original spec
+// as written.
 //
 //   2. Three separate collections (one per subject), each hardcoded to its
 //      own content/editorials/<subject>/* path, instead of one collection
@@ -44,145 +39,51 @@ import { config, collection, singleton, fields } from "@keystatic/core";
 //   5. vizConfig.discriminant's select includes "none" as a legal value,
 //      matching velite.config.ts today, even though it is flagged there as
 //      conflicting with spec §1. Not this task's call to resolve.
-
-// Superset object covering every field used by any of the four
-// scalar-configured viz engines (spec §7's table), all optional. Each real
-// file only populates the subset relevant to its own engine. This object
-// becomes `vizConfig.value` below — see vizConfigObject()'s comment for why
-// it's nested that way.
 //
-// DEVIATION from spec §3 decision #1 ("vizConfig uses fields.conditional —
-// one typed sub-schema per engine — so a mismatched engine/vizConfig
-// pairing is rejected at authoring time"). Found via the round-trip check
-// (keystatic.config.test.ts, added for CH-01 — see below), not assumed:
+// CH-03 (found via a live report that informaticsEditorials — and the
+// other two subject collections — still showed every engine's fields,
+// physics/astronomy included, regardless of subject or the chosen
+// discriminant): CH-01's original fix shipped `vizConfig.value` as ONE
+// flat fields.object() superset covering all three scalar engines' fields
+// as optional siblings (graph-array-stepper's array/steps AND
+// trajectory-sandbox's gravity/initial AND orbital-sandbox's eccentricity/
+// massRatio, all always visible together). The comment that used to sit
+// here claimed fields.conditional() couldn't be used instead, because it
+// "flattens each branch's fields directly under value on disk" in a way
+// that "can't accept" the fully generic, open-ended value shape that
+// composed-scene/programmable-scene need. That claim was WRONG for the
+// three scalar engines specifically — verified directly, not assumed:
+// installed @keystatic/core@0.6.8 in isolation, built vizConfig as
+// fields.conditional() with one typed branch per real engine, and
+// round-tripped all three real hand-authored editorials
+// (binary-search-on-answer.mdx, projectile-range-symmetry.mdx,
+// eccentric-transit-duration.mdx) through a real reader — each came back
+// with ONLY its own engine's fields, no cross-contamination, then
+// confirmed the same against this repo's actual keystatic.config.test.ts
+// (all 4 tests still pass; see that file's comments too).
 //
-//   fields.conditional() in @keystatic/core 0.6.8 flattens each branch's
-//   own fields directly under `value` on disk — it can't accept a plain,
-//   mostly-untyped object (the real shape of `value`, per
-//   velite.config.ts's `s.record(s.string(), s.unknown())`) as a branch's
-//   field set. Expressing this superset as a conditional's branches would
-//   mean going back to decision #1's original per-engine typed
-//   sub-schemas, which runs into the same problem the spec itself already
-//   flagged: an editorial using a field this superset doesn't yet
-//   anticipate becomes unrepresentable rather than merely unvalidated.
-//
-//   The spec's own decision table already named the alternative: "Generic
-//   fields.object({}) field ... simpler, but defers all validation to
-//   production." That is the actual tradeoff shipped here — a single
-//   fields.object() containing every engine's fields as optional. The
-//   practical loss versus decision #1's original intent: authoring
-//   `discriminant: "orbital-sandbox"` with `gravity` (a trajectory-sandbox
-//   field) instead of `eccentricity` set is NOT rejected at authoring
-//   time — it still only surfaces as production's existing
-//   VizConfigError, exactly as it does today without Keystatic at all. No
-//   regression versus the pre-Keystatic status quo; just short of what
-//   decision #1 hoped to add.
-function vizConfigValueObject() {
-  return fields.object({
-    // --- graph-array-stepper ---
-    array: fields.array(fields.number({ label: "Value" }), {
-      label: "Array",
-      itemLabel: (props) => String(props.value ?? ""),
-    }),
-    steps: fields.array(
-      fields.object({
-        // DEVIATION, also found via the round-trip check: `pointers` is
-        // documented in components/viz/graph-array-stepper/types.ts as an
-        // open `Record<string, number>` (arbitrary named indices). Neither
-        // fields.json() (doesn't exist in this Keystatic version — checked
-        // against the package) nor fields.text() holding raw JSON (tried;
-        // the real data is a genuine YAML mapping, not a string, and
-        // Keystatic's reader rejects a string where the file has a
-        // mapping) round-trips the real data. What DOES work, verified
-        // against every real step in
-        // content/editorials/informatics/binary-search-on-answer.mdx, is
-        // a fixed-key object matching the only keys any current editorial
-        // actually uses: lo, hi, mid (binary search's own vocabulary).
-        // This is a genuine narrowing of the true open-record type — an
-        // editorial using different pointer names (e.g. a two-pointer
-        // technique's "left"/"right") will NOT be authorable through this
-        // field as it stands. Flagging as a real limitation, not silently
-        // covering for it: extending this object with more optional
-        // named-pointer fields as new algorithms are added is the
-        // pragmatic path within this Keystatic version's real
-        // constraints.
-        pointers: fields.object({
-          lo: fields.integer({ label: "lo" }),
-          hi: fields.integer({ label: "hi" }),
-          mid: fields.integer({ label: "mid" }),
-        }),
-        highlight: fields.array(fields.integer({ label: "Index" }), {
-          label: "Highlight indices",
-          itemLabel: (props) => String(props.value ?? ""),
-        }),
-        note: fields.text({ label: "Note", multiline: true }),
-      }),
-      { label: "Steps", itemLabel: (props) => props.fields.note.value || "Step" },
-    ),
-
-    // --- trajectory-sandbox ---
-    // physicsType's registry has exactly one entry today
-    // (components/viz/trajectory-sandbox/index.tsx's own comment); new
-    // scenarios add a registry entry there, not a schema change here.
-    physicsType: fields.select({
-      label: "Physics type",
-      options: [{ label: "Projectile", value: "projectile" }],
-      defaultValue: "projectile",
-    }),
-    gravity: fields.number({ label: "Gravity (m/s²)" }),
-    initial: fields.object({
-      speed: fields.number({ label: "Initial speed (m/s)" }),
-      angleDeg: fields.number({ label: "Initial angle (degrees)" }),
-    }),
-    speedRange: fields.array(fields.number({ label: "Bound" }), {
-      label: "Speed slider range [min, max]",
-      itemLabel: (props) => String(props.value ?? ""),
-    }),
-    angleRange: fields.array(fields.number({ label: "Bound" }), {
-      label: "Angle slider range [min, max]",
-      itemLabel: (props) => String(props.value ?? ""),
-    }),
-
-    // --- orbital-sandbox ---
-    eccentricity: fields.number({
-      label: "Eccentricity",
-      description: "0 = circular, must stay below 1 (types.ts comment).",
-    }),
-    semiMajorAxisPx: fields.number({
-      label: "Semi-major axis (px)",
-      description: "Schematic visual scale, not AU.",
-    }),
-    periodSeconds: fields.number({ label: "Orbit period (s)" }),
-    massRatio: fields.number({
-      label: "Mass ratio (planet/star)",
-      description: "Defaults to 0.05 in the engine if left unset.",
-    }),
-    transitDepth: fields.number({
-      label: "Transit depth (fractional flux drop)",
-      description: "Defaults to 0.01 in the engine if left unset.",
-    }),
-    eccentricityRange: fields.array(fields.number({ label: "Bound" }), {
-      label: "Eccentricity slider range [min, max]",
-      itemLabel: (props) => String(props.value ?? ""),
-    }),
-    massRatioRange: fields.array(fields.number({ label: "Bound" }), {
-      label: "Mass ratio slider range [min, max]",
-      itemLabel: (props) => String(props.value ?? ""),
-    }),
-  });
-}
-
-// CH-01 fix: `vizConfig` is now a `{ discriminant, value }` object matching
-// velite.config.ts's real schema exactly, instead of a flat object with a
-// separate top-level `vizEngine` selector. `discriminant` is the sole
-// source of truth for which engine an editorial uses — there is no longer
-// a standalone `vizEngine` frontmatter key (see the file-level CH-01
-// comment above, and lib/scene-builder-write.ts, which already only ever
-// wrote this exact `{discriminant, value}` shape and never touched a
-// `vizEngine` key — see CH-02).
-function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
-  return fields.object({
-    discriminant: fields.select({
+// The claim IS still correct for composed-scene/programmable-scene: their
+// value is an arbitrary tree (SceneElement[]/SceneControl[]/SceneStep[],
+// or a recursive ProgramNode — components/viz/programmable-scene/types.ts)
+// that no fixed Keystatic field set can represent, and no generic/JSON
+// field type exists in this Keystatic version to fall back on (same
+// finding as the `pointers` comment below). So `vizConfig` below is now a
+// real fields.conditional() with a typed branch per scalar engine, and a
+// placeholder branch for composed-scene/programmable-scene/none — opening
+// an EXISTING composed-scene or programmable-scene editorial in this main
+// form still fails today exactly as it did before this fix (confirmed:
+// programmable-scene-fixture.mdx still throws the same
+// "Key on object value ... is not allowed" class of error,
+// keystatic.config.test.ts's own "documents ... the known
+// programmable-scene limitation" test still passes unchanged) — those two
+// engines are authored at the scene builder tool regardless, never
+// through this field, so this is not a new regression, just an unchanged,
+// already-documented limitation. What changes is real: the three engines
+// that ARE authored through this form (every real editorial today) no
+// longer show each other's fields.
+function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") {
+  return fields.conditional(
+    fields.select({
       label: "Visualization engine",
       options: [
         { label: "Graph / array stepper", value: "graph-array-stepper" },
@@ -193,48 +94,138 @@ function vizConfigObject(subject: "astronomy" | "physics" | "informatics") {
         { label: "None", value: "none" },
       ],
       defaultValue: "none",
+      // SCENE-009 / PROG-004, carried over from the old outer-object
+      // description (see git history): composed-scene/programmable-scene
+      // aren't authored here — see each branch's own placeholder below for
+      // the concrete scene builder URL.
+      description:
+        `For "Composed scene" or "Programmable scene", build the scene at ` +
+        `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug> ` +
+        `instead of setting fields here.`,
     }),
-    value: vizConfigValueObject(),
-  }, {
-    // Neither composed-scene's vizConfig.value (SceneElement[]/
-    // SceneControl[]/SceneStep[]) nor programmable-scene's (a recursive
-    // ProgramNode tree, components/viz/programmable-scene/types.ts) fits
-    // vizConfigValueObject()'s superset-of-scalar-fields shape — both are
-    // authored visually instead, at the same scene builder tool.
-    //
-    // SCENE-009: updated from SCENE-002's original placeholder now that
-    // SCENE-008 ships real, direct write-back (no more copy-paste step,
-    // unlike photoUrl's field hint above it in this file — that field
-    // still expects a pasted URL because team-photo never got a
-    // write-back route of its own). The URL embeds this collection's
-    // fixed `subject` (A-1's "carrying subject+slug as context"); `slug`
-    // can't be embedded the same way — Keystatic's field descriptions in
-    // this codebase are static per-collection strings, evaluated once at
-    // config-definition time, not per-document (confirmed by every other
-    // description in this file, including photoUrl's, being a plain
-    // string) — so slug is filled in on the scene builder page itself,
-    // which has its own fallback subject/slug form for exactly this case.
-    //
-    // PROG-004: for discriminant: programmable-scene specifically, the
-    // scene builder's own write-back route (lib/scene-builder-write.ts,
-    // app/api/scene-builder/route.ts) is hardcoded to composed-scene and
-    // was NOT extended as part of this feature — it's outside this
-    // feature's own §4 Repository Impact file list, and adding a second,
-    // structurally different config shape to that route's validation is a
-    // large enough change to warrant its own review rather than folding in
-    // here. So today, building a program at the scene builder produces (and
-    // structurally validates) a real ProgramNode tree, but publishing it
-    // still requires hand-placing the result into this file's frontmatter
-    // rather than clicking Save — see the implementation report's
-    // Deviations section for the full reasoning.
-    description:
-      `For discriminant: composed-scene or programmable-scene, build the scene at ` +
-      `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug>. ` +
-      `composed-scene: saving there writes discriminant and value into this exact ` +
-      `vizConfig field directly. programmable-scene: the builder validates and ` +
-      `previews the program, but does not yet write it back automatically — copy ` +
-      `its compiled output into vizConfig.value by hand for now.`,
-  });
+    {
+      "graph-array-stepper": fields.object({
+        array: fields.array(fields.number({ label: "Value" }), {
+          label: "Array",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+        steps: fields.array(
+          fields.object({
+            // DEVIATION, found via the round-trip check: `pointers` is
+            // documented in components/viz/graph-array-stepper/types.ts as
+            // an open `Record<string, number>` (arbitrary named indices).
+            // Neither fields.json() (doesn't exist in this Keystatic
+            // version — checked against the package) nor fields.text()
+            // holding raw JSON (tried; the real data is a genuine YAML
+            // mapping, not a string, and Keystatic's reader rejects a
+            // string where the file has a mapping) round-trips the real
+            // data. What DOES work, verified against every real step in
+            // content/editorials/informatics/binary-search-on-answer.mdx,
+            // is a fixed-key object matching the only keys any current
+            // editorial actually uses: lo, hi, mid (binary search's own
+            // vocabulary). This is a genuine narrowing of the true
+            // open-record type — an editorial using different pointer
+            // names (e.g. a two-pointer technique's "left"/"right") will
+            // NOT be authorable through this field as it stands. Flagging
+            // as a real limitation, not silently covering for it:
+            // extending this object with more optional named-pointer
+            // fields as new algorithms are added is the pragmatic path
+            // within this Keystatic version's real constraints.
+            pointers: fields.object({
+              lo: fields.integer({ label: "lo" }),
+              hi: fields.integer({ label: "hi" }),
+              mid: fields.integer({ label: "mid" }),
+            }),
+            highlight: fields.array(fields.integer({ label: "Index" }), {
+              label: "Highlight indices",
+              itemLabel: (props) => String(props.value ?? ""),
+            }),
+            note: fields.text({ label: "Note", multiline: true }),
+          }),
+          { label: "Steps", itemLabel: (props) => props.fields.note.value || "Step" },
+        ),
+      }),
+
+      "trajectory-sandbox": fields.object({
+        // physicsType's registry has exactly one entry today
+        // (components/viz/trajectory-sandbox/index.tsx's own comment); new
+        // scenarios add a registry entry there, not a schema change here.
+        physicsType: fields.select({
+          label: "Physics type",
+          options: [{ label: "Projectile", value: "projectile" }],
+          defaultValue: "projectile",
+        }),
+        gravity: fields.number({ label: "Gravity (m/s²)" }),
+        initial: fields.object({
+          speed: fields.number({ label: "Initial speed (m/s)" }),
+          angleDeg: fields.number({ label: "Initial angle (degrees)" }),
+        }),
+        speedRange: fields.array(fields.number({ label: "Bound" }), {
+          label: "Speed slider range [min, max]",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+        angleRange: fields.array(fields.number({ label: "Bound" }), {
+          label: "Angle slider range [min, max]",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+      }),
+
+      "orbital-sandbox": fields.object({
+        eccentricity: fields.number({
+          label: "Eccentricity",
+          description: "0 = circular, must stay below 1 (types.ts comment).",
+        }),
+        semiMajorAxisPx: fields.number({
+          label: "Semi-major axis (px)",
+          description: "Schematic visual scale, not AU.",
+        }),
+        periodSeconds: fields.number({ label: "Orbit period (s)" }),
+        massRatio: fields.number({
+          label: "Mass ratio (planet/star)",
+          description: "Defaults to 0.05 in the engine if left unset.",
+        }),
+        transitDepth: fields.number({
+          label: "Transit depth (fractional flux drop)",
+          description: "Defaults to 0.01 in the engine if left unset.",
+        }),
+        eccentricityRange: fields.array(fields.number({ label: "Bound" }), {
+          label: "Eccentricity slider range [min, max]",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+        massRatioRange: fields.array(fields.number({ label: "Bound" }), {
+          label: "Mass ratio slider range [min, max]",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+      }),
+
+      // Placeholder branches: neither shape fits a fixed Keystatic field
+      // set (see the CH-03 comment above) — both are authored visually
+      // instead, at the same scene builder tool. Opening an EXISTING
+      // editorial that already uses one of these two discriminants still
+      // fails to load in this form today, same as before this fix; new
+      // ones are created at the scene builder, not here.
+      "composed-scene": fields.object(
+        {},
+        {
+          description:
+            `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
+            `Saving there writes discriminant and value into this exact vizConfig field ` +
+            `directly — nothing to set here.`,
+        },
+      ),
+      "programmable-scene": fields.object(
+        {},
+        {
+          description:
+            `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
+            `The builder validates and previews the program but does not yet write it ` +
+            `back automatically — copy its compiled output into vizConfig.value by hand ` +
+            `for now (see PROG-004 in git history).`,
+        },
+      ),
+      none: fields.empty(),
+    },
+  );
 }
 
 // Shared frontmatter fields, identical across all three subject collections
@@ -280,7 +271,7 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       label: "Error type",
       description: "Free text, optional — see principle's note.",
     }),
-    vizConfig: vizConfigObject(subject),
+    vizConfig: vizConfigConditional(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
     author: fields.text({ label: "Author", validation: { isRequired: true } }),
     // Explicit, author-set slug — see decision #3. Velite derives its own

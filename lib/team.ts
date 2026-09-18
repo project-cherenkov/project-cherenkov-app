@@ -33,6 +33,22 @@ export interface TeamData {
   members: TeamMember[];
 }
 
+// BUGFIX (live report: a member's saved bio wasn't showing on /about):
+// app/[locale]/about/page.tsx used to pick `locale === "id" ? bioId :
+// bioEn` with no fallback. i18n/routing.ts's default locale is "id", and
+// the Team singleton's Bio (Indonesian) field is separate from Bio
+// (English) — every real member today only has bioEn filled in, so the
+// default-locale page rendered an empty bio even though one was saved.
+// Falls back to whichever language IS populated, so a member is never
+// bio-less just because one of the two fields is blank.
+export function resolveMemberBio(
+  member: Pick<TeamMember, "bioEn" | "bioId">,
+  locale: string,
+): string {
+  const primary = locale === "id" ? member.bioId : member.bioEn;
+  return primary || member.bioEn || member.bioId || "";
+}
+
 export async function getTeam(): Promise<TeamData> {
   const team = await reader.singletons.team.read();
   if (!team) {

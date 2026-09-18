@@ -15,7 +15,7 @@ vi.mock("@keystatic/core/reader", () => {
   };
 });
 
-import { getTeam } from "./team";
+import { getTeam, resolveMemberBio } from "./team";
 import { createReader } from "@keystatic/core/reader";
 
 describe("lib/team — getTeam", () => {
@@ -125,5 +125,27 @@ describe("lib/team — getTeam", () => {
       personalContact: undefined,
       personalContacts: [],
     });
+  });
+});
+
+describe("lib/team — resolveMemberBio", () => {
+  it("uses bioId on the Indonesian locale when it's populated", () => {
+    expect(resolveMemberBio({ bioEn: "English", bioId: "Indonesia" }, "id")).toBe("Indonesia");
+  });
+
+  it("uses bioEn on the English locale when it's populated", () => {
+    expect(resolveMemberBio({ bioEn: "English", bioId: "Indonesia" }, "en")).toBe("English");
+  });
+
+  it("falls back to bioEn on the Indonesian locale when bioId is blank — the reported bug", () => {
+    expect(resolveMemberBio({ bioEn: "English", bioId: "" }, "id")).toBe("English");
+  });
+
+  it("falls back to bioId on the English locale when bioEn is blank", () => {
+    expect(resolveMemberBio({ bioEn: "", bioId: "Indonesia" }, "en")).toBe("Indonesia");
+  });
+
+  it("returns an empty string when neither bio is populated", () => {
+    expect(resolveMemberBio({ bioEn: "", bioId: "" }, "id")).toBe("");
   });
 });
