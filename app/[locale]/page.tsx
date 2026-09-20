@@ -1,11 +1,17 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { getRecentEditorials } from "@/lib/content";
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("home");
   const recent = getRecentEditorials();
 

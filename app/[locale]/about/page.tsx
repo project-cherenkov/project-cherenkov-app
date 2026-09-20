@@ -1,10 +1,15 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { getTeam, resolveMemberBio } from "@/lib/team";
 
-export default async function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("about");
-  const locale = await getLocale();
   const { members, professionalContact } = await getTeam();
 
   return (

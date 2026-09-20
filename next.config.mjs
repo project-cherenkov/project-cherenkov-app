@@ -49,6 +49,14 @@ const nextConfig = {
     // MDX-derived pages can be heavy; keeps per-editorial bundles isolated
     // rather than pulled into a shared chunk (Non-Functional Requirements §8).
     optimizePackageImports: ["d3", "lucide-react"],
+    // Keystatic's local reader hits the filesystem with a runtime-computed
+    // path, which @vercel/nft's static trace can't discover on its own. If
+    // this route is ever served dynamically for any reason, this makes sure
+    // content/team/ is still bundled into the function rather than silently
+    // 404'ing (see the about-page placeholder-content incident).
+    outputFileTracingIncludes: {
+      "/[locale]/about": ["./content/team/**"],
+    },
   },
 
   // DEPLOYMENT-READINESS ADDITION, not part of the original spec: baseline
