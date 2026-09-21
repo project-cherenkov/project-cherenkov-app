@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { ComposedScene } from "@/components/viz/composed-scene";
 import { isComposedSceneConfig } from "@/components/viz/composed-scene/types";
 import { ProgrammableScene } from "@/components/viz/programmable-scene";
@@ -89,7 +90,11 @@ function TargetEditorialFields({
       </div>
       <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
         Saving writes this scene into that editorial&apos;s <code className="font-mono">vizConfig</code>{" "}
-        frontmatter — the editorial must already exist as a draft or published file.
+        frontmatter — the editorial must already exist as a draft or published file. Starting a{" "}
+        <Link href="/keystatic/scene-builder/new" className="underline">
+          new visualization
+        </Link>{" "}
+        creates that stub for you and brings you straight back here.
       </p>
     </div>
   );
@@ -183,8 +188,19 @@ export function SceneBuilderApp({
     if (newest) setSelectedElementId(newest.id);
   }
 
+  // Generalized (PROG-005 follow-up) to cover both engines: previously
+  // this always sent `publishable` (composed-scene only) and the
+  // programmable-scene branch below never called it at all — its "Save to
+  // editorial" button was hard-disabled instead. isValidForSave/configToSave
+  // pick the right guard and payload for whichever engine is selected, so
+  // this one function (and the one POST /api/scene-builder call it makes)
+  // now serves both, matching how writeSceneConfig itself branches on
+  // `engine` (lib/scene-builder-write.ts) rather than assuming composed-scene.
+  const isValidForSave = engine === "composed-scene" ? isValidConfig : isProgramValid;
+  const configToSave = engine === "composed-scene" ? publishable : programmableConfig;
+
   async function handleSave() {
-    if (!targetReady || !isValidConfig) return;
+    if (!targetReady || !isValidForSave) return;
     setSaveStatus("saving");
     setSaveError(null);
     setSaveMessage(null);
@@ -192,7 +208,7 @@ export function SceneBuilderApp({
       const res = await fetch("/api/scene-builder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject, slug: slug.trim(), vizConfig: publishable }),
+        body: JSON.stringify({ subject, slug: slug.trim(), vizConfig: configToSave, engine }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -245,23 +261,33 @@ export function SceneBuilderApp({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-slate-900 opacity-50 transition-colors"
-                disabled
-                title="Programmable-scene publishing isn't wired up yet — see the compiled program below."
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                disabled={!targetReady || !isProgramValid || saveStatus === "saving"}
+                onClick={() => void handleSave()}
               >
-                Save to editorial
+                {saveStatus === "saving" ? "Saving…" : "Save to editorial"}
               </button>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Publishing isn&apos;t wired up for this engine yet — copy the compiled program below
-                into this editorial&apos;s <code className="font-mono">vizConfig</code> frontmatter by
-                hand.
-              </p>
+              {!targetReady && (
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Choose a subject and slug above to enable saving.
+                </p>
+              )}
+              {targetReady && !isProgramValid && (
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  This program isn&apos;t valid yet — check for an unset variable or an unrecognized
+                  element.
+                </p>
+              )}
             </div>
+            {saveStatus === "error" && saveError && <p className="text-sm text-red-700">{saveError}</p>}
+            {saveStatus === "done" && saveMessage && (
+              <p className="text-sm text-emerald-700 dark:text-emerald-400">{saveMessage}</p>
+            )}
 
             {isProgramValid && (
               <details className="rounded-md border border-border p-3 text-xs">
                 <summary className="label-code cursor-pointer text-slate-600 dark:text-slate-300">
-                  Compiled program (copy into vizConfig.program)
+                  Compiled program (for reference — Save to editorial above writes this for you)
                 </summary>
                 <pre className="mt-2 overflow-x-auto whitespace-pre-wrap font-mono">
                   {JSON.stringify(program, null, 2)}

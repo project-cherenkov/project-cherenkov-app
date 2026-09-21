@@ -7,11 +7,37 @@ import matter from "gray-matter";
 import { isValidSlug, writeSceneConfig } from "./scene-builder-write";
 import type { GithubClient } from "./scene-builder-github";
 import type { ComposedSceneConfig } from "@/components/viz/composed-scene/types";
+import type { ProgrammableSceneConfig } from "@/components/viz/programmable-scene/types";
 
 function validConfig(): ComposedSceneConfig {
   return {
     canvas: { widthPx: 320, heightPx: 200 },
     elements: [{ id: "el1", templateId: "shape-circle", params: { x: 10, y: 10, radius: 20, color: "blue" } }],
+  };
+}
+
+// Mirrors content/editorials/informatics/programmable-scene-fixture.mdx's
+// own program — the smallest program the engine accepts (PROG-004's own
+// fixture), reused here rather than invented fresh so this test and that
+// real fixture can't quietly drift apart on what "valid" means.
+function validProgrammableConfig(): ProgrammableSceneConfig {
+  return {
+    canvas: { widthPx: 320, heightPx: 200 },
+    program: {
+      kind: "sequence",
+      body: [
+        {
+          kind: "emitElement",
+          templateId: "shape-circle",
+          params: {
+            x: { kind: "literal", value: 160 },
+            y: { kind: "literal", value: 100 },
+            radius: { kind: "literal", value: 30 },
+            color: { kind: "literal", value: "blue" },
+          },
+        },
+      ],
+    },
   };
 }
 
@@ -70,6 +96,39 @@ describe("writeSceneConfig — validation (short-circuits before touching fs)", 
       ok: false,
       status: 400,
       error: expect.stringContaining("Invalid composed-scene configuration"),
+    });
+  });
+
+  it("rejects an unknown engine", async () => {
+    const result = await writeSceneConfig(
+      {
+        subject: "physics",
+        slug: "projectile-range-symmetry",
+        vizConfig: validConfig(),
+        engine: "trajectory-sandbox" as never,
+      },
+      { fsDeps: explodingFsDeps },
+    );
+    expect(result).toEqual({ ok: false, status: 400, error: expect.stringContaining("Unknown engine") });
+  });
+
+  it("rejects an invalid programmable-scene vizConfig when engine is programmable-scene", async () => {
+    const result = await writeSceneConfig(
+      {
+        subject: "physics",
+        slug: "projectile-range-symmetry",
+        // A composed-scene config is not a valid programmable-scene one —
+        // proves the two engines are actually validated against different
+        // guards, not just stamped with whichever discriminant was asked for.
+        vizConfig: validConfig(),
+        engine: "programmable-scene",
+      },
+      { fsDeps: explodingFsDeps },
+    );
+    expect(result).toEqual({
+      ok: false,
+      status: 400,
+      error: expect.stringContaining("Invalid programmable-scene configuration"),
     });
   });
 });
@@ -157,6 +216,35 @@ describe("writeSceneConfig — local mode round-trip against real content", () =
     const after = matter(readFileSync(result.path, "utf8"));
     expect(after.data.vizConfig).toEqual({ discriminant: "composed-scene", value: newVizConfig });
     expect(after.data.title).toBe("Switch me");
+  });
+
+  // Same round-trip guarantee as the composed-scene loop above, exercised
+  // against the one real programmable-scene editorial this repo has
+  // (content/editorials/informatics/programmable-scene-fixture.mdx) — the
+  // engine's write path had no test at all before this, since it had no
+  // write path at all before this.
+  it("rewrites vizConfig with the programmable-scene discriminant against the real fixture", async () => {
+    const { tmpRoot: root, originalRaw } = setUpTmpCopy("informatics", "programmable-scene-fixture");
+    const newVizConfig = validProgrammableConfig();
+
+    const result = await writeSceneConfig(
+      { subject: "informatics", slug: "programmable-scene-fixture", vizConfig: newVizConfig, engine: "programmable-scene" },
+      { contentRoot: root },
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok || result.mode !== "local") throw new Error("expected a local-mode success result");
+
+    const updatedRaw = readFileSync(result.path, "utf8");
+    const before = matter(originalRaw);
+    const after = matter(updatedRaw);
+
+    expect(after.content).toBe(before.content);
+    const beforeKeys = Object.keys(before.data).filter((k) => k !== "vizConfig");
+    for (const key of beforeKeys) {
+      expect(after.data[key]).toEqual(before.data[key]);
+    }
+    expect(after.data.vizConfig).toEqual({ discriminant: "programmable-scene", value: newVizConfig });
   });
 
   it("returns 404 when the target file doesn't exist", async () => {
@@ -256,6 +344,34 @@ describe("writeSceneConfig — GitHub mode", () => {
     expect(parsed.data.vizConfig).toEqual({ discriminant: "composed-scene", value: validConfig() });
     expect(parsed.data.title).toBe("Test");
     expect(parsed.content).toBe("Body content here.\n");
+  });
+
+  it("commits a programmable-scene save with the engine-specific commit message and discriminant", async () => {
+    stubGithubMode();
+    const client = fakeClient();
+    const result = await writeSceneConfig(
+      {
+        subject: "informatics",
+        slug: "programmable-scene-fixture",
+        vizConfig: validProgrammableConfig(),
+        engine: "programmable-scene",
+      },
+      { githubClient: client, now: () => 1735689600000 },
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok || result.mode !== "github") throw new Error("expected a github-mode success result");
+
+    const putCall = (client.putFileContent as ReturnType<typeof vi.fn>).mock.calls[0];
+    if (!putCall) throw new Error("putFileContent was not called");
+    expect(putCall[3].message).toBe("scene-builder: update programmable-scene for programmable-scene-fixture");
+
+    const committedRaw = Buffer.from(putCall[3].contentBase64, "base64").toString("utf8");
+    const parsed = matter(committedRaw);
+    expect(parsed.data.vizConfig).toEqual({
+      discriminant: "programmable-scene",
+      value: validProgrammableConfig(),
+    });
   });
 
   it("returns 404 when the file doesn't exist in the repository", async () => {

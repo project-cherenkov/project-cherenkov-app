@@ -24,7 +24,13 @@ export interface GithubClient {
     owner: string,
     repo: string,
     path: string,
-    params: { message: string; contentBase64: string; sha: string; branch: string },
+    // `sha` is optional — required by GitHub's contents API when
+    // overwriting an existing blob (every call in scene-builder-write.ts
+    // passes it), omitted entirely when creating a brand-new file (see
+    // lib/scene-builder-create.ts, which passes no `sha` at all rather than
+    // one it doesn't have). JSON.stringify below drops an undefined value,
+    // so omitting it here is exactly the request GitHub's API expects.
+    params: { message: string; contentBase64: string; sha?: string; branch: string },
   ): Promise<GithubPutResult>;
 }
 

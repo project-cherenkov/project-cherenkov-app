@@ -10,6 +10,19 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 
+// The Save button's own className always contains the literal substring
+// "disabled" (Tailwind's disabled:pointer-events-none / disabled:opacity-50
+// variants), whether or not the button actually is — so a plain /disabled/
+// regex against the whole tag is a false positive waiting to happen,
+// specifically the moment a test asserts the *negative* (button enabled).
+// This checks for React's actual serialized boolean attribute (`disabled=""`)
+// within the button's own opening tag only.
+function isSaveButtonDisabled(html: string): boolean {
+  const match = html.match(/<button([^>]*)>\s*(?:Saving…|Save to editorial)/);
+  if (!match) throw new Error("Save to editorial button not found in rendered output");
+  return /\bdisabled=""/.test(match[1] ?? "");
+}
+
 describe("SceneBuilderApp — initial render", () => {
   it("renders the palette, target-editorial fields, and a disabled Save button with no elements yet", () => {
     const html = renderToStaticMarkup(<SceneBuilderApp />);
@@ -30,7 +43,7 @@ describe("SceneBuilderApp — initial render", () => {
     expect(html).toContain("No timeline steps yet");
 
     // Save is disabled until both target fields and a valid config exist.
-    expect(html).toMatch(/<button[^>]*disabled[^>]*>\s*Save to editorial/);
+    expect(isSaveButtonDisabled(html)).toBe(true);
   });
 
   it("prefills subject/slug from props (the A-1 deep-link path) when given a known subject", () => {
@@ -69,10 +82,30 @@ describe("SceneBuilderApp — engine select (PROG-005)", () => {
     expect(html).not.toContain("isn&#x27;t valid yet");
   });
 
-  it("disables Save and explains why for the programmable-scene engine, without touching composed-scene's own Save button behavior", () => {
+  // Generalizing lib/scene-builder-write.ts to cover programmable-scene
+  // (this feature's own prerequisite — see its test suite) means this
+  // engine's Save button no longer needs to be hard-disabled the way it
+  // was; these two tests replace the old single "always disabled, with an
+  // explanation" test with composed-scene's own enabled/disabled split.
+  it("enables Save once a program and target are valid, without touching composed-scene's own Save button behavior", () => {
+    const html = renderToStaticMarkup(
+      <SceneBuilderApp
+        initialEngine="programmable-scene"
+        initialSubject="physics"
+        initialSlug="projectile-range-symmetry"
+      />,
+    );
+    // An empty program is a valid (empty) sequence, and subject+slug are
+    // prefilled, so — unlike before this write path existed — Save is
+    // enabled here, the same way it is for composed-scene once its own
+    // preconditions are met.
+    expect(isSaveButtonDisabled(html)).toBe(false);
+  });
+
+  it("disables Save for programmable-scene until a subject/slug target is chosen", () => {
     const html = renderToStaticMarkup(<SceneBuilderApp initialEngine="programmable-scene" />);
-    expect(html).toMatch(/<button[^>]*disabled[^>]*>\s*Save to editorial/);
-    expect(html).toContain("Publishing isn&#x27;t wired up for this engine yet");
+    expect(isSaveButtonDisabled(html)).toBe(true);
+    expect(html).toContain("Choose a subject and slug above to enable saving.");
   });
 
   it("does not render the composed-scene palette or timeline in programmable-scene mode", () => {

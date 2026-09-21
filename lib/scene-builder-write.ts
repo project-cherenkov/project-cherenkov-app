@@ -2,8 +2,11 @@ import matter from "gray-matter";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { isComposedSceneConfig, type ComposedSceneConfig } from "@/components/viz/composed-scene/types";
+import { isProgrammableSceneConfig, type ProgrammableSceneConfig } from "@/components/viz/programmable-scene/types";
 import { isKnownSubject, type Subject } from "@/lib/subjects";
 import type { GithubClient } from "@/lib/scene-builder-github";
+
+export type SceneEngine = "composed-scene" | "programmable-scene";
 
 // Kebab-case only, matching every existing slug under content/editorials/
 // (binary-search-on-answer, projectile-range-symmetry, ...). Rejecting
@@ -17,7 +20,13 @@ export function isValidSlug(value: string): boolean {
   return SLUG_PATTERN.test(value);
 }
 
-function relativeContentPath(subject: Subject, slug: string): string {
+// Exported (not just used internally) so lib/scene-builder-create.ts — the
+// "start a new visualization" flow's create-a-stub-file counterpart to this
+// file's update-an-existing-file job — computes the exact same path for a
+// given subject/slug. Two independent implementations of this one-liner
+// would be a silent way for the two flows to disagree about where a file
+// lives; a shared function can't drift.
+export function relativeContentPath(subject: Subject, slug: string): string {
   return path.posix.join("content", "editorials", subject, `${slug}.mdx`);
 }
 
@@ -26,10 +35,23 @@ export interface FsDeps {
   writeFile: (path: string, content: string) => Promise<void>;
 }
 
-const realFsDeps: FsDeps = {
+// Exported for the same reason as relativeContentPath above — reused as-is
+// by lib/scene-builder-create.ts rather than re-declared there.
+export const realFsDeps: FsDeps = {
   readFile: (p) => readFile(p, "utf8"),
   writeFile: (p, content) => writeFile(p, content, "utf8"),
 };
+
+// Exported alongside the above — the create-stub flow talks to the same
+// KEYSTATIC_GITHUB_REPO env var and needs to fail the same way when it's
+// missing or malformed.
+export function parseRepoEnv(): { owner: string; repo: string } | null {
+  const value = process.env.KEYSTATIC_GITHUB_REPO;
+  if (!value) return null;
+  const [owner, repo] = value.split("/");
+  if (!owner || !repo) return null;
+  return { owner, repo };
+}
 
 export type WriteSceneConfigResult =
   | { ok: true; mode: "local"; path: string }
@@ -40,6 +62,12 @@ export interface WriteSceneConfigParams {
   subject: string;
   slug: string;
   vizConfig: unknown;
+  // Optional, defaulting to "composed-scene", purely so every existing
+  // caller/test that predates programmable-scene's write path (there were
+  // no others until now) keeps compiling and passing completely unchanged.
+  // New callers — the scene-builder UI included — always pass this
+  // explicitly; see app/api/scene-builder/route.ts.
+  engine?: SceneEngine;
 }
 
 export interface WriteSceneConfigDeps {
@@ -57,15 +85,24 @@ export interface WriteSceneConfigDeps {
 // scene-builder-write.test.ts's round-trip suite) before writing this:
 // gray-matter's stringify reproduces the body byte-for-byte and every
 // other frontmatter key deep-equal (NFR-3 / R2).
-function applyVizConfig(raw: string, vizConfig: ComposedSceneConfig): string {
+//
+// `engine` decides the discriminant, generalizing what used to be a
+// hardcoded "composed-scene" so the same function serves both engines —
+// programmable-scene never had a write path at all before this.
+function applyVizConfig(
+  raw: string,
+  vizConfig: ComposedSceneConfig | ProgrammableSceneConfig,
+  engine: SceneEngine,
+): string {
   const parsed = matter(raw);
-  const nextData = { ...parsed.data, vizConfig: { discriminant: "composed-scene", value: vizConfig } };
+  const nextData = { ...parsed.data, vizConfig: { discriminant: engine, value: vizConfig } };
   return matter.stringify(parsed.content, nextData);
 }
 
 async function writeLocal(
   absolutePath: string,
-  vizConfig: ComposedSceneConfig,
+  vizConfig: ComposedSceneConfig | ProgrammableSceneConfig,
+  engine: SceneEngine,
   fsDeps: FsDeps,
 ): Promise<WriteSceneConfigResult> {
   let raw: string;
@@ -77,7 +114,7 @@ async function writeLocal(
 
   let updated: string;
   try {
-    updated = applyVizConfig(raw, vizConfig);
+    updated = applyVizConfig(raw, vizConfig, engine);
   } catch {
     return {
       ok: false,
@@ -95,17 +132,10 @@ async function writeLocal(
   return { ok: true, mode: "local", path: absolutePath };
 }
 
-function parseRepoEnv(): { owner: string; repo: string } | null {
-  const value = process.env.KEYSTATIC_GITHUB_REPO;
-  if (!value) return null;
-  const [owner, repo] = value.split("/");
-  if (!owner || !repo) return null;
-  return { owner, repo };
-}
-
 async function writeGithub(
   relativePath: string,
-  vizConfig: ComposedSceneConfig,
+  vizConfig: ComposedSceneConfig | ProgrammableSceneConfig,
+  engine: SceneEngine,
   slug: string,
   client: GithubClient,
   now: () => number,
@@ -127,7 +157,7 @@ async function writeGithub(
   let updatedContent: string;
   try {
     const raw = Buffer.from(file.contentBase64, "base64").toString("utf8");
-    updatedContent = applyVizConfig(raw, vizConfig);
+    updatedContent = applyVizConfig(raw, vizConfig, engine);
   } catch {
     return {
       ok: false,
@@ -157,7 +187,7 @@ async function writeGithub(
 
   try {
     const result = await client.putFileContent(owner, repo, relativePath, {
-      message: `scene-builder: update composed-scene for ${slug}`,
+      message: `scene-builder: update ${engine} for ${slug}`,
       contentBase64: Buffer.from(updatedContent, "utf8").toString("base64"),
       sha: file.sha,
       branch,
@@ -187,8 +217,20 @@ export async function writeSceneConfig(
   if (!isValidSlug(params.slug)) {
     return { ok: false, status: 400, error: `Invalid slug: "${params.slug}".` };
   }
-  if (!isComposedSceneConfig(params.vizConfig)) {
-    return { ok: false, status: 400, error: "Invalid composed-scene configuration." };
+  const engine: SceneEngine = params.engine ?? "composed-scene";
+  if (engine !== "composed-scene" && engine !== "programmable-scene") {
+    return { ok: false, status: 400, error: `Unknown engine: "${engine}".` };
+  }
+  const vizConfig: ComposedSceneConfig | ProgrammableSceneConfig | null =
+    engine === "composed-scene"
+      ? isComposedSceneConfig(params.vizConfig)
+        ? params.vizConfig
+        : null
+      : isProgrammableSceneConfig(params.vizConfig)
+        ? params.vizConfig
+        : null;
+  if (vizConfig === null) {
+    return { ok: false, status: 400, error: `Invalid ${engine} configuration.` };
   }
 
   const relativePath = relativeContentPath(params.subject, params.slug);
@@ -196,7 +238,7 @@ export async function writeSceneConfig(
   if (!isGithubModeConfigured()) {
     const fsDeps = deps.fsDeps ?? realFsDeps;
     const absolutePath = path.join(deps.contentRoot ?? process.cwd(), relativePath);
-    return writeLocal(absolutePath, params.vizConfig, fsDeps);
+    return writeLocal(absolutePath, vizConfig, engine, fsDeps);
   }
 
   if (!deps.githubClient) {
@@ -207,5 +249,5 @@ export async function writeSceneConfig(
     };
   }
   const now = deps.now ?? (() => Date.now());
-  return writeGithub(relativePath, params.vizConfig, params.slug, deps.githubClient, now);
+  return writeGithub(relativePath, vizConfig, engine, params.slug, deps.githubClient, now);
 }

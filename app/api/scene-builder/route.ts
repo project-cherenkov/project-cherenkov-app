@@ -3,12 +3,13 @@ import { getCurrentUser } from "@/lib/auth-guard";
 import { isAdminEmail } from "@/lib/admin-guard";
 import { createGithubClient } from "@/lib/scene-builder-github";
 import { GITHUB_TOKEN_COOKIE, readCookie, readGithubToken } from "@/lib/scene-builder-oauth";
-import { isGithubModeConfigured, writeSceneConfig } from "@/lib/scene-builder-write";
+import { isGithubModeConfigured, writeSceneConfig, type SceneEngine } from "@/lib/scene-builder-write";
 
 interface ScenePostBody {
   subject: string;
   slug: string;
   vizConfig: unknown;
+  engine?: SceneEngine;
 }
 
 function parseBody(value: unknown): ScenePostBody | null {
@@ -16,6 +17,14 @@ function parseBody(value: unknown): ScenePostBody | null {
   const record = value as Record<string, unknown>;
   if (typeof record.subject !== "string" || typeof record.slug !== "string") return null;
   if (!("vizConfig" in record)) return null;
+  // engine is optional (writeSceneConfig defaults it to "composed-scene")
+  // — but if present, it must be a real engine, not just any string;
+  // rejected here as a plain 400 rather than reaching writeSceneConfig's
+  // own "Unknown engine" branch with something already wrong shaped.
+  if ("engine" in record) {
+    if (record.engine !== "composed-scene" && record.engine !== "programmable-scene") return null;
+    return { subject: record.subject, slug: record.slug, vizConfig: record.vizConfig, engine: record.engine };
+  }
   return { subject: record.subject, slug: record.slug, vizConfig: record.vizConfig };
 }
 
