@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SUBJECTS } from "@/lib/subjects";
+import { buildGithubAuthorizeUrl, isGithubAuthRequiredError } from "@/lib/scene-builder-oauth-client";
 
 type SceneEngine = "composed-scene" | "programmable-scene";
 
@@ -39,6 +40,12 @@ export function NewVisualizationForm() {
   const [engine, setEngine] = useState<SceneEngine>("composed-scene");
   const [status, setStatus] = useState<"idle" | "creating" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  // BUG FIX: previously this error rendered as dead-end text — the message
+  // itself says to "visit /api/scene-builder/github-oauth/start", but
+  // nothing made that a link, so a contributor without that URL memorized
+  // was stuck. Detect the specific 401 both /new and /route.ts (save) share
+  // and, only for that one, offer a real link back to this same form.
+  const [needsGithubAuth, setNeedsGithubAuth] = useState(false);
 
   const effectiveSlug = slugTouched ? slug : slugify(title);
   const canSubmit = subject.length > 0 && title.trim().length > 0 && effectiveSlug.length > 0;
@@ -48,6 +55,7 @@ export function NewVisualizationForm() {
     if (!canSubmit || status === "creating") return;
     setStatus("creating");
     setError(null);
+    setNeedsGithubAuth(false);
     try {
       const res = await fetch("/api/scene-builder/new", {
         method: "POST",
@@ -58,6 +66,7 @@ export function NewVisualizationForm() {
       if (!res.ok) {
         setStatus("error");
         setError(data.error ?? "Couldn't create the new visualization.");
+        setNeedsGithubAuth(isGithubAuthRequiredError(data.error));
         return;
       }
       router.push(
@@ -148,7 +157,23 @@ export function NewVisualizationForm() {
       >
         {status === "creating" ? "Creating…" : "Create and open the scene builder"}
       </button>
-      {status === "error" && error && <p className="text-sm text-red-700">{error}</p>}
+      {status === "error" && error && (
+        <div className="text-sm text-red-700">
+          <p>{error}</p>
+          {needsGithubAuth && (
+            <a
+              className="font-medium underline underline-offset-2 hover:no-underline"
+              href={buildGithubAuthorizeUrl(
+                typeof window !== "undefined"
+                  ? window.location.pathname + window.location.search
+                  : "/keystatic/scene-builder/new",
+              )}
+            >
+              Authorize with GitHub, then come back and try again
+            </a>
+          )}
+        </div>
+      )}
     </form>
   );
 }

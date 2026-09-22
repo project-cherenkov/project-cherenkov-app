@@ -8,6 +8,7 @@ import { ProgrammableScene } from "@/components/viz/programmable-scene";
 import { isProgrammableSceneConfig } from "@/components/viz/programmable-scene/types";
 import type { ProgramNode } from "@/components/viz/programmable-scene/types";
 import { isKnownSubject, SUBJECTS } from "@/lib/subjects";
+import { buildGithubAuthorizeUrl, isGithubAuthRequiredError } from "@/lib/scene-builder-oauth-client";
 import {
   addControl,
   addElement,
@@ -100,6 +101,34 @@ function TargetEditorialFields({
   );
 }
 
+// BUG FIX (shared by both engine branches' save-error display below):
+// renders the plain error message, and — only when it's specifically the
+// "needs GitHub authorization" 401 — a real link to go get it, with
+// `returnTo` pointing back at this exact page (subject/slug/engine query
+// params included) so the callback lands the contributor back here rather
+// than its own default. Note this is a full-page redirect through GitHub;
+// in-progress draft edits are not preserved across it, same as a manual
+// page reload would lose them.
+function SaveError({ error, needsGithubAuth }: { error: string; needsGithubAuth: boolean }) {
+  return (
+    <div className="text-sm text-red-700">
+      <p>{error}</p>
+      {needsGithubAuth && (
+        <a
+          className="font-medium underline underline-offset-2 hover:no-underline"
+          href={buildGithubAuthorizeUrl(
+            typeof window !== "undefined"
+              ? window.location.pathname + window.location.search
+              : "/keystatic/scene-builder",
+          )}
+        >
+          Authorize with GitHub, then come back and save again
+        </a>
+      )}
+    </div>
+  );
+}
+
 // PROG-005: the engine-select step this repository didn't yet have (see
 // this feature's implementation report — the architect's spec assumed one
 // already existed here, routing to palette/inspector/timeline; this file
@@ -168,6 +197,12 @@ export function SceneBuilderApp({
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  // BUG FIX: see new-visualization-form.tsx's identical addition — this
+  // route (app/api/scene-builder/route.ts) returns the same 401 "GitHub
+  // authorization required" body as /new when the contributor hasn't done
+  // the scene-builder OAuth handshake yet, and this component used to just
+  // print that text with no way to act on it.
+  const [needsGithubAuth, setNeedsGithubAuth] = useState(false);
 
   const publishable = useMemo(() => toPublishableConfig(draft), [draft]);
   // Re-runs the exact same guard the write-back route and the reader page
@@ -204,6 +239,7 @@ export function SceneBuilderApp({
     setSaveStatus("saving");
     setSaveError(null);
     setSaveMessage(null);
+    setNeedsGithubAuth(false);
     try {
       const res = await fetch("/api/scene-builder", {
         method: "POST",
@@ -214,6 +250,7 @@ export function SceneBuilderApp({
       if (!res.ok) {
         setSaveStatus("error");
         setSaveError(data.error ?? "Save failed.");
+        setNeedsGithubAuth(isGithubAuthRequiredError(data.error));
         return;
       }
       setSaveStatus("done");
@@ -279,7 +316,9 @@ export function SceneBuilderApp({
                 </p>
               )}
             </div>
-            {saveStatus === "error" && saveError && <p className="text-sm text-red-700">{saveError}</p>}
+            {saveStatus === "error" && saveError && (
+              <SaveError error={saveError} needsGithubAuth={needsGithubAuth} />
+            )}
             {saveStatus === "done" && saveMessage && (
               <p className="text-sm text-emerald-700 dark:text-emerald-400">{saveMessage}</p>
             )}
@@ -387,7 +426,9 @@ export function SceneBuilderApp({
               </p>
             )}
           </div>
-          {saveStatus === "error" && saveError && <p className="text-sm text-red-700">{saveError}</p>}
+          {saveStatus === "error" && saveError && (
+            <SaveError error={saveError} needsGithubAuth={needsGithubAuth} />
+          )}
           {saveStatus === "done" && saveMessage && (
             <p className="text-sm text-emerald-700 dark:text-emerald-400">{saveMessage}</p>
           )}
