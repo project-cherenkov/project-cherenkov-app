@@ -357,7 +357,7 @@ Reached from a specific editorial's `vizConfig` field description inside `/keyst
 - **Local** (default, no env vars): writes the change straight to the target file on disk.
 - **GitHub** (`KEYSTATIC_GITHUB_CLIENT_ID` set): commits the change to a brand-new branch (`keystatic/scene-builder-<slug>-<timestamp>`) off the repository's default branch. **This does not open or merge a pull request automatically** — the author still opens a PR on GitHub to actually publish the change.
 
-GitHub mode needs its own authorization step first, via a **dedicated GitHub OAuth flow** (`app/api/scene-builder/github-oauth/{start,callback}/route.ts`, `lib/scene-builder-oauth.ts`) — deliberately separate from both Keystatic's own admin-UI session and Better Auth's session, so that a temporary, deployment-mode-specific OAuth token never needs a schema migration onto the durable user/session tables. It reuses the already-configured `KEYSTATIC_GITHUB_CLIENT_ID`/`KEYSTATIC_GITHUB_CLIENT_SECRET`/`KEYSTATIC_SECRET` env vars rather than provisioning new ones, and keeps the resulting GitHub access token in its own short-lived (1 hour), HMAC-signed, `httpOnly` cookie.
+GitHub mode needs its own authorization step first, via a **dedicated GitHub OAuth flow** (`app/api/scene-builder/github-oauth/{start,callback}/route.ts`, `lib/scene-builder-oauth.ts`) — deliberately separate from both Keystatic's own admin-UI session and Better Auth's session, so that a temporary, deployment-mode-specific OAuth token never needs a schema migration onto the durable user/session tables. It reuses the already-configured `KEYSTATIC_GITHUB_CLIENT_ID`/`KEYSTATIC_GITHUB_CLIENT_SECRET`/`KEYSTATIC_SECRET` env vars rather than provisioning new ones, and keeps the resulting GitHub access token in its own short-lived (1 hour), HMAC-signed, `httpOnly` cookie. Hitting a "GitHub authorization required" 401 from either "Save to editorial" or "New visualization" means this step hasn't been done yet (or its token expired) — see [`docs/scene-builder-github-auth.md`](docs/scene-builder-github-auth.md) for the walkthrough and troubleshooting checklist (also linked from FAQ F below).
 
 **Access is gated the same way as the rest of the CMS write surface**: `/keystatic/scene-builder`, `/api/scene-builder/*`, and the OAuth routes all fall under `middleware.ts`'s admin-surface gate (Section VI), so on a deployed build they 404 together with `/keystatic` unless `KEYSTATIC_GITHUB_CLIENT_ID` is set — and `/api/scene-builder`'s own handler separately re-checks the caller's session and `ADMIN_EMAILS` membership per request, the same defense-in-depth pattern `/api/team-photo` uses.
 
@@ -437,6 +437,15 @@ The taxonomy isn't finalized yet, and there isn't enough real content to know wh
 <summary><b>View Explanation (Click to expand)</b></summary>
 
 The repository is public and the live site is deployed at `https://project-cherenkov-app.vercel.app/en`, so the repo-visibility mismatch described in older docs is no longer current. The site still intentionally keeps `robots: { index: false, follow: false }` on deployed pages (`app/[locale]/layout.tsx`): the hero, tagline, and about/philosophy copy in `messages/*.json` are finished, but the team bios and contact details there are not yet written, so the site is public but not yet ready for a final, indexed launch.
+
+</details>
+
+### **F. "Why do I see 'GitHub authorization required...' in the scene builder even though I'm already logged into `/keystatic`?"**
+
+<details>
+<summary><b>View Explanation (Click to expand)</b></summary>
+
+Because Keystatic's own login and the scene builder's own GitHub access are two separate OAuth handshakes by design (Section VII above) — being logged into `/keystatic` doesn't also authorize the scene builder. Follow the link the error itself shows ("Authorize with GitHub"), or see [`docs/scene-builder-github-auth.md`](docs/scene-builder-github-auth.md) for the full walkthrough and a troubleshooting checklist if it still doesn't go through. The authorization is also time-limited (1 hour), so seeing this again later isn't a regression.
 
 </details>
 
