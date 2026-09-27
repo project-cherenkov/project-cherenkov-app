@@ -4,7 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getEditorial } from "@/lib/content";
 import { EditorialMDX } from "@/components/editorial-mdx";
-import { VizEngine } from "@/components/viz/viz-engine";
 // Imported here, not in app/globals.css — KaTeX's CSS should only ship to
 // pages that actually render math (Non-Functional Requirements §8).
 import "katex/dist/katex.min.css";
@@ -26,14 +25,6 @@ export default async function EditorialPage({
   if (!editorial) notFound();
 
   const t = await getTranslations("editorial");
-
-  // Contributors place <Interactive /> in their MDX body wherever it
-  // belongs in the hook → problem → idea → interactive → proof flow
-  // (spec §5). Since the site's own rule is that no editorial ships
-  // without one (spec §1, "non-negotiable"), a forgotten tag shouldn't
-  // silently mean no visualization — fall back to rendering it right
-  // after the hook instead of hiding the gap.
-  const embedsInteractive = editorial.body.includes("Interactive");
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -63,27 +54,10 @@ export default async function EditorialPage({
         {t("byAuthor", { author: editorial.author })}
       </p>
 
-      {(() => {
-        // See the comment above `embedsInteractive`. Split into two cases so
-        // we don't show two overlapping warnings: a genuinely unconfigured
-        // engine ("none") already gets VizEngine's own message; this notice
-        // is only for "the engine IS configured but nobody placed the tag."
-        const forgotToEmbedTag =
-          !embedsInteractive && editorial.vizConfig.discriminant !== "none";
-        if (embedsInteractive) return null;
-        return (
-          <div className="not-prose my-8">
-            {forgotToEmbedTag && (
-              <p className="label-code mb-2 text-amber-600">
-                {t("vizFallbackNotice")}
-              </p>
-            )}
-            <VizEngine editorial={editorial} />
-          </div>
-        );
-      })()}
-
       <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
+        {/* EditorialMDX itself decides whether to also render the "forgot
+            the tag" visualization fallback, based on the actual rendered
+            body — see components/editorial-mdx.tsx (F-05). */}
         <EditorialMDX
           code={editorial.body}
           vizConfig={editorial.vizConfig}

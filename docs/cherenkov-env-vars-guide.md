@@ -327,7 +327,7 @@ Variables**.
 
 ---
 
-## 6. `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` / `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED`
+## 6. `KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` (plus the auto-derived `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED`)
 
 **What these do:** Without `KEYSTATIC_GITHUB_CLIENT_ID` set,
 `keystatic.config.ts` falls back to `{ kind: "local" }` — local-storage mode
@@ -338,17 +338,32 @@ Setting it switches Keystatic to "github-storage" mode, where GitHub access
 control becomes real: edits land as commits, gated by whether the logged-in
 user actually has write access to the repo.
 
-`NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` has to be set *alongside* it, for a
-subtler reason: `keystatic.config.ts` is imported by a `"use client"`
-component, so it's bundled into the **browser**, not just the server.
-`KEYSTATIC_GITHUB_CLIENT_ID` is server-only — Next.js never inlines a value
-for it into client code, so in the browser it always reads as `undefined`.
-That means the *browser* decides local-vs-github storage from this separate
-`NEXT_PUBLIC_`-prefixed flag instead, independently of what the server
-decides. Set all three together, or you get a real bug, not just a
-misconfiguration: the server runs in github mode while the browser silently
-stays in local mode, and collections 404 while singleton pages just spin
-forever.
+`NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` exists for a subtler reason:
+`keystatic.config.ts` is imported by a `"use client"` component, so it's
+bundled into the **browser**, not just the server. `KEYSTATIC_GITHUB_CLIENT_ID`
+is server-only — Next.js never inlines a value for it into client code, so in
+the browser it always reads as `undefined`. Rather than requiring a second,
+separately-set variable that could drift out of sync with the first (a real
+bug this project shipped with previously: the server running in github mode
+while the browser silently stayed in local mode, so collections 404'd while
+singleton pages just spun forever), `next.config.mjs` computes
+`NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` automatically from
+`KEYSTATIC_GITHUB_CLIENT_ID` at build time:
+
+```js
+env: {
+  NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED: process.env.KEYSTATIC_GITHUB_CLIENT_ID
+    ? "1"
+    : "",
+},
+```
+
+**Never set `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` yourself** — locally, on
+Vercel, or anywhere else. There is exactly one source of truth
+(`KEYSTATIC_GITHUB_CLIENT_ID`); setting this derived variable directly can
+only reintroduce the client/server desync described above, and any value you
+set would be overwritten by `next.config.mjs`'s own computation at build time
+regardless.
 
 **These need a real GitHub App — not an OAuth App.** Keystatic's own GitHub
 login (`@keystatic/core`'s `githubLogin` function) never sends an OAuth
@@ -458,20 +473,19 @@ GitHub Pro/Team and has no usage limits.
 
 ### Local development
 
-**How to set it:** Add all three to `.env.local`:
+**How to set it:** Add both to `.env.local`:
 
 ```
 KEYSTATIC_GITHUB_CLIENT_ID=<paste client id>
 KEYSTATIC_GITHUB_CLIENT_SECRET=<paste client secret>
-NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED=true
 ```
 
-Set all three together or none — setting only the first two reproduces the
-client/server storage-mode mismatch described above.
+`NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` is computed automatically from the
+first of these — see above. Do not add it here.
 
 ### Vercel deployment
 
-**How to set it:** The exact same three variables, same values — there's no
+**How to set it:** The exact same two variables, same values — there's no
 separate production App or separate credentials to obtain; it's the one
 App created above, already installed on the repo.
 

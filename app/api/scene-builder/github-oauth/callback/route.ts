@@ -5,6 +5,7 @@ import {
   GITHUB_OAUTH_STATE_COOKIE,
   GITHUB_RETURN_TO_COOKIE,
   GITHUB_TOKEN_COOKIE,
+  isSafeReturnTo,
   readCookie,
   signGithubToken,
   verifyGithubOauthState,
@@ -14,10 +15,6 @@ interface GithubTokenResponse {
   access_token?: string;
   error?: string;
   error_description?: string;
-}
-
-function isSafeReturnTo(value: string | null | undefined): value is string {
-  return !!value && value.startsWith("/") && !value.startsWith("//");
 }
 
 export async function GET(request: Request) {

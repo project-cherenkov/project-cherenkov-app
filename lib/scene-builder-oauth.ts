@@ -1,5 +1,14 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
+// F-01 fix: re-export the canonical same-origin returnTo check from
+// lib/safe-redirect.ts (pure string logic, no Node-only imports) rather
+// than defining a second copy here. lib/safe-redirect.ts also has to exist
+// independently of this module because components/auth/login-form.tsx (a
+// Client Component) needs the identical check but cannot import this
+// file's node:crypto usage above. See lib/safe-redirect.ts for the actual
+// logic and the bypass this closes.
+export { isSafeReturnTo } from "@/lib/safe-redirect";
+
 // Design decision (left open by the architect's spec as "use your
 // judgment, document it"): GitHub-mode write-back needs somewhere to keep
 // the contributor's GitHub OAuth access token between the OAuth redirect

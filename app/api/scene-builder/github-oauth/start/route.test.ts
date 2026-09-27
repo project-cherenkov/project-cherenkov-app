@@ -33,4 +33,16 @@ describe("GET /api/scene-builder/github-oauth/start — requires authentication"
     expect(location).toContain("github.com/login/oauth/authorize");
     expect(location).not.toContain("evil.example");
   });
+
+  // F-01 regression: `/\evil.example` used to pass the old
+  // `startsWith("/") && !startsWith("//")` check, and `new URL(value, origin)`
+  // resolves a leading-backslash value to the external origin. Confirm the
+  // cookie set for the eventual post-OAuth redirect never carries that value.
+  it("falls back to the safe default returnTo when the value is a backslash-based origin bypass", async () => {
+    const response = await GET(makeRequest("?returnTo=/%5Cevil.example"));
+    const cookie = response.cookies.get("scene_builder_gh_return_to");
+    expect(cookie?.value).toBe("/keystatic/scene-builder");
+    const resolved = new URL(cookie?.value ?? "", "https://project-cherenkov.example");
+    expect(resolved.origin).toBe("https://project-cherenkov.example");
+  });
 });

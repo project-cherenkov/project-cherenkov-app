@@ -7,6 +7,7 @@ import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
+import { isSafeReturnTo } from "@/lib/safe-redirect";
 
 export interface LoginFormProps {
   // Server-computed (GOOGLE_CLIENT_ID isn't a NEXT_PUBLIC_* var, so this
@@ -65,11 +66,7 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
           setError(result.error.message ?? t("genericError"));
           return;
         }
-        router.push(
-          nextPath && nextPath.startsWith("/") && !nextPath.startsWith("//")
-            ? nextPath
-            : "/planner",
-        );
+        router.push(nextPath && isSafeReturnTo(nextPath) ? nextPath : "/planner");
       } catch (err) {
         // The request never got a structured response to read a per-field
         // error out of at all — e.g. offline, or the deployment's own API
@@ -91,10 +88,7 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
     try {
       const result = await signIn.social({
         provider: "google",
-        callbackURL:
-          nextPath && nextPath.startsWith("/") && !nextPath.startsWith("//")
-            ? nextPath
-            : `/${locale}/planner`,
+        callbackURL: nextPath && isSafeReturnTo(nextPath) ? nextPath : `/${locale}/planner`,
       });
       // A successful call redirects the browser to Google before this
       // promise ever resolves — reaching here with an error means our own

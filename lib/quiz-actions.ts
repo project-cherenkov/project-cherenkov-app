@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { quizQuestions, quizAttempts, studyPlans, planItems } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth-guard";
+import { deriveStatusFromAttempts } from "@/lib/planner";
 import {
   syncPlanItemCompletion,
   syncPlanItemCompletionCore,
@@ -73,6 +74,11 @@ const realDeps: QuizAttemptDeps = {
         },
         onAttemptRecorded: async (userId, topicId) => {
           const txSyncDeps: PlanSyncDeps = {
+            // F-03 fix: fetch attempts via `tx` (same query shape as
+            // before) but derive status through lib/planner.ts's
+            // deriveStatusFromAttempts — the single source of truth for
+            // this comparison — instead of re-implementing it inline with
+            // the mastery threshold hardcoded.
             async getStatus(userId, topicId) {
               const attempts = await tx
                 .select({
@@ -88,14 +94,7 @@ const realDeps: QuizAttemptDeps = {
                 )
                 .orderBy(quizAttempts.attemptedAt, quizAttempts.id);
 
-              const [mostRecent] = [...attempts].sort(
-                (a, b) =>
-                  +new Date(b.attemptedAt).getTime() -
-                  +new Date(a.attemptedAt).getTime(),
-              );
-
-              if (!mostRecent) return "not_started";
-              return mostRecent.score >= 0.8 ? "done" : "in_progress";
+              return deriveStatusFromAttempts(attempts);
             },
             async getUserPlanId(userId) {
               const [plan] = await tx

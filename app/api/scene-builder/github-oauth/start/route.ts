@@ -5,13 +5,10 @@ import {
   createGithubOauthState,
   GITHUB_OAUTH_STATE_COOKIE,
   GITHUB_RETURN_TO_COOKIE,
+  isSafeReturnTo,
 } from "@/lib/scene-builder-oauth";
 
 const OAUTH_COOKIE_MAX_AGE_SECONDS = 600; // matches scene-builder-oauth.ts's 10-minute state TTL
-
-function isSafeReturnTo(value: string | null): value is string {
-  return !!value && value.startsWith("/") && !value.startsWith("//");
-}
 
 // This route sits under /api/scene-builder, already covered by
 // middleware.ts's ADMIN_SURFACE_PREFIXES env-level gate — but per NFR-4

@@ -31,6 +31,13 @@ export const vizEngines = [
 
 const subjects = ["informatics", "physics", "astronomy"] as const;
 
+// F-04 guard: reject placeholder/test `publishedAt` values (the two junk
+// editorials removed in this same change had `publishedAt` values in the
+// years 0011 and 0031) with a hard build failure rather than a silent
+// merge. 2020 predates this project by a comfortable margin, so any real
+// editorial will clear it easily.
+export const MIN_PUBLISHED_YEAR = 2020;
+
 const editorials = defineCollection({
   name: "Editorial",
   pattern: "editorials/**/*.mdx",
@@ -48,7 +55,11 @@ const editorials = defineCollection({
           value: s.record(s.string(), s.unknown()).default({}),
         })
         .default({ discriminant: "none", value: {} }),
-      publishedAt: s.isodate(),
+      publishedAt: s
+        .isodate()
+        .refine((value) => new Date(value).getUTCFullYear() >= MIN_PUBLISHED_YEAR, (value) => ({
+          message: `publishedAt "${value}" is before ${MIN_PUBLISHED_YEAR} — looks like placeholder/test data, not a real publish date.`,
+        })),
       author: s.string(),
       // Full proof + prose body, compiled to a renderable MDX component.
       body: s.mdx(),
