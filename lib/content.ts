@@ -1,7 +1,7 @@
 // Thin query layer over Velite's generated content. Nothing in app/ should
 // import "#content" directly — go through these helpers so filtering/sorting
 // logic lives in one place instead of being copy-pasted into every page.
-import { editorials, type Editorial } from "#content";
+import { editorials, materials, type Editorial, type Material } from "#content";
 
 export type Subject = Editorial["subject"];
 
@@ -67,4 +67,16 @@ function uniqueSorted(values: string[]): string[] {
 // surfaces instead of hiding.
 export function hasMissingViz(editorial: Editorial): boolean {
   return editorial.vizConfig.discriminant === "none";
+}
+
+// --- Materials (topic-by-topic syllabus breakdowns) -------------------------
+
+export function getAllMaterials(): Material[] {
+  return [...materials].sort(
+    (a, b) => a.subject.localeCompare(b.subject) || a.slug.localeCompare(b.slug),
+  );
+}
+
+export function getMaterial(subject: string, slug: string): Material | undefined {
+  return materials.find((m) => m.subject === subject && m.slug === slug);
 }

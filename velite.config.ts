@@ -61,6 +61,12 @@ const editorials = defineCollection({
           message: `publishedAt "${value}" is before ${MIN_PUBLISHED_YEAR} — looks like placeholder/test data, not a real publish date.`,
         })),
       author: s.string(),
+      // Optional link into the syllabus (a topic id from lib/syllabus). Empty
+      // string is what Keystatic writes for "none", so normalise it away.
+      syllabusTopic: s
+        .string()
+        .optional()
+        .transform((value) => value || undefined),
       // Full proof + prose body, compiled to a renderable MDX component.
       body: s.mdx(),
       // Derived from the file path (content/editorials/<subject>/<slug>.mdx),
@@ -75,9 +81,33 @@ const editorials = defineCollection({
     })),
 });
 
+// Materials: unsigned, topic-by-topic breakdowns of the syllabus. Deliberately
+// a separate collection from editorials — no author, no principle/errorType
+// (the archive's index), and no required visualization — because they are
+// indexed by syllabus topic, not by principle. `topic` must be a topic id from
+// lib/syllabus for the same `subject`; content-integrity.test.ts enforces it.
+const materials = defineCollection({
+  name: "Material",
+  pattern: "materials/**/*.mdx",
+  schema: s
+    .object({
+      title: s.string().max(120),
+      subject: s.enum(subjects),
+      topic: s.string(),
+      summary: s.string().max(280),
+      body: s.mdx(),
+      // Derived from the file path, same as editorials.
+      slug: s.path(),
+    })
+    .transform((data) => {
+      const slug = data.slug.split("/").pop() as string;
+      return { ...data, slug, url: `/materials/${data.subject}/${slug}` };
+    }),
+});
+
 export default defineConfig({
   root: "content",
-  collections: { editorials },
+  collections: { editorials, materials },
   mdx: {
     // $inline$ and $$display$$ math in editorial prose compiles to static
     // KaTeX HTML at build time — no client JS, no reflow (spec §3's reason

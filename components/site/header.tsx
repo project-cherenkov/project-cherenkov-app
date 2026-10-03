@@ -9,6 +9,18 @@ import { useSession, signOut } from "@/lib/auth-client";
 import { Github } from "lucide-react";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 
+// The "Archive" bookmark stands for three sections (see archive-subnav.tsx), so
+// it stays highlighted on any of them, not just on /archive itself.
+const ARCHIVE_SECTIONS = [
+  { href: "/syllabus", labelKey: "syllabus" },
+  { href: "/materials", labelKey: "materials" },
+  { href: "/archive", labelKey: "editorials" },
+] as const;
+
+function isWithin(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 const localeOptions = [
   { code: "en", label: "EN", flag: "🇬🇧" },
   { code: "id", label: "ID", flag: "🇮🇩" },
@@ -42,7 +54,18 @@ export function SiteHeader() {
   }
 
   const navItems = [
-    { href: "/archive", label: t("archive"), isExternal: false },
+    {
+      href: "/archive",
+      label: t("archive"),
+      isExternal: false,
+      // Highlighted on all three archive sections; the mobile drawer also
+      // lists them as an indented group under this item.
+      activeFor: ARCHIVE_SECTIONS.map((entry) => entry.href),
+      children: ARCHIVE_SECTIONS.map((entry) => ({
+        href: entry.href,
+        label: t(entry.labelKey),
+      })),
+    },
     { href: "/about", label: t("about"), isExternal: false },
     { href: "/keystatic", label: t("edit"), isExternal: true },
     ...(session
@@ -73,7 +96,11 @@ export function SiteHeader() {
           {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
           <nav className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0">
             {navItems.map((item, index) => {
-              const isActive = item.href ? pathname === item.href : false;
+              const isActive = item.href
+                ? item.activeFor
+                  ? item.activeFor.some((href) => isWithin(pathname, href))
+                  : pathname === item.href
+                : false;
 
               const bookmarkStyle = [
                 "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus:outline-none",
@@ -194,7 +221,11 @@ export function SiteHeader() {
         <div className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
           <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
             {navItems.map((item, index) => {
-              const isActive = item.href ? pathname === item.href : false;
+              const isActive = item.href
+                ? item.activeFor
+                  ? item.activeFor.some((href) => isWithin(pathname, href))
+                  : pathname === item.href
+                : false;
 
               const linkClasses = [
                 "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",
@@ -229,6 +260,41 @@ export function SiteHeader() {
                   >
                     {item.label}
                   </NextLink>
+                );
+              }
+
+              if (item.children) {
+                return (
+                  <div key={item.href} className="flex flex-col gap-2">
+                    <Link
+                      href={item.href!}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={linkClasses}
+                    >
+                      {item.label}
+                    </Link>
+                    <div className="ml-3 flex flex-col gap-1 border-l border-border pl-3">
+                      {item.children.map((child) => {
+                        const childActive = isWithin(pathname, child.href);
+                        return (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            aria-current={childActive ? "page" : undefined}
+                            className={[
+                              "flex min-h-11 items-center rounded-md px-3 transition-colors",
+                              childActive
+                                ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                                : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                            ].join(" ")}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 );
               }
 

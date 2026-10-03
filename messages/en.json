@@ -12,7 +12,11 @@
     "login": "Log In",
     "signup": "Sign Up",
     "myPlan": "My Plan",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "syllabus": "Syllabus",
+    "materials": "Materials",
+    "editorials": "Editorials",
+    "archiveSections": "Archive sections"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -21,7 +25,8 @@
     "ctaArchive": "Browse the archive",
     "ctaAbout": "Read the philosophy",
     "recentHeading": "requirements.txt — recent editorials",
-    "recentEmpty": "No editorials published yet."
+    "recentEmpty": "No editorials published yet.",
+    "ctaSyllabus": "See the syllabus"
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -160,5 +165,52 @@
     "heading": "Page not found",
     "body": "The page you are looking for doesn't exist or has been moved.",
     "cta": "Back to home"
+  },
+  "syllabus": {
+    "eyebrow": "syllabus.md",
+    "title": "Syllabus",
+    "description": "What each olympiad subject covers — and where to learn each topic.",
+    "subjects": {
+      "informatics": "Informatics",
+      "physics": "Physics",
+      "astronomy": "Astronomy"
+    },
+    "languages": {
+      "id": "Indonesian",
+      "en": "English"
+    },
+    "source": "Source",
+    "translationNote": "The official wording is in {language}. Translations here are unofficial — check the source if in doubt.",
+    "stats": {
+      "topics": "topics",
+      "materials": "materials",
+      "editorials": "editorials"
+    },
+    "counts": {
+      "topics": "{count, plural, one {# topic} other {# topics}}",
+      "materials": "{count, plural, one {# material} other {# materials}}",
+      "editorials": "{count, plural, one {# editorial} other {# editorials}}"
+    },
+    "theory": "Theory",
+    "practical": "Practical",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "readMaterial": "Read material",
+    "comingSoon": "Coming soon",
+    "editorialsLabel": "Editorials:"
+  },
+  "materials": {
+    "eyebrow": "materials.md",
+    "title": "Materials",
+    "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",
+    "coverage": "{covered} of {total} topics covered",
+    "viewSyllabus": "View syllabus",
+    "emptyForSubject": "No materials yet — they appear here as each syllabus topic gets written up.",
+    "backToMaterials": "Materials",
+    "inSyllabus": "In the syllabus",
+    "relatedEditorials": "Related editorials",
+    "sectionNav": "More in this syllabus section",
+    "previous": "Previous",
+    "next": "Next"
   }
 }

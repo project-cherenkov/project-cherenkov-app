@@ -459,3 +459,19 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 - The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
 
 This is the current state of the repo: public codebase, public deployment, a couple of about-page fields still being written, and production admin access still behind the GitHub OAuth gate.
+
+## Syllabus, materials and editorials
+
+The archive has three sections, joined by the syllabus:
+
+| Section | URL | Source of truth |
+|---|---|---|
+| Syllabus | `/syllabus`, `/syllabus/[subject]` | `lib/syllabus/data/*.ts` (structured data, not MDX) |
+| Materials | `/materials`, `/materials/[subject]/[slug]` | `content/materials/<subject>/*.mdx` |
+| Editorials | `/archive`, `/archive/[subject]/[slug]` | `content/editorials/<subject>/*.mdx` (unchanged) |
+
+- Every syllabus topic has a stable `id`. A material points at one with `topic:`, an editorial with the optional `syllabusTopic:`. **Never rename a topic id** — change its `name` instead. `content-integrity.test.ts` fails if either points at a topic that doesn't exist.
+- One material per topic. Materials are unsigned and have no visualization requirement; editorials keep their rules.
+- To add a material: create it in Keystatic ("Materials — <subject>") and pick the syllabus topic from the dropdown.
+- The syllabus names are stored in both locales. Only one language per subject is the official wording (`sourceLang`); the other is an unofficial gloss and the page says so.
+- The physics source (`lib/syllabus/data/physics.ts`) is still a `[PLACEHOLDER]` — fill in where that scope table comes from.

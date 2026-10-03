@@ -1,4 +1,5 @@
 import { config, collection, singleton, fields } from "@keystatic/core";
+import { topicSelectOptions } from "./lib/syllabus";
 
 // Mirrors velite.config.ts field-for-field (spec §11 CMS-002). If either
 // schema changes, the other must change with it — there is no automated
@@ -274,6 +275,15 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     vizConfig: vizConfigConditional(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
     author: fields.text({ label: "Author", validation: { isRequired: true } }),
+    // Optional link into the syllabus. Written as "" when unset; velite.config.ts
+    // normalises that back to undefined.
+    syllabusTopic: fields.select({
+      label: "Syllabus topic (optional)",
+      description:
+        "Which syllabus topic this editorial belongs to. Shows up on the syllabus page and the editorial.",
+      options: [{ label: "— none —", value: "" }, ...topicSelectOptions(subject)],
+      defaultValue: "",
+    }),
     // Explicit, author-set slug — see decision #3. Velite derives its own
     // slug from the filename, so this must match the MDX filename exactly;
     // Keystatic uses it as the collection's itemSlug source below.
@@ -287,6 +297,48 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     content: fields.mdx({
       label: "Body",
       description: "Full proof + prose. $inline$ and $$display$$ math compile to KaTeX at build time.",
+    }),
+  };
+}
+
+// Materials: unsigned, topic-by-topic syllabus breakdowns. Same per-subject
+// collection pattern as editorials (decision #2) so a folder/frontmatter
+// subject mismatch is structurally impossible. `topic` is a <select> built
+// from lib/syllabus, so authors can't mistype a topic id — the one way a
+// material could silently detach from the syllabus.
+function materialSchema(subject: "astronomy" | "physics" | "informatics") {
+  const options = topicSelectOptions(subject);
+  return {
+    subject: fields.select({
+      label: "Subject (fixed — matches this collection)",
+      options: [{ label: subject, value: subject }],
+      defaultValue: subject,
+    }),
+    title: fields.text({
+      label: "Title",
+      validation: { isRequired: true, length: { max: 120 } },
+    }),
+    topic: fields.select({
+      label: "Syllabus topic",
+      description: "The syllabus topic this material explains — one material per topic.",
+      options,
+      defaultValue: options[0]?.value ?? "",
+    }),
+    summary: fields.text({
+      label: "Summary",
+      multiline: true,
+      validation: { isRequired: true, length: { max: 280 } },
+    }),
+    slug: fields.slug({
+      name: {
+        label: "Slug",
+        description:
+          "Sets the MDX filename (content/materials/<subject>/<slug>.mdx) and the URL.",
+      },
+    }),
+    content: fields.mdx({
+      label: "Body",
+      description: "Prose and math. $inline$ and $$display$$ math compile to KaTeX at build time.",
     }),
   };
 }
@@ -349,6 +401,27 @@ export default config({
       path: "content/editorials/informatics/*",
       format: { contentField: "content" },
       schema: editorialSchema("informatics"),
+    }),
+    astronomyMaterials: collection({
+      label: "Materials — Astronomy",
+      slugField: "slug",
+      path: "content/materials/astronomy/*",
+      format: { contentField: "content" },
+      schema: materialSchema("astronomy"),
+    }),
+    physicsMaterials: collection({
+      label: "Materials — Physics",
+      slugField: "slug",
+      path: "content/materials/physics/*",
+      format: { contentField: "content" },
+      schema: materialSchema("physics"),
+    }),
+    informaticsMaterials: collection({
+      label: "Materials — Informatics",
+      slugField: "slug",
+      path: "content/materials/informatics/*",
+      format: { contentField: "content" },
+      schema: materialSchema("informatics"),
     }),
   },
   singletons: {

@@ -74,3 +74,22 @@ describe("keystatic.config — reader round-trip against real content", () => {
     ).rejects.toThrow(/vizConfig\.value/);
   });
 });
+
+// Materials: the same round-trip guard as editorials. Also proves the
+// syllabus-topic <select> options accept every real material's `topic`.
+describe("keystatic.config — materials round-trip against real content", () => {
+  it.each(["astronomyMaterials", "physicsMaterials", "informaticsMaterials"] as const)(
+    "%s reads every real material without throwing",
+    async (name) => {
+      const collection = reader.collections[name];
+      const slugs = await collection.list();
+      const entries = await Promise.all(slugs.map((slug) => collection.readOrThrow(slug)));
+      expect(entries).toHaveLength(slugs.length);
+    },
+  );
+
+  it("reads the new optional syllabusTopic on an editorial", async () => {
+    const entry = await reader.collections.informaticsEditorials.readOrThrow("binary-search-on-answer");
+    expect(entry.syllabusTopic).toBe("binary-search");
+  });
+});

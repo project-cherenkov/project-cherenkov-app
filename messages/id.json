@@ -12,7 +12,11 @@
     "login": "Masuk",
     "signup": "Daftar",
     "myPlan": "Rencana Saya",
-    "logout": "Keluar"
+    "logout": "Keluar",
+    "syllabus": "Silabus",
+    "materials": "Materi",
+    "editorials": "Editorial",
+    "archiveSections": "Bagian arsip"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -21,7 +25,8 @@
     "ctaArchive": "Jelajahi arsip",
     "ctaAbout": "Baca filosofinya",
     "recentHeading": "requirements.txt — edisi terbaru",
-    "recentEmpty": "Belum ada edisi yang diterbitkan."
+    "recentEmpty": "Belum ada edisi yang diterbitkan.",
+    "ctaSyllabus": "Lihat silabus"
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -160,5 +165,52 @@
     "heading": "Halaman tidak ditemukan",
     "body": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
     "cta": "Kembali ke beranda"
+  },
+  "syllabus": {
+    "eyebrow": "syllabus.md",
+    "title": "Silabus",
+    "description": "Apa saja yang diujikan di tiap bidang olimpiade — dan di mana mempelajari tiap topiknya.",
+    "subjects": {
+      "informatics": "Informatika",
+      "physics": "Fisika",
+      "astronomy": "Astronomi"
+    },
+    "languages": {
+      "id": "Indonesia",
+      "en": "Inggris"
+    },
+    "source": "Sumber",
+    "translationNote": "Redaksi resminya dalam bahasa {language}. Terjemahan di sini tidak resmi — periksa sumbernya jika ragu.",
+    "stats": {
+      "topics": "topik",
+      "materials": "materi",
+      "editorials": "editorial"
+    },
+    "counts": {
+      "topics": "{count, plural, other {# topik}}",
+      "materials": "{count, plural, other {# materi}}",
+      "editorials": "{count, plural, other {# editorial}}"
+    },
+    "theory": "Teori",
+    "practical": "Praktikum",
+    "expandAll": "Buka semua",
+    "collapseAll": "Tutup semua",
+    "readMaterial": "Baca materi",
+    "comingSoon": "Segera hadir",
+    "editorialsLabel": "Editorial:"
+  },
+  "materials": {
+    "eyebrow": "materials.md",
+    "title": "Materi",
+    "description": "Silabus yang diuraikan topik demi topik. Catatan rujukan tanpa nama penulis, disusun mengikuti silabus.",
+    "coverage": "{covered} dari {total} topik tersedia",
+    "viewSyllabus": "Lihat silabus",
+    "emptyForSubject": "Belum ada materi — materi muncul di sini seiring tiap topik silabus selesai ditulis.",
+    "backToMaterials": "Materi",
+    "inSyllabus": "Dalam silabus",
+    "relatedEditorials": "Editorial terkait",
+    "sectionNav": "Lainnya di bagian silabus ini",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya"
   }
 }

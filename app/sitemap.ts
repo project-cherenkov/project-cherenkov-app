@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
-import { getAllEditorials } from "@/lib/content";
+import { getAllEditorials, getAllMaterials } from "@/lib/content";
 import { routing } from "@/i18n/routing";
+import { SUBJECTS } from "@/lib/subjects";
 import { siteUrl } from "@/lib/site";
 
 // DEPLOYMENT-READINESS ADDITION, not part of the original spec — no
@@ -10,10 +11,18 @@ import { siteUrl } from "@/lib/site";
 // maintained. Every locale in i18n/routing.ts gets its own entry per page
 // (next-intl's default localePrefix is "always" — see that file's
 // comment — so /id/... and /en/... are both real, distinct URLs).
-const STATIC_PATHS = ["", "/archive", "/about"];
+const STATIC_PATHS = [
+  "",
+  "/archive",
+  "/syllabus",
+  ...SUBJECTS.map((subject) => `/syllabus/${subject}`),
+  "/materials",
+  "/about",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const editorials = getAllEditorials();
+  const materials = getAllMaterials();
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of routing.locales) {
@@ -28,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${siteUrl}/${locale}/archive/${editorial.subject}/${editorial.slug}`,
         lastModified: new Date(editorial.publishedAt),
         changeFrequency: "yearly",
+      });
+    }
+    for (const material of materials) {
+      entries.push({
+        url: `${siteUrl}/${locale}/materials/${material.subject}/${material.slug}`,
+        changeFrequency: "monthly",
       });
     }
   }

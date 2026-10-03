@@ -1,27 +1,13 @@
 "use client";
 
-import { isValidElement, useMemo, type ComponentType, type ReactNode } from "react";
+import { isValidElement, useMemo, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import * as runtime from "react/jsx-runtime";
 import type { Editorial } from "#content";
 
+import { useMDXComponent } from "@/components/use-mdx-component";
 import { VizEngine } from "@/components/viz/viz-engine";
 
 type VizEditorial = Pick<Editorial, "vizConfig">;
-
-// Velite compiles each editorial's MDX `body` to a JS module source string,
-// not a component — this is the small runtime Velite's own docs point
-// projects to for turning that string back into something renderable.
-function useMDXComponent(
-  code: string,
-): (props: {
-  components?: Record<string, ComponentType<Record<string, unknown>>>;
-}) => ReactNode {
-  return useMemo(() => {
-    const fn = new Function(code);
-    return fn({ ...runtime }).default;
-  }, [code]);
-}
 
 // F-05 fix: walk the actual React element tree the compiled MDX body
 // produces, looking for an element whose `type` is the exact `Interactive`

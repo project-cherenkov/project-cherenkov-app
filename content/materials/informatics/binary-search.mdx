@@ -1,0 +1,47 @@
+---
+title: "Binary search"
+subject: informatics
+topic: binary-search
+summary: "Halve the search space every step: the invariant that makes it correct, and the off-by-one traps."
+---
+
+## What it does
+
+Given a sorted array $a_0 \le a_1 \le \dots \le a_{n-1}$ and a value $x$,
+binary search finds the first index $i$ with $a_i \ge x$ (or reports $n$ if
+there is none) by repeatedly discarding half of the remaining candidates.
+
+## The invariant
+
+Keep a half-open window $[lo, hi)$ and hold on to two facts:
+
+- every index **before** $lo$ has $a_i < x$;
+- every index **from** $hi$ onward has $a_i \ge x$.
+
+```
+lo = 0
+hi = n
+while lo < hi:
+    mid = lo + (hi - lo) / 2
+    if a[mid] < x:
+        lo = mid + 1      # a[0..mid] are all < x
+    else:
+        hi = mid          # a[mid..] are all >= x
+return lo                 # first index with a[i] >= x
+```
+
+When the loop ends, $lo = hi$, so the two facts meet: everything before $lo$
+is $< x$ and everything from $lo$ on is $\ge x$. That is the answer.
+
+## Why it is fast
+
+Each step shrinks $hi - lo$ by at least half, so the loop runs
+$O(\log n)$ times instead of $O(n)$.
+
+## Common traps
+
+- **Overflow.** Write `lo + (hi - lo) / 2`, not `(lo + hi) / 2`.
+- **Infinite loops.** `lo = mid` (without the `+ 1`) can stall when
+  `hi = lo + 1`. Move the boundary *past* `mid` whenever `mid` is ruled out.
+- **Mixing conventions.** Pick half-open $[lo, hi)$ or closed $[lo, hi]$ and
+  stay with it; the loop condition and both updates change together.

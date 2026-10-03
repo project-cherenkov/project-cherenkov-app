@@ -28,6 +28,12 @@ export default async function HomePage({
           {t("ctaArchive")}
         </Link>
         <Link
+          href="/syllabus"
+          className={buttonVariants({ variant: "outline", size: "lg" })}
+        >
+          {t("ctaSyllabus")}
+        </Link>
+        <Link
           href="/about"
           className={buttonVariants({ variant: "outline", size: "lg" })}
         >
