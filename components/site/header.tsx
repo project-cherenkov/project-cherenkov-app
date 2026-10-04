@@ -110,7 +110,7 @@ export function SiteHeader() {
               const content = (
                 <>
                   <Image
-                    src="/mbantul2.png"
+                    src="/navbar-banner-extended.png"
                     alt=""
                     fill
                     sizes="96px"
@@ -201,7 +201,7 @@ export function SiteHeader() {
               ].join(" ")}
             >
               <Image
-                src="/mbantul2.png"
+                src="/navbar-banner-extended.png"
                 alt=""
                 fill
                 sizes="64px"
