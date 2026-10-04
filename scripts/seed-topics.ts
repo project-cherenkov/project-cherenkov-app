@@ -1,54 +1,43 @@
-// DB-002: derives `topics` rows from existing editorial frontmatter so
-// `editorial_slug` links are real, not invented. Only reads
-// content/editorials/ (via lib/content.ts, which reads Velite's build
-// output) — never writes to it (DB-002 constraint).
+// Seeds the planner's `topics` table from the SYLLABUS (lib/syllabus), one row
+// per theory topic, keyed by (subject, syllabus_topic_id). Replaces the older
+// editorial-driven seed (lib/seed/derive-topics.ts): the planner schedules
+// syllabus topics, and an editorial is only attached to a topic when its
+// `syllabusTopic` frontmatter points there.
+//
+// Existing rows that were derived from an editorial are adopted in place, not
+// duplicated (see lib/seed/seed-db.ts). Rows that cannot be matched to a
+// syllabus topic are left untouched; they keep syllabus_topic_id = null and
+// the planner must ignore them.
 //
 // Precondition: `pnpm generate` (Velite build) must already have run, since
-// lib/content.ts resolves the generated #content module — the same
-// "generate before #content resolves" precondition
-// .github/workflows/ci.yml's own comment documents for lint/typecheck.
-// `pnpm db:seed` runs `pnpm generate` first for exactly this reason.
+// lib/content.ts resolves the generated #content module. `pnpm db:seed` runs
+// `pnpm generate` first for exactly this reason.
 //
-// Relative imports throughout (not the @/ tsconfig alias) — this script
-// runs directly under `tsx`, not through Next's bundler, and relative
-// imports don't depend on tsx resolving tsconfig `paths` the same way
-// Next.js does. UNVERIFIED: whether `tsx` can run this script at all in a
-// real environment could not be checked here (no network access to install
-// dependencies) — see the final implementation report's Remaining Risks.
+// Relative imports throughout (not the @/ alias) — this runs directly under
+// `tsx`, not through Next's bundler.
 import { getAllEditorials } from "../lib/content";
-import { deriveTopicsFromEditorials } from "../lib/seed/derive-topics";
 import { db } from "../lib/db";
-import { topics } from "../lib/db/schema";
-import { sql } from "drizzle-orm";
+import { deriveSyllabusTopics } from "../lib/seed/derive-syllabus-topics";
+import { seedSyllabusTopics } from "../lib/seed/seed-db";
+import { getAllSyllabi } from "../lib/syllabus";
 
 async function main() {
-  const editorials = getAllEditorials();
-  const derived = deriveTopicsFromEditorials(editorials);
-
-  if (derived.length === 0) {
-    console.log("No editorials found in content/editorials/ — nothing to seed.");
-    return;
-  }
-
-  for (const topic of derived) {
-    await db
-      .insert(topics)
-      .values(topic)
-      .onConflictDoUpdate({
-        target: topics.editorialSlug,
-        targetWhere: sql`${topics.editorialSlug} is not null`,
-        set: {
-          subject: topic.subject,
-          chapter: topic.chapter,
-          title: topic.title,
-          order: topic.order,
-        },
-      });
-  }
+  const derived = deriveSyllabusTopics(getAllSyllabi(), getAllEditorials());
+  const report = await seedSyllabusTopics(db, derived);
 
   console.log(
-    `Seeded ${derived.length} topic(s) from ${editorials.length} editorial(s).`,
+    `Seeded ${report.upserted} syllabus topic(s)` +
+      (report.adopted > 0
+        ? `; adopted ${report.adopted} existing editorial-derived row(s)`
+        : "") +
+      ".",
   );
+  for (const slug of report.editorialLinksSkipped) {
+    console.warn(
+      `Editorial "${slug}" is already attached to a different topics row — ` +
+        "its syllabus topic was left without an editorial link.",
+    );
+  }
 }
 
 main()

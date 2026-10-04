@@ -16,6 +16,11 @@ export interface SyllabusTopic {
   name: LocalizedText;
   // Extra scope text copied from the source, in the subject's source language.
   detail?: string;
+  // Rough study effort for the planner: 1 = light, 2 = medium, 3 = heavy.
+  // NOT YET AUTHORED for any topic — the planner must treat a missing value
+  // as medium (2). Set it per topic when someone who knows the material has
+  // an opinion; never fill it in from a guess.
+  effort?: 1 | 2 | 3;
 }
 
 export interface SyllabusSection {

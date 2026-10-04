@@ -9,10 +9,22 @@ import {
   jsonb,
   numeric,
   date,
+  smallint,
   uniqueIndex,
   index,
+  check,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import {
+  MAX_HOURS_PER_WEEK,
+  OSN_STAGES,
+  PLAN_ITEM_KINDS,
+  QUESTION_DIFFICULTIES,
+  QUESTION_STATUSES,
+  SELF_RATING_MAX,
+  SELF_RATING_MIN,
+} from "../planner-vocab";
 
 // ===========================================================================
 // Better Auth core tables — user, session, account, verification
@@ -161,11 +173,32 @@ export const topics = pgTable("topics", {
   // (spec §4). Nullable: a planner topic can exist before its editorial is
   // published.
   editorialSlug: text("editorial_slug"),
+  // Phase 3: the planner schedules SYLLABUS topics (lib/syllabus). A topic id
+  // is only unique within its subject, so the key is (subject,
+  // syllabus_topic_id). Nullable because rows created before Phase 3 were
+  // derived from editorials and have no syllabus link; the planner must
+  // ignore rows where this is null. Postgres treats NULLs as distinct, so
+  // many legacy rows can coexist under the unique index below.
+  syllabusTopicId: text("syllabus_topic_id"),
+  sectionId: text("section_id"),
 }, (table) => [
   uniqueIndex("topics_editorial_slug_unique")
     .on(table.editorialSlug)
     .where(sql`${table.editorialSlug} is not null`),
+  uniqueIndex("topics_subject_syllabus_topic_unique").on(
+    table.subject,
+    table.syllabusTopicId,
+  ),
 ]);
+
+// Phase 3 enums (values live in lib/planner-vocab.ts).
+export const osnStageEnum = pgEnum("osn_stage", OSN_STAGES);
+export const questionDifficultyEnum = pgEnum(
+  "question_difficulty",
+  QUESTION_DIFFICULTIES,
+);
+export const questionStatusEnum = pgEnum("question_status", QUESTION_STATUSES);
+export const planItemKindEnum = pgEnum("plan_item_kind", PLAN_ITEM_KINDS);
 
 export const quizQuestions = pgTable("quiz_questions", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -179,7 +212,22 @@ export const quizQuestions = pgTable("quiz_questions", {
   // submission (spec §5, §9 HIGH risk, QUIZ-001 constraint).
   correctChoiceIndex: integer("correct_choice_index").notNull(),
   explanation: text("explanation"),
-});
+  // Phase 3. Stable authoring key from lib/quiz-bank (e.g.
+  // "physics.vectors.basic.1") so re-running the seed updates a question
+  // instead of duplicating it. Null only for questions created before the
+  // bank existed.
+  key: text("key"),
+  // Every question carries a difficulty label (OSN stages draw from
+  // different difficulty ranges). Rows that predate the column were
+  // backfilled with `intermediate` WITHOUT review — see the migration.
+  difficulty: questionDifficultyEnum("difficulty").notNull(),
+  // Unreviewed questions stay `draft` so the app can label them.
+  status: questionStatusEnum("status").notNull().default("draft"),
+}, (table) => [
+  uniqueIndex("quiz_questions_key_unique")
+    .on(table.key)
+    .where(sql`${table.key} is not null`),
+]);
 
 export const quizAttempts = pgTable("quiz_attempts", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -225,4 +273,109 @@ export const planItems = pgTable("plan_items", {
   // code path writes to this column; there is deliberately no manual
   // "mark complete" action anywhere in Phase 2.
   completedAt: timestamp("completed_at"),
+  // Phase 3: why the item is on the plan (confirmation quiz, first study,
+  // review, final review, buffer) and a short human-readable explanation
+  // shown next to it. Pre-Phase-3 rows are all first-study items.
+  kind: planItemKindEnum("kind").notNull().default("study"),
+  reason: text("reason"),
 });
+
+// ===========================================================================
+// Phase 3 planner tables (OSN path)
+// ===========================================================================
+
+// Per-question record of every quiz answer. quiz_attempts only keeps an
+// aggregate score, which is too coarse to estimate mastery per topic or to
+// weigh questions by difficulty; this table keeps one row per answered
+// question. Difficulty is deliberately NOT copied here: editors will relabel
+// draft questions during review, and estimates should follow the corrected
+// label, so it is read through the question.
+//
+// NOTE: nothing writes to this table yet. lib/quiz-scoring.ts still records
+// only the aggregate attempt; wiring it is a separate change.
+export const quizQuestionResponses = pgTable(
+  "quiz_question_responses",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    attemptId: uuid("attempt_id")
+      .notNull()
+      .references(() => quizAttempts.id, { onDelete: "cascade" }),
+    questionId: uuid("question_id")
+      .notNull()
+      .references(() => quizQuestions.id, { onDelete: "cascade" }),
+    correct: boolean("correct").notNull(),
+    answeredAt: timestamp("answered_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("quiz_question_responses_attempt_question_unique").on(
+      table.attemptId,
+      table.questionId,
+    ),
+    index("quiz_question_responses_question_idx").on(table.questionId),
+  ],
+);
+
+// One row per user: what the plan is for. One subject per plan (OSN entry is
+// per field), and — because study_plans is one-plan-per-user — one subject at
+// a time; switching subject replaces the plan. The exam date is not stored:
+// it is resolved from (stage, examYear) via lib/osn-stages.ts so a corrected
+// official date reaches every plan.
+export const userPlannerSettings = pgTable(
+  "user_planner_settings",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => user.id, { onDelete: "cascade" }),
+    subject: subjectEnum("subject").notNull(),
+    stage: osnStageEnum("stage").notNull(),
+    examYear: integer("exam_year").notNull(),
+    // One number for every week (a per-weekday schedule can be added later
+    // as a separate column without changing this one).
+    hoursPerWeek: numeric("hours_per_week", {
+      precision: 4,
+      scale: 1,
+      mode: "number",
+    }).notNull(),
+    // IANA zone name; validated in application code (Intl), not in SQL.
+    timezone: text("timezone").notNull().default("Asia/Jakarta"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [
+    check(
+      "user_planner_settings_hours_check",
+      sql`${table.hoursPerWeek} > 0 and ${table.hoursPerWeek} <= ${sql.raw(String(MAX_HOURS_PER_WEEK))}`,
+    ),
+    check(
+      "user_planner_settings_exam_year_check",
+      sql`${table.examYear} between 2000 and 2100`,
+    ),
+  ],
+);
+
+// The student's own rating of a topic, before any quiz. A weak signal only
+// (self-assessment is poorly calibrated), kept so it can be shown next to the
+// quiz result. Latest rating per (user, topic); no history.
+export const topicSelfRatings = pgTable(
+  "topic_self_ratings",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    topicId: uuid("topic_id")
+      .notNull()
+      .references(() => topics.id, { onDelete: "cascade" }),
+    rating: smallint("rating").notNull(),
+    ratedAt: timestamp("rated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.topicId] }),
+    check(
+      "topic_self_ratings_rating_check",
+      sql`${table.rating} between ${sql.raw(String(SELF_RATING_MIN))} and ${sql.raw(String(SELF_RATING_MAX))}`,
+    ),
+  ],
+);

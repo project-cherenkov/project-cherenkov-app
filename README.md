@@ -215,7 +215,7 @@ or any other port you prefer. If the port is still busy, the app will continue t
 | `pnpm test:watch` | Runs Vitest in watch mode. |
 | `pnpm db:generate` | Generates Drizzle migrations from `lib/db/schema.ts`; does not require a database connection. |
 | `pnpm db:migrate` | Applies Drizzle migrations; requires `DATABASE_URL`. |
-| `pnpm db:seed` | Generates Velite output, then seeds topics (one per editorial) and one example quiz question per editorial; requires `DATABASE_URL`. |
+| `pnpm db:seed` | Generates Velite output, then seeds one topic per syllabus topic (`scripts/seed-topics.ts`) and the quiz bank (`scripts/seed-quiz-questions.ts`, add `--prune-legacy` to delete pre-bank questions that have no key); safe to re-run; requires `DATABASE_URL`. |
 | `pnpm start` | Serves an already-built app (`next start`). |
 
 ### Environment variables
@@ -488,12 +488,12 @@ Phase 2 is implemented. It is entirely optional for visitors — the archive, sy
 
 - **Accounts.** Better Auth with email/password, plus Google OAuth when both Google variables are set (the "Continue with Google" buttons only render then). Sign-in and sign-up live at `/[locale]/login` and `/[locale]/signup`; post-login redirects go through `lib/safe-redirect.ts`.
 - **The gate.** `middleware.ts` redirects any unauthenticated request under `/[locale]/planner` to the login page, carrying a `?next=` return path. With no `DATABASE_URL`, session checks fail closed (treated as unauthenticated), so the planner redirects rather than erroring.
-- **Topics.** Planner topics are rows in the `topics` table, derived from the editorials by `pnpm db:seed` (`scripts/seed-topics.ts`): one topic per editorial, with `chapter` taken from the editorial's `principle` and `order` from its position by publication date within its subject. They are **not** derived from the syllabus.
+- **Topics.** Planner topics are rows in the `topics` table, derived from the **syllabus** (`lib/syllabus`) by `pnpm db:seed` (`scripts/seed-topics.ts`): one row per theory topic, keyed by `(subject, syllabus_topic_id)`, in syllabus order. An editorial is attached to a topic when its `syllabusTopic` frontmatter points there. Rows created by the older editorial-driven seed are adopted in place when their editorial links to a syllabus topic; the rest keep `syllabus_topic_id = null` and the Phase 3 planner must ignore them.
 - **Plans.** A signed-in user picks a target exam date and `lib/plan-generator.ts` spreads every topic evenly across the days from today to that date (informatics, then physics, then astronomy). If the window is shorter than the number of topics, topics are compressed onto the available days. Regenerating replaces the plan.
 - **Quizzes and progress.** Each topic page offers a quiz. Topic status is derived from the **most recent** attempt: a score of at least 80% (`MASTERY_THRESHOLD = 0.8`) is `done`, any lower score is `in_progress`, and no attempts is `not_started`. A plan item's `completed_at` is set automatically the first time a topic reaches `done` and is not cleared by a later weaker attempt. Correct answers are never sent to the browser before submission.
-- **Question bank.** There is no quiz-authoring UI. `pnpm db:seed` also seeds one illustrative example question per editorial (`scripts/seed-quiz-questions.ts`); these are placeholders for the quiz machinery, not reviewed curriculum.
+- **Question bank.** There is no quiz-authoring UI; questions live in `lib/quiz-bank/` and `pnpm db:seed` copies them into `quiz_questions`, upserting on a stable `key`. Every question must carry a `difficulty` (`basic` / `intermediate` / `advanced`) and a `status` (`draft` / `reviewed`). Editors are meant to write and review the real questions; the current ones — 51 for physics (one per topic and difficulty) plus the two earlier examples — are AI-generated **drafts**, not reviewed curriculum.
 
-The schema is in `lib/db/schema.ts` (Better Auth's `user`/`session`/`account`/`verification` tables plus `topics`, `quiz_questions`, `quiz_attempts`, `study_plans` and `plan_items`), with migrations committed in `drizzle/`.
+The schema is in `lib/db/schema.ts` (Better Auth's `user`/`session`/`account`/`verification` tables plus `topics`, `quiz_questions`, `quiz_attempts`, `study_plans` and `plan_items`), with migrations committed in `drizzle/`. Phase 3 data-layer tables (not yet used by any page): `quiz_question_responses`, `user_planner_settings`, `topic_self_ratings`; stage dates live in `lib/osn-stages.ts` (2027 dates are **projected** from 2026, not announced).
 
 ---
 
@@ -593,7 +593,7 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 - **Not built:** Phase 3 adaptive scheduling (design only), a quiz-authoring UI, and a Content-Security-Policy.
 - **Content is thin.** There are three real editorials plus one implementation fixture, and one material (`binary-search`). Of the syllabus, only informatics has a starter material; physics and astronomy have none yet.
 - **About page.** `content/team/index.json` has one real member plus a dummy entry named "placeholder" ("the holder of place") that currently renders on the page. The project contact email is set, so the `[PLACEHOLDER — contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow`; the comment in `app/[locale]/layout.tsx` ties that to finishing placeholder copy, so the dummy team entry is the thing to resolve before flipping it.
-- **Physics syllabus source.** `lib/syllabus/data/physics.ts` still has a `[PLACEHOLDER]` source label — fill in where the physics scope table comes from.
+- **Physics syllabus source.** `lib/syllabus/data/physics.ts` is labelled as coming from the official OSN guidebook (confirmed by the project owner), but the exact title, edition and URL are not recorded yet — add `edition`/`url` to its `source` once known.
 - Keystatic and the scene builder stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` and `KEYSTATIC_SECRET` are configured.
 - The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
 

@@ -13,8 +13,10 @@ const THERMO_SCOPE = "Suhu dan Kalor, Entropi, Hukum Termodinamika 0, I dan II";
 export const physics: SubjectSyllabus = {
   subject: "physics",
   sourceLang: "id",
-  // PLACEHOLDER: the screenshot didn't say where the table comes from.
-  source: { label: "[PLACEHOLDER — source of the physics scope table]" },
+  // Confirmed by the project owner as coming from the official OSN guidebook.
+  // The exact title, edition and URL were not given — add `edition` / `url`
+  // here once known rather than guessing them.
+  source: { label: "Official OSN guidebook — \"Cabang Fisika\" scope table (Teori + Praktikum)" },
   sections: [
     section("mechanics", "Mekanika", "Mechanics", [
       topic("vectors", "Vektor", "Vectors"),
