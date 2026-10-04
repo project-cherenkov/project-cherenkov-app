@@ -81,13 +81,24 @@ export interface SubmitQuizAttemptInput {
   answers: SubmittedAnswer[];
 }
 
+export interface QuestionResponseRow {
+  attemptId: string;
+  questionId: string;
+  correct: boolean;
+}
+
 export interface QuizAttemptTxDeps {
   getAnswerKeys: (topicId: string) => Promise<QuizQuestionAnswerKey[]>;
+  // Returns the new attempt's id so the per-question responses can reference it.
   insertAttempt: (row: {
     userId: string;
     topicId: string;
     score: number;
-  }) => Promise<void>;
+  }) => Promise<string>;
+  // One row per ANSWERED question (quiz_question_responses). Called right
+  // after insertAttempt, inside the same transaction when one is available,
+  // so an attempt is never stored without its responses.
+  insertResponses: (rows: QuestionResponseRow[]) => Promise<void>;
   onAttemptRecorded?: (userId: string, topicId: string) => Promise<void>;
 }
 
@@ -134,7 +145,22 @@ export async function submitQuizAttemptCore(
   // Partial answers remain valid for feedback, but mastery must reflect the
   // complete topic rather than only the questions answered in this request.
   const score = scored.filter((answer) => answer.correct).length / answerKeys.length;
-  await deps.insertAttempt({ userId, topicId: input.topicId, score });
+  const attemptId = await deps.insertAttempt({
+    userId,
+    topicId: input.topicId,
+    score,
+  });
+  // Only valid, answered questions get a response row. Rejected answers
+  // (unknown question, out-of-range choice, duplicates) never do, and
+  // unanswered questions leave no row: the mastery estimate must treat
+  // "not asked" and "answered wrong" differently.
+  await deps.insertResponses(
+    scored.map((answer) => ({
+      attemptId,
+      questionId: answer.questionId,
+      correct: answer.correct,
+    })),
+  );
   await deps.onAttemptRecorded?.(userId, input.topicId);
 
   return { scoredAnswers: scored, score, rejected: invalid };

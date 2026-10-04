@@ -11,6 +11,16 @@
       "personalContact": "narendramal4869@gmail.com",
       "personalContacts": [
         {
+          "label": "Portfolio",
+          "href": "https://akirenaki.github.io/",
+          "value": "Portfolio"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/akirenaki",
+          "value": "GitHub"
+        },
+        {
           "label": "LinkedIn",
           "href": "https://www.linkedin.com/in/renee-astraea/",
           "value": "LinkedIn"

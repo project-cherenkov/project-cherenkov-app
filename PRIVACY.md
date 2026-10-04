@@ -35,6 +35,7 @@ This project may use services such as hosting, authentication, analytics, or sto
 For privacy questions, contact:
 
 Project email: projectcherenkov@gmail.com
+Owner email: narendramal4869@gmail.com (Renee)
 
 ## 7. Updates
 

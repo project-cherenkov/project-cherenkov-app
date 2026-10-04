@@ -19,6 +19,7 @@ const fixture = vi.hoisted(() => ({
     | { id: string; completedAt: Date | null }
     | null,
   markCompleteCalls: 0,
+  responses: [] as { attemptId: string; questionId: string; correct: boolean }[],
 }));
 
 vi.mock("@/lib/auth-guard", () => ({
@@ -60,9 +61,21 @@ vi.mock("@/lib/db", async () => {
   const tx = {
     select: () => selectBuilder(),
     insert: (table: unknown) => ({
-      values: (row: { score: number }) => {
+      values: (row: unknown) => {
         if (table === schema.quizAttempts) {
-          fixture.attempts.push({ score: row.score, attemptedAt: new Date() });
+          fixture.attempts.push({
+            score: (row as { score: number }).score,
+            attemptedAt: new Date(),
+          });
+          // Mirrors Drizzle: the insert is awaitable and also offers
+          // .returning() for callers that need the new row's id.
+          const returning = () => Promise.resolve([{ id: `attempt-${fixture.attempts.length}` }]);
+          return Object.assign(Promise.resolve(), { returning });
+        }
+        if (table === schema.quizQuestionResponses) {
+          fixture.responses.push(
+            ...(row as typeof fixture.responses),
+          );
         }
         return Promise.resolve();
       },
@@ -99,6 +112,7 @@ beforeEach(() => {
   fixture.planId = "plan-1";
   fixture.planItem = { id: "item-1", completedAt: null };
   fixture.markCompleteCalls = 0;
+  fixture.responses = [];
 });
 
 function answersWithScore(correctCount: number) {
@@ -153,5 +167,36 @@ describe("submitQuizAttempt — transaction-mode completion path uses MASTERY_TH
     // confirms quiz-actions.ts's transaction path honors it too, via the
     // same function).
     expect(fixture.markCompleteCalls).toBe(1);
+  });
+});
+
+describe("submitQuizAttempt — per-question responses through the real transaction path", () => {
+  it("stores one response row per answered question, referencing the stored attempt", async () => {
+    await submitQuizAttempt({ topicId: "topic-1", answers: answersWithScore(3) });
+
+    expect(fixture.responses).toHaveLength(5);
+    expect(new Set(fixture.responses.map((r) => r.attemptId)).size).toBe(1);
+    expect(fixture.responses.filter((r) => r.correct)).toHaveLength(3);
+  });
+
+  it("stores only the answered questions on a partial submission", async () => {
+    await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [{ questionId: "q2", selectedChoiceIndex: 0 }],
+    });
+
+    expect(fixture.responses).toEqual([
+      { attemptId: "attempt-1", questionId: "q2", correct: true },
+    ]);
+  });
+
+  it("stores nothing when no answer is valid", async () => {
+    const result = await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [{ questionId: "nope", selectedChoiceIndex: 0 }],
+    });
+
+    expect(result).toEqual({ ok: false, reason: "no_valid_answers" });
+    expect(fixture.responses).toHaveLength(0);
   });
 });

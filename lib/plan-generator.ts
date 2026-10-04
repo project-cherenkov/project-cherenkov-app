@@ -104,7 +104,12 @@ export interface PlanGenerationTxDeps {
   getExistingPlan: (userId: string) => Promise<ExistingPlanRef | null>;
   insertPlan: (userId: string, targetExamDate: string) => Promise<string>;
   updatePlan: (planId: string, targetExamDate: string) => Promise<void>;
-  deletePlanItems: (planId: string) => Promise<void>;
+  // Topic ids of this plan's items that are already completed. Regeneration
+  // keeps those items exactly as they are (see below).
+  getCompletedTopicIds: (planId: string) => Promise<string[]>;
+  // Deletes only items whose completedAt is null. Completed items are history
+  // and must survive regeneration.
+  deleteUncompletedPlanItems: (planId: string) => Promise<void>;
   insertPlanItems: (
     planId: string,
     items: GeneratedPlanItem[],
@@ -122,10 +127,15 @@ export type GeneratePlanCoreResult =
   | { ok: false; reason: "no_topics" };
 
 // Decision #7: one always-current plan per user. Regenerating updates the
-// existing study_plans row and replaces its plan_items wholesale — it never
-// inserts a second study_plans row for the same user (studyPlans.userId is
-// also DB-unique — see lib/db/schema.ts — so this is enforced at two
+// existing study_plans row and replaces its NOT-YET-COMPLETED plan_items — it
+// never inserts a second study_plans row for the same user (studyPlans.userId
+// is also DB-unique — see lib/db/schema.ts — so this is enforced at two
 // layers, not just here).
+//
+// Completed items are frozen: they keep their original date and completedAt,
+// and their topics are not scheduled again. (Before Phase 3 this deleted every
+// item, so a regenerated plan put already-mastered topics back on the
+// calendar and lost the completion record.)
 export async function generateOrRegeneratePlanCore(
   deps: PlanGenerationDeps,
   userId: string,
@@ -148,8 +158,15 @@ export async function generateOrRegeneratePlanCore(
     return { ok: false, reason: "no_topics" };
   }
 
-  const items = generatePlanItems(allTopics, targetExamDate, today);
   const existing = await deps.getExistingPlan(userId);
+  const completed = new Set(
+    existing ? await deps.getCompletedTopicIds(existing.id) : [],
+  );
+  const items = generatePlanItems(
+    allTopics.filter((topic) => !completed.has(topic.id)),
+    targetExamDate,
+    today,
+  );
 
   const planId = existing
     ? existing.id
@@ -157,7 +174,7 @@ export async function generateOrRegeneratePlanCore(
 
   if (existing) {
     await deps.updatePlan(planId, targetExamDate);
-    await deps.deletePlanItems(planId);
+    await deps.deleteUncompletedPlanItems(planId);
   }
 
   await deps.insertPlanItems(planId, items);

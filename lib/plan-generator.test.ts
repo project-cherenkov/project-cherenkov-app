@@ -102,6 +102,7 @@ function makeFakePlanStore() {
   let nextId = 1;
   const plans = new Map<string, { id: string; targetExamDate: string }>(); // keyed by userId
   const items = new Map<string, GeneratedPlanItem[]>(); // keyed by planId
+  const completedTopicIds = new Set<string>(); // topics whose item is completed
 
   const deps: PlanGenerationDeps = {
     async getAllTopics() {
@@ -121,15 +122,23 @@ function makeFakePlanStore() {
         if (plan.id === planId) plans.set(userId, { id: planId, targetExamDate });
       }
     },
-    async deletePlanItems(planId) {
-      items.delete(planId);
+    async getCompletedTopicIds(planId) {
+      return (items.get(planId) ?? [])
+        .filter((item) => completedTopicIds.has(item.topicId))
+        .map((item) => item.topicId);
+    },
+    async deleteUncompletedPlanItems(planId) {
+      items.set(
+        planId,
+        (items.get(planId) ?? []).filter((item) => completedTopicIds.has(item.topicId)),
+      );
     },
     async insertPlanItems(planId, newItems) {
-      items.set(planId, newItems);
+      items.set(planId, [...(items.get(planId) ?? []), ...newItems]);
     },
   };
 
-  return { deps, plans, items };
+  return { deps, plans, items, completedTopicIds };
 }
 
 // spec §8 required test: "Regeneration overwrites, doesn't duplicate —
@@ -186,5 +195,58 @@ describe("generateOrRegeneratePlanCore — regeneration semantics", () => {
 
     expect(result).toEqual({ ok: false, reason: "no_topics" });
     expect(plans.size).toBe(0);
+  });
+});
+
+// Phase 3: regeneration must not undo history.
+describe("generateOrRegeneratePlanCore — completed items survive regeneration", () => {
+  async function generateThenComplete(completeIds: string[]) {
+    const store = makeFakePlanStore();
+    await generateOrRegeneratePlanCore(store.deps, "user-1", "2026-06-05", "2026-06-01");
+    for (const id of completeIds) store.completedTopicIds.add(id);
+    return store;
+  }
+
+  it("keeps completed items untouched and does not schedule their topics again", async () => {
+    const { deps, plans, items } = await generateThenComplete(["t1", "t2"]);
+    const planId = plans.get("user-1")!.id;
+    const originalCompleted = items
+      .get(planId)!
+      .filter((i) => i.topicId === "t1" || i.topicId === "t2");
+
+    const result = await generateOrRegeneratePlanCore(deps, "user-1", "2026-06-20", "2026-06-10");
+    expect(result).toEqual({ ok: true, planId, itemCount: 3 });
+
+    const finalItems = items.get(planId)!;
+    // Each topic is on the plan exactly once.
+    expect(finalItems.map((i) => i.topicId).sort()).toEqual(["t1", "t2", "t3", "t4", "t5"]);
+    // The completed ones kept their original dates.
+    for (const original of originalCompleted) {
+      expect(finalItems).toContainEqual(original);
+    }
+    // Only the not-yet-completed topics were rescheduled, from the new "today".
+    const rescheduled = finalItems.filter((i) => !["t1", "t2"].includes(i.topicId));
+    expect(rescheduled.every((i) => i.scheduledFor >= "2026-06-10")).toBe(true);
+  });
+
+  it("schedules nothing new when every topic is already completed", async () => {
+    const { deps, plans, items } = await generateThenComplete(["t1", "t2", "t3", "t4", "t5"]);
+    const planId = plans.get("user-1")!.id;
+    const before = [...items.get(planId)!];
+
+    const result = await generateOrRegeneratePlanCore(deps, "user-1", "2026-06-20", "2026-06-10");
+
+    expect(result).toEqual({ ok: true, planId, itemCount: 0 });
+    expect(items.get(planId)).toEqual(before);
+  });
+
+  it("still reschedules everything on a plan with no completed items", async () => {
+    const { deps, plans, items } = await generateThenComplete([]);
+    const planId = plans.get("user-1")!.id;
+
+    await generateOrRegeneratePlanCore(deps, "user-1", "2026-06-20", "2026-06-10");
+
+    expect(items.get(planId)).toHaveLength(5);
+    expect(items.get(planId)!.every((i) => i.scheduledFor >= "2026-06-10")).toBe(true);
   });
 });

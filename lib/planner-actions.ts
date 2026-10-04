@@ -1,8 +1,15 @@
 "use server";
 
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNotNull, isNull } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { studyPlans, planItems, topics } from "@/lib/db/schema";
+import {
+  studyPlans,
+  planItems,
+  topics,
+  userPlannerSettings,
+} from "@/lib/db/schema";
+import { DEFAULT_PLANNER_TIMEZONE } from "@/lib/planner-vocab";
+import { isValidTimeZone, todayInTimeZone } from "@/lib/osn-stages";
 import { getCurrentUser } from "@/lib/auth-guard";
 import {
   generateOrRegeneratePlanCore,
@@ -77,8 +84,17 @@ const realDeps: PlanGenerationDeps = {
       .set({ targetExamDate, generatedAt: new Date() })
       .where(eq(studyPlans.id, planId));
   },
-  async deletePlanItems(planId) {
-    await db.delete(planItems).where(eq(planItems.planId, planId));
+  async getCompletedTopicIds(planId) {
+    const rows = await db
+      .select({ topicId: planItems.topicId })
+      .from(planItems)
+      .where(and(eq(planItems.planId, planId), isNotNull(planItems.completedAt)));
+    return rows.map((r) => r.topicId);
+  },
+  async deleteUncompletedPlanItems(planId) {
+    await db
+      .delete(planItems)
+      .where(and(eq(planItems.planId, planId), isNull(planItems.completedAt)));
   },
   async insertPlanItems(planId, items) {
     if (items.length === 0) return;
@@ -120,8 +136,21 @@ const realDeps: PlanGenerationDeps = {
             .set({ targetExamDate, generatedAt: new Date() })
             .where(eq(studyPlans.id, planId));
         },
-        async deletePlanItems(planId) {
-          await tx.delete(planItems).where(eq(planItems.planId, planId));
+        async getCompletedTopicIds(planId) {
+          const rows = await tx
+            .select({ topicId: planItems.topicId })
+            .from(planItems)
+            .where(
+              and(eq(planItems.planId, planId), isNotNull(planItems.completedAt)),
+            );
+          return rows.map((r) => r.topicId);
+        },
+        async deleteUncompletedPlanItems(planId) {
+          await tx
+            .delete(planItems)
+            .where(
+              and(eq(planItems.planId, planId), isNull(planItems.completedAt)),
+            );
         },
         async insertPlanItems(planId, items) {
           if (items.length === 0) return;
@@ -158,17 +187,32 @@ export async function generatePlan(
     return { ok: false, reason: "invalid_date" };
   }
 
-  const today = [
-    new Date().getFullYear(),
-    String(new Date().getMonth() + 1).padStart(2, "0"),
-    String(new Date().getDate()).padStart(2, "0"),
-  ].join("-");
-  if (targetExamDate < today) {
+  // "Today" is the student's calendar day, not the server's. Vercel runs in
+  // UTC, which is still "yesterday" in Indonesia (UTC+7) for ~7 hours a day.
+  // The first check runs before authentication, so it can only use the
+  // default zone; it is a cheap sanity check, and is repeated below with the
+  // student's own zone once that is known.
+  if (targetExamDate < todayInTimeZone(new Date(), DEFAULT_PLANNER_TIMEZONE)) {
     return { ok: false, reason: "invalid_date" };
   }
 
   const user = await getCurrentUser();
   if (!user) return { ok: false, reason: "unauthenticated" };
+
+  const [settings] = await db
+    .select({ timezone: userPlannerSettings.timezone })
+    .from(userPlannerSettings)
+    .where(eq(userPlannerSettings.userId, user.id))
+    .limit(1);
+  const timeZone =
+    settings && isValidTimeZone(settings.timezone)
+      ? settings.timezone
+      : DEFAULT_PLANNER_TIMEZONE;
+  const today = todayInTimeZone(new Date(), timeZone);
+  if (targetExamDate < today) {
+    return { ok: false, reason: "invalid_date" };
+  }
+
   const result = await generateOrRegeneratePlanCore(
     realDeps,
     user.id,

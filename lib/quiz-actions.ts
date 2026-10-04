@@ -2,7 +2,13 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { quizQuestions, quizAttempts, studyPlans, planItems } from "@/lib/db/schema";
+import {
+  quizQuestions,
+  quizAttempts,
+  quizQuestionResponses,
+  studyPlans,
+  planItems,
+} from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { deriveStatusFromAttempts } from "@/lib/planner";
 import {
@@ -43,7 +49,15 @@ const realDeps: QuizAttemptDeps = {
     }));
   },
   async insertAttempt(row) {
-    await db.insert(quizAttempts).values(row);
+    const [inserted] = await db
+      .insert(quizAttempts)
+      .values(row)
+      .returning({ id: quizAttempts.id });
+    return inserted!.id;
+  },
+  async insertResponses(rows) {
+    if (rows.length === 0) return;
+    await db.insert(quizQuestionResponses).values(rows);
   },
   // Decision #8: recomputing status and stamping plan_items.completed_at
   // happens right after the attempt is recorded, driven by lib/planner.ts's
@@ -70,7 +84,15 @@ const realDeps: QuizAttemptDeps = {
           }));
         },
         async insertAttempt(row) {
-          await tx.insert(quizAttempts).values(row);
+          const [inserted] = await tx
+            .insert(quizAttempts)
+            .values(row)
+            .returning({ id: quizAttempts.id });
+          return inserted!.id;
+        },
+        async insertResponses(rows) {
+          if (rows.length === 0) return;
+          await tx.insert(quizQuestionResponses).values(rows);
         },
         onAttemptRecorded: async (userId, topicId) => {
           const txSyncDeps: PlanSyncDeps = {

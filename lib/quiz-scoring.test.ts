@@ -3,6 +3,7 @@ import {
   scoreAnswers,
   computeTopicScore,
   submitQuizAttemptCore,
+  type QuestionResponseRow,
   type QuizAttemptDeps,
   type QuizQuestionAnswerKey,
 } from "./quiz-scoring";
@@ -15,15 +16,25 @@ const ANSWER_KEYS: QuizQuestionAnswerKey[] = [
 
 function makeFakeDeps(answerKeys: QuizQuestionAnswerKey[]) {
   const inserted: { userId: string; topicId: string; score: number }[] = [];
-  const onAttemptRecorded = vi.fn().mockResolvedValue(undefined);
+  const responses: QuestionResponseRow[] = [];
+  const calls: string[] = [];
+  const onAttemptRecorded = vi.fn(async () => {
+    calls.push("onAttemptRecorded");
+  });
   const deps: QuizAttemptDeps = {
     getAnswerKeys: vi.fn().mockResolvedValue(answerKeys),
     insertAttempt: vi.fn(async (row) => {
+      calls.push("insertAttempt");
       inserted.push(row);
+      return `attempt-${inserted.length}`;
+    }),
+    insertResponses: vi.fn(async (rows) => {
+      calls.push("insertResponses");
+      responses.push(...rows);
     }),
     onAttemptRecorded,
   };
-  return { deps, inserted, onAttemptRecorded };
+  return { deps, inserted, responses, calls, onAttemptRecorded };
 }
 
 // QUIZ-001 required test (spec §8): "submit a Server Action call with a
@@ -148,5 +159,92 @@ describe("submitQuizAttemptCore — partial submissions do not grant mastery", (
     });
 
     expect(inserted[0]?.score).toBeCloseTo(1 / ANSWER_KEYS.length);
+  });
+});
+
+// Phase 3: every answered question is also recorded individually, so mastery
+// can be estimated per topic instead of from one aggregate score.
+describe("submitQuizAttemptCore — per-question responses", () => {
+  it("records one response per answered question, tied to the new attempt id", async () => {
+    const { deps, responses } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [
+        { questionId: "q1", selectedChoiceIndex: 2 }, // correct
+        { questionId: "q2", selectedChoiceIndex: 1 }, // wrong
+        { questionId: "q3", selectedChoiceIndex: 1 }, // correct
+      ],
+    });
+
+    expect(responses).toEqual([
+      { attemptId: "attempt-1", questionId: "q1", correct: true },
+      { attemptId: "attempt-1", questionId: "q2", correct: false },
+      { attemptId: "attempt-1", questionId: "q3", correct: true },
+    ]);
+  });
+
+  it("leaves no row for unanswered questions (not asked is not the same as wrong)", async () => {
+    const { deps, responses } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [{ questionId: "q2", selectedChoiceIndex: 0 }],
+    });
+
+    expect(responses.map((r) => r.questionId)).toEqual(["q2"]);
+  });
+
+  it("leaves no row for rejected answers (unknown question, bad index, duplicate)", async () => {
+    const { deps, responses } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [
+        { questionId: "q1", selectedChoiceIndex: 2 },
+        { questionId: "q1", selectedChoiceIndex: 0 }, // duplicate
+        { questionId: "nope", selectedChoiceIndex: 0 }, // unknown
+        { questionId: "q2", selectedChoiceIndex: 9 }, // out of range
+      ],
+    });
+
+    expect(responses).toEqual([
+      { attemptId: "attempt-1", questionId: "q1", correct: true },
+    ]);
+  });
+
+  it("derives correctness from the server-side key, not from anything the client sent", async () => {
+    const { deps, responses } = makeFakeDeps(ANSWER_KEYS);
+    const forged = {
+      topicId: "topic-1",
+      answers: [{ questionId: "q1", selectedChoiceIndex: 0, correct: true }],
+    } as unknown as Parameters<typeof submitQuizAttemptCore>[2];
+
+    await submitQuizAttemptCore(deps, "user-1", forged);
+
+    expect(responses[0]?.correct).toBe(false);
+  });
+
+  it("writes the attempt first, then its responses, then runs the completion hook", async () => {
+    const { deps, calls } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [{ questionId: "q1", selectedChoiceIndex: 2 }],
+    });
+
+    expect(calls).toEqual(["insertAttempt", "insertResponses", "onAttemptRecorded"]);
+  });
+
+  it("writes neither an attempt nor responses when every answer is invalid", async () => {
+    const { deps, responses, inserted } = makeFakeDeps(ANSWER_KEYS);
+
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [{ questionId: "unknown", selectedChoiceIndex: 0 }],
+    });
+
+    expect(inserted).toHaveLength(0);
+    expect(responses).toHaveLength(0);
   });
 });
