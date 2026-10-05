@@ -120,3 +120,13 @@ describe("todayInTimeZone", () => {
     expect(isValidTimeZone("Mars/Olympus")).toBe(false);
   });
 });
+
+describe("difficultiesForStage", () => {
+  it("returns the inclusive difficulty range of each stage, easiest first", async () => {
+    const { difficultiesForStage } = await import("./osn-stages");
+    expect(difficultiesForStage("osn_k")).toEqual(["basic", "intermediate"]);
+    expect(difficultiesForStage("osn_p")).toEqual(["intermediate", "advanced"]);
+    expect(difficultiesForStage("semifinal")).toEqual(["advanced"]);
+    expect(difficultiesForStage("final")).toEqual(["advanced"]);
+  });
+});

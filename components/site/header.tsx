@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
-import { useSession, signOut } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 import { Github } from "lucide-react";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 
@@ -31,7 +31,6 @@ export function SiteHeader() {
   const currentLocale = useLocale();
   const pathname = usePathname();
   const { data: session } = useSession();
-  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   /* Lock body scroll when mobileMenuOpen is true */
@@ -46,12 +45,6 @@ export function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
-
-  async function handleSignOut() {
-    await signOut();
-    router.push("/");
-    router.refresh();
-  }
 
   const navItems = [
     {
@@ -71,7 +64,7 @@ export function SiteHeader() {
     ...(session
       ? [
           { href: "/planner", label: t("myPlan"), isExternal: false },
-          { onClick: handleSignOut, label: t("logout"), isButton: true },
+          { href: "/account", label: t("account"), isExternal: false },
         ]
       : [
           { href: "/login", label: t("login"), isExternal: false },
@@ -95,7 +88,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 overflow-visible">
           {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
           <nav className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0">
-            {navItems.map((item, index) => {
+            {navItems.map((item) => {
               const isActive = item.href
                 ? item.activeFor
                   ? item.activeFor.some((href) => isWithin(pathname, href))
@@ -122,19 +115,6 @@ export function SiteHeader() {
                   </span>
                 </>
               );
-
-              if (item.isButton) {
-                return (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={item.onClick}
-                    className={bookmarkStyle}
-                  >
-                    {content}
-                  </button>
-                );
-              }
 
               if (item.isExternal) {
                 return (
@@ -220,7 +200,7 @@ export function SiteHeader() {
       {mobileMenuOpen && (
         <div className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
           <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
-            {navItems.map((item, index) => {
+            {navItems.map((item) => {
               const isActive = item.href
                 ? item.activeFor
                   ? item.activeFor.some((href) => isWithin(pathname, href))
@@ -233,22 +213,6 @@ export function SiteHeader() {
                   ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                   : "text-foreground hover:bg-accent hover:text-accent-foreground",
               ].join(" ");
-
-              if (item.isButton) {
-                return (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      item.onClick?.();
-                    }}
-                    className={`${linkClasses} w-full text-left`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              }
 
               if (item.isExternal) {
                 return (

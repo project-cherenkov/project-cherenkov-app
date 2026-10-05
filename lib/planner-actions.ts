@@ -16,6 +16,13 @@ import {
   type PlanGenerationDeps,
   type PlanGenerationTxDeps,
 } from "@/lib/plan-generator";
+import {
+  generateStudyPlanCore,
+  setPlanItemDoneCore,
+  type GenerateStudyPlanResult,
+  type SetPlanItemDoneResult,
+} from "@/lib/plan-service";
+import { planItemDoneDeps, planServiceDeps } from "@/lib/plan-db";
 
 export type GeneratePlanResult =
   | { ok: true }
@@ -169,6 +176,11 @@ const realDeps: PlanGenerationDeps = {
   },
 };
 
+// PHASE 2 FALLBACK. The /planner page no longer calls this: it uses
+// generateStudyPlan() below. It is kept (with lib/plan-generator.ts's
+// even-spread generator) as the deterministic fallback the Phase 3 docs ask
+// for, and because its tests pin that behaviour.
+//
 // PLANNER-002. Handles both "Generate plan" and "Regenerate plan" (spec
 // §5's UI decision) with a single action — decision #7 means they're the
 // same operation: update-or-create the user's one study_plans row, then
@@ -222,4 +234,36 @@ export async function generatePlan(
 
   if (!result.ok) return result;
   return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3 actions
+// ---------------------------------------------------------------------------
+
+export type GenerateStudyPlanActionResult =
+  | GenerateStudyPlanResult
+  | { ok: false; reason: "unauthenticated" };
+
+// Builds (or rebuilds) the signed-in student's adaptive plan from their saved
+// settings, self-ratings and quiz answers (lib/plan-service.ts). This is what
+// the /planner page calls. The user always comes from the session.
+export async function generateStudyPlan(): Promise<GenerateStudyPlanActionResult> {
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, reason: "unauthenticated" };
+  return generateStudyPlanCore(planServiceDeps, user.id, new Date());
+}
+
+export type SetPlanItemDoneActionResult =
+  | SetPlanItemDoneResult
+  | { ok: false; reason: "unauthenticated" };
+
+// Ticks a study/review session off (or back on). `itemId` and `done` are
+// untrusted client input; ownership is checked server-side.
+export async function setPlanItemDone(
+  itemId: unknown,
+  done: unknown,
+): Promise<SetPlanItemDoneActionResult> {
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, reason: "unauthenticated" };
+  return setPlanItemDoneCore(planItemDoneDeps, user.id, itemId, done, new Date());
 }

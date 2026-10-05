@@ -29,7 +29,7 @@ vi.mock("next-intl", () => ({
       login: "Log In",
       signup: "Sign Up",
       myPlan: "My Plan",
-      logout: "Log Out",
+      account: "Account",
     };
     return translations[key] ?? key;
   },
@@ -70,10 +70,10 @@ describe("SiteHeader — session awareness", () => {
     expect(html).toContain('href="/signup"');
     expect(html).toContain("Sign Up");
     expect(html).not.toContain("My Plan");
-    expect(html).not.toContain("Log Out");
+    expect(html).not.toContain("Account");
   });
 
-  it("renders Edit link, My Plan, Log Out, and Theme Toggle when logged in", () => {
+  it("renders Edit link, My Plan, Account (not Log Out), and Theme Toggle when logged in", () => {
     mockUseSession.mockReturnValue({
       data: {
         user: { id: "u1", name: "User", email: "user@example.com" },
@@ -86,7 +86,9 @@ describe("SiteHeader — session awareness", () => {
     expect(html).toContain("Edit");
     expect(html).toContain('href="/planner"');
     expect(html).toContain("My Plan");
-    expect(html).toContain("Log Out");
+    expect(html).toContain('href="/account"');
+    expect(html).toContain("Account");
+    expect(html).not.toContain("Log Out");
     expect(html).toContain('aria-label="Toggle theme"');
     expect(html).toContain('aria-label="GitHub"');
     expect(html).not.toContain("Log In");

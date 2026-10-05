@@ -16,7 +16,8 @@
     "syllabus": "Silabus",
     "materials": "Materi",
     "editorials": "Editorial",
-    "archiveSections": "Bagian arsip"
+    "archiveSections": "Bagian arsip",
+    "account": "Akun"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -212,5 +213,123 @@
     "sectionNav": "Lainnya di bagian silabus ini",
     "previous": "Sebelumnya",
     "next": "Berikutnya"
+  },
+  "account": {
+    "eyebrow": "ACCOUNT.MD",
+    "title": "Akun kamu",
+    "username": "Nama pengguna",
+    "email": "Email",
+    "role": "Peran",
+    "roleEditorHint": "Kamu dapat mengedit konten situs.",
+    "roleMemberHint": "Kamu dapat memakai perencana belajar. Penyuntingan dibatasi untuk editor yang disetujui.",
+    "signInMethods": "Metode masuk",
+    "memberSince": "Anggota sejak",
+    "providerPassword": "Email dan kata sandi",
+    "goToPlan": "Ke rencana saya",
+    "openEditor": "Buka editor",
+    "signOut": "Keluar"
+  },
+  "phase3": {
+    "settings": {
+      "subject": "Bidang",
+      "subjects": {
+        "informatics": "Informatika",
+        "physics": "Fisika",
+        "astronomy": "Astronomi"
+      },
+      "stage": "Tingkat OSN",
+      "year": "Tahun ujian",
+      "hours": "Jam belajar per minggu (maks. {max})",
+      "examStarts": "Waktu belajar berlangsung sampai sehari sebelum {date}.",
+      "projectedNote": "Tanggal ini diproyeksikan dari 2026, belum diumumkan penyelenggara.",
+      "save": "Simpan",
+      "errorUnauthenticated": "Sesi kamu telah berakhir. Silakan masuk kembali dan coba lagi."
+    },
+    "ratings": {
+      "scaleHelp": "Nilai seberapa kamu menguasai tiap topik: 1 = hampir tidak tahu, 5 = bisa mengajarkannya. Nilai ini hanya tebakan awal; kuis yang memastikannya. Topik yang dilewati dianggap belum diketahui.",
+      "progress": "{rated} dari {total} topik dinilai"
+    },
+    "errors": {
+      "unauthenticated": "Sesi kamu telah berakhir. Silakan masuk kembali dan coba lagi.",
+      "ratingsFailed": "Penilaianmu tidak dapat disimpan. Silakan coba lagi.",
+      "no_settings": "Pilih bidang, tingkat, dan jam per minggu terlebih dahulu.",
+      "no_exam_date": "Belum ada tanggal yang diumumkan untuk tingkat dan tahun itu.",
+      "exam_passed": "Tingkat itu sudah berlalu. Pilih tingkat atau tahun lain.",
+      "no_days": "Ujian dimulai hari ini atau besok, jadi tidak ada waktu tersisa untuk direncanakan.",
+      "topics_not_seeded": "Topik untuk bidang ini belum dimuat ke database. Minta admin menjalankan seed."
+    },
+    "onboarding": {
+      "eyebrow": "PLANNER.MD",
+      "title": "Susun rencana belajar OSN",
+      "step1": "Langkah 1 — Kamu menyiapkan apa?",
+      "step1Body": "Pilih satu bidang, tingkat OSN yang dituju, dan berapa jam seminggu kamu bisa belajar.",
+      "continue": "Lanjut",
+      "changeSettings": "Ubah bidang, tingkat, atau jam",
+      "saveSettings": "Simpan",
+      "step2": "Langkah 2 — Seberapa kamu menguasai tiap topik?",
+      "step2Body": "Rencana ini kebanyakan revisi, jadi yang sudah kamu kuasai dilewati. Jujurlah: kuis akan memeriksa penilaianmu.",
+      "topicsMissing": "Belum ada topik untuk bidang ini. Minta admin menjalankan seed.",
+      "generate": "Buat rencanaku"
+    },
+    "plan": {
+      "eyebrow": "PLANNER.MD",
+      "title": "Rencana belajarmu",
+      "daysLeft": "{days} hari sampai tingkat ini dimulai",
+      "hoursPerWeek": "{hours} jam/minggu",
+      "projectedDates": "Tanggal diproyeksikan dari 2026 dan bisa berubah saat penyelenggara mengumumkan.",
+      "infeasibleTitle": "Jam belajarmu tidak cukup untuk semuanya.",
+      "infeasibleBody": "Rencana ini butuh minimal {needed} jam, sedangkan kamu punya {available} jam sebelum ujian, sehingga sekitar {short} jam tidak bisa dijadwalkan. Tambah jam per minggu, atau mulai dari topik yang sudah dijadwalkan.",
+      "infeasibleDropped": "Kandidat pertama untuk ditunda:",
+      "staleSettings": "Pengaturanmu berubah setelah rencana ini dibuat.",
+      "staleQuiz": "Kamu mengerjakan kuis setelah rencana ini dibuat. Buat ulang untuk memakai hasil baru.",
+      "regenerate": "Buat ulang rencana",
+      "today": "Hari ini",
+      "overdue": "Terlewat",
+      "upNext": "Berikutnya",
+      "nothingToday": "Tidak ada jadwal hari ini.",
+      "upcoming": "Minggu-minggu mendatang",
+      "weekOf": "Minggu {date}",
+      "weekSummary": "{hours} jam · {done}/{total} selesai",
+      "min": "mnt",
+      "nothingUpcoming": "Tidak ada jadwal lain.",
+      "topics": "Topik",
+      "masterySummary": "{known} dikuasai · {uncertain} belum pasti · {notKnown} belum dikuasai · {unverified} belum diperiksa",
+      "colTopic": "Topik",
+      "colRating": "Nilaimu",
+      "colResult": "Hasil kuis",
+      "noQuizYet": "belum ada kuis",
+      "noQuizNote": "{count} topik belum punya soal kuis pada tingkat kesulitan ini, sehingga belum bisa diperiksa.",
+      "editRatings": "Ubah penilaian topikku",
+      "editSettings": "Ubah bidang, tingkat, dan jam",
+      "saveAndRegenerate": "Simpan dan buat ulang",
+      "markDone": "Tandai selesai",
+      "undo": "Batalkan",
+      "quizTaken": "Kuis dikerjakan",
+      "takeQuiz": "Kerjakan kuis",
+      "kind": {
+        "confirm": "Kuis",
+        "study": "Belajar",
+        "review": "Ulasan",
+        "final_review": "Ulasan akhir",
+        "buffer": "Cadangan"
+      },
+      "status": {
+        "unverified": "Belum diperiksa",
+        "known": "Dikuasai",
+        "uncertain": "Belum pasti",
+        "not_known": "Belum dikuasai"
+      }
+    },
+    "reason": {
+      "confirm_high": "Kamu menilai ini tinggi. Kuis singkat memeriksanya.",
+      "confirm_mid": "Kuis singkat menunjukkan posisimu sebenarnya.",
+      "confirm_low": "Kamu menilai ini rendah. Kuis mengkalibrasi rencana.",
+      "study_weak": "Jawaban kuis menunjukkan ini belum dikuasai.",
+      "study_uncertain": "Jawaban kuis belum bisa memastikan. Belajar lalu periksa lagi.",
+      "study_unverified": "Nilaimu di bawah target tingkat ini.",
+      "study_continue": "Lanjutan sesi sebelumnya.",
+      "review_ladder": "Pengulangan berjarak, dihitung dari tanggal ujian.",
+      "final_review": "Ulasan campuran terakhir sebelum ujian."
+    }
   }
 }

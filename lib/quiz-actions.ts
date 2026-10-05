@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull, ne } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   quizQuestions,
@@ -134,8 +134,27 @@ const realDeps: QuizAttemptDeps = {
                   and(
                     eq(planItems.planId, planId),
                     eq(planItems.topicId, topicId),
+                    isNull(planItems.completedAt),
+                    ne(planItems.kind, "confirm"),
                   ),
                 )
+                .orderBy(planItems.scheduledFor, planItems.position)
+                .limit(1);
+              return item ?? null;
+            },
+            async getOpenConfirmItem(planId, topicId) {
+              const [item] = await tx
+                .select({ id: planItems.id, completedAt: planItems.completedAt })
+                .from(planItems)
+                .where(
+                  and(
+                    eq(planItems.planId, planId),
+                    eq(planItems.topicId, topicId),
+                    isNull(planItems.completedAt),
+                    eq(planItems.kind, "confirm"),
+                  ),
+                )
+                .orderBy(planItems.scheduledFor, planItems.position)
                 .limit(1);
               return item ?? null;
             },

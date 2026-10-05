@@ -16,7 +16,8 @@
     "syllabus": "Syllabus",
     "materials": "Materials",
     "editorials": "Editorials",
-    "archiveSections": "Archive sections"
+    "archiveSections": "Archive sections",
+    "account": "Account"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -212,5 +213,123 @@
     "sectionNav": "More in this syllabus section",
     "previous": "Previous",
     "next": "Next"
+  },
+  "account": {
+    "eyebrow": "ACCOUNT.MD",
+    "title": "Your account",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "roleEditorHint": "You can edit site content.",
+    "roleMemberHint": "You can use the study planner. Editing is limited to approved editors.",
+    "signInMethods": "Sign-in method",
+    "memberSince": "Member since",
+    "providerPassword": "Email and password",
+    "goToPlan": "Go to my plan",
+    "openEditor": "Open the editor",
+    "signOut": "Log out"
+  },
+  "phase3": {
+    "settings": {
+      "subject": "Subject",
+      "subjects": {
+        "informatics": "Informatics",
+        "physics": "Physics",
+        "astronomy": "Astronomy"
+      },
+      "stage": "OSN stage",
+      "year": "Exam year",
+      "hours": "Study hours per week (up to {max})",
+      "examStarts": "Study time runs until the day before {date}.",
+      "projectedNote": "These dates are projected from 2026, not announced by the organiser.",
+      "save": "Save",
+      "errorUnauthenticated": "Your session has expired. Please log back in and try again."
+    },
+    "ratings": {
+      "scaleHelp": "Rate how well you know each topic: 1 = barely know it, 5 = could teach it. Your rating is only a starting guess; quizzes confirm it. Topics you skip are treated as unknown.",
+      "progress": "{rated} of {total} topics rated"
+    },
+    "errors": {
+      "unauthenticated": "Your session has expired. Please log back in and try again.",
+      "ratingsFailed": "Your ratings could not be saved. Please try again.",
+      "no_settings": "Choose your subject, stage and weekly hours first.",
+      "no_exam_date": "No dates are published for that stage and year yet.",
+      "exam_passed": "That stage has already taken place. Choose another stage or year.",
+      "no_days": "The exam starts today or tomorrow, so there is no time left to plan.",
+      "topics_not_seeded": "The topics for this subject have not been loaded into the database yet. Ask an admin to run the seed."
+    },
+    "onboarding": {
+      "eyebrow": "PLANNER.MD",
+      "title": "Build your OSN study plan",
+      "step1": "Step 1 — What are you preparing for?",
+      "step1Body": "Pick one subject, the OSN stage you are aiming for, and how many hours a week you can study.",
+      "continue": "Continue",
+      "changeSettings": "Change subject, stage or hours",
+      "saveSettings": "Save",
+      "step2": "Step 2 — How well do you know each topic?",
+      "step2Body": "The plan is mostly revision, so it skips what you already know. Be honest: quizzes will check your ratings.",
+      "topicsMissing": "No topics are loaded for this subject yet. Ask an admin to run the seed.",
+      "generate": "Generate my plan"
+    },
+    "plan": {
+      "eyebrow": "PLANNER.MD",
+      "title": "Your study plan",
+      "daysLeft": "{days} days until the stage starts",
+      "hoursPerWeek": "{hours} h/week",
+      "projectedDates": "Dates are projected from 2026 and may change when the organiser announces them.",
+      "infeasibleTitle": "Your hours are not enough for everything.",
+      "infeasibleBody": "The plan needs at least {needed} h but you have {available} h before the exam, so about {short} h could not be scheduled. Add hours per week, or start with the topics that are scheduled.",
+      "infeasibleDropped": "First candidates to defer:",
+      "staleSettings": "Your settings changed after this plan was made.",
+      "staleQuiz": "You took quizzes after this plan was made. Regenerate to use the new results.",
+      "regenerate": "Regenerate plan",
+      "today": "Today",
+      "overdue": "Overdue",
+      "upNext": "Up next",
+      "nothingToday": "Nothing is scheduled for today.",
+      "upcoming": "Coming weeks",
+      "weekOf": "Week of {date}",
+      "weekSummary": "{hours} h · {done}/{total} done",
+      "min": "min",
+      "nothingUpcoming": "Nothing else is scheduled.",
+      "topics": "Topics",
+      "masterySummary": "{known} known · {uncertain} uncertain · {notKnown} not known yet · {unverified} not checked",
+      "colTopic": "Topic",
+      "colRating": "Your rating",
+      "colResult": "Quiz result",
+      "noQuizYet": "no quiz yet",
+      "noQuizNote": "{count} topics have no quiz question at this stage's difficulty yet, so they could not be checked.",
+      "editRatings": "Edit my topic ratings",
+      "editSettings": "Edit subject, stage and hours",
+      "saveAndRegenerate": "Save and regenerate",
+      "markDone": "Mark done",
+      "undo": "Undo",
+      "quizTaken": "Quiz taken",
+      "takeQuiz": "Take the quiz",
+      "kind": {
+        "confirm": "Quiz",
+        "study": "Study",
+        "review": "Review",
+        "final_review": "Final review",
+        "buffer": "Buffer"
+      },
+      "status": {
+        "unverified": "Not checked",
+        "known": "Known",
+        "uncertain": "Uncertain",
+        "not_known": "Not known yet"
+      }
+    },
+    "reason": {
+      "confirm_high": "You rated this high. A quick quiz checks it.",
+      "confirm_mid": "A quick quiz shows where you really stand.",
+      "confirm_low": "You rated this low. A quiz calibrates the plan.",
+      "study_weak": "Quiz answers show this is not known yet.",
+      "study_uncertain": "Quiz answers cannot say yet. Study then re-check.",
+      "study_unverified": "Your rating is below the stage target.",
+      "study_continue": "Continues the earlier session.",
+      "review_ladder": "Spaced revisit, timed against the exam date.",
+      "final_review": "Last mixed pass before the exam."
+    }
   }
 }

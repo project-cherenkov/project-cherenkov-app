@@ -20,6 +20,7 @@ import {
   MAX_HOURS_PER_WEEK,
   OSN_STAGES,
   PLAN_ITEM_KINDS,
+  type PlanSummary,
   QUESTION_DIFFICULTIES,
   QUESTION_STATUSES,
   SELF_RATING_MAX,
@@ -257,28 +258,43 @@ export const studyPlans = pgTable("study_plans", {
   // keeps this as a plain "YYYY-MM-DD" string end to end.
   targetExamDate: date("target_exam_date", { mode: "string" }).notNull(),
   generatedAt: timestamp("generated_at").notNull().defaultNow(),
+  // Phase 3: how the plan was generated (feasibility, shortfall, dropped
+  // topics). Null for plans made by the Phase 2 even-spread generator.
+  summary: jsonb("summary").$type<PlanSummary>(),
 });
 
-export const planItems = pgTable("plan_items", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  planId: uuid("plan_id")
-    .notNull()
-    .references(() => studyPlans.id, { onDelete: "cascade" }),
-  topicId: uuid("topic_id")
-    .notNull()
-    .references(() => topics.id, { onDelete: "cascade" }),
-  scheduledFor: date("scheduled_for", { mode: "string" }).notNull(),
-  // Set automatically when the linked topic's derived status becomes `done`
-  // (decision #8) — see lib/quiz-actions.ts's post-submission hook. No other
-  // code path writes to this column; there is deliberately no manual
-  // "mark complete" action anywhere in Phase 2.
-  completedAt: timestamp("completed_at"),
-  // Phase 3: why the item is on the plan (confirmation quiz, first study,
-  // review, final review, buffer) and a short human-readable explanation
-  // shown next to it. Pre-Phase-3 rows are all first-study items.
-  kind: planItemKindEnum("kind").notNull().default("study"),
-  reason: text("reason"),
-});
+export const planItems = pgTable(
+  "plan_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    planId: uuid("plan_id")
+      .notNull()
+      .references(() => studyPlans.id, { onDelete: "cascade" }),
+    topicId: uuid("topic_id")
+      .notNull()
+      .references(() => topics.id, { onDelete: "cascade" }),
+    scheduledFor: date("scheduled_for", { mode: "string" }).notNull(),
+    // Phase 2: set automatically when the linked topic's derived status
+    // becomes `done` (decision #8, lib/quiz-actions.ts's post-submission
+    // hook). Phase 3 adds two more writers: a quiz attempt completes the
+    // topic's open confirmation item, and the student can tick a study or
+    // review session off by hand (lib/planner-actions.ts, completePlanItem) —
+    // reading and revising have no automatic signal.
+    completedAt: timestamp("completed_at"),
+    // Phase 3: why the item is on the plan (confirmation quiz, first study,
+    // review, final review, buffer) and a short human-readable explanation
+    // shown next to it. Pre-Phase-3 rows are all first-study items.
+    kind: planItemKindEnum("kind").notNull().default("study"),
+    reason: text("reason"),
+    // Phase 3: planned minutes, and the item's order within its day (after
+    // interleaving). Null minutes / position 0 on Phase 2 rows.
+    minutes: integer("minutes"),
+    position: integer("position").notNull().default(0),
+  },
+  (table) => [
+    index("plan_items_plan_scheduled_idx").on(table.planId, table.scheduledFor),
+  ],
+);
 
 // ===========================================================================
 // Phase 3 planner tables (OSN path)

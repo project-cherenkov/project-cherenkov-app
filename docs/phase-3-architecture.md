@@ -1,4 +1,8 @@
-# Phase 3 architecture — adaptive scheduling (not implemented)
+# Phase 3 architecture — adaptive scheduling
+
+> **Status (5 Oct 2026): the OSN planner described in `docs/phase-3-planner.md` is
+> implemented. This file is the original sketch and is kept for history; where the
+> two disagree, `phase-3-planner.md` and the code win.**
 
 Phase 2 (this repo, as built) gives every user a single, evenly-distributed
 study plan generated once from a target exam date (`lib/plan-generator.ts`)

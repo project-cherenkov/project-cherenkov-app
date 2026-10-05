@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNull, ne } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { studyPlans, planItems } from "@/lib/db/schema";
 import { getTopicStatus, type TopicStatus } from "@/lib/planner";
@@ -24,11 +24,24 @@ export interface PlanSyncDeps {
     topicId: string,
   ) => Promise<PlanItemRef | null>;
   markComplete: (planItemId: string) => Promise<void>;
+  // Phase 3. The topic's earliest not-yet-completed confirmation item, if any.
+  // Taking ANY quiz on the topic completes it, whatever the score — the item
+  // is "check what you know", not "pass". Optional so older callers and tests
+  // that predate the scheduler keep working.
+  getOpenConfirmItem?: (
+    planId: string,
+    topicId: string,
+  ) => Promise<PlanItemRef | null>;
 }
 
 // DI'd core, testable without a database (spec §8's completed_at test).
 //
-// Decision #8: completed_at is set automatically, never a manual field.
+// Decision #8: completed_at is set automatically by quiz results (Phase 3 adds
+// a manual tick for study/review sessions, which have no automatic signal — see
+// lib/plan-service.ts setPlanItemDoneCore).
+// Phase 3: with several plan items per topic, `getPlanItem` returns the
+// earliest open item that is NOT a confirmation quiz, and a confirmation item
+// is completed by any attempt (above).
 // Sticky/monotonic (documented assumption, not explicitly specified): once
 // set, a later retake that drops status back to in_progress (spec §6
 // boundary case) does not clear completedAt — the spec documents the
@@ -40,11 +53,16 @@ export async function syncPlanItemCompletionCore(
   userId: string,
   topicId: string,
 ): Promise<void> {
-  const status = await deps.getStatus(userId, topicId);
-  if (status !== "done") return;
-
   const planId = await deps.getUserPlanId(userId);
   if (!planId) return; // no plan yet — nothing to stamp
+
+  if (deps.getOpenConfirmItem) {
+    const confirm = await deps.getOpenConfirmItem(planId, topicId);
+    if (confirm && !confirm.completedAt) await deps.markComplete(confirm.id);
+  }
+
+  const status = await deps.getStatus(userId, topicId);
+  if (status !== "done") return;
 
   const item = await deps.getPlanItem(planId, topicId);
   if (!item || item.completedAt) return;
@@ -66,7 +84,31 @@ const realDeps: PlanSyncDeps = {
     const [item] = await db
       .select({ id: planItems.id, completedAt: planItems.completedAt })
       .from(planItems)
-      .where(and(eq(planItems.planId, planId), eq(planItems.topicId, topicId)))
+      .where(
+        and(
+          eq(planItems.planId, planId),
+          eq(planItems.topicId, topicId),
+          isNull(planItems.completedAt),
+          ne(planItems.kind, "confirm"),
+        ),
+      )
+      .orderBy(planItems.scheduledFor, planItems.position)
+      .limit(1);
+    return item ?? null;
+  },
+  async getOpenConfirmItem(planId, topicId) {
+    const [item] = await db
+      .select({ id: planItems.id, completedAt: planItems.completedAt })
+      .from(planItems)
+      .where(
+        and(
+          eq(planItems.planId, planId),
+          eq(planItems.topicId, topicId),
+          isNull(planItems.completedAt),
+          eq(planItems.kind, "confirm"),
+        ),
+      )
+      .orderBy(planItems.scheduledFor, planItems.position)
       .limit(1);
     return item ?? null;
   },

@@ -42,3 +42,50 @@ export const DEFAULT_PLANNER_TIMEZONE = "Asia/Jakarta";
 
 // Sanity bounds on weekly study hours, not a recommendation.
 export const MAX_HOURS_PER_WEEK = 80;
+
+// Why a plan item is on the plan, as a stable code. plan_items.reason stores
+// one of these; the UI translates it (messages: phase3.planner.reason.*), so
+// the wording can change without touching stored rows.
+export const PLAN_REASONS = [
+  "confirm_high", // rated high, not verified yet: check it is really known
+  "confirm_mid", // rated middling, not verified yet
+  "confirm_low", // rated low; quizzed last, mostly to calibrate
+  "study_weak", // quiz answers say it is not known yet
+  "study_uncertain", // quiz answers cannot say yet
+  "study_unverified", // self-rating alone puts it below the stage target
+  "study_continue", // a later session of a topic too big for one day
+  "review_ladder", // spaced revisit, timed against the exam date
+  "final_review", // last mixed pass in the days before the exam
+] as const;
+export type PlanReason = (typeof PLAN_REASONS)[number];
+
+export function isPlanReason(value: string): value is PlanReason {
+  return (PLAN_REASONS as readonly string[]).includes(value);
+}
+
+// What the planner stores about how a plan was generated, so the plan page can
+// say honestly whether the hours were enough without re-running the scheduler.
+// A snapshot: it is not updated when settings change; regenerating rewrites it.
+export interface PlanSummary {
+  subject: string;
+  stage: OsnStage;
+  examYear: number;
+  // First day of the stage window (the day study stops).
+  examDate: string;
+  hoursPerWeek: number;
+  feasible: boolean;
+  requiredMinutes: number;
+  availableMinutes: number;
+  shortfallMinutes: number;
+  windowDays: number;
+  bufferDays: number;
+  // topics.id of topics that lost their confirmation quiz or study time,
+  // lowest priority first (the first candidates to cut or defer).
+  droppedTopicIds: string[];
+  // Mean gap between self-rating and quiz results used for unverified topics
+  // (negative = the student tends to overrate). 0 when nothing to learn from.
+  calibrationOffset: number;
+  // Topics with no quiz question at this stage's difficulty yet, so no
+  // confirmation quiz could be planned for them.
+  topicsWithoutQuiz: number;
+}

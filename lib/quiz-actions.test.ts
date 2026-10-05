@@ -18,6 +18,11 @@ const fixture = vi.hoisted(() => ({
   planItem: { id: "item-1", completedAt: null as Date | null } as
     | { id: string; completedAt: Date | null }
     | null,
+  // Phase 3: the plan item lookups per submission are, in order, the open
+  // confirmation item (first) and then the open study/review item. The fake
+  // cannot see the WHERE clause, so it answers by call order.
+  confirmItem: null as { id: string; completedAt: Date | null } | null,
+  planItemQueries: 0,
   markCompleteCalls: 0,
   responses: [] as { attemptId: string; questionId: string; correct: boolean }[],
 }));
@@ -50,7 +55,10 @@ vi.mock("@/lib/db", async () => {
         if (table === schema.quizQuestions) rows = fixture.answerKeys;
         else if (table === schema.quizAttempts) rows = fixture.attempts;
         else if (table === schema.studyPlans) rows = fixture.planId ? [{ id: fixture.planId }] : [];
-        else if (table === schema.planItems) rows = fixture.planItem ? [fixture.planItem] : [];
+        else if (table === schema.planItems) {
+          const item = fixture.planItemQueries++ === 0 ? fixture.confirmItem : fixture.planItem;
+          rows = item ? [item] : [];
+        }
         else rows = [];
         return Promise.resolve(rows).then(resolve, reject);
       },
@@ -100,6 +108,8 @@ vi.mock("@/lib/db", async () => {
 import { submitQuizAttempt } from "./quiz-actions";
 
 beforeEach(() => {
+  fixture.confirmItem = null;
+  fixture.planItemQueries = 0;
   fixture.user = { id: "user-1", email: "user@example.com" };
   fixture.answerKeys = [
     { id: "q1", correctChoiceIndex: 0, choices: ["a", "b"] },
@@ -198,5 +208,20 @@ describe("submitQuizAttempt — per-question responses through the real transact
 
     expect(result).toEqual({ ok: false, reason: "no_valid_answers" });
     expect(fixture.responses).toHaveLength(0);
+  });
+});
+
+// Phase 3: a plan can hold several items per topic, including a confirmation
+// quiz. Taking ANY quiz on the topic completes the open confirmation item,
+// whatever the score; the study item still needs a passing result.
+describe("submitQuizAttempt — Phase 3 confirmation items", () => {
+  it("completes the confirmation item on a failing attempt without touching the study item", async () => {
+    fixture.confirmItem = { id: "confirm-1", completedAt: null };
+    const result = await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [{ questionId: "q1", selectedChoiceIndex: 1 }],
+    });
+    expect(result.ok).toBe(true);
+    expect(fixture.markCompleteCalls).toBe(1);
   });
 });

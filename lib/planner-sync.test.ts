@@ -75,3 +75,35 @@ describe("syncPlanItemCompletionCore", () => {
     expect(markComplete).not.toHaveBeenCalled();
   });
 });
+
+describe("syncPlanItemCompletionCore — Phase 3 confirmation items", () => {
+  it("completes an open confirmation item on ANY attempt, even a failing one", async () => {
+    const { deps, markComplete } = makeFakeDeps({
+      getStatus: vi.fn(async (): Promise<TopicStatus> => "in_progress"),
+      getOpenConfirmItem: vi.fn(async () => ({ id: "confirm-1", completedAt: null })),
+    });
+    await syncPlanItemCompletionCore(deps, "user-1", "topic-1");
+    expect(markComplete).toHaveBeenCalledTimes(1);
+    expect(markComplete).toHaveBeenCalledWith("confirm-1");
+  });
+
+  it("completes both the confirmation and the next study item on a passing attempt", async () => {
+    // (The shared fake's markComplete mutates the study item; use a plain spy.)
+    const markComplete = vi.fn(async (id: string) => void id);
+    const { deps } = makeFakeDeps({
+      markComplete,
+      getOpenConfirmItem: vi.fn(async () => ({ id: "confirm-1", completedAt: null })),
+    });
+    await syncPlanItemCompletionCore(deps, "user-1", "topic-1");
+    expect(markComplete.mock.calls.map((c) => c[0])).toEqual(["confirm-1", "item-1"]);
+  });
+
+  it("does nothing for a confirmation item without a plan", async () => {
+    const { deps, markComplete } = makeFakeDeps({
+      getUserPlanId: vi.fn(async () => null),
+      getOpenConfirmItem: vi.fn(async () => ({ id: "confirm-1", completedAt: null })),
+    });
+    await syncPlanItemCompletionCore(deps, "user-1", "topic-1");
+    expect(markComplete).not.toHaveBeenCalled();
+  });
+});

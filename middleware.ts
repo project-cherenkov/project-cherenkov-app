@@ -38,7 +38,8 @@ function isAdminSurfacePath(pathname: string): boolean {
 // AUTH-002: the study-planner "gated surface", alongside (not replacing)
 // ADMIN_SURFACE_PREFIXES above. Every /[locale]/planner path must carry a
 // valid Better Auth session — spec §2, §5, §6.
-const PLANNER_GATED_PREFIXES = ["/planner"];
+// /account needs a session for the same reason (it shows the signed-in user).
+const PLANNER_GATED_PREFIXES = ["/planner", "/account"];
 
 // Strips a leading /<locale> segment if present, so the planner check works
 // the same way whether the request already has a locale prefix

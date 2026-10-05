@@ -8,6 +8,7 @@
 import {
   DEFAULT_PLANNER_TIMEZONE,
   OSN_STAGES,
+  QUESTION_DIFFICULTIES,
   type OsnStage,
   type QuestionDifficulty,
 } from "./planner-vocab";
@@ -58,6 +59,17 @@ export const STAGES: Record<OsnStage, StageInfo> = {
     masteryTarget: 0.85,
   },
 };
+
+// The question difficulties a stage draws from, easiest first. Used for the
+// confirmation quiz (which questions are offered AND which count towards the
+// score) and for which quiz answers feed the stage's mastery estimate.
+export function difficultiesForStage(stage: OsnStage): QuestionDifficulty[] {
+  const { min, max } = STAGES[stage].difficulty;
+  return QUESTION_DIFFICULTIES.slice(
+    QUESTION_DIFFICULTIES.indexOf(min),
+    QUESTION_DIFFICULTIES.indexOf(max) + 1,
+  );
+}
 
 export function isOsnStage(value: string): value is OsnStage {
   return (OSN_STAGES as readonly string[]).includes(value);
