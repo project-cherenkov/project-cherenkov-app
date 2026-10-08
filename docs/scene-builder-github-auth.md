@@ -14,7 +14,7 @@ authorization to do it — but this is a **second, separate** authorization
 from the one you already did to get into `/keystatic` itself. Logging into
 Keystatic does not also authorize the scene builder.
 
-Two independent OAuth handshakes exist on purpose (see [README §VII, "The
+Two independent OAuth handshakes exist on purpose (see [README §VIII, "The
 authoring tool"](../README.md#the-authoring-tool-keystaticscene-builder)):
 
 - **Keystatic's own login** — handled entirely inside `@keystatic/core`,

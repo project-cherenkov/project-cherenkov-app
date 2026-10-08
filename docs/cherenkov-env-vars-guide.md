@@ -31,15 +31,16 @@ step depending on which context you're configuring.
 | Variable | Unlocks | Required? | Cost |
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Correct sitemap/robots/Open Graph URLs | Optional | Free |
-| `DATABASE_URL` | Accounts + study planner (Phase 2) | Optional | Free (Neon) |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Allows search engines to index public pages and enables `/llms.txt` | Optional (default: noindex) | Free |
+| `DATABASE_URL` | Accounts, quizzes, and Phase 3 adaptive study planner | Optional | Free (Neon) |
 | `BETTER_AUTH_SECRET` | Required *if* using accounts | With `DATABASE_URL` | Free |
 | `BETTER_AUTH_URL` | Required *if* using accounts | With `DATABASE_URL` | Free |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | "Continue with Google" button | Optional | Free |
-| `KEYSTATIC_GITHUB_CLIENT_ID` / `_SECRET` | `/keystatic` admin UI in production | Optional | Free |
-| `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | Makes github-storage mode actually activate client-side | With Keystatic vars | Free |
-| `KEYSTATIC_SECRET` | Required *if* using Keystatic GitHub mode | With Keystatic vars | Free |
-| `KEYSTATIC_GITHUB_REPO` | Which repo Keystatic commits to | Optional (has a default) | Free |
-| `ADMIN_EMAILS` | Restricts team-photo uploads to specific editors | Required for team-photo uploads | Free |
+| `KEYSTATIC_GITHUB_CLIENT_ID` / `_SECRET` | `/keystatic` admin UI and scene builder in production | Optional | Free |
+| `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | Client-side GitHub mode flag (**auto-derived in `next.config.mjs`**) | **Do not set manually** | Free |
+| `KEYSTATIC_SECRET` | Required *if* using Keystatic GitHub mode / scene builder | With Keystatic vars | Free |
+| `KEYSTATIC_GITHUB_REPO` | Which repo Keystatic and scene builder commit to | Optional (has a default) | Free |
+| `ADMIN_EMAILS` | Authorizes CMS writes, scene builder save/create, and grants `Primus Inter Pares` role | Required for CMS editing / admin role | Free |
 | `BLOB_READ_WRITE_TOKEN` | Team-photo upload feature | Optional | Free (Vercel Blob) |
 
 ---
@@ -55,6 +56,7 @@ variable-by-variable below.
 | Variable | Same value in both? | Notes |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | No — different by nature | `http://localhost:3000` locally, real domain in production |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Same (usually 0 locally, 1 once launch-ready in production) | 1 makes public pages indexable; private/placeholder pages stay `noindex` regardless |
 | `DATABASE_URL` | Can share, but **recommended separate** | Use a Neon branch for local — protects real user/planner data from local bugs |
 | `BETTER_AUTH_SECRET` | Can share, but **recommended separate** | No requirement they match; generating two is slightly better hygiene |
 | `BETTER_AUTH_URL` | No — different by nature | Mirrors `NEXT_PUBLIC_SITE_URL`'s local/prod split |
@@ -62,10 +64,10 @@ variable-by-variable below.
 | `GOOGLE_CLIENT_SECRET` | **Same** | Comes from the same shared client above |
 | `KEYSTATIC_GITHUB_CLIENT_ID` | **Same** — one GitHub App, four registered callback URLs | Unlike classic OAuth Apps (one callback URL each), a GitHub App supports up to 10 — see §6 |
 | `KEYSTATIC_GITHUB_CLIENT_SECRET` | **Same** | Comes from the one shared GitHub App above |
-| `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | **Same** | Plain boolean flag, not a secret — must be set alongside the two above in both contexts or client and server disagree on storage mode |
+| `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | **Do not set** | Computed by `next.config.mjs` automatically at build time from `KEYSTATIC_GITHUB_CLIENT_ID` — never set by hand |
 | `KEYSTATIC_SECRET` | Can share, but **recommended separate** | Self-generated; no cost to making two |
 | `KEYSTATIC_GITHUB_REPO` | Same, if set at all | Usually just the one real repo either way |
-| `ADMIN_EMAILS` | Usually the same list | Can trim to just your own email locally if you want a smaller test allowlist |
+| `ADMIN_EMAILS` | Usually the same list | Controls CMS writes, scene builder save/new endpoints, and `/account` Primus Inter Pares role |
 | `BLOB_READ_WRITE_TOKEN` | Can share, but **recommended separate** | Two Blob stores, same variable name, scoped by environment in Vercel |
 
 **Quick summary of what actually requires re-registering something
@@ -142,13 +144,13 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ---
 
-## 2. `DATABASE_URL` (Phase 2 — accounts + planner)
+## 2. `DATABASE_URL` (Accounts, quizzes, and Phase 3 adaptive study planner)
 
 **What it does:** Connection string for the Postgres database that backs
-user accounts and the study planner. `lib/db/index.ts` constructs the client
-lazily, so without this var, any request to `/planner/**` or `/api/auth/**`
-simply fails closed (treated as unauthenticated) rather than crashing the
-build.
+user accounts, topic quizzes, response history, and the Phase 3 adaptive
+study planner. `lib/db/index.ts` constructs the client lazily, so without this
+var, any request to `/planner/**`, `/account`, or `/api/auth/**` simply fails
+closed (treated as unauthenticated) rather than crashing the build.
 
 **Required?** Only if you want accounts/login/planner to work at all.
 
@@ -552,14 +554,23 @@ Variables** (only if overriding the default).
 
 ## 9. `ADMIN_EMAILS`
 
-**What it does:** A comma-separated allowlist of editor emails allowed to
-upload team photos. `app/api/team-photo/route.ts` checks `getCurrentUser()`
-first, then calls `isAdminEmail(user.email)` before it will accept the upload.
-This is a separate authorization gate from the Keystatic GitHub App setup.
+**What it does:** A comma-separated allowlist of editor emails that governs
+administrative write access and roles across the app:
 
-**Required?** Only for the team-photo upload route when you want to restrict
-who can upload. If the value is unset or empty, no authenticated user is
-allowed through this check.
+1. **CMS editing and scene builder:** `app/api/scene-builder/route.ts` and
+   `app/api/scene-builder/new/route.ts` verify that the caller is signed in and
+   their email passes `isAdminEmail(user.email)` before allowing scenes to be
+   saved or stub editorials to be created (**required in local mode too**).
+2. **Team-photo uploads:** `app/api/team-photo/route.ts` checks `getCurrentUser()`
+   first, then calls `isAdminEmail(user.email)` before accepting the upload.
+3. **Account roles:** On `/[locale]/account`, users whose email appears in
+   `ADMIN_EMAILS` are assigned the **`Primus Inter Pares`** role (with edit
+   access indicator); other signed-in users receive the standard **`Inchoatus`** role.
+
+**Required?** Required if you want to use the scene builder (save or "New
+visualization"), upload team photos, or assign admin status on `/account`. If
+the value is unset or empty, no authenticated user is allowed through these
+administrative checks.
 
 **Value format (same for both contexts):**
 
@@ -573,7 +584,7 @@ important.
 ### Local development
 
 **How to set it:** Add to `.env.local`, typically your own email so you can
-test the upload flow:
+test scene-builder saves, team-photo uploads, and account roles:
 
 ```
 ADMIN_EMAILS=you@example.com
@@ -685,6 +696,31 @@ one).
 **Free tier notes:** Vercel Hobby includes 1 GB of Blob storage and 10 GB of
 Blob transfer per month, plus up to 100 separate Blob stores — enough
 headroom to run a fully separate store for local/dev testing at no cost.
+
+---
+
+## 11. `NEXT_PUBLIC_ALLOW_INDEXING`
+
+**What it does:** The global toggle controlling whether search engine crawlers are allowed to index public pages (`lib/seo.ts`).
+
+- **Unset or `0` (default):** Every page ships `robots: { index: false, follow: false }`, and `/llms.txt` indicates that the site is not yet ready for crawling.
+- **Set to `1` (or `"true"`):** Public pages (home, syllabus, materials, published editorials with real authors, about, docs) become indexable with canonical and hreflang metadata, and `/llms.txt` lists the site contents.
+
+**Private and unready pages stay protected:** Account, login, signup, planner pages, editorials still carrying a `PLACEHOLDER ...` author or tagged `fixture`, and docs fallback pages stay `noindex` regardless of this setting.
+
+See `docs/seo-and-accessibility.md` for the full pre-launch checklist.
+
+### Local development
+
+**How to set it:** Leave unset during normal development. To test robots/sitemap/indexing behaviour locally:
+
+```
+NEXT_PUBLIC_ALLOW_INDEXING=1
+```
+
+### Vercel deployment
+
+**Where to set it:** Vercel dashboard → **Settings → Environment Variables**. Set `Key: NEXT_PUBLIC_ALLOW_INDEXING` and `Value: 1` once all launch checklist items in `docs/seo-and-accessibility.md` are completed.
 
 ---
 

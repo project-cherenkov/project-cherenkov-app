@@ -32,7 +32,7 @@ The public site has three sections, joined by the OSN syllabus:
 
 The editorial archive is indexed by **principle** (the general idea an editorial teaches) and **error type** (the specific mistake it corrects), deliberately **not** by subject chapter — the goal is to let someone arrive because they made a specific mistake or want to understand a specific idea, not because they're browsing a syllabus. (The syllabus and materials sections are the place for browsing by topic.)
 
-This repo contains **Phase 1** (the public archive, syllabus and materials) and the implemented **Phase 2** account and study-planner layer. Visitors can browse, read, and interact with everything in Phase 1 without an account; signed-in users can generate a study plan, track progress through quiz attempts, and open topic pages. Phase 3 adaptive scheduling remains planned but is not implemented — see `docs/phase-3-architecture.md`.
+This repo contains **Phase 1** (the public archive, syllabus, materials, and documentation), **Phase 2** (user accounts and core topic progress), and the implemented **Phase 3** adaptive study planner (OSN path). Visitors can browse, read, and interact with all public content without an account; signed-in users can configure their OSN stage, weekly hours, and topic self-ratings to generate an adaptively scheduled study plan, track daily sessions and reviews, and verify mastery through topic quizzes. See `docs/phase-3-planner.md` for the Phase 3 planner architecture.
 
 Content is git-committed MDX, not stored in a database: there is no CRUD backend for editorials or materials, only files under `content/`, compiled at build time. Editing happens either by editing those files directly, or through an in-site CMS layer ([Section VII](#vii-editing-content-in-the-browser-keystatic)) that writes back to the same files.
 
@@ -53,24 +53,24 @@ These documents are intentionally kept in dedicated files instead of being burie
 | --- | --- | --- |
 | **Framework** | [Next.js](https://nextjs.org/) 15 (App Router) + React 19 + TypeScript | Server-rendered pages for content that should be crawlable and fast on a first load, with the App Router's per-route code splitting keeping each editorial's (potentially heavy) visualisation out of every other page's bundle. `middleware.ts` opts in to the **Node.js middleware runtime** (stable since Next 15.5) because it checks Better Auth sessions — see [Section IX](#ix-accounts--study-planner). |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) 3 + hand-rolled shadcn/ui-style primitives (`components/ui/`, built on Radix) + [next-themes](https://github.com/pacocoursey/next-themes) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for colour/spacing, rather than scattering hex values through components. Light/dark theme follows the system by default, with a manual toggle. |
-| **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Two collections — `editorials` and `materials` — each with a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualisation-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` is the only place that touches Velite's generated `#content` output directly; every page goes through it. |
+| **Content pipeline** | MDX compiled with [Velite](https://velite.js.org) | Three collections — `editorials`, `materials`, and `docs` — each with a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualisation-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` and `lib/docs.ts` query Velite's generated `#content` collections; page routes never import `#content` directly. |
 | **Math typesetting** | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML **at build time**, so a reader's browser never runs math-rendering JS or reflows the page after load. |
 | **Visualisations** | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Five engines (`components/viz/`), dispatched by `vizConfig.discriminant` in an editorial's frontmatter (see [Section V](#v-content-model--writing-an-editorial)): three purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox) plus two authored visually — `composed-scene` (template-driven) and `programmable-scene` (a sandboxed, block-authored program). See [Section VIII](#viii-composed--programmable-scenes-the-scene-builder). D3 is used narrowly for its scale maths, not as a full charting layer, since each engine's rendering is bespoke. |
 | **Block editor** | [Blockly](https://developers.google.com/blockly) | Authoring-only dependency of the scene builder's `programmable-scene` mode. It is deliberately kept out of every reader-facing page's JavaScript; `pnpm build` ends with a script that fails the build if it leaks (see [Section IV](#iv-getting-started)). |
 | **i18n** | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts` — see [Section X](#x-internationalisation). |
 | **CMS** | [Keystatic](https://keystatic.com/) | In-site editing at `/keystatic`, mirroring `velite.config.ts`'s schema field-for-field (`keystatic.config.ts`): three editorial collections, three materials collections, and a `team` singleton. Local-storage mode in development, GitHub-storage mode (real OAuth-backed auth) in production — see [Section VII](#vii-editing-content-in-the-browser-keystatic). |
 | **Image uploads** | [Vercel Blob](https://vercel.com/storage/blob) | Backs the team-photo upload path (`app/api/team-photo/route.ts`, used from `/keystatic/team-photo`). Gated by the same production rule as Keystatic itself, plus a per-request session and `ADMIN_EMAILS` check — see [Section VII](#vii-editing-content-in-the-browser-keystatic). |
-| **Database** | [Neon](https://neon.tech/) serverless Postgres | Stores accounts, sessions, topics, quiz questions, quiz attempts, study plans and plan items. |
+| **Database** | [Neon](https://neon.tech/) serverless Postgres | Stores accounts, sessions, topics, quiz questions, quiz attempts, per-question responses (`quiz_question_responses`), study plans, plan items, user planner settings (`user_planner_settings`), and topic self-ratings (`topic_self_ratings`). |
 | **ORM and migrations** | [Drizzle ORM](https://orm.drizzle.team/) | Defines the schema in TypeScript (`lib/db/schema.ts`); migrations are committed under `drizzle/`. |
-| **Authentication** | [Better Auth](https://www.better-auth.com/) | Email/password authentication; Google OAuth is optional and only activates when both Google credentials are configured. |
-| **Testing** | [Vitest](https://vitest.dev/) | Unit and render-path tests live beside the code they cover (`*.test.ts(x)`), plus `content-integrity.test.ts`, `velite.config.test.ts`, `keystatic.config.test.ts` and `__tests__/middleware.test.ts` at the root. |
+| **Authentication** | [Better Auth](https://www.better-auth.com/) | Email/password authentication; Google OAuth is optional and only activates when both Google credentials are configured. Role resolution (`Inchoatus` vs `Primus Inter Pares`) checks `ADMIN_EMAILS` on `/account`. |
+| **Testing** | [Vitest](https://vitest.dev/) | Unit and render-path tests live beside the code they cover (`*.test.ts(x)`), plus `content-integrity.test.ts`, `velite.config.test.ts`, `keystatic.config.test.ts`, `messages-parity.test.ts`, and `__tests__/middleware.test.ts` at the root. |
 | **Package manager** | [pnpm](https://pnpm.io) 9 (pinned via `packageManager` in `package.json`) | — |
 
 **Hosting:** [Vercel](https://vercel.com). The live deployment is available at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js — no `vercel.json` is needed. See [Section XI](#xi-deploying) for deployment details.
 
 `next.config.mjs` also applies baseline security headers to every route (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`). There is deliberately **no Content-Security-Policy yet**; a real one has to be worked out against Keystatic's admin UI and Vercel Blob's image host (see `docs/deployment-readiness.md`).
 
-Phase 3 adaptive scheduling remains a design document in `docs/phase-3-architecture.md`.
+Phase 3 adaptive scheduling is implemented (`docs/phase-3-planner.md`). The earlier design sketch is preserved in `docs/phase-3-architecture.md`.
 
 ---
 
@@ -82,14 +82,15 @@ app/[locale]/                    routes (everything is locale-prefixed)
   syllabus/                      syllabus index; syllabus/[subject]/ for one subject
   materials/                     materials index; materials/[subject]/[slug]/ for one material
   archive/                       editorial listing, filterable by subject/principle/errorType
-  archive/[subject]/[slug]/      one editorial's page
+  archive/[subject]/[slug]/      one editorial's page (+ opengraph-image.tsx)
   about/                         philosophy, team (from content/team), repo link
   docs/                          documentation: docs/ (index), docs/[slug] (one page) — Section VI-b
+  account/                       account profile, role (Inchoatus / Primus Inter Pares), sign out
   [...rest]/                     catch-all that renders the localized 404 (real routes win)
   layout.tsx                     the ROOT layout: <html lang={locale}>, theme, header/footer, skip link
   opengraph-image.tsx            the site-wide social card (one per locale, built statically)
   login/ signup/                 Better Auth email/password (and optional Google) forms
-  planner/                       authenticated plan overview and generation
+  planner/                       authenticated adaptive plan dashboard and onboarding
   planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (the
                                   "chapter" segment actually contains the topic ID)
   error.tsx, not-found.tsx       locale-scoped error and 404 pages
@@ -113,12 +114,16 @@ app/robots.ts, app/sitemap.ts    generated from the same content queries every p
 app/llms.txt/route.ts            /llms.txt — Markdown map of the site for LLM tools
 app/icon.svg                     favicon
 components/
+  account/                       sign-out button
   auth/                          login and signup forms
-  planner/                       plan overview, plan-generation form, topic view
+  docs/                          MDX rendering for documentation (doc-mdx.tsx), docs navigation
+  planner/                       plan dashboard, onboarding (settings & self-rating forms),
+                                  chapter/topic view, and fallback even-spread overview
   quiz/                          quiz dialog
+  seo/                           JSON-LD structured data injector
   ui/                            hand-rolled shadcn/ui-style primitives
   site/                          header, footer, cards, filters, archive sub-nav, theme toggle,
-                                  syllabus controls, team-photo uploader
+                                  syllabus controls, team-photo uploader, skip link
   site/scene-builder/            the scene builder UI: palette, inspector, timeline,
                                   Blockly block editor, new-visualisation form
   viz/                           the five visualisation engines, the engine dispatcher
@@ -150,8 +155,25 @@ lib/auth.ts, lib/auth-guard.ts,  Better Auth configuration, session checks, clie
   lib/auth-client.ts,             error-message mapping, safe post-login redirects
   lib/auth-error-messages.ts,
   lib/safe-redirect.ts
-lib/planner*.ts, lib/plan-generator.ts,
-  lib/quiz*.ts                   plan generation, progress, scoring, and server actions
+lib/account.ts,                  user account profile lookup and role resolution
+  lib/account-roles.ts            (Inchoatus vs Primus Inter Pares based on ADMIN_EMAILS)
+lib/plan-scheduler.ts,           Phase 3 adaptive scheduler pipeline: state loading,
+  lib/plan-service.ts,            scheduling, database persistence, view model, and
+  lib/plan-state.ts,              calendar date helpers
+  lib/plan-view.ts,
+  lib/plan-dates.ts,
+  lib/plan-db.ts
+lib/mastery.ts,                  Bayesian Beta posterior mastery estimation with decay
+  lib/osn-stages.ts               and official/projected OSN stage dates
+lib/planner-settings.ts,         planner settings validation, vocabulary constants,
+  lib/planner-settings-actions.ts, client-server sync, and user server actions
+  lib/planner-vocab.ts,
+  lib/planner-sync.ts,
+  lib/planner-actions.ts
+lib/plan-generator.ts,           Phase 2 even-spread generator (deterministic fallback)
+  lib/planner.ts                  and topic progress helpers
+lib/quiz-bank/                   typed, validated quiz question bank per subject
+lib/quiz*.ts                     quiz attempt actions, scoring, and response recording
 lib/scene-builder-*.ts           frontmatter write-back (write), stub-editorial creation
                                   (create), GitHub API client (github), and the dedicated
                                   GitHub OAuth flow (oauth, oauth-client) — Section VIII
@@ -161,7 +183,7 @@ messages/{id,en}.json            UI strings
 i18n/                            next-intl routing and request configuration
 drizzle/                         committed SQL migrations (drizzle/meta is git-ignored)
 scripts/                         seed-topics.ts, seed-quiz-questions.ts,
-                                  check-blockly-bundle-isolation.ts
+                                  simulate-planner.ts, check-blockly-bundle-isolation.ts
 middleware.ts                    locale routing, admin-surface gate, planner auth gate
 docs/                            see the list below
 ```
@@ -173,7 +195,9 @@ docs/                            see the list below
 | `seo-and-accessibility.md` | How indexing is switched on, what each page declares to search engines, the accessibility decisions and how to verify them, and the open launch decisions. |
 | `cherenkov-env-vars-guide.md` | Every environment variable, what it unlocks, and how to obtain it, for both local development and Vercel. |
 | `scene-builder-github-auth.md` | Walkthrough and troubleshooting for the scene builder's GitHub authorisation step ([FAQ F](#f-why-do-i-see-github-authorization-required-in-the-scene-builder-even-though-im-already-logged-into-keystatic)). |
-| `phase-3-architecture.md` | The Phase 3 adaptive-scheduling plan (**not implemented**). It also summarises Phase 2 as built. |
+| `phase-3-planner.md` | The Phase 3 adaptive planner as built: student settings, topic self-ratings, mastery estimation, scheduler pipeline, regeneration, and feasibility. Code is the source of truth. |
+| `planner-context-transfer.md` | Domain research, pedagogical rationale, and architectural decisions behind the Phase 3 scheduler. |
+| `phase-3-architecture.md` | The original Phase 2/3 design sketch (historical; `phase-3-planner.md` and the code supersede it where they differ). |
 | `phase-2-architecture.md` | The original Phase 2 design sketch. Historical: Phase 2 is built, and its own header says so. |
 | `deployment-readiness.md` | The Phase 1 deployment-hardening write-up. Historical: it predates the scene builder, the planner and the syllabus/materials sections, so treat it as context rather than a current file or dependency list. |
 
@@ -244,7 +268,7 @@ or any other port you prefer. If the port is still busy, the app will continue t
 | `KEYSTATIC_SECRET` | Required in production whenever `KEYSTATIC_GITHUB_CLIENT_ID` is set | Signs Keystatic's GitHub-mode session and the scene builder's short-lived GitHub-token cookie. **If the client ID is set but this is not, the whole admin surface stays disabled in production** (`lib/admin-guard.ts` fails closed rather than signing cookies with a guessable secret). | Run `openssl rand -base64 32` and paste the result. |
 | `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | **Do not set** | A client-visible boolean that `next.config.mjs` derives automatically from `KEYSTATIC_GITHUB_CLIENT_ID` at build time, so the browser and server agree on Keystatic's storage mode. Setting it by hand just creates a way for the two to disagree. | Nothing to do. |
 | `KEYSTATIC_GITHUB_REPO` | Optional | Which repo Keystatic and the scene builder commit to in GitHub-storage mode. Defaults to `project-cherenkov/project-cherenkov-app` if unset — only needed if you're running a fork under a different name. | Usually leave unset. |
-| `ADMIN_EMAILS` | Required for team-photo uploads **and** the scene builder (save and "New visualization") | Comma-separated email allow-list for content editors. These routes require both an authenticated session and a matching email — **in local mode too**, so saving from the scene builder locally needs the Phase 2 account variables below as well. | Add a list such as `editor@example.com, second-editor@example.com` to `.env.local` or Vercel's environment variables. |
+| `ADMIN_EMAILS` | Required for CMS editing / scene builder, and assigns the admin role | Comma-separated email allow-list for content editors. Required for team-photo uploads, saving/creating scenes in the scene builder (**in local mode too**), and grants the **Primus Inter Pares** role on `/account`. Non-admin users receive the **Inchoatus** role. | Add a list such as `editor@example.com, second-editor@example.com` to `.env.local` or Vercel's environment variables. |
 | `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the upload after authorisation succeeds. Without it, the route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it, and let Vercel create the variable automatically. |
 | `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or to the eventual custom domain. | Use the deployed origin. |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | **The switch that lets search engines index the site.** Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login, signup and planner pages stay `noindex` regardless, as do editorials still carrying a placeholder author. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/seo-and-accessibility.md` is done. |
@@ -511,16 +535,62 @@ GitHub mode needs its own authorisation step first, via a **dedicated GitHub OAu
 
 ## **IX. Accounts & Study Planner**
 
-Phase 2 is implemented. It is entirely optional for visitors — the archive, syllabus and materials never require an account.
+Accounts and the study planner are implemented (Phase 2 core accounts/quizzes, followed by the **Phase 3 OSN adaptive study planner**). They are entirely optional for visitors — the archive, syllabus, materials, and documentation never require an account.
 
-- **Accounts.** Better Auth with email/password, plus Google OAuth when both Google variables are set (the "Continue with Google" buttons only render then). Sign-in and sign-up live at `/[locale]/login` and `/[locale]/signup`; post-login redirects go through `lib/safe-redirect.ts`.
-- **The gate.** `middleware.ts` redirects any unauthenticated request under `/[locale]/planner` to the login page, carrying a `?next=` return path. With no `DATABASE_URL`, session checks fail closed (treated as unauthenticated), so the planner redirects rather than erroring.
-- **Topics.** Planner topics are rows in the `topics` table, derived from the **syllabus** (`lib/syllabus`) by `pnpm db:seed` (`scripts/seed-topics.ts`): one row per theory topic, keyed by `(subject, syllabus_topic_id)`, in syllabus order. An editorial is attached to a topic when its `syllabusTopic` frontmatter points there. Rows created by the older editorial-driven seed are adopted in place when their editorial links to a syllabus topic; the rest keep `syllabus_topic_id = null` and the Phase 3 planner must ignore them.
-- **Plans.** A signed-in user picks a target exam date and `lib/plan-generator.ts` spreads every topic evenly across the days from today to that date (informatics, then physics, then astronomy). If the window is shorter than the number of topics, topics are compressed onto the available days. Regenerating replaces the plan.
-- **Quizzes and progress.** Each topic page offers a quiz. Topic status is derived from the **most recent** attempt: a score of at least 80% (`MASTERY_THRESHOLD = 0.8`) is `done`, any lower score is `in_progress`, and no attempts is `not_started`. A plan item's `completed_at` is set automatically the first time a topic reaches `done` and is not cleared by a later weaker attempt. Correct answers are never sent to the browser before submission.
-- **Question bank.** There is no quiz-authoring UI; questions live in `lib/quiz-bank/` and `pnpm db:seed` copies them into `quiz_questions`, upserting on a stable `key`. Every question must carry a `difficulty` (`basic` / `intermediate` / `advanced`) and a `status` (`draft` / `reviewed`). Editors are meant to write and review the real questions; the current ones — 51 for physics (one per topic and difficulty) plus the two earlier examples — are AI-generated **drafts**, not reviewed curriculum.
+### Accounts & Profile
 
-The schema is in `lib/db/schema.ts` (Better Auth's `user`/`session`/`account`/`verification` tables plus `topics`, `quiz_questions`, `quiz_attempts`, `study_plans` and `plan_items`), with migrations committed in `drizzle/`. Phase 3 tables: `quiz_question_responses` (one row per answered question, written together with the attempt), `user_planner_settings` and `topic_self_ratings` (saved by `lib/planner-settings-actions.ts`; no page calls these yet); stage dates live in `lib/osn-stages.ts` (2027 dates are **projected** from 2026, not announced). `lib/mastery.ts` turns self-ratings and recorded answers into a per-topic mastery estimate; its parameters are placeholders and nothing uses it yet. Plan regeneration keeps completed plan items, and "today" is the student's calendar day (default Asia/Jakarta), not the server's.
+- **Better Auth.** Email/password authentication, plus Google OAuth when both Google variables (`GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`) are configured. Sign-in and sign-up live at `/[locale]/login` and `/[locale]/signup`; post-login redirects are validated by `lib/safe-redirect.ts`.
+- **Account profile (`/[locale]/account`).** Signed-in users can view their account name, email address, registration date, connected authentication providers, and role.
+- **Roles & Permissions (`lib/account-roles.ts`).** Accounts are assigned one of two roles based on whether their email is listed in `ADMIN_EMAILS` (`lib/admin-guard.ts`):
+  - **`Primus Inter Pares`** — account email matches `ADMIN_EMAILS`. Has permission to author and edit content in the CMS and scene builder.
+  - **`Inchoatus`** — standard member role for students and regular accounts without administrative write access.
+- **The auth gate.** `middleware.ts` redirects unauthenticated requests under `/[locale]/planner` and `/[locale]/account` to the login page, carrying a `?next=` return path. If `DATABASE_URL` is unset, session checks fail closed (treated as unauthenticated), redirecting rather than throwing unhandled server errors.
+
+### Phase 3 Adaptive Study Planner (`/[locale]/planner`)
+
+The study planner implements an adaptive OSN preparation engine tailored to Indonesian olympiad competitions (OSN-K, OSN-P, and national semifinal/final).
+
+#### 1. Onboarding & Settings
+When a student visits `/planner` for the first time, they complete a guided onboarding flow (`components/planner/planner-onboarding.tsx`):
+1. **Study Settings (`user_planner_settings`):** The student selects their target subject (`informatics`, `physics`, or `astronomy`), target OSN competition stage (`osn_k`, `osn_p`, `semifinal`, `final`), exam year (e.g. 2026 or 2027), available study hours per week (1–80 hours/week), and timezone (default `Asia/Jakarta`). Target exam dates resolve dynamically from `lib/osn-stages.ts`.
+2. **Topic Self-Ratings (`topic_self_ratings`):** The student rates their confidence on each syllabus topic for their subject on a 1–5 scale (1 = "barely know it", 5 = "could teach it", or leave unrated for "no opinion").
+
+Settings and ratings can be updated at any time from the dashboard, which prompts the student to recalculate or regenerate their plan.
+
+#### 2. The Adaptive Scheduling Pipeline
+The scheduling pipeline is pure and deterministic except for database I/O (`plan-state.ts` → `plan-scheduler.ts` → `plan-service.ts` → `plan-view.ts` → `plan-db.ts`):
+- **Bayesian Mastery Estimation (`lib/mastery.ts`).** Topic mastery is modelled as a Beta posterior distribution:
+  - Self-ratings serve as a weak prior belief.
+  - Quiz answers at the stage's target difficulty range (`basic` for OSN-K, `intermediate` for OSN-P, `advanced` for national stages) update the posterior. Answers outside the stage difficulty range do not contaminate the estimate.
+  - Mastery experiences a time-decay factor (30-day half-life) to account for memory retention.
+- **Scheduler Algorithm (`lib/plan-scheduler.ts`).**
+  - **Confirmation quizzes:** Topics rated high without verified quiz evidence are scheduled first to confirm mastery early; topics rated low are scheduled for confirmation last.
+  - **Study sessions:** Prioritised by marginal gain per hour using the Region of Proximal Learning (RPL) principle.
+  - **Exam-anchored spaced reviews:** A review ladder schedules revisit sessions timed against the target exam date.
+  - **Pre-exam buffer & final review:** A final mixed pass across topics in the days immediately preceding the competition.
+  - **Daily interleaving:** Daily study sessions interleave multiple topics rather than block-studying one topic.
+- **Feasibility & Transparency.** If the student's weekly hours are insufficient to cover all required study and review sessions, the planner flags this transparently. The dashboard displays an honest feasibility banner detailing any hour shortfall, unplaced topics, or skipped review sessions (`skippedReviewCount`).
+- **Regeneration.** Re-running the scheduler preserves completed items, never reschedules completed study, and computes calendar days relative to the student's configured timezone. It runs on explicit user action; banners appear when settings or quiz answers change.
+- **Deterministic fallback.** The Phase 2 uniform even-spread scheduler (`lib/plan-generator.ts`) is retained as a deterministic fallback.
+
+#### 3. Dashboard & Session Tracking (`PlanDashboard`)
+- Displays today's agenda, overdue items, "up next" items, weekly calendars, and topic breakdown.
+- Plan items carry specific kinds (`confirm`, `study`, `review`, `final_review`, `buffer`) and human-readable pedagogical explanations (`reason`).
+- **Manual & automatic completion:** Students can check off study and review sessions by hand (`completePlanItem` in `lib/planner-actions.ts`). Passing a topic quiz automatically completes the topic's confirmation item.
+
+#### 4. Topic Quizzes & Question Bank
+- **Topic pages (`/[locale]/planner/[subject]/[chapter]`).** Each topic page links to the relevant editorial (if published) and provides an interactive quiz dialog (`components/quiz/quiz-dialog.tsx`).
+- **Quiz bank (`lib/quiz-bank/`).** Questions are authored with stable keys (e.g. `physics.vectors.basic.1`), difficulties (`basic`, `intermediate`, `advanced`), and review statuses (`draft`, `reviewed`).
+- **Auto-grading & response recording.** Quizzes are submitted to `submitQuizAttempt` (`lib/quiz-actions.ts`). The aggregate score is saved in `quiz_attempts`, while individual answers are recorded in `quiz_question_responses` to feed the mastery estimator. Correct answers are never sent to the client before submission.
+- **Seeding.** `pnpm db:seed` runs `scripts/seed-topics.ts` (populating syllabus topics) and `scripts/seed-quiz-questions.ts` (upserting quiz bank questions, with `--prune-legacy` available to clean unkeyed questions).
+- **Simulation.** `scripts/simulate-planner.ts` simulates learning trajectories to evaluate scheduler behaviour across hypothetical learner cohorts.
+
+### Database Schema
+
+Defined in TypeScript via Drizzle ORM (`lib/db/schema.ts`) and committed under `drizzle/` (`0000_wonderful_meteorite.sql`):
+- **Auth:** `user`, `session`, `account`, `verification` (Better Auth core).
+- **Curriculum:** `topics` (linked to syllabus topics and editorial slugs), `quiz_questions`, `quiz_attempts`, `quiz_question_responses`.
+- **Planner:** `study_plans`, `plan_items`, `user_planner_settings`, `topic_self_ratings`.
 
 ---
 
@@ -616,12 +686,13 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 ## **XIII. Current Status & Open Questions**
 
 - The repo is public at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app), and the live deployment is at [`project-cherenkov-app.vercel.app/en`](https://project-cherenkov-app.vercel.app/en). The default locale is served under a locale prefix, not at the bare site root.
-- **Built:** the editorial archive with five visualisation engines; the syllabus and materials sections; Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); accounts, the study planner and quizzes.
-- **Not built:** Phase 3 adaptive scheduling (design only), a quiz-authoring UI, and a Content-Security-Policy.
-- **Content is thin.** There are three real editorials plus one implementation fixture, and one material (`binary-search`). Of the syllabus, only informatics has a starter material; physics and astronomy have none yet.
+- **Built:** the editorial archive with five visualisation engines; the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the **Phase 3 OSN adaptive study planner** with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and the quiz question bank with automated seeding and coverage checks.
+- **Not built:** a GUI quiz-authoring UI (questions are authored in `lib/quiz-bank/` and seeded into Postgres via `pnpm db:seed`), and a Content-Security-Policy (CSP).
+- **Planner & calibration placeholders:** `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
+- **Content is thin.** There are three real editorials plus one implementation fixture, and one material (`binary-search`). Of the syllabus, only informatics has a starter material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty); informatics and astronomy have starter stubs.
 - **About page.** `content/team/index.json` has one real member plus a dummy entry named "placeholder" ("the holder of place") that currently renders on the page. The project contact email is set, so the `[PLACEHOLDER — contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow`; the comment in `app/[locale]/layout.tsx` ties that to finishing placeholder copy, so the dummy team entry is the thing to resolve before flipping it.
 - **Physics syllabus source.** `lib/syllabus/data/physics.ts` is labelled as coming from the official OSN guidebook (confirmed by the project owner), but the exact title, edition and URL are not recorded yet — add `edition`/`url` to its `source` once known.
 - Keystatic and the scene builder stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` and `KEYSTATIC_SECRET` are configured.
 - The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
 
-This is the current state of the repo: public codebase, public deployment, the archive/syllabus/materials/planner features built, a few About-page and syllabus fields still being written, and production admin access still behind the GitHub OAuth gate.
+This is the current state of the repo: public codebase, public deployment, the archive/syllabus/materials/docs/planner features built, a few About-page and syllabus fields still being written, and production admin access still behind the GitHub OAuth gate.

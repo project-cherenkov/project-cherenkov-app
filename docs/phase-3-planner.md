@@ -1,7 +1,6 @@
 # Phase 3 planner (OSN path) — how it works now
 
-Research and reasoning: the context-transfer document (`cherenkov-planner-context-transfer.md`,
-copied to `docs/`). This file describes what is built. Code is the source of truth.
+Research and reasoning: the context-transfer document (`docs/planner-context-transfer.md`). This file describes what is built. Code is the source of truth.
 
 ## Flow the student sees (`/planner`)
 1. **Settings** — subject, OSN stage, exam year, hours per week (`user_planner_settings`).
@@ -36,10 +35,9 @@ copied to `docs/`). This file describes what is built. Code is the source of tru
 check only, not evidence that students learn more.
 
 ## Deploying
-1. Apply migrations `0004_phase3_planner_data.sql` then `0005_phase3_scheduler.sql`
-   (`drizzle/meta` is git-ignored, so run the SQL files directly if `db:migrate` does not see them).
+1. Apply database migrations: `pnpm db:migrate` (runs `drizzle/0000_wonderful_meteorite.sql`, which includes the full schema and Phase 3 tables).
 2. `pnpm db:seed` — loads syllabus topics and the quiz bank. Without it the planner says topics are not loaded.
-3. Set `ADMIN_EMAILS` — it decides who gets the **Primus Inter Pares** role on `/account`.
+3. Set `ADMIN_EMAILS` — authorizes the CMS write surface and scene builder, and decides who gets the **Primus Inter Pares** role on `/account`.
 
 ## Known gaps
 - Topic `effort` is not authored anywhere, so every topic counts as medium.

@@ -1,5 +1,7 @@
 # Deployment readiness — Phase 1
 
+> **Historical note:** This write-up documents the initial Phase 1 deployment-hardening pass. It predates the scene builder, the syllabus and materials sections, accounts, in-app documentation, and the Phase 2/3 study planner. For current deployment details and environment variables, consult `README.md` and `docs/cherenkov-env-vars-guide.md`.
+
 Written against the "Feature Architect" process used elsewhere in this repo
 (see the `spec §…`, `BLOB-…`, `CMS-…` comments throughout the codebase).
 Feature request: **"get Project Cherenkov ready for deployment."**
