@@ -2,6 +2,8 @@ import { defineCollection, defineConfig, s } from "velite";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
+import { extractToc, rehypeHeadingIds } from "./lib/docs-headings";
+
 // Mirrors the frontmatter schema from the build spec, Section 6.
 //
 // OPEN QUESTION (spec §12): `principle` / `errorType` are left as free
@@ -105,9 +107,54 @@ const materials = defineCollection({
     }),
 });
 
+// Docs: reader- and contributor-facing documentation, rendered at
+// /[locale]/docs. One file per page per language:
+//   content/docs/<locale>/<slug>.mdx        e.g. content/docs/en/getting-started.mdx
+// The English set is the source of truth; a page that has no file in the
+// reader's language falls back to English (see lib/docs.ts), so adding an
+// Indonesian translation is just adding the same-named file under docs/id/.
+// Deliberately NOT the same collection as editorials/materials: docs have no
+// subject, author or syllabus topic, and they carry a table of contents.
+// The developer-facing notes in the repo's top-level docs/ folder (env vars,
+// deployment, architecture) are NOT part of this collection and are never
+// published on the site.
+export const docSections = ["start", "reading", "contributing"] as const;
+export const docLocales = ["en", "id"] as const;
+
+const docs = defineCollection({
+  name: "Doc",
+  pattern: "docs/**/*.mdx",
+  schema: s
+    .object({
+      title: s.string().max(100),
+      // Becomes the page's <meta name="description"> and its card text.
+      description: s.string().max(200),
+      section: s.enum(docSections),
+      // Lower first, within a section.
+      order: s.number().int().default(100),
+      // ISO date of the last substantive edit; feeds the sitemap + JSON-LD.
+      updatedAt: s.isodate().optional(),
+      // Heading ids are added per-field so editorials/materials are unchanged.
+      body: s.mdx({ rehypePlugins: [rehypeHeadingIds] }),
+      toc: s
+        .custom((value) => value === undefined || typeof value === "string")
+        .transform((value, { meta }) =>
+          // meta.content is the Markdown body (frontmatter already stripped).
+          extractToc(typeof value === "string" ? value : String(meta.content ?? "")),
+        ),
+      slug: s.path(),
+    })
+    .transform((data) => {
+      // "docs/en/getting-started" -> locale "en", slug "getting-started"
+      const [, locale = "", ...rest] = data.slug.split("/");
+      const slug = rest.join("/");
+      return { ...data, locale, slug, url: `/docs/${slug}` };
+    }),
+});
+
 export default defineConfig({
   root: "content",
-  collections: { editorials, materials },
+  collections: { editorials, materials, docs },
   mdx: {
     // $inline$ and $$display$$ math in editorial prose compiles to static
     // KaTeX HTML at build time — no client JS, no reflow (spec §3's reason

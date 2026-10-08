@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo-metadata";
 import { redirect } from "next/navigation";
 import NextLink from "next/link";
 import { getCurrentUser } from "@/lib/auth-guard";
@@ -6,6 +8,16 @@ import { getAccountDetails } from "@/lib/account";
 import { ROLE_LABELS } from "@/lib/account-roles";
 import { Link } from "@/i18n/routing";
 import { SignOutButton } from "@/components/account/sign-out-button";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "account" });
+  return pageMetadata({ locale, path: "/account", title: t("title"), description: t("title"), noindex: true });
+}
 
 // middleware.ts already redirects signed-out visitors to /login; the null
 // checks are the defence-in-depth fallback, same as the planner pages.

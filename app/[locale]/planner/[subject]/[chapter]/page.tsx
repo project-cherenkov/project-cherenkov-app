@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth-guard";
@@ -10,6 +11,10 @@ import { QuizDialog } from "@/components/quiz/quiz-dialog";
 // app/[locale]/archive/[subject]/[slug]/page.tsx's existing pattern for the
 // same stylesheet (spec's code-splitting rule).
 import "katex/dist/katex.min.css";
+
+// Per-user study pages: never offered to search engines, whatever the
+// site-wide indexing switch says.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 // PLANNER-003. Route shape reserved since Phase 1 (see the prior placeholder's
 // own comment, now replaced) — resolves against lib/planner.ts's

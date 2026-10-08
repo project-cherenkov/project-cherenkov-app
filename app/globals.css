@@ -18,6 +18,10 @@
     --secondary-alt: 327 100% 89%;
     --card: 0 0% 100%;
     --border: 210 20% 88%;
+    /* Focus ring. #0A88B8 on white is 4.0:1 (WCAG 1.4.11 asks for 3:1); the
+       pastel blue it replaces was 1.6:1 and effectively invisible on the
+       light theme. */
+    --ring: 196 89% 38%;
   }
 
   .dark {
@@ -30,6 +34,7 @@
     --secondary-alt: 327 65% 76%;
     --card: 210 0% 12%;
     --border: 210 0% 22%;
+    --ring: 201 100% 77%; /* the pastel blue: 9.5:1 on the dark background */
   }
 
   body {
@@ -46,7 +51,14 @@
      controls — non-functional requirement §8 calls out keyboard operability
      explicitly. */
   :focus-visible {
-    @apply outline-none ring-2 ring-cherenkov-blue-pastel ring-offset-2 ring-offset-background;
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Sticky header (and its hanging bookmarks) must not cover the target of a
+     skip link, a #fragment or a focused element (WCAG 2.4.11 Focus Not
+     Obscured). */
+  html {
+    scroll-padding-top: 5rem;
   }
 
   ::selection {

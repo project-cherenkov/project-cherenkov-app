@@ -1,0 +1,48 @@
+---
+title: "Using the visualizations"
+description: "How the interactive visualizations work: playback controls, sliders, keyboard and touch use, and the kinds of visualization you will meet."
+section: reading
+order: 20
+updatedAt: "2026-10-07"
+---
+
+Each editorial's visualization is part of the argument, not an illustration added afterwards. They are built to work on a phone: nothing depends on hover, and every control can be used by touch or keyboard.
+
+## Playback controls
+
+Most visualizations share the same control bar:
+
+| Control | What it does |
+| --- | --- |
+| **Step back / Step forward** | Move one step at a time. |
+| **Play / Pause** | Run the visualization automatically. Nothing plays until you press Play. |
+| **Reset** | Return to the starting state. |
+| **Scrub slider** | Jump to any step, or any moment in time. |
+
+A short label beside the controls tells you where you are — for example *Step 3 of 8*, or the elapsed time.
+
+## Sliders
+
+Sandbox-style visualizations expose their key quantities as sliders — for instance the launch angle of a projectile, or the eccentricity of an orbit. Drag a slider, or focus it and use the arrow keys, to change the value and watch the picture respond.
+
+## Keyboard use
+
+- **Tab** moves between controls; the focus ring shows where you are.
+- **Space** or **Enter** activates a button.
+- On a slider, **Left / Right** (or **Down / Up**) change the value by one step, **Page Up / Page Down** by a larger step, and **Home / End** jump to the minimum or maximum.
+
+## The kinds of visualization
+
+| Kind | What you can do |
+| --- | --- |
+| **Graph / array stepper** | Step through an algorithm on an array or graph, with pointers and highlighted cells and a one-line note per step. |
+| **Trajectory sandbox** | Change the launch speed and angle and watch the path. |
+| **Orbital sandbox** | Change eccentricity and mass ratio and watch the orbit and a schematic transit light curve. |
+| **Composed scene** | A custom scene built from reusable shapes, curves and labels, with optional sliders and steps. |
+| **Programmable scene** | A custom scene driven by a small sandboxed program, built visually from blocks. |
+
+The last two are authored without writing code; see [The scene builder](/docs/scene-builder) if you want to make your own.
+
+## If a visualization does not load
+
+Visualizations load after the page itself, so for a moment you may see a placeholder. They need JavaScript; the text of the editorial, including the full proof, is available without it. If a visualization shows a configuration error instead, the editorial's setup is wrong — please [report it](/docs/contributing).

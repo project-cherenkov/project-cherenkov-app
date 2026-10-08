@@ -1,7 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Interactive olympiad editorials for informatics, physics, and astronomy — every proof paired with a visualization you can actually manipulate."
+    "tagline": "Interactive olympiad editorials for informatics, physics, and astronomy — every proof paired with a visualization you can actually manipulate.",
+    "homeTitle": "Cherenkov — interactive olympiad editorials"
   },
   "nav": {
     "home": "Home",
@@ -17,7 +18,13 @@
     "materials": "Materials",
     "editorials": "Editorials",
     "archiveSections": "Archive sections",
-    "account": "Account"
+    "account": "Account",
+    "docs": "Docs",
+    "menu": "Menu",
+    "skipToContent": "Skip to main content",
+    "mainNavigation": "Main navigation",
+    "language": "Language",
+    "toggleTheme": "Toggle theme"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -27,7 +34,8 @@
     "ctaAbout": "Read the philosophy",
     "recentHeading": "requirements.txt — recent editorials",
     "recentEmpty": "No editorials published yet.",
-    "ctaSyllabus": "See the syllabus"
+    "ctaSyllabus": "See the syllabus",
+    "ctaDocs": "Read the docs"
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -71,7 +79,11 @@
     "scrub": "Scrub through steps",
     "stepCounter": "Step {current} of {total}",
     "transitCurve": "Transit light curve (schematic)",
-    "programmableSceneBudgetNotice": "This scene is taking too long to compute — showing the last frame that finished in time."
+    "programmableSceneBudgetNotice": "This scene is taking too long to compute — showing the last frame that finished in time.",
+    "canvasLabel": "Interactive visualization. Use the controls and sliders below it to change what it shows.",
+    "orbitalLabel": "Orbit diagram: eccentricity {eccentricity}, planet-to-star mass ratio {massRatio}, at time {time} seconds. Use the sliders below to change the orbit.",
+    "trajectoryLabel": "Trajectory diagram: launch speed {speed} metres per second at {angle} degrees. Use the sliders below to change the launch.",
+    "loading": "Loading visualization…"
   },
   "about": {
     "eyebrow": "about.md",
@@ -90,7 +102,10 @@
     "license": "License",
     "terms": "Terms",
     "privacy": "Privacy",
-    "contact": "Contact"
+    "contact": "Contact",
+    "docs": "Docs",
+    "navLabel": "Site information",
+    "opensInNewTab": "(opens in a new tab)"
   },
   "phase2": {
     "login": {
@@ -198,7 +213,8 @@
     "collapseAll": "Collapse all",
     "readMaterial": "Read material",
     "comingSoon": "Coming soon",
-    "editorialsLabel": "Editorials:"
+    "editorialsLabel": "Editorials:",
+    "subjectDescription": "The {subject} syllabus for the Indonesian OSN, topic by topic (source: {source}). See which topics already have a material or an interactive editorial."
   },
   "materials": {
     "eyebrow": "materials.md",
@@ -330,6 +346,25 @@
       "study_continue": "Continues the earlier session.",
       "review_ladder": "Spaced revisit, timed against the exam date.",
       "final_review": "Last mixed pass before the exam."
+    }
+  },
+  "docs": {
+    "eyebrow": "docs.md",
+    "title": "Documentation",
+    "description": "How to use Cherenkov, read its editorials and visualizations, and contribute to the project.",
+    "navLabel": "Documentation sections",
+    "browse": "Browse documentation",
+    "onThisPage": "On this page",
+    "breadcrumb": "Breadcrumb",
+    "pager": "More documentation",
+    "previous": "Previous",
+    "next": "Next",
+    "updated": "Last updated {date}",
+    "fallbackNotice": "This page has not been translated yet, so you are reading the English original.",
+    "sections": {
+      "start": "Start here",
+      "reading": "Reading and using the site",
+      "contributing": "Contributing"
     }
   }
 }

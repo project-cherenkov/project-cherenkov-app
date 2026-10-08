@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
@@ -21,9 +21,12 @@ function isWithin(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+// `name` is the language's own name for itself and is deliberately NOT
+// translated: someone who needs to find the Indonesian site should be able to
+// find "Bahasa Indonesia" even when the page is currently in English.
 const localeOptions = [
-  { code: "en", label: "EN", flag: "🇬🇧" },
-  { code: "id", label: "ID", flag: "🇮🇩" },
+  { code: "en", label: "EN", name: "English", flag: "🇬🇧" },
+  { code: "id", label: "ID", name: "Bahasa Indonesia", flag: "🇮🇩" },
 ] as const;
 
 export function SiteHeader() {
@@ -32,6 +35,22 @@ export function SiteHeader() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  /* Escape closes the drawer and hands focus back to the button that opened
+     it (WCAG 2.1.1 / 2.4.3) — otherwise a keyboard user has to tab all the way
+     back through the drawer to dismiss it. */
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
 
   /* Lock body scroll when mobileMenuOpen is true */
   useEffect(() => {
@@ -87,7 +106,10 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2 overflow-visible">
           {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
-          <nav className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0">
+          <nav
+            aria-label={t("mainNavigation")}
+            className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0"
+          >
             {navItems.map((item) => {
               const isActive = item.href
                 ? item.activeFor
@@ -125,7 +147,12 @@ export function SiteHeader() {
               }
 
               return (
-                <Link key={item.href} href={item.href!} className={bookmarkStyle}>
+                <Link
+                  key={item.href}
+                  href={item.href!}
+                  className={bookmarkStyle}
+                  aria-current={isActive ? (item.activeFor ? "true" : "page") : undefined}
+                >
                   {content}
                 </Link>
               );
@@ -136,8 +163,12 @@ export function SiteHeader() {
           <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
             <ThemeToggle />
 
-            <div className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70">
-              {localeOptions.map(({ code, label, flag }) => {
+            <div
+              role="group"
+              aria-label={t("language")}
+              className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70"
+            >
+              {localeOptions.map(({ code, label, name, flag }) => {
                 const isActive = code === currentLocale;
 
                 return (
@@ -145,15 +176,20 @@ export function SiteHeader() {
                     key={code}
                     href={pathname}
                     locale={code}
+                    lang={code}
+                    hrefLang={code}
+                    aria-current={isActive ? "true" : undefined}
                     className={[
-                      "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 transition-colors text-xs",
+                      "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 transition-colors text-xs",
                       isActive
                         ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white",
                     ].join(" ")}
-                    aria-label={`Switch language to ${label}`}
+                    aria-label={`${name} (${label})`}
                   >
-                    <span aria-hidden="true">{flag}</span>
+                    <span aria-hidden="true" className="hidden min-[420px]:inline">
+                      {flag}
+                    </span>
                     <span className="font-semibold leading-none">{label}</span>
                   </Link>
                 );
@@ -165,16 +201,21 @@ export function SiteHeader() {
               target="_blank"
               rel="noreferrer"
               aria-label={t("repo")}
-              className="hidden sm:inline-flex h-8 w-8 items-center justify-center rounded-md border border-border p-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+              className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-md border border-border p-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
             >
               <Github className="h-4 w-4" aria-hidden />
             </a>
 
             {/* Single Bookmark Menu Toggle: Displays at 856px or smaller */}
+            {/* No aria-label on purpose: the visible word "Menu" IS the
+                accessible name (WCAG 2.5.3 Label in Name). The old label,
+                "Toggle Navigation", did not contain the visible text. */}
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label="Toggle Navigation"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
               className={[
                 "group relative min-[857px]:hidden -mt-2 inline-flex h-20 w-16 items-center justify-center p-1 pt-3 transition-transform duration-300 ease-out focus:outline-none z-30",
                 mobileMenuOpen ? "translate-y-5" : "hover:translate-y-2",
@@ -189,7 +230,7 @@ export function SiteHeader() {
                 className="object-fill pointer-events-none drop-shadow-md"
               />
               <span className="relative z-10 text-center font-mono font-bold text-white dark:text-slate-100 text-[10px] uppercase tracking-widest leading-none pb-2">
-                MENU
+                {t("menu")}
               </span>
             </button>
           </div>
@@ -198,8 +239,14 @@ export function SiteHeader() {
 
       {/* Mobile/Tablet Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur">
-          <nav className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide">
+        <div
+          id="mobile-nav"
+          className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur"
+        >
+          <nav
+            aria-label={t("mainNavigation")}
+            className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide"
+          >
             {navItems.map((item) => {
               const isActive = item.href
                 ? item.activeFor
@@ -267,6 +314,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href!}
                   onClick={() => setMobileMenuOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
                   className={linkClasses}
                 >
                   {item.label}

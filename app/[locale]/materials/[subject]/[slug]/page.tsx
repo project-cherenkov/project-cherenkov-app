@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { MaterialMDX } from "@/components/material-mdx";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbJsonLd } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo-metadata";
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getAllMaterials, getMaterial } from "@/lib/content";
 import { buildSubjectCoverage, getSectionNeighbours } from "@/lib/library";
@@ -15,6 +19,24 @@ export function generateStaticParams() {
     subject: material.subject,
     slug: material.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; subject: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, subject, slug } = await params;
+  const material = getMaterial(subject, slug);
+  if (!material) return {};
+  return pageMetadata({
+    locale,
+    path: `/materials/${subject}/${slug}`,
+    title: material.title,
+    description: material.summary,
+    ogType: "article",
+    article: { section: material.subject },
+  });
 }
 
 export default async function MaterialPage({
@@ -40,12 +62,18 @@ export default async function MaterialPage({
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: t("title"), path: "/materials" },
+          { name: material.title },
+        ])}
+      />
       <Link href="/materials" className="label-code hover:text-slate-700 dark:hover:text-slate-200">
         ← {t("backToMaterials")}
       </Link>
 
       <div className="mt-5 flex flex-wrap items-center gap-2">
-        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-700 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
+        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-800 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
           {ts(`subjects.${subject}`)}
         </span>
         {location && (
@@ -73,7 +101,7 @@ export default async function MaterialPage({
               <li key={editorial.slug}>
                 <Link
                   href={`/archive/${editorial.subject}/${editorial.slug}`}
-                  className="text-cherenkov-blue-700 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
+                  className="text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
                 >
                   {editorial.title}
                 </Link>

@@ -12,6 +12,11 @@ vi.mock("next-themes", () => ({
   }),
 }));
 
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) =>
+    ({ toggleTheme: "Toggle theme" })[key as "toggleTheme"] ?? key,
+}));
+
 import { ThemeToggle, nextTheme } from "./theme-toggle";
 
 describe("ThemeToggle", () => {

@@ -30,6 +30,10 @@ vi.mock("next-intl", () => ({
       signup: "Sign Up",
       myPlan: "My Plan",
       account: "Account",
+      toggleTheme: "Toggle theme",
+      menu: "Menu",
+      mainNavigation: "Main navigation",
+      language: "Language",
     };
     return translations[key] ?? key;
   },
@@ -105,5 +109,46 @@ describe("SiteHeader — session awareness", () => {
     expect(html).toContain("<svg");
     expect(html).toContain('href="/id/about"');
     expect(html).toContain('href="/en/about"');
+  });
+});
+
+// Accessibility behaviour added in the SEO/a11y pass.
+describe("SiteHeader — accessibility", () => {
+  function render() {
+    mockUseSession.mockReturnValue({ data: null });
+    return renderToStaticMarkup(<SiteHeader />);
+  }
+
+  it("names the menu button by its visible text (WCAG 2.5.3) and exposes its state", () => {
+    const html = render();
+    const button = html.match(/<button[^>]*aria-controls="mobile-nav"[^>]*>/)?.[0] ?? "";
+    expect(button).toContain('aria-expanded="false"');
+    // No aria-label: the visible "Menu" text is the accessible name.
+    expect(button).not.toContain("aria-label");
+    expect(html).not.toContain("Toggle Navigation");
+    expect(html).toContain(">Menu<");
+  });
+
+  it("labels the navigation landmark and the language group", () => {
+    const html = render();
+    expect(html).toContain('<nav aria-label="Main navigation"');
+    expect(html).toContain('role="group" aria-label="Language"');
+  });
+
+  it("marks the current page and current language", () => {
+    const html = render();
+    // usePathname() is mocked to "/about".
+    expect(html).toMatch(/<a href="\/about"[^>]*aria-current="page"/);
+    expect(html).toMatch(/<a href="\/en\/about"[^>]*aria-current="true"/);
+    expect(html).not.toMatch(/<a href="\/id\/about"[^>]*aria-current/);
+  });
+
+  it("gives each language link its own language and an autonym label", () => {
+    const html = render();
+    expect(html).toMatch(/<a href="\/id\/about"[^>]*lang="id"/);
+    expect(html).toContain('aria-label="Bahasa Indonesia (ID)"');
+    expect(html).toContain('aria-label="English (EN)"');
+    // The old English-only label must be gone.
+    expect(html).not.toContain("Switch language to");
   });
 });

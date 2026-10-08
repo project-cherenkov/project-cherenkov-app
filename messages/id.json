@@ -1,7 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi — setiap bukti dipasangkan dengan visualisasi yang benar-benar bisa Anda manipulasi."
+    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi — setiap bukti dipasangkan dengan visualisasi yang benar-benar bisa Anda manipulasi.",
+    "homeTitle": "Cherenkov — editorial olimpiade interaktif"
   },
   "nav": {
     "home": "Beranda",
@@ -17,7 +18,13 @@
     "materials": "Materi",
     "editorials": "Editorial",
     "archiveSections": "Bagian arsip",
-    "account": "Akun"
+    "account": "Akun",
+    "docs": "Dokumentasi",
+    "menu": "Menu",
+    "skipToContent": "Lewati ke konten utama",
+    "mainNavigation": "Navigasi utama",
+    "language": "Bahasa",
+    "toggleTheme": "Ganti tema"
   },
   "home": {
     "eyebrow": "readme.md",
@@ -27,7 +34,8 @@
     "ctaAbout": "Baca filosofinya",
     "recentHeading": "requirements.txt — edisi terbaru",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
-    "ctaSyllabus": "Lihat silabus"
+    "ctaSyllabus": "Lihat silabus",
+    "ctaDocs": "Baca dokumentasi"
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -71,7 +79,11 @@
     "scrub": "Geser antar langkah",
     "stepCounter": "Langkah {current} dari {total}",
     "transitCurve": "Kurva cahaya transit (skematik)",
-    "programmableSceneBudgetNotice": "Adegan ini butuh waktu terlalu lama untuk dihitung — menampilkan bingkai terakhir yang selesai tepat waktu."
+    "programmableSceneBudgetNotice": "Adegan ini butuh waktu terlalu lama untuk dihitung — menampilkan bingkai terakhir yang selesai tepat waktu.",
+    "canvasLabel": "Visualisasi interaktif. Gunakan kontrol dan penggeser di bawahnya untuk mengubah tampilannya.",
+    "orbitalLabel": "Diagram orbit: eksentrisitas {eccentricity}, rasio massa planet terhadap bintang {massRatio}, pada waktu {time} detik. Gunakan penggeser di bawahnya untuk mengubah orbit.",
+    "trajectoryLabel": "Diagram lintasan: kecepatan awal {speed} meter per detik pada sudut {angle} derajat. Gunakan penggeser di bawahnya untuk mengubah peluncuran.",
+    "loading": "Memuat visualisasi…"
   },
   "about": {
     "eyebrow": "about.md",
@@ -90,7 +102,10 @@
     "license": "Lisensi",
     "terms": "Syarat",
     "privacy": "Privasi",
-    "contact": "Kontak"
+    "contact": "Kontak",
+    "docs": "Dokumentasi",
+    "navLabel": "Informasi situs",
+    "opensInNewTab": "(terbuka di tab baru)"
   },
   "phase2": {
     "login": {
@@ -198,7 +213,8 @@
     "collapseAll": "Tutup semua",
     "readMaterial": "Baca materi",
     "comingSoon": "Segera hadir",
-    "editorialsLabel": "Editorial:"
+    "editorialsLabel": "Editorial:",
+    "subjectDescription": "Silabus {subject} OSN, topik demi topik (sumber: {source}). Lihat topik mana yang sudah punya materi atau editorial interaktif."
   },
   "materials": {
     "eyebrow": "materials.md",
@@ -330,6 +346,25 @@
       "study_continue": "Lanjutan sesi sebelumnya.",
       "review_ladder": "Pengulangan berjarak, dihitung dari tanggal ujian.",
       "final_review": "Ulasan campuran terakhir sebelum ujian."
+    }
+  },
+  "docs": {
+    "eyebrow": "docs.md",
+    "title": "Dokumentasi",
+    "description": "Cara menggunakan Cherenkov, membaca editorial dan visualisasinya, serta berkontribusi pada proyek ini.",
+    "navLabel": "Bagian dokumentasi",
+    "browse": "Telusuri dokumentasi",
+    "onThisPage": "Di halaman ini",
+    "breadcrumb": "Jejak halaman",
+    "pager": "Dokumentasi lainnya",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "updated": "Terakhir diperbarui {date}",
+    "fallbackNotice": "Halaman ini belum diterjemahkan, jadi yang ditampilkan adalah versi aslinya dalam bahasa Inggris.",
+    "sections": {
+      "start": "Mulai di sini",
+      "reading": "Membaca dan menggunakan situs",
+      "contributing": "Berkontribusi"
     }
   }
 }

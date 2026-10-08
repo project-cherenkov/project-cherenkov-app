@@ -1,0 +1,31 @@
+---
+title: "Editing with Keystatic"
+description: "Using the in-browser content editor: what it can edit, who can reach it, and how its saves become commits."
+section: contributing
+order: 20
+updatedAt: "2026-10-07"
+---
+
+Keystatic is the site's in-browser editor, available at `/keystatic`. It reads and writes the same MDX files described in [Writing an editorial](/docs/writing-editorials); it is a friendlier way to edit them, not a separate store.
+
+## What you can edit
+
+- Editorials — one collection per subject.
+- Materials — one collection per subject.
+- The team list shown on the About page.
+
+Because each collection is tied to one subject, a file in the wrong folder is not possible to create through the editor.
+
+## Who can reach it
+
+On a deployed site the editor is reachable only when GitHub sign-in is configured, and each action additionally requires a signed-in account whose email is on the editors' allow-list. Otherwise `/keystatic` returns "not found". Locally, with no configuration, it edits the files in your working copy directly.
+
+## How saves work
+
+In GitHub mode, saves land as commits on a new branch of the repository. Nothing is published until a pull request is opened and merged on GitHub — the editor does not do that step for you.
+
+## Known limitations
+
+- The editorial form cannot display the two visually-built engines' configuration. Create and edit those with [the scene builder](/docs/scene-builder), and edit their prose in the MDX file.
+
+For setup details — environment variables, OAuth apps and deployment — see the developer notes in the repository's `docs/` folder on GitHub.

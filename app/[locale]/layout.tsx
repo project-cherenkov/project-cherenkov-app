@@ -1,17 +1,32 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { routing } from "@/i18n/routing";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SkipLink } from "@/components/site/skip-link";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { fontVariableClasses } from "@/lib/fonts";
+import { OG_LOCALES, isAppLocale, robotsFor } from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
+import "../globals.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+// Matches --background in app/globals.css so the mobile browser chrome blends
+// into the page in both themes. Zoom is deliberately NOT restricted
+// (no maximumScale / userScalable) — WCAG 1.4.4 / 1.4.10.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#262626" },
+  ],
+};
 
 export async function generateMetadata({
   params,
@@ -20,29 +35,39 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "site" });
+  const ogLocale = isAppLocale(locale) ? OG_LOCALES[locale] : OG_LOCALES.id;
   return {
     metadataBase: new URL(siteUrl),
-    title: { default: t("name"), template: `%s — ${t("name")}` },
+    title: { default: t("homeTitle"), template: `%s — ${t("name")}` },
     description: t("tagline"),
+    applicationName: t("name"),
     openGraph: {
-      title: t("name"),
+      title: t("homeTitle"),
       description: t("tagline"),
-      locale,
-      alternateLocale: routing.locales.filter((l) => l !== locale),
+      siteName: t("name"),
+      locale: ogLocale,
+      alternateLocale: routing.locales
+        .filter((l) => l !== locale)
+        .map((l) => OG_LOCALES[l]),
       type: "website",
     },
-    // DEPLOYMENT-READINESS DEFAULT, not part of the original spec: every
-    // page is noindex/nofollow for now. messages/*.json still has several
-    // "[PLACEHOLDER — ...]" strings (heroTitle, tagline, philosophy, team
-    // bios) — t("tagline") above literally becomes the page's <meta
-    // name="description">, so search engines would index that placeholder
-    // text verbatim today. Flip this once real hero/tagline/about copy
-    // (README's "Open questions" list) is in — search the codebase for
-    // this comment when that happens, nothing else needs to change.
-    robots: { index: false, follow: false },
+    twitter: { card: "summary_large_image" },
+    // Site-wide default. Every page that builds its own metadata through
+    // lib/seo.ts inherits the same switch; account/auth/planner pages force
+    // noindex on top of it. The switch itself is NEXT_PUBLIC_ALLOW_INDEXING
+    // (see lib/seo.ts) — it replaces the old hard-coded
+    // `robots: { index: false, follow: false }` so going live no longer
+    // needs a code change.
+    robots: robotsFor(),
   };
 }
 
+// This is now the ROOT layout for every localized route (the previous
+// app/layout.tsx was removed). Having <html> here is what lets `lang` follow
+// the URL's locale — with one shared root layout it could only ever be a
+// fixed "en", which made every Indonesian page (the default locale!) announce
+// itself to screen readers and search engines as English (WCAG 3.1.1).
+// /keystatic has its own root layout in app/keystatic/layout.tsx.
 export default async function LocaleLayout({
   children,
   params,
@@ -59,19 +84,28 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
 
-  // <html>/<body> now live in app/layout.tsx (the actual App Router root
-  // layout) — see the comment there for why. This layout no longer renders
-  // them itself; `lang={locale}` moves there too since it can't be set
-  // dynamically per-locale from the real root, but every route under this
-  // segment sets it via next-intl's own <html lang> handling in
-  // NextIntlClientProvider is not applicable here — see note below.
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
-      </div>
-    </NextIntlClientProvider>
+    <html lang={locale} suppressHydrationWarning className={fontVariableClasses}>
+      <body className="font-sans bg-background text-foreground antialiased">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <SkipLink />
+            <div className="flex min-h-screen flex-col">
+              <SiteHeader />
+              {/* tabIndex={-1} lets the skip link move focus here; the ring is
+                  suppressed because the whole region lighting up is noise. */}
+              <main
+                id="main-content"
+                tabIndex={-1}
+                className="flex-1 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              >
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
+          </NextIntlClientProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

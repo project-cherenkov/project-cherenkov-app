@@ -142,7 +142,13 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
       )}
 
       <div ref={containerRef} className="w-full">
-        <canvas ref={canvasRef} className="w-full" data-testid="composed-scene-canvas" />
+        <canvas
+          ref={canvasRef}
+          className="w-full"
+          data-testid="composed-scene-canvas"
+          role="img"
+          aria-label={t("canvasLabel")}
+        />
       </div>
 
       {currentStep?.note && (
@@ -220,6 +226,7 @@ function SceneControlField({
     <label className="flex flex-col gap-1">
       <span className="label-code">{control.label}</span>
       <Slider
+        aria-label={control.label}
         min={control.min ?? paramSpec?.min ?? 0}
         max={control.max ?? paramSpec?.max ?? 100}
         step={control.step ?? paramSpec?.step ?? 1}

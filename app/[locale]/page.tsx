@@ -1,9 +1,29 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import { EditorialCard } from "@/components/site/editorial-card";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getRecentEditorials } from "@/lib/content";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo-metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "site" });
+  return pageMetadata({
+    locale,
+    path: "/",
+    title: t("homeTitle"),
+    absoluteTitle: true,
+    description: t("tagline"),
+  });
+}
 
 export default async function HomePage({
   params,
@@ -13,10 +33,17 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("home");
+  const tSite = await getTranslations("site");
   const recent = getRecentEditorials();
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
+      <JsonLd
+        data={[
+          organizationJsonLd(tSite("name")),
+          websiteJsonLd({ siteName: tSite("name"), description: tSite("tagline"), locale }),
+        ]}
+      />
       <p className="label-code">{t("eyebrow")}</p>
       <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
         {t("heroTitle")}
@@ -32,6 +59,12 @@ export default async function HomePage({
           className={buttonVariants({ variant: "outline", size: "lg" })}
         >
           {t("ctaSyllabus")}
+        </Link>
+        <Link
+          href="/docs"
+          className={buttonVariants({ variant: "outline", size: "lg" })}
+        >
+          {t("ctaDocs")}
         </Link>
         <Link
           href="/about"

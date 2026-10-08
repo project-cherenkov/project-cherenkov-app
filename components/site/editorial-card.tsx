@@ -17,7 +17,7 @@ export function EditorialCard({ editorial }: { editorial: Editorial }) {
       className="group block rounded-lg border border-slate-200 bg-white p-5 transition-colors hover:border-cherenkov-blue-pastel"
     >
       <div className="flex items-center gap-2">
-        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-pastel">
+        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-800 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
           {subjectLabel[editorial.subject]}
         </span>
         <span className="label-code">{editorial.principle}</span>
@@ -39,7 +39,7 @@ export function EditorialCard({ editorial }: { editorial: Editorial }) {
         ))}
       </div>
 
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-slate-600 dark:text-slate-400">
         {t("byAuthor", { author: editorial.author })}
       </p>
     </Link>

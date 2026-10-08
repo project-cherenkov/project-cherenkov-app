@@ -1,9 +1,26 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
+import { pageMetadata } from "@/lib/seo-metadata";
 import { getAllEditorials, getAllMaterials } from "@/lib/content";
 import { buildSubjectCoverage } from "@/lib/library";
 import { getAllSyllabi, localize } from "@/lib/syllabus";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "materials" });
+  return pageMetadata({
+    locale,
+    path: "/materials",
+    title: t("title"),
+    description: t("description"),
+  });
+}
 
 // Same shape as the syllabus (subject → section → topic), because materials
 // ARE the syllabus broken down — only sections that have a material show up.

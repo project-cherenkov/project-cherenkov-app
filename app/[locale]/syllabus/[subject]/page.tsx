@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
@@ -13,12 +14,34 @@ import {
   topicAnchor,
 } from "@/lib/syllabus";
 import { SUBJECTS } from "@/lib/subjects";
+import { pageMetadata } from "@/lib/seo-metadata";
 
 export function generateStaticParams() {
   return SUBJECTS.map((subject) => ({ subject }));
 }
 
 const LIST_ID = "syllabus-sections";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; subject: string }>;
+}): Promise<Metadata> {
+  const { locale, subject } = await params;
+  const syllabus = getSyllabus(subject);
+  if (!syllabus) return {};
+  const t = await getTranslations({ locale, namespace: "syllabus" });
+  const name = t(`subjects.${syllabus.subject}`);
+  return pageMetadata({
+    locale,
+    path: `/syllabus/${subject}`,
+    title: name,
+    description: t("subjectDescription", {
+      subject: name,
+      source: `${syllabus.source.label}${syllabus.source.edition ? ` · ${syllabus.source.edition}` : ""}`,
+    }),
+  });
+}
 
 export default async function SubjectSyllabusPage({
   params,
@@ -156,7 +179,7 @@ async function SectionBlock({
                     <Link
                       key={editorial.slug}
                       href={`/archive/${editorial.subject}/${editorial.slug}`}
-                      className="text-cherenkov-blue-700 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
+                      className="text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
                     >
                       {editorial.title}
                     </Link>
@@ -169,7 +192,7 @@ async function SectionBlock({
               {material ? (
                 <Link
                   href={`/materials/${subject}/${material.slug}`}
-                  className="inline-flex min-h-11 items-center font-mono text-xs uppercase tracking-wide text-cherenkov-blue-700 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
+                  className="inline-flex min-h-11 items-center font-mono text-xs uppercase tracking-wide text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
                 >
                   {t("readMaterial")} →
                 </Link>

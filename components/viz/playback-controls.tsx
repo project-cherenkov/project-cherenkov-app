@@ -36,7 +36,7 @@ export function PlaybackControls({
   const t = useTranslations("viz");
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-3">
+    <div className="flex flex-col gap-2 rounded-md border border-border bg-card p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Button
@@ -45,7 +45,7 @@ export function PlaybackControls({
             aria-label={t("stepBack")}
             onClick={() => onStep(-1)}
           >
-            <SkipBack className="h-4 w-4" />
+            <SkipBack className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             variant="default"
@@ -54,9 +54,9 @@ export function PlaybackControls({
             onClick={onPlayPause}
           >
             {isPlaying ? (
-              <Pause className="h-4 w-4" />
+              <Pause className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <Play className="h-4 w-4" />
+              <Play className="h-4 w-4" aria-hidden="true" />
             )}
           </Button>
           <Button
@@ -65,7 +65,7 @@ export function PlaybackControls({
             aria-label={t("stepForward")}
             onClick={() => onStep(1)}
           >
-            <SkipForward className="h-4 w-4" />
+            <SkipForward className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             variant="ghost"
@@ -73,10 +73,14 @@ export function PlaybackControls({
             aria-label={t("reset")}
             onClick={onReset}
           >
-            <RotateCcw className="h-4 w-4" />
+            <RotateCcw className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
-        <span className="label-code" aria-live="polite">
+        {/* Announced politely when the reader steps or scrubs. While the
+            visualization is auto-playing the label changes every frame, which
+            would make a screen reader read out "t = 1.42s … 1.43s …"
+            continuously — so the region goes quiet during playback. */}
+        <span className="label-code" role="status" aria-live={isPlaying ? "off" : "polite"}>
           {label}
         </span>
       </div>

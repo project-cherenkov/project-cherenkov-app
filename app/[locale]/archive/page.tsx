@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ArchiveFilters } from "@/components/site/archive-filters";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { filterEditorials, getArchiveFacets } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo-metadata";
 
 interface ArchiveSearchParams {
   subject?: string;
@@ -11,11 +13,32 @@ interface ArchiveSearchParams {
   errorType?: string;
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "archive" });
+  // Always canonical to the unfiltered archive: ?subject=…&principle=… views
+  // are the same page re-sorted, and shouldn't compete with it in search.
+  return pageMetadata({
+    locale,
+    path: "/archive",
+    title: t("title"),
+    description: t("description"),
+  });
+}
+
 export default async function ArchivePage({
+  params: routeParams,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<ArchiveSearchParams>;
 }) {
+  const { locale } = await routeParams;
+  setRequestLocale(locale);
   const params = await searchParams;
   const t = await getTranslations("archive");
   const facets = getArchiveFacets(params);

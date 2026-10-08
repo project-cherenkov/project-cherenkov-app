@@ -55,6 +55,7 @@ const config: Config = {
         secondary: "hsl(var(--secondary) / <alpha-value>)",
         card: "hsl(var(--card) / <alpha-value>)",
         border: "hsl(var(--border) / <alpha-value>)",
+        ring: "hsl(var(--ring) / <alpha-value>)",
       },
       fontFamily: {
         // Blue and white are literal to Cherenkov radiation (the glow emitted when

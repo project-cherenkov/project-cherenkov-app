@@ -77,6 +77,7 @@ export function TakingTooLongNotice({ show }: { show: boolean }) {
 // the scene builder's own live preview for this engine, same posture
 // composed-scene's own doc comment holds for itself.
 export function ProgrammableScene({ config }: { config: ProgrammableSceneConfig }) {
+  const t = useTranslations("viz");
   const [width, setWidth] = useState(320);
   const [controlValues, setControlValues] = useState<Record<string, number | boolean>>({});
   const [budgetExceeded, setBudgetExceeded] = useState(false);
@@ -167,7 +168,13 @@ export function ProgrammableScene({ config }: { config: ProgrammableSceneConfig 
       )}
 
       <div ref={containerRef} className="w-full">
-        <canvas ref={canvasRef} className="w-full" data-testid="programmable-scene-canvas" />
+        <canvas
+          ref={canvasRef}
+          className="w-full"
+          data-testid="programmable-scene-canvas"
+          role="img"
+          aria-label={t("canvasLabel")}
+        />
       </div>
 
       <TakingTooLongNotice show={budgetExceeded} />
@@ -199,6 +206,7 @@ function ProgramControlField({
     <label className="flex flex-col gap-1">
       <span className="label-code">{control.label}</span>
       <Slider
+        aria-label={control.label}
         min={control.min ?? 0}
         max={control.max ?? 100}
         step={control.step ?? 1}

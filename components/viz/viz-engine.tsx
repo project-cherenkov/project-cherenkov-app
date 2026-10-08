@@ -83,8 +83,17 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
 }
 
 function VizSkeleton() {
+  const t = useTranslations("viz");
+  // The engines are client-only (ssr: false), so this placeholder is all the
+  // server renders — and all a screen reader finds until the chunk arrives.
   return (
-    <div className="h-64 w-full animate-pulse rounded-md border border-slate-200 bg-slate-100" />
+    <div
+      role="status"
+      aria-busy="true"
+      className="flex h-64 w-full animate-pulse items-center justify-center rounded-md border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800"
+    >
+      <span className="sr-only">{t("loading")}</span>
+    </div>
   );
 }
 

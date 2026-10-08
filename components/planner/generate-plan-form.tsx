@@ -71,7 +71,7 @@ export function GeneratePlanForm({
           value={examDate}
           onChange={(event) => setExamDate(event.target.value)}
           required
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="rounded-md border border-slate-500 px-3 py-2 text-sm dark:border-slate-400"
         />
       </label>
       <Button type="submit" disabled={isPending || !examDate}>

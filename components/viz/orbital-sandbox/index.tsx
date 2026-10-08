@@ -162,7 +162,16 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
       </div>
 
       <div ref={containerRef} className="w-full">
-        <canvas ref={canvasRef} className="w-full" />
+        <canvas
+          ref={canvasRef}
+          className="w-full"
+          role="img"
+          aria-label={t("orbitalLabel", {
+            eccentricity: eccentricity.toFixed(2),
+            massRatio: massRatio.toFixed(3),
+            time: simTime.toFixed(2),
+          })}
+        />
       </div>
 
       <div>
@@ -283,6 +292,7 @@ function SliderField({
     <label className="flex flex-col gap-1">
       <span className="label-code">{label}</span>
       <Slider
+        aria-label={label}
         min={min}
         max={max}
         step={step}

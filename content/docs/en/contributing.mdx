@@ -1,0 +1,41 @@
+---
+title: "Contributing and reporting problems"
+description: "How to report a bug or content error, suggest an improvement, or contribute code and writing to Project Cherenkov."
+section: contributing
+order: 40
+updatedAt: "2026-10-07"
+---
+
+Project Cherenkov is built in the open and is licensed under the MIT licence. Every editorial is a git-tracked file, so the history of every change is public.
+
+## Reporting a problem
+
+- **A mistake in an editorial, material or the syllabus** — open an issue on GitHub, or email the project, saying which page and what is wrong.
+- **A visualization that misbehaves** — include the page address, your browser and device, and what you did just before.
+- **An accessibility problem** — tell us what you were using (screen reader, keyboard only, zoom, a switch device) and what got in the way. Accessibility reports are treated as bugs, not wishes.
+
+The project's contact address and repository link are in the site footer and on the About page.
+
+## Contributing
+
+- **Writing** — read [Writing an editorial](/docs/writing-editorials) and open a pull request with a new `.mdx` file.
+- **Translating** — the interface strings live in `messages/en.json` and `messages/id.json`. Documentation pages live in `content/docs/<locale>/`; to translate one, add a file with the same name under `content/docs/id/`.
+- **Code** — the stack is Next.js, TypeScript and Tailwind. Run `pnpm install`, then `pnpm dev`. Run `pnpm lint`, `pnpm typecheck` and `pnpm test` before opening a pull request.
+
+## Frequently asked questions
+
+### Do I need an account to read editorials?
+
+No. Reading, the syllabus, materials and the visualizations never require an account.
+
+### Why does every editorial have a visualization?
+
+Because the visualization is how the idea is explored. An editorial with no working visualization is treated as a content error and is flagged on the page rather than hidden.
+
+### Why are principle and error type free text?
+
+The vocabulary is still settling. Tightening them too early would force editorials into categories that do not fit yet.
+
+### Where is the developer documentation?
+
+Environment variables, deployment notes and architecture documents are in the `docs/` folder of the repository on GitHub. They are intentionally not published on the site.

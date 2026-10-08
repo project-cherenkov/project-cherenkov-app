@@ -125,20 +125,22 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
           {t("emailLabel")}
           <input
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="rounded-md border border-slate-300 px-3 py-2"
+            className="rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           {t("passwordLabel")}
           <input
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            className="rounded-md border border-slate-300 px-3 py-2"
+            className="rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400"
           />
         </label>
         {error ? (
@@ -153,7 +155,7 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
 
       {googleEnabled ? (
         <div className="mt-4 flex flex-col gap-3">
-          <p className="text-center text-xs uppercase tracking-wide text-slate-400">
+          <p className="text-center text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
             {t("orDivider")}
           </p>
           <Button

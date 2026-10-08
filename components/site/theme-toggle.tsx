@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +14,7 @@ export function nextTheme(current: string | undefined) {
 }
 
 export function ThemeToggle() {
+  const t = useTranslations("nav");
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -30,8 +32,8 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
-      className="h-8 w-8 rounded-md text-slate-700 hover:bg-white/70 dark:text-slate-200 dark:hover:bg-slate-800"
+      aria-label={t("toggleTheme")}
+      className="h-10 w-10 rounded-md text-slate-700 hover:bg-white/70 dark:text-slate-200 dark:hover:bg-slate-800"
     >
       {mounted && resolvedTheme === "dark" ? (
         <Sun className="h-4 w-4" aria-hidden />

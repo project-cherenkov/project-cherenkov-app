@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
@@ -17,6 +18,7 @@ export function TrajectorySandbox({
 }: {
   config: TrajectorySandboxConfig;
 }) {
+  const t = useTranslations("viz");
   // Safe: isTrajectorySandboxConfig (types.ts) validates config.physicsType
   // against PHYSICS_TYPE_KEYS before a config ever reaches this component
   // (see viz-engine.tsx's dispatch), so this lookup can never miss here.
@@ -164,7 +166,15 @@ export function TrajectorySandbox({
       </div>
 
       <div ref={containerRef} className="w-full">
-        <canvas ref={canvasRef} className="w-full" />
+        <canvas
+          ref={canvasRef}
+          className="w-full"
+          role="img"
+          aria-label={t("trajectoryLabel", {
+            speed: speed.toFixed(0),
+            angle: angleDeg.toFixed(0),
+          })}
+        />
       </div>
 
       <p className="font-mono text-xs text-slate-500 dark:text-slate-400">
@@ -214,6 +224,7 @@ function SliderField({
     <label className="flex flex-col gap-1">
       <span className="label-code">{label}</span>
       <Slider
+        aria-label={label}
         min={min}
         max={max}
         step={step}

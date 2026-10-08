@@ -10,7 +10,11 @@ import { cn } from "@/lib/utils";
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => (
+>(({ className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, ...props }, ref) => (
+  // The slider's accessible name has to sit on the THUMB (the element with
+  // role="slider"), not on Radix's root wrapper. This used to hard-code
+  // aria-label="value" on the thumb, which overrode every caller's own label —
+  // so every slider in every visualization was announced as just "value".
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
@@ -20,11 +24,12 @@ const Slider = React.forwardRef<
     {...props}
   >
     <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-      <SliderPrimitive.Range className="absolute h-full bg-cherenkov-blue-pastel" />
+      <SliderPrimitive.Range className="absolute h-full bg-cherenkov-blue-700 dark:bg-cherenkov-blue-pastel" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb
-      className="block h-6 w-6 rounded-full border-2 border-cherenkov-blue-pastel bg-white dark:bg-slate-900 shadow transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
-      aria-label="value"
+      className="block h-6 w-6 rounded-full border-2 border-cherenkov-blue-700 bg-white shadow transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-cherenkov-blue-pastel dark:bg-slate-900"
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
     />
   </SliderPrimitive.Root>
 ));

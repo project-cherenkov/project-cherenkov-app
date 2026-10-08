@@ -1,0 +1,38 @@
+---
+title: "The scene builder"
+description: "Build interactive visualizations without writing code: composed scenes from shapes and sliders, or programmable scenes from blocks."
+section: contributing
+order: 30
+updatedAt: "2026-10-07"
+---
+
+The scene builder lets you make a visualization visually, without writing frontmatter by hand. It lives at `/keystatic/scene-builder` and is open to editors only. Choose an **Engine** at the top.
+
+## Composed scenes
+
+Assemble a scene from a library of reusable elements:
+
+| Element | What it draws |
+| --- | --- |
+| Circle, rectangle | Filled shapes. |
+| Line, arrow | A line between two points, optionally with an arrowhead. |
+| Text label | Plain display text. |
+| Curves | Linear, quadratic and sine curves, or a polyline through 2–4 points. |
+| Slider marker | A marker intended to be moved by a slider. |
+| Array with pointers | A small array with named pointers and a highlighted cell. |
+
+You can add up to 12 elements, bind **sliders** or **toggles** to an element's parameter, and add up to 20 **steps**. Each step has an optional note (Markdown and math supported) and only lists the parameters that change.
+
+## Programmable scenes
+
+A programmable scene is a small program built from blocks. It can use variables, comparisons, conditionals and bounded loops, read the elapsed time or a slider's value, and emit the same elements a composed scene uses.
+
+The program is sandboxed: it cannot run arbitrary code, loops are capped, and each frame has a fixed work budget. If a program exceeds it, the last finished frame stays on screen with a notice.
+
+## Starting a new visualization
+
+Use the **+ New visualization** button on any Keystatic screen. It asks for a subject, slug, title and engine, creates a clearly-marked draft editorial, and opens the builder on it. The draft is something to finish, not publish as-is.
+
+## Saving
+
+**Save to editorial** rewrites only the editorial's visualization setting; its text and other fields are untouched. In GitHub mode it commits to a new branch and does not open a pull request for you. The first save in GitHub mode needs a one-off GitHub authorization; if you see "GitHub authorization required", follow the steps in `docs/scene-builder-github-auth.md` in the repository.

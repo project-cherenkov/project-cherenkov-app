@@ -7,7 +7,7 @@
 3. [Project Structure](#iii-project-structure)
 4. [Getting Started](#iv-getting-started)
 5. [Content Model — Writing an Editorial](#v-content-model--writing-an-editorial)
-6. [Syllabus & Materials](#vi-syllabus--materials)
+6. [Syllabus & Materials](#vi-syllabus--materials) · [Documentation pages (`/docs`)](#vi-b-documentation-pages-docs)
 7. [Editing Content in the Browser (Keystatic)](#vii-editing-content-in-the-browser-keystatic)
 8. [Composed & Programmable Scenes (the Scene Builder)](#viii-composed--programmable-scenes-the-scene-builder)
 9. [Accounts & Study Planner](#ix-accounts--study-planner)
@@ -84,13 +84,20 @@ app/[locale]/                    routes (everything is locale-prefixed)
   archive/                       editorial listing, filterable by subject/principle/errorType
   archive/[subject]/[slug]/      one editorial's page
   about/                         philosophy, team (from content/team), repo link
+  docs/                          documentation: docs/ (index), docs/[slug] (one page) — Section VI-b
+  [...rest]/                     catch-all that renders the localized 404 (real routes win)
+  layout.tsx                     the ROOT layout: <html lang={locale}>, theme, header/footer, skip link
+  opengraph-image.tsx            the site-wide social card (one per locale, built statically)
   login/ signup/                 Better Auth email/password (and optional Google) forms
   planner/                       authenticated plan overview and generation
   planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (the
                                   "chapter" segment actually contains the topic ID)
   error.tsx, not-found.tsx       locale-scoped error and 404 pages
 app/keystatic/                   Keystatic admin UI (gated in production — Section VII)
-  layout.tsx                     adds the floating "+ New visualization" button
+  layout.tsx                     its OWN root layout (<html lang="en">) + the floating
+                                  "+ New visualization" button. There is deliberately no
+                                  shared app/layout.tsx: the localized site and the admin UI
+                                  are two root layouts so <html lang> can follow the URL.
   scene-builder/                 the scene builder page (Section VIII)
   scene-builder/new/             "New visualization" form: creates a stub editorial first
   team-photo/                    team-photo upload page
@@ -101,7 +108,9 @@ app/api/scene-builder/           POST: save a scene into an existing editorial
   new/                           POST: create the stub editorial for a new visualisation
   github-oauth/{start,callback}/ the scene builder's own GitHub OAuth flow
                                   (all gated in production — Section VIII)
-app/robots.ts, app/sitemap.ts    generated from the same content queries every page uses
+app/robots.ts, app/sitemap.ts    generated from the same content queries every page uses; the
+                                  sitemap carries hreflang alternates for every URL
+app/llms.txt/route.ts            /llms.txt — Markdown map of the site for LLM tools
 app/icon.svg                     favicon
 components/
   auth/                          login and signup forms
@@ -120,6 +129,7 @@ components/
 content/editorials/<subject>/    the editorial archive (MDX)
 content/materials/<subject>/     materials (MDX), one per syllabus topic at most
 content/team/                    Keystatic-managed team singleton (About page)
+content/docs/<locale>/           documentation pages (MDX), English is the source of truth
 lib/content.ts                   all querying/filtering of editorials and materials goes
                                   through here — pages never import Velite's #content directly
 lib/syllabus/                    syllabus data (data/{informatics,physics,astronomy}.ts),
@@ -131,6 +141,11 @@ lib/admin-guard.ts               single source of truth for whether /keystatic, 
                                   team-photo route, and the scene-builder routes are
                                   reachable, plus the ADMIN_EMAILS check (Section VII)
 lib/site.ts                      shared absolute site URL for sitemap/robots/Open Graph
+lib/seo.ts, lib/seo-metadata.ts  canonical/hreflang/Open Graph metadata builders, the indexing
+                                  switch, JSON-LD builders (pure, unit-tested)
+lib/docs.ts, lib/docs-core.ts,   docs queries + English-fallback logic (core is pure),
+  lib/docs-headings.ts            heading ids and table of contents
+lib/fonts.ts                     the two next/font families, shared by both root layouts
 lib/auth.ts, lib/auth-guard.ts,  Better Auth configuration, session checks, client,
   lib/auth-client.ts,             error-message mapping, safe post-login redirects
   lib/auth-error-messages.ts,
@@ -155,6 +170,7 @@ docs/                            see the list below
 
 | File | What it is |
 | --- | --- |
+| `seo-and-accessibility.md` | How indexing is switched on, what each page declares to search engines, the accessibility decisions and how to verify them, and the open launch decisions. |
 | `cherenkov-env-vars-guide.md` | Every environment variable, what it unlocks, and how to obtain it, for both local development and Vercel. |
 | `scene-builder-github-auth.md` | Walkthrough and troubleshooting for the scene builder's GitHub authorisation step ([FAQ F](#f-why-do-i-see-github-authorization-required-in-the-scene-builder-even-though-im-already-logged-into-keystatic)). |
 | `phase-3-architecture.md` | The Phase 3 adaptive-scheduling plan (**not implemented**). It also summarises Phase 2 as built. |
@@ -231,6 +247,7 @@ or any other port you prefer. If the port is still busy, the app will continue t
 | `ADMIN_EMAILS` | Required for team-photo uploads **and** the scene builder (save and "New visualization") | Comma-separated email allow-list for content editors. These routes require both an authenticated session and a matching email — **in local mode too**, so saving from the scene builder locally needs the Phase 2 account variables below as well. | Add a list such as `editor@example.com, second-editor@example.com` to `.env.local` or Vercel's environment variables. |
 | `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the upload after authorisation succeeds. Without it, the route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it, and let Vercel create the variable automatically. |
 | `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset — set it to `https://project-cherenkov-app.vercel.app` in Vercel, or to the eventual custom domain. | Use the deployed origin. |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | **The switch that lets search engines index the site.** Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login, signup and planner pages stay `noindex` regardless, as do editorials still carrying a placeholder author. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/seo-and-accessibility.md` is done. |
 | `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public site or CI's unit tests. | Create a Neon project and copy the connection string from Neon → Connection Details. |
 | `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. | Run `openssl rand -base64 32` and paste the result. |
 | `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. | Set to your deployed origin. |
@@ -331,6 +348,16 @@ The syllabus is the spine that joins materials and editorials.
 - **Linking an editorial.** Pick a "Syllabus topic (optional)" in the editorial's Keystatic form, or set `syllabusTopic:` in its frontmatter.
 - **Languages.** Names are stored in both locales. Only one language per subject is the official wording (`sourceLang`); the other is an unofficial gloss, and the page says so.
 - **Routes.** `/syllabus`, `/syllabus/[subject]`, `/materials`, `/materials/[subject]/[slug]`. The header's "Archive" bookmark groups all three sections (Syllabus, Materials, Editorials), and the sitemap includes the syllabus and materials pages.
+
+---
+
+## **VI-b. Documentation Pages (`/docs`)**
+
+Reader- and contributor-facing documentation lives **inside this app**, not in a separate site: `content/docs/<locale>/<slug>.mdx`, compiled by Velite into a third collection (`docs`) next to editorials and materials, and rendered at `/[locale]/docs` and `/[locale]/docs/[slug]` with the same header, theme, i18n and design tokens as everything else.
+
+- **Adding a page.** Create `content/docs/en/<slug>.mdx` with `title`, `description` (≤200 chars, used as the meta description), `section` (`start` | `reading` | `contributing`), optional `order` (lower first) and optional `updatedAt` (ISO date). Don't add a `# H1` — the page title is the `h1`. `## ` and `### ` headings get anchor ids and an automatic "On this page" list. Link between docs with plain `/docs/<slug>` paths; `content-integrity.test.ts` fails on a link to a page that doesn't exist.
+- **Translating.** Add a file with the **same name** under `content/docs/id/`. Until then the Indonesian site shows the English page with a translated notice, `lang="en"` on the text, `noindex`, and a canonical pointing at the English URL — and the sitemap lists only the language a page truly exists in.
+- **Not published here.** The developer notes in this repository's top-level `docs/` folder (environment variables, deployment, architecture) are deliberately **not** part of the site. They describe how the deployment is configured and belong on GitHub.
 
 ---
 
@@ -571,7 +598,7 @@ The taxonomy isn't finalised yet, and there isn't enough real content to know wh
 <details>
 <summary><b>View Explanation (Click to expand)</b></summary>
 
-Not yet. The repository is public and the live site is deployed at `https://project-cherenkov-app.vercel.app/en`, but every page still ships `robots: { index: false, follow: false }` (`app/[locale]/layout.tsx`). The hero, tagline and about/philosophy copy are written, but the About page still shows a dummy team entry (see [Section XIII](#xiii-current-status--open-questions)), so the site is public but has not been switched on for indexing. Once the content is ready, removing that one `robots` line is all that is needed.
+The code is ready; the switch is still off. Every page ships `noindex, nofollow` until the environment variable `NEXT_PUBLIC_ALLOW_INDEXING` is set to `1` (it replaces the old hard-coded `robots: { index: false, follow: false }` in `app/[locale]/layout.tsx`, so going live no longer needs a code change). Even with it on, account/login/signup/planner pages stay `noindex`, and so does any editorial whose author is still the `PLACEHOLDER …` value or that is tagged `fixture` — those are also left out of the sitemap and `/llms.txt`. At the time of writing every editorial still has the placeholder author, so the archive itself would remain `noindex` after flipping the switch until real author names are entered. `docs/seo-and-accessibility.md` has the full pre-launch checklist.
 
 </details>
 

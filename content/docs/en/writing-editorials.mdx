@@ -1,0 +1,61 @@
+---
+title: "Writing an editorial"
+description: "How to add an editorial or a material: file locations, frontmatter fields, MDX and math, and where the visualization goes."
+section: contributing
+order: 10
+updatedAt: "2026-10-07"
+---
+
+Editorials and materials are plain MDX files committed to the repository. There is no database for content: files under `content/` are compiled at build time.
+
+## Where files go
+
+- Editorials: `content/editorials/<subject>/<slug>.mdx`
+- Materials: `content/materials/<subject>/<slug>.mdx`
+
+`<subject>` is `informatics`, `physics` or `astronomy`. The URL's slug comes from the **filename**, not the title, so renaming a title never silently changes a published URL.
+
+## Editorial frontmatter
+
+| Field | Notes |
+| --- | --- |
+| `title` | Up to 120 characters. |
+| `subject` | Must match the folder the file is in. |
+| `hook` | Up to 280 characters; one sentence that makes someone want to read on. |
+| `tags` | Short, lowercase labels. |
+| `principle` | The general idea this editorial teaches. Free text on purpose. |
+| `errorType` | Optional. The specific mistake it corrects. Free text. |
+| `vizConfig` | Which visualization engine to use, and its configuration. |
+| `publishedAt` | An ISO date, 2020 or later. Earlier dates are rejected as placeholder data. |
+| `author` | Who wrote it. |
+| `syllabusTopic` | Optional. A topic id from the syllabus for the same subject. |
+
+The body is everything after the frontmatter, written in Markdown/MDX.
+
+## Math
+
+Use `$...$` for inline math and `$$...$$` for display math. It is compiled to static KaTeX HTML at build time.
+
+## Placing the visualization
+
+Put `<Interactive />` on its own line where the visualization should appear — typically between the idea and the full proof. If you forget it, the visualization still renders (just after the hook, with a small notice) rather than the editorial shipping without one.
+
+## Choosing a visualization engine
+
+Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `composed-scene` or `programmable-scene`. The first three are configured in frontmatter; the last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
+
+- `content/editorials/informatics/binary-search-on-answer.mdx` — `graph-array-stepper`
+- `content/editorials/physics/projectile-range-symmetry.mdx` — `trajectory-sandbox`
+- `content/editorials/astronomy/eccentric-transit-duration.mdx` — `orbital-sandbox`
+
+## Materials
+
+A material is shorter and unsigned: `title`, `subject`, `topic` (a syllabus topic id), `summary` (up to 280 characters) and a body. There is at most one material per topic, and no visualization is required.
+
+## Checking your work
+
+Run `pnpm generate` to validate frontmatter and `pnpm test` to check that every material and editorial points at a real syllabus topic. Never rename a syllabus topic's `id`; change its `name` instead.
+
+## Editing in the browser
+
+You can also write and edit content in the browser; see [Editing with Keystatic](/docs/editing-with-keystatic).

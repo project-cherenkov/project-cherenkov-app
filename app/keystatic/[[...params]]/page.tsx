@@ -23,7 +23,8 @@ import KeystaticApp from "@/app/keystatic/keystatic";
 // A literal segment like "scene-builder" always wins this match over the
 // optional catch-all "[[...params]]" at the same level, so this file
 // never runs for our custom pages — they render their own content, using
-// the ordinary (now-default, no override) layout from app/layout.tsx.
+// the ordinary layout in app/keystatic/layout.tsx (which is also this
+// segment's root layout now that the shared app/layout.tsx is gone).
 // app/keystatic/layout.tsx has been deleted rather than left as a no-op
 // passthrough; it existed only to host the line moved here.
 export default function Page() {

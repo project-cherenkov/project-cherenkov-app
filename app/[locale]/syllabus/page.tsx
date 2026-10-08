@@ -1,9 +1,26 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
+import { pageMetadata } from "@/lib/seo-metadata";
 import { getAllEditorials, getAllMaterials } from "@/lib/content";
 import { buildSubjectCoverage } from "@/lib/library";
 import { getAllSyllabi } from "@/lib/syllabus";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "syllabus" });
+  return pageMetadata({
+    locale,
+    path: "/syllabus",
+    title: t("title"),
+    description: t("description"),
+  });
+}
 
 export default async function SyllabusIndexPage({
   params,
@@ -31,7 +48,7 @@ export default async function SyllabusIndexPage({
               href={`/syllabus/${syllabus.subject}`}
               className="group flex flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-pastel"
             >
-              <span className="label-code text-cherenkov-blue-700 dark:text-cherenkov-blue-pastel">
+              <span className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-pastel">
                 {syllabus.subject}
               </span>
               <h2 className="mt-2 text-xl font-semibold text-foreground group-hover:underline">

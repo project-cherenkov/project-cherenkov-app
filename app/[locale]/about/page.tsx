@@ -1,6 +1,24 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { getTeam, resolveMemberBio } from "@/lib/team";
+import { pageMetadata } from "@/lib/seo-metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  // The philosophy paragraph is the page's real summary; reuse its opening.
+  return pageMetadata({
+    locale,
+    path: "/about",
+    title: t("title"),
+    description: t("philosophyPlaceholder"),
+  });
+}
 
 export default async function AboutPage({
   params,
@@ -66,7 +84,7 @@ export default async function AboutPage({
                           href={contact.href}
                           target={contact.href.startsWith("http") ? "_blank" : undefined}
                           rel={contact.href.startsWith("http") ? "noreferrer" : undefined}
-                          className="inline-block font-mono text-xs text-cherenkov-blue-pastel underline"
+                          className="inline-block font-mono text-xs text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
                         >
                           {contact.value}
                         </a>
@@ -87,7 +105,7 @@ export default async function AboutPage({
         href="https://github.com/project-cherenkov/project-cherenkov-app"
         target="_blank"
         rel="noreferrer"
-        className="mt-2 inline-block text-cherenkov-blue-pastel underline"
+        className="mt-2 inline-block text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
       >
         github.com/project-cherenkov/project-cherenkov-app
       </a>
@@ -100,7 +118,7 @@ export default async function AboutPage({
           ) : null}
           <a
             href={`mailto:${professionalContact.email}`}
-            className="mt-1 inline-block text-cherenkov-blue-pastel underline"
+            className="mt-1 inline-block text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
           >
             {professionalContact.email}
           </a>
