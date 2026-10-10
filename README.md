@@ -200,6 +200,7 @@ docs/                            see the list below
 | `phase-3-architecture.md` | The original Phase 2/3 design sketch (historical; `phase-3-planner.md` and the code supersede it where they differ). |
 | `phase-2-architecture.md` | The original Phase 2 design sketch. Historical: Phase 2 is built, and its own header says so. |
 | `deployment-readiness.md` | The Phase 1 deployment-hardening write-up. Historical: it predates the scene builder, the planner and the syllabus/materials sections, so treat it as context rather than a current file or dependency list. |
+| `design-report.md` | The UI design review: the colour palette (tokens, hero band, computed contrast), what the design pass fixed, what is still open and why, and a browser checklist. Code is the source of truth for token values. |
 
 ---
 

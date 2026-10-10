@@ -111,7 +111,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
             const result = feedback?.find((f) => f.questionId === question.id);
             return (
               <TabsContent key={question.id} value={String(index)}>
-                <p className="mb-2 font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <p className="mb-2 font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
                   {t("questionCounter", {
                     current: index + 1,
                     total: questions.length,
@@ -136,7 +136,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   <p
                     className={
                       result.correct
-                        ? "mt-2 text-sm text-emerald-600 dark:text-emerald-400"
+                        ? "mt-2 text-sm text-emerald-700 dark:text-emerald-400"
                         : "mt-2 text-sm text-red-600 dark:text-red-400"
                     }
                   >

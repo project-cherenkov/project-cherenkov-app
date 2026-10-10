@@ -71,7 +71,7 @@ export default async function SubjectSyllabusPage({
         {syllabus.source.edition ? ` · ${syllabus.source.edition}` : ""}
       </p>
       {translated && (
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
           {t("translationNote", { language: t(`languages.${syllabus.sourceLang}`) })}
         </p>
       )}
@@ -149,7 +149,7 @@ async function SectionBlock({
       <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <ChevronRight
           aria-hidden
-          className="h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-90 motion-reduce:transition-none"
+          className="h-4 w-4 shrink-0 text-slate-600 transition-transform group-open:rotate-90 motion-reduce:transition-none"
         />
         <span className="font-semibold text-foreground">{localize(section.name, locale)}</span>
         <span className="label-code ml-auto">{t("counts.topics", { count: topics.length })}</span>

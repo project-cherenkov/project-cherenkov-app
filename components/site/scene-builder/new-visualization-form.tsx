@@ -81,7 +81,7 @@ export function NewVisualizationForm() {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-4">
       <label className="flex flex-col gap-1">
-        <span className="text-xs text-slate-500 dark:text-slate-400">Subject</span>
+        <span className="text-xs text-slate-600 dark:text-slate-400">Subject</span>
         <select
           className="rounded-md border border-border bg-transparent px-2 py-1"
           value={subject}
@@ -99,7 +99,7 @@ export function NewVisualizationForm() {
       </label>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs text-slate-500 dark:text-slate-400">Title</span>
+        <span className="text-xs text-slate-600 dark:text-slate-400">Title</span>
         <input
           type="text"
           placeholder="A short, descriptive title"
@@ -110,7 +110,7 @@ export function NewVisualizationForm() {
       </label>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs text-slate-500 dark:text-slate-400">Slug</span>
+        <span className="text-xs text-slate-600 dark:text-slate-400">Slug</span>
         <input
           type="text"
           placeholder="binary-search-on-answer"
@@ -122,7 +122,7 @@ export function NewVisualizationForm() {
           }}
         />
       </label>
-      <p className="-mt-2 text-xs text-slate-500 dark:text-slate-400">
+      <p className="-mt-2 text-xs text-slate-600 dark:text-slate-400">
         Filled in from the title until you edit it directly.
       </p>
 

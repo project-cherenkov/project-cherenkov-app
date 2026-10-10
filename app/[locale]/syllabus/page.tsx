@@ -75,7 +75,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <dd className="text-lg font-semibold text-foreground">{value}</dd>
-      <dt className="text-slate-500 dark:text-slate-400">{label}</dt>
+      <dt className="text-slate-600 dark:text-slate-400">{label}</dt>
     </div>
   );
 }

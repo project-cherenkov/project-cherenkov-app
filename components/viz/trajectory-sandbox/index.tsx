@@ -177,7 +177,7 @@ export function TrajectorySandbox({
         />
       </div>
 
-      <p className="font-mono text-xs text-slate-500 dark:text-slate-400">
+      <p className="font-mono text-xs text-slate-600 dark:text-slate-400">
         range ≈ {maxRange.toFixed(1)} m · max height ≈ {maxHeight.toFixed(1)} m
       </p>
 

@@ -258,7 +258,7 @@ export function SiteHeader() {
                 "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",
                 isActive
                   ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                  : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                  : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
               ].join(" ");
 
               if (item.isExternal) {
@@ -297,7 +297,7 @@ export function SiteHeader() {
                               "flex min-h-11 items-center rounded-md px-3 transition-colors",
                               childActive
                                 ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                                : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                                : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
                             ].join(" ")}
                           >
                             {child.label}

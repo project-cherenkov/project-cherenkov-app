@@ -50,7 +50,7 @@ export function SceneInspector({
       <div>
         <h2 className="label-code text-slate-600 dark:text-slate-300">Elements</h2>
         {draft.elements.length === 0 ? (
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             Add an element from the palette to get started.
           </p>
         ) : (
@@ -100,7 +100,7 @@ export function SceneInspector({
 
           {stepIndex === null || !step ? (
             <>
-              <p className="label-code text-slate-500 dark:text-slate-400">Base parameters</p>
+              <p className="label-code text-slate-600 dark:text-slate-400">Base parameters</p>
               {template.paramSchema.map((spec) => (
                 <ParamField
                   key={spec.key}
@@ -116,7 +116,7 @@ export function SceneInspector({
                 if (bindable.length === 0) return null;
                 return (
                   <div className="flex flex-col gap-1 border-t border-border pt-2">
-                    <span className="label-code text-slate-500 dark:text-slate-400">
+                    <span className="label-code text-slate-600 dark:text-slate-400">
                       Bind a reader control
                     </span>
                     <div className="flex flex-wrap gap-2">
@@ -139,7 +139,7 @@ export function SceneInspector({
           ) : (
             <>
               <div className="flex items-center justify-between">
-                <p className="label-code text-slate-500 dark:text-slate-400">
+                <p className="label-code text-slate-600 dark:text-slate-400">
                   Overrides for this step
                 </p>
                 {isOverridingSelected && (

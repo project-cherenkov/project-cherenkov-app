@@ -71,7 +71,7 @@ export default async function AboutPage({
                 <div className="min-w-0 max-w-prose">
                   <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (
-                    <p className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    <p className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
                       {member.role}
                     </p>
                   )}

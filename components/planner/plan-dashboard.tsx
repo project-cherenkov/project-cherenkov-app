@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { generateStudyPlan, setPlanItemDone } from "@/lib/planner-actions";
 import { STAGES } from "@/lib/osn-stages";
 import { buildTodayList, groupItemsByWeek, type ItemView, type PlannerPageData } from "@/lib/plan-view";
@@ -99,7 +99,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         {todayList.today.length > 0 ? <ItemList items={todayList.today} locale={locale} subject={data.settings.subject} /> : null}
         {todayList.upNext.length > 0 ? (
           <div className="mt-3">
-            <h3 className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{t("upNext")}</h3>
+            <h3 className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">{t("upNext")}</h3>
             <ItemList items={todayList.upNext} locale={locale} subject={data.settings.subject} showDate />
           </div>
         ) : null}
@@ -117,7 +117,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
               <div className="space-y-3 px-4 pb-4">
                 {week.days.map((day) => (
                   <div key={day.date}>
-                    <h3 className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    <h3 className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
                       {formatDay(day.date, locale)} · {day.minutes} {t("min")}
                     </h3>
                     <ItemList items={day.items} locale={locale} subject={data.settings.subject} />
@@ -142,7 +142,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         </p>
         <div className="mt-3 overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-left text-sm">
-            <thead className="bg-card font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            <thead className="bg-card font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
               <tr>
                 <th className="px-3 py-2">{t("colTopic")}</th>
                 <th className="px-3 py-2">{t("colRating")}</th>
@@ -156,12 +156,12 @@ export function PlanDashboard({ data }: { data: PlanData }) {
                     <Link href={`/planner/${data.settings.subject}/${topic.topicId}`} className="underline-offset-2 hover:underline">
                       {topic.title}
                     </Link>
-                    <span className="block text-xs text-slate-500 dark:text-slate-400">{topic.sectionName}</span>
+                    <span className="block text-xs text-slate-600 dark:text-slate-400">{topic.sectionName}</span>
                   </td>
                   <td className="px-3 py-2">{topic.selfRating ?? "—"}</td>
                   <td className="px-3 py-2">
                     {topic.status === "unverified" ? (
-                      <span className="text-slate-500 dark:text-slate-400">
+                      <span className="text-slate-600 dark:text-slate-400">
                         {t("status.unverified")}
                         {!topic.canConfirm ? ` · ${t("noQuizYet")}` : ""}
                       </span>
@@ -177,7 +177,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
           </table>
         </div>
         {summary.topicsWithoutQuiz > 0 ? (
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t("noQuizNote", { count: summary.topicsWithoutQuiz })}</p>
+          <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">{t("noQuizNote", { count: summary.topicsWithoutQuiz })}</p>
         ) : null}
       </section>
 
@@ -242,7 +242,7 @@ function ItemList({
         return (
           <li key={item.id} className="flex flex-wrap items-center gap-3 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className={["text-sm font-medium", done ? "text-slate-500 line-through dark:text-slate-400" : "text-foreground"].join(" ")}>
+              <p className={["text-sm font-medium", done ? "text-slate-600 line-through dark:text-slate-400" : "text-foreground"].join(" ")}>
                 <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide dark:bg-slate-800">
                   {t(`kind.${item.kind}`)}
                 </span>
@@ -250,7 +250,7 @@ function ItemList({
                   {item.title}
                 </Link>
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 {showDate ? `${formatDay(item.scheduledFor, locale)} · ` : ""}
                 {item.minutes !== null ? `${item.minutes} ${t("min")} · ` : ""}
                 {item.reason ? tReason(item.reason) : ""}
@@ -263,7 +263,9 @@ function ItemList({
             ) : done ? (
               <span className="text-xs text-emerald-700 dark:text-emerald-400">{t("quizTaken")}</span>
             ) : (
-              <Link href={`/planner/${subject}/${item.topicId}`} className="text-xs underline">{t("takeQuiz")}</Link>
+              <Link href={`/planner/${subject}/${item.topicId}`} className={buttonVariants({ size: "sm" })}>
+                {t("takeQuiz")}
+              </Link>
             )}
           </li>
         );

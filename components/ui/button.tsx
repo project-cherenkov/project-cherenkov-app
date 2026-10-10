@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default:
           "bg-cherenkov-blue text-slate-900 hover:bg-cherenkov-blue-pastel",
         outline:
-          "border border-border bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground",
+          "border border-slate-500 bg-transparent hover:bg-slate-100 dark:border-slate-400 dark:hover:bg-slate-800 text-foreground",
         ghost:
           "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground",
         link: "bg-transparent underline-offset-4 hover:underline p-0 h-auto text-foreground",

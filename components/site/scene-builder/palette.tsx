@@ -38,7 +38,7 @@ export function ScenePalette({
         })}
       </div>
       {disabled && (
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-slate-600 dark:text-slate-400">
           This scene has reached the maximum number of elements.
         </p>
       )}

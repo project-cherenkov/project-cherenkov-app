@@ -23,8 +23,8 @@ export function generateStaticParams() {
 // (no maximumScale / userScalable) — WCAG 1.4.4 / 1.4.10.
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#262626" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF5F6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B2436" },
   ],
 };
 

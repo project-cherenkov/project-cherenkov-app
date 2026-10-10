@@ -82,7 +82,7 @@ export default async function AccountPage() {
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="grid gap-1 px-4 py-3 sm:grid-cols-[10rem_1fr] sm:gap-4">
-      <dt className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</dt>
+      <dt className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">{label}</dt>
       <dd className="break-words text-foreground">{value}</dd>
     </div>
   );

@@ -74,7 +74,7 @@ export default async function MaterialsIndexPage({
               </div>
 
               {withMaterial.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
                   {t("emptyForSubject")}
                 </p>
               ) : (

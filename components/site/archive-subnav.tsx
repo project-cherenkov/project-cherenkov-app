@@ -42,7 +42,7 @@ export function ArchiveSubnav() {
                   "-mb-px inline-flex min-h-11 items-center border-b-2 px-3 transition-colors",
                   active
                     ? "border-cherenkov-blue-600 font-semibold text-foreground dark:border-cherenkov-blue-pastel"
-                    : "border-transparent text-slate-500 hover:text-foreground dark:text-slate-400",
+                    : "border-transparent text-slate-600 hover:text-foreground dark:text-slate-400",
                 ].join(" ")}
               >
                 {t(labelKey)}

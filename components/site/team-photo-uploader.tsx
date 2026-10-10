@@ -49,7 +49,7 @@ export function TeamPhotoUploader() {
           if (file) void handleFile(file);
         }}
       />
-      {status === "uploading" && <p className="mt-2 text-slate-500">Uploading…</p>}
+      {status === "uploading" && <p className="mt-2 text-slate-600">Uploading…</p>}
       {status === "error" && error && <p className="mt-2 text-red-700">{error}</p>}
       {status === "done" && url && (
         <p className="mt-2 break-all text-slate-700">

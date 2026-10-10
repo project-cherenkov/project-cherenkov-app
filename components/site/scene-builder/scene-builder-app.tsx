@@ -62,7 +62,7 @@ function TargetEditorialFields({
       <p className="label-code mb-2 text-slate-600 dark:text-slate-300">Target editorial</p>
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400">Subject</span>
+          <span className="text-xs text-slate-600 dark:text-slate-400">Subject</span>
           <select
             className="rounded-md border border-border bg-transparent px-2 py-1"
             value={subject}
@@ -79,7 +79,7 @@ function TargetEditorialFields({
           </select>
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400">Slug</span>
+          <span className="text-xs text-slate-600 dark:text-slate-400">Slug</span>
           <input
             type="text"
             placeholder="binary-search-on-answer"
@@ -89,7 +89,7 @@ function TargetEditorialFields({
           />
         </label>
       </div>
-      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+      <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
         Saving writes this scene into that editorial&apos;s <code className="font-mono">vizConfig</code>{" "}
         frontmatter — the editorial must already exist as a draft or published file. Starting a{" "}
         <Link href="/keystatic/scene-builder/new" className="underline">
@@ -288,7 +288,7 @@ export function SceneBuilderApp({
               {isProgramValid ? (
                 <ProgrammableScene config={programmableConfig} />
               ) : (
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   This program isn&apos;t valid yet — check for an unset variable or an unrecognized
                   element.
                 </p>
@@ -305,12 +305,12 @@ export function SceneBuilderApp({
                 {saveStatus === "saving" ? "Saving…" : "Save to editorial"}
               </button>
               {!targetReady && (
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   Choose a subject and slug above to enable saving.
                 </p>
               )}
               {targetReady && !isProgramValid && (
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   This program isn&apos;t valid yet — check for an unset variable or an unrecognized
                   element.
                 </p>
@@ -334,7 +334,7 @@ export function SceneBuilderApp({
               </details>
             )}
           </div>
-          <aside className="text-sm text-slate-500 dark:text-slate-400">
+          <aside className="text-sm text-slate-600 dark:text-slate-400">
             <p>
               Drag blocks from the toolbox at left of the workspace above. Reader-facing controls
               aren&apos;t authorable here yet — add a <code className="font-mono">controls</code> array
@@ -376,7 +376,7 @@ export function SceneBuilderApp({
             {isValidConfig ? (
               <ComposedScene config={publishable} />
             ) : (
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
                 Add at least one element to see a preview.
               </p>
             )}
@@ -416,12 +416,12 @@ export function SceneBuilderApp({
               {saveStatus === "saving" ? "Saving…" : "Save to editorial"}
             </button>
             {!targetReady && (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Choose a subject and slug above to enable saving.
               </p>
             )}
             {targetReady && !isValidConfig && (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Add at least one element to enable saving.
               </p>
             )}

@@ -65,7 +65,7 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
       <p className="text-sm text-slate-600 dark:text-slate-300">{t("scaleHelp")}</p>
       {sections.map((section) => (
         <fieldset key={section.name} className="rounded-lg border border-border bg-card p-4">
-          <legend className="px-1 font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          <legend className="px-1 font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
             {section.name}
           </legend>
           <ul className="divide-y divide-border">
