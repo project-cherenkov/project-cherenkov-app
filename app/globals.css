@@ -66,11 +66,18 @@
   }
 }
 
-@layer utilities {
-  /* Code-styled section labels (readme.md, archive.log, about.md) — the
-     catournament.org-style visual precedent named in spec §4. */
+/* Code-styled section labels (readme.md, archive.log, about.md) — the
+   catournament.org-style visual precedent named in spec §4.
+
+   Lives in `components`, not `utilities`: Tailwind emits utilities after
+   components, so a colour utility on the same element (e.g.
+   `label-code text-cherenkov-blue-800`) now wins as the author intended.
+   Previously the label's slate-500 beat it and put slate-500 on slate-100
+   chips (4.3:1, WCAG 1.4.3 failure). The default is slate-600 (7.6:1 on
+   white) for the same reason. */
+@layer components {
   .label-code {
-    @apply font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400;
+    @apply font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400;
   }
 }
 

@@ -68,6 +68,7 @@ export default async function ArchivePage({
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((editorial) => (
             <EditorialCard
+              headingLevel={2}
               key={`${editorial.subject}-${editorial.slug}`}
               editorial={editorial}
             />

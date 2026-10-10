@@ -111,7 +111,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
   }
 
   return (
-    <div className="mx-auto max-w-sm py-12">
+    <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
       <h1 className="mb-6 text-2xl font-semibold text-foreground">
         {t("title")}
       </h1>
@@ -124,7 +124,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
-            className="rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400"
+            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -135,7 +135,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400"
+            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -146,7 +146,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            className="rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400"
+            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         {error ? (

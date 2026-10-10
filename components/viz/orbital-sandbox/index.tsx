@@ -103,10 +103,19 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, width, CANVAS_HEIGHT);
 
-    const fit = Math.min(
-      (width - PADDING_PX * 2) / (2 * a),
-      (CANVAS_HEIGHT - PADDING_PX * 2) / (2 * b),
-      1,
+    // ResizeObserver can report a 0-width box (hidden/collapsed container,
+    // first layout pass). Without this guard `fit` goes negative, the ellipse
+    // radius becomes negative and CanvasRenderingContext2D.ellipse() throws an
+    // IndexSizeError that bubbles to the route's error boundary.
+    if (width <= PADDING_PX * 2) return;
+
+    const fit = Math.max(
+      0,
+      Math.min(
+        (width - PADDING_PX * 2) / (2 * a),
+        (CANVAS_HEIGHT - PADDING_PX * 2) / (2 * b),
+        1,
+      ),
     );
     const cx = width / 2;
     const cy = CANVAS_HEIGHT / 2;

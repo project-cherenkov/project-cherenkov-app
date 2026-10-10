@@ -119,7 +119,7 @@ export function SiteHeader() {
 
               const bookmarkStyle = [
                 "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus:outline-none",
-                isActive ? "translate-y-9 z-30" : "z-20 hover:translate-y-9",
+                isActive ? "translate-y-3 z-30" : "z-20 hover:translate-y-9",
               ].join(" ");
 
               const content = (

@@ -27,13 +27,14 @@ vi.mock("@/i18n/routing", () => ({
 
 import { SiteHeader } from "./header";
 
-// The active bookmark is pulled down with "translate-y-9 z-30"; inactive ones only
-// have "hover:translate-y-9", so match the exact active pair.
+// The active bookmark carries aria-current="true" (it stands for three
+// sections, so it is not aria-current="page"). Asserting the attribute rather
+// than a styling class keeps this test valid when the ribbon's look changes.
 function archiveIsActive(pathname: string): boolean {
   mockPathname = pathname;
   const html = renderToStaticMarkup(<SiteHeader />);
   const archiveAnchor = html.match(/<a href="\/archive"[^>]*>/)?.[0] ?? "";
-  return archiveAnchor.includes(" translate-y-9 z-30");
+  return archiveAnchor.includes('aria-current="true"');
 }
 
 describe("SiteHeader — Archive bookmark covers all three archive sections", () => {

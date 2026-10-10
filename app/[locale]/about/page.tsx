@@ -51,7 +51,7 @@ export default async function AboutPage({
         // concern (gated on GATHER-001), untouched here.
         <p className="mt-2 text-slate-700 dark:text-slate-200">{t("teamPlaceholder")}</p>
       ) : (
-        <ul className="mt-4 grid gap-6 sm:grid-cols-2">
+        <ul className="mt-4 grid gap-8">
           {members.map((member) => {
             // See lib/team.ts's resolveMemberBio comment for why this
             // isn't a plain `locale === "id" ? bioId : bioEn` lookup.
@@ -68,7 +68,7 @@ export default async function AboutPage({
                 ) : (
                   <div className="h-16 w-16 flex-none rounded-full bg-cherenkov-blue/20" />
                 )}
-                <div>
+                <div className="min-w-0 max-w-prose">
                   <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (
                     <p className="font-mono text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
@@ -77,14 +77,14 @@ export default async function AboutPage({
                   )}
                   {bio && <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{bio}</p>}
                   {member.personalContacts.length > 0 && (
-                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                    <div className="mt-1 flex flex-wrap gap-x-4">
                       {member.personalContacts.map((contact) => (
                         <a
                           key={`${member.name}-${contact.label}-${contact.value}`}
                           href={contact.href}
                           target={contact.href.startsWith("http") ? "_blank" : undefined}
                           rel={contact.href.startsWith("http") ? "noreferrer" : undefined}
-                          className="inline-block font-mono text-xs text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
+                          className="inline-flex min-h-11 items-center font-mono text-xs text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
                         >
                           {contact.value}
                         </a>
