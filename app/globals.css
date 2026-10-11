@@ -22,6 +22,15 @@
        pastel blue it replaces was 1.6:1 and effectively invisible on the
        light theme. */
     --ring: 196 89% 38%;
+
+    /* Semantic tokens added so a palette change is a one-line edit. Values
+       equal what components hard-coded before (slate / cherenkov scales), so
+       adding them changes nothing on screen. Prefer these over text-slate-*
+       in new code. */
+    --muted-foreground: 215 19% 35%; /* slate-600: secondary text, 7.0:1 on the page */
+    --border-strong: 215 16% 47%; /* slate-500: control borders (inputs, outline buttons) */
+    --brand: 197 84% 30%; /* cherenkov-blue-800: text, links, active states */
+    --highlight: 348 79% 81%; /* cherenkov-pink: a highlight, never text */
   }
 
   .dark {
@@ -35,6 +44,10 @@
     --card: 206 66% 17%; /* #0F3049: lighter than the page, so cards read as raised */
     --border: 204 53% 26%; /* #1F4A66 */
     --ring: 201 100% 77%; /* the pastel blue: 9.5:1 on the dark background */
+    --muted-foreground: 215 20% 65%; /* slate-400 */
+    --border-strong: 215 20% 65%; /* slate-400 */
+    --brand: 196 84% 78%; /* cherenkov-blue-300 */
+    --highlight: 348 79% 81%; /* cherenkov-pink */
   }
 
   body {
@@ -77,7 +90,7 @@
    white) for the same reason. */
 @layer components {
   .label-code {
-    @apply font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400;
+    @apply font-mono text-xs uppercase tracking-wider text-muted-foreground;
   }
 }
 

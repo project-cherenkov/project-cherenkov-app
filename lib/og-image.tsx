@@ -1,46 +1,47 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 
-// Shared 1200×630 social card. Rendered by next/og (Satori) at build time, so
-// there is no binary asset to maintain and nothing runs per request. Uses only
-// the built-in font — adding the site's own typefaces would mean bundling font
-// files, which is a typography decision left to the project.
-export const OG_SIZE = { width: 1200, height: 630 } as const;
+import { OG_SIZE, ogCard, type OgCardProps } from "@/lib/og-card";
 
-export function renderOgImage({
-  eyebrow,
-  title,
-  footer,
-}: {
-  eyebrow: string;
-  title: string;
-  footer: string;
-}) {
-  // Long editorial titles must still fit: step the size down by length.
-  const titleSize = title.length > 90 ? 52 : title.length > 55 ? 64 : 80;
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "72px 80px",
-          background: "linear-gradient(135deg, #0b1620 0%, #12303f 100%)",
-          color: "#ffffff",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 10, background: "#8AD7FF" }} />
-          <div style={{ fontSize: 34, letterSpacing: 1, color: "#8AD7FF" }}>{eyebrow}</div>
-        </div>
-        <div style={{ display: "flex", fontSize: titleSize, fontWeight: 700, lineHeight: 1.12 }}>
-          {title}
-        </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#cbd5e1" }}>{footer}</div>
-      </div>
-    ),
-    { ...OG_SIZE },
+export { OG_SIZE };
+export type { OgCardProps };
+
+// Shared 1200×630 social card, rendered by next/og (Satori) at build time, so
+// there is no binary asset to maintain and nothing runs per request. The
+// layout and artwork live in lib/og-card.tsx; this file only loads the fonts
+// and hands the result to ImageResponse.
+//
+// Fonts: Space Grotesk (the site's heading face) and Space Mono (its
+// code-label voice), both SIL OFL, bundled as WOFF in assets/og-fonts/.
+// Satori reads TTF/OTF/WOFF but not WOFF2, which is why they are not taken
+// from next/font. Only the Latin subset is shipped, which covers English and
+// Indonesian.
+const FONT_DIR = path.join(process.cwd(), "assets", "og-fonts");
+
+const FONT_FILES = [
+  { name: "Space Grotesk", file: "space-grotesk-latin-500-normal.woff", weight: 500 },
+  { name: "Space Grotesk", file: "space-grotesk-latin-700-normal.woff", weight: 700 },
+  { name: "Space Mono", file: "space-mono-latin-400-normal.woff", weight: 400 },
+  { name: "Space Mono", file: "space-mono-latin-700-normal.woff", weight: 700 },
+] as const;
+
+let fontsPromise: ReturnType<typeof loadFonts> | undefined;
+
+async function loadFonts() {
+  return Promise.all(
+    FONT_FILES.map(async ({ name, file, weight }) => {
+      const buffer = await readFile(path.join(FONT_DIR, file));
+      const data = buffer.buffer.slice(
+        buffer.byteOffset,
+        buffer.byteOffset + buffer.byteLength,
+      ) as ArrayBuffer;
+      return { name, data, weight, style: "normal" as const };
+    }),
   );
+}
+
+export async function renderOgImage(props: OgCardProps) {
+  fontsPromise ??= loadFonts();
+  return new ImageResponse(ogCard(props), { ...OG_SIZE, fonts: await fontsPromise });
 }

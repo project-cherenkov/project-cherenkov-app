@@ -56,6 +56,12 @@ const config: Config = {
         card: "hsl(var(--card) / <alpha-value>)",
         border: "hsl(var(--border) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
+        // Semantic layer (see app/globals.css). Components should reach for
+        // these instead of text-slate-* / dark: pairs.
+        muted: { foreground: "hsl(var(--muted-foreground) / <alpha-value>)" },
+        "border-strong": "hsl(var(--border-strong) / <alpha-value>)",
+        brand: "hsl(var(--brand) / <alpha-value>)",
+        highlight: "hsl(var(--highlight) / <alpha-value>)",
       },
       fontFamily: {
         // Blue and white are literal to Cherenkov radiation (the glow emitted when

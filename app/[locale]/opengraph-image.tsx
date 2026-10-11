@@ -14,13 +14,16 @@ export function generateStaticParams() {
 
 // One site-wide card per locale (inherited by every page under /[locale]
 // that doesn't define its own). Text comes from the same message catalogues
-// as the rest of the site.
+// as the rest of the site: the home headline, a one-line description, and
+// the three subjects as chips. The long tagline is deliberately not used —
+// at card size it becomes a wall of text.
 export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const messages = locale === "id" ? id : en;
   return renderOgImage({
-    eyebrow: messages.site.name,
-    title: messages.site.tagline,
-    footer: locale === "id" ? "Informatika · Fisika · Astronomi · OSN" : "Informatics · Physics · Astronomy · OSN",
+    display: true,
+    title: messages.home.heroTitle,
+    description: messages.site.ogDescription,
+    chips: Object.values(messages.syllabus.subjects),
   });
 }

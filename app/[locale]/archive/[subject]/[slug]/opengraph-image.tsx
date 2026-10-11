@@ -22,8 +22,8 @@ export default async function Image({
   const subjectName =
     (messages.syllabus.subjects as Record<string, string>)[subject] ?? subject;
   return renderOgImage({
-    eyebrow: `${messages.site.name} · ${subjectName}`,
+    label: subjectName,
     title: editorial?.title ?? messages.site.name,
-    footer: editorial?.hook ?? messages.site.tagline,
+    description: editorial?.hook ?? messages.site.ogDescription,
   });
 }

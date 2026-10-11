@@ -2,7 +2,8 @@
   "site": {
     "name": "Cherenkov",
     "tagline": "Interactive olympiad editorials for informatics, physics, and astronomy — every proof paired with a visualization you can actually manipulate.",
-    "homeTitle": "Cherenkov — interactive olympiad editorials"
+    "homeTitle": "Cherenkov — interactive olympiad editorials",
+    "ogDescription": "Olympiad editorials with a visualization you can manipulate."
   },
   "nav": {
     "home": "Home",

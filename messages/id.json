@@ -2,7 +2,8 @@
   "site": {
     "name": "Cherenkov",
     "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi — setiap bukti dipasangkan dengan visualisasi yang benar-benar bisa Anda manipulasi.",
-    "homeTitle": "Cherenkov — editorial olimpiade interaktif"
+    "homeTitle": "Cherenkov — editorial olimpiade interaktif",
+    "ogDescription": "Editorial olimpiade dengan visualisasi yang bisa Anda manipulasi."
   },
   "nav": {
     "home": "Beranda",
