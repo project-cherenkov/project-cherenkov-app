@@ -3,7 +3,7 @@ import en from "@/messages/en.json";
 import id from "@/messages/id.json";
 import { OG_SIZE, renderOgImage } from "@/lib/og-image";
 
-export const alt = "Cherenkov — interactive olympiad editorials";
+export const alt = "Cherenkov: interactive olympiad editorials";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

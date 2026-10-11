@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Interactive olympiad editorials for informatics, physics, and astronomy — every proof paired with a visualization you can actually manipulate.",
-    "homeTitle": "Cherenkov — interactive olympiad editorials",
+    "tagline": "Interactive olympiad editorials for informatics, physics and astronomy. Every proof comes with a visualization you can manipulate.",
+    "homeTitle": "Cherenkov: interactive olympiad editorials",
     "ogDescription": "Olympiad editorials with a visualization you can manipulate."
   },
   "nav": {
@@ -30,10 +30,10 @@
   "home": {
     "eyebrow": "readme.md",
     "heroTitle": "The idea, made visible.",
-    "heroBody": "Each editorial is written by someone competing in that subject, not teaching it from the outside. Instagram carries the hook — the surprising idea, in a few seconds. This site carries the rest: the full proof, and an interactive visualization you can actually manipulate rather than just read.",
+    "heroBody": "Each editorial is written by someone who competes in that subject. Instagram carries the hook, the surprising idea in a few seconds. This site carries the rest: the full proof and an interactive visualization you can manipulate.",
     "ctaArchive": "Browse the archive",
     "ctaAbout": "Read the philosophy",
-    "recentHeading": "requirements.txt — recent editorials",
+    "recentHeading": "requirements.txt: recent editorials",
     "recentEmpty": "No editorials published yet.",
     "ctaSyllabus": "See the syllabus",
     "ctaDocs": "Read the docs"
@@ -41,7 +41,7 @@
   "archive": {
     "eyebrow": "archive.log",
     "title": "Archive",
-    "description": "Indexed by principle and error type — not by chapter.",
+    "description": "Indexed by principle and error type, not by chapter.",
     "filters": {
       "subject": "Subject",
       "principle": "Principle",
@@ -66,9 +66,9 @@
     "principleLabel": "Principle",
     "errorTypeLabel": "Error type",
     "byAuthor": "Written by {author}",
-    "vizMissing": "[PLACEHOLDER — this editorial has no interactive visualization configured, which conflicts with the site's non-negotiable rule. Flagged for review.]",
+    "vizMissing": "[PLACEHOLDER: this editorial has no interactive visualization configured, but every editorial is supposed to have one. Flagged for review.]",
     "vizConfigError": "This editorial's vizConfig doesn't match what the {engine} engine expects. Check the MDX frontmatter against the engine's type guard.",
-    "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default — move the tag in the MDX body to reposition it.",
+    "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it.",
     "backToArchive": "Back to archive"
   },
   "viz": {
@@ -80,7 +80,7 @@
     "scrub": "Scrub through steps",
     "stepCounter": "Step {current} of {total}",
     "transitCurve": "Transit light curve (schematic)",
-    "programmableSceneBudgetNotice": "This scene is taking too long to compute — showing the last frame that finished in time.",
+    "programmableSceneBudgetNotice": "This scene is taking too long to compute, so this is the last frame that finished in time.",
     "canvasLabel": "Interactive visualization. Use the controls and sliders below it to change what it shows.",
     "orbitalLabel": "Orbit diagram: eccentricity {eccentricity}, planet-to-star mass ratio {massRatio}, at time {time} seconds. Use the sliders below to change the orbit.",
     "trajectoryLabel": "Trajectory diagram: launch speed {speed} metres per second at {angle} degrees. Use the sliders below to change the launch.",
@@ -89,13 +89,13 @@
   "about": {
     "eyebrow": "about.md",
     "title": "About",
-    "philosophyPlaceholder": "Neutrino observatories never see a neutrino directly — it passes through ordinary matter almost every time. What gets detected is the flash of light the neutrino leaves behind on the rare occasion it does interact, and that flash is enough to trace it back to where it came from. That's the idea behind this project. The reasoning that cracks a hard problem is usually invisible — easy to read past without noticing it was ever there. The visualization is the flash: the moment that reasoning becomes something you can see and trace for yourself.",
+    "philosophyPlaceholder": "Neutrino observatories never see a neutrino directly, because it passes through ordinary matter almost every time. What gets detected is the flash of light the neutrino leaves behind on the rare occasion it does interact, and that flash is enough to trace it back to where it came from. That's the idea behind this project. The reasoning that cracks a hard problem is usually invisible, and easy to read past without noticing it was ever there. The visualization is the flash: the moment that reasoning becomes something you can see and trace for yourself.",
     "teamHeading": "Team",
-    "teamPlaceholder": "[PLACEHOLDER — team bios TBD]",
+    "teamPlaceholder": "[PLACEHOLDER: team bios TBD]",
     "repoHeading": "Source",
-    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file — see the commit history and contribute on GitHub.",
+    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file, so the commit history is public. Contribute on GitHub.",
     "contactHeading": "Contact",
-    "contactPlaceholder": "[PLACEHOLDER — contact inquiries TBD]"
+    "contactPlaceholder": "[PLACEHOLDER: contact inquiries TBD]"
   },
   "footer": {
     "tagline": "The idea, made visible.",
@@ -186,7 +186,7 @@
   "syllabus": {
     "eyebrow": "syllabus.md",
     "title": "Syllabus",
-    "description": "What each olympiad subject covers — and where to learn each topic.",
+    "description": "What each olympiad subject covers, and where to learn each topic.",
     "subjects": {
       "informatics": "Informatics",
       "physics": "Physics",
@@ -197,7 +197,7 @@
       "en": "English"
     },
     "source": "Source",
-    "translationNote": "The official wording is in {language}. Translations here are unofficial — check the source if in doubt.",
+    "translationNote": "The official wording is in {language}. Translations here are unofficial, so check the source if in doubt.",
     "stats": {
       "topics": "topics",
       "materials": "materials",
@@ -223,7 +223,7 @@
     "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",
     "coverage": "{covered} of {total} topics covered",
     "viewSyllabus": "View syllabus",
-    "emptyForSubject": "No materials yet — they appear here as each syllabus topic gets written up.",
+    "emptyForSubject": "No materials yet. They appear here as each syllabus topic gets written up.",
     "backToMaterials": "Materials",
     "inSyllabus": "In the syllabus",
     "relatedEditorials": "Related editorials",
@@ -278,12 +278,12 @@
     "onboarding": {
       "eyebrow": "PLANNER.MD",
       "title": "Build your OSN study plan",
-      "step1": "Step 1 — What are you preparing for?",
+      "step1": "Step 1: What are you preparing for?",
       "step1Body": "Pick one subject, the OSN stage you are aiming for, and how many hours a week you can study.",
       "continue": "Continue",
       "changeSettings": "Change subject, stage or hours",
       "saveSettings": "Save",
-      "step2": "Step 2 — How well do you know each topic?",
+      "step2": "Step 2: How well do you know each topic?",
       "step2Body": "The plan is mostly revision, so it skips what you already know. Be honest: quizzes will check your ratings.",
       "topicsMissing": "No topics are loaded for this subject yet. Ask an admin to run the seed.",
       "generate": "Generate my plan"

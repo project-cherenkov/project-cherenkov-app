@@ -132,7 +132,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     article,
   } = input;
   const description = truncate(input.description, 200);
-  const fullTitle = absoluteTitle ? title : `${title} — ${siteName}`;
+  const fullTitle = absoluteTitle ? title : `${title} | ${siteName}`;
   const canonical = localizedUrl(canonicalLocale, path);
   const known = isAppLocale(locale) ? locale : DEFAULT_LOCALE;
   // A page that defines its own `openGraph` REPLACES its parent's, including

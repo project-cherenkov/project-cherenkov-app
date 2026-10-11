@@ -3,29 +3,29 @@ title: "Editing with Keystatic"
 description: "Using the in-browser content editor: what it can edit, who can reach it, and how its saves become commits."
 section: contributing
 order: 20
-updatedAt: "2026-10-07"
+updatedAt: "2026-10-11"
 ---
 
-Keystatic is the site's in-browser editor, available at `/keystatic`. It reads and writes the same MDX files described in [Writing an editorial](/docs/writing-editorials); it is a friendlier way to edit them, not a separate store.
+Keystatic is the site's in-browser editor, available at `/keystatic`. It reads and writes the same MDX files described in [Writing an editorial](/docs/writing-editorials), so it is a friendlier way to edit them and has no store of its own.
 
 ## What you can edit
 
-- Editorials — one collection per subject.
-- Materials — one collection per subject.
+- Editorials, with one collection per subject.
+- Materials, with one collection per subject.
 - The team list shown on the About page.
 
-Because each collection is tied to one subject, a file in the wrong folder is not possible to create through the editor.
+Each collection is tied to one subject, so the editor cannot put a file in the wrong folder.
 
 ## Who can reach it
 
-On a deployed site the editor is reachable only when GitHub sign-in is configured, and each action additionally requires a signed-in account whose email is on the editors' allow-list. Otherwise `/keystatic` returns "not found". Locally, with no configuration, it edits the files in your working copy directly.
+On a deployed site the editor is reachable only when GitHub sign-in is configured, and each action also requires a signed-in account whose email is on the editors' allow-list. Otherwise `/keystatic` returns "not found". Locally, with no configuration, it edits the files in your working copy directly.
 
 ## How saves work
 
-In GitHub mode, saves land as commits on a new branch of the repository. Nothing is published until a pull request is opened and merged on GitHub — the editor does not do that step for you.
+In GitHub mode, saves land as commits on a new branch of the repository. Nothing is published until a pull request is opened and merged on GitHub, and the editor does not do that step for you.
 
 ## Known limitations
 
-- The editorial form cannot display the two visually-built engines' configuration. Create and edit those with [the scene builder](/docs/scene-builder), and edit their prose in the MDX file.
+The editorial form cannot display the configuration of the two visually built engines. Create and edit those with [the scene builder](/docs/scene-builder), and edit their prose in the MDX file.
 
-For setup details — environment variables, OAuth apps and deployment — see the developer notes in the repository's `docs/` folder on GitHub.
+For setup details (environment variables, OAuth apps and deployment), see the developer notes in the repository's `docs/` folder on GitHub.

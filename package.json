@@ -2,7 +2,7 @@
   "name": "project-cherenkov",
   "version": "0.1.0",
   "private": true,
-  "description": "Project Cherenkov — Indonesian OSN (informatics/physics/astronomy) editorial archive with interactive visualizations.",
+  "description": "Project Cherenkov: Indonesian OSN (informatics/physics/astronomy) editorial archive with interactive visualizations.",
   "scripts": {
     "dev": "concurrently -n next,velite -c blue,green \"next dev\" \"velite dev\"",
     "build": "velite build && next build && tsx scripts/check-blockly-bundle-isolation.ts",

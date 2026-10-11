@@ -85,7 +85,7 @@ describe("buildPageMetadata", () => {
     expect(meta.alternates?.canonical).toMatch(/\/id\/archive$/);
     expect(meta.alternates?.languages).toHaveProperty("en");
     expect(meta.alternates?.languages).toHaveProperty("x-default");
-    expect(meta.openGraph).toMatchObject({ locale: "id_ID", alternateLocale: ["en_US"], title: "Arsip — Cherenkov" });
+    expect(meta.openGraph).toMatchObject({ locale: "id_ID", alternateLocale: ["en_US"], title: "Arsip | Cherenkov" });
     expect(meta.twitter).toMatchObject({ card: "summary_large_image" });
   });
 

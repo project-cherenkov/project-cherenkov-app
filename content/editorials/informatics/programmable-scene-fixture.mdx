@@ -1,7 +1,7 @@
 ---
-title: "Programmable Scene Fixture: A Single Circle"
+title: "Programmable scene fixture: a single circle"
 subject: informatics
-hook: "The smallest possible programmable-scene program — one emitElement, nothing else — used to prove the engine round-trips end to end."
+hook: "The smallest possible programmable-scene program, one emitElement and nothing else, used to check that the engine round-trips end to end."
 tags: ["fixture", "programmable-scene"]
 principle: "programmable-scene-engine-round-trip"
 errorType: "n/a-implementation-fixture"
@@ -25,20 +25,19 @@ author: "PLACEHOLDER Author Name"
 
 ## What this is
 
-A hand-built fixture, not a real proof-of-error editorial — PROG-004's own
+A hand-built fixture, not a real proof-of-error editorial. PROG-004's
 acceptance criterion calls for exactly this: "a hand-built fixture
 editorial with a trivial program (e.g., one `emitElement` of a
 `shape-circle`) round-trips and renders via a local dev build." This file
-is that fixture, committed so the round-trip stays exercised by an ordinary
-`pnpm generate` / `pnpm build` rather than a one-off manual check that
-nothing re-runs later.
+is that fixture. It is committed so that an ordinary `pnpm generate` or
+`pnpm build` keeps exercising the round-trip, in place of a one-off manual
+check that nothing re-runs later.
 
-The program itself does the least a `programmable-scene` program can do:
-one top-level `emitElement` drawing a single blue circle, no variables, no
-control flow, no reader-facing controls.
+The program does the least a `programmable-scene` program can do: one
+top-level `emitElement` drawing a single blue circle, with no variables, no
+control flow and no reader-facing controls.
 
 <Interactive />
 
-This fixture is expected to be superseded (or removed) once a real
-programmable-scene editorial exists to exercise the engine end to end
-instead.
+This fixture is expected to be superseded or removed once a real
+programmable-scene editorial exercises the engine end to end.

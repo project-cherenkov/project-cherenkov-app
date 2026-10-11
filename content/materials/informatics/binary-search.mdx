@@ -15,8 +15,8 @@ there is none) by repeatedly discarding half of the remaining candidates.
 
 Keep a half-open window $[lo, hi)$ and hold on to two facts:
 
-- every index **before** $lo$ has $a_i < x$;
-- every index **from** $hi$ onward has $a_i \ge x$.
+- every index before $lo$ has $a_i < x$;
+- every index from $hi$ onward has $a_i \ge x$.
 
 ```
 lo = 0
@@ -40,8 +40,9 @@ $O(\log n)$ times instead of $O(n)$.
 
 ## Common traps
 
-- **Overflow.** Write `lo + (hi - lo) / 2`, not `(lo + hi) / 2`.
-- **Infinite loops.** `lo = mid` (without the `+ 1`) can stall when
-  `hi = lo + 1`. Move the boundary *past* `mid` whenever `mid` is ruled out.
-- **Mixing conventions.** Pick half-open $[lo, hi)$ or closed $[lo, hi]$ and
-  stay with it; the loop condition and both updates change together.
+- Overflow. Write `lo + (hi - lo) / 2` instead of `(lo + hi) / 2`.
+- Infinite loops. `lo = mid` (without the `+ 1`) can stall when
+  `hi = lo + 1`. Whenever `mid` is ruled out, move the boundary *past* it.
+- Mixing conventions. Pick half-open $[lo, hi)$ or closed $[lo, hi]$ and
+  stay with it, because the loop condition and both updates change
+  together.

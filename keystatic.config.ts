@@ -211,7 +211,7 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
           description:
             `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
             `Saving there writes discriminant and value into this exact vizConfig field ` +
-            `directly — nothing to set here.`,
+            `directly, so there is nothing to set here.`,
         },
       ),
       "programmable-scene": fields.object(
@@ -220,7 +220,7 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
           description:
             `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
             `The builder validates and previews the program but does not yet write it ` +
-            `back automatically — copy its compiled output into vizConfig.value by hand ` +
+            `back automatically, so copy its compiled output into vizConfig.value by hand ` +
             `for now (see PROG-004 in git history).`,
         },
       ),
@@ -244,7 +244,7 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
 function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
   return {
     subject: fields.select({
-      label: "Subject (fixed — matches this collection)",
+      label: "Subject (fixed to match this collection)",
       options: [{ label: subject, value: subject }],
       defaultValue: subject,
     }),
@@ -265,12 +265,12 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     // comment in velite.config.ts. Do not convert to fields.select.
     principle: fields.text({
       label: "Principle",
-      description: "Free text — taxonomy not finalized yet (see velite.config.ts).",
+      description: "Free text. The taxonomy is not finalized yet (see velite.config.ts).",
       validation: { isRequired: true },
     }),
     errorType: fields.text({
       label: "Error type",
-      description: "Free text, optional — see principle's note.",
+      description: "Free text, optional. See the note on principle.",
     }),
     vizConfig: vizConfigConditional(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
@@ -281,7 +281,7 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       label: "Syllabus topic (optional)",
       description:
         "Which syllabus topic this editorial belongs to. Shows up on the syllabus page and the editorial.",
-      options: [{ label: "— none —", value: "" }, ...topicSelectOptions(subject)],
+      options: [{ label: "None", value: "" }, ...topicSelectOptions(subject)],
       defaultValue: "",
     }),
     // Explicit, author-set slug — see decision #3. Velite derives its own
@@ -291,7 +291,7 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       name: {
         label: "Slug",
         description:
-          "Sets the MDX filename (content/editorials/<subject>/<slug>.mdx). Not derived from title — retitling a published piece must never change its URL.",
+          "Sets the MDX filename (content/editorials/<subject>/<slug>.mdx). Not derived from the title, so retitling a published piece never changes its URL.",
       },
     }),
     content: fields.mdx({
@@ -310,7 +310,7 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
   const options = topicSelectOptions(subject);
   return {
     subject: fields.select({
-      label: "Subject (fixed — matches this collection)",
+      label: "Subject (fixed to match this collection)",
       options: [{ label: subject, value: subject }],
       defaultValue: subject,
     }),
@@ -320,7 +320,7 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
     }),
     topic: fields.select({
       label: "Syllabus topic",
-      description: "The syllabus topic this material explains — one material per topic.",
+      description: "The syllabus topic this material explains. There is one material per topic.",
       options,
       defaultValue: options[0]?.value ?? "",
     }),
@@ -382,42 +382,42 @@ export default config({
     : { kind: "local" },
   collections: {
     astronomyEditorials: collection({
-      label: "Editorials — Astronomy",
+      label: "Editorials: Astronomy",
       slugField: "slug",
       path: "content/editorials/astronomy/*",
       format: { contentField: "content" },
       schema: editorialSchema("astronomy"),
     }),
     physicsEditorials: collection({
-      label: "Editorials — Physics",
+      label: "Editorials: Physics",
       slugField: "slug",
       path: "content/editorials/physics/*",
       format: { contentField: "content" },
       schema: editorialSchema("physics"),
     }),
     informaticsEditorials: collection({
-      label: "Editorials — Informatics",
+      label: "Editorials: Informatics",
       slugField: "slug",
       path: "content/editorials/informatics/*",
       format: { contentField: "content" },
       schema: editorialSchema("informatics"),
     }),
     astronomyMaterials: collection({
-      label: "Materials — Astronomy",
+      label: "Materials: Astronomy",
       slugField: "slug",
       path: "content/materials/astronomy/*",
       format: { contentField: "content" },
       schema: materialSchema("astronomy"),
     }),
     physicsMaterials: collection({
-      label: "Materials — Physics",
+      label: "Materials: Physics",
       slugField: "slug",
       path: "content/materials/physics/*",
       format: { contentField: "content" },
       schema: materialSchema("physics"),
     }),
     informaticsMaterials: collection({
-      label: "Materials — Informatics",
+      label: "Materials: Informatics",
       slugField: "slug",
       path: "content/materials/informatics/*",
       format: { contentField: "content" },
@@ -455,7 +455,7 @@ export default config({
             name: fields.text({ label: "Name", validation: { isRequired: true } }),
             role: fields.text({
               label: "Role",
-              description: "e.g. Founder — Astronomy",
+              description: "e.g. Founder, Astronomy",
             }),
             bioEn: fields.text({ label: "Bio (English)", multiline: true }),
             bioId: fields.text({ label: "Bio (Indonesian)", multiline: true }),

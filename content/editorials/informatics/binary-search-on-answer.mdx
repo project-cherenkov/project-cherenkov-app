@@ -1,7 +1,7 @@
 ---
-title: "Binary Search on the Answer: Why the Predicate Must Be Monotonic"
+title: "Binary search on the answer: why the predicate must be monotonic"
 subject: informatics
-hook: "Binary search doesn't need a sorted array — it needs a predicate that flips exactly once."
+hook: "Binary search doesn't need a sorted array. It needs a predicate that flips exactly once."
 tags: ["binary-search", "monotonic-predicate", "searching"]
 principle: "monotonic-predicate-search"
 errorType: "assumed-sortedness-instead-of-monotonicity"
@@ -15,13 +15,13 @@ vizConfig:
         note: "mid = 3 → array[3] = 8 < 10, so index 3 isn't the answer. Search the right half: lo = 4."
       - pointers: { lo: 4, hi: 7, mid: 5 }
         highlight: [5]
-        note: "mid = 5 → array[5] = 12 ≥ 10. Index 5 is a valid candidate — remember it, then keep searching left: hi = 4."
+        note: "mid = 5 → array[5] = 12 ≥ 10. Index 5 is a valid candidate, so remember it and keep searching left: hi = 4."
       - pointers: { lo: 4, hi: 4, mid: 4 }
         highlight: [4]
-        note: "mid = 4 → array[4] = 10 ≥ 10. A better candidate — remember it, then keep searching left: hi = 3."
+        note: "mid = 4 → array[4] = 10 ≥ 10. A better candidate, so remember it and keep searching left: hi = 3."
       - pointers: { lo: 4, hi: 3 }
         highlight: [4]
-        note: "lo (4) has crossed hi (3) — the search is over. The best candidate found was index 4."
+        note: "lo (4) has crossed hi (3), so the search is over. The best candidate found was index 4."
 publishedAt: "2026-08-01"
 author: "PLACEHOLDER Author Name"
 syllabusTopic: binary-search
@@ -29,29 +29,28 @@ syllabusTopic: binary-search
 
 ## The problem
 
-Most students meet binary search as "the trick for sorted arrays." That's
-true, but it's not the *reason* binary search works, and treating
-sortedness as the reason is exactly what breaks once problems stop handing
-you a sorted array directly — "find the smallest value of $x$ satisfying
-some condition" problems, for instance, where no array is sorted because
-there's no array at all.
+Most students meet binary search as "the trick for sorted arrays." That is
+true, but sortedness is not the *reason* binary search works, and treating
+it as the reason breaks once problems stop handing you a sorted array
+directly. "Find the smallest value of $x$ satisfying some condition"
+problems are an example: no array is sorted, because there is no array at
+all.
 
 ## The idea
 
-What binary search actually needs is a predicate $P(i)$ over index $i$ that
-is **monotonic**: false for a while, then true for the rest —
-$P(0), P(1), \dots, P(n-1)$ looks like $F, F, \dots, F, T, T, \dots, T$
-with exactly one flip. Sortedness is just the most common way that
-condition shows up: for "first index with $a_i \ge \text{target}$," the
-predicate $P(i) := a_i \ge \text{target}$ is monotonic precisely because
-the array is sorted. But plenty of monotonic predicates come from
-completely unsorted data — "smallest speed that finishes the race in time,"
-"smallest budget that satisfies every constraint" — and binary search
-applies to all of them the same way.
+Binary search needs a predicate $P(i)$ over index $i$ that is monotonic:
+false for a while, then true for the rest. $P(0), P(1), \dots, P(n-1)$
+looks like $F, F, \dots, F, T, T, \dots, T$ with exactly one flip.
+Sortedness is the most common way that condition shows up. For "first
+index with $a_i \ge \text{target}$," the predicate
+$P(i) := a_i \ge \text{target}$ is monotonic precisely because the array is
+sorted. But plenty of monotonic predicates come from unsorted data, such as
+"smallest speed that finishes the race in time" or "smallest budget that
+satisfies every constraint," and binary search applies to all of them the
+same way.
 
-The array below is deliberately sorted so the predicate is easy to see, but
-watch what the search is actually tracking: not "where does the array grow,"
-but "where does the predicate flip."
+The array below is sorted so the predicate is easy to see. Watch what the
+search tracks: the place where the predicate flips.
 
 <Interactive />
 
@@ -61,9 +60,9 @@ but "where does the predicate flip."
 "the answer lies in $[lo, hi]$" holds at every step, and the loop
 terminates with the correct answer (or no answer, if $P$ is never true).
 
-**Invariant.** At the start of every iteration, either no index in
-$[lo, hi]$ has been ruled out incorrectly — i.e. the first index where $P$
-is true, if one exists, lies in $[lo, hi]$.
+**Invariant.** At the start of every iteration, no index has been ruled
+out incorrectly: the first index where $P$ is true, if one exists, lies in
+$[lo, hi]$.
 
 **Base case.** Initially $lo = 0$, $hi = n-1$, so the invariant holds
 trivially: the first true index, if any, is within $[0, n-1]$.
@@ -83,9 +82,9 @@ ends in $O(\log n)$ steps. When $lo > hi$, the invariant's search window is
 empty, and the best candidate recorded along the way is exactly the first
 index where $P$ is true. $\blacksquare$
 
-**Where it breaks in practice.** The error this editorial is filed under —
-assuming sortedness instead of monotonicity — shows up when someone binary
+**Where it breaks in practice.** The error this editorial is filed under,
+assuming sortedness instead of monotonicity, shows up when someone binary
 searches over a value that *looks* array-like (a range of possible answers)
-without checking that the actual predicate is monotonic over that range. A
-predicate that's true, false, true is not safe to binary search over, even
-if the "array" it's defined over happens to be sorted numbers.
+without checking that the predicate is monotonic over that range. A
+predicate that is true, false, true is not safe to binary search, even if
+the "array" it is defined over happens to be sorted numbers.

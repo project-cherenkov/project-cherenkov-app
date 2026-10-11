@@ -34,9 +34,9 @@ export function GET() {
   const lines: string[] = [
     "# Project Cherenkov",
     "",
-    "> Interactive olympiad editorials for informatics, physics and astronomy — every proof paired with a visualization you can manipulate. Built for Indonesian OSN (Olimpiade Sains Nasional) students. Open source (MIT).",
+    "> Interactive olympiad editorials for informatics, physics and astronomy. Every proof comes with a visualization you can manipulate. Built for Indonesian OSN (Olimpiade Sains Nasional) students. Open source (MIT).",
     "",
-    "The site is available in Indonesian (/id) and English (/en). Editorials and materials are written in a single language and shown as written in both interfaces.",
+    "The site is available in Indonesian (/id) and English (/en). Each editorial and material is written in one language and appears as written in both interfaces.",
     "",
     "## Sections",
     "",

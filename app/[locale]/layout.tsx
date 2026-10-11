@@ -38,7 +38,7 @@ export async function generateMetadata({
   const ogLocale = isAppLocale(locale) ? OG_LOCALES[locale] : OG_LOCALES.id;
   return {
     metadataBase: new URL(siteUrl),
-    title: { default: t("homeTitle"), template: `%s — ${t("name")}` },
+    title: { default: t("homeTitle"), template: `%s | ${t("name")}` },
     description: t("tagline"),
     applicationName: t("name"),
     openGraph: {

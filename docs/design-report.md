@@ -12,34 +12,34 @@ browser. Date of review: 10 October 2026.
 
 ## 1. What the design pass changed
 
-- **Palette** (`app/globals.css`, `app/[locale]/layout.tsx`): neutrals are now
+- Palette (`app/globals.css`, `app/[locale]/layout.tsx`): neutrals are now
   brand-tinted instead of pure white and flat gray. See section 2.
-- **Hero band** (`app/globals.css`, `app/[locale]/page.tsx`): the home hero
+- Hero band (`app/globals.css`, `app/[locale]/page.tsx`): the home hero
   sits in a full-width `.hero-band` with a blue and a pink glow that fade into
   the page, in both themes. The recent-editorials section moved out of the
   hero wrapper and keeps the old `max-w-5xl` width.
-- **Muted text** (19 files): light-mode `text-slate-500` became `text-
+- Muted text (19 files): light-mode `text-slate-500` became `text-
   slate-600`. On the tinted page background slate-500 is 4.41:1, below the
   4.5:1 AA minimum for normal text. Dark-mode `dark:text-slate-400` is
   unchanged.
-- **Outline buttons** (`components/ui/button.tsx`): the border is `slate-500`
+- Outline buttons (`components/ui/button.tsx`): the border is `slate-500`
   (`slate-400` in dark), the same strength as form inputs. It was `border-
   border`, about 1.3:1 against the page, so the buttons barely read as
   buttons.
-- **Take quiz** (`components/planner/plan-dashboard.tsx`): now a small primary
+- Take quiz (`components/planner/plan-dashboard.tsx`): now a small primary
   button instead of an `text-xs` underlined link. It is the action that
   verifies mastery, and "Mark done" next to it was the more prominent control.
-- **Archive filters** (`components/site/archive-filters.tsx`): the selects use
+- Archive filters (`components/site/archive-filters.tsx`): the selects use
   `bg-background text-foreground` (they were hardcoded white, so they were
   white boxes in dark mode), and the Clear button has a visible hover in both
   themes.
-- **Quiz feedback** (`components/quiz/quiz-dialog.tsx`): "correct" text is
+- Quiz feedback (`components/quiz/quiz-dialog.tsx`): "correct" text is
   `emerald-700` in light mode (`emerald-600` was 3.77:1 on white).
-- **Header hovers** (`components/site/header.tsx`): `hover:bg-accent` and
+- Header hovers (`components/site/header.tsx`): `hover:bg-accent` and
   `hover:text-accent-foreground` referred to colors that are not defined in
   `tailwind.config.ts`, so those hovers did nothing. They now use the same
   slate hover as the rest of the app.
-- **Dialog close button** (`components/ui/dialog.tsx`): the hit area is 32px
+- Dialog close button (`components/ui/dialog.tsx`): the hit area is 32px
   instead of the 16px icon (WCAG 2.5.8 asks for at least 24px).
 
 ## 2. The palette
@@ -153,7 +153,7 @@ Keep these when changing the UI:
   shareable and keyboard-friendly.
 - `EditorialCard` has a clear order (subject chip, title, hook, tags, author)
   and a `headingLevel` prop that keeps the outline valid.
-- The planner is honest about infeasible plans (banner with the hours gap) and
+- The planner reports infeasible plans (banner with the hours gap) and
   puts the stale-plan action beside its message.
 - The login form uses `role="alert"` errors and distinguishes failure modes.
 - Brand colors live in `tailwind.config.ts`, with few hardcoded hexes.

@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi — setiap bukti dipasangkan dengan visualisasi yang benar-benar bisa Anda manipulasi.",
-    "homeTitle": "Cherenkov — editorial olimpiade interaktif",
+    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi. Setiap bukti disertai visualisasi yang bisa Anda manipulasi.",
+    "homeTitle": "Cherenkov: editorial olimpiade interaktif",
     "ogDescription": "Editorial olimpiade dengan visualisasi yang bisa Anda manipulasi."
   },
   "nav": {
@@ -30,10 +30,10 @@
   "home": {
     "eyebrow": "readme.md",
     "heroTitle": "Ide yang tampak jelas.",
-    "heroBody": "Setiap editorial ditulis oleh seseorang yang sedang bersaing di bidang itu, bukan oleh pengajar dari luar. Instagram membawa pancingan — ide yang mengejutkan, dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap, dan visualisasi interaktif yang benar-benar bisa Anda manipulasi, bukan hanya dibaca.",
+    "heroBody": "Setiap editorial ditulis oleh seseorang yang bersaing di bidang itu. Instagram membawa pancingan, yaitu ide yang mengejutkan dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap dan visualisasi interaktif yang bisa Anda manipulasi.",
     "ctaArchive": "Jelajahi arsip",
     "ctaAbout": "Baca filosofinya",
-    "recentHeading": "requirements.txt — edisi terbaru",
+    "recentHeading": "requirements.txt: edisi terbaru",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
     "ctaSyllabus": "Lihat silabus",
     "ctaDocs": "Baca dokumentasi"
@@ -41,7 +41,7 @@
   "archive": {
     "eyebrow": "archive.log",
     "title": "Arsip",
-    "description": "Diindeks berdasarkan prinsip dan jenis kesalahan — bukan berdasarkan bab.",
+    "description": "Diindeks berdasarkan prinsip dan jenis kesalahan, bukan berdasarkan bab.",
     "filters": {
       "subject": "Bidang",
       "principle": "Prinsip",
@@ -66,9 +66,9 @@
     "principleLabel": "Prinsip",
     "errorTypeLabel": "Jenis kesalahan",
     "byAuthor": "Ditulis oleh {author}",
-    "vizMissing": "[PLACEHOLDER — edisi ini belum punya visualisasi interaktif, bertentangan dengan aturan wajib situs. Ditandai untuk ditinjau.]",
+    "vizMissing": "[PLACEHOLDER: edisi ini belum punya visualisasi interaktif, padahal setiap edisi seharusnya memilikinya. Ditandai untuk ditinjau.]",
     "vizConfigError": "Konfigurasi vizConfig edisi ini tidak sesuai dengan yang diharapkan oleh mesin {engine}. Periksa frontmatter MDX terhadap type guard mesin terkait.",
-    "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default — pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
+    "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
     "backToArchive": "Kembali ke arsip"
   },
   "viz": {
@@ -80,7 +80,7 @@
     "scrub": "Geser antar langkah",
     "stepCounter": "Langkah {current} dari {total}",
     "transitCurve": "Kurva cahaya transit (skematik)",
-    "programmableSceneBudgetNotice": "Adegan ini butuh waktu terlalu lama untuk dihitung — menampilkan bingkai terakhir yang selesai tepat waktu.",
+    "programmableSceneBudgetNotice": "Adegan ini butuh waktu terlalu lama untuk dihitung, jadi yang tampil adalah bingkai terakhir yang selesai tepat waktu.",
     "canvasLabel": "Visualisasi interaktif. Gunakan kontrol dan penggeser di bawahnya untuk mengubah tampilannya.",
     "orbitalLabel": "Diagram orbit: eksentrisitas {eccentricity}, rasio massa planet terhadap bintang {massRatio}, pada waktu {time} detik. Gunakan penggeser di bawahnya untuk mengubah orbit.",
     "trajectoryLabel": "Diagram lintasan: kecepatan awal {speed} meter per detik pada sudut {angle} derajat. Gunakan penggeser di bawahnya untuk mengubah peluncuran.",
@@ -89,13 +89,13 @@
   "about": {
     "eyebrow": "about.md",
     "title": "Tentang",
-    "philosophyPlaceholder": "Observatorium neutrino tidak pernah melihat neutrino secara langsung — ia melewati materi biasa hampir setiap saat. Yang terdeteksi adalah kilatan cahaya yang ditinggalkan neutrino pada saat-saat langka saat ia berinteraksi, dan kilatan itu cukup untuk melacak kembali asalnya. Itu inti proyek ini. Penalaran yang memecahkan masalah sulit biasanya tak terlihat — mudah diabaikan tanpa sadar ia pernah hadir. Visualisasi adalah kilatan itu: saat penalaran itu menjadi sesuatu yang bisa Anda lihat dan lacak sendiri.",
+    "philosophyPlaceholder": "Observatorium neutrino tidak pernah melihat neutrino secara langsung, karena ia melewati materi biasa hampir setiap saat. Yang terdeteksi adalah kilatan cahaya yang ditinggalkan neutrino pada saat-saat langka saat ia berinteraksi, dan kilatan itu cukup untuk melacak kembali asalnya. Itu inti proyek ini. Penalaran yang memecahkan masalah sulit biasanya tak terlihat, dan mudah diabaikan tanpa sadar ia pernah hadir. Visualisasi adalah kilatan itu: saat penalaran itu menjadi sesuatu yang bisa Anda lihat dan lacak sendiri.",
     "teamHeading": "Tim",
-    "teamPlaceholder": "[PLACEHOLDER — bio tim belum ditulis]",
+    "teamPlaceholder": "[PLACEHOLDER: bio tim belum ditulis]",
     "repoHeading": "Sumber",
-    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git — lihat riwayat commit dan berkontribusi di GitHub.",
+    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git, jadi riwayat commit-nya terbuka. Berkontribusilah di GitHub.",
     "contactHeading": "Kontak",
-    "contactPlaceholder": "[PLACEHOLDER — informasi kontak belum ditulis]"
+    "contactPlaceholder": "[PLACEHOLDER: informasi kontak belum ditulis]"
   },
   "footer": {
     "tagline": "Ide yang tampak jelas.",
@@ -186,7 +186,7 @@
   "syllabus": {
     "eyebrow": "syllabus.md",
     "title": "Silabus",
-    "description": "Apa saja yang diujikan di tiap bidang olimpiade — dan di mana mempelajari tiap topiknya.",
+    "description": "Apa saja yang diujikan di tiap bidang olimpiade, dan di mana mempelajari tiap topiknya.",
     "subjects": {
       "informatics": "Informatika",
       "physics": "Fisika",
@@ -197,7 +197,7 @@
       "en": "Inggris"
     },
     "source": "Sumber",
-    "translationNote": "Redaksi resminya dalam bahasa {language}. Terjemahan di sini tidak resmi — periksa sumbernya jika ragu.",
+    "translationNote": "Redaksi resminya dalam bahasa {language}. Terjemahan di sini tidak resmi, jadi periksa sumbernya jika ragu.",
     "stats": {
       "topics": "topik",
       "materials": "materi",
@@ -223,7 +223,7 @@
     "description": "Silabus yang diuraikan topik demi topik. Catatan rujukan tanpa nama penulis, disusun mengikuti silabus.",
     "coverage": "{covered} dari {total} topik tersedia",
     "viewSyllabus": "Lihat silabus",
-    "emptyForSubject": "Belum ada materi — materi muncul di sini seiring tiap topik silabus selesai ditulis.",
+    "emptyForSubject": "Belum ada materi. Materi muncul di sini seiring tiap topik silabus selesai ditulis.",
     "backToMaterials": "Materi",
     "inSyllabus": "Dalam silabus",
     "relatedEditorials": "Editorial terkait",
@@ -278,12 +278,12 @@
     "onboarding": {
       "eyebrow": "PLANNER.MD",
       "title": "Susun rencana belajar OSN",
-      "step1": "Langkah 1 — Kamu menyiapkan apa?",
+      "step1": "Langkah 1: Kamu menyiapkan apa?",
       "step1Body": "Pilih satu bidang, tingkat OSN yang dituju, dan berapa jam seminggu kamu bisa belajar.",
       "continue": "Lanjut",
       "changeSettings": "Ubah bidang, tingkat, atau jam",
       "saveSettings": "Simpan",
-      "step2": "Langkah 2 — Seberapa kamu menguasai tiap topik?",
+      "step2": "Langkah 2: Seberapa kamu menguasai tiap topik?",
       "step2Body": "Rencana ini kebanyakan revisi, jadi yang sudah kamu kuasai dilewati. Jujurlah: kuis akan memeriksa penilaianmu.",
       "topicsMissing": "Belum ada topik untuk bidang ini. Minta admin menjalankan seed.",
       "generate": "Buat rencanaku"
