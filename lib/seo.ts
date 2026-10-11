@@ -18,6 +18,13 @@ export const OG_LOCALES: Record<AppLocale, string> = {
   en: "en_US",
 };
 
+// Chat apps (Discord, Slack, WhatsApp...) cache a link preview's image by its
+// URL, and this route's URL never changes when the card is redrawn — so a
+// redesigned card keeps showing the old picture wherever the link was already
+// shared. Bump this whenever the share card's look changes; it only has to
+// differ from the previous value.
+export const OG_IMAGE_VERSION = 2;
+
 export const REPO_URL = "https://github.com/project-cherenkov/project-cherenkov-app";
 
 export function isAppLocale(value: string): value is AppLocale {
@@ -133,7 +140,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
   // image to use explicitly. Pages with their own opengraph-image file (the
   // editorials) still override this, because file-based images win.
   const image = {
-    url: localizedUrl(known, "/opengraph-image"),
+    url: `${localizedUrl(known, "/opengraph-image")}?v=${OG_IMAGE_VERSION}`,
     width: 1200,
     height: 630,
     alt: fullTitle,

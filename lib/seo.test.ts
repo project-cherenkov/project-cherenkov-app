@@ -92,9 +92,9 @@ describe("buildPageMetadata", () => {
   it("names the social image explicitly (a page's openGraph replaces its parent's)", () => {
     const meta = buildPageMetadata(base);
     expect(meta.openGraph?.images).toEqual([
-      expect.objectContaining({ url: expect.stringMatching(/\/id\/opengraph-image$/), width: 1200, height: 630 }),
+      expect.objectContaining({ url: expect.stringMatching(/\/id\/opengraph-image\?v=\d+$/), width: 1200, height: 630 }),
     ]);
-    expect(meta.twitter?.images).toEqual([expect.stringMatching(/\/id\/opengraph-image$/)]);
+    expect(meta.twitter?.images).toEqual([expect.stringMatching(/\/id\/opengraph-image\?v=\d+$/)]);
   });
 
   it("can canonicalise to a different locale (used for untranslated docs)", () => {
