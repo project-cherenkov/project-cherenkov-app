@@ -3,6 +3,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 import { extractToc, rehypeHeadingIds } from "./lib/docs-headings";
+import { isSafePracticeUrl } from "./lib/practice-links";
 
 // Mirrors the frontmatter schema from the build spec, Section 6.
 //
@@ -69,6 +70,19 @@ const editorials = defineCollection({
         .string()
         .optional()
         .transform((value) => value || undefined),
+      // External practice problems (R7): links only, https only, each with a
+      // "checked on" date so a stale link is visible. See lib/practice-links.ts.
+      practiceLinks: s
+        .array(
+          s.object({
+            title: s.string().max(120),
+            url: s.string().refine(isSafePracticeUrl, {
+              message: "practice link must be an https:// URL with a real host",
+            }),
+            checkedOn: s.isodate(),
+          }),
+        )
+        .default([]),
       // Full proof + prose body, compiled to a renderable MDX component.
       body: s.mdx(),
       // Derived from the file path (content/editorials/<subject>/<slug>.mdx),
@@ -85,8 +99,13 @@ const editorials = defineCollection({
 
 // Materials: unsigned, topic-by-topic breakdowns of the syllabus. Deliberately
 // a separate collection from editorials — no author, no principle/errorType
-// (the archive's index), and no required visualization — because they are
-// indexed by syllabus topic, not by principle. `topic` must be a topic id from
+// (the archive's index) — because they are indexed by syllabus topic, not by
+// principle. A visualization is OPTIONAL here (R1): `vizConfig` has the same
+// shape as an editorial's but defaults to "none", and "none" is a legitimate
+// state for a material (unlike for an editorial, where it is flagged as a
+// content error). A topic's first explanation is where a picture helps most,
+// so the field exists; requiring one for every material would stall content.
+// `topic` must be a topic id from
 // lib/syllabus for the same `subject`; content-integrity.test.ts enforces it.
 const materials = defineCollection({
   name: "Material",
@@ -97,6 +116,12 @@ const materials = defineCollection({
       subject: s.enum(subjects),
       topic: s.string(),
       summary: s.string().max(280),
+      vizConfig: s
+        .object({
+          discriminant: s.enum(vizEngines),
+          value: s.record(s.string(), s.unknown()).default({}),
+        })
+        .default({ discriminant: "none", value: {} }),
       body: s.mdx(),
       // Derived from the file path, same as editorials.
       slug: s.path(),

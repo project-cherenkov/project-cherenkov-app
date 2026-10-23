@@ -178,9 +178,9 @@ describe("submitQuizAttemptCore — per-question responses", () => {
     });
 
     expect(responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q1", correct: true },
-      { attemptId: "attempt-1", questionId: "q2", correct: false },
-      { attemptId: "attempt-1", questionId: "q3", correct: true },
+      { attemptId: "attempt-1", questionId: "q1", correct: true, selectedChoiceIndex: 2 },
+      { attemptId: "attempt-1", questionId: "q2", correct: false, selectedChoiceIndex: 1 },
+      { attemptId: "attempt-1", questionId: "q3", correct: true, selectedChoiceIndex: 1 },
     ]);
   });
 
@@ -209,7 +209,7 @@ describe("submitQuizAttemptCore — per-question responses", () => {
     });
 
     expect(responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q1", correct: true },
+      { attemptId: "attempt-1", questionId: "q1", correct: true, selectedChoiceIndex: 2 },
     ]);
   });
 

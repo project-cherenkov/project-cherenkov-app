@@ -307,8 +307,14 @@ export const planItems = pgTable(
 // draft questions during review, and estimates should follow the corrected
 // label, so it is read through the question.
 //
-// NOTE: nothing writes to this table yet. lib/quiz-scoring.ts still records
-// only the aggregate attempt; wiring it is a separate change.
+// lib/quiz-scoring.ts (submitQuizAttemptCore) writes one row per answered
+// question, in the same transaction as the attempt. (An older version of this
+// comment said nothing wrote here yet; that stopped being true when the
+// submission path was wired up.)
+//
+// `selectedChoiceIndex` records WHICH choice the student picked, so the
+// misses-review page (R2) can show "your answer" next to the correct one.
+// Nullable because rows written before the column existed never recorded it.
 export const quizQuestionResponses = pgTable(
   "quiz_question_responses",
   {
@@ -320,6 +326,7 @@ export const quizQuestionResponses = pgTable(
       .notNull()
       .references(() => quizQuestions.id, { onDelete: "cascade" }),
     correct: boolean("correct").notNull(),
+    selectedChoiceIndex: smallint("selected_choice_index"),
     answeredAt: timestamp("answered_at").notNull().defaultNow(),
   },
   (table) => [
@@ -393,5 +400,87 @@ export const topicSelfRatings = pgTable(
       "topic_self_ratings_rating_check",
       sql`${table.rating} between ${sql.raw(String(SELF_RATING_MIN))} and ${sql.raw(String(SELF_RATING_MAX))}`,
     ),
+  ],
+);
+
+// ===========================================================================
+// Phase 4 study-tool tables (misses review, study timer, progress views)
+// ===========================================================================
+
+// A retry of a question the student previously answered wrongly, made from
+// the misses-review page. Kept apart from quiz_attempts / quiz_question_responses
+// ON PURPOSE: those feed the mastery estimate and the plan's completion
+// signals (lib/plan-db.ts reads quiz_question_responses; lib/planner.ts derives
+// topic status from quiz_attempts.score). A single-question retry recorded as
+// an attempt would score 1/N for the topic and could flip a finished topic
+// back to "in progress". Retries are practice, not evidence.
+export const questionRetries = pgTable(
+  "question_retries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    questionId: uuid("question_id")
+      .notNull()
+      .references(() => quizQuestions.id, { onDelete: "cascade" }),
+    correct: boolean("correct").notNull(),
+    selectedChoiceIndex: smallint("selected_choice_index").notNull(),
+    answeredAt: timestamp("answered_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("question_retries_user_question_idx").on(table.userId, table.questionId),
+  ],
+);
+
+// One row per finished study session (timer or manual entry). Minutes studied
+// are NOT mastery and nothing here feeds lib/mastery.ts. `subject` is stored
+// next to `syllabusTopicId` because a syllabus topic id is only unique within
+// its subject (see the topics table). `planItemId` is SET NULL on delete since
+// regenerating a plan deletes its open items.
+export const studySessions = pgTable(
+  "study_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    subject: subjectEnum("subject"),
+    syllabusTopicId: text("syllabus_topic_id"),
+    planItemId: uuid("plan_item_id").references(() => planItems.id, {
+      onDelete: "set null",
+    }),
+    startedAt: timestamp("started_at").notNull(),
+    durationSeconds: integer("duration_seconds").notNull(),
+    source: text("source").notNull(),
+  },
+  (table) => [
+    index("study_sessions_user_started_idx").on(table.userId, table.startedAt),
+    check("study_sessions_duration_check", sql`${table.durationSeconds} > 0`),
+    check("study_sessions_source_check", sql`${table.source} in ('timer', 'manual')`),
+    check(
+      "study_sessions_topic_pair_check",
+      sql`(${table.syllabusTopicId} is null) or (${table.subject} is not null)`,
+    ),
+  ],
+);
+
+// A student's own "I understood this" flag on a material or editorial. Kept
+// separate from the mastery estimate. Keyed by subject as well as slug: slugs
+// are only unique within a subject folder.
+export const understoodMarks = pgTable(
+  "understood_marks",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull(),
+    subject: subjectEnum("subject").notNull(),
+    slug: text("slug").notNull(),
+    markedAt: timestamp("marked_at").notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.kind, table.subject, table.slug] }),
+    check("understood_marks_kind_check", sql`${table.kind} in ('material', 'editorial')`),
   ],
 );

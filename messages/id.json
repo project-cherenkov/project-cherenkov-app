@@ -69,7 +69,18 @@
     "vizMissing": "[PLACEHOLDER: edisi ini belum punya visualisasi interaktif, padahal setiap edisi seharusnya memilikinya. Ditandai untuk ditinjau.]",
     "vizConfigError": "Konfigurasi vizConfig edisi ini tidak sesuai dengan yang diharapkan oleh mesin {engine}. Periksa frontmatter MDX terhadap type guard mesin terkait.",
     "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
-    "backToArchive": "Kembali ke arsip"
+    "backToArchive": "Kembali ke arsip",
+    "showSolution": "Tampilkan solusi",
+    "hideSolution": "Sembunyikan solusi",
+    "tryFirstLabel": "Coba dulu sendiri",
+    "tryFirstHint": "Sembunyikan solusi dan pembuktian lengkap sampai kamu membukanya. Nonaktif secara default; hanya disimpan di browser ini.",
+    "practice": {
+      "heading": "Latihan",
+      "note": "Soal di situs lain. Kami hanya menautkannya; soalnya tetap milik pembuatnya.",
+      "checkedOn": "tautan dicek {date}",
+      "stale": "Sudah lama dicek, jadi mungkin sudah pindah.",
+      "opensNewTab": "(terbuka di tab baru)"
+    }
   },
   "viz": {
     "play": "Putar",
@@ -229,7 +240,11 @@
     "relatedEditorials": "Editorial terkait",
     "sectionNav": "Lainnya di bagian silabus ini",
     "previous": "Sebelumnya",
-    "next": "Berikutnya"
+    "next": "Berikutnya",
+    "chapters": "Dalam mata lomba ini",
+    "chaptersToggle": "Bab dalam mata lomba ini",
+    "comingSoon": "segera hadir",
+    "vizFallbackNotice": "Tag <Interactive /> pada materi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya."
   },
   "account": {
     "eyebrow": "ACCOUNT.MD",
@@ -260,7 +275,8 @@
       "examStarts": "Waktu belajar berlangsung sampai sehari sebelum {date}.",
       "projectedNote": "Tanggal ini diproyeksikan dari 2026, belum diumumkan penyelenggara.",
       "save": "Simpan",
-      "errorUnauthenticated": "Sesi kamu telah berakhir. Silakan masuk kembali dan coba lagi."
+      "errorUnauthenticated": "Sesi kamu telah berakhir. Silakan masuk kembali dan coba lagi.",
+      "datesVerified": "Tanggal terakhir dicek dengan penyelenggara: {date}."
     },
     "ratings": {
       "scaleHelp": "Nilai seberapa kamu menguasai tiap topik: 1 = hampir tidak tahu, 5 = bisa mengajarkannya. Nilai ini hanya tebakan awal; kuis yang memastikannya. Topik yang dilewati dianggap belum diketahui.",
@@ -335,7 +351,8 @@
         "known": "Dikuasai",
         "uncertain": "Belum pasti",
         "not_known": "Belum dikuasai"
-      }
+      },
+      "datesVerified": "Tanggal terakhir dicek dengan penyelenggara: {date}."
     },
     "reason": {
       "confirm_high": "Kamu menilai ini tinggi. Kuis singkat memeriksanya.",
@@ -366,6 +383,186 @@
       "start": "Mulai di sini",
       "reading": "Membaca dan menggunakan situs",
       "contributing": "Berkontribusi"
+    }
+  },
+  "understood": {
+    "mark": "Tandai sudah paham",
+    "marked": "Sudah paham",
+    "error": "Tidak bisa menyimpan. Coba lagi."
+  },
+  "search": {
+    "open": "Cari di situs",
+    "title": "Cari",
+    "description": "Cari edisi, materi, topik silabus, dan dokumentasi.",
+    "placeholder": "Cari edisi, materi, topik…",
+    "results": "Hasil pencarian",
+    "loading": "Memuat indeks pencarian…",
+    "error": "Pencarian sedang tidak tersedia.",
+    "noResults": "Tidak ada hasil untuk “{query}”.",
+    "resultCount": "{count, plural, other {# hasil}}",
+    "kinds": {
+      "topic": "Topik",
+      "material": "Materi",
+      "editorial": "Edisi",
+      "doc": "Dokumentasi"
+    }
+  },
+  "studyTools": {
+    "navLabel": "Alat belajar",
+    "plan": "Rencana",
+    "progress": "Progres",
+    "review": "Soal yang salah",
+    "timer": "Timer",
+    "help": "Bantuan"
+  },
+  "review": {
+    "eyebrow": "REVIEW.MD",
+    "title": "Soal yang salah",
+    "intro": "Semua soal kuis yang kamu jawab salah, supaya bisa dicoba lagi.",
+    "practiceNote": "Mencoba ulang hanyalah latihan: bisa menyelesaikan satu soal yang salah, tetapi tidak mengubah rencana atau estimasi penguasaanmu.",
+    "summary": "Menampilkan {shown} dari {total} soal yang salah.",
+    "emptyNoMisses": "Belum ada soal yang salah. Soal kuis yang kamu jawab salah akan muncul di sini.",
+    "emptyFiltered": "Tidak ada yang cocok dengan filter ini.",
+    "unknownTopic": "Topik belum terhubung ke silabus",
+    "open": "Belum selesai",
+    "resolved": "Selesai",
+    "missedCount": "{count, plural, one {salah sekali} other {salah # kali}}",
+    "retriedCount": "{count, plural, other {dicoba ulang # kali}}",
+    "difficulty": {
+      "basic": "Dasar",
+      "intermediate": "Menengah",
+      "advanced": "Lanjut"
+    },
+    "choices": "Pilihan jawaban",
+    "yourEarlierAnswer": "jawabanmu sebelumnya",
+    "correctAnswer": "jawaban benar",
+    "check": "Periksa jawabanku",
+    "showAnswer": "Tampilkan jawabannya",
+    "retryCorrect": "Benar. Soal ini sudah selesai.",
+    "retryWrong": "Belum tepat. Jawaban yang benar ditandai di bawah.",
+    "explanation": "Penjelasan",
+    "learnIt": "Pelajari lagi",
+    "material": "Baca materinya",
+    "error": "Terjadi kesalahan. Coba lagi.",
+    "filters": {
+      "subject": "Mata lomba",
+      "topic": "Topik",
+      "state": "Status",
+      "recency": "Terakhir salah",
+      "all": "Semua",
+      "stateOpen": "Belum selesai",
+      "stateResolved": "Selesai",
+      "last7": "7 hari terakhir",
+      "last30": "30 hari terakhir",
+      "apply": "Terapkan"
+    }
+  },
+  "timer": {
+    "eyebrow": "TIMER.MD",
+    "title": "Timer belajar",
+    "intro": "Belajar dalam blok fokus dengan istirahat singkat. Hanya waktu fokus yang dihitung sebagai waktu belajar.",
+    "presetsLabel": "Panjang blok",
+    "preset": "{focus} menit fokus / {rest} menit istirahat",
+    "customFocus": "Fokus (menit)",
+    "customBreak": "Istirahat (menit)",
+    "planItem": "Item rencana (opsional)",
+    "noPlanItem": "Tidak ada",
+    "subject": "Mata lomba (opsional)",
+    "topic": "Topik (opsional)",
+    "noTopic": "Tanpa mata lomba",
+    "anyTopic": "Tanpa topik tertentu",
+    "start": "Mulai",
+    "pause": "Jeda",
+    "resume": "Lanjutkan",
+    "finish": "Selesai dan simpan",
+    "discard": "Buang",
+    "skipToBreak": "Lewati ke istirahat",
+    "startBreak": "Mulai istirahat",
+    "skipBreak": "Lewati istirahat",
+    "nextFocus": "Mulai blok fokus berikutnya",
+    "phaseFocus": "Fokus",
+    "phaseBreak": "Istirahat",
+    "focusComplete": "Blok fokus selesai. Istirahatlah saat kamu siap.",
+    "breakComplete": "Istirahat selesai. Mulai blok berikutnya saat kamu siap.",
+    "elapsedFocus": "{minutes} menit fokus sejauh ini dalam sesi ini",
+    "focusView": "Tampilan layar penuh",
+    "exitFocusView": "Keluar dari layar penuh",
+    "guestNote": "Kamu belum masuk, jadi tidak ada yang disimpan: timer tetap berjalan, tetapi sesi tidak dicatat.",
+    "signInToLog": "Masuk untuk menyimpan catatan belajar.",
+    "savedGuest": "Kerja bagus: {minutes} menit fokus. Masuk jika ingin sesi disimpan.",
+    "saved": "Tersimpan {minutes} menit belajar.",
+    "tooShort": "Sesi itu kurang dari satu menit, jadi tidak disimpan.",
+    "errors": {
+      "unauthenticated": "Silakan masuk untuk menyimpan sesi.",
+      "invalid": "Data tersebut tidak valid.",
+      "too_short": "Sesi minimal satu menit.",
+      "too_long": "Sesi maksimal 12 jam.",
+      "in_future": "Sesi tidak boleh berada di masa depan.",
+      "too_old": "Sesi tidak boleh lebih dari setahun yang lalu.",
+      "invalid_topic": "Topik itu bukan bagian dari mata lomba tersebut.",
+      "invalid_plan_item": "Item rencana itu tidak tersedia.",
+      "overlap": "Sesi ini tumpang tindih dengan sesi lain yang sudah kamu catat."
+    },
+    "manual": {
+      "heading": "Catat waktu belajar di luar timer",
+      "hint": "Untuk kuliah atau latihan soal di kertas. Aturannya sama dengan timer.",
+      "startedAt": "Mulai pada",
+      "minutes": "Menit",
+      "submit": "Simpan sesi",
+      "saved": "Tersimpan {minutes} menit belajar."
+    }
+  },
+  "progress": {
+    "eyebrow": "PROGRESS.MD",
+    "title": "Progresmu",
+    "intro": "Apa yang benar-benar sudah kamu lakukan: waktu belajar, hasil kuis, dan topik yang kamu tandai sudah paham.",
+    "privacyNote": "Hanya kamu yang bisa melihat halaman ini.",
+    "emptyState": "Belum ada yang ditampilkan. Catat sesi belajar atau kerjakan kuis, lalu hasilnya muncul di sini.",
+    "openTimer": "Buka timer",
+    "minutes": "{minutes} menit",
+    "minutesShort": "{minutes} mnt",
+    "week": {
+      "heading": "Minggu ini",
+      "activeDays": "{count, plural, other {# hari}} belajar minggu ini",
+      "active": "(belajar)",
+      "inactive": "(tidak belajar)",
+      "activeRule": "Satu hari dihitung jika kamu mencatat minimal 10 menit atau mengerjakan kuis. Sekadar membuka situs tidak dihitung, dan melewatkan satu hari tidak ada ruginya.",
+      "plannedVsMeasured": "Direncanakan minggu ini: {planned} menit. Tercatat dengan timer: {measured} menit. Rencana dan timer mengukur hal yang berbeda, jadi anggap selisihnya sebagai informasi, bukan nilai."
+    },
+    "chart": {
+      "heading": "Menit per hari, {days} hari terakhir",
+      "alt": "Diagram batang menit belajar per hari selama {days} hari terakhir, total {total} menit. Tabel dengan angka yang sama ada di bawahnya.",
+      "showTable": "Tampilkan sebagai tabel",
+      "colDay": "Hari",
+      "colMinutes": "Menit"
+    },
+    "topics": {
+      "heading": "Waktu per topik (31 hari terakhir)",
+      "unassigned": "Tanpa topik"
+    },
+    "coverage": {
+      "heading": "Cakupan silabus",
+      "subjectNav": "Pilih mata lomba",
+      "basis": "Diukur terhadap {stage}, berdasarkan penilaian topik dan jawaban kuismu.",
+      "legend": "Keterangan",
+      "status": {
+        "known": "Dikuasai",
+        "uncertain": "Belum pasti",
+        "not_known": "Belum dikuasai",
+        "unverified": "Data belum cukup"
+      },
+      "understoodLegend": "Ditandai sudah paham ({count})",
+      "understood": "Kamu menandai ini sudah paham",
+      "estimate": "estimasi {estimate} (kemungkinan {low} sampai {high}, dari {count, plural, other {# jawaban}})",
+      "noAnswers": "belum ada jawaban kuis",
+      "note": "“Data belum cukup” berarti belum ada yang terukur untuk topik {subject} ini, dan itu berbeda dari hasil yang buruk. “Sudah paham” adalah tandamu sendiri dan ditampilkan terpisah dari estimasi."
+    },
+    "sessions": {
+      "heading": "Sesi terbaru",
+      "empty": "Belum ada sesi yang dicatat.",
+      "manual": "ditambahkan manual",
+      "delete": "Hapus",
+      "deleteError": "Tidak bisa menghapus sesi itu."
     }
   }
 }

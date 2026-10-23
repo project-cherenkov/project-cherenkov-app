@@ -85,6 +85,9 @@ export interface QuestionResponseRow {
   attemptId: string;
   questionId: string;
   correct: boolean;
+  // Which choice the student picked (already range-checked by scoreAnswers).
+  // Lets the misses-review page show "your answer".
+  selectedChoiceIndex: number;
 }
 
 export interface QuizAttemptTxDeps {
@@ -154,11 +157,20 @@ export async function submitQuizAttemptCore(
   // (unknown question, out-of-range choice, duplicates) never do, and
   // unanswered questions leave no row: the mastery estimate must treat
   // "not asked" and "answered wrong" differently.
+  // scoreAnswers keeps the FIRST answer for a duplicated question id, so the
+  // recorded choice must too (a plain Map constructor would keep the last).
+  const pickedByQuestion = new Map<string, number>();
+  for (const answer of input.answers) {
+    if (!pickedByQuestion.has(answer.questionId)) {
+      pickedByQuestion.set(answer.questionId, answer.selectedChoiceIndex);
+    }
+  }
   await deps.insertResponses(
     scored.map((answer) => ({
       attemptId,
       questionId: answer.questionId,
       correct: answer.correct,
+      selectedChoiceIndex: pickedByQuestion.get(answer.questionId)!,
     })),
   );
   await deps.onAttemptRecorded?.(userId, input.topicId);

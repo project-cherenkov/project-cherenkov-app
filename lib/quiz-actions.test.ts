@@ -24,7 +24,12 @@ const fixture = vi.hoisted(() => ({
   confirmItem: null as { id: string; completedAt: Date | null } | null,
   planItemQueries: 0,
   markCompleteCalls: 0,
-  responses: [] as { attemptId: string; questionId: string; correct: boolean }[],
+  responses: [] as {
+    attemptId: string;
+    questionId: string;
+    correct: boolean;
+    selectedChoiceIndex: number;
+  }[],
 }));
 
 vi.mock("@/lib/auth-guard", () => ({
@@ -196,7 +201,7 @@ describe("submitQuizAttempt — per-question responses through the real transact
     });
 
     expect(fixture.responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q2", correct: true },
+      { attemptId: "attempt-1", questionId: "q2", correct: true, selectedChoiceIndex: 0 },
     ]);
   });
 

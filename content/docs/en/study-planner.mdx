@@ -33,9 +33,18 @@ The page shows today's tasks, anything overdue, what is up next and the coming w
 
 You tick off study and review sessions by hand. A quiz completes its own confirmation item automatically.
 
+## Progress, missed questions and the timer
+
+Three more tools sit next to the plan. They are all private to you.
+
+- **Timer** (`/timer`). Work in focus blocks with short breaks (25/5, 50/10 or 90/5, or your own lengths). Only focus time counts as study time. Anyone can use the timer, but only signed-in students get finished sessions saved. A session is saved when you press Finish, and the server checks it: at least a minute, at most 12 hours, not in the future and not overlapping another session. If the machine sleeps mid-block, the block is credited at most its planned length. You can also log time away from the timer by hand.
+- **Progress**. This week's active days, minutes per day, time by topic and a syllabus coverage map. A day counts as active when you logged at least 10 minutes or took a quiz. Opening the site does not count and there is no streak. The coverage map keeps "not enough data" separate from "not known yet": the first means nothing has been measured, which is different from doing badly. Each cell shows how many answers its estimate rests on. Study minutes and your own "understood" marks are shown next to the mastery estimate, never mixed into it.
+- **Missed questions**. Every quiz question you got wrong, filterable by subject, topic, status and recency. You can retry a question or ask to see its answer. A retry is practice: it can resolve a miss, but it never changes your mastery estimate or your plan.
+
 ## Things to know
 
 - Regenerating a plan keeps the items you have already completed.
 - "Today" means your calendar day (Asia/Jakarta by default), not the server's.
 - Some inputs are placeholders that have not been calibrated on real students yet. These include the target mastery levels and any 2027 exam dates, which are projected from 2026. Treat the plan as a reasoned guide and not a guarantee.
+- The timer does not yet change your plan: planned and logged minutes are shown side by side on the Progress page as information, not as a correction.
 - Informatics and astronomy have few quiz questions so far, so many of their topics cannot be confirmed by quiz yet.

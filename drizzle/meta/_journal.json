@@ -8,6 +8,13 @@
       "when": 1791214392584,
       "tag": "0000_wonderful_meteorite",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792454448605,
+      "tag": "0001_high_shinobi_shaw",
+      "breakpoints": true
     }
   ]
 }

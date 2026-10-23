@@ -55,6 +55,12 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         {data.stageDates?.status === "projected" ? (
           <p className="mt-1 text-sm font-medium text-amber-700 dark:text-amber-400">{t("projectedDates")}</p>
         ) : null}
+        {/* Shown only when a person recorded checking the dates (SCHEDULE_VERIFIED_ON). */}
+        {data.stageDates?.verifiedOn ? (
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            {t("datesVerified", { date: data.stageDates.verifiedOn })}
+          </p>
+        ) : null}
       </header>
 
       {!summary.feasible ? (

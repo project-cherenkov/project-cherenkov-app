@@ -73,6 +73,9 @@ export interface StageDates {
   start: string;
   end: string;
   status: StageWindow["status"];
+  // Set only when a person recorded checking these dates (see
+  // SCHEDULE_VERIFIED_ON in lib/osn-stages.ts).
+  verifiedOn?: string;
 }
 
 export type PlannerPageData =
@@ -137,7 +140,12 @@ export async function buildPlannerPageData(
 
   const { settings, today, window } = state;
   const stageDates: StageDates | null = window
-    ? { start: window.start, end: window.end, status: window.status }
+    ? {
+        start: window.start,
+        end: window.end,
+        status: window.status,
+        ...(window.verifiedOn ? { verifiedOn: window.verifiedOn } : {}),
+      }
     : null;
   const topics = toTopicViews(state, locale);
   const ratedCount = topics.filter((t) => t.selfRating !== null).length;

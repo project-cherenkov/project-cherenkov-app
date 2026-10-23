@@ -29,6 +29,7 @@ Editorials and materials are plain MDX files committed to the repository. Conten
 | `publishedAt` | An ISO date, 2020 or later. Earlier dates are rejected as placeholder data. |
 | `author` | Who wrote it. |
 | `syllabusTopic` | Optional. A topic id from the syllabus for the same subject. |
+| `practiceLinks` | Optional. A list of `{ title, url, checkedOn }` for practice problems on other sites (for example TLX). `url` must be `https://`. See below. |
 
 The body is everything after the frontmatter, written in Markdown/MDX.
 
@@ -40,6 +41,26 @@ Use `$...$` for inline math and `$$...$$` for display math. Both compile to stat
 
 Put `<Interactive />` on its own line where the visualization should appear, usually between the idea and the full proof. If you forget it, the visualization still renders, just after the hook with a small notice, so an editorial never ships without one.
 
+## Hiding the solution until the reader asks
+
+Wrap a worked solution or proof in `<Solution>` on its own lines, with a blank line after the opening tag and before the closing tag:
+
+```mdx
+<Solution>
+
+## Full proof
+
+...
+
+</Solution>
+```
+
+By default everyone sees the full text. A reader can switch on "Try it first" (saved only in their browser), and then solutions collapse behind a "Show solution" control. Every `<Solution>` must be closed, and `pnpm test` checks that.
+
+## Practice links
+
+Use `practiceLinks` to point at problems that belong to someone else. Link only: do not copy a problem statement. Set `checkedOn` to the day you last opened the link. After 180 days the page marks the link as possibly moved, so re-check it and update the date.
+
 ## Choosing a visualization engine
 
 Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `composed-scene` or `programmable-scene`. The first three are configured in frontmatter. The last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
@@ -50,7 +71,7 @@ Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbo
 
 ## Materials
 
-A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syllabus topic id), `summary` (up to 280 characters) and a body. There is at most one material per topic, and no visualization is required.
+A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syllabus topic id), `summary` (up to 280 characters) and a body. There is at most one material per topic. A visualization is optional: set `vizConfig` the same way as for an editorial (the first three engines; the scene builder only writes editorials) and place `<Interactive />` where it belongs. With `discriminant: none`, or no `vizConfig` at all, a material simply has no visualization. See `content/materials/informatics/binary-search.mdx` for an example.
 
 ## Checking your work
 

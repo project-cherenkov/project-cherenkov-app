@@ -119,6 +119,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
           <p className="text-sm text-slate-600 dark:text-slate-300">
             {t("examStarts", { date: windowInfo.start })}{" "}
             {status === "projected" ? <strong>{t("projectedNote")}</strong> : null}
+            {windowInfo.verifiedOn ? <> {t("datesVerified", { date: windowInfo.verifiedOn })}</> : null}
           </p>
         ) : null}
         {errors.timezone ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{errors.timezone}</p> : null}

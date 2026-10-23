@@ -1,29 +1,15 @@
 "use client";
 
-import { isValidElement, useMemo, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import type { Editorial } from "#content";
 
+import { usesMarker } from "@/components/mdx-marker";
+import { Solution, TryFirstToggle } from "@/components/solution-disclosure";
 import { useMDXComponent } from "@/components/use-mdx-component";
 import { VizEngine } from "@/components/viz/viz-engine";
 
 type VizEditorial = Pick<Editorial, "vizConfig">;
-
-// F-05 fix: walk the actual React element tree the compiled MDX body
-// produces, looking for an element whose `type` is the exact `Interactive`
-// marker reference passed in below via `components`. This replaces the
-// previous approach (in app/[locale]/archive/[subject]/[slug]/page.tsx) of
-// searching the compiled source text for the substring "Interactive",
-// which also matched ordinary prose containing that word rather than
-// actual component usage.
-function usesMarker(node: ReactNode, marker: unknown): boolean {
-  if (node == null || typeof node === "boolean") return false;
-  if (Array.isArray(node)) return node.some((child) => usesMarker(child, marker));
-  if (!isValidElement(node)) return false;
-  if (node.type === marker) return true;
-  const children = (node.props as { children?: ReactNode } | null)?.children;
-  return usesMarker(children ?? null, marker);
-}
 
 // The `Interactive` component must be defined on the client side because
 // React's Server/Client boundary forbids passing functions as props from
@@ -64,8 +50,11 @@ export function EditorialMDX({
     // only wraps in a provider component if `props.components.wrapper`
     // is set, which it never is here). That tree is then rendered
     // directly below (`{tree}`), so the body is only evaluated once.
-    const tree = Component({ components: { Interactive } }) as ReactNode;
+    const tree = Component({ components: { Interactive, Solution } }) as ReactNode;
     const embedsInteractive = usesMarker(tree, Interactive);
+    // R5: offer the "try it first" switch only on pages that have a solution
+    // to hide.
+    const hasSolution = usesMarker(tree, Solution);
     // Split into two cases so we don't show two overlapping warnings: a
     // genuinely unconfigured engine ("none") already gets VizEngine's own
     // message (via hasMissingViz); this notice is only for "the engine IS
@@ -74,6 +63,7 @@ export function EditorialMDX({
 
     return (
       <>
+        {hasSolution && <TryFirstToggle />}
         {!embedsInteractive && (
           <div className="not-prose my-8">
             {forgotToEmbedTag && (

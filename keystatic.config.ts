@@ -82,7 +82,18 @@ import { topicSelectOptions } from "./lib/syllabus";
 // already-documented limitation. What changes is real: the three engines
 // that ARE authored through this form (every real editorial today) no
 // longer show each other's fields.
-function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") {
+// `kind` only changes the author-facing hints: the scene builder writes
+// EDITORIALS only (lib/scene-builder-write.ts), so for a material the two
+// scene engines have no authoring path yet and the hint says so. The field
+// shape itself is identical, so the same files round-trip either way.
+function vizConfigConditional(
+  subject: "astronomy" | "physics" | "informatics",
+  kind: "editorial" | "material" = "editorial",
+) {
+  const sceneHint =
+    kind === "material"
+      ? "The scene builder only writes editorials, so this engine cannot be authored for a material yet. Pick another engine."
+      : null;
   return fields.conditional(
     fields.select({
       label: "Visualization engine",
@@ -100,9 +111,10 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
       // aren't authored here — see each branch's own placeholder below for
       // the concrete scene builder URL.
       description:
+        sceneHint ??
         `For "Composed scene" or "Programmable scene", build the scene at ` +
-        `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug> ` +
-        `instead of setting fields here.`,
+          `/keystatic/scene-builder?subject=${subject}&slug=<this editorial's slug> ` +
+          `instead of setting fields here.`,
     }),
     {
       "graph-array-stepper": fields.object({
@@ -209,6 +221,7 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
         {},
         {
           description:
+            sceneHint ??
             `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
             `Saving there writes discriminant and value into this exact vizConfig field ` +
             `directly, so there is nothing to set here.`,
@@ -218,6 +231,7 @@ function vizConfigConditional(subject: "astronomy" | "physics" | "informatics") 
         {},
         {
           description:
+            sceneHint ??
             `Build this at /keystatic/scene-builder?subject=${subject}&slug=<slug>. ` +
             `The builder validates and previews the program but does not yet write it ` +
             `back automatically, so copy its compiled output into vizConfig.value by hand ` +
@@ -284,6 +298,27 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       options: [{ label: "None", value: "" }, ...topicSelectOptions(subject)],
       defaultValue: "",
     }),
+    // External practice problems (e.g. on TLX). Links only; see
+    // lib/practice-links.ts. Every link needs a "checked on" date so a moved
+    // or dead link is visible on the page instead of silently rotting.
+    practiceLinks: fields.array(
+      fields.object({
+        title: fields.text({ label: "Title", validation: { isRequired: true, length: { max: 120 } } }),
+        url: fields.url({
+          label: "URL (https only)",
+          validation: { isRequired: true },
+        }),
+        checkedOn: fields.date({
+          label: "Checked on",
+          description: "The day someone last opened this link and confirmed it still works.",
+          validation: { isRequired: true },
+        }),
+      }),
+      {
+        label: "Practice links (optional)",
+        itemLabel: (props) => props.fields.title.value || "Practice link",
+      },
+    ),
     // Explicit, author-set slug — see decision #3. Velite derives its own
     // slug from the filename, so this must match the MDX filename exactly;
     // Keystatic uses it as the collection's itemSlug source below.
@@ -329,6 +364,10 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
       multiline: true,
       validation: { isRequired: true, length: { max: 280 } },
     }),
+    // Optional visualization (R1). Same shape as an editorial's; "None" is a
+    // normal choice here, unlike for editorials. Place <Interactive /> in the
+    // body where it belongs; if you forget, it renders above the body.
+    vizConfig: vizConfigConditional(subject, "material"),
     slug: fields.slug({
       name: {
         label: "Slug",

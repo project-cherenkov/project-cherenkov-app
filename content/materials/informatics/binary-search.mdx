@@ -3,6 +3,23 @@ title: "Binary search"
 subject: informatics
 topic: binary-search
 summary: "Halve the search space every step: the invariant that makes it correct, and the off-by-one traps."
+vizConfig:
+  discriminant: graph-array-stepper
+  value:
+    array: [2, 4, 6, 8, 10, 12, 14, 16]
+    steps:
+      - pointers: { lo: 0, mid: 4 }
+        highlight: [4]
+        note: "Find the first index with a[i] ≥ 10. The window is [lo, hi) = [0, 8); hi = 8 is one past the last cell, so it is not drawn. mid = 0 + (8 − 0)/2 = 4, and a[4] = 10 ≥ 10, so the answer is at mid or before it: hi = 4."
+      - pointers: { lo: 0, hi: 4, mid: 2 }
+        highlight: [2]
+        note: "Window [0, 4). mid = 2, and a[2] = 6 < 10, so every index up to 2 is too small: lo = 3."
+      - pointers: { lo: 3, hi: 4, mid: 3 }
+        highlight: [3]
+        note: "Window [3, 4). mid = 3, and a[3] = 8 < 10, so index 3 is too small too: lo = 4."
+      - pointers: { lo: 4, hi: 4 }
+        highlight: [4]
+        note: "lo = hi = 4, so the window is empty and the two facts meet. The answer is lo = 4: a[4] = 10 is the first value ≥ 10."
 ---
 
 ## What it does
@@ -32,6 +49,12 @@ return lo                 # first index with a[i] >= x
 
 When the loop ends, $lo = hi$, so the two facts meet: everything before $lo$
 is $< x$ and everything from $lo$ on is $\ge x$. That is the answer.
+
+Step through one run on a small array below. The pointers show where $lo$,
+$mid$ and $hi$ sit; $hi = n$ is one past the last cell, so it is only drawn
+once it moves inside the array.
+
+<Interactive />
 
 ## Why it is fast
 

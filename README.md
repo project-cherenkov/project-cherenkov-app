@@ -600,6 +600,15 @@ Defined in TypeScript via Drizzle ORM (`lib/db/schema.ts`) and committed under `
 - Auth: `user`, `session`, `account`, `verification` (Better Auth core).
 - Curriculum: `topics` (linked to syllabus topics and editorial slugs), `quiz_questions`, `quiz_attempts`, `quiz_question_responses`.
 - Planner: `study_plans`, `plan_items`, `user_planner_settings`, `topic_self_ratings`.
+- Study tools (migration `0001`): `study_sessions` (timer and manual sessions), `understood_marks`, `question_retries` (practice retries of missed questions; deliberately separate from `quiz_attempts` so they never feed mastery or plan status), plus a nullable `quiz_question_responses.selected_choice_index`.
+
+#### 5. Study tools: progress, missed questions, timer
+
+Routes: `/[locale]/planner/progress`, `/[locale]/planner/review` (both behind the planner auth middleware) and `/[locale]/timer` (public; saving needs a session). The pure logic lives in `lib/progress.ts`, `lib/misses.ts`, `lib/study-timer.ts` and `lib/study-session.ts`, each with unit tests; the database layers are `lib/*-db.ts` and the server actions are `lib/*-actions.ts`. None of these feed `lib/mastery.ts`.
+
+#### 6. Search, "try it first" and practice links
+
+Search is an in-house index built at build time (`lib/search.ts`, served from `/api/search-index/[locale]`) and scored in the browser (`components/site/search-palette.tsx`, Ctrl/Cmd+K). `<Solution>` (`components/solution-disclosure.tsx`) is the opt-in "try it first" wrapper for editorial MDX. `practiceLinks` on an editorial (`lib/practice-links.ts`) are https-only links with a checked-on date.
 
 ---
 

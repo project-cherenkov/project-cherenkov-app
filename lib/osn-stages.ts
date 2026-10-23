@@ -99,12 +99,21 @@ export const SCHEDULE_YEARS: Record<number, "user-provided" | "projected"> = {
   2027: "projected",
 };
 
+// "YYYY-MM-DD" on which someone last checked a year's dates against the
+// organiser's own announcement. Deliberately EMPTY: no date may be added here
+// unless a person actually did that check on that day. "user-provided" means
+// the owner supplied the dates; it is not the same as "verified". While a
+// year has no entry, the UI shows no verified date at all.
+export const SCHEDULE_VERIFIED_ON: Record<number, string> = {};
+
 export interface StageWindow {
   stage: OsnStage;
   year: number;
   start: string; // "YYYY-MM-DD", first day of the stage
   end: string; // "YYYY-MM-DD", last day of the stage
   status: "user-provided" | "projected";
+  // Present only when SCHEDULE_VERIFIED_ON has an entry for `year`.
+  verifiedOn?: string;
 }
 
 export function getStageWindow(
@@ -114,12 +123,14 @@ export function getStageWindow(
   const status = SCHEDULE_YEARS[year];
   if (!status) return undefined;
   const base = BASE_WINDOWS[stage];
+  const verifiedOn = SCHEDULE_VERIFIED_ON[year];
   return {
     stage,
     year,
     start: `${year}-${base.start}`,
     end: `${year}-${base.end}`,
     status,
+    ...(verifiedOn ? { verifiedOn } : {}),
   };
 }
 

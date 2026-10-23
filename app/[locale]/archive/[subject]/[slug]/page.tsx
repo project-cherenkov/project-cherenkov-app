@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getEditorial } from "@/lib/content";
 import { EditorialMDX } from "@/components/editorial-mdx";
+import { PracticeLinks } from "@/components/site/practice-links";
+import { UnderstoodButton } from "@/components/understood-button";
 import { JsonLd } from "@/components/seo/json-ld";
 import { articleJsonLd, breadcrumbJsonLd, isIndexableEditorial } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
@@ -108,6 +110,8 @@ export default async function EditorialPage({
         {t("byAuthor", { author: editorial.author })}
       </p>
 
+      <UnderstoodButton kind="editorial" subject={editorial.subject} slug={editorial.slug} />
+
       <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
         {/* EditorialMDX itself decides whether to also render the "forgot
             the tag" visualization fallback, based on the actual rendered
@@ -117,6 +121,8 @@ export default async function EditorialPage({
           vizConfig={editorial.vizConfig}
         />
       </div>
+
+      <PracticeLinks links={editorial.practiceLinks} />
 
       <div className="mt-10 flex flex-wrap gap-1.5 border-t border-slate-200 pt-6">
         <span className="label-code mr-1">{t("sections.tags")}:</span>

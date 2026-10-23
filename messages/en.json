@@ -69,7 +69,18 @@
     "vizMissing": "[PLACEHOLDER: this editorial has no interactive visualization configured, but every editorial is supposed to have one. Flagged for review.]",
     "vizConfigError": "This editorial's vizConfig doesn't match what the {engine} engine expects. Check the MDX frontmatter against the engine's type guard.",
     "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it.",
-    "backToArchive": "Back to archive"
+    "backToArchive": "Back to archive",
+    "showSolution": "Show solution",
+    "hideSolution": "Hide solution",
+    "tryFirstLabel": "Try it first",
+    "tryFirstHint": "Hide worked solutions and proofs until you open them. Off by default; saved only in this browser.",
+    "practice": {
+      "heading": "Practice",
+      "note": "Problems on other sites. We link to them; the statements stay with their authors.",
+      "checkedOn": "link checked {date}",
+      "stale": "Checked a while ago, so it may have moved.",
+      "opensNewTab": "(opens in a new tab)"
+    }
   },
   "viz": {
     "play": "Play",
@@ -229,7 +240,11 @@
     "relatedEditorials": "Related editorials",
     "sectionNav": "More in this syllabus section",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "chapters": "On this subject",
+    "chaptersToggle": "Chapters in this subject",
+    "comingSoon": "coming soon",
+    "vizFallbackNotice": "This material's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it."
   },
   "account": {
     "eyebrow": "ACCOUNT.MD",
@@ -260,7 +275,8 @@
       "examStarts": "Study time runs until the day before {date}.",
       "projectedNote": "These dates are projected from 2026, not announced by the organiser.",
       "save": "Save",
-      "errorUnauthenticated": "Your session has expired. Please log back in and try again."
+      "errorUnauthenticated": "Your session has expired. Please log back in and try again.",
+      "datesVerified": "Dates last checked against the organiser: {date}."
     },
     "ratings": {
       "scaleHelp": "Rate how well you know each topic: 1 = barely know it, 5 = could teach it. Your rating is only a starting guess; quizzes confirm it. Topics you skip are treated as unknown.",
@@ -335,7 +351,8 @@
         "known": "Known",
         "uncertain": "Uncertain",
         "not_known": "Not known yet"
-      }
+      },
+      "datesVerified": "Dates last checked against the organiser: {date}."
     },
     "reason": {
       "confirm_high": "You rated this high. A quick quiz checks it.",
@@ -366,6 +383,186 @@
       "start": "Start here",
       "reading": "Reading and using the site",
       "contributing": "Contributing"
+    }
+  },
+  "understood": {
+    "mark": "Mark as understood",
+    "marked": "Understood",
+    "error": "Could not save that. Please try again."
+  },
+  "search": {
+    "open": "Search the site",
+    "title": "Search",
+    "description": "Search editorials, materials, syllabus topics and docs.",
+    "placeholder": "Search editorials, materials, topics…",
+    "results": "Search results",
+    "loading": "Loading the search index…",
+    "error": "Search is unavailable right now.",
+    "noResults": "No results for “{query}”.",
+    "resultCount": "{count, plural, one {# result} other {# results}}",
+    "kinds": {
+      "topic": "Topic",
+      "material": "Material",
+      "editorial": "Editorial",
+      "doc": "Docs"
+    }
+  },
+  "studyTools": {
+    "navLabel": "Study tools",
+    "plan": "Plan",
+    "progress": "Progress",
+    "review": "Missed questions",
+    "timer": "Timer",
+    "help": "Help"
+  },
+  "review": {
+    "eyebrow": "REVIEW.MD",
+    "title": "Missed questions",
+    "intro": "Every quiz question you got wrong, so you can try it again.",
+    "practiceNote": "Retrying is practice: it can resolve a miss, but it does not change your plan or your mastery estimate.",
+    "summary": "Showing {shown} of {total} missed questions.",
+    "emptyNoMisses": "No missed questions yet. When you get a quiz question wrong it will show up here.",
+    "emptyFiltered": "Nothing matches these filters.",
+    "unknownTopic": "Topic not linked to the syllabus",
+    "open": "Open",
+    "resolved": "Resolved",
+    "missedCount": "{count, plural, one {missed once} other {missed # times}}",
+    "retriedCount": "{count, plural, one {retried once} other {retried # times}}",
+    "difficulty": {
+      "basic": "Basic",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "choices": "Answer choices",
+    "yourEarlierAnswer": "your earlier answer",
+    "correctAnswer": "correct answer",
+    "check": "Check my answer",
+    "showAnswer": "Show the answer",
+    "retryCorrect": "Correct. This one is resolved.",
+    "retryWrong": "Not quite. The correct answer is marked below.",
+    "explanation": "Explanation",
+    "learnIt": "Learn it again",
+    "material": "Read the material",
+    "error": "Something went wrong. Please try again.",
+    "filters": {
+      "subject": "Subject",
+      "topic": "Topic",
+      "state": "Status",
+      "recency": "Last missed",
+      "all": "All",
+      "stateOpen": "Open",
+      "stateResolved": "Resolved",
+      "last7": "Last 7 days",
+      "last30": "Last 30 days",
+      "apply": "Apply"
+    }
+  },
+  "timer": {
+    "eyebrow": "TIMER.MD",
+    "title": "Study timer",
+    "intro": "Work in focus blocks with short breaks. Only focus time counts as study time.",
+    "presetsLabel": "Block length",
+    "preset": "{focus} min focus / {rest} min break",
+    "customFocus": "Focus (minutes)",
+    "customBreak": "Break (minutes)",
+    "planItem": "Plan item (optional)",
+    "noPlanItem": "None",
+    "subject": "Subject (optional)",
+    "topic": "Topic (optional)",
+    "noTopic": "No subject",
+    "anyTopic": "No specific topic",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "finish": "Finish and save",
+    "discard": "Discard",
+    "skipToBreak": "Skip to break",
+    "startBreak": "Start break",
+    "skipBreak": "Skip break",
+    "nextFocus": "Start next focus block",
+    "phaseFocus": "Focus",
+    "phaseBreak": "Break",
+    "focusComplete": "Focus block complete. Take a break when you are ready.",
+    "breakComplete": "Break over. Start the next block when you are ready.",
+    "elapsedFocus": "{minutes} min of focus so far in this session",
+    "focusView": "Full-screen view",
+    "exitFocusView": "Exit full-screen view",
+    "guestNote": "You are not signed in, so nothing is saved: the timer works, but sessions are not logged.",
+    "signInToLog": "Log in to keep a study log.",
+    "savedGuest": "Nice work: {minutes} min of focus. Log in if you want sessions saved.",
+    "saved": "Saved {minutes} min of study.",
+    "tooShort": "That session was under a minute, so it was not saved.",
+    "errors": {
+      "unauthenticated": "Please log in to save sessions.",
+      "invalid": "Those details are not valid.",
+      "too_short": "A session must be at least one minute.",
+      "too_long": "A session can be at most 12 hours.",
+      "in_future": "A session cannot be in the future.",
+      "too_old": "A session cannot be more than a year old.",
+      "invalid_topic": "That topic does not belong to that subject.",
+      "invalid_plan_item": "That plan item is not available.",
+      "overlap": "This overlaps another session you already logged."
+    },
+    "manual": {
+      "heading": "Log time studied away from the timer",
+      "hint": "For a lecture or a problem set on paper. It follows the same rules as the timer.",
+      "startedAt": "Started at",
+      "minutes": "Minutes",
+      "submit": "Save session",
+      "saved": "Saved {minutes} min of study."
+    }
+  },
+  "progress": {
+    "eyebrow": "PROGRESS.MD",
+    "title": "Your progress",
+    "intro": "What you have actually done: study time, quiz results and the topics you marked as understood.",
+    "privacyNote": "Only you can see this page.",
+    "emptyState": "Nothing to show yet. Log a study session or take a quiz and it will appear here.",
+    "openTimer": "Open the timer",
+    "minutes": "{minutes} min",
+    "minutesShort": "{minutes} min",
+    "week": {
+      "heading": "This week",
+      "activeDays": "{count, plural, one {# day} other {# days}} with study this week",
+      "active": "(studied)",
+      "inactive": "(no study)",
+      "activeRule": "A day counts when you logged at least 10 minutes or took a quiz. Opening the site does not count, and missing a day costs nothing.",
+      "plannedVsMeasured": "Planned this week: {planned} min. Logged with the timer: {measured} min. Plans and timers measure different things, so treat the gap as information, not a grade."
+    },
+    "chart": {
+      "heading": "Minutes per day, last {days} days",
+      "alt": "Bar chart of minutes studied per day over the last {days} days, {total} minutes in total. A table with the same numbers follows.",
+      "showTable": "Show as a table",
+      "colDay": "Day",
+      "colMinutes": "Minutes"
+    },
+    "topics": {
+      "heading": "Time by topic (last 31 days)",
+      "unassigned": "No topic chosen"
+    },
+    "coverage": {
+      "heading": "Syllabus coverage",
+      "subjectNav": "Choose a subject",
+      "basis": "Measured against {stage}, using your topic ratings and quiz answers.",
+      "legend": "Legend",
+      "status": {
+        "known": "Known",
+        "uncertain": "Uncertain",
+        "not_known": "Not known yet",
+        "unverified": "Not enough data"
+      },
+      "understoodLegend": "Marked as understood ({count})",
+      "understood": "You marked this as understood",
+      "estimate": "estimate {estimate} (likely {low} to {high}, from {count, plural, one {# answer} other {# answers}})",
+      "noAnswers": "no quiz answers yet",
+      "note": "“Not enough data” means nothing has been measured for this {subject} topic yet, which is different from doing badly. “Understood” is your own mark and is shown separately from the estimate."
+    },
+    "sessions": {
+      "heading": "Recent sessions",
+      "empty": "No sessions logged yet.",
+      "manual": "added by hand",
+      "delete": "Delete",
+      "deleteError": "Could not delete that session."
     }
   }
 }

@@ -7,6 +7,7 @@ import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
 import { useSession } from "@/lib/auth-client";
 import { Github } from "lucide-react";
+import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 
 // The "Archive" bookmark stands for three sections (see archive-subnav.tsx), so
@@ -161,6 +162,7 @@ export function SiteHeader() {
 
           {/* Controls Right */}
           <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
+            <SearchPalette />
             <ThemeToggle />
 
             <div

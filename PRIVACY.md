@@ -11,6 +11,15 @@ Depending on the features in use, we may collect the following:
 - usage data needed to operate the website and study tools
 - optional content submitted through forms or uploads
 
+If you have an account and use the study tools, we also store:
+
+- your quiz answers, including which choice you picked on each question and any retries of missed questions
+- your study sessions (when you studied, for how long, and the subject or topic you chose), whether from the timer or entered by hand
+- the pages you marked as "understood"
+- your planner settings and topic self-ratings
+
+You can see all of this on your Progress and Missed questions pages, and you can delete individual study sessions there. Visitors without an account can use the study timer, but nothing is sent to us or saved. The "try it first" preference, the timer's state while it runs, and site search all stay in your own browser; what you type into search is not sent to a server.
+
 ## 2. How We Use Information
 
 We may use collected information to do the following:

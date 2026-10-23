@@ -130,3 +130,22 @@ describe("difficultiesForStage", () => {
     expect(difficultiesForStage("final")).toEqual(["advanced"]);
   });
 });
+
+describe("verified date", () => {
+  it("shows no verified date until someone records one", async () => {
+    const { SCHEDULE_VERIFIED_ON, getStageWindow } = await import("./osn-stages");
+    expect(Object.keys(SCHEDULE_VERIFIED_ON)).toEqual([]);
+    expect(getStageWindow("osn_k", 2026)).not.toHaveProperty("verifiedOn");
+  });
+
+  it("carries a recorded verified date through to the window", async () => {
+    const { SCHEDULE_VERIFIED_ON, getStageWindow } = await import("./osn-stages");
+    SCHEDULE_VERIFIED_ON[2026] = "2026-10-01";
+    try {
+      expect(getStageWindow("final", 2026)).toMatchObject({ verifiedOn: "2026-10-01" });
+      expect(getStageWindow("final", 2027)).not.toHaveProperty("verifiedOn");
+    } finally {
+      delete SCHEDULE_VERIFIED_ON[2026];
+    }
+  });
+});
