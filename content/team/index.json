@@ -33,6 +33,16 @@
       "bioEn": "I am the holder of place, the place of the holder",
       "personalContact": "example@gmail.com",
       "personalContacts": []
+    },
+    {
+      "name": "A6cenna",
+      "role": "Developer",
+      "personalContacts": []
+    },
+    {
+      "name": "MintLen15",
+      "role": "Developer",
+      "personalContacts": []
     }
   ]
 }
