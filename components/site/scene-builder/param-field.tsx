@@ -35,7 +35,7 @@ export function ParamField({
   if (spec.type === "select") {
     return (
       <label htmlFor={inputId} className="flex flex-col gap-1 text-sm">
-        <span className="label-code text-slate-600 dark:text-slate-300">{spec.label}</span>
+        <span className="label-code text-foreground/75">{spec.label}</span>
         <select
           id={inputId}
           className="rounded-md border border-border bg-transparent px-2 py-1"
@@ -55,7 +55,7 @@ export function ParamField({
   if (spec.type === "text") {
     return (
       <label htmlFor={inputId} className="flex flex-col gap-1 text-sm">
-        <span className="label-code text-slate-600 dark:text-slate-300">{spec.label}</span>
+        <span className="label-code text-foreground/75">{spec.label}</span>
         <input
           id={inputId}
           type="text"
@@ -72,7 +72,7 @@ export function ParamField({
   const numericValue = typeof value === "number" ? value : Number(spec.default);
   return (
     <label htmlFor={inputId} className="flex flex-col gap-1 text-sm">
-      <span className="label-code text-slate-600 dark:text-slate-300">{spec.label}</span>
+      <span className="label-code text-foreground/75">{spec.label}</span>
       <input
         id={inputId}
         type="number"

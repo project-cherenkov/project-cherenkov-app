@@ -12,11 +12,8 @@
     color-scheme: light;
     --background: 349 33% 97%; /* #FAF5F6 = cherenkov-pink-50: a warm, barely-pink white */
     --foreground: 205 66% 13%;
-    --primary: 197 94% 67%;
-    --primary-alt: 201 100% 77%;
-    --secondary: 348 79% 81%;
-    --secondary-alt: 327 100% 89%;
     --card: 0 0% 100%;
+    --muted: 349 30% 95%; /* chips and quiet fills; blue-800 text on it is 5.3:1 */
     --border: 349 61% 88%; /* #F3CED5 = cherenkov-pink-200 */
     /* Focus ring. #0A88B8 on white is 4.0:1 (WCAG 1.4.11 asks for 3:1); the
        pastel blue it replaces was 1.6:1 and effectively invisible on the
@@ -37,11 +34,8 @@
     color-scheme: dark;
     --background: 205 66% 13%; /* #0B2436 = cherenkov-ink, not flat grey */
     --foreground: 165 100% 97%; /* #EFFFFB = cherenkov-cream */
-    --primary: 100 100% 100%;
-    --primary-alt: 201 70% 68%;
-    --secondary: 348 55% 68%;
-    --secondary-alt: 327 65% 76%;
     --card: 206 66% 17%; /* #0F3049: lighter than the page, so cards read as raised */
+    --muted: 205 55% 21%; /* #184058 */
     --border: 204 53% 26%; /* #1F4A66 */
     --ring: 201 100% 77%; /* the pastel blue: 9.5:1 on the dark background */
     --muted-foreground: 215 20% 65%; /* slate-400 */
@@ -92,6 +86,22 @@
   .label-code {
     @apply font-mono text-xs uppercase tracking-wider text-muted-foreground;
   }
+
+  /* A real section heading. The mono-caps .label-code is 12px, SMALLER than the
+     card titles under it, so using it as an <h2> made the heading the weakest
+     text in its section. Keep .label-code for the eyebrow above a heading
+     (e.g. "requirements.txt") and use this for the heading itself. */
+  .heading-section {
+    @apply font-heading text-xl font-semibold tracking-tight text-foreground;
+  }
+
+  /* Same voice as .label-code but with NO case transform. Use it for anything
+     that carries a physical quantity, unit or symbol (slider labels, readouts):
+     uppercasing turns m/s into M/S (mega-siemens), s into S (siemens) and
+     θ into Θ. Keep .label-code for section eyebrows only. */
+  .label-mono {
+    @apply font-mono text-xs tracking-wide text-muted-foreground;
+  }
 }
 
 /* Hero band: a blue glow top-left and a pink glow top-right that fade to
@@ -105,9 +115,12 @@
       radial-gradient(ellipse at 90% 10%, rgba(245, 169, 184, 0.3), transparent 55%);
   }
   .dark .hero-band {
+    /* The pink glow uses the saturated pink-500 here, not the pastel pink.
+       A low-alpha pastel over the navy lands on a grey-brown (≈ #3d3338);
+       pink-500 at 22% lands on a plum (≈ #3b273d) that still reads as pink. */
     background-image:
       radial-gradient(ellipse at 20% 0%, rgba(91, 206, 250, 0.3), transparent 60%),
-      radial-gradient(ellipse at 90% 10%, rgba(245, 169, 184, 0.18), transparent 55%);
+      radial-gradient(ellipse at 90% 10%, rgba(231, 49, 85, 0.22), transparent 55%);
   }
 }
 

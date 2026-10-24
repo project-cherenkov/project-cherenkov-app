@@ -71,7 +71,7 @@ export function MissCard({ data }: { data: MissCardData }) {
     <li className="rounded-lg border border-border bg-card p-5">
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="label-code">{data.topicLabel}</span>
-        <span className="rounded border border-border px-1.5 py-0.5 text-slate-600 dark:text-slate-400">
+        <span className="rounded border border-border px-1.5 py-0.5 text-muted-foreground">
           {t(`difficulty.${data.difficulty}` as never)}
         </span>
         <span
@@ -83,7 +83,7 @@ export function MissCard({ data }: { data: MissCardData }) {
         >
           {resolved ? t("resolved") : t("open")}
         </span>
-        <span className="text-slate-600 dark:text-slate-400">
+        <span className="text-muted-foreground">
           {t("missedCount", { count: data.wrongCount })}
           {data.retryCount > 0 ? ` · ${t("retriedCount", { count: data.retryCount })}` : ""}
         </span>
@@ -120,7 +120,7 @@ export function MissCard({ data }: { data: MissCardData }) {
                   </span>
                 ) : null}
                 {wasMine ? (
-                  <span className="ml-2 text-slate-600 dark:text-slate-400">({t("yourEarlierAnswer")})</span>
+                  <span className="ml-2 text-muted-foreground">({t("yourEarlierAnswer")})</span>
                 ) : null}
               </span>
             </label>
@@ -135,7 +135,7 @@ export function MissCard({ data }: { data: MissCardData }) {
       ) : null}
 
       {answer?.explanation ? (
-        <div className="mt-3 rounded-md bg-slate-50 p-3 text-sm dark:bg-slate-800/60">
+        <div className="mt-3 rounded-md bg-muted p-3 text-sm">
           <p className="label-code mb-1">{t("explanation")}</p>
           <MarkdownText text={answer.explanation} />
         </div>

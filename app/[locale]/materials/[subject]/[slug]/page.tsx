@@ -98,12 +98,12 @@ export default async function MaterialPage({
             { name: material.title },
           ])}
         />
-        <Link href="/materials" className="label-code hover:text-slate-700 dark:hover:text-slate-200">
+        <Link href="/materials" className="label-code hover:text-foreground">
           ← {t("backToMaterials")}
         </Link>
 
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-800 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
+          <span className="label-code rounded bg-muted px-2 py-0.5 text-brand">
             {ts(`subjects.${subject}`)}
           </span>
           {location && (
@@ -117,7 +117,7 @@ export default async function MaterialPage({
         </div>
 
         <h1 className="mt-3 text-3xl font-bold text-foreground">{material.title}</h1>
-        <p className="mt-2 text-lg text-slate-600 dark:text-slate-300">{material.summary}</p>
+        <p className="mt-2 text-lg text-foreground/75">{material.summary}</p>
         <UnderstoodButton kind="material" subject={material.subject} slug={material.slug} />
 
         <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
@@ -126,7 +126,7 @@ export default async function MaterialPage({
 
         {related.length > 0 && (
           <section className="mt-10 border-t border-border pt-6">
-            <h2 className="label-code mb-3">{t("relatedEditorials")}</h2>
+            <h2 className="heading-section mb-3">{t("relatedEditorials")}</h2>
             <ul className="space-y-2">
               {related.map((editorial) => (
                 <li key={editorial.slug}>

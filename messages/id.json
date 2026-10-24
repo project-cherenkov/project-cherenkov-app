@@ -31,9 +31,11 @@
     "eyebrow": "readme.md",
     "heroTitle": "Ide yang tampak jelas.",
     "heroBody": "Setiap editorial ditulis oleh seseorang yang bersaing di bidang itu. Instagram membawa pancingan, yaitu ide yang mengejutkan dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap dan visualisasi interaktif yang bisa Anda manipulasi.",
+    "ctaPlan": "Rencanakan belajarku",
+    "recentEyebrow": "requirements.txt",
+    "recentHeading": "Edisi terbaru",
     "ctaArchive": "Jelajahi arsip",
     "ctaAbout": "Baca filosofinya",
-    "recentHeading": "requirements.txt: edisi terbaru",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
     "ctaSyllabus": "Lihat silabus",
     "ctaDocs": "Baca dokumentasi"
@@ -95,6 +97,8 @@
     "canvasLabel": "Visualisasi interaktif. Gunakan kontrol dan penggeser di bawahnya untuk mengubah tampilannya.",
     "orbitalLabel": "Diagram orbit: eksentrisitas {eccentricity}, rasio massa planet terhadap bintang {massRatio}, pada waktu {time} detik. Gunakan penggeser di bawahnya untuk mengubah orbit.",
     "trajectoryLabel": "Diagram lintasan: kecepatan awal {speed} meter per detik pada sudut {angle} derajat. Gunakan penggeser di bawahnya untuk mengubah peluncuran.",
+    "trajectoryLegendLaunch": "peluncuran {angle}° (milikmu)",
+    "trajectoryLegendComplement": "peluncuran {angle}°, sudut komplementer",
     "loading": "Memuat visualisasi…"
   },
   "about": {
@@ -129,7 +133,11 @@
       "orDivider": "atau",
       "noAccount": "Belum punya akun?",
       "signupLink": "Daftar",
-      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+      "genericError": "Terjadi kesalahan. Silakan coba lagi.",
+      "forgotLink": "Lupa kata sandi?",
+      "showPassword": "Tampilkan kata sandi",
+      "hidePassword": "Sembunyikan kata sandi",
+      "submitting": "Sedang masuk…"
     },
     "signup": {
       "title": "Daftar",
@@ -141,7 +149,8 @@
       "orDivider": "atau",
       "hasAccount": "Sudah punya akun?",
       "loginLink": "Masuk",
-      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+      "genericError": "Terjadi kesalahan. Silakan coba lagi.",
+      "submitting": "Membuat akun…"
     },
     "planner": {
       "overviewHeading": "Progres kamu",
@@ -169,6 +178,10 @@
       "incorrect": "Salah",
       "retake": "Ulangi kuis",
       "scoreLabel": "Skor kamu {score}%",
+      "tabUnanswered": "Soal {n}, belum dijawab",
+      "tabAnswered": "Soal {n}, sudah dijawab",
+      "tabCorrect": "Soal {n}, benar",
+      "tabIncorrect": "Soal {n}, salah",
       "questionCounter": "Soal {current} dari {total}",
       "submitErrorUnauthenticated": "Sesi Anda telah berakhir. Silakan masuk kembali dan coba lagi.",
       "submitErrorGeneric": "Terjadi kesalahan saat mengirim jawaban Anda. Silakan coba lagi."
@@ -182,6 +195,36 @@
       "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
       "server": "Server menolak permintaan masuk dengan Google. Silakan coba lagi.",
       "unknown": "Terjadi kesalahan saat masuk dengan Google. Silakan coba lagi."
+    },
+    "forgot": {
+      "title": "Atur ulang kata sandi",
+      "intro": "Masukkan email yang Anda gunakan untuk mendaftar. Jika akunnya ada, kami akan mengirim tautan untuk memilih kata sandi baru.",
+      "emailLabel": "Email",
+      "submit": "Kirim tautan",
+      "submitting": "Mengirim…",
+      "sent": "Jika ada akun dengan email itu, tautan pengaturan ulang sedang dikirim. Tautan berlaku satu jam.",
+      "backToLogin": "Kembali ke halaman masuk",
+      "genericError": "Tautan tidak dapat dikirim. Silakan coba lagi."
+    },
+    "reset": {
+      "title": "Pilih kata sandi baru",
+      "passwordLabel": "Kata sandi baru",
+      "submit": "Simpan kata sandi baru",
+      "submitting": "Menyimpan…",
+      "done": "Kata sandi Anda sudah diganti. Sekarang Anda bisa masuk dengannya.",
+      "goToLogin": "Ke halaman masuk",
+      "invalidToken": "Tautan ini tidak valid atau sudah kedaluwarsa. Minta tautan baru.",
+      "requestAgain": "Minta tautan baru",
+      "genericError": "Kata sandi tidak dapat diganti. Silakan coba lagi."
+    },
+    "authCodes": {
+      "INVALID_EMAIL_OR_PASSWORD": "Email atau kata sandi salah.",
+      "INVALID_EMAIL": "Alamat email tidak valid.",
+      "PASSWORD_TOO_SHORT": "Kata sandi terlalu pendek.",
+      "PASSWORD_TOO_LONG": "Kata sandi terlalu panjang.",
+      "USER_ALREADY_EXISTS": "Akun dengan email ini sudah ada. Coba masuk saja.",
+      "EMAIL_NOT_VERIFIED": "Verifikasi alamat email Anda terlebih dahulu.",
+      "INVALID_TOKEN": "Tautan ini tidak valid atau sudah kedaluwarsa."
     }
   },
   "error": {
@@ -208,6 +251,7 @@
       "en": "Inggris"
     },
     "source": "Sumber",
+    "accessed": "Diakses {date}",
     "translationNote": "Redaksi resminya dalam bahasa {language}. Terjemahan di sini tidak resmi, jadi periksa sumbernya jika ragu.",
     "stats": {
       "topics": "topik",
@@ -328,8 +372,9 @@
       "topics": "Topik",
       "masterySummary": "{known} dikuasai · {uncertain} belum pasti · {notKnown} belum dikuasai · {unverified} belum diperiksa",
       "colTopic": "Topik",
-      "colRating": "Nilaimu",
-      "colResult": "Hasil kuis",
+      "colRating": "Nilaimu (1–5)",
+      "colResult": "Hasil kuis (persentase benar)",
+      "resultDetail": "{status} · {percent}% dari {count} soal",
       "noQuizYet": "belum ada kuis",
       "noQuizNote": "{count} topik belum punya soal kuis pada tingkat kesulitan ini, sehingga belum bisa diperiksa.",
       "editRatings": "Ubah penilaian topikku",

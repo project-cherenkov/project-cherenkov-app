@@ -24,7 +24,7 @@ export function PlannerOnboarding({ data }: { data: Data }) {
       {data.state === "needs_settings" ? (
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-foreground">{t("step1")}</h2>
-          <p className="text-sm text-slate-600 dark:text-slate-300">{t("step1Body")}</p>
+          <p className="text-sm text-foreground/75">{t("step1Body")}</p>
           <SettingsForm initial={null} submitLabel={t("continue")} onSaved={() => router.refresh()} />
         </section>
       ) : (
@@ -39,7 +39,7 @@ export function PlannerOnboarding({ data }: { data: Data }) {
           </section>
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-foreground">{t("step2")}</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300">{t("step2Body")}</p>
+            <p className="text-sm text-foreground/75">{t("step2Body")}</p>
             {data.topicsMissing ? (
               <p role="alert" className="text-sm text-red-600 dark:text-red-400">{t("topicsMissing")}</p>
             ) : (

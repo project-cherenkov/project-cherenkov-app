@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import { useState, useTransition, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
@@ -66,12 +67,12 @@ export function GeneratePlanForm({
     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-3">
       <label className="flex flex-col gap-1 text-sm">
         {labels.examDateLabel}
-        <input
+        <Input
           type="date"
           value={examDate}
           onChange={(event) => setExamDate(event.target.value)}
           required
-          className="rounded-md border border-slate-500 px-3 py-2 text-sm dark:border-slate-400"
+          className="w-auto"
         />
       </label>
       <Button type="submit" disabled={isPending || !examDate}>

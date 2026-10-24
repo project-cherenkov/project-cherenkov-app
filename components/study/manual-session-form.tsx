@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import { useState, useTransition, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 
@@ -61,22 +62,21 @@ export function ManualSessionForm({
     <form onSubmit={submit} className="space-y-4 rounded-lg border border-border p-4">
       <div>
         <h2 className="text-lg font-semibold text-foreground">{t("manual.heading")}</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400">{t("manual.hint")}</p>
+        <p className="text-sm text-muted-foreground">{t("manual.hint")}</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
           <span className="font-medium text-foreground">{t("manual.startedAt")}</span>
-          <input
+          <Input
             type="datetime-local"
             required
             value={startedAt}
             onChange={(event) => setStartedAt(event.target.value)}
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-foreground"
           />
         </label>
         <label className="space-y-1 text-sm">
           <span className="font-medium text-foreground">{t("manual.minutes")}</span>
-          <input
+          <Input
             type="number"
             inputMode="numeric"
             required
@@ -84,7 +84,6 @@ export function ManualSessionForm({
             max={720}
             value={minutes}
             onChange={(event) => setMinutes(event.target.value)}
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-foreground"
           />
         </label>
       </div>

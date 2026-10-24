@@ -46,42 +46,52 @@ export default async function HomePage({
       />
       <section className="hero-band">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
-          <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
-          <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-            {t("heroTitle")}
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
+          <div>
+            <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
+            <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+              {t("heroTitle")}
+            </h1>
+            <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/archive" className={buttonVariants({ size: "lg" })}>
-              {t("ctaArchive")}
-            </Link>
-            <Link
-              href="/syllabus"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {t("ctaSyllabus")}
-            </Link>
-            <Link
-              href="/docs"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {t("ctaDocs")}
-            </Link>
-            <Link
-              href="/about"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {t("ctaAbout")}
-            </Link>
+            {/* One primary and one secondary action. Syllabus, Docs and About
+                are still one click away, as quiet text links. */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/archive" className={buttonVariants({ size: "lg" })}>
+                {t("ctaArchive")}
+              </Link>
+              <Link
+                href="/planner"
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                {t("ctaPlan")}
+              </Link>
+            </div>
+            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+              {[
+                { href: "/syllabus", label: t("ctaSyllabus") },
+                { href: "/docs", label: t("ctaDocs") },
+                { href: "/about", label: t("ctaAbout") },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-11 items-center font-medium text-brand underline-offset-4 hover:underline"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6">
-        <h2 className="label-code mb-4">{t("recentHeading")}</h2>
+        <p className="label-code">{t("recentEyebrow")}</p>
+        <h2 className="heading-section mb-4 mt-1">{t("recentHeading")}</h2>
         {recent.length === 0 ? (
-          <p className="text-sm text-slate-600 dark:text-slate-400">{t("recentEmpty")}</p>
+          <p className="text-sm text-muted-foreground">{t("recentEmpty")}</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {recent.map((editorial) => (

@@ -32,7 +32,7 @@ export default async function SceneBuilderPage({
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-xl font-bold text-foreground">Scene builder</h1>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-sm text-foreground/75">
         Compose a <code className="font-mono">composed-scene</code> visualization from reusable
         element templates, or a <code className="font-mono">programmable-scene</code> program from
         blocks, preview it live, and save it into an editorial&apos;s{" "}

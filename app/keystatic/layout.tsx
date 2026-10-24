@@ -38,7 +38,7 @@ export default function KeystaticSectionLayout({ children }: { children: ReactNo
           {children}
           <Link
             href="/keystatic/scene-builder/new"
-            className="fixed bottom-5 right-5 z-[999] inline-flex items-center gap-2 rounded-full bg-cherenkov-blue px-4 py-3 text-sm font-medium text-slate-900 shadow-lg transition-colors hover:bg-cherenkov-blue-pastel"
+            className="fixed bottom-5 right-5 z-[999] inline-flex items-center gap-2 rounded-full bg-cherenkov-blue px-4 py-3 text-sm font-medium text-cherenkov-ink shadow-lg transition-colors hover:bg-cherenkov-blue-pastel"
           >
             <span aria-hidden="true">+</span> New visualization
           </Link>

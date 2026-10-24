@@ -68,7 +68,7 @@ export function MaterialNav({
           {sections.map((section) => (
             <li key={section.id}>
               <details open={section.topics.some((topic) => topic.current)} className="group">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded px-1 py-1.5 text-sm font-semibold text-foreground hover:bg-slate-100 dark:hover:bg-slate-800">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded px-1 py-1.5 text-sm font-semibold text-foreground hover:bg-muted">
                   <span>{section.name}</span>
                   <ChevronDown
                     aria-hidden
@@ -85,16 +85,16 @@ export function MaterialNav({
                           className={[
                             "block rounded px-2 py-1 text-sm",
                             topic.current
-                              ? "bg-slate-900 font-medium text-white dark:bg-slate-100 dark:text-slate-900"
-                              : "text-cherenkov-blue-800 hover:bg-slate-100 dark:text-cherenkov-blue-pastel dark:hover:bg-slate-800",
+                              ? "bg-foreground font-medium text-background"
+                              : "text-cherenkov-blue-800 hover:bg-muted dark:text-cherenkov-blue-pastel",
                           ].join(" ")}
                         >
                           {topic.name}
                         </Link>
                       ) : (
-                        <span className="block px-2 py-1 text-sm text-slate-500 dark:text-slate-400">
+                        <span className="block px-2 py-1 text-sm text-muted-foreground">
                           {topic.name}
-                          <span className="ml-1.5 text-[11px] italic">({labels.comingSoon})</span>
+                          <span className="ml-1.5 text-xs italic">({labels.comingSoon})</span>
                         </span>
                       )}
                     </li>

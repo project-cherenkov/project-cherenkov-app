@@ -10,7 +10,7 @@ import { PHYSICS_FUNCTIONS } from "./physics-functions";
 import type { TrajectorySandboxConfig } from "./types";
 
 const SCRUB_STEPS = 200;
-const CANVAS_HEIGHT = 240;
+const CANVAS_HEIGHT = 220;
 const PADDING_PX = 24;
 
 export function TrajectorySandbox({
@@ -96,9 +96,30 @@ export function TrajectorySandbox({
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, width, CANVAS_HEIGHT);
 
-    const maxRange = physics.position(flightTime, initial, config.gravity).x;
+    // The complementary launch (90° − θ, same speed) is drawn as a faint
+    // ghost so the idea of the editorial, "same range, different path", is
+    // visible before anything is dragged. At 45° it coincides with the live
+    // arc, so it is skipped there.
+    const ghostInitial = { speed, angleDeg: 90 - angleDeg };
+    const ghostFlightTime = physics.flightTime(ghostInitial, config.gravity);
+    const showGhost = Math.abs(angleDeg - 45) > 0.5;
+
+    const peakOf = (init: typeof initial, ft: number) =>
+      physics.position(ft / 2, init, config.gravity).y;
+    const maxRange = Math.max(
+      physics.position(flightTime, initial, config.gravity).x,
+      showGhost ? physics.position(ghostFlightTime, ghostInitial, config.gravity).x : 0,
+    );
+    const maxPeak = Math.max(
+      peakOf(initial, flightTime),
+      showGhost ? peakOf(ghostInitial, ghostFlightTime) : 0,
+    );
     const plotW = width - PADDING_PX * 2;
-    const scale = plotW / Math.max(maxRange, 1);
+    const plotH = CANVAS_HEIGHT - PADDING_PX * 2;
+    // Fit BOTH axes (one scale, so the arc keeps its true shape): a flat arc
+    // is limited by width, a tall one by height, and nothing is clipped or
+    // left floating in dead space.
+    const scale = Math.min(plotW / Math.max(maxRange, 1), plotH / Math.max(maxPeak, 1));
 
     const groundY = CANVAS_HEIGHT - PADDING_PX;
     const toPx = (p: { x: number; y: number }) => ({
@@ -114,19 +135,32 @@ export function TrajectorySandbox({
     ctx.lineTo(width, groundY);
     ctx.stroke();
 
+    const tracePath = (init: typeof initial, ft: number) => {
+      ctx.beginPath();
+      const samples = 60;
+      for (let i = 0; i <= samples; i++) {
+        const p = toPx(physics.position((ft * i) / samples, init, config.gravity));
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+    };
+
+    // Ghost: complementary angle, dotted pink.
+    if (showGhost) {
+      ctx.setLineDash([2, 5]);
+      ctx.lineCap = "round";
+      ctx.strokeStyle = themeColors.pink;
+      ctx.lineWidth = 2;
+      tracePath(ghostInitial, ghostFlightTime);
+      ctx.lineCap = "butt";
+    }
+
     // Path (dashed, full flight preview).
     ctx.setLineDash([4, 4]);
     ctx.strokeStyle = themeColors.blue;
     ctx.lineWidth = 2;
-    ctx.beginPath();
-    const samples = 60;
-    for (let i = 0; i <= samples; i++) {
-      const sampleT = (flightTime * i) / samples;
-      const p = toPx(physics.position(sampleT, initial, config.gravity));
-      if (i === 0) ctx.moveTo(p.x, p.y);
-      else ctx.lineTo(p.x, p.y);
-    }
-    ctx.stroke();
+    tracePath(initial, flightTime);
     ctx.setLineDash([]);
 
     // Marker at current sim time.
@@ -138,14 +172,14 @@ export function TrajectorySandbox({
     ctx.arc(markerPos.x, markerPos.y, 7, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-  }, [width, simTime, initial, config.gravity, physics, flightTime]);
+  }, [width, simTime, initial, speed, angleDeg, config.gravity, physics, flightTime]);
 
   const maxRange = physics.position(flightTime, initial, config.gravity).x;
   const maxHeight = physics.position(flightTime / 2, initial, config.gravity).y;
   const scrubValue = flightTime > 0 ? Math.round((simTime / flightTime) * SCRUB_STEPS) : 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SliderField
           label={`v₀ = ${speed.toFixed(0)} m/s`}
@@ -177,9 +211,23 @@ export function TrajectorySandbox({
         />
       </div>
 
-      <p className="font-mono text-xs text-slate-600 dark:text-slate-400">
-        range ≈ {maxRange.toFixed(1)} m · max height ≈ {maxHeight.toFixed(1)} m
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p className="label-mono">
+          range ≈ {maxRange.toFixed(1)} m · max height ≈ {maxHeight.toFixed(1)} m
+        </p>
+        {Math.abs(angleDeg - 45) > 0.5 && (
+          <p className="label-mono flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden className="inline-block w-5 border-t-2 border-dashed border-cherenkov-blue-700 dark:border-cherenkov-blue-400" />
+              {t("trajectoryLegendLaunch", { angle: angleDeg.toFixed(0) })}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden className="inline-block w-5 border-t-2 border-dotted border-cherenkov-pink-400" />
+              {t("trajectoryLegendComplement", { angle: (90 - angleDeg).toFixed(0) })}
+            </span>
+          </p>
+        )}
+      </div>
 
       <PlaybackControls
         current={scrubValue}
@@ -222,7 +270,7 @@ function SliderField({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="label-code">{label}</span>
+      <span className="label-mono">{label}</span>
       <Slider
         aria-label={label}
         min={min}

@@ -40,9 +40,12 @@ describe("PlaybackControls accessibility", () => {
 
   it("uses theme tokens rather than a hard-coded white surface (dark mode)", () => {
     // Look at the outer container only — the slider thumb legitimately keeps
-    // its own bg-white / dark:bg-slate-900 pair.
+    // its own bg-white / dark:bg-slate-900 pair. The surface itself now comes
+    // from the VizFrame card around the whole instrument; the controls only
+    // draw a divider, in the border token.
     const container = render(false).match(/^<div class="([^"]*)"/)?.[1] ?? "";
-    expect(container).toContain("bg-card");
+    expect(container).toContain("border-border");
     expect(container).not.toContain("bg-white");
+    expect(container).not.toContain("slate-");
   });
 });

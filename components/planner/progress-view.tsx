@@ -27,7 +27,7 @@ export async function WeekStrip({
       <h2 id="week-heading" className="text-xl font-semibold text-foreground">
         {t("week.heading")}
       </h2>
-      <p className="text-slate-700 dark:text-slate-300">
+      <p className="text-foreground/80">
         {t("week.activeDays", { count: week.activeDays })}
       </p>
       <ol className="grid grid-cols-7 gap-1.5">
@@ -44,18 +44,18 @@ export async function WeekStrip({
             <span className="block font-medium text-foreground">
               {fmtDay(locale, day.date, { weekday: "short" })}
             </span>
-            <span className="block text-slate-600 dark:text-slate-400">
+            <span className="block text-muted-foreground">
               {day.active ? "✓" : "–"}
               <span className="sr-only">{day.active ? t("week.active") : t("week.inactive")}</span>
             </span>
-            <span className="block text-slate-600 dark:text-slate-400">
+            <span className="block text-muted-foreground">
               {t("minutesShort", { minutes: day.minutes })}
             </span>
           </li>
         ))}
       </ol>
-      <p className="text-xs text-slate-600 dark:text-slate-400">{t("week.activeRule")}</p>
-      <p className="text-sm text-slate-700 dark:text-slate-300">
+      <p className="text-xs text-muted-foreground">{t("week.activeRule")}</p>
+      <p className="text-sm text-foreground/80">
         {t("week.plannedVsMeasured", { planned: plannedMinutes, measured: week.totalMinutes })}
       </p>
     </section>
@@ -102,7 +102,7 @@ export async function MinutesChart({ days, locale }: { days: DayMinutes[]; local
       </svg>
       {/* The same numbers as a table, for screen readers and anyone who wants them. */}
       <details className="text-sm">
-        <summary className="cursor-pointer text-slate-700 dark:text-slate-300">{t("chart.showTable")}</summary>
+        <summary className="cursor-pointer text-foreground/80">{t("chart.showTable")}</summary>
         <table className="mt-2 w-full max-w-sm text-left">
           <thead>
             <tr>
@@ -142,9 +142,9 @@ export async function TopicMinutesList({
           <li key={`${row.subject}/${row.syllabusTopicId}`} className="text-sm">
             <div className="flex justify-between gap-3">
               <span className="text-foreground">{row.label ?? t("topics.unassigned")}</span>
-              <span className="text-slate-600 dark:text-slate-400">{t("minutes", { minutes: row.minutes })}</span>
+              <span className="text-muted-foreground">{t("minutes", { minutes: row.minutes })}</span>
             </div>
-            <div className="mt-1 h-1.5 rounded bg-slate-200 dark:bg-slate-700" aria-hidden>
+            <div className="mt-1 h-1.5 rounded bg-border" aria-hidden>
               <div
                 className="h-1.5 rounded bg-cherenkov-blue-800 dark:bg-cherenkov-blue-pastel"
                 style={{ width: `${Math.round((row.minutes / max) * 100)}%` }}
@@ -166,7 +166,7 @@ const STATUS_STYLE: Record<MasteryStatus, { symbol: string; box: string }> = {
   known: { symbol: "●", box: "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40" },
   uncertain: { symbol: "◐", box: "border-amber-600 bg-amber-50 dark:bg-amber-950/40" },
   not_known: { symbol: "○", box: "border-rose-600 bg-rose-50 dark:bg-rose-950/40" },
-  unverified: { symbol: "–", box: "border-dashed border-slate-400" },
+  unverified: { symbol: "–", box: "border-dashed border-border-strong" },
 };
 const STATUS_ORDER: MasteryStatus[] = ["known", "uncertain", "not_known", "unverified"];
 
@@ -195,16 +195,16 @@ export async function CoverageMap({
       <h2 id="coverage-heading" className="text-xl font-semibold text-foreground">
         {t("coverage.heading")}
       </h2>
-      <p className="text-sm text-slate-600 dark:text-slate-400">{t("coverage.basis", { stage: stageLabel })}</p>
+      <p className="text-sm text-muted-foreground">{t("coverage.basis", { stage: stageLabel })}</p>
 
       <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm" aria-label={t("coverage.legend")}>
         {STATUS_ORDER.map((status) => (
-          <li key={status} className="text-slate-700 dark:text-slate-300">
+          <li key={status} className="text-foreground/80">
             <span aria-hidden className="mr-1">{STATUS_STYLE[status].symbol}</span>
             {t(`coverage.status.${status}` as never)} ({coverage.counts[status]})
           </li>
         ))}
-        <li className="text-slate-700 dark:text-slate-300">
+        <li className="text-foreground/80">
           <span aria-hidden className="mr-1">✓</span>
           {t("coverage.understoodLegend", { count: coverage.understoodCount })}
         </li>
@@ -233,7 +233,7 @@ export async function CoverageMap({
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-1 text-xs text-slate-700 dark:text-slate-300">
+                  <p className="mt-1 text-xs text-foreground/80">
                     <span aria-hidden className="mr-1">{STATUS_STYLE[cell.status].symbol}</span>
                     {t(`coverage.status.${cell.status}` as never)}
                     {cell.pHat !== null
@@ -253,7 +253,7 @@ export async function CoverageMap({
           </div>
         ))}
       </div>
-      <p className="text-xs text-slate-600 dark:text-slate-400">{t("coverage.note", { subject })}</p>
+      <p className="text-xs text-muted-foreground">{t("coverage.note", { subject })}</p>
     </section>
   );
 }

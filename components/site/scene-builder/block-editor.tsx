@@ -579,7 +579,7 @@ export function BlockEditor({
     <div
       ref={containerRef}
       data-testid="block-editor-workspace"
-      className="h-[480px] w-full rounded-md border border-slate-200 dark:border-slate-700"
+      className="h-[480px] w-full rounded-md border border-border"
     />
   );
 }

@@ -36,23 +36,23 @@ export function TeamPhotoUploader() {
   }
 
   return (
-    <div className="mt-4 rounded-md border border-dashed border-slate-300 p-4 text-sm">
-      <label className="label-code block text-slate-600">
+    <div className="mt-4 rounded-md border border-dashed border-border-strong p-4 text-sm">
+      <label className="label-code block">
         Admin: upload a team photo
       </label>
       <input
         type="file"
         accept="image/*"
-        className="mt-2 text-slate-700"
+        className="mt-2 text-foreground/80"
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) void handleFile(file);
         }}
       />
-      {status === "uploading" && <p className="mt-2 text-slate-600">Uploading…</p>}
+      {status === "uploading" && <p className="mt-2 text-muted-foreground">Uploading…</p>}
       {status === "error" && error && <p className="mt-2 text-red-700">{error}</p>}
       {status === "done" && url && (
-        <p className="mt-2 break-all text-slate-700">
+        <p className="mt-2 break-all text-foreground/80">
           Uploaded. Paste this URL into the team singleton&apos;s Photo URL field:{" "}
           <code className="font-mono">{url}</code>
         </p>

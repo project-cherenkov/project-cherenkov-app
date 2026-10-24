@@ -28,7 +28,7 @@ function DocLink({ href, children, ...rest }: { href?: string; children?: ReactN
 function DocTable({ children }: { children?: ReactNode }) {
   return (
     <div className="not-prose my-6 overflow-x-auto rounded-md border border-border" tabIndex={0}>
-      <table className="w-full min-w-[32rem] border-collapse text-left text-sm [&_td]:border-t [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold dark:[&_th]:bg-slate-800/60">
+      <table className="w-full min-w-[32rem] border-collapse text-left text-sm [&_td]:border-t [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold dark:[&_th]:bg-slate-800/60">
         {children}
       </table>
     </div>

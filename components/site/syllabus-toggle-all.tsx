@@ -23,7 +23,7 @@ export function SyllabusToggleAll({
   }
 
   const buttonClass =
-    "inline-flex min-h-11 items-center rounded-md border border-border px-3 font-mono text-xs uppercase tracking-wide text-foreground hover:bg-slate-100 dark:hover:bg-slate-800";
+    "inline-flex min-h-11 items-center rounded-md border border-border px-3 font-mono text-xs uppercase tracking-wide text-foreground hover:bg-muted";
 
   return (
     <div className="flex gap-2">

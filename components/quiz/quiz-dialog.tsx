@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Check, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -101,17 +102,40 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
-            {questions.map((question, index) => (
-              <TabsTrigger key={question.id} value={String(index)}>
-                {index + 1}
-              </TabsTrigger>
-            ))}
+            {questions.map((question, index) => {
+              const graded = feedback?.find((f) => f.questionId === question.id);
+              const answered = answers[question.id] !== undefined;
+              // Number plus a state mark, so the reader can see which
+              // questions are still open before submitting. The mark is
+              // decorative; the state is in the accessible name.
+              const label = graded
+                ? graded.correct
+                  ? t("tabCorrect", { n: index + 1 })
+                  : t("tabIncorrect", { n: index + 1 })
+                : answered
+                  ? t("tabAnswered", { n: index + 1 })
+                  : t("tabUnanswered", { n: index + 1 });
+              return (
+                <TabsTrigger key={question.id} value={String(index)} aria-label={label}>
+                  {index + 1}
+                  {graded ? (
+                    graded.correct ? (
+                      <Check className="h-3 w-3 text-emerald-700 dark:text-emerald-400" aria-hidden />
+                    ) : (
+                      <X className="h-3 w-3 text-red-700 dark:text-red-400" aria-hidden />
+                    )
+                  ) : answered ? (
+                    <Check className="h-3 w-3" aria-hidden />
+                  ) : null}
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
           {questions.map((question, index) => {
             const result = feedback?.find((f) => f.questionId === question.id);
             return (
               <TabsContent key={question.id} value={String(index)}>
-                <p className="mb-2 font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                <p className="label-mono mb-2">
                   {t("questionCounter", {
                     current: index + 1,
                     total: questions.length,
@@ -120,8 +144,12 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                 <MarkdownText text={question.prompt} className="mb-3 font-medium" />
                 <div className="flex flex-col gap-2">
                   {question.choices.map((choice, choiceIndex) => (
-                    <label key={choiceIndex} className="flex items-center gap-2 text-sm">
+                    <label
+                      key={choiceIndex}
+                      className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-transparent px-3 py-2 text-sm hover:bg-muted has-[:checked]:border-border-strong has-[:checked]:bg-muted"
+                    >
                       <input
+                        className="h-4 w-4 shrink-0"
                         type="radio"
                         name={question.id}
                         checked={answers[question.id] === choiceIndex}
@@ -137,7 +165,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                     className={
                       result.correct
                         ? "mt-2 text-sm text-emerald-700 dark:text-emerald-400"
-                        : "mt-2 text-sm text-red-600 dark:text-red-400"
+                        : "mt-2 text-sm text-red-700 dark:text-red-400"
                     }
                   >
                     {result.correct ? t("correct") : t("incorrect")}
@@ -150,7 +178,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
 
         <div className="mt-4">
           {submitError ? (
-            <p role="alert" className="mb-2 text-sm text-red-600 dark:text-red-400">
+            <p role="alert" className="mb-2 text-sm text-red-700 dark:text-red-400">
               {submitError === "unauthenticated"
                 ? t("submitErrorUnauthenticated")
                 : t("submitErrorGeneric")}

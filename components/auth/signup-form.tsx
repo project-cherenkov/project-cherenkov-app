@@ -6,7 +6,9 @@ import { useSearchParams } from "next/navigation";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { signUp, signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/auth/password-input";
+import { authCodeKey, classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
 
 export interface SignupFormProps {
   googleEnabled: boolean;
@@ -19,6 +21,7 @@ export interface SignupFormProps {
 export function SignupForm({ googleEnabled }: SignupFormProps) {
   const t = useTranslations("phase2.signup");
   const tErrors = useTranslations("phase2.authErrors");
+  const tCodes = useTranslations("phase2.authCodes");
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -56,7 +59,8 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
       try {
         const result = await signUp.email({ email, password, name });
         if (result.error) {
-          setError(result.error.message ?? t("genericError"));
+          const codeKey = authCodeKey(result.error.code);
+          setError(codeKey ? tCodes(codeKey) : (result.error.message ?? t("genericError")));
           return;
         }
         router.push("/planner");
@@ -118,50 +122,46 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
           {t("nameLabel")}
-          <input
+          <Input
             type="text"
             autoComplete="name"
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
-            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           {t("emailLabel")}
-          <input
+          <Input
             type="email"
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           {t("passwordLabel")}
-          <input
-            type="password"
+          <PasswordInput
             autoComplete="new-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         {error ? (
-          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+          <p role="alert" className="text-sm text-red-700 dark:text-red-400">
             {error}
           </p>
         ) : null}
-        <Button type="submit" disabled={isPending}>
-          {t("submit")}
+        <Button type="submit" disabled={isPending} aria-busy={isPending}>
+          {isPending ? t("submitting") : t("submit")}
         </Button>
       </form>
 
       {googleEnabled ? (
         <div className="mt-4 flex flex-col gap-3">
-          <p className="text-center text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+          <p className="text-center text-xs uppercase tracking-wide text-muted-foreground">
             {t("orDivider")}
           </p>
           <Button
@@ -175,7 +175,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
         </div>
       ) : null}
 
-      <p className="mt-6 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-6 text-sm text-foreground/75">
         {t("hasAccount")}{" "}
         <Link href="/login" className="underline">
           {t("loginLink")}

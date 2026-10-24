@@ -76,3 +76,33 @@ describe("syllabus helpers", () => {
     expect(labels).toContain("Problem-Solving Strategies › Divide and conquer");
   });
 });
+
+describe("syllabus sources", () => {
+  it.each(SUBJECTS)("%s: a source URL is https and a checked date is a real ISO date", (subject) => {
+    const { source } = SYLLABI[subject];
+    if (source.url) expect(source.url).toMatch(/^https:\/\//);
+    if (source.accessed) {
+      expect(source.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(Number.isNaN(Date.parse(source.accessed))).toBe(false);
+    }
+  });
+
+  it("astronomy follows the senior IOAA syllabus, not the Junior one", () => {
+    const { source } = SYLLABI.astronomy;
+    expect(source.label).not.toMatch(/junior/i);
+    expect(source.url ?? "").not.toMatch(/junior/i);
+    // Topics that exist only in the senior syllabus.
+    for (const id of ["nuclear-physics", "interstellar-medium", "accretion-processes"]) {
+      expect(getTopicLocation("astronomy", id), id).toBeDefined();
+    }
+    // Topic ids the planner and quiz bank already depend on stay valid.
+    for (const id of ["celestial-mechanics", "exoplanets", "space-exploration", "instrumentation"]) {
+      expect(getTopicLocation("astronomy", id), id).toBeDefined();
+    }
+  });
+
+  it("astronomy has the senior syllabus's practical part", () => {
+    const practical = SYLLABI.astronomy.sections.filter((s) => s.part === "practical");
+    expect(practical.map((s) => s.id)).toEqual(["practical-observations", "practical-data-analysis"]);
+  });
+});

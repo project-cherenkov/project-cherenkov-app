@@ -61,17 +61,36 @@ export default async function SubjectSyllabusPage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <Link href="/syllabus" className="label-code hover:text-slate-700 dark:hover:text-slate-200">
+      <Link href="/syllabus" className="label-code hover:text-foreground">
         ← {t("title")}
       </Link>
 
       <h1 className="mt-4 text-3xl font-bold text-foreground">{t(`subjects.${syllabus.subject}`)}</h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-300">
-        {t("source")}: {syllabus.source.label}
+      <p className="mt-2 text-foreground/75">
+        {t("source")}:{" "}
+        {syllabus.source.url ? (
+          <a
+            href={syllabus.source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-foreground"
+          >
+            {syllabus.source.label}
+          </a>
+        ) : (
+          syllabus.source.label
+        )}
         {syllabus.source.edition ? ` · ${syllabus.source.edition}` : ""}
+        {syllabus.source.accessed
+          ? ` · ${t("accessed", {
+              date: new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" }).format(
+                new Date(`${syllabus.source.accessed}T00:00:00Z`),
+              ),
+            })}`
+          : ""}
       </p>
       {translated && (
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t("translationNote", { language: t(`languages.${syllabus.sourceLang}`) })}
         </p>
       )}
@@ -90,7 +109,7 @@ export default async function SubjectSyllabusPage({
       </div>
 
       <div id={LIST_ID} className="mt-6 space-y-3">
-        <h2 className="label-code">{t("theory")}</h2>
+        <h2 className="heading-section">{t("theory")}</h2>
         {theory.map((entry) => (
           <SectionBlock
             key={entry.section.id}
@@ -102,7 +121,7 @@ export default async function SubjectSyllabusPage({
 
         {practical.length > 0 && (
           <>
-            <h2 className="label-code pt-4">{t("practical")}</h2>
+            <h2 className="heading-section pt-4">{t("practical")}</h2>
             {practical.map(({ section }) => (
               <div
                 key={section.id}
@@ -113,7 +132,7 @@ export default async function SubjectSyllabusPage({
                 {section.note && (
                   <p
                     lang={syllabus.sourceLang}
-                    className="mt-1 text-sm text-slate-600 dark:text-slate-300"
+                    className="mt-1 text-sm text-foreground/75"
                   >
                     {section.note}
                   </p>
@@ -149,7 +168,7 @@ async function SectionBlock({
       <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <ChevronRight
           aria-hidden
-          className="h-4 w-4 shrink-0 text-slate-600 transition-transform group-open:rotate-90 motion-reduce:transition-none"
+          className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90 motion-reduce:transition-none"
         />
         <span className="font-semibold text-foreground">{localize(section.name, locale)}</span>
         <span className="label-code ml-auto">{t("counts.topics", { count: topics.length })}</span>
@@ -167,7 +186,7 @@ async function SectionBlock({
               {topic.detail && (
                 <p
                   lang={sourceLang}
-                  className="mt-1 text-sm text-slate-600 dark:text-slate-300"
+                  className="mt-1 text-sm text-foreground/75"
                 >
                   {topic.detail}
                 </p>

@@ -40,7 +40,7 @@ export default async function MaterialsIndexPage({
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
       <p className="label-code">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
-      <p className="mt-2 max-w-2xl text-slate-600 dark:text-slate-300">{t("description")}</p>
+      <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
 
       <div className="mt-8 space-y-10">
         {getAllSyllabi().map((syllabus) => {
@@ -74,14 +74,14 @@ export default async function MaterialsIndexPage({
               </div>
 
               {withMaterial.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+                <p className="mt-4 text-sm text-muted-foreground">
                   {t("emptyForSubject")}
                 </p>
               ) : (
                 <div className="mt-4 space-y-6">
                   {withMaterial.map(({ section, topics }) => (
                     <div key={section.id}>
-                      <h3 className="label-code mb-2">{localize(section.name, locale)}</h3>
+                      <h3 className="heading-section mb-2 text-lg">{localize(section.name, locale)}</h3>
                       <ul className="grid gap-3 sm:grid-cols-2">
                         {topics.map(({ topic, material }) => (
                           <li key={topic.id}>
@@ -92,7 +92,7 @@ export default async function MaterialsIndexPage({
                               <span className="font-semibold text-foreground group-hover:underline">
                                 {material!.title}
                               </span>
-                              <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                              <span className="mt-1 block text-sm text-foreground/75">
                                 {localize(topic.name, locale)}
                               </span>
                             </Link>

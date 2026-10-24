@@ -33,7 +33,7 @@ export function SessionList({ items }: { items: SessionListItem[] }) {
 
   const visible = items.filter((item) => !removed.has(item.id));
   if (visible.length === 0) {
-    return <p className="text-sm text-slate-600 dark:text-slate-400">{t("sessions.empty")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("sessions.empty")}</p>;
   }
 
   return (
@@ -43,7 +43,7 @@ export function SessionList({ items }: { items: SessionListItem[] }) {
           <li key={item.id} className="flex items-center justify-between gap-3 px-4 py-2 text-sm">
             <span className="min-w-0">
               <span className="font-medium text-foreground">{t("minutes", { minutes: item.minutes })}</span>
-              <span className="ml-2 text-slate-600 dark:text-slate-400">
+              <span className="ml-2 text-muted-foreground">
                 {item.when}
                 {item.topicLabel ? ` · ${item.topicLabel}` : ""}
                 {item.source === "manual" ? ` · ${t("sessions.manual")}` : ""}
@@ -53,7 +53,7 @@ export function SessionList({ items }: { items: SessionListItem[] }) {
               type="button"
               onClick={() => remove(item.id)}
               disabled={pending}
-              className="min-h-9 shrink-0 rounded px-2 text-xs text-slate-600 underline-offset-4 hover:underline dark:text-slate-400"
+              className="min-h-9 shrink-0 rounded px-2 text-xs text-muted-foreground underline-offset-4 hover:underline"
             >
               {t("sessions.delete")}
               <span className="sr-only"> {item.when}</span>

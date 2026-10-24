@@ -36,7 +36,7 @@ export function PlaybackControls({
   const t = useTranslations("viz");
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border border-border bg-card p-3">
+    <div className="flex flex-col gap-2 border-t border-border pt-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Button
@@ -80,7 +80,7 @@ export function PlaybackControls({
             visualization is auto-playing the label changes every frame, which
             would make a screen reader read out "t = 1.42s … 1.43s …"
             continuously — so the region goes quiet during playback. */}
-        <span className="label-code" role="status" aria-live={isPlaying ? "off" : "polite"}>
+        <span className="label-mono" role="status" aria-live={isPlaying ? "off" : "polite"}>
           {label}
         </span>
       </div>

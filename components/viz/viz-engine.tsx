@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import type { Editorial } from "#content";
@@ -43,6 +44,18 @@ const ProgrammableScene = dynamic(
 
 type VizEditorial = Pick<Editorial, "vizConfig">;
 
+// One bordered card holds the sliders, the canvas and the playback controls,
+// so the reader sees a single instrument rather than three loose pieces. The
+// error and "missing" states are NOT framed: they are notices, not
+// visualizations.
+function VizFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="rounded-lg border border-border-strong/40 bg-card p-4 shadow-sm sm:p-5">
+      {children}
+    </div>
+  );
+}
+
 export function VizEngine({ editorial }: { editorial: VizEditorial }) {
   const { discriminant, value } = editorial.vizConfig;
   switch (discriminant) {
@@ -50,31 +63,51 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
       if (!isGraphArrayStepperConfig(value)) {
         return <VizConfigError engine={discriminant} />;
       }
-      return <GraphArrayStepper config={value} />;
+      return (
+        <VizFrame>
+          <GraphArrayStepper config={value} />
+        </VizFrame>
+      );
 
     case "trajectory-sandbox":
       if (!isTrajectorySandboxConfig(value)) {
         return <VizConfigError engine={discriminant} />;
       }
-      return <TrajectorySandbox config={value} />;
+      return (
+        <VizFrame>
+          <TrajectorySandbox config={value} />
+        </VizFrame>
+      );
 
     case "orbital-sandbox":
       if (!isOrbitalSandboxConfig(value)) {
         return <VizConfigError engine={discriminant} />;
       }
-      return <OrbitalSandbox config={value} />;
+      return (
+        <VizFrame>
+          <OrbitalSandbox config={value} />
+        </VizFrame>
+      );
 
     case "composed-scene":
       if (!isComposedSceneConfig(value)) {
         return <VizConfigError engine={discriminant} />;
       }
-      return <ComposedScene config={value} />;
+      return (
+        <VizFrame>
+          <ComposedScene config={value} />
+        </VizFrame>
+      );
 
     case "programmable-scene":
       if (!isProgrammableSceneConfig(value)) {
         return <VizConfigError engine={discriminant} />;
       }
-      return <ProgrammableScene config={value} />;
+      return (
+        <VizFrame>
+          <ProgrammableScene config={value} />
+        </VizFrame>
+      );
 
     case "none":
     default:
@@ -90,7 +123,7 @@ function VizSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      className="flex h-64 w-full animate-pulse items-center justify-center rounded-md border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800"
+      className="flex h-64 w-full animate-pulse items-center justify-center rounded-md border border-border bg-muted"
     >
       <span className="sr-only">{t("loading")}</span>
     </div>
@@ -102,7 +135,7 @@ function VizSkeleton() {
 function VizMissing() {
   const t = useTranslations("editorial");
   return (
-    <div className="rounded-md border border-dashed border-cherenkov-pink-pastel bg-cherenkov-pink/20 p-4 text-sm text-slate-700 dark:text-slate-200">
+    <div className="rounded-md border border-dashed border-cherenkov-pink-pastel bg-cherenkov-pink/20 p-4 text-sm text-foreground/80">
       {t("vizMissing")}
     </div>
   );

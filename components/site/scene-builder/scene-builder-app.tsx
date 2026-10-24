@@ -58,11 +58,11 @@ function TargetEditorialFields({
   onSlugChange: (value: string) => void;
 }) {
   return (
-    <div className="rounded-md border border-dashed border-slate-300 p-3 text-sm dark:border-slate-700">
-      <p className="label-code mb-2 text-slate-600 dark:text-slate-300">Target editorial</p>
+    <div className="rounded-md border border-dashed border-border-strong p-3 text-sm">
+      <p className="label-code mb-2 text-foreground/75">Target editorial</p>
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-slate-600 dark:text-slate-400">Subject</span>
+          <span className="text-xs text-muted-foreground">Subject</span>
           <select
             className="rounded-md border border-border bg-transparent px-2 py-1"
             value={subject}
@@ -79,7 +79,7 @@ function TargetEditorialFields({
           </select>
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-slate-600 dark:text-slate-400">Slug</span>
+          <span className="text-xs text-muted-foreground">Slug</span>
           <input
             type="text"
             placeholder="binary-search-on-answer"
@@ -89,7 +89,7 @@ function TargetEditorialFields({
           />
         </label>
       </div>
-      <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+      <p className="mt-2 text-xs text-muted-foreground">
         Saving writes this scene into that editorial&apos;s <code className="font-mono">vizConfig</code>{" "}
         frontmatter — the editorial must already exist as a draft or published file. Starting a{" "}
         <Link href="/keystatic/scene-builder/new" className="underline">
@@ -144,7 +144,7 @@ function EngineSelect({
 }) {
   return (
     <div className="mb-4 flex items-center gap-4 text-sm">
-      <span className="label-code text-slate-600 dark:text-slate-300">Engine</span>
+      <span className="label-code text-foreground/75">Engine</span>
       <label className="flex items-center gap-1.5">
         <input
           type="radio"
@@ -279,16 +279,16 @@ export function SceneBuilderApp({
             />
 
             <div className="rounded-md border border-border p-3">
-              <p className="label-code mb-2 text-slate-600 dark:text-slate-300">Program</p>
+              <p className="label-code mb-2 text-foreground/75">Program</p>
               <BlockEditor controls={[]} onChange={setProgram} />
             </div>
 
             <div className="rounded-md border border-border p-3">
-              <p className="label-code mb-2 text-slate-600 dark:text-slate-300">Preview</p>
+              <p className="label-code mb-2 text-foreground/75">Preview</p>
               {isProgramValid ? (
                 <ProgrammableScene config={programmableConfig} />
               ) : (
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   This program isn&apos;t valid yet — check for an unset variable or an unrecognized
                   element.
                 </p>
@@ -298,19 +298,19 @@ export function SceneBuilderApp({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-cherenkov-ink transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
                 disabled={!targetReady || !isProgramValid || saveStatus === "saving"}
                 onClick={() => void handleSave()}
               >
                 {saveStatus === "saving" ? "Saving…" : "Save to editorial"}
               </button>
               {!targetReady && (
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   Choose a subject and slug above to enable saving.
                 </p>
               )}
               {targetReady && !isProgramValid && (
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   This program isn&apos;t valid yet — check for an unset variable or an unrecognized
                   element.
                 </p>
@@ -325,7 +325,7 @@ export function SceneBuilderApp({
 
             {isProgramValid && (
               <details className="rounded-md border border-border p-3 text-xs">
-                <summary className="label-code cursor-pointer text-slate-600 dark:text-slate-300">
+                <summary className="label-code cursor-pointer text-foreground/75">
                   Compiled program (for reference — Save to editorial above writes this for you)
                 </summary>
                 <pre className="mt-2 overflow-x-auto whitespace-pre-wrap font-mono">
@@ -334,7 +334,7 @@ export function SceneBuilderApp({
               </details>
             )}
           </div>
-          <aside className="text-sm text-slate-600 dark:text-slate-400">
+          <aside className="text-sm text-muted-foreground">
             <p>
               Drag blocks from the toolbox at left of the workspace above. Reader-facing controls
               aren&apos;t authorable here yet — add a <code className="font-mono">controls</code> array
@@ -372,11 +372,11 @@ export function SceneBuilderApp({
           />
 
           <div className="rounded-md border border-border p-3">
-            <p className="label-code mb-2 text-slate-600 dark:text-slate-300">Preview</p>
+            <p className="label-code mb-2 text-foreground/75">Preview</p>
             {isValidConfig ? (
               <ComposedScene config={publishable} />
             ) : (
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Add at least one element to see a preview.
               </p>
             )}
@@ -409,19 +409,19 @@ export function SceneBuilderApp({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-cherenkov-ink transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
               disabled={!targetReady || !isValidConfig || saveStatus === "saving"}
               onClick={() => void handleSave()}
             >
               {saveStatus === "saving" ? "Saving…" : "Save to editorial"}
             </button>
             {!targetReady && (
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Choose a subject and slug above to enable saving.
               </p>
             )}
             {targetReady && !isValidConfig && (
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Add at least one element to enable saving.
               </p>
             )}

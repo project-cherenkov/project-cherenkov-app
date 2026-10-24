@@ -38,6 +38,10 @@ export interface SyllabusSource {
   label: string;
   edition?: string;
   url?: string;
+  // ISO date (YYYY-MM-DD) on which the topic list in this file was last
+  // compared against `url`. Leave it unset until that comparison has actually
+  // been made — a date here is a claim that the data was checked.
+  accessed?: string;
 }
 
 export interface SubjectSyllabus {

@@ -65,8 +65,8 @@ export function UnderstoodButton({
         className={[
           "inline-flex min-h-10 items-center gap-2 rounded-md border px-3 text-sm font-medium transition-colors",
           understood
-            ? "border-cherenkov-blue-800 bg-cherenkov-blue-800 text-white dark:border-cherenkov-blue-pastel dark:bg-cherenkov-blue-pastel dark:text-slate-900"
-            : "border-border text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+            ? "border-cherenkov-blue-800 bg-cherenkov-blue-800 text-white dark:border-cherenkov-blue-pastel dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink"
+            : "border-border text-foreground hover:bg-muted",
         ].join(" ")}
       >
         <Check aria-hidden className={`h-4 w-4 ${understood ? "" : "opacity-40"}`} />

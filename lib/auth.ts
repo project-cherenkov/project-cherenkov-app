@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { isEmailConfigured, sendEmail } from "@/lib/email";
 
 type Auth = ReturnType<typeof betterAuth>;
 
@@ -34,6 +35,24 @@ function getAuth(): Auth {
     // no other providers.
     emailAndPassword: {
       enabled: true,
+      // Password reset exists only when an email provider is configured
+      // (lib/email.ts). Without sendResetPassword Better Auth refuses the
+      // request itself, and the UI hides the link (isEmailConfigured()).
+      ...(isEmailConfigured()
+        ? {
+            resetPasswordTokenExpiresIn: 60 * 60,
+            sendResetPassword: async ({ user, url }: { user: { email: string }; url: string }) => {
+              // Not awaited by Better Auth's request path in a way that leaks
+              // whether the account exists: the endpoint answers the same
+              // either way, so errors are logged, never surfaced.
+              await sendEmail({
+                to: user.email,
+                subject: "Reset your Cherenkov password",
+                text: `Use this link to choose a new password (valid for one hour):\n\n${url}\n\nIf you did not ask for this, ignore this email.`,
+              }).catch((error) => console.error("[auth] reset email failed", error));
+            },
+          }
+        : {}),
     },
     socialProviders:
       process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET

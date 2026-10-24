@@ -48,9 +48,9 @@ export function SceneInspector({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="label-code text-slate-600 dark:text-slate-300">Elements</h2>
+        <h2 className="label-code text-foreground/75">Elements</h2>
         {draft.elements.length === 0 ? (
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             Add an element from the palette to get started.
           </p>
         ) : (
@@ -64,7 +64,7 @@ export function SceneInspector({
                     className={`flex-1 rounded-md px-2 py-1 text-left text-sm ${
                       el.id === selectedElementId
                         ? "bg-cherenkov-blue/30"
-                        : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                        : "hover:bg-muted"
                     }`}
                     onClick={() => onSelectElement(el.id)}
                   >
@@ -89,7 +89,7 @@ export function SceneInspector({
       {selected && template && (
         <div className="flex flex-col gap-3 rounded-md border border-border p-3">
           <label className="flex flex-col gap-1 text-sm">
-            <span className="label-code text-slate-600 dark:text-slate-300">Name (optional)</span>
+            <span className="label-code text-foreground/75">Name (optional)</span>
             <input
               type="text"
               className="rounded-md border border-border bg-transparent px-2 py-1"
@@ -100,7 +100,7 @@ export function SceneInspector({
 
           {stepIndex === null || !step ? (
             <>
-              <p className="label-code text-slate-600 dark:text-slate-400">Base parameters</p>
+              <p className="label-code text-muted-foreground">Base parameters</p>
               {template.paramSchema.map((spec) => (
                 <ParamField
                   key={spec.key}
@@ -116,7 +116,7 @@ export function SceneInspector({
                 if (bindable.length === 0) return null;
                 return (
                   <div className="flex flex-col gap-1 border-t border-border pt-2">
-                    <span className="label-code text-slate-600 dark:text-slate-400">
+                    <span className="label-code text-muted-foreground">
                       Bind a reader control
                     </span>
                     <div className="flex flex-wrap gap-2">
@@ -139,7 +139,7 @@ export function SceneInspector({
           ) : (
             <>
               <div className="flex items-center justify-between">
-                <p className="label-code text-slate-600 dark:text-slate-400">
+                <p className="label-code text-muted-foreground">
                   Overrides for this step
                 </p>
                 {isOverridingSelected && (
@@ -172,7 +172,7 @@ export function SceneInspector({
 
       {draft.controls.length > 0 && (
         <div>
-          <h2 className="label-code text-slate-600 dark:text-slate-300">Reader controls</h2>
+          <h2 className="label-code text-foreground/75">Reader controls</h2>
           <ul className="mt-1 flex flex-col gap-1">
             {draft.controls.map((control) => (
               <li key={control.id} className="flex items-center justify-between gap-2 text-sm">

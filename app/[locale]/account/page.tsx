@@ -48,7 +48,7 @@ export default async function AccountPage() {
           value={
             <span>
               <span className="font-mono font-semibold">{ROLE_LABELS[details.role]}</span>
-              <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+              <span className="mt-1 block text-sm text-foreground/75">
                 {t(details.hasEditAccess ? "roleEditorHint" : "roleMemberHint")}
               </span>
             </span>
@@ -61,14 +61,14 @@ export default async function AccountPage() {
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Link
           href="/planner"
-          className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-muted"
         >
           {t("goToPlan")}
         </Link>
         {details.hasEditAccess ? (
           <NextLink
             href="/keystatic"
-            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-muted"
           >
             {t("openEditor")}
           </NextLink>
@@ -82,7 +82,7 @@ export default async function AccountPage() {
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="grid gap-1 px-4 py-3 sm:grid-cols-[10rem_1fr] sm:gap-4">
-      <dt className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">{label}</dt>
+      <dt className="font-mono text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="break-words text-foreground">{value}</dd>
     </div>
   );

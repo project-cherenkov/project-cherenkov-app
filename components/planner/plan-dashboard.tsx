@@ -48,7 +48,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
       <header>
         <p className="label-code">{t("eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
+        <p className="mt-2 text-foreground/75">
           {stage.label[locale as "en" | "id"]} · {data.settings.subject} ·{" "}
           {t("daysLeft", { days: data.daysLeft })} · {t("hoursPerWeek", { hours: data.settings.hoursPerWeek })}
         </p>
@@ -57,7 +57,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         ) : null}
         {/* Shown only when a person recorded checking the dates (SCHEDULE_VERIFIED_ON). */}
         {data.stageDates?.verifiedOn ? (
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t("datesVerified", { date: data.stageDates.verifiedOn })}
           </p>
         ) : null}
@@ -94,7 +94,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
       <section aria-labelledby="today-heading">
         <h2 id="today-heading" className="text-xl font-semibold text-foreground">{t("today")}</h2>
         {todayList.overdue.length === 0 && todayList.today.length === 0 && todayList.upNext.length === 0 ? (
-          <p className="mt-2 text-slate-600 dark:text-slate-300">{t("nothingToday")}</p>
+          <p className="mt-2 text-foreground/75">{t("nothingToday")}</p>
         ) : null}
         {todayList.overdue.length > 0 ? (
           <div className="mt-3">
@@ -105,7 +105,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         {todayList.today.length > 0 ? <ItemList items={todayList.today} locale={locale} subject={data.settings.subject} /> : null}
         {todayList.upNext.length > 0 ? (
           <div className="mt-3">
-            <h3 className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">{t("upNext")}</h3>
+            <h3 className="font-mono text-xs uppercase tracking-wide text-muted-foreground">{t("upNext")}</h3>
             <ItemList items={todayList.upNext} locale={locale} subject={data.settings.subject} showDate />
           </div>
         ) : null}
@@ -123,7 +123,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
               <div className="space-y-3 px-4 pb-4">
                 {week.days.map((day) => (
                   <div key={day.date}>
-                    <h3 className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                    <h3 className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
                       {formatDay(day.date, locale)} · {day.minutes} {t("min")}
                     </h3>
                     <ItemList items={day.items} locale={locale} subject={data.settings.subject} />
@@ -132,13 +132,13 @@ export function PlanDashboard({ data }: { data: PlanData }) {
               </div>
             </details>
           ))}
-          {weeks.length === 0 ? <p className="text-slate-600 dark:text-slate-300">{t("nothingUpcoming")}</p> : null}
+          {weeks.length === 0 ? <p className="text-foreground/75">{t("nothingUpcoming")}</p> : null}
         </div>
       </section>
 
       <section aria-labelledby="topics-heading">
         <h2 id="topics-heading" className="text-xl font-semibold text-foreground">{t("topics")}</h2>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+        <p className="mt-1 text-sm text-foreground/75">
           {t("masterySummary", {
             known: data.masteryCounts.known,
             uncertain: data.masteryCounts.uncertain,
@@ -148,7 +148,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         </p>
         <div className="mt-3 overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-left text-sm">
-            <thead className="bg-card font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+            <thead className="bg-card font-mono text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-3 py-2">{t("colTopic")}</th>
                 <th className="px-3 py-2">{t("colRating")}</th>
@@ -162,18 +162,22 @@ export function PlanDashboard({ data }: { data: PlanData }) {
                     <Link href={`/planner/${data.settings.subject}/${topic.topicId}`} className="underline-offset-2 hover:underline">
                       {topic.title}
                     </Link>
-                    <span className="block text-xs text-slate-600 dark:text-slate-400">{topic.sectionName}</span>
+                    <span className="block text-xs text-muted-foreground">{topic.sectionName}</span>
                   </td>
                   <td className="px-3 py-2">{topic.selfRating ?? "—"}</td>
                   <td className="px-3 py-2">
                     {topic.status === "unverified" ? (
-                      <span className="text-slate-600 dark:text-slate-400">
+                      <span className="text-muted-foreground">
                         {t("status.unverified")}
                         {!topic.canConfirm ? ` · ${t("noQuizYet")}` : ""}
                       </span>
                     ) : (
                       <span>
-                        {t(`status.${topic.status}`)} · {Math.round(topic.pHat * 100)}% ({topic.answerCount})
+                        {t("resultDetail", {
+                          status: t(`status.${topic.status}`),
+                          percent: Math.round(topic.pHat * 100),
+                          count: topic.answerCount,
+                        })}
                       </span>
                     )}
                   </td>
@@ -183,7 +187,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
           </table>
         </div>
         {summary.topicsWithoutQuiz > 0 ? (
-          <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">{t("noQuizNote", { count: summary.topicsWithoutQuiz })}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{t("noQuizNote", { count: summary.topicsWithoutQuiz })}</p>
         ) : null}
       </section>
 
@@ -248,15 +252,15 @@ function ItemList({
         return (
           <li key={item.id} className="flex flex-wrap items-center gap-3 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className={["text-sm font-medium", done ? "text-slate-600 line-through dark:text-slate-400" : "text-foreground"].join(" ")}>
-                <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide dark:bg-slate-800">
+              <p className={["text-sm font-medium", done ? "text-muted-foreground line-through" : "text-foreground"].join(" ")}>
+                <span className="mr-2 rounded bg-muted px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide">
                   {t(`kind.${item.kind}`)}
                 </span>
                 <Link href={`/planner/${subject}/${item.topicId}`} className="underline-offset-2 hover:underline">
                   {item.title}
                 </Link>
               </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 {showDate ? `${formatDay(item.scheduledFor, locale)} · ` : ""}
                 {item.minutes !== null ? `${item.minutes} ${t("min")} · ` : ""}
                 {item.reason ? tReason(item.reason) : ""}

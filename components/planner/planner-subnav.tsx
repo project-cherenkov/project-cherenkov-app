@@ -31,8 +31,8 @@ export function PlannerSubnav() {
                 className={[
                   "inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium",
                   active
-                    ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                    : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+                    ? "bg-foreground text-background"
+                    : "text-foreground hover:bg-muted",
                 ].join(" ")}
               >
                 {t(item.key)}
@@ -43,7 +43,7 @@ export function PlannerSubnav() {
         <li className="ml-auto">
           <Link
             href="/docs/study-planner"
-            className="inline-flex min-h-10 items-center rounded-md px-3 text-sm text-slate-600 underline-offset-4 hover:underline dark:text-slate-400"
+            className="inline-flex min-h-10 items-center rounded-md px-3 text-sm text-muted-foreground underline-offset-4 hover:underline"
           >
             {t("help")}
           </Link>
