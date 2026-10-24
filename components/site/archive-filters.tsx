@@ -1,5 +1,6 @@
 "use client";
 
+import { Select } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
@@ -62,7 +63,7 @@ export function ArchiveFilters({
         <button
           type="button"
           onClick={() => router.push(pathname, { scroll: false })}
-          className="label-code rounded-md border border-slate-500 px-3 py-2 hover:bg-slate-100 dark:border-slate-400 dark:hover:bg-slate-800"
+          className="label-code rounded-md border border-border-strong px-3 py-2 hover:bg-muted"
         >
           {t("clear")}
         </button>
@@ -90,10 +91,10 @@ function FilterSelect({
       {/* Native <select> on purpose — best touch target + keyboard support
           on mobile for free, no custom listbox to maintain (spec §7/§8:
           mobile-first, touch-friendly, keyboard-operable). */}
-      <select
+      <Select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 min-w-[9rem] rounded-md border border-slate-500 bg-background px-3 text-sm text-foreground focus-visible:outline-none dark:border-slate-400"
+        className="w-auto min-w-[9rem]"
       >
         <option value="">{allLabel}</option>
         {options.map((opt) => (
@@ -101,7 +102,7 @@ function FilterSelect({
             {opt}
           </option>
         ))}
-      </select>
+      </Select>
     </label>
   );
 }

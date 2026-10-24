@@ -2,15 +2,30 @@ import { section, topic } from "../define";
 import type { SubjectSyllabus } from "../types";
 
 // Source language: Indonesian (official). English names are unofficial glosses.
-// Transcribed from the "Silabus — OSN" page maintained by IA TOKI (the
-// national-level tab only; the OSN-K / OSN-P tabs weren't supplied, so no
-// per-level flags are modelled here). The page marks changes against the 2025
-// syllabus in red; that marking doesn't survive PDF text extraction, so it is
-// NOT carried over.
+// Transcribed from the "Silabus — OSN" page maintained by IA TOKI, which says it
+// follows the IOI syllabus "with various adjustments" and links the Ministry's
+// OSN 2026 guide. Re-checked topic by topic against the page on 2026-10-24:
+// all 10 sections and 51 topics match. The page marks changes against the 2025
+// syllabus in red; that marking is NOT carried over.
+//
+// No per-level (OSN-K / OSN-P) flags are modelled, on purpose. The OSN-P page
+// says its material "refers to the OSN syllabus" (i.e. all of it), and the
+// OSN-K page gives only a non-exhaustive list of themes ("terdiri atas, namun
+// tidak terbatas pada": Boolean algebra, set theory, graphs, geometry,
+// combinatorics, mathematical models, arithmetic series, simulation,
+// optimisation, logical induction/deduction, computational thinking, I/O,
+// reading algorithms, branching, loops, arrays, subprograms, recursion).
+// Neither is a topic-by-topic table, so mapping them onto topic ids would be
+// guesswork. Revisit if IA TOKI or the Ministry publishes per-topic marks.
 export const informatics: SubjectSyllabus = {
   subject: "informatics",
   sourceLang: "id",
-  source: { label: "Silabus OSN Bidang Informatika — IA TOKI", edition: "OSN 2026" },
+  source: {
+    label: "Silabus OSN Bidang Informatika — IA TOKI",
+    edition: "OSN 2026",
+    url: "https://osn.toki.id/silabus",
+    accessed: "2026-10-24",
+  },
   sections: [
     section("programming-basics", "Dasar-dasar Pemrograman", "Programming Fundamentals", [
       topic("language-syntax", "Sintaks dan semantik dasar dari bahasa yang diperbolehkan pada OSN yang bersangkutan", "Basic syntax and semantics of the language permitted in the relevant OSN"),

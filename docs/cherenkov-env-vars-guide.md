@@ -36,6 +36,7 @@ step depending on which context you're configuring.
 | `BETTER_AUTH_SECRET` | Required *if* using accounts | With `DATABASE_URL` | Free |
 | `BETTER_AUTH_URL` | Required *if* using accounts | With `DATABASE_URL` | Free |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | "Continue with Google" button | Optional | Free |
+| `RESEND_API_KEY` / `EMAIL_FROM` | Password-reset emails (the "Forgot password?" link and `/forgot-password`, `/reset-password`). Both must be set; with neither, reset is off and those pages 404. `EMAIL_FROM` must be a sender verified at the provider, e.g. `Cherenkov <no-reply@your-domain>`. | Optional | Free tier at Resend (provider is a swappable choice; see `lib/email.ts`) |
 | `KEYSTATIC_GITHUB_CLIENT_ID` / `_SECRET` | `/keystatic` admin UI and scene builder in production | Optional | Free |
 | `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | Client-side GitHub mode flag (auto-derived in `next.config.mjs`) | Do not set manually | Free |
 | `KEYSTATIC_SECRET` | Required *if* using Keystatic GitHub mode / scene builder | With Keystatic vars | Free |

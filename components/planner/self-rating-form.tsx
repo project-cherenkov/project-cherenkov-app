@@ -62,10 +62,10 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-slate-600 dark:text-slate-300">{t("scaleHelp")}</p>
+      <p className="text-sm text-foreground/75">{t("scaleHelp")}</p>
       {sections.map((section) => (
         <fieldset key={section.name} className="rounded-lg border border-border bg-card p-4">
-          <legend className="px-1 font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+          <legend className="px-1 font-mono text-xs uppercase tracking-wide text-muted-foreground">
             {section.name}
           </legend>
           <ul className="divide-y divide-border">
@@ -85,8 +85,8 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
                         className={[
                           "h-9 w-9 rounded-md border text-sm font-medium transition-colors",
                           selected
-                            ? "border-transparent bg-cherenkov-blue text-slate-900"
-                            : "border-border text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+                            ? "border-transparent bg-cherenkov-blue text-cherenkov-ink"
+                            : "border-border text-foreground hover:bg-muted",
                         ].join(" ")}
                       >
                         {value}
@@ -100,7 +100,7 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
         </fieldset>
       ))}
       <div className="space-y-2">
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+        <p className="text-sm text-foreground/75">
           {t("progress", { rated: ratedCount, total: topics.length })}
         </p>
         {error ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}

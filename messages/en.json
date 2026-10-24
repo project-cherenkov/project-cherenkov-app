@@ -31,9 +31,11 @@
     "eyebrow": "readme.md",
     "heroTitle": "The idea, made visible.",
     "heroBody": "Each editorial is written by someone who competes in that subject. Instagram carries the hook, the surprising idea in a few seconds. This site carries the rest: the full proof and an interactive visualization you can manipulate.",
+    "ctaPlan": "Plan my study",
+    "recentEyebrow": "requirements.txt",
+    "recentHeading": "Recent editorials",
     "ctaArchive": "Browse the archive",
     "ctaAbout": "Read the philosophy",
-    "recentHeading": "requirements.txt: recent editorials",
     "recentEmpty": "No editorials published yet.",
     "ctaSyllabus": "See the syllabus",
     "ctaDocs": "Read the docs"
@@ -95,6 +97,8 @@
     "canvasLabel": "Interactive visualization. Use the controls and sliders below it to change what it shows.",
     "orbitalLabel": "Orbit diagram: eccentricity {eccentricity}, planet-to-star mass ratio {massRatio}, at time {time} seconds. Use the sliders below to change the orbit.",
     "trajectoryLabel": "Trajectory diagram: launch speed {speed} metres per second at {angle} degrees. Use the sliders below to change the launch.",
+    "trajectoryLegendLaunch": "{angle}° launch (yours)",
+    "trajectoryLegendComplement": "{angle}° launch, the complementary angle",
     "loading": "Loading visualization…"
   },
   "about": {
@@ -129,7 +133,11 @@
       "orDivider": "or",
       "noAccount": "Don't have an account?",
       "signupLink": "Sign up",
-      "genericError": "Something went wrong. Please try again."
+      "genericError": "Something went wrong. Please try again.",
+      "forgotLink": "Forgot password?",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submitting": "Logging in…"
     },
     "signup": {
       "title": "Sign up",
@@ -141,7 +149,8 @@
       "orDivider": "or",
       "hasAccount": "Already have an account?",
       "loginLink": "Log in",
-      "genericError": "Something went wrong. Please try again."
+      "genericError": "Something went wrong. Please try again.",
+      "submitting": "Creating account…"
     },
     "planner": {
       "overviewHeading": "Your progress",
@@ -169,6 +178,10 @@
       "incorrect": "Incorrect",
       "retake": "Retake quiz",
       "scoreLabel": "You scored {score}%",
+      "tabUnanswered": "Question {n}, not answered",
+      "tabAnswered": "Question {n}, answered",
+      "tabCorrect": "Question {n}, correct",
+      "tabIncorrect": "Question {n}, incorrect",
       "questionCounter": "Question {current} of {total}",
       "submitErrorUnauthenticated": "Your session has expired. Please log back in and try again.",
       "submitErrorGeneric": "Something went wrong submitting your answers. Please try again."
@@ -182,6 +195,36 @@
       "rateLimited": "Too many attempts. Please wait a moment and try again.",
       "server": "The server rejected the Google sign-in request. Please try again.",
       "unknown": "Something went wrong signing in with Google. Please try again."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "intro": "Enter the email you signed up with. If an account exists, we will send a link to choose a new password.",
+      "emailLabel": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending…",
+      "sent": "If an account exists for that email, a reset link is on its way. It expires in one hour.",
+      "backToLogin": "Back to log in",
+      "genericError": "Could not send the reset link. Please try again."
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "passwordLabel": "New password",
+      "submit": "Save new password",
+      "submitting": "Saving…",
+      "done": "Your password is changed. You can log in with it now.",
+      "goToLogin": "Go to log in",
+      "invalidToken": "This reset link is invalid or has expired. Request a new one.",
+      "requestAgain": "Request a new link",
+      "genericError": "Could not change the password. Please try again."
+    },
+    "authCodes": {
+      "INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password.",
+      "INVALID_EMAIL": "That email address is not valid.",
+      "PASSWORD_TOO_SHORT": "That password is too short.",
+      "PASSWORD_TOO_LONG": "That password is too long.",
+      "USER_ALREADY_EXISTS": "An account with this email already exists. Try logging in instead.",
+      "EMAIL_NOT_VERIFIED": "Verify your email address first.",
+      "INVALID_TOKEN": "This link is invalid or has expired."
     }
   },
   "error": {
@@ -208,6 +251,7 @@
       "en": "English"
     },
     "source": "Source",
+    "accessed": "Accessed {date}",
     "translationNote": "The official wording is in {language}. Translations here are unofficial, so check the source if in doubt.",
     "stats": {
       "topics": "topics",
@@ -328,8 +372,9 @@
       "topics": "Topics",
       "masterySummary": "{known} known · {uncertain} uncertain · {notKnown} not known yet · {unverified} not checked",
       "colTopic": "Topic",
-      "colRating": "Your rating",
-      "colResult": "Quiz result",
+      "colRating": "Your rating (1–5)",
+      "colResult": "Quiz result (share correct)",
+      "resultDetail": "{status} · {percent}% on {count, plural, one {# question} other {# questions}}",
       "noQuizYet": "no quiz yet",
       "noQuizNote": "{count} topics have no quiz question at this stage's difficulty yet, so they could not be checked.",
       "editRatings": "Edit my topic ratings",

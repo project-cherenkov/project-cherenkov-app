@@ -24,12 +24,12 @@ export function ArchiveSubnav() {
   const t = useTranslations("nav");
   const pathname = usePathname();
 
-  // min-[857px]:pt-11 — on desktop the header's hanging ribbons reach ~87px
-  // below the viewport top; this clears them so they never sit on top of (or
-  // steal clicks from) the tabs. Below 857px the ribbons collapse into the Menu
+  // min-[960px]:pt-11 — on desktop the header's hanging ribbons reach ~71px
+  // below the viewport top (~83px for the lowered active one); this clears them so they never sit on top of (or
+  // steal clicks from) the tabs. Below 960px the ribbons collapse into the Menu
   // drawer, so no extra space is needed.
   return (
-    <nav aria-label={t("archiveSections")} className="border-b border-border min-[857px]:pt-11">
+    <nav aria-label={t("archiveSections")} className="border-b border-border min-[960px]:pt-11">
       <ul className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 font-mono text-xs uppercase tracking-wide sm:px-6">
         {TABS.map(({ href, labelKey }) => {
           const active = isTabActive(pathname, href);
@@ -42,7 +42,7 @@ export function ArchiveSubnav() {
                   "-mb-px inline-flex min-h-11 items-center border-b-2 px-3 transition-colors",
                   active
                     ? "border-cherenkov-blue-600 font-semibold text-foreground dark:border-cherenkov-blue-pastel"
-                    : "border-transparent text-slate-600 hover:text-foreground dark:text-slate-400",
+                    : "border-transparent text-muted-foreground hover:text-foreground",
                 ].join(" ")}
               >
                 {t(labelKey)}

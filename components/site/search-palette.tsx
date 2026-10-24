@@ -98,7 +98,7 @@ export function SearchPalette() {
         onClick={() => setOpen(true)}
         aria-label={t("open")}
         aria-keyshortcuts="Control+K Meta+K"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border p-2 text-slate-700 hover:bg-white/70 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border p-2 text-muted-foreground hover:bg-card hover:text-foreground"
       >
         <Search className="h-4 w-4" aria-hidden />
       </button>
@@ -154,7 +154,7 @@ export function SearchPalette() {
                 onClick={() => go(entry)}
                 className={[
                   "cursor-pointer rounded-md px-3 py-2",
-                  index === active ? "bg-slate-100 dark:bg-slate-800" : "",
+                  index === active ? "bg-muted" : "",
                 ].join(" ")}
               >
                 <span className="flex items-baseline justify-between gap-3">
@@ -164,7 +164,7 @@ export function SearchPalette() {
                     {entry.subject ? ` · ${entry.subject}` : ""}
                   </span>
                 </span>
-                <span className="mt-0.5 line-clamp-2 block text-sm text-slate-600 dark:text-slate-400">
+                <span className="mt-0.5 line-clamp-2 block text-sm text-muted-foreground">
                   {entry.summary}
                 </span>
               </li>
@@ -172,7 +172,7 @@ export function SearchPalette() {
           </ul>
 
           {/* One polite live region announces the state, not every keystroke. */}
-          <p role="status" aria-live="polite" className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          <p role="status" aria-live="polite" className="mt-2 text-sm text-muted-foreground">
             {state.status === "loading" ? t("loading") : null}
             {state.status === "error" ? t("error") : null}
             {state.status === "ready" && trimmed && hits.length === 0 ? t("noResults", { query: trimmed }) : null}

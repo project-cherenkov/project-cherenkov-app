@@ -141,6 +141,36 @@ Token and component debt, which is the root of several findings above:
 - Control borders use neutral slate. Brand-colored control borders (blue-800 /
   blue-400) would be a nice follow-up once the form primitives exist.
 
+## 3a. Status after the 24 Oct 2026 critique pass
+
+Code changes only; none of this has been looked at in a browser yet (section 6
+is still the checklist). "Done" means implemented and covered by tests where a
+test is possible.
+
+| ID | Status | What changed |
+|---|---|---|
+| O1 | Partly | `NavRibbon` still draws `public/navbar-banner-extended.png`; an inline SVG ribbon from brand tokens is drawn only if the image fails to load. The PNG's baked-in text, near-black colour and licence question are therefore still open. |
+| O2 | Partly | Ribbons are 96px (was 112px) and hover moves them 8px (was 36px); the active one drops 12px. Overlap on `/planner`, `/account`, `/login`, `/about` is still unverified. |
+| O3 | Done | Desktop breakpoint is 960px, ribbons are 80px wide, GitHub icon moves into the drawer below 960px. Verify at 857-930px. |
+| O4 | Partly | One primary and one secondary CTA, text links for Syllabus/Docs/About. The live visualization in the hero was tried and removed at the owner's request. |
+| O5 | Partly | Edit shows only to editors (`/api/account/edit-access`, `useCanEdit`). Log in and Sign up stay as ribbons (a separate Sign up button was tried and reverted at the owner's request). |
+| O6 | Done, needs setup | Show-password toggle and pending labels are live. Reset needs an email provider: `lib/email.ts` is written for Resend (`RESEND_API_KEY`, `EMAIL_FROM`); without them the link and the two pages stay off. |
+| O7 | Done | "82% on 5 questions", scale in the column headers. |
+| O8 | Done | `.heading-section` for real headings, `.label-code` kept as the eyebrow. |
+| O9 | Partly | Better Auth error codes are translated (`phase2.authCodes`). The dialog's sr-only "Close" is still hardcoded English. |
+| O10 | Open | Flags kept at the owner's request. |
+| O11 | Done | Tabs show answered/correct/incorrect with an accessible name; choice rows are 44px. |
+| O12 | Open | Card borders unchanged (decorative). |
+| O13 | Done | No `text-[10px]` / `text-[11px]` left in `app/` or `components/`. |
+
+Token and component debt: `Input`, `Select` and `PasswordInput` exist and the
+planner, study, archive and auth forms use them (the scene builder's compact
+inspector fields do not yet). `text-slate-*` and friends went from 441 to a
+handful of intentional SVG/overlay uses. `--primary`, `--secondary` and their
+`-alt` variables are removed (the dark `--primary` was an invalid colour).
+`--muted` is new. Units and symbols in visualizations now use `.label-mono`
+(no uppercase); `.label-code` is for eyebrows only.
+
 ## 4. What works well
 
 Keep these when changing the UI:

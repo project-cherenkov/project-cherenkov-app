@@ -17,7 +17,7 @@ export function ScenePalette({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="label-code text-slate-600 dark:text-slate-300">Add an element</h2>
+      <h2 className="label-code text-foreground/75">Add an element</h2>
       <div className="grid grid-cols-2 gap-2">
         {ELEMENT_TEMPLATE_KEYS.map((id) => {
           const template = ELEMENT_TEMPLATES[id];
@@ -38,7 +38,7 @@ export function ScenePalette({
         })}
       </div>
       {disabled && (
-        <p className="text-xs text-slate-600 dark:text-slate-400">
+        <p className="text-xs text-muted-foreground">
           This scene has reached the maximum number of elements.
         </p>
       )}

@@ -88,7 +88,7 @@ export function TryFirstToggle() {
       />
       <span>
         <span className="font-medium text-foreground">{t("tryFirstLabel")}</span>
-        <span className="block text-slate-600 dark:text-slate-400">{t("tryFirstHint")}</span>
+        <span className="block text-muted-foreground">{t("tryFirstHint")}</span>
       </span>
     </label>
   );

@@ -154,7 +154,7 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
       {currentStep?.note && (
         <MarkdownText
           text={currentStep.note}
-          className="text-sm text-slate-600 dark:text-slate-300"
+          className="text-sm text-foreground/75"
         />
       )}
 
@@ -224,7 +224,7 @@ function SceneControlField({
           : 0;
   return (
     <label className="flex flex-col gap-1">
-      <span className="label-code">{control.label}</span>
+      <span className="label-mono">{control.label}</span>
       <Slider
         aria-label={control.label}
         min={control.min ?? paramSpec?.min ?? 0}

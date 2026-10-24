@@ -8,6 +8,7 @@ import { OSN_STAGES, SCHEDULE_YEARS, STAGES, getStageWindow } from "@/lib/osn-st
 import { SUBJECTS } from "@/lib/subjects";
 import { MAX_HOURS_PER_WEEK } from "@/lib/planner-vocab";
 import type { PlannerSettings, SettingsField } from "@/lib/planner-settings";
+import { controlClasses } from "@/components/ui/input";
 
 export interface SettingsFormProps {
   initial: PlannerSettings | null;
@@ -65,7 +66,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
     });
   }
 
-  const field = "rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground";
+  const field = controlClasses;
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
       <label className="flex flex-col gap-1 text-sm">
@@ -116,7 +117,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
 
       <div className="sm:col-span-2 space-y-2">
         {windowInfo ? (
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="text-sm text-foreground/75">
             {t("examStarts", { date: windowInfo.start })}{" "}
             {status === "projected" ? <strong>{t("projectedNote")}</strong> : null}
             {windowInfo.verifiedOn ? <> {t("datesVerified", { date: windowInfo.verifiedOn })}</> : null}

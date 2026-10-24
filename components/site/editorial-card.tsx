@@ -26,30 +26,33 @@ export function EditorialCard({
       href={`/archive/${editorial.subject}/${editorial.slug}`}
       className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-600 dark:hover:border-cherenkov-blue-pastel"
     >
-      <div className="flex items-center gap-2">
-        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-800 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
-          {subjectLabel[editorial.subject]}
-        </span>
-        <span className="label-code">{editorial.principle}</span>
-      </div>
+      <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
+        {subjectLabel[editorial.subject]}
+      </span>
 
       <Heading className="mt-3 text-lg font-semibold text-foreground group-hover:underline">
         {editorial.title}
       </Heading>
-      <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">{editorial.hook}</p>
+      {/* The principle slug can be 40+ characters. It sits under the title on
+          one truncated line (full text on hover/focus via title) instead of
+          wrapping into two lines of mono caps beside the subject chip. */}
+      <p className="label-mono mt-1 truncate" title={editorial.principle}>
+        {editorial.principle}
+      </p>
+      <p className="mt-1.5 text-sm text-foreground/75">{editorial.hook}</p>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         {editorial.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-[11px] text-slate-800 dark:bg-cherenkov-pink/25 dark:text-slate-100"
+            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-xs text-foreground dark:bg-cherenkov-pink/25"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <p className="mt-4 text-xs text-slate-600 dark:text-slate-300">
+      <p className="mt-4 text-xs text-foreground/75">
         {t("byAuthor", { author: editorial.author })}
       </p>
     </Link>

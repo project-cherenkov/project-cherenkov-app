@@ -6,7 +6,9 @@ import { useSearchParams } from "next/navigation";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/auth/password-input";
+import { authCodeKey, classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
 import { isSafeReturnTo } from "@/lib/safe-redirect";
 
 export interface LoginFormProps {
@@ -14,6 +16,9 @@ export interface LoginFormProps {
   // Client Component can't read it itself) — same graceful-degradation
   // pattern already used for Keystatic's GitHub OAuth (spec §5).
   googleEnabled: boolean;
+  // Server-computed like googleEnabled: the "Forgot password?" link only shows
+  // when the deployment can actually send the reset email (see lib/email.ts).
+  resetEnabled?: boolean;
 }
 
 // AUTH-002. Failure handling (spec §6): Better Auth's own per-field error
@@ -23,9 +28,10 @@ export interface LoginFormProps {
 // failed Google OAuth round trip — see lib/auth-error-messages.ts for why
 // each is classified into a specific, translated message rather than one
 // generic fallback.
-export function LoginForm({ googleEnabled }: LoginFormProps) {
+export function LoginForm({ googleEnabled, resetEnabled = false }: LoginFormProps) {
   const t = useTranslations("phase2.login");
   const tErrors = useTranslations("phase2.authErrors");
+  const tCodes = useTranslations("phase2.authCodes");
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -63,7 +69,8 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
       try {
         const result = await signIn.email({ email, password });
         if (result.error) {
-          setError(result.error.message ?? t("genericError"));
+          const codeKey = authCodeKey(result.error.code);
+          setError(codeKey ? tCodes(codeKey) : (result.error.message ?? t("genericError")));
           return;
         }
         router.push(nextPath && isSafeReturnTo(nextPath) ? nextPath : "/planner");
@@ -123,39 +130,46 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
           {t("emailLabel")}
-          <input
+          <Input
             type="email"
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          {t("passwordLabel")}
-          <input
-            type="password"
+          <span className="flex items-baseline justify-between gap-3">
+            {t("passwordLabel")}
+            {resetEnabled ? (
+              <Link
+                href="/forgot-password"
+                className="inline-flex min-h-6 items-center text-sm text-brand underline underline-offset-4"
+              >
+                {t("forgotLink")}
+              </Link>
+            ) : null}
+          </span>
+          <PasswordInput
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            className="min-h-11 rounded-md border border-slate-500 bg-background px-3 py-2 text-foreground dark:border-slate-400"
           />
         </label>
         {error ? (
-          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+          <p role="alert" className="text-sm text-red-700 dark:text-red-400">
             {error}
           </p>
         ) : null}
-        <Button type="submit" disabled={isPending}>
-          {t("submit")}
+        <Button type="submit" disabled={isPending} aria-busy={isPending}>
+          {isPending ? t("submitting") : t("submit")}
         </Button>
       </form>
 
       {googleEnabled ? (
         <div className="mt-4 flex flex-col gap-3">
-          <p className="text-center text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+          <p className="label-code text-center">
             {t("orDivider")}
           </p>
           <Button
@@ -163,15 +177,19 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
             type="button"
             onClick={handleGoogle}
             disabled={isGooglePending}
+            aria-busy={isGooglePending}
           >
             {t("googleButton")}
           </Button>
         </div>
       ) : null}
 
-      <p className="mt-6 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-6 text-sm text-foreground/75">
         {t("noAccount")}{" "}
-        <Link href="/signup" className="underline">
+        <Link
+          href="/signup"
+          className="inline-flex min-h-11 items-center font-medium text-brand underline underline-offset-4"
+        >
           {t("signupLink")}
         </Link>
       </p>

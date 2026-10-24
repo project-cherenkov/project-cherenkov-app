@@ -32,7 +32,7 @@ export function TimelineEditor({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h2 className="label-code text-slate-600 dark:text-slate-300">Timeline steps</h2>
+        <h2 className="label-code text-foreground/75">Timeline steps</h2>
         <Button type="button" variant="outline" size="sm" disabled={disabledAdd} onClick={onAddStep}>
           + Add step
         </Button>
@@ -43,7 +43,7 @@ export function TimelineEditor({
         className={`rounded-md border px-2 py-1 text-left text-sm ${
           selectedStepIndex === null
             ? "border-cherenkov-blue-pastel bg-cherenkov-blue/20"
-            : "border-border hover:bg-slate-100 dark:hover:bg-slate-800"
+            : "border-border hover:bg-muted"
         }`}
         onClick={() => onSelectStep(null)}
       >
@@ -51,7 +51,7 @@ export function TimelineEditor({
       </button>
 
       {steps.length === 0 ? (
-        <p className="text-sm text-slate-600 dark:text-slate-400">
+        <p className="text-sm text-muted-foreground">
           No timeline steps yet — this will render as a static scene. Add a step to make it
           scrubbable.
         </p>

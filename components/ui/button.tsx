@@ -9,11 +9,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-cherenkov-blue text-slate-900 hover:bg-cherenkov-blue-pastel",
+          "bg-cherenkov-blue text-cherenkov-ink hover:bg-cherenkov-blue-pastel",
         outline:
-          "border border-slate-500 bg-transparent hover:bg-slate-100 dark:border-slate-400 dark:hover:bg-slate-800 text-foreground",
+          "border border-border-strong bg-transparent hover:bg-muted text-foreground",
         ghost:
-          "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground",
+          "bg-transparent hover:bg-muted text-foreground",
         link: "bg-transparent underline-offset-4 hover:underline p-0 h-auto text-foreground",
       },
       size: {

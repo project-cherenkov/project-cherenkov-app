@@ -11,6 +11,7 @@ import { loadMissData } from "@/lib/misses-db";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { SUBJECTS } from "@/lib/subjects";
 import { getTopicLocation, localize } from "@/lib/syllabus";
+import { controlClasses } from "@/components/ui/input";
 
 // "Review my misses" (R2): the questions the student got wrong, newest first,
 // with a way to retry each one. Private and per-user, so dynamic and noindex.
@@ -32,8 +33,7 @@ export async function generateMetadata({
   });
 }
 
-const selectClass =
-  "w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground";
+const selectClass = controlClasses;
 
 export default async function ReviewPage({
   searchParams,
@@ -94,8 +94,8 @@ export default async function ReviewPage({
       <header>
         <p className="label-code">{t("eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">{t("intro")}</p>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{t("practiceNote")}</p>
+        <p className="mt-2 text-foreground/75">{t("intro")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{t("practiceNote")}</p>
       </header>
 
       <form method="get" className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-5">
@@ -140,19 +140,19 @@ export default async function ReviewPage({
         <div className="flex items-end">
           <button
             type="submit"
-            className="min-h-10 w-full rounded-md border border-slate-500 px-4 text-sm font-medium text-foreground hover:bg-slate-100 dark:border-slate-400 dark:hover:bg-slate-800"
+            className="min-h-10 w-full rounded-md border border-border-strong px-4 text-sm font-medium text-foreground hover:bg-muted"
           >
             {t("filters.apply")}
           </button>
         </div>
       </form>
 
-      <p role="status" className="text-sm text-slate-600 dark:text-slate-400">
+      <p role="status" className="text-sm text-muted-foreground">
         {t("summary", { shown: cards.length, total: all.length })}
       </p>
 
       {cards.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border p-6 text-center text-slate-600 dark:text-slate-400">
+        <p className="rounded-lg border border-dashed border-border p-6 text-center text-muted-foreground">
           {all.length === 0 ? t("emptyNoMisses") : t("emptyFiltered")}
         </p>
       ) : (

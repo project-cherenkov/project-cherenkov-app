@@ -148,3 +148,31 @@ export function classifyCallbackError(errorParam: string): AuthErrorCode {
 
   return "unknown";
 }
+
+// Better Auth's field-level errors (wrong password, email taken, ...) arrive
+// as English sentences in `error.message`. Showing them verbatim put English
+// text on the Indonesian site. Where the error carries a stable `code`, the
+// forms translate it from "phase2.authCodes"; anything unrecognised falls back
+// to Better Auth's own message, as before.
+//
+// Matching is by prefix on the upper-cased code so a renamed variant
+// (e.g. USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL) still resolves.
+const AUTH_CODE_KEYS = [
+  "INVALID_EMAIL_OR_PASSWORD",
+  "INVALID_EMAIL",
+  "PASSWORD_TOO_SHORT",
+  "PASSWORD_TOO_LONG",
+  "USER_ALREADY_EXISTS",
+  "EMAIL_NOT_VERIFIED",
+  "INVALID_TOKEN",
+] as const;
+
+export type AuthCodeKey = (typeof AUTH_CODE_KEYS)[number];
+
+export function authCodeKey(code: unknown): AuthCodeKey | null {
+  if (typeof code !== "string") return null;
+  const upper = code.toUpperCase();
+  // Longest-first so INVALID_EMAIL_OR_PASSWORD is not taken for INVALID_EMAIL.
+  const sorted = [...AUTH_CODE_KEYS].sort((a, b) => b.length - a.length);
+  return sorted.find((key) => upper === key || upper.startsWith(`${key}_`)) ?? null;
+}

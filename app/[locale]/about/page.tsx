@@ -44,12 +44,12 @@ export default async function AboutPage({
           ))}
       </div>
 
-      <h2 className="label-code mt-10">{t("teamHeading")}</h2>
+      <h2 className="heading-section mt-10">{t("teamHeading")}</h2>
       {members.length === 0 ? (
         // No entries in content/team/ yet — keep the existing placeholder
         // copy rather than rendering an empty list. This text is a COPY-001
         // concern (gated on GATHER-001), untouched here.
-        <p className="mt-2 text-slate-700 dark:text-slate-200">{t("teamPlaceholder")}</p>
+        <p className="mt-2 text-foreground/80">{t("teamPlaceholder")}</p>
       ) : (
         <ul className="mt-4 grid gap-8">
           {members.map((member) => {
@@ -71,11 +71,11 @@ export default async function AboutPage({
                 <div className="min-w-0 max-w-prose">
                   <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (
-                    <p className="font-mono text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                    <p className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
                       {member.role}
                     </p>
                   )}
-                  {bio && <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{bio}</p>}
+                  {bio && <p className="mt-1 text-sm text-foreground/80">{bio}</p>}
                   {member.personalContacts.length > 0 && (
                     <div className="mt-1 flex flex-wrap gap-x-4">
                       {member.personalContacts.map((contact) => (
@@ -98,8 +98,8 @@ export default async function AboutPage({
         </ul>
       )}
 
-      <h2 className="label-code mt-10">{t("repoHeading")}</h2>
-      <p className="mt-2 text-slate-700 dark:text-slate-200">{t("repoBody")}</p>
+      <h2 className="heading-section mt-10">{t("repoHeading")}</h2>
+      <p className="mt-2 text-foreground/80">{t("repoBody")}</p>
       {/* Repo URL confirmed — see docs/deployment-readiness.md re: this repo being private. */}
       <a
         href="https://github.com/project-cherenkov/project-cherenkov-app"
@@ -110,11 +110,11 @@ export default async function AboutPage({
         github.com/project-cherenkov/project-cherenkov-app
       </a>
 
-      <h2 className="label-code mt-10">{t("contactHeading")}</h2>
+      <h2 className="heading-section mt-10">{t("contactHeading")}</h2>
       {professionalContact?.email ? (
         <div className="mt-2">
           {professionalContact.label ? (
-            <p className="text-slate-700 dark:text-slate-200">{professionalContact.label}</p>
+            <p className="text-foreground/80">{professionalContact.label}</p>
           ) : null}
           <a
             href={`mailto:${professionalContact.email}`}
@@ -124,7 +124,7 @@ export default async function AboutPage({
           </a>
         </div>
       ) : (
-        <p className="mt-2 text-slate-700 dark:text-slate-200">{t("contactPlaceholder")}</p>
+        <p className="mt-2 text-foreground/80">{t("contactPlaceholder")}</p>
       )}
     </div>
   );

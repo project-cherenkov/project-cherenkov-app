@@ -51,14 +51,15 @@ const config: Config = {
         },
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
-        primary: "hsl(var(--primary) / <alpha-value>)",
-        secondary: "hsl(var(--secondary) / <alpha-value>)",
         card: "hsl(var(--card) / <alpha-value>)",
         border: "hsl(var(--border) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
         // Semantic layer (see app/globals.css). Components should reach for
         // these instead of text-slate-* / dark: pairs.
-        muted: { foreground: "hsl(var(--muted-foreground) / <alpha-value>)" },
+        muted: {
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+        },
         "border-strong": "hsl(var(--border-strong) / <alpha-value>)",
         brand: "hsl(var(--brand) / <alpha-value>)",
         highlight: "hsl(var(--highlight) / <alpha-value>)",

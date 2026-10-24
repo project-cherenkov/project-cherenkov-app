@@ -13,10 +13,20 @@ const THERMO_SCOPE = "Suhu dan Kalor, Entropi, Hukum Termodinamika 0, I dan II";
 export const physics: SubjectSyllabus = {
   subject: "physics",
   sourceLang: "id",
-  // Confirmed by the project owner as coming from the official OSN guidebook.
-  // The exact title, edition and URL were not given — add `edition` / `url`
-  // here once known rather than guessing them.
-  source: { label: "Official OSN guidebook — \"Cabang Fisika\" scope table (Teori + Praktikum)" },
+  // The Ministry's OSN guide (Pusat Prestasi Nasional, Kemendikdasmen), the
+  // appendix with the per-branch syllabus tables. `url` is the guide's landing
+  // page, which IA TOKI links as the OSN 2026 guideline. `accessed` is
+  // deliberately unset: the guide's PDF host blocks automated access, so these
+  // lists have NOT been compared with the 2026 PDF. What was seen: the 2025
+  // appendix text (a third-party copy) gives the same mechanics list as
+  // MECHANICS_SCOPE below, verbatim. The EM and thermodynamics scope strings
+  // and the four practical areas rest on the owner's transcription. Set
+  // `accessed` once someone has compared them with the PDF.
+  source: {
+    label: "Panduan OSN SMA/MA/SMK/MAK/Sederajat — Silabus OSN, Cabang Fisika (Teori + Praktikum)",
+    edition: "OSN 2026",
+    url: "https://pusatprestasinasional.kemendikdasmen.go.id/pengumuman/sd/panduan-osn-tahun-2026-2026-sd",
+  },
   sections: [
     section("mechanics", "Mekanika", "Mechanics", [
       topic("vectors", "Vektor", "Vectors"),

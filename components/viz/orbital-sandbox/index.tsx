@@ -299,7 +299,7 @@ function SliderField({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="label-code">{label}</span>
+      <span className="label-mono">{label}</span>
       <Slider
         aria-label={label}
         min={min}

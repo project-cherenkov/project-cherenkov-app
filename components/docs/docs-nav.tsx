@@ -31,7 +31,7 @@ function NavList({ sections }: { sections: DocsNavSection[] }) {
                       "-ml-px flex min-h-11 items-center border-l-2 px-3 text-sm transition-colors",
                       active
                         ? "border-cherenkov-blue-700 font-semibold text-foreground dark:border-cherenkov-blue-pastel"
-                        : "border-transparent text-slate-600 hover:text-foreground dark:text-slate-300",
+                        : "border-transparent text-muted-foreground hover:text-foreground",
                     ].join(" ")}
                   >
                     {entry.title}

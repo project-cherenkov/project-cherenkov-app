@@ -93,7 +93,7 @@ export function GraphArrayStepper({
                   className={
                     isHighlighted
                       ? "fill-cherenkov-blue stroke-cherenkov-blue-pastel"
-                      : "fill-white stroke-slate-200"
+                      : "fill-card stroke-border-strong"
                   }
                   strokeWidth={isHighlighted ? 2 : 1}
                 />
@@ -102,7 +102,7 @@ export function GraphArrayStepper({
                   y={28 + CELL_HEIGHT / 2}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-slate-900 font-mono text-sm"
+                  className={`${isHighlighted ? "fill-cherenkov-ink" : "fill-foreground"} font-mono text-sm`}
                 >
                   {value}
                 </text>
@@ -111,7 +111,8 @@ export function GraphArrayStepper({
                     x={cellWidth / 2}
                     y={16}
                     textAnchor="middle"
-                    className="fill-slate-500 dark:fill-slate-400 font-mono text-[10px] uppercase"
+                    // Pointer names are variable names (i, j, lo, hi): never uppercase them.
+                    className="fill-muted-foreground font-mono text-xs"
                   >
                     {pointersByIndex.get(i)!.join("/")}
                   </text>
@@ -123,7 +124,7 @@ export function GraphArrayStepper({
       </div>
 
       {step?.note && (
-        <MarkdownText text={step.note} className="text-sm text-slate-600 dark:text-slate-300" />
+        <MarkdownText text={step.note} className="text-sm text-foreground/75" />
       )}
 
       <PlaybackControls

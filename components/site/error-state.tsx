@@ -28,13 +28,13 @@ export function ErrorState({
       <h1 className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
         {heading}
       </h1>
-      <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+      <p className="mt-3 text-sm leading-relaxed text-foreground/75">
         {body}
       </p>
       {ctaHref ? (
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none"
+          className="mt-6 inline-flex h-10 items-center justify-center gap-2 rounded-md bg-cherenkov-blue px-4 py-2 text-sm font-medium text-cherenkov-ink transition-colors hover:bg-cherenkov-blue-pastel focus-visible:outline-none"
         >
           {ctaLabel}
         </Link>

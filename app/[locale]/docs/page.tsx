@@ -37,7 +37,7 @@ export default async function DocsIndexPage({
       <JsonLd data={breadcrumbJsonLd(locale, [{ name: t("title") }])} />
       <p className="label-code">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
-      <p className="mt-2 max-w-2xl text-slate-600 dark:text-slate-300">{t("description")}</p>
+      <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
 
       <div className="mt-8 space-y-10">
         {sections.map(({ section, entries }) => (
@@ -58,7 +58,7 @@ export default async function DocsIndexPage({
                     <span className="text-lg font-semibold text-foreground group-hover:underline">
                       {doc.title}
                     </span>
-                    <span className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                    <span className="mt-1 text-sm text-foreground/75">
                       {doc.description}
                     </span>
                   </Link>

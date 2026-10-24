@@ -10,7 +10,7 @@ export default function NewVisualizationPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-xl font-bold text-foreground">New visualization</h1>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-sm text-foreground/75">
         Creates a minimal draft editorial — title only; everything else undecided gets a clearly
         marked placeholder, the same convention every hand-authored editorial in this repo
         already uses — then opens the scene builder for it, targeted and ready.

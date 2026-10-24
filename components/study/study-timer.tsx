@@ -221,7 +221,7 @@ export function StudyTimer({
           >
             {formatClock(planned - elapsed)}
           </p>
-          <p className="text-sm text-slate-600 dark:text-slate-400">{t("elapsedFocus", { minutes: focusMinutes })}</p>
+          <p className="text-sm text-muted-foreground">{t("elapsedFocus", { minutes: focusMinutes })}</p>
 
           <div className="flex flex-wrap items-center justify-center gap-2">
             {!complete ? (
@@ -269,8 +269,8 @@ export function StudyTimer({
                     className={[
                       "min-h-10 rounded-md border px-3 text-sm font-medium",
                       selected
-                        ? "border-cherenkov-blue-800 bg-cherenkov-blue-800 text-white dark:border-cherenkov-blue-pastel dark:bg-cherenkov-blue-pastel dark:text-slate-900"
-                        : "border-border text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+                        ? "border-cherenkov-blue-800 bg-cherenkov-blue-800 text-white dark:border-cherenkov-blue-pastel dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink"
+                        : "border-border text-foreground hover:bg-muted",
                     ].join(" ")}
                   >
                     {t("preset", { focus: option.focusMin, rest: option.breakMin })}
@@ -317,7 +317,7 @@ export function StudyTimer({
 
           <Button onClick={start}>{t("start")}</Button>
           {!signedIn ? (
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-muted-foreground">
               {t("guestNote")}{" "}
               <Link href="/login" className="underline underline-offset-4">
                 {t("signInToLog")}
@@ -350,7 +350,7 @@ export function StudyTimer({
       <button
         type="button"
         onClick={toggleFullscreen}
-        className="inline-flex min-h-10 items-center gap-2 text-sm text-slate-600 underline-offset-4 hover:underline dark:text-slate-400"
+        className="inline-flex min-h-10 items-center gap-2 text-sm text-muted-foreground underline-offset-4 hover:underline"
       >
         {fullscreen ? <Minimize2 aria-hidden className="h-4 w-4" /> : <Maximize2 aria-hidden className="h-4 w-4" />}
         {fullscreen ? t("exitFocusView") : t("focusView")}

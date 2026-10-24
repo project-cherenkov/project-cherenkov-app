@@ -84,12 +84,12 @@ export default async function EditorialPage({
           ]}
         />
       )}
-      <Link href="/archive" className="label-code hover:text-slate-700 dark:hover:text-slate-200">
+      <Link href="/archive" className="label-code hover:text-foreground">
         ← {t("backToArchive")}
       </Link>
 
       <div className="mt-5 flex flex-wrap items-center gap-2">
-        <span className="label-code rounded bg-slate-100 px-2 py-0.5 text-cherenkov-blue-800 dark:bg-slate-800 dark:text-cherenkov-blue-pastel">
+        <span className="label-code rounded bg-muted px-2 py-0.5 text-brand">
           {editorial.subject}
         </span>
         <span className="label-code">
@@ -105,8 +105,8 @@ export default async function EditorialPage({
       <h1 className="mt-3 text-3xl font-bold text-foreground">
         {editorial.title}
       </h1>
-      <p className="mt-2 text-lg text-slate-600 dark:text-slate-300">{editorial.hook}</p>
-      <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+      <p className="mt-2 text-lg text-foreground/75">{editorial.hook}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
         {t("byAuthor", { author: editorial.author })}
       </p>
 
@@ -124,12 +124,12 @@ export default async function EditorialPage({
 
       <PracticeLinks links={editorial.practiceLinks} />
 
-      <div className="mt-10 flex flex-wrap gap-1.5 border-t border-slate-200 pt-6">
+      <div className="mt-10 flex flex-wrap gap-1.5 border-t border-border pt-6">
         <span className="label-code mr-1">{t("sections.tags")}:</span>
         {editorial.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-[11px] text-slate-700 dark:text-slate-200"
+            className="rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-xs text-foreground/80"
           >
             {tag}
           </span>

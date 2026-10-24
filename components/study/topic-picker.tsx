@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { controlClasses } from "@/components/ui/input";
 
 export interface PickerSubject {
   subject: string;
@@ -22,8 +23,7 @@ export interface PickerValue {
   planItemId: string;
 }
 
-const selectClass =
-  "w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground";
+const selectClass = controlClasses;
 
 // Subject -> topic, plus an optional plan item. Choosing a plan item fills in
 // (and locks) its subject and topic, so a session can never be attached to a

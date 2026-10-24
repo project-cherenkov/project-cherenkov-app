@@ -19,7 +19,7 @@ export async function PracticeLinks({ links }: { links: PracticeLink[] }) {
       <h2 id="practice-heading" className="label-code mb-1">
         {t("practice.heading")}
       </h2>
-      <p className="mb-3 text-sm text-slate-600 dark:text-slate-400">{t("practice.note")}</p>
+      <p className="mb-3 text-sm text-muted-foreground">{t("practice.note")}</p>
       <ul className="space-y-2">
         {links.map((link) => {
           const stale = isPracticeLinkStale(link.checkedOn, now);
@@ -35,7 +35,7 @@ export async function PracticeLinks({ links }: { links: PracticeLink[] }) {
                 <ExternalLink aria-hidden className="h-3.5 w-3.5" />
                 <span className="sr-only">{t("practice.opensNewTab")}</span>
               </a>
-              <span className="ml-2 text-xs text-slate-600 dark:text-slate-400">
+              <span className="ml-2 text-xs text-muted-foreground">
                 {t("practice.checkedOn", { date: formatDate(link.checkedOn) })}
               </span>
               {stale ? (

@@ -204,7 +204,7 @@ function ProgramControlField({
   const current = typeof value === "number" ? value : 0;
   return (
     <label className="flex flex-col gap-1">
-      <span className="label-code">{control.label}</span>
+      <span className="label-mono">{control.label}</span>
       <Slider
         aria-label={control.label}
         min={control.min ?? 0}

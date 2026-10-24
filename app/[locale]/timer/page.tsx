@@ -71,7 +71,7 @@ export default async function TimerPage() {
         <header>
           <p className="label-code">{t("eyebrow")}</p>
           <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
-          <p className="mt-2 text-slate-600 dark:text-slate-300">{t("intro")}</p>
+          <p className="mt-2 text-foreground/75">{t("intro")}</p>
         </header>
         <StudyTimer signedIn={Boolean(user)} subjects={subjects} planItems={planItems} />
         {user ? <ManualSessionForm subjects={subjects} planItems={planItems} /> : null}
