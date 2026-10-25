@@ -90,9 +90,12 @@ app/[locale]/                    routes (everything is locale-prefixed)
   layout.tsx                     the ROOT layout: <html lang={locale}>, theme, header/footer, skip link
   opengraph-image.tsx            the site-wide social card (one per locale, built statically)
   login/ signup/                 Better Auth email/password (and optional Google) forms
+  forgot-password/ reset-password/  password recovery flow
   planner/                       authenticated adaptive plan dashboard and onboarding
+  planner/progress/ review/      authenticated progress and missed-question views
   planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (the
                                   "chapter" segment contains the topic ID)
+  timer/                         public study timer; saving sessions requires an account
   error.tsx, not-found.tsx       locale-scoped error and 404 pages
 app/keystatic/                   Keystatic admin UI (gated in production, Section VII)
   layout.tsx                     its OWN root layout (<html lang="en">) + the floating
@@ -104,12 +107,14 @@ app/keystatic/                   Keystatic admin UI (gated in production, Sectio
   scene-builder/new/             "New visualization" form: creates a stub editorial first
   team-photo/                    team-photo upload page
 app/api/auth/[...all]/           Better Auth's catch-all handler
+app/api/account/edit-access/     account access-edit endpoint
 app/api/keystatic/               Keystatic's own API route (gated in production)
 app/api/team-photo/              Vercel Blob upload endpoint (gated in production)
 app/api/scene-builder/           POST: save a scene into an existing editorial
   new/                           POST: create the stub editorial for a new visualisation
   github-oauth/{start,callback}/ the scene builder's own GitHub OAuth flow
                                   (all gated in production, Section VIII)
+app/api/search-index/[locale]/   build-time search index for the localized archive
 app/robots.ts, app/sitemap.ts    generated from the same content queries every page uses; the
                                   sitemap carries hreflang alternates for every URL
 app/llms.txt/route.ts            /llms.txt: Markdown map of the site for LLM tools
@@ -238,13 +243,13 @@ After that, start the app again:
 pnpm dev
 ```
 
-If you want to force a specific port, run:
+If you want to force a specific port while keeping both Next.js and Velite running, set `PORT` before starting the combined script:
 
-```bash
-npx next dev -p 3000
+```powershell
+$env:PORT=3000; pnpm dev
 ```
 
-or any other port you prefer. If the port is still busy, the app will continue to choose the next free one unless you first stop the process holding that port.
+Use any other port value you prefer. If the port is still busy, the app will continue to choose the next free one unless you first stop the process holding that port.
 
 | Script | Does |
 | --- | --- |
@@ -614,7 +619,7 @@ Search is an in-house index built at build time (`lib/search.ts`, served from `/
 
 ## X. Internationalisation
 
-Locales live in `messages/id.json` and `messages/en.json`, same keys in both, loaded via `i18n/request.ts`. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`). `id` is the default locale and still gets its own `/id` prefix instead of living at the bare root. (The live deployment is therefore reached at `/en` or `/id`, not at the bare domain.) The `/keystatic` and `/api` paths are the exceptions and are never locale-prefixed. Syllabus names are stored in both locales inside the syllabus data itself, not in `messages/*.json`.
+Locales live in `messages/id.json` and `messages/en.json`, same keys in both, loaded via `i18n/request.ts`. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`). `id` is the default locale and still gets its own `/id` prefix instead of living at the bare root. (The live deployment is therefore reached at `/en` or `/id`, not at the bare domain.) The `/keystatic`, `/api`, and `/llms.txt` paths are the exceptions and are never locale-prefixed. Syllabus names are stored in both locales inside the syllabus data itself, not in `messages/*.json`.
 
 To add a locale: add it to `i18n/routing.ts`'s `locales` array, add a matching `messages/<locale>.json`, and add its names to the syllabus data (`LocalizedText` in `lib/syllabus/types.ts` falls back to Indonesian for any locale without one).
 
@@ -622,14 +627,14 @@ To add a locale: add it to `i18n/routing.ts`'s `locales` array, add a matching `
 
 ## XI. Deploying
 
-The public site is deployed on Vercel at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). It can be deployed with zero required environment variables for the archive, syllabus and materials.
+The repository is intended to deploy on Vercel and can be deployed with zero required environment variables for the archive, syllabus and materials. The currently reported live deployment is [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en); verify that external deployment separately when changing hosting or environment configuration.
 
 1. Push to GitHub. This repo lives at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app) and is public.
 2. Import the repo in [Vercel](https://vercel.com/new). Next.js is auto-detected; no `vercel.json` or custom build command is needed.
 3. Deploy. No environment variables are required for the archive, i18n, or MDX pipeline.
 4. Set `NEXT_PUBLIC_SITE_URL` to `https://project-cherenkov-app.vercel.app` (or the eventual custom domain) in Vercel so the sitemap and Open Graph metadata use the deployed origin instead of `localhost`.
 5. Optionally enable accounts and the planner with `DATABASE_URL`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`, then run `pnpm db:migrate` and `pnpm db:seed` against the database ([Section IX](#ix-accounts-and-study-planner)).
-6. Every PR gets its own preview deploy automatically (Vercel's default behaviour for a connected repo), with nothing extra to configure.
+6. When the repository is connected to Vercel, every PR gets its own preview deploy by Vercel's default behaviour; this is hosting configuration rather than a repository guarantee.
 7. CI runs independently of Vercel. `.github/workflows/ci.yml` runs on Node 22: install (frozen lockfile) → `pnpm generate` → lint → typecheck → test → build, on every push and pull request to `main`. The build step includes the Blockly bundle-isolation check. No Phase 2 variables are configured in CI on purpose: the tests are unit tests that need no live database.
 
 Before a fully polished public launch, read `docs/deployment-readiness.md` (keeping in mind it is a historical Phase 1 document) and resolve:
@@ -637,7 +642,7 @@ Before a fully polished public launch, read `docs/deployment-readiness.md` (keep
 - The site is `noindex, nofollow` on every page (`app/[locale]/layout.tsx`) until the remaining placeholder content is cleared. See [Section XIII](#xiii-current-status-and-open-questions) for what is left.
 - Whether/when to set up a real GitHub OAuth App (plus `KEYSTATIC_SECRET`) so `/keystatic` and the scene builder become reachable in production ([Section VII](#vii-editing-content-in-the-browser-keystatic)).
 
-The public repo and deployment are both live. What remains is content polish and the production CMS gate.
+The repository and deployment status are external to the codebase. What remains in the tracked project is content polish and the production CMS gate.
 
 ---
 
@@ -673,12 +678,12 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 
 ## XIII. Current status and open questions
 
-- The repo is public at [`github.com/project-cherenkov/project-cherenkov-app`](https://github.com/project-cherenkov/project-cherenkov-app), and the live deployment is at [`project-cherenkov-app.vercel.app/en`](https://project-cherenkov-app.vercel.app/en). The default locale is served under a locale prefix, not at the bare site root.
+- The repository and deployment URLs recorded here are external project metadata; verify their visibility and availability independently of the tracked code. The default locale is served under a locale prefix, not at the bare site root.
 - Built: the editorial archive with five visualisation engines; the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and the quiz question bank with automated seeding and coverage checks.
 - Not built: a GUI quiz-authoring UI (questions are authored in `lib/quiz-bank/` and seeded into Postgres via `pnpm db:seed`), and a Content-Security-Policy (CSP).
 - Planner and calibration placeholders: `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
-- Content is thin. There are three real editorials plus one implementation fixture, and one material (`binary-search`). Of the syllabus, only informatics has a starter material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty); informatics and astronomy have starter stubs.
-- About page. `content/team/index.json` has one real member plus a dummy entry named "placeholder" ("the holder of place") that currently renders on the page. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow`; the comment in `app/[locale]/layout.tsx` ties that to finishing placeholder copy, so the dummy team entry is the thing to resolve before flipping it.
-- Physics syllabus source. `lib/syllabus/data/physics.ts` is labelled as coming from the official OSN guidebook (confirmed by the project owner), but the exact title, edition and URL are not recorded yet. Add `edition`/`url` to its `source` once known.
+- Content is thin. There are three real editorials plus one implementation fixture, and one material (`binary-search`) in total. Of the syllabus, only informatics has a material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.
+- About page. `content/team/index.json` currently has four entries, including the placeholder entry named "placeholder" ("the holder of place"), and all four render on the page. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow` unless indexing is enabled through the documented environment switch; the placeholder entry remains content to resolve before indexing.
+- Physics syllabus source. `lib/syllabus/data/physics.ts` records the source label, `OSN 2026` edition, and URL. Its comment states that the lists have not yet been compared with the 2026 PDF because the PDF host blocks automated access, so `accessed` remains unset.
 - Keystatic and the scene builder stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` and `KEYSTATIC_SECRET` are configured.
 - The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.
