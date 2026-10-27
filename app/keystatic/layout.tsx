@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { AdminFloatingLinks } from "./admin-floating-links";
 import { fontVariableClasses } from "@/lib/fonts";
 import "../globals.css";
 
@@ -36,20 +36,7 @@ export default function KeystaticSectionLayout({ children }: { children: ReactNo
       <body className="font-sans bg-background text-foreground antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-          <div className="fixed bottom-5 right-5 z-[999] flex gap-2">
-            <Link
-              href="/keystatic/quiz-bank"
-              className="inline-flex items-center rounded-full border border-border-strong bg-background px-4 py-3 text-sm font-medium text-foreground shadow-lg transition-colors hover:bg-muted"
-            >
-              Quiz bank
-            </Link>
-            <Link
-              href="/keystatic/scene-builder/new"
-              className="inline-flex items-center gap-2 rounded-full bg-cherenkov-blue px-4 py-3 text-sm font-medium text-cherenkov-ink shadow-lg transition-colors hover:bg-cherenkov-blue-pastel"
-            >
-              <span aria-hidden="true">+</span> New visualization
-            </Link>
-          </div>
+          <AdminFloatingLinks />
         </ThemeProvider>
       </body>
     </html>
