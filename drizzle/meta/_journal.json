@@ -15,6 +15,13 @@
       "when": 1792454448605,
       "tag": "0001_high_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793119425749,
+      "tag": "0002_quiz_question_archive",
+      "breakpoints": true
     }
   ]
 }

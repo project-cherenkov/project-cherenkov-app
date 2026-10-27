@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { quizQuestions } from "@/lib/db/schema";
 
@@ -22,7 +22,13 @@ export async function getQuizQuestionsForTopic(
       choices: quizQuestions.choices,
     })
     .from(quizQuestions)
-    .where(eq(quizQuestions.topicId, topicId));
+    .where(
+      and(
+        eq(quizQuestions.topicId, topicId),
+        eq(quizQuestions.status, "reviewed"),
+        eq(quizQuestions.archived, false),
+      ),
+    );
 
   return rows;
 }

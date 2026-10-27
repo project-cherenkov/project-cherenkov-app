@@ -117,9 +117,8 @@ export interface SeedQuizReport {
   skippedNoTopic: string[];
 }
 
-// Idempotent on `key`. Re-seeding overwrites a question's text, answer,
-// difficulty and status with what the bank says — the bank is the source of
-// truth — and keeps its row id, so recorded responses stay attached. Never
+// Idempotent on `key`. The checked-in bank bootstraps missing database rows;
+// after that, the admin editor database values are authoritative. Never
 // reuse a key for a question that means something else.
 export async function seedQuizBank(
   db: SeedDb,
@@ -154,15 +153,15 @@ export async function seedQuizBank(
       status: q.status,
     };
 
-    await db
+    const inserted = await db
       .insert(quizQuestions)
       .values({ key: q.key, ...values })
-      .onConflictDoUpdate({
+      .onConflictDoNothing({
         target: quizQuestions.key,
-        targetWhere: sql`${quizQuestions.key} is not null`,
-        set: values,
-      });
-    report.upserted += 1;
+        where: sql`${quizQuestions.key} is not null`,
+      })
+      .returning({ id: quizQuestions.id });
+    report.upserted += inserted.length;
   }
 
   return report;

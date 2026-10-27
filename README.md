@@ -178,8 +178,8 @@ lib/planner-settings.ts,         planner settings validation, vocabulary constan
   lib/planner-actions.ts
 lib/plan-generator.ts,           Phase 2 even-spread generator (deterministic fallback)
   lib/planner.ts                  and topic progress helpers
-lib/quiz-bank/                   typed, validated quiz question bank per subject
-lib/quiz*.ts                     quiz attempt actions, scoring, and response recording
+lib/quiz-bank/                   typed bootstrap bank; database edits are managed in /keystatic/quiz-bank
+lib/quiz*.ts                     quiz authoring validation, attempts, scoring, and response recording
 lib/scene-builder-*.ts           frontmatter write-back (write), stub-editorial creation
                                   (create), GitHub API client (github), and the dedicated
                                   GitHub OAuth flow (oauth, oauth-client); Section VIII
@@ -593,9 +593,9 @@ The scheduling pipeline is pure and deterministic except for database I/O (`plan
 #### 4. Topic quizzes and question bank
 
 - Topic pages (`/[locale]/planner/[subject]/[chapter]`). Each topic page links to the relevant editorial (if published) and provides an interactive quiz dialog (`components/quiz/quiz-dialog.tsx`).
-- Quiz bank (`lib/quiz-bank/`). Questions are authored with stable keys (e.g. `physics.vectors.basic.1`), difficulties (`basic`, `intermediate`, `advanced`), and review statuses (`draft`, `reviewed`).
+- Quiz bank. Admins create and manage multiple-choice questions at `/keystatic/quiz-bank`; they are stored in Postgres, with difficulty, review status, and archive state. `lib/quiz-bank/` remains bootstrap data for initial seeding.
 - Auto-grading & response recording. Quizzes are submitted to `submitQuizAttempt` (`lib/quiz-actions.ts`). The aggregate score is saved in `quiz_attempts`, while individual answers are recorded in `quiz_question_responses` to feed the mastery estimator. Correct answers are never sent to the client before submission.
-- Seeding. `pnpm db:seed` runs `scripts/seed-topics.ts` (populating syllabus topics) and `scripts/seed-quiz-questions.ts` (upserting quiz bank questions, with `--prune-legacy` available to clean unkeyed questions).
+- Seeding. `pnpm db:seed` runs `scripts/seed-topics.ts` (populating syllabus topics) and `scripts/seed-quiz-questions.ts` (inserting missing bootstrap questions without overwriting database edits; `--prune-legacy` remains available to clean unkeyed questions). Students receive only active questions marked reviewed.
 - Simulation. `scripts/simulate-planner.ts` simulates learning trajectories to evaluate scheduler behaviour across hypothetical learner cohorts.
 
 ### Database schema
@@ -679,8 +679,8 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 ## XIII. Current status and open questions
 
 - The repository and deployment URLs recorded here are external project metadata; verify their visibility and availability independently of the tracked code. The default locale is served under a locale prefix, not at the bare site root.
-- Built: the editorial archive with five visualisation engines; the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and the quiz question bank with automated seeding and coverage checks.
-- Not built: a GUI quiz-authoring UI (questions are authored in `lib/quiz-bank/` and seeded into Postgres via `pnpm db:seed`), and a Content-Security-Policy (CSP).
+- Built: the editorial archive with five visualisation engines; the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and an admin-only multiple-choice question editor at `/keystatic/quiz-bank` with review, archive, coverage, and database-backed authoring.
+- Not built: a Content-Security-Policy (CSP). The checked-in quiz bank is now bootstrap data only; seeding inserts missing questions and does not overwrite admin edits. Only reviewed, non-archived questions are served to students.
 - Planner and calibration placeholders: `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
 - Content is thin. There are three real editorials plus one implementation fixture, and one material (`binary-search`) in total. Of the syllabus, only informatics has a material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.
 - About page. `content/team/index.json` currently has four entries, including the placeholder entry named "placeholder" ("the holder of place"), and all four render on the page. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow` unless indexing is enabled through the documented environment switch; the placeholder entry remains content to resolve before indexing.
