@@ -39,7 +39,11 @@ export async function loadMissData(
       })
       .from(quizQuestions)
       .innerJoin(topics, eq(quizQuestions.topicId, topics.id))
-      .where(inArray(quizQuestions.id, ids)),
+      .where(and(
+        inArray(quizQuestions.id, ids),
+        eq(quizQuestions.status, "reviewed"),
+        eq(quizQuestions.archived, false),
+      )),
     db
       .select({
         questionId: quizQuestionResponses.questionId,
@@ -77,7 +81,11 @@ export const retryDeps: RetryDeps = {
         explanation: quizQuestions.explanation,
       })
       .from(quizQuestions)
-      .where(eq(quizQuestions.id, questionId))
+      .where(and(
+        eq(quizQuestions.id, questionId),
+        eq(quizQuestions.status, "reviewed"),
+        eq(quizQuestions.archived, false),
+      ))
       .limit(1);
     if (!row) return null;
     return {

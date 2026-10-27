@@ -101,6 +101,8 @@ export function makePlanReadDeps(exec: Executor): PlanReadDeps {
           and(
             inArray(quizQuestions.topicId, topicIds),
             inArray(quizQuestions.difficulty, difficulties),
+            eq(quizQuestions.status, "reviewed"),
+            eq(quizQuestions.archived, false),
           ),
         );
       return new Set(rows.map((r) => r.topicId));

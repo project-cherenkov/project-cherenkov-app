@@ -43,6 +43,7 @@ describe("Phase 3 planner schema", () => {
     expect(column(quizQuestions, "difficulty").notNull).toBe(true);
     expect(column(quizQuestions, "difficulty").hasDefault).toBe(false);
     expect(column(quizQuestions, "status").default).toBe("draft");
+    expect(column(quizQuestions, "archived").default).toBe(false);
     expect(indexes(quizQuestions)).toContainEqual(["quiz_questions_key_unique", true]);
   });
 

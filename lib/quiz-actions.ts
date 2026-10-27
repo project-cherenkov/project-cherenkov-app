@@ -40,7 +40,13 @@ const realDeps: QuizAttemptDeps = {
         choices: quizQuestions.choices,
       })
       .from(quizQuestions)
-      .where(eq(quizQuestions.topicId, topicId));
+      .where(
+          and(
+            eq(quizQuestions.topicId, topicId),
+            eq(quizQuestions.status, "reviewed"),
+            eq(quizQuestions.archived, false),
+          ),
+        );
 
     return rows.map((r) => ({
       id: r.id,
@@ -75,7 +81,13 @@ const realDeps: QuizAttemptDeps = {
               choices: quizQuestions.choices,
             })
             .from(quizQuestions)
-            .where(eq(quizQuestions.topicId, topicId));
+            .where(
+              and(
+                eq(quizQuestions.topicId, topicId),
+                eq(quizQuestions.status, "reviewed"),
+                eq(quizQuestions.archived, false),
+              ),
+            );
 
           return rows.map((r) => ({
             id: r.id,

@@ -224,6 +224,8 @@ export const quizQuestions = pgTable("quiz_questions", {
   difficulty: questionDifficultyEnum("difficulty").notNull(),
   // Unreviewed questions stay `draft` so the app can label them.
   status: questionStatusEnum("status").notNull().default("draft"),
+  // Archived questions stay linked to their response history but are not served.
+  archived: boolean("archived").notNull().default(false),
 }, (table) => [
   uniqueIndex("quiz_questions_key_unique")
     .on(table.key)

@@ -1,8 +1,8 @@
 // Seeds quiz_questions from the quiz bank (lib/quiz-bank). Run after
 // scripts/seed-topics.ts — questions attach to syllabus-keyed topics rows.
 //
-// Idempotent: questions are upserted on their stable `key`, so re-running
-// updates them instead of duplicating them. The bank is validated first and
+// Idempotent: questions are inserted only when their stable `key` is missing.
+// Database edits are preserved. The bank is validated first and
 // nothing is written if it has problems.
 //
 // Questions that predate the bank (no key) are not touched. They are counted
@@ -24,7 +24,7 @@ async function main() {
   }
 
   const report = await seedQuizBank(db, QUIZ_BANK);
-  console.log(`Seeded ${report.upserted} quiz question(s) from the bank.`);
+  console.log(`Added ${report.upserted} missing quiz question(s) from the bank.`);
   if (report.skippedNoTopic.length > 0) {
     console.warn(
       `Skipped ${report.skippedNoTopic.length} question(s) with no topics row ` +
