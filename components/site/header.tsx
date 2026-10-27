@@ -9,6 +9,7 @@ import { useSession } from "@/lib/auth-client";
 import { Github } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { BrandMark } from "@/components/site/brand-mark";
 
 // The "Archive" bookmark stands for three sections (see archive-subnav.tsx), so
 // it stays highlighted on any of them, not just on /archive itself.
@@ -96,11 +97,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur overflow-visible">
       <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6 overflow-visible">
         <Link href="/" className="flex items-center gap-2 z-10 shrink-0">
-          <span
-            aria-hidden
-            className="h-2.5 w-2.5 rounded-full bg-cherenkov-blue-pastel"
-          />
-          <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
+          <BrandMark className="h-6 w-6 text-cherenkov-blue-700 dark:text-cherenkov-blue-pastel" />
+          <span className="font-heading text-base font-bold tracking-tight text-foreground">
             cherenkov
           </span>
         </Link>
