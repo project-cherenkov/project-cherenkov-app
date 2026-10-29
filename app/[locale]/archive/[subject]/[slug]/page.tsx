@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
-import { getAllEditorials, getEditorial } from "@/lib/content";
+import { getAllEditorials, getEditorial, isArchivedEditorial } from "@/lib/content";
+import { isEditorRequest } from "@/lib/editor-access";
 import { EditorialMDX } from "@/components/editorial-mdx";
 import { PracticeLinks } from "@/components/site/practice-links";
 import { UnderstoodButton } from "@/components/understood-button";
@@ -14,6 +15,20 @@ import { pageMetadata } from "@/lib/seo-metadata";
 // pages that actually render math (Non-Functional Requirements §8).
 import "katex/dist/katex.min.css";
 
+// Published editorials resolve for everyone. An archived one resolves only for
+// an editor; for anyone else it is indistinguishable from a page that does not
+// exist. The editor check (which reads the session, making the request
+// dynamic) runs only when the item is archived, so published pages stay
+// statically generated.
+async function resolveEditorial(subject: string, slug: string) {
+  const published = getEditorial(subject, slug);
+  if (published) return published;
+  if (!isArchivedEditorial(subject, slug)) return undefined;
+  if (!(await isEditorRequest())) return undefined;
+  return getEditorial(subject, slug, { includeArchived: true });
+}
+
+// Only published editorials are prerendered; archived ones render on demand.
 export function generateStaticParams() {
   return getAllEditorials().map((editorial) => ({
     subject: editorial.subject,
@@ -27,6 +42,11 @@ export async function generateMetadata({
   params: Promise<{ locale: string; subject: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, subject, slug } = await params;
+  // Archived: never expose its title/description in metadata (this runs for
+  // every visitor, editor or not) and keep it out of search either way.
+  if (isArchivedEditorial(subject, slug)) {
+    return { robots: { index: false, follow: false } };
+  }
   const editorial = getEditorial(subject, slug);
   if (!editorial) return {};
   return pageMetadata({
@@ -54,8 +74,9 @@ export default async function EditorialPage({
 }) {
   const { locale, subject, slug } = await params;
   setRequestLocale(locale);
-  const editorial = getEditorial(subject, slug);
+  const editorial = await resolveEditorial(subject, slug);
   if (!editorial) notFound();
+  const archived = editorial.status === "archived";
 
   const t = await getTranslations("editorial");
   const tSite = await getTranslations("site");
@@ -88,6 +109,16 @@ export default async function EditorialPage({
         ← {t("backToArchive")}
       </Link>
 
+      {archived && (
+        <p
+          role="note"
+          className="mt-4 rounded-md border border-border-strong bg-muted px-3 py-2 text-sm text-foreground"
+        >
+          <span className="label-code mr-2">{t("archivedBadge")}</span>
+          {t("archivedNotice")}
+        </p>
+      )}
+
       <div className="mt-5 flex flex-wrap items-center gap-2">
         <span className="label-code rounded bg-muted px-2 py-0.5 text-brand">
           {editorial.subject}
@@ -110,7 +141,11 @@ export default async function EditorialPage({
         {t("byAuthor", { author: editorial.author })}
       </p>
 
-      <UnderstoodButton kind="editorial" subject={editorial.subject} slug={editorial.slug} />
+      {/* Progress is only recorded for published pages (the study-session
+          action validates against the public list), so archived pages omit it. */}
+      {!archived && (
+        <UnderstoodButton kind="editorial" subject={editorial.subject} slug={editorial.slug} />
+      )}
 
       <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
         {/* EditorialMDX itself decides whether to also render the "forgot

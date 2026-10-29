@@ -29,6 +29,13 @@ export function EditorialCard({
       <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
         {subjectLabel[editorial.subject]}
       </span>
+      {/* Only ever rendered for editors: public lists never contain archived
+          editorials (lib/content.ts). */}
+      {editorial.status === "archived" && (
+        <span className="label-code ml-2 inline-block rounded border border-border-strong px-2 py-0.5 text-foreground">
+          {t("archivedBadge")}
+        </span>
+      )}
 
       <Heading className="mt-3 text-lg font-semibold text-foreground group-hover:underline">
         {editorial.title}
