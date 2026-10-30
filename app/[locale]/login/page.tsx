@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { LoginForm } from "@/components/auth/login-form";
+import { AuthPage } from "@/components/auth/auth-page";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { isEmailConfigured } from "@/lib/email";
 
@@ -21,9 +21,6 @@ export async function generateMetadata({
 export default function LoginPage() {
   const googleEnabled = Boolean(process.env.GOOGLE_CLIENT_ID);
   return (
-    <Suspense>
-      <LoginForm googleEnabled={googleEnabled} resetEnabled={isEmailConfigured()} />
-    </Suspense>
+    <Suspense><AuthPage defaultTab="login" resetEnabled={isEmailConfigured()} googleEnabled={googleEnabled} /></Suspense>
   );
 }
-

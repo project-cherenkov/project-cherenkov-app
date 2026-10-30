@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getRecentEditorials } from "@/lib/content";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
+import { HomeVisualizations } from "@/components/site/home-visualizations";
 
 export async function generateMetadata({
   params,
@@ -46,7 +47,8 @@ export default async function HomePage({
       />
       <section className="hero-band">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
-          <div>
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)]">
+            <div>
             <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
             <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("heroTitle")}
@@ -82,9 +84,17 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
+            </div>
+            <div className="hidden lg:block">
+              <HomeVisualizations />
+            </div>
           </div>
 
         </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pb-14 sm:px-6 lg:hidden">
+        <HomeVisualizations />
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6">

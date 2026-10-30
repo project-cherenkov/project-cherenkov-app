@@ -36,8 +36,28 @@ export function SiteHeader() {
   const currentLocale = useLocale();
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [canEdit, setCanEdit] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    if (!session) {
+      setCanEdit(false);
+      return;
+    }
+    fetch("/api/account/edit-access", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : { canEdit: false }))
+      .then((result: { canEdit?: boolean }) => {
+        if (active) setCanEdit(result.canEdit === true);
+      })
+      .catch(() => {
+        if (active) setCanEdit(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [session]);
 
   /* Escape closes the drawer and hands focus back to the button that opened
      it (WCAG 2.1.1 / 2.4.3) — otherwise a keyboard user has to tab all the way
@@ -81,16 +101,13 @@ export function SiteHeader() {
       })),
     },
     { href: "/about", label: t("about"), isExternal: false },
-    { href: "/keystatic", label: t("edit"), isExternal: true },
+    ...(canEdit ? [{ href: "/keystatic", label: t("edit"), isExternal: true }] : []),
     ...(session
       ? [
           { href: "/planner", label: t("myPlan"), isExternal: false },
           { href: "/account", label: t("account"), isExternal: false },
         ]
-      : [
-          { href: "/login", label: t("login"), isExternal: false },
-          { href: "/signup", label: t("signup"), isExternal: false },
-        ]),
+      : [{ href: "/account", label: t("account"), isExternal: false }]),
   ];
 
   return (

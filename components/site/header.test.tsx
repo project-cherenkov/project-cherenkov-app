@@ -58,26 +58,23 @@ vi.mock("@/i18n/routing", () => ({
 import { SiteHeader } from "./header";
 
 describe("SiteHeader — session awareness", () => {
-  it("renders Edit link, GitHub repo link, and Log In/Sign Up when logged out", () => {
+  it("renders Account and GitHub repo link when logged out", () => {
     mockUseSession.mockReturnValue({ data: null });
 
     const html = renderToStaticMarkup(<SiteHeader />);
 
-    expect(html).toContain('href="/keystatic"');
-    expect(html).toContain("Edit");
     expect(html).toContain("Archive");
     expect(html).toContain("About");
     expect(html).toContain('aria-label="GitHub"');
     expect(html).toContain('aria-label="Toggle theme"');
-    expect(html).toContain('href="/login"');
-    expect(html).toContain("Log In");
-    expect(html).toContain('href="/signup"');
-    expect(html).toContain("Sign Up");
+    expect(html).toContain('href="/account"');
+    expect(html).toContain("Account");
     expect(html).not.toContain("My Plan");
-    expect(html).not.toContain("Account");
+    expect(html).not.toContain("Log In");
+    expect(html).not.toContain("Sign Up");
   });
 
-  it("renders Edit link, My Plan, Account (not Log Out), and Theme Toggle when logged in", () => {
+  it("renders My Plan and Account (not Log Out) when logged in", () => {
     mockUseSession.mockReturnValue({
       data: {
         user: { id: "u1", name: "User", email: "user@example.com" },
@@ -86,8 +83,6 @@ describe("SiteHeader — session awareness", () => {
 
     const html = renderToStaticMarkup(<SiteHeader />);
 
-    expect(html).toContain('href="/keystatic"');
-    expect(html).toContain("Edit");
     expect(html).toContain('href="/planner"');
     expect(html).toContain("My Plan");
     expect(html).toContain('href="/account"');
