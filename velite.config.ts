@@ -34,6 +34,14 @@ export const vizEngines = [
 
 const subjects = ["informatics", "physics", "astronomy"] as const;
 
+// Visibility of an editorial or material. "published" is visible to every
+// visitor; "archived" is visible to editors only (lib/editor-access.ts) and is
+// left out of every public surface: the archive and materials lists, the home
+// page, the syllabus and planner, search, the sitemap and llms.txt. It
+// defaults to "published" so content written before this field existed (and
+// anything Keystatic saves without it) keeps its current behaviour.
+export const contentStatuses = ["published", "archived"] as const;
+
 // F-04 guard: reject placeholder/test `publishedAt` values (the two junk
 // editorials removed in this same change had `publishedAt` values in the
 // years 0011 and 0031) with a hard build failure rather than a silent
@@ -48,6 +56,7 @@ const editorials = defineCollection({
     .object({
       title: s.string().max(120),
       subject: s.enum(subjects),
+      status: s.enum(contentStatuses).default("published"),
       hook: s.string().max(280),
       tags: s.array(s.string()),
       principle: s.string(), // open string — see note above
@@ -114,6 +123,7 @@ const materials = defineCollection({
     .object({
       title: s.string().max(120),
       subject: s.enum(subjects),
+      status: s.enum(contentStatuses).default("published"),
       topic: s.string(),
       summary: s.string().max(280),
       vizConfig: s

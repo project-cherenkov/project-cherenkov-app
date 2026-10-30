@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArchiveFilters } from "@/components/site/archive-filters";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { filterEditorials, getArchiveFacets } from "@/lib/content";
+import { isEditorRequest } from "@/lib/editor-access";
 import { pageMetadata } from "@/lib/seo-metadata";
 
 interface ArchiveSearchParams {
@@ -41,8 +42,13 @@ export default async function ArchivePage({
   setRequestLocale(locale);
   const params = await searchParams;
   const t = await getTranslations("archive");
-  const facets = getArchiveFacets(params);
-  const results = filterEditorials(params);
+  // Editors also see archived editorials here (marked with an "Archived"
+  // badge on the card); everyone else sees published ones only. This page
+  // already renders per request because of searchParams, so reading the
+  // session costs nothing extra.
+  const includeArchived = await isEditorRequest();
+  const facets = getArchiveFacets(params, { includeArchived });
+  const results = filterEditorials(params, { includeArchived });
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
