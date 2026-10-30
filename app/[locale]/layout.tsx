@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SkipLink } from "@/components/site/skip-link";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { InPageNeutrino } from "@/components/study/neutrino-launcher";
 import { fontVariableClasses } from "@/lib/fonts";
 import { OG_LOCALES, isAppLocale, robotsFor } from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
@@ -103,6 +104,7 @@ export default async function LocaleLayout({
               </main>
               <SiteFooter />
             </div>
+            <InPageNeutrino />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

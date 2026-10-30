@@ -1,0 +1,39 @@
+---
+title: "Neutrino study companion"
+description: "Open the floating study companion, use the study timer and chat about informatics, physics or astronomy."
+section: start
+order: 35
+updatedAt: "2026-10-30"
+---
+
+Neutrino is a study companion available in two ways: use the small avatar at the bottom-right of the page to open it in place, then choose **Float** inside the companion to open a separate window above your other windows. The floating window uses Chrome's Document Picture-in-Picture feature, so use a recent desktop version of Chrome and keep the Cherenkov tab open. The in-page companion works without Picture-in-Picture support.
+
+## Name and timer
+
+The default name is **Neutrino**. While signed in, change it under **Account → Study companion**. The name is saved to your Cherenkov account and appears the next time you open the companion.
+
+The companion includes Cherenkov's study timer. It uses the same timer state as the regular timer page, so an active timer can be seen in either place. The timer state is kept in this browser's local storage. If you are signed in, completed focus sessions can be saved to your study log; breaks do not count as study time. See [the study planner](/docs/study-planner) for the rest of the study tools.
+
+## Study chat
+
+Study chat is available only when you are signed in. Neutrino uses Google's Gemini API to answer short questions about learning. It is meant for explanations, examples, checking your reasoning and hints. Avoid sending passwords, private information or anything you do not want sent to an AI service.
+
+Cherenkov applies a limit of **10 chat requests per account per UTC day**. A failed provider request and a retry each count as a request. The limit is shared by the normal Cherenkov Gemini configuration and a personal key. Messages are limited to 1,200 characters, only the latest six conversation messages are sent, and replies are limited to 256 generated tokens. These caps help keep the feature suitable for a small shared API allowance; Google's own model and project quotas still apply separately.
+
+Google applies Gemini API limits by project and model. A `429` can mean a per-minute rate limit or a daily/project quota, and actual available capacity may vary. It does not by itself show that Gemini is down. A `503` indicates temporary service unavailability. Current limits depend on Google's project tier and the selected model; see Google's [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) and [API error guide](https://ai.google.dev/gemini-api/docs/api-errors).
+
+## Errors and what to do
+
+| Message | What it means | What to do |
+| --- | --- | --- |
+| Today's Cherenkov chat limit is used | This account has sent 10 requests during the current UTC day. | Wait until the next UTC day. A personal key does not extend this limit. |
+| Cherenkov's Gemini project or model quota is exhausted | Google's API returned a quota or rate-limit response (`429`). | Try later. If the prompt offers it, you may choose to make one request with your own key. |
+| Gemini is temporarily unavailable | Google's service returned a temporary service error, or the request timed out. | Try again later. The message does not claim a global outage. |
+| Chat is not configured | Cherenkov's server is missing or cannot use its Gemini configuration. | Contact the Cherenkov team; changing your prompt will not fix server configuration. |
+| Your personal key could not be used | Google rejected the submitted key or its project access. | Check the key and API access in Google AI Studio. The key is discarded after that request. |
+
+## Using your own Gemini API key for one request
+
+After a Gemini project quota, availability or server-configuration error, the companion may show an optional key form. Choosing it is entirely opt-in. Check the consent box, enter a Gemini API key and retry once. The key is sent from your browser to **Cherenkov's server**, then to **Google** to make that request. It is not stored in your Cherenkov account, database or browser storage, and the interface clears the field after the retry. The server does not log the key or Google's response body.
+
+Cherenkov's per-account daily request limit still applies when you use your own key. Google applies the key's own project's model and quota limits, and Google's terms govern that request. Only enter a key you control, and do not use the form if you are not comfortable sending it to both services.

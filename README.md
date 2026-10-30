@@ -283,8 +283,11 @@ The public site needs none of the variables below. Accounts, planner pages, quiz
 | `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. | Run `openssl rand -base64 32` and paste the result. |
 | `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. | Set to your deployed origin. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional | Enables the "Continue with Google" buttons and Google OAuth. Email/password remains available without these. | Create a Google OAuth web client in Google Cloud Console and add the callback URL `https://<your-domain>/api/auth/callback/google`. |
+| `GEMINI_API_KEY` | Optional for Neutrino chat | Server-side Gemini API key used by the signed-in study companion. Keep it in Vercel/local server environment variables; never expose it as a `NEXT_PUBLIC_` variable. Chat is limited to 10 requests per account per UTC day, and Google's project/model quotas also apply. | Create a key in Google AI Studio and add it to Vercel or `.env.local`. |
 
 Without `DATABASE_URL`, requests to authenticated features fail closed as unauthenticated rather than making the public site unavailable.
+
+Neutrino also needs the latest database migration (`pnpm db:migrate`) for account names and its persistent daily chat limit. See [the Neutrino user guide](content/docs/en/neutrino.mdx) for behavior, limits, error messages and temporary personal-key handling.
 
 ---
 

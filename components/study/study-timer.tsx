@@ -61,10 +61,12 @@ export function StudyTimer({
   signedIn,
   subjects,
   planItems,
+  showFocusView = true,
 }: {
   signedIn: boolean;
   subjects: PickerSubject[];
   planItems: PickerPlanItem[];
+  showFocusView?: boolean;
 }) {
   const t = useTranslations("timer");
   const [timer, setTimer] = useState<TimerState>({ status: "idle" });
@@ -120,14 +122,14 @@ export function StudyTimer({
 
   // Show the countdown in the tab title so it is visible from other tabs.
   useEffect(() => {
-    if (timer.status !== "active") return;
+    if (!showFocusView || timer.status !== "active") return;
     const base = document.title;
     const left = plannedMs(timer) - phaseElapsedMs(timer, now);
     document.title = `${formatClock(left)} · ${t(timer.phase === "focus" ? "phaseFocus" : "phaseBreak")}`;
     return () => {
       document.title = base;
     };
-  }, [timer, now, t]);
+  }, [timer, now, t, showFocusView]);
 
   function toggleFullscreen() {
     if (document.fullscreenElement) void document.exitFullscreen();
@@ -347,14 +349,16 @@ export function StudyTimer({
         ) : null}
       </div>
 
-      <button
-        type="button"
-        onClick={toggleFullscreen}
-        className="inline-flex min-h-10 items-center gap-2 text-sm text-muted-foreground underline-offset-4 hover:underline"
-      >
-        {fullscreen ? <Minimize2 aria-hidden className="h-4 w-4" /> : <Maximize2 aria-hidden className="h-4 w-4" />}
-        {fullscreen ? t("exitFocusView") : t("focusView")}
-      </button>
+      {showFocusView ? (
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className="inline-flex min-h-10 items-center gap-2 text-sm text-muted-foreground underline-offset-4 hover:underline"
+        >
+          {fullscreen ? <Minimize2 aria-hidden className="h-4 w-4" /> : <Maximize2 aria-hidden className="h-4 w-4" />}
+          {fullscreen ? t("exitFocusView") : t("focusView")}
+        </button>
+      ) : null}
     </div>
   );
 }

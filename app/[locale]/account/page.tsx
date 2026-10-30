@@ -11,6 +11,10 @@ import { SignOutButton } from "@/components/account/sign-out-button";
 import { AuthPage } from "@/components/auth/auth-page";
 import { isEmailConfigured } from "@/lib/email";
 import { PasswordSettings } from "@/components/account/password-settings";
+import { CompanionNameForm } from "@/components/account/companion-name-form";
+import { db } from "@/lib/db";
+import { companionSettings } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function generateMetadata({
   params,
@@ -39,6 +43,18 @@ export default async function AccountPage() {
   }
   const details = await getAccountDetails(current.id);
   if (!details) redirect(`/${locale}/login`);
+  let companionName = "Neutrino";
+  try {
+    const [setting] = await db
+      .select({ name: companionSettings.name })
+      .from(companionSettings)
+      .where(eq(companionSettings.userId, current.id))
+      .limit(1);
+    companionName = setting?.name ?? companionName;
+  } catch {
+    // Account details remain available if the optional companion preference
+    // cannot be read temporarily.
+  }
 
   const providerLabel = (id: string) =>
     id === "credential" ? t("providerPassword") : id === "google" ? "Google" : id;
@@ -66,6 +82,8 @@ export default async function AccountPage() {
         <Row label={t("signInMethods")} value={details.providers.map(providerLabel).join(", ") || "—"} />
         <Row label={t("memberSince")} value={joined} />
       </dl>
+
+      <CompanionNameForm initialName={companionName} />
 
       <PasswordSettings
         email={details.email}

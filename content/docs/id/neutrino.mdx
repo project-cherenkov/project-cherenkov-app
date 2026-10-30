@@ -1,0 +1,39 @@
+---
+title: "Pendamping belajar Neutrino"
+description: "Buka pendamping belajar mengambang, gunakan timer, dan bertanya tentang informatika, fisika, atau astronomi."
+section: start
+order: 35
+updatedAt: "2026-10-30"
+---
+
+Neutrino dapat digunakan dengan dua cara: tekan avatar kecil di kanan bawah halaman untuk membuka pendamping langsung di halaman, lalu pilih **Apungkan** di dalam pendamping untuk membuka jendela terpisah di atas jendela lain. Jendela mengambang menggunakan Document Picture-in-Picture dari Chrome, jadi gunakan Chrome desktop versi terbaru dan biarkan tab Cherenkov tetap terbuka. Pendamping di halaman tetap bisa digunakan tanpa dukungan Picture-in-Picture.
+
+## Nama dan timer
+
+Nama awalnya adalah **Neutrino**. Saat sudah masuk, ubah nama di **Akun → Pendamping belajar**. Nama tersimpan di akun Cherenkov dan ditampilkan saat pendamping dibuka berikutnya.
+
+Pendamping ini menyertakan timer belajar Cherenkov. Timer menggunakan status yang sama dengan halaman timer biasa, sehingga sesi yang sedang berjalan terlihat di kedua tempat. Status timer disimpan di local storage browser ini. Jika kamu sudah masuk, sesi fokus yang selesai dapat disimpan ke catatan belajarmu; waktu istirahat tidak dihitung sebagai waktu belajar. Lihat [rencana belajar](/docs/study-planner) untuk alat belajar lainnya.
+
+## Obrolan belajar
+
+Obrolan belajar hanya tersedia saat kamu sudah masuk. Neutrino menggunakan Gemini API dari Google untuk menjawab pertanyaan singkat tentang belajar. Fitur ini cocok untuk penjelasan, contoh, memeriksa penalaran, dan petunjuk. Jangan kirim kata sandi, informasi pribadi, atau hal yang tidak ingin kamu bagikan dengan layanan AI.
+
+Cherenkov membatasi **10 permintaan obrolan per akun per hari UTC**. Permintaan ke penyedia yang gagal dan percobaan ulang tetap dihitung sebagai permintaan. Batas ini sama untuk konfigurasi Gemini Cherenkov dan key pribadi. Pesan dibatasi hingga 1.200 karakter, hanya enam pesan percakapan terbaru yang dikirim, dan jawaban dibatasi hingga 256 token keluaran. Batas ini membantu menjaga penggunaan fitur tetap sesuai dengan kuota API bersama yang kecil; Google juga memiliki batas kuota model dan proyeknya sendiri.
+
+Google menerapkan batas Gemini API berdasarkan proyek dan model. Respons `429` dapat berarti batas laju per menit atau kuota harian/proyek, dan kapasitas sebenarnya dapat berubah. Kode itu sendiri tidak menunjukkan bahwa Gemini sedang mati. Respons `503` menunjukkan layanan sementara tidak tersedia. Batas terbaru bergantung pada tingkat proyek Google dan model yang dipilih; baca [batas laju Gemini API](https://ai.google.dev/gemini-api/docs/rate-limits) dan [panduan error API](https://ai.google.dev/gemini-api/docs/api-errors) dari Google.
+
+## Error dan tindakan
+
+| Pesan | Artinya | Tindakan |
+| --- | --- | --- |
+| Batas obrolan Cherenkov hari ini telah digunakan | Akun ini telah mengirim 10 permintaan pada hari UTC ini. | Tunggu sampai hari UTC berikutnya. Key pribadi tidak menambah batas ini. |
+| Kuota proyek atau model Gemini Cherenkov habis | API Google mengirim respons batas kuota atau laju (`429`). | Coba lagi nanti. Jika formulir ditawarkan, kamu boleh memilih untuk mengirim satu permintaan dengan key pribadi. |
+| Gemini sementara tidak tersedia | Layanan Google mengirim error sementara atau permintaan mengalami timeout. | Coba lagi nanti. Pesan ini tidak menyatakan adanya gangguan global. |
+| Obrolan belum dikonfigurasi | Server Cherenkov belum memiliki atau tidak dapat menggunakan konfigurasi Gemini. | Hubungi tim Cherenkov; mengganti pertanyaan tidak akan memperbaiki konfigurasi server. |
+| Key pribadi tidak dapat digunakan | Google menolak key atau akses proyek yang terkait dengannya. | Periksa key dan akses API di Google AI Studio. Key langsung dibuang setelah permintaan itu. |
+
+## Menggunakan Gemini API key pribadi untuk satu permintaan
+
+Setelah error kuota, ketersediaan, atau konfigurasi server Gemini, pendamping mungkin menampilkan formulir key opsional. Kamu bebas memilih untuk menggunakannya atau tidak. Centang persetujuan, masukkan Gemini API key, lalu coba sekali lagi. Key dikirim dari browser ke **server Cherenkov**, lalu ke **Google** untuk menyelesaikan permintaan itu. Key tidak disimpan di akun Cherenkov, database, atau penyimpanan browser, dan kolomnya dikosongkan setelah percobaan. Server tidak mencatat key atau isi respons Google.
+
+Batas permintaan harian per akun Cherenkov tetap berlaku saat menggunakan key pribadi. Google menerapkan batas proyek dan kuota model untuk proyek key tersebut; ketentuan Google berlaku bagi permintaan itu. Masukkan hanya key yang kamu miliki, dan jangan gunakan formulir ini jika kamu tidak nyaman mengirimkannya ke kedua layanan tersebut.
