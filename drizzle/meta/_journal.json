@@ -22,6 +22,13 @@
       "when": 1793119425749,
       "tag": "0002_quiz_question_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793318400000,
+      "tag": "0003_neutrino_companion",
+      "breakpoints": true
     }
   ]
 }

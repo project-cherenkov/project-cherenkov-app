@@ -467,6 +467,33 @@ export const studySessions = pgTable(
   ],
 );
 
+// Per-account preferences for the Neutrino study companion.
+export const companionSettings = pgTable("companion_settings", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull().default("Neutrino"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Atomic, database-backed daily chatbot budget. The composite key makes the
+// upsert safe across serverless instances; personal Gemini keys use this same
+// counter and cannot bypass Cherenkov's own limit.
+export const companionUsage = pgTable(
+  "companion_usage",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    usageDay: date("usage_day", { mode: "string" }).notNull(),
+    requestCount: integer("request_count").notNull().default(0),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.usageDay] }),
+    check("companion_usage_count_check", sql`${table.requestCount} >= 0`),
+  ],
+);
+
 // A student's own "I understood this" flag on a material or editorial. Kept
 // separate from the mastery estimate. Keyed by subject as well as slug: slugs
 // are only unique within a subject folder.
