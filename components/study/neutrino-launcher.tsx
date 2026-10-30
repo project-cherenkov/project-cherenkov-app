@@ -52,9 +52,10 @@ function CompanionPanel({ name, signedIn, close, embedded = false, messages, set
     const latest = messages[messages.length - 1];
     const text = usePersonalKey ? (latest?.role === "user" ? latest.text : "") : draft.trim();
     if (!text || busy || !signedIn) return;
+    const userMessage: Message = { role: "user", text };
     const next: Message[] = usePersonalKey
       ? messages.slice(-6)
-      : [...messages, { role: "user", text }].slice(-6);
+      : [...messages, userMessage].slice(-6);
     if (!usePersonalKey) {
       setMessages(next);
       setDraft("");
@@ -81,7 +82,8 @@ function CompanionPanel({ name, signedIn, close, embedded = false, messages, set
         setError("unknown");
         return;
       }
-      const updated: Message[] = [...next, { role: "model", text: data.reply }].slice(-6);
+      const modelMessage: Message = { role: "model", text: data.reply };
+      const updated = [...next, modelMessage].slice(-6);
       setMessages(updated);
     } catch {
       setError("unavailable");
