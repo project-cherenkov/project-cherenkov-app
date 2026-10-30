@@ -262,6 +262,16 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       options: [{ label: subject, value: subject }],
       defaultValue: subject,
     }),
+    status: fields.select({
+      label: "Status",
+      description:
+        "Published: visible to everyone. Archived: visible to editors only, and left out of every public list, search and the sitemap.",
+      options: [
+        { label: "Published", value: "published" },
+        { label: "Archived (editors only)", value: "archived" },
+      ],
+      defaultValue: "published",
+    }),
     title: fields.text({
       label: "Title",
       validation: { isRequired: true, length: { max: 120 } },
@@ -348,6 +358,16 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
       label: "Subject (fixed to match this collection)",
       options: [{ label: subject, value: subject }],
       defaultValue: subject,
+    }),
+    status: fields.select({
+      label: "Status",
+      description:
+        "Published: visible to everyone. Archived: visible to editors only, and left out of every public list, search and the sitemap.",
+      options: [
+        { label: "Published", value: "published" },
+        { label: "Archived (editors only)", value: "archived" },
+      ],
+      defaultValue: "published",
     }),
     title: fields.text({
       label: "Title",

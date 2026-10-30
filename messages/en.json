@@ -73,6 +73,8 @@
     "count": "{count, plural, =0 {No editorials} one {# editorial} other {# editorials}}"
   },
   "editorial": {
+    "archivedBadge": "Archived",
+    "archivedNotice": "Only editors can see this editorial. Visitors get a 404.",
     "sections": {
       "hook": "The hook",
       "problem": "The problem",
@@ -298,6 +300,8 @@
     "subjectDescription": "The {subject} syllabus for the Indonesian OSN, topic by topic (source: {source}). See which topics already have a material or an interactive editorial."
   },
   "materials": {
+    "archivedBadge": "Archived",
+    "archivedNotice": "Only editors can see this material. Visitors get a 404.",
     "eyebrow": "materials.md",
     "title": "Materials",
     "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",

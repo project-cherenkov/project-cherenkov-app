@@ -284,15 +284,22 @@ export function articleJsonLd(input: {
 }
 
 /**
- * Implementation fixtures and unfinished stubs are published in the archive
- * (the editorial pipeline has no draft state) but must not be offered to
- * search engines or AI crawlers. content/editorials/informatics/
- * programmable-scene-fixture.mdx is the current example: tagged "fixture",
- * with a placeholder author.
+ * Archived editorials (visible to editors only), implementation fixtures and
+ * unfinished stubs must not be offered to search engines or AI crawlers.
+ * Archived ones are already left out of the sitemap and llms.txt because the
+ * public content helpers skip them; checking `status` here is the second
+ * line of defence for any page that renders one for an editor.
+ * content/editorials/informatics/programmable-scene-fixture.mdx is the
+ * current example: archived, tagged "fixture", with a placeholder author.
  */
 export function isIndexableEditorial(editorial: {
   tags: readonly string[];
   author: string;
+  status?: string;
 }): boolean {
-  return !editorial.tags.includes("fixture") && !/^PLACEHOLDER\b/i.test(editorial.author.trim());
+  return (
+    editorial.status !== "archived" &&
+    !editorial.tags.includes("fixture") &&
+    !/^PLACEHOLDER\b/i.test(editorial.author.trim())
+  );
 }

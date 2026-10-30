@@ -5,10 +5,24 @@ import { editorials, materials, type Editorial, type Material } from "#content";
 
 export type Subject = Editorial["subject"];
 
-export function getAllEditorials(): Editorial[] {
-  return [...editorials].sort(
-    (a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt),
-  );
+// Visibility. Every helper below returns PUBLISHED content only unless the
+// caller passes { includeArchived: true }. That is deliberate: the sitemap,
+// search index, llms.txt, home page, syllabus and planner all call these
+// helpers with no arguments, so an archived item can never leak into them by
+// accident. Only code that has first confirmed the visitor is an editor
+// (lib/editor-access.ts) may opt in.
+export interface VisibilityOptions {
+  includeArchived?: boolean;
+}
+
+function isVisible(item: { status: string }, options: VisibilityOptions): boolean {
+  return options.includeArchived === true || item.status === "published";
+}
+
+export function getAllEditorials(options: VisibilityOptions = {}): Editorial[] {
+  return editorials
+    .filter((e) => isVisible(e, options))
+    .sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
 }
 
 export function getRecentEditorials(limit = 6): Editorial[] {
@@ -22,8 +36,19 @@ export function getEditorialsBySubject(subject: Subject): Editorial[] {
 export function getEditorial(
   subject: string,
   slug: string,
+  options: VisibilityOptions = {},
 ): Editorial | undefined {
-  return editorials.find((e) => e.subject === subject && e.slug === slug);
+  return editorials.find(
+    (e) => e.subject === subject && e.slug === slug && isVisible(e, options),
+  );
+}
+
+// True when the editorial exists but is archived. Lets a page tell "does not
+// exist" apart from "exists, editors only" without exposing any of its content.
+export function isArchivedEditorial(subject: string, slug: string): boolean {
+  return editorials.some(
+    (e) => e.subject === subject && e.slug === slug && e.status === "archived",
+  );
 }
 
 export interface ArchiveFilters {
@@ -32,8 +57,11 @@ export interface ArchiveFilters {
   errorType?: string;
 }
 
-export function filterEditorials(filters: ArchiveFilters): Editorial[] {
-  return getAllEditorials().filter((e) => {
+export function filterEditorials(
+  filters: ArchiveFilters,
+  options: VisibilityOptions = {},
+): Editorial[] {
+  return getAllEditorials(options).filter((e) => {
     if (filters.subject && e.subject !== filters.subject) return false;
     if (filters.principle && e.principle !== filters.principle) return false;
     if (filters.errorType && e.errorType !== filters.errorType) return false;
@@ -43,10 +71,22 @@ export function filterEditorials(filters: ArchiveFilters): Editorial[] {
 
 // Archive is indexed by principle + error type, not by chapter (spec §1) —
 // these power the filter dropdowns in components/site/archive-filters.tsx.
-export function getArchiveFacets(filters: ArchiveFilters = {}) {
-  const forSubject = filterEditorials({ principle: filters.principle, errorType: filters.errorType });
-  const forPrinciple = filterEditorials({ subject: filters.subject, errorType: filters.errorType });
-  const forErrorType = filterEditorials({ subject: filters.subject, principle: filters.principle });
+export function getArchiveFacets(
+  filters: ArchiveFilters = {},
+  options: VisibilityOptions = {},
+) {
+  const forSubject = filterEditorials(
+    { principle: filters.principle, errorType: filters.errorType },
+    options,
+  );
+  const forPrinciple = filterEditorials(
+    { subject: filters.subject, errorType: filters.errorType },
+    options,
+  );
+  const forErrorType = filterEditorials(
+    { subject: filters.subject, principle: filters.principle },
+    options,
+  );
   return {
     subjects: uniqueSorted(forSubject.map((e) => e.subject)),
     principles: uniqueSorted(forPrinciple.map((e) => e.principle)),
@@ -71,12 +111,24 @@ export function hasMissingViz(editorial: Editorial): boolean {
 
 // --- Materials (topic-by-topic syllabus breakdowns) -------------------------
 
-export function getAllMaterials(): Material[] {
-  return [...materials].sort(
-    (a, b) => a.subject.localeCompare(b.subject) || a.slug.localeCompare(b.slug),
+export function getAllMaterials(options: VisibilityOptions = {}): Material[] {
+  return materials
+    .filter((m) => isVisible(m, options))
+    .sort((a, b) => a.subject.localeCompare(b.subject) || a.slug.localeCompare(b.slug));
+}
+
+export function getMaterial(
+  subject: string,
+  slug: string,
+  options: VisibilityOptions = {},
+): Material | undefined {
+  return materials.find(
+    (m) => m.subject === subject && m.slug === slug && isVisible(m, options),
   );
 }
 
-export function getMaterial(subject: string, slug: string): Material | undefined {
-  return materials.find((m) => m.subject === subject && m.slug === slug);
+export function isArchivedMaterial(subject: string, slug: string): boolean {
+  return materials.some(
+    (m) => m.subject === subject && m.slug === slug && m.status === "archived",
+  );
 }

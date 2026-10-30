@@ -9,13 +9,26 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { Link } from "@/i18n/routing";
-import { getAllEditorials, getAllMaterials, getMaterial } from "@/lib/content";
+import { getAllEditorials, getAllMaterials, getMaterial, isArchivedMaterial } from "@/lib/content";
+import { isEditorRequest } from "@/lib/editor-access";
 import { buildSubjectCoverage, getSectionNeighbours } from "@/lib/library";
 import { getSyllabus, getTopicLocation, localize, topicAnchor } from "@/lib/syllabus";
 // Imported here, not globally — KaTeX's CSS only ships to pages that render
 // math (Non-Functional Requirements §8), same as the editorial page.
 import "katex/dist/katex.min.css";
 
+// Same rule as editorials: published materials resolve for everyone, an
+// archived one only for an editor, and the session is read only when the
+// material is archived so published pages stay statically generated.
+async function resolveMaterial(subject: string, slug: string) {
+  const published = getMaterial(subject, slug);
+  if (published) return published;
+  if (!isArchivedMaterial(subject, slug)) return undefined;
+  if (!(await isEditorRequest())) return undefined;
+  return getMaterial(subject, slug, { includeArchived: true });
+}
+
+// Only published materials are prerendered; archived ones render on demand.
 export function generateStaticParams() {
   return getAllMaterials().map((material) => ({
     subject: material.subject,
@@ -29,6 +42,11 @@ export async function generateMetadata({
   params: Promise<{ locale: string; subject: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, subject, slug } = await params;
+  // Archived: no title/description in metadata (this runs for every visitor)
+  // and never indexed.
+  if (isArchivedMaterial(subject, slug)) {
+    return { robots: { index: false, follow: false } };
+  }
   const material = getMaterial(subject, slug);
   if (!material) return {};
   return pageMetadata({
@@ -48,9 +66,10 @@ export default async function MaterialPage({
 }) {
   const { locale, subject, slug } = await params;
   setRequestLocale(locale);
-  const material = getMaterial(subject, slug);
+  const material = await resolveMaterial(subject, slug);
   const syllabus = getSyllabus(subject);
   if (!material || !syllabus) notFound();
+  const archived = material.status === "archived";
 
   const t = await getTranslations("materials");
   const ts = await getTranslations("syllabus");
@@ -102,6 +121,16 @@ export default async function MaterialPage({
           ← {t("backToMaterials")}
         </Link>
 
+        {archived && (
+          <p
+            role="note"
+            className="mt-4 rounded-md border border-border-strong bg-muted px-3 py-2 text-sm text-foreground"
+          >
+            <span className="label-code mr-2">{t("archivedBadge")}</span>
+            {t("archivedNotice")}
+          </p>
+        )}
+
         <div className="mt-5 flex flex-wrap items-center gap-2">
           <span className="label-code rounded bg-muted px-2 py-0.5 text-brand">
             {ts(`subjects.${subject}`)}
@@ -118,7 +147,9 @@ export default async function MaterialPage({
 
         <h1 className="mt-3 text-3xl font-bold text-foreground">{material.title}</h1>
         <p className="mt-2 text-lg text-foreground/75">{material.summary}</p>
-        <UnderstoodButton kind="material" subject={material.subject} slug={material.slug} />
+        {!archived && (
+          <UnderstoodButton kind="material" subject={material.subject} slug={material.slug} />
+        )}
 
         <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
           <MaterialMDX code={material.body} vizConfig={material.vizConfig} />
