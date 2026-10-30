@@ -168,7 +168,7 @@ export async function POST(request: Request) {
       : "";
     if (!reply) return NextResponse.json({ error: "provider_unavailable" }, { status: 503 });
     return NextResponse.json({ reply });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: usingPersonalKey ? "personal_unavailable" : "provider_unavailable" },
       { status: 503 },
