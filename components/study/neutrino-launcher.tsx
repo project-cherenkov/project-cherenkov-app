@@ -52,7 +52,9 @@ function CompanionPanel({ name, signedIn, close, embedded = false, messages, set
     const latest = messages[messages.length - 1];
     const text = usePersonalKey ? (latest?.role === "user" ? latest.text : "") : draft.trim();
     if (!text || busy || !signedIn) return;
-    const next = usePersonalKey ? messages.slice(-6) : [...messages, { role: "user" as const, text }].slice(-6);
+    const next: Message[] = usePersonalKey
+      ? messages.slice(-6)
+      : [...messages, { role: "user", text }].slice(-6);
     if (!usePersonalKey) {
       setMessages(next);
       setDraft("");
@@ -70,12 +72,17 @@ function CompanionPanel({ name, signedIn, close, embedded = false, messages, set
           ...(key ? { personalKey: key, personalKeyConsent: keyConsent } : {}),
         }),
       });
-      const data = await response.json().catch(() => ({}));
+      const data: { reply?: unknown; error?: unknown } = await response.json().catch(() => ({}));
       if (!response.ok) {
         setError(isChatError(data.error) ? data.error : "unknown");
         return;
       }
-      setMessages([...next, { role: "model", text: data.reply }].slice(-6));
+      if (typeof data.reply !== "string") {
+        setError("unknown");
+        return;
+      }
+      const updated: Message[] = [...next, { role: "model", text: data.reply }].slice(-6);
+      setMessages(updated);
     } catch {
       setError("unavailable");
     } finally {
