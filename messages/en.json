@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "readme.md",
-    "heroTitle": "The idea, made visible.",
+    "heroTitle": "Make the idea visible",
     "heroBody": "Each editorial is written by someone who competes in that subject. Instagram carries the hook, the surprising idea in a few seconds. This site carries the rest: the full proof and an interactive visualization you can manipulate.",
     "ctaPlan": "Plan my study",
     "recentEyebrow": "requirements.txt",
@@ -38,7 +38,23 @@
     "ctaAbout": "Read the philosophy",
     "recentEmpty": "No editorials published yet.",
     "ctaSyllabus": "See the syllabus",
-    "ctaDocs": "Read the docs"
+    "ctaDocs": "Read the docs",
+    "visualizations": {
+      "eyebrow": "INTERACTIVE FIELD NOTES",
+      "physics": "Physics",
+      "astronomy": "Astronomy",
+      "informatics": "Informatics",
+      "projectile": "Projectile range symmetry",
+      "orbit": "Eccentric orbit",
+      "binarySearch": "Binary search",
+      "projectileAria": "Interactive physics visualization: projectile range symmetry",
+      "orbitAria": "Interactive astronomy visualization: eccentric orbit",
+      "binarySearchAria": "Interactive informatics visualization: binary search",
+      "previous": "Previous visualization",
+      "next": "Next visualization",
+      "slides": "Visualization slides",
+      "of": "of"
+    }
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -113,7 +129,7 @@
     "contactPlaceholder": "[PLACEHOLDER: contact inquiries TBD]"
   },
   "footer": {
-    "tagline": "The idea, made visible.",
+    "tagline": "Make the idea visible.",
     "madeBy": "A public-repo project by the Cherenkov team.",
     "license": "License",
     "terms": "Terms",
@@ -124,6 +140,15 @@
     "opensInNewTab": "(opens in a new tab)"
   },
   "phase2": {
+    "benefits": {
+      "eyebrow": "WHY MAKE AN ACCOUNT?",
+      "title": "Account Benefits",
+      "body": "A free account turns Cherenkov from a library into a study companion.",
+      "accessWithoutAccount": "You can still access editorials, materials, the syllabus, and interactive visualizations without an account.",
+      "planner": "Build a personal OSN study plan with subjects, chapters, and your target exam stage in one place.",
+      "progress": "Track completed topics and review your progress so you always know what to study next.",
+      "practice": "Save your place in editorials and interactive visualizations, then return without losing your context."
+    },
     "login": {
       "title": "Log in",
       "emailLabel": "Email",
@@ -303,7 +328,22 @@
     "providerPassword": "Email and password",
     "goToPlan": "Go to my plan",
     "openEditor": "Open the editor",
-    "signOut": "Log out"
+    "signOut": "Log out",
+    "password": {
+      "setTitle": "Set a password",
+      "setBody": "We will email a secure link to {email} so you can choose a password.",
+      "setButton": "Set a password",
+      "sending": "Sending link…",
+      "sent": "Check your email for a link to set your password.",
+      "changeTitle": "Change password",
+      "changeBody": "Enter your current password and choose a new one.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "changeButton": "Change password",
+      "saving": "Changing password…",
+      "changed": "Your password has been changed.",
+      "genericError": "We could not update your password. Please try again."
+    }
   },
   "phase3": {
     "settings": {

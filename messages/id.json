@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "readme.md",
-    "heroTitle": "Ide yang tampak jelas.",
+    "heroTitle": "Membuat ide menjadi terlihat",
     "heroBody": "Setiap editorial ditulis oleh seseorang yang bersaing di bidang itu. Instagram membawa pancingan, yaitu ide yang mengejutkan dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap dan visualisasi interaktif yang bisa Anda manipulasi.",
     "ctaPlan": "Rencanakan belajarku",
     "recentEyebrow": "requirements.txt",
@@ -38,7 +38,23 @@
     "ctaAbout": "Baca filosofinya",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
     "ctaSyllabus": "Lihat silabus",
-    "ctaDocs": "Baca dokumentasi"
+    "ctaDocs": "Baca dokumentasi",
+    "visualizations": {
+      "eyebrow": "CATATAN INTERAKTIF",
+      "physics": "Fisika",
+      "astronomy": "Astronomi",
+      "informatics": "Informatika",
+      "projectile": "Simetri jarak proyektil",
+      "orbit": "Orbit eksentrik",
+      "binarySearch": "Pencarian biner",
+      "projectileAria": "Visualisasi fisika interaktif: simetri jarak proyektil",
+      "orbitAria": "Visualisasi astronomi interaktif: orbit eksentrik",
+      "binarySearchAria": "Visualisasi informatika interaktif: pencarian biner",
+      "previous": "Visualisasi sebelumnya",
+      "next": "Visualisasi berikutnya",
+      "slides": "Slide visualisasi",
+      "of": "dari"
+    }
   },
   "archive": {
     "eyebrow": "archive.log",
@@ -124,6 +140,15 @@
     "opensInNewTab": "(terbuka di tab baru)"
   },
   "phase2": {
+    "benefits": {
+      "eyebrow": "MENGAPA MEMBUAT AKUN?",
+      "title": "Manfaat Akun",
+      "body": "Akun gratis mengubah Cherenkov dari perpustakaan menjadi teman belajar.",
+      "accessWithoutAccount": "Kamu tetap dapat mengakses editorial, materi, silabus, dan visualisasi interaktif tanpa akun.",
+      "planner": "Buat rencana belajar OSN berdasarkan mata pelajaran, bab, dan tingkat ujian yang kamu tuju.",
+      "progress": "Tandai topik yang sudah dikuasai dan tinjau progresmu agar selalu tahu apa yang perlu dipelajari berikutnya.",
+      "practice": "Simpan posisi bacaan di editorial dan visualisasi interaktif, lalu lanjutkan tanpa kehilangan konteks."
+    },
     "login": {
       "title": "Masuk",
       "emailLabel": "Email",
@@ -303,7 +328,22 @@
     "providerPassword": "Email dan kata sandi",
     "goToPlan": "Ke rencana saya",
     "openEditor": "Buka editor",
-    "signOut": "Keluar"
+    "signOut": "Keluar",
+    "password": {
+      "setTitle": "Atur kata sandi",
+      "setBody": "Kami akan mengirim tautan aman ke {email} agar kamu dapat memilih kata sandi.",
+      "setButton": "Atur kata sandi",
+      "sending": "Mengirim tautan…",
+      "sent": "Periksa email untuk tautan mengatur kata sandi.",
+      "changeTitle": "Ganti kata sandi",
+      "changeBody": "Masukkan kata sandi saat ini dan pilih yang baru.",
+      "currentPassword": "Kata sandi saat ini",
+      "newPassword": "Kata sandi baru",
+      "changeButton": "Ganti kata sandi",
+      "saving": "Mengganti kata sandi…",
+      "changed": "Kata sandi kamu telah diganti.",
+      "genericError": "Kata sandi tidak dapat diperbarui. Silakan coba lagi."
+    }
   },
   "phase3": {
     "settings": {

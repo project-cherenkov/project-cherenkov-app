@@ -8,6 +8,9 @@ import { getAccountDetails } from "@/lib/account";
 import { ROLE_LABELS } from "@/lib/account-roles";
 import { Link } from "@/i18n/routing";
 import { SignOutButton } from "@/components/account/sign-out-button";
+import { AuthPage } from "@/components/auth/auth-page";
+import { isEmailConfigured } from "@/lib/email";
+import { PasswordSettings } from "@/components/account/password-settings";
 
 export async function generateMetadata({
   params,
@@ -19,15 +22,21 @@ export async function generateMetadata({
   return pageMetadata({ locale, path: "/account", title: t("title"), description: t("title"), noindex: true });
 }
 
-// middleware.ts already redirects signed-out visitors to /login; the null
-// checks are the defence-in-depth fallback, same as the planner pages.
 export default async function AccountPage() {
   const [t, locale, current] = await Promise.all([
     getTranslations("account"),
     getLocale(),
     getCurrentUser(),
   ]);
-  if (!current) redirect(`/${locale}/login`);
+  if (!current) {
+    return (
+      <AuthPage
+        defaultTab="login"
+        googleEnabled={Boolean(process.env.GOOGLE_CLIENT_ID)}
+        resetEnabled={isEmailConfigured()}
+      />
+    );
+  }
   const details = await getAccountDetails(current.id);
   if (!details) redirect(`/${locale}/login`);
 
@@ -57,6 +66,12 @@ export default async function AccountPage() {
         <Row label={t("signInMethods")} value={details.providers.map(providerLabel).join(", ") || "—"} />
         <Row label={t("memberSince")} value={joined} />
       </dl>
+
+      <PasswordSettings
+        email={details.email}
+        hasPassword={details.providers.includes("credential")}
+        resetEnabled={isEmailConfigured()}
+      />
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Link

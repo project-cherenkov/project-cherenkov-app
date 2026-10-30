@@ -67,6 +67,12 @@ function getAuth(): Auth {
             },
           }
         : undefined,
+    account: {
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["google", "email-password"],
+      },
+    },
   });
 
   return cached;

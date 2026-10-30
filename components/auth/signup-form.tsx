@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/auth/password-input";
 import { authCodeKey, classifyAuthError, classifyCallbackError } from "@/lib/auth-error-messages";
+import { isSafeReturnTo } from "@/lib/safe-redirect";
 
 export interface SignupFormProps {
   googleEnabled: boolean;
@@ -26,6 +27,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,7 +65,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
           setError(codeKey ? tCodes(codeKey) : (result.error.message ?? t("genericError")));
           return;
         }
-        router.push("/planner");
+        router.push(nextPath && isSafeReturnTo(nextPath) ? nextPath : "/planner");
       } catch (err) {
         // The request never got a structured response to read a per-field
         // error out of at all — e.g. offline, or the deployment's own API
@@ -87,7 +89,7 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
     try {
       const result = await signIn.social({
         provider: "google",
-        callbackURL: `/${locale}/planner`,
+        callbackURL: nextPath && isSafeReturnTo(nextPath) ? nextPath : `/${locale}/planner`,
       });
       // A successful call redirects the browser to Google before this
       // promise ever resolves — reaching here with an error means our own
