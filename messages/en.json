@@ -575,12 +575,45 @@
     "personalKeyPlaceholder": "Paste Gemini API key",
     "personalKeyRetry": "Retry once with my key",
     "settingsTitle": "Study companion",
-    "settingsDescription": "Choose the name shown in your floating study companion.",
+    "settingsDescription": "Name your companion, choose its size and how it turns, or turn it off. The mascot can be dragged anywhere on the page.",
     "nameLabel": "Companion name",
     "saveName": "Save name",
     "saving": "Saving…",
     "nameSaved": "Companion name saved.",
     "nameError": "Could not save the name. Please try again.",
+    "settingsTab": "Settings",
+    "accountOnly": "Sign in to rename the companion or turn it off. Size and rotation are saved on this device.",
+    "activeLabel": "Show the companion",
+    "activeHelp": "When off, the mascot is removed from every page. Turn it back on here at any time.",
+    "sizeLabel": "Size",
+    "sizes": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "rotationLabel": "Rotation style",
+    "rotations": {
+      "auto": {
+        "label": "Automatic",
+        "help": "Smooth 3D turning. Switches to simple turning if your device struggles."
+      },
+      "3d": {
+        "label": "3D",
+        "help": "Always use 3D turning, even if it runs slowly."
+      },
+      "flat": {
+        "label": "Simple",
+        "help": "Flat turning that uses less power and works on older devices."
+      }
+    },
+    "prefsSaved": "Settings saved.",
+    "prefsLocal": "Saved on this device.",
+    "prefsError": "Could not save. Please try again.",
+    "resetPosition": "Reset position",
+    "positionReset": "Moved back to the bottom-right corner.",
+    "hideNow": "Hide until I reload the page",
+    "showAgain": "Show the study companion again",
+    "dragHelp": "Drag to move it anywhere on the page, or use the arrow keys (hold Shift for bigger steps). Press Enter to open or close the companion.",
     "errors": {
       "cherenkov_limit": "You’ve used today’s 10 chat requests. Come back tomorrow; a personal key cannot extend this limit.",
       "provider_quota": "Cherenkov’s Gemini project or model quota is currently exhausted. A 429 can reflect a project rate or daily quota, and does not by itself mean a Gemini-wide outage.",

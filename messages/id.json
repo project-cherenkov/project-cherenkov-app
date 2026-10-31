@@ -575,12 +575,45 @@
     "personalKeyPlaceholder": "Tempel Gemini API key",
     "personalKeyRetry": "Coba sekali dengan key saya",
     "settingsTitle": "Pendamping belajar",
-    "settingsDescription": "Pilih nama yang ditampilkan pada pendamping belajar mengambang.",
+    "settingsDescription": "Beri nama pendampingmu, pilih ukuran dan cara berputarnya, atau matikan. Maskot dapat digeser ke mana saja di halaman.",
     "nameLabel": "Nama pendamping",
     "saveName": "Simpan nama",
     "saving": "Menyimpan…",
     "nameSaved": "Nama pendamping disimpan.",
     "nameError": "Nama tidak dapat disimpan. Silakan coba lagi.",
+    "settingsTab": "Pengaturan",
+    "accountOnly": "Masuk untuk mengganti nama atau mematikan pendamping. Ukuran dan gaya putaran disimpan di perangkat ini.",
+    "activeLabel": "Tampilkan pendamping",
+    "activeHelp": "Jika dimatikan, maskot dihapus dari semua halaman. Nyalakan lagi di sini kapan saja.",
+    "sizeLabel": "Ukuran",
+    "sizes": {
+      "small": "Kecil",
+      "medium": "Sedang",
+      "large": "Besar"
+    },
+    "rotationLabel": "Gaya putaran",
+    "rotations": {
+      "auto": {
+        "label": "Otomatis",
+        "help": "Putaran 3D yang halus. Beralih ke putaran sederhana jika perangkatmu kesulitan."
+      },
+      "3d": {
+        "label": "3D",
+        "help": "Selalu gunakan putaran 3D, meskipun berjalan lambat."
+      },
+      "flat": {
+        "label": "Sederhana",
+        "help": "Putaran datar yang lebih hemat daya dan cocok untuk perangkat lama."
+      }
+    },
+    "prefsSaved": "Pengaturan disimpan.",
+    "prefsLocal": "Disimpan di perangkat ini.",
+    "prefsError": "Tidak dapat menyimpan. Silakan coba lagi.",
+    "resetPosition": "Reset posisi",
+    "positionReset": "Dikembalikan ke pojok kanan bawah.",
+    "hideNow": "Sembunyikan sampai halaman dimuat ulang",
+    "showAgain": "Tampilkan pendamping belajar lagi",
+    "dragHelp": "Geser untuk memindahkannya ke mana saja di halaman, atau gunakan tombol panah (tahan Shift untuk langkah lebih besar). Tekan Enter untuk membuka atau menutup pendamping.",
     "errors": {
       "cherenkov_limit": "Kamu telah menggunakan 10 permintaan obrolan hari ini. Coba lagi besok; key pribadi tidak menambah batas ini.",
       "provider_quota": "Kuota proyek atau model Gemini milik Cherenkov sedang habis. Respons 429 dapat berarti batas laju proyek atau kuota harian, dan tidak otomatis berarti seluruh layanan Gemini sedang mati.",

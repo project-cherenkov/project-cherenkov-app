@@ -468,13 +468,26 @@ export const studySessions = pgTable(
 );
 
 // Per-account preferences for the Neutrino study companion.
-export const companionSettings = pgTable("companion_settings", {
-  userId: text("user_id")
-    .primaryKey()
-    .references(() => user.id, { onDelete: "cascade" }),
-  name: text("name").notNull().default("Neutrino"),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+// size / rotation are plain text constrained by CHECKs (not pgEnums) so a new
+// option is a one-line migration; the allowed values live in
+// lib/companion-settings.ts and the CHECKs must stay in sync with them.
+export const companionSettings = pgTable(
+  "companion_settings",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull().default("Neutrino"),
+    enabled: boolean("enabled").notNull().default(true),
+    size: text("size").notNull().default("medium"),
+    rotation: text("rotation").notNull().default("auto"),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    check("companion_settings_size_check", sql`${table.size} IN ('small', 'medium', 'large')`),
+    check("companion_settings_rotation_check", sql`${table.rotation} IN ('auto', '3d', 'flat')`),
+  ],
+);
 
 // Atomic, database-backed daily chatbot budget. The composite key makes the
 // upsert safe across serverless instances; personal Gemini keys use this same

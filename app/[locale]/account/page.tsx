@@ -11,7 +11,8 @@ import { SignOutButton } from "@/components/account/sign-out-button";
 import { AuthPage } from "@/components/auth/auth-page";
 import { isEmailConfigured } from "@/lib/email";
 import { PasswordSettings } from "@/components/account/password-settings";
-import { CompanionNameForm } from "@/components/account/companion-name-form";
+import { CompanionPreferences } from "@/components/study/companion-preferences";
+import { DEFAULT_COMPANION_PREFS, normalizeCompanionPrefs } from "@/lib/companion-settings";
 import { db } from "@/lib/db";
 import { companionSettings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -43,16 +44,21 @@ export default async function AccountPage() {
   }
   const details = await getAccountDetails(current.id);
   if (!details) redirect(`/${locale}/login`);
-  let companionName = "Neutrino";
+  let companionPrefs = DEFAULT_COMPANION_PREFS;
   try {
     const [setting] = await db
-      .select({ name: companionSettings.name })
+      .select({
+        name: companionSettings.name,
+        enabled: companionSettings.enabled,
+        size: companionSettings.size,
+        rotation: companionSettings.rotation,
+      })
       .from(companionSettings)
       .where(eq(companionSettings.userId, current.id))
       .limit(1);
-    companionName = setting?.name ?? companionName;
+    companionPrefs = normalizeCompanionPrefs(setting);
   } catch {
-    // Account details remain available if the optional companion preference
+    // Account details remain available if the optional companion preferences
     // cannot be read temporarily.
   }
 
@@ -83,7 +89,7 @@ export default async function AccountPage() {
         <Row label={t("memberSince")} value={joined} />
       </dl>
 
-      <CompanionNameForm initialName={companionName} />
+      <CompanionPreferences signedIn initial={companionPrefs} />
 
       <PasswordSettings
         email={details.email}
