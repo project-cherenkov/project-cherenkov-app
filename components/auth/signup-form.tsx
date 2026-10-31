@@ -156,6 +156,17 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
             {error}
           </p>
         ) : null}
+        <p className="text-xs text-muted-foreground">
+          {t("consent.prefix")}
+          <Link href="/terms" className="underline underline-offset-2">
+            {t("consent.terms")}
+          </Link>
+          {t("consent.and")}
+          <Link href="/privacy" className="underline underline-offset-2">
+            {t("consent.privacy")}
+          </Link>
+          {t("consent.suffix")}
+        </p>
         <Button type="submit" disabled={isPending} aria-busy={isPending}>
           {isPending ? t("submitting") : t("submit")}
         </Button>

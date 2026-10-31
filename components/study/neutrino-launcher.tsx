@@ -494,6 +494,8 @@ export function InPageNeutrino() {
 
       {showDock && !hiddenForNow ? (
         <div
+          role="region"
+          aria-label={prefs.name}
           className="neutrino-dock group fixed z-50"
           data-dragging={dragPx ? "true" : "false"}
           hidden={sheetOpen}

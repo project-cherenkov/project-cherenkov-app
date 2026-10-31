@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi. Setiap bukti disertai visualisasi yang bisa Anda manipulasi.",
-    "homeTitle": "Cherenkov: editorial olimpiade interaktif",
+    "tagline": "Editorial olimpiade OSN interaktif untuk informatika, fisika, dan astronomi. Setiap bukti disertai visualisasi yang bisa Anda manipulasi.",
+    "homeTitle": "Cherenkov: editorial OSN informatika, fisika, astronomi",
     "ogDescription": "Editorial olimpiade dengan visualisasi yang bisa Anda manipulasi."
   },
   "nav": {
@@ -53,7 +53,13 @@
       "previous": "Visualisasi sebelumnya",
       "next": "Visualisasi berikutnya",
       "slides": "Slide visualisasi",
-      "of": "dari"
+      "of": "dari",
+      "binarySearchNotes": {
+        "0": "Titik tengahnya 10: jawabannya ada di sini atau sebelumnya.",
+        "1": "6 terlalu kecil, jadi buang separuh kiri.",
+        "2": "8 terlalu kecil, jadi geser batas bawah ke depan.",
+        "3": "Kedua batas bertemu di nilai pertama yang paling sedikit bernilai 10."
+      }
     }
   },
   "archive": {
@@ -128,7 +134,8 @@
     "repoHeading": "Sumber",
     "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git, jadi riwayat commit-nya terbuka. Berkontribusilah di GitHub.",
     "contactHeading": "Kontak",
-    "contactPlaceholder": "[PLACEHOLDER: informasi kontak belum ditulis]"
+    "contactPlaceholder": "[PLACEHOLDER: informasi kontak belum ditulis]",
+    "metaDescription": "Tentang Project Cherenkov: arsip editorial olimpiade interaktif sumber terbuka untuk siswa OSN Indonesia, dan gagasan di baliknya."
   },
   "footer": {
     "tagline": "Ide yang tampak jelas.",
@@ -177,7 +184,14 @@
       "hasAccount": "Sudah punya akun?",
       "loginLink": "Masuk",
       "genericError": "Terjadi kesalahan. Silakan coba lagi.",
-      "submitting": "Membuat akun…"
+      "submitting": "Membuat akun…",
+      "consent": {
+        "prefix": "Dengan membuat akun, Anda menyetujui ",
+        "and": " dan ",
+        "terms": "Ketentuan Penggunaan",
+        "privacy": "Kebijakan Privasi",
+        "suffix": ". Jika berusia di bawah 18 tahun, minta izin orang tua atau wali dahulu."
+      }
     },
     "planner": {
       "overviewHeading": "Progres kamu",
@@ -733,6 +747,16 @@
       "manual": "ditambahkan manual",
       "delete": "Hapus",
       "deleteError": "Tidak bisa menghapus sesi itu."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Kebijakan Privasi",
+      "description": "Data pribadi apa yang dikumpulkan Project Cherenkov, alasannya, siapa penerimanya, dan hak Anda."
+    },
+    "terms": {
+      "title": "Ketentuan Penggunaan",
+      "description": "Aturan memakai Project Cherenkov: akun, penggunaan yang diperbolehkan, lisensi konten, dan fitur AI."
     }
   }
 }

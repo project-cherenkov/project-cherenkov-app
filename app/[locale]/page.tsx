@@ -85,16 +85,13 @@ export default async function HomePage({
               ))}
             </ul>
             </div>
-            <div className="hidden lg:block">
-              <HomeVisualizations />
-            </div>
+            {/* ONE instance, placed by the grid: beside the text from lg up,
+                under it below. It used to be rendered twice (one copy hidden
+                with CSS at each breakpoint), which mounted every simulation
+                twice and put two copies of its headings in the DOM. */}
+            <HomeVisualizations />
           </div>
-
         </div>
-      </section>
-
-      <section className="mx-auto max-w-5xl px-4 pb-14 sm:px-6 lg:hidden">
-        <HomeVisualizations />
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6">

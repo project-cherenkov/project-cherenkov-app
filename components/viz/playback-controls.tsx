@@ -36,7 +36,7 @@ export function PlaybackControls({
   const t = useTranslations("viz");
 
   return (
-    <div className="flex flex-col gap-2 border-t border-border pt-3">
+    <div className="mt-auto flex flex-col gap-2 border-t border-border pt-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Button

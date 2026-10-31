@@ -50,7 +50,10 @@ type VizEditorial = Pick<Editorial, "vizConfig">;
 // visualizations.
 function VizFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-lg border border-border-strong/40 bg-card p-4 shadow-sm sm:p-5">
+    // flex + [&>*]:grow lets a frame be stretched by its parent (the home page's
+    // carousel gives every slide the same height); in normal flow the frame is
+    // content-sized and these do nothing.
+    <div className="flex flex-col rounded-lg border border-border-strong/40 bg-card p-4 shadow-sm sm:p-5 [&>*]:grow">
       {children}
     </div>
   );

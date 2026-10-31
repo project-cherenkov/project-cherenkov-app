@@ -141,8 +141,8 @@ describe("SiteHeader — accessibility", () => {
   it("gives each language link its own language and an autonym label", () => {
     const html = render();
     expect(html).toMatch(/<a href="\/id\/about"[^>]*lang="id"/);
-    expect(html).toContain('aria-label="Bahasa Indonesia (ID)"');
-    expect(html).toContain('aria-label="English (EN)"');
+    expect(html).toContain('<span class="sr-only"> Bahasa Indonesia</span>');
+    expect(html).toContain('<span class="sr-only"> English</span>');
     // The old English-only label must be gone.
     expect(html).not.toContain("Switch language to");
   });
