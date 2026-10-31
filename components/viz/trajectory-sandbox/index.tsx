@@ -177,6 +177,7 @@ export function TrajectorySandbox({
   const maxRange = physics.position(flightTime, initial, config.gravity).x;
   const maxHeight = physics.position(flightTime / 2, initial, config.gravity).y;
   const scrubValue = flightTime > 0 ? Math.round((simTime / flightTime) * SCRUB_STEPS) : 0;
+  const showLegend = Math.abs(angleDeg - 45) > 0.5;
 
   return (
     <div className="flex flex-col gap-3">
@@ -215,18 +216,23 @@ export function TrajectorySandbox({
         <p className="label-mono">
           range ≈ {maxRange.toFixed(1)} m · max height ≈ {maxHeight.toFixed(1)} m
         </p>
-        {Math.abs(angleDeg - 45) > 0.5 && (
-          <p className="label-mono flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden className="inline-block w-5 border-t-2 border-dashed border-cherenkov-blue-700 dark:border-cherenkov-blue-400" />
-              {t("trajectoryLegendLaunch", { angle: angleDeg.toFixed(0) })}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden className="inline-block w-5 border-t-2 border-dotted border-cherenkov-pink-400" />
-              {t("trajectoryLegendComplement", { angle: (90 - angleDeg).toFixed(0) })}
-            </span>
-          </p>
-        )}
+        {/* Kept in the layout (just hidden) at 45°, where the two arcs
+            coincide: removing it made the whole visualization, and anything
+            laid out around it, jump in height whenever the angle slider
+            crossed 45°. */}
+        <p
+          className={`label-mono flex items-center gap-3 ${showLegend ? "" : "invisible"}`}
+          aria-hidden={showLegend ? undefined : true}
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <span aria-hidden className="inline-block w-5 border-t-2 border-dashed border-cherenkov-blue-700 dark:border-cherenkov-blue-400" />
+            {t("trajectoryLegendLaunch", { angle: angleDeg.toFixed(0) })}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span aria-hidden className="inline-block w-5 border-t-2 border-dotted border-cherenkov-pink-400" />
+            {t("trajectoryLegendComplement", { angle: (90 - angleDeg).toFixed(0) })}
+          </span>
+        </p>
       </div>
 
       <PlaybackControls

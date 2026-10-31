@@ -12,3 +12,15 @@
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
 ).replace(/\/$/, "");
+
+// A launch with indexing on but no real origin would publish localhost
+// canonicals, sitemap entries and Open Graph URLs. Say so at build time.
+if (
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING &&
+  !process.env.NEXT_PUBLIC_SITE_URL &&
+  process.env.NODE_ENV === "production"
+) {
+  console.warn(
+    "[seo] NEXT_PUBLIC_ALLOW_INDEXING is set but NEXT_PUBLIC_SITE_URL is not: canonical URLs and the sitemap will point at localhost.",
+  );
+}

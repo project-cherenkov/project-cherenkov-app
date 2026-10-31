@@ -11,12 +11,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
-  // The philosophy paragraph is the page's real summary; reuse its opening.
+  // A dedicated search-snippet description: the philosophy paragraph opens
+  // with neutrinos, which says nothing about what the site is.
   return pageMetadata({
     locale,
     path: "/about",
     title: t("title"),
-    description: t("philosophyPlaceholder"),
+    description: t("metaDescription"),
   });
 }
 

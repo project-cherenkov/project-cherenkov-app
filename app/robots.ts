@@ -1,40 +1,48 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/site";
 
-// DEPLOYMENT-READINESS ADDITION, not part of the original spec — no
-// robots.txt existed at all. /keystatic and /api are disallowed here as a
-// second, independent layer on top of lib/admin-guard.ts's actual access
-// control (a 404 doesn't need a disallow rule to be safe, but keeping
-// well-behaved crawlers from even requesting it is good practice and
-// costs nothing).
+// Crawler rules. /keystatic and /api are disallowed as a second layer on top
+// of lib/admin-guard.ts's real access control; the account-only pages carry no
+// search value and are also marked noindex in their own metadata. Do NOT add
+// pages you want REMOVED from search results here: a blocked page can never
+// have its noindex read. See lib/seo.ts (isIndexingEnabled) for the real
+// "don't index yet" switch.
 //
-// SEO pass: the account-only pages (login, signup, planner, account) are now
-// disallowed too. They carry no search value, they redirect or show a form,
-// and crawling them just spends crawl budget. They are ALSO marked noindex in
-// their own metadata, which is the part that actually keeps them out of the
-// index if something links to them.
-//
-// IMPORTANT interaction: a page blocked here can never have its noindex read.
-// That is fine for the pages above (they are not meant to be indexed either
-// way), but do NOT add pages you want to *remove* from search results to this
-// list — leave them crawlable with a noindex instead.
-//
-// See lib/seo.ts (isIndexingEnabled) for the real "don't index yet" switch,
-// driven by NEXT_PUBLIC_ALLOW_INDEXING and independent of this file.
+// AI crawlers. Two different things are controlled here, and they are separate
+// decisions:
+//  - SEARCH / ANSWER bots fetch pages so an assistant can cite you
+//    (OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-SearchBot, Claude-User).
+//    They are left allowed: being cited is the point of AI search visibility.
+//  - TRAINING bots collect pages to train models (GPTBot, ClaudeBot,
+//    Google-Extended, Applebot-Extended, CCBot, Bytespider, meta-externalagent).
+//    Default is to allow (the behaviour before this file named them). Set
+//    AI_TRAINING_CRAWLERS=disallow to opt the site out of training; this does
+//    not affect Google or Bing search ranking. robots.txt is a request, not an
+//    enforcement mechanism.
+const TRAINING_BOTS = [
+  "GPTBot",
+  "ClaudeBot",
+  "Google-Extended",
+  "Applebot-Extended",
+  "CCBot",
+  "Bytespider",
+  "meta-externalagent",
+];
+
+const DISALLOWED = [
+  "/keystatic",
+  "/api",
+  "/*/login",
+  "/*/signup",
+  "/*/planner",
+  "/*/account",
+];
+
 export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: [
-        "/keystatic",
-        "/api",
-        "/*/login",
-        "/*/signup",
-        "/*/planner",
-        "/*/account",
-      ],
-    },
-    sitemap: `${siteUrl}/sitemap.xml`,
-  };
+  const blockTraining = process.env.AI_TRAINING_CRAWLERS === "disallow";
+  const rules: MetadataRoute.Robots["rules"] = [
+    { userAgent: "*", allow: "/", disallow: DISALLOWED },
+  ];
+  if (blockTraining) rules.push({ userAgent: TRAINING_BOTS, disallow: "/" });
+  return { rules, sitemap: `${siteUrl}/sitemap.xml` };
 }

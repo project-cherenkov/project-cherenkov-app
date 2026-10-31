@@ -202,12 +202,15 @@ export function SiteHeader() {
                         ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white",
                     ].join(" ")}
-                    aria-label={`${name} (${label})`}
                   >
                     <span aria-hidden="true" className="hidden min-[420px]:inline">
                       {flag}
                     </span>
                     <span className="font-semibold leading-none">{label}</span>
+                    {/* Full language name for screen readers, appended to the
+                        visible code so the accessible name starts with what is
+                        on screen (WCAG 2.5.3), e.g. "EN English". */}
+                    <span className="sr-only"> {name}</span>
                   </Link>
                 );
               })}

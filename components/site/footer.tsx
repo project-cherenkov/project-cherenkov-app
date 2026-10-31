@@ -34,14 +34,12 @@ export function SiteFooter() {
             {t("license")}
             {external}
           </a>
-          <a href={`${gitHubBase}/TERMS.md`} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          <Link href="/terms" className={linkClass}>
             {t("terms")}
-            {external}
-          </a>
-          <a href={`${gitHubBase}/PRIVACY.md`} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          </Link>
+          <Link href="/privacy" className={linkClass}>
             {t("privacy")}
-            {external}
-          </a>
+          </Link>
           <a href="mailto:projectcherenkov@gmail.com" className={linkClass}>
             {t("contact")}
           </a>

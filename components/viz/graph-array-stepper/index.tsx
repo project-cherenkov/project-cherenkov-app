@@ -73,59 +73,81 @@ export function GraphArrayStepper({
 
   return (
     <div className="flex flex-col gap-4">
-      <div ref={containerRef} className="w-full overflow-x-auto">
-        <svg
-          width={width}
-          height={CELL_HEIGHT + 40}
-          role="img"
-          aria-label={step?.note ?? t("stepCounter", { current: stepIndex + 1, total: steps.length })}
-        >
-          {array.map((value, i) => {
-            const x = scale(i) ?? 0;
-            const isHighlighted = highlight.has(i);
-            return (
-              <g key={i} transform={`translate(${x}, 0)`}>
-                <rect
-                  width={cellWidth}
-                  height={CELL_HEIGHT}
-                  y={28}
-                  rx={6}
-                  className={
-                    isHighlighted
-                      ? "fill-cherenkov-blue stroke-cherenkov-blue-pastel"
-                      : "fill-card stroke-border-strong"
-                  }
-                  strokeWidth={isHighlighted ? 2 : 1}
-                />
-                <text
-                  x={cellWidth / 2}
-                  y={28 + CELL_HEIGHT / 2}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className={`${isHighlighted ? "fill-cherenkov-ink" : "fill-foreground"} font-mono text-sm`}
-                >
-                  {value}
-                </text>
-                {pointersByIndex.get(i) && (
+      {/* my-auto: when a parent stretches this card (the home carousel gives
+          every slide the same height) the array and its note sit in the middle
+          of the spare space instead of leaving a hole above the controls. In
+          normal flow there is no spare space and this does nothing. */}
+      <div className="my-auto flex flex-col gap-4">
+        <div ref={containerRef} className="w-full overflow-x-auto">
+          <svg
+            width={width}
+            height={CELL_HEIGHT + 40}
+            role="img"
+            aria-label={step?.note ?? t("stepCounter", { current: stepIndex + 1, total: steps.length })}
+          >
+            {array.map((value, i) => {
+              const x = scale(i) ?? 0;
+              const isHighlighted = highlight.has(i);
+              return (
+                <g key={i} transform={`translate(${x}, 0)`}>
+                  <rect
+                    width={cellWidth}
+                    height={CELL_HEIGHT}
+                    y={28}
+                    rx={6}
+                    className={
+                      isHighlighted
+                        ? "fill-cherenkov-blue stroke-cherenkov-blue-pastel"
+                        : "fill-card stroke-border-strong"
+                    }
+                    strokeWidth={isHighlighted ? 2 : 1}
+                  />
                   <text
                     x={cellWidth / 2}
-                    y={16}
+                    y={28 + CELL_HEIGHT / 2}
                     textAnchor="middle"
-                    // Pointer names are variable names (i, j, lo, hi): never uppercase them.
-                    className="fill-muted-foreground font-mono text-xs"
+                    dominantBaseline="middle"
+                    className={`${isHighlighted ? "fill-cherenkov-ink" : "fill-foreground"} font-mono text-sm`}
                   >
-                    {pointersByIndex.get(i)!.join("/")}
+                    {value}
                   </text>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-      </div>
+                  {pointersByIndex.get(i) && (
+                    <text
+                      x={cellWidth / 2}
+                      y={16}
+                      textAnchor="middle"
+                      // Pointer names are variable names (i, j, lo, hi): never uppercase them.
+                      className="fill-muted-foreground font-mono text-xs"
+                    >
+                      {pointersByIndex.get(i)!.join("/")}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+          </svg>
+        </div>
 
-      {step?.note && (
-        <MarkdownText text={step.note} className="text-sm text-foreground/75" />
-      )}
+        {/* Every step's note shares one grid cell and only the current one is
+            visible, so the block is as tall as the LONGEST note and does not
+            change height from step to step (a note that wraps to a second line
+            used to push the controls, and the page below, down and back up). */}
+        {steps.some((s) => s.note) && (
+          <div className="grid">
+            {steps.map((s, i) =>
+              s.note ? (
+                <div
+                  key={i}
+                  aria-hidden={i === stepIndex ? undefined : true}
+                  className={`col-start-1 row-start-1 ${i === stepIndex ? "" : "invisible"}`}
+                >
+                  <MarkdownText text={s.note} className="text-sm text-foreground/75" />
+                </div>
+              ) : null,
+            )}
+          </div>
+        )}
+      </div>
 
       <PlaybackControls
         current={stepIndex}

@@ -26,6 +26,8 @@ const STATIC_PATHS = [
   "/materials",
   "/docs",
   "/about",
+  "/privacy",
+  "/terms",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Interactive olympiad editorials for informatics, physics and astronomy. Every proof comes with a visualization you can manipulate.",
-    "homeTitle": "Cherenkov: interactive olympiad editorials",
+    "tagline": "Interactive OSN olympiad editorials for informatics, physics and astronomy. Every proof comes with a visualization you can manipulate.",
+    "homeTitle": "Cherenkov: interactive OSN olympiad editorials",
     "ogDescription": "Olympiad editorials with a visualization you can manipulate."
   },
   "nav": {
@@ -53,7 +53,13 @@
       "previous": "Previous visualization",
       "next": "Next visualization",
       "slides": "Visualization slides",
-      "of": "of"
+      "of": "of",
+      "binarySearchNotes": {
+        "0": "The midpoint is 10: the answer is here or before it.",
+        "1": "6 is too small, so discard the left half.",
+        "2": "8 is too small, so move the lower bound forward.",
+        "3": "The bounds meet at the first value that is at least 10."
+      }
     }
   },
   "archive": {
@@ -128,7 +134,8 @@
     "repoHeading": "Source",
     "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file, so the commit history is public. Contribute on GitHub.",
     "contactHeading": "Contact",
-    "contactPlaceholder": "[PLACEHOLDER: contact inquiries TBD]"
+    "contactPlaceholder": "[PLACEHOLDER: contact inquiries TBD]",
+    "metaDescription": "About Project Cherenkov: an open-source archive of interactive olympiad editorials for Indonesian OSN students, and the idea behind it."
   },
   "footer": {
     "tagline": "Make the idea visible.",
@@ -177,7 +184,14 @@
       "hasAccount": "Already have an account?",
       "loginLink": "Log in",
       "genericError": "Something went wrong. Please try again.",
-      "submitting": "Creating account…"
+      "submitting": "Creating account…",
+      "consent": {
+        "prefix": "By creating an account you agree to the ",
+        "and": " and the ",
+        "terms": "Terms of Use",
+        "privacy": "Privacy Policy",
+        "suffix": ". If you are under 18, ask a parent or guardian first."
+      }
     },
     "planner": {
       "overviewHeading": "Your progress",
@@ -733,6 +747,16 @@
       "manual": "added by hand",
       "delete": "Delete",
       "deleteError": "Could not delete that session."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "What personal data Project Cherenkov collects, why, who receives it, and your rights."
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "description": "The rules for using Project Cherenkov: accounts, acceptable use, content licences and AI features."
     }
   }
 }
