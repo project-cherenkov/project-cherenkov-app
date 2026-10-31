@@ -1,7 +1,18 @@
 import createNextIntlPlugin from "next-intl/plugin";
+import { execFileSync } from "node:child_process";
 
 // Points next-intl at the request-time config (locale detection, message loading).
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+
+const lastUpdatedAt =
+  process.env.NEXT_PUBLIC_LAST_UPDATED_AT ??
+  execFileSync("git", ["log", "-1", "--format=%cI"], { encoding: "utf8" }).trim();
+
+if (!lastUpdatedAt) {
+  throw new Error(
+    "Unable to determine the latest commit timestamp. Set NEXT_PUBLIC_LAST_UPDATED_AT explicitly.",
+  );
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -25,6 +36,7 @@ const nextConfig = {
     NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED: process.env.KEYSTATIC_GITHUB_CLIENT_ID
       ? "1"
       : "",
+    NEXT_PUBLIC_LAST_UPDATED_AT: lastUpdatedAt,
   },
   // Velite writes generated content types/data into .velite/ at dev/build
   // time. It's run alongside Next via `concurrently` in package.json's

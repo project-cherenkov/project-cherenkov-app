@@ -1,13 +1,18 @@
 import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
+import { formatCommitTimestamp } from "@/lib/last-updated";
 
 const gitHubBase = "https://github.com/project-cherenkov/project-cherenkov-app/blob/main";
+const lastUpdatedAt = process.env.NEXT_PUBLIC_LAST_UPDATED_AT;
 
 const linkClass = "inline-flex min-h-8 items-center underline hover:text-foreground";
 
 export function SiteFooter() {
   const t = useTranslations("footer");
+  if (!lastUpdatedAt) {
+    throw new Error("NEXT_PUBLIC_LAST_UPDATED_AT is not configured.");
+  }
 
   // The three legal links open GitHub in a new tab. Saying so (visually
   // hidden, but read by screen readers) is WCAG 3.2.5 / technique G201 — a
@@ -22,6 +27,9 @@ export function SiteFooter() {
         <p className="label-code mb-2">footer.md</p>
         <p>{t("tagline")}</p>
         <p className="mt-1">{t("madeBy")}</p>
+        <p className="mt-1">
+          {t("lastUpdatedOn")}: {formatCommitTimestamp(lastUpdatedAt)}
+        </p>
 
         <nav
           aria-label={t("navLabel")}
