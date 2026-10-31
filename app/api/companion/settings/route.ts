@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
 import { companionSettings } from "@/lib/db/schema";
+import { normalizeCompanionPrefs, parseCompanionPatch } from "@/lib/companion-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -11,16 +12,25 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
   try {
     const [setting] = await db
-      .select({ name: companionSettings.name })
+      .select({
+        name: companionSettings.name,
+        enabled: companionSettings.enabled,
+        size: companionSettings.size,
+        rotation: companionSettings.rotation,
+      })
       .from(companionSettings)
       .where(eq(companionSettings.userId, user.id))
       .limit(1);
-    return NextResponse.json({ name: setting?.name ?? "Neutrino" });
+    // No row yet means "all defaults"; normalising also guards against any
+    // value that predates the CHECK constraints.
+    return NextResponse.json(normalizeCompanionPrefs(setting));
   } catch {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
 }
 
+// Partial update: send only the fields that changed. Unsent fields keep their
+// stored value (or the column default if the account has no row yet).
 export async function PATCH(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
@@ -30,20 +40,24 @@ export async function PATCH(request: Request) {
   } catch {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
   }
-  const name = typeof body === "object" && body !== null ? (body as { name?: unknown }).name : null;
-  if (typeof name !== "string" || name.trim().length < 1 || name.trim().length > 32) {
-    return NextResponse.json({ error: "invalid" }, { status: 400 });
-  }
+  const patch = parseCompanionPatch(body);
+  if (!patch) return NextResponse.json({ error: "invalid" }, { status: 400 });
+
   try {
-    const normalized = name.trim();
-    await db
+    const [saved] = await db
       .insert(companionSettings)
-      .values({ userId: user.id, name: normalized })
+      .values({ userId: user.id, ...patch })
       .onConflictDoUpdate({
         target: companionSettings.userId,
-        set: { name: normalized, updatedAt: new Date() },
+        set: { ...patch, updatedAt: new Date() },
+      })
+      .returning({
+        name: companionSettings.name,
+        enabled: companionSettings.enabled,
+        size: companionSettings.size,
+        rotation: companionSettings.rotation,
       });
-    return NextResponse.json({ name: normalized });
+    return NextResponse.json(normalizeCompanionPrefs(saved));
   } catch {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }

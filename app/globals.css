@@ -134,3 +134,150 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Neutrino mascot (components/study/manifold-mascot.tsx)
+
+   The mascot always sits on its own dark plate, so these colours are the same
+   in light and dark themes. They are deliberately soft: the brightest tone is
+   a pale blue (not white), halos are low-alpha, and nothing flashes. The
+   fastest motion is a ~0.8 Hz shimmer on small nodes while the companion is
+   "thinking", well under the 3-flashes-per-second limit of WCAG 2.3.1.
+   Base hues come from the brand tokens (cherenkov-blue-300/400, pink-300) and
+   are dimmed here for use on the plate.
+   --------------------------------------------------------------------------- */
+:root {
+  --mf-plate-a: #14283f;
+  --mf-plate-b: #08121f;
+  --mf-rim: #4a87a6;
+  --mf-core: #6cc6ee;
+  --mf-core-hi: #b4e3f8;
+  --mf-edge: #8fd3f2;
+  --mf-node: #c4eaf9;
+  --mf-accent: #e29ab6;
+}
+
+.mf-root {
+  display: block;
+}
+
+.mf-float {
+  animation: mf-float 6s ease-in-out infinite;
+}
+.mf-root[data-mood="thinking"] .mf-float {
+  animation-duration: 3s;
+}
+@keyframes mf-float {
+  0%, 100% { transform: translateY(1.6px); }
+  50% { transform: translateY(-2px); }
+}
+
+.mf-halo,
+.mf-core {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mf-pulse 5s ease-in-out infinite;
+}
+.mf-root[data-mood="thinking"] .mf-halo,
+.mf-root[data-mood="thinking"] .mf-core {
+  animation-duration: 1.8s;
+}
+@keyframes mf-pulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.82; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+/* A highlight travelling around the shock boundary. */
+.mf-comet {
+  animation: mf-orbit 9s linear infinite;
+}
+.mf-root[data-mood="thinking"] .mf-comet {
+  animation-duration: 2.2s;
+}
+@keyframes mf-orbit {
+  to { stroke-dashoffset: -100; }
+}
+
+/* Streaming trails: only visible while thinking. */
+.mf-trails {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.mf-root[data-mood="thinking"] .mf-trails {
+  opacity: 0.65;
+}
+.mf-trail {
+  animation: mf-orbit 2.6s linear infinite;
+}
+.mf-trail-b { animation-duration: 3.1s; animation-delay: -0.8s; }
+.mf-trail-c { animation-duration: 3.7s; animation-delay: -1.6s; }
+
+.mf-sparkle {
+  animation: mf-twinkle 3.6s ease-in-out infinite;
+}
+.mf-sparkle:nth-child(2) { animation-delay: -0.9s; }
+.mf-sparkle:nth-child(3) { animation-delay: -1.8s; }
+.mf-sparkle:nth-child(4) { animation-delay: -2.7s; }
+.mf-root[data-mood="thinking"] .mf-sparkle {
+  animation-duration: 1.8s;
+}
+@keyframes mf-twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
+}
+
+/* Flat fallback: the lattice is a static projection turned in the plane by
+   CSS alone, so no script runs per frame. Idle rests, then turns once. */
+.mf-lattice-flat {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  animation: mf-flat-idle 18s ease-in-out infinite;
+}
+.mf-root[data-mood="thinking"] .mf-lattice-flat {
+  animation: mf-flat-think 2.8s linear infinite;
+}
+@keyframes mf-flat-idle {
+  0%, 62% { transform: rotate(0deg); }
+  78%, 100% { transform: rotate(360deg); }
+}
+@keyframes mf-flat-think {
+  to { transform: rotate(360deg); }
+}
+.mf-root[data-mood="thinking"] .mf-lattice-flat .mf-node {
+  animation: mf-shimmer 1.3s ease-in-out infinite;
+}
+@keyframes mf-shimmer {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Dock: the draggable wrapper around the mascot. */
+.neutrino-dock {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.neutrino-dock[data-dragging="true"] {
+  cursor: grabbing;
+}
+.neutrino-dock[data-dragging="true"] .neutrino-plate {
+  transform: scale(1.06);
+}
+.neutrino-plate {
+  transition: transform 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mf-root *,
+  .neutrino-plate {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Two-tone focus ring for the mascot: visible on both the light and dark page. */
+.neutrino-focus:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--mf-plate-b);
+}
