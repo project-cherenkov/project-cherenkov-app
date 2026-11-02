@@ -50,6 +50,7 @@ export default async function AccountPage() {
       .select({
         name: companionSettings.name,
         enabled: companionSettings.enabled,
+        aiEnabled: companionSettings.aiEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       })

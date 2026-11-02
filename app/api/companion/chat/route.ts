@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
-import { companionUsage } from "@/lib/db/schema";
+import { companionSettings, companionUsage } from "@/lib/db/schema";
+import { COMPANION_DAILY_LIMIT, COMPANION_MAX_HISTORY, COMPANION_MAX_MESSAGE_CHARS } from "@/lib/companion-settings";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const DAILY_LIMIT = 10;
-const MAX_MESSAGES = 6;
-const MAX_MESSAGE_LENGTH = 1200;
+const DAILY_LIMIT = COMPANION_DAILY_LIMIT;
+const MAX_MESSAGES = COMPANION_MAX_HISTORY;
+const MAX_MESSAGE_LENGTH = COMPANION_MAX_MESSAGE_CHARS;
 const MAX_PERSONAL_KEY_LENGTH = 256;
 const MODEL = "gemini-3.5-flash-lite";
 
@@ -62,6 +63,21 @@ export async function POST(request: Request) {
       (typeof personalKey !== "string" || personalKey.length > MAX_PERSONAL_KEY_LENGTH || record.personalKeyConsent !== true))
   ) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
+  }
+
+  // The student can switch the AI off in Neutrino's settings. Enforce it here
+  // too, so a stale tab or a hand-made request cannot send a message anyway.
+  // No settings row means the default (on). Checked before the daily budget so
+  // a refused request never uses up a request.
+  try {
+    const [setting] = await db
+      .select({ aiEnabled: companionSettings.aiEnabled })
+      .from(companionSettings)
+      .where(eq(companionSettings.userId, user.id))
+      .limit(1);
+    if (setting && !setting.aiEnabled) return NextResponse.json({ error: "ai_disabled" }, { status: 403 });
+  } catch {
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
 
   const key = typeof personalKey === "string" && personalKey.trim()

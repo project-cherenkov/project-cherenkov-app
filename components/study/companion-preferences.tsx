@@ -10,7 +10,7 @@ import {
 } from "@/lib/companion-settings";
 import { useCompanionPrefs, type PrefsSaveResult } from "@/components/study/use-companion-prefs";
 
-type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset";
+type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset";
 
 const optionLabel =
   "flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
@@ -69,12 +69,14 @@ export function CompanionPreferences({
   initial,
   variant = "card",
   onResetPosition,
+  onResetPanelSize,
   onHideUntilReload,
 }: {
   signedIn: boolean;
   initial?: CompanionPrefs;
   variant?: "card" | "compact";
   onResetPosition?: () => void;
+  onResetPanelSize?: () => void;
   onHideUntilReload?: () => void;
 }) {
   const t = useTranslations("companion");
@@ -106,6 +108,7 @@ export function CompanionPreferences({
     : status === "local" ? t("prefsLocal")
     : status === "error" ? t("prefsError")
     : status === "positionReset" ? t("positionReset")
+    : status === "panelSizeReset" ? t("panelSizeReset")
     : "";
 
   const body = (
@@ -151,6 +154,20 @@ export function CompanionPreferences({
         <p className="rounded-md bg-muted/60 p-3 text-xs text-muted-foreground">{t("accountOnly")}</p>
       )}
 
+      <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+        <input
+          type="checkbox"
+          role="switch"
+          checked={prefs.aiEnabled}
+          onChange={(event) => void apply({ aiEnabled: event.target.checked })}
+          className="mt-1 h-5 w-5 shrink-0"
+        />
+        <span>
+          <span className="block font-medium">{t("aiLabel")}</span>
+          <span className="block text-xs text-muted-foreground">{t("aiHelp")}</span>
+        </span>
+      </label>
+
       <RadioGroup
         legend={t("sizeLabel")}
         name={`${fieldId}-size`}
@@ -171,7 +188,7 @@ export function CompanionPreferences({
         }))}
       />
 
-      {onResetPosition || onHideUntilReload ? (
+      {onResetPosition || onResetPanelSize || onHideUntilReload ? (
         <div className="flex flex-wrap gap-2">
           {onResetPosition ? (
             <button
@@ -180,6 +197,15 @@ export function CompanionPreferences({
               className="min-h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
             >
               {t("resetPosition")}
+            </button>
+          ) : null}
+          {onResetPanelSize ? (
+            <button
+              type="button"
+              onClick={() => { onResetPanelSize(); setStatus("panelSizeReset"); }}
+              className="min-h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            >
+              {t("resetPanelSize")}
             </button>
           ) : null}
           {onHideUntilReload ? (

@@ -7,7 +7,9 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 - **Idle:** gentle vertical hover, slow core pulse, slow drift, and every 6 to 11 seconds one eased full turn ("spins sometimes").
 - **Thinking** (while a chat reply is pending): fast steady spin, streaming trails, quicker pulse, small node shimmer.
 - Drag it anywhere (pointer), or focus it and use the arrow keys (Shift = bigger steps). Click or Enter opens the panel. Position is stored as a fraction of the available space in `localStorage` (`neutrino-position-v1`), so resizing or rotating a phone never strands it off-screen.
-- The panel has three tabs: Study chat, Study timer, Settings. It opens beside the mascot (above or below, whichever has room) and as a bottom sheet under 640px wide.
+- The panel has three tabs: Ask, Study timer, Settings. It opens beside the mascot (above or below, whichever has room) and as a bottom sheet under 640px wide.
+- **Ask has two modes, FAQ and AI chat.** FAQ is the default every time (the mode is component state, never persisted). The segmented control and a `role="status"` notice under it always say which mode is active (amber notice for AI, because text leaves the device); the panel subtitle repeats it. The FAQ (`components/study/neutrino-faq.tsx`, data and search in `lib/neutrino-faq.ts`, wording in `companion.faq.*` in both message files) is pre-written and sends nothing anywhere. When `aiEnabled` is false the control is not rendered at all and Ask shows only the FAQ.
+- **Resizing (desktop, >= 640px):** the panel is attached to the mascot, so only the two *free* edges (the ones facing away from it) and the corner between them are draggable; `placePanel` reports them as `freeHorizontal` / `freeVertical`. The attached edges never move, which is why releasing a drag needs no snap-back: placing the panel again with the stored size gives the same frame (unit-tested). Handles sit just outside the panel so they never cover its scrollbar or buttons. Each edge is a focusable `role="separator"` with arrow-key support (Shift = bigger step); double-click or Settings > Reset panel size restores the default. Size is stored per device in `localStorage` (`neutrino-panel-size-v1`), clamped to a 300x320 minimum and to the viewport. The phone bottom sheet is deliberately not resizable.
 
 ## Settings (account page and the panel's Settings tab share one component)
 | Field | Values | Stored | Signed out |
@@ -16,6 +18,9 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 | `enabled` | boolean | `companion_settings.enabled` | not available |
 | `size` | small 56px, medium 76px, large 104px | `companion_settings.size` | `localStorage` (`neutrino-prefs-v1`) |
 | `rotation` | `auto`, `3d`, `flat` | `companion_settings.rotation` | `localStorage` (`neutrino-prefs-v1`) |
+| `aiEnabled` | boolean | `companion_settings.ai_enabled` (migration `0005_neutrino_ai_toggle`) | `localStorage` (`neutrino-prefs-v1`) |
+
+`aiEnabled` switches off only the AI chat. The chat route also refuses (`403 ai_disabled`) for an account whose row says it is off, before the daily budget is touched, so a stale tab or hand-made request cannot bypass it.
 
 `PATCH /api/companion/settings` takes a partial body and rejects the whole request if any field is invalid. Migration `0004_neutrino_mascot_settings` adds the columns with defaults (existing rows become enabled / medium / auto) and CHECK constraints that must stay in sync with `lib/companion-settings.ts`.
 
@@ -40,8 +45,8 @@ The animation loop uses the `requestAnimationFrame` of the window that owns the 
 
 ## Deliberately not built yet
 - More states (for example timer running, break, or session finished). The structure supports it: add a value to `MascotMood`, a `data-mood` rule in `globals.css`, and a branch in `stepMotion`.
-- Persisting the dock position to the account (it is per device on purpose, because the viewport differs per device).
+- Persisting the dock position (and panel size) to the account (it is per device on purpose, because the viewport differs per device).
 - Name and "show the companion" for signed-out visitors (they are account features).
 
 ## Files
-`lib/companion-settings.ts` (types, validation) · `lib/companion-position.ts` (drag and panel geometry) · `lib/manifold-geometry.ts` (3D maths, motion, frame monitor) · `components/study/manifold-mascot.tsx` · `components/study/neutrino-launcher.tsx` · `components/study/companion-preferences.tsx` · `components/study/use-companion-prefs.ts` · `app/api/companion/settings/route.ts` · mascot CSS at the end of `app/globals.css`.
+`lib/companion-settings.ts` (types, validation) · `lib/companion-position.ts` (drag, panel placement and resize geometry) · `lib/neutrino-faq.ts` (FAQ structure, search) · `components/study/neutrino-faq.tsx` · `lib/manifold-geometry.ts` (3D maths, motion, frame monitor) · `components/study/manifold-mascot.tsx` · `components/study/neutrino-launcher.tsx` · `components/study/companion-preferences.tsx` · `components/study/use-companion-prefs.ts` · `app/api/companion/settings/route.ts` · mascot CSS at the end of `app/globals.css`.

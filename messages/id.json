@@ -572,10 +572,9 @@
     "subtitle": "Pendamping belajarmu",
     "close": "Tutup pendamping",
     "tools": "Alat pendamping",
-    "chatTab": "Obrolan belajar",
     "timerTab": "Timer belajar",
-    "signInTitle": "Masuk untuk menggunakan obrolan belajar",
-    "signInBody": "Timer dapat digunakan tanpa akun. Obrolan tersedia bagi siswa yang sudah masuk.",
+    "signInTitle": "Masuk untuk menggunakan obrolan AI",
+    "signInBody": "FAQ dan timer dapat digunakan tanpa akun. Obrolan AI tersedia bagi siswa yang sudah masuk.",
     "signIn": "Masuk",
     "welcome": "Tanyakan konsep, ceritakan bagian yang membuatmu bingung, atau minta petunjuk. Neutrino membantu agar kamu tetap belajar.",
     "thinking": "Sedang berpikir…",
@@ -590,14 +589,14 @@
     "personalKeyPlaceholder": "Tempel Gemini API key",
     "personalKeyRetry": "Coba sekali dengan key saya",
     "settingsTitle": "Pendamping belajar",
-    "settingsDescription": "Beri nama pendampingmu, pilih ukuran dan cara berputarnya, atau matikan. Maskot dapat digeser ke mana saja di halaman.",
+    "settingsDescription": "Beri nama pendampingmu, pilih ukuran dan cara berputarnya, matikan obrolan AI, atau matikan seluruhnya. Maskot dapat digeser ke mana saja di halaman, dan ukuran panelnya dapat diubah.",
     "nameLabel": "Nama pendamping",
     "saveName": "Simpan nama",
     "saving": "Menyimpan…",
     "nameSaved": "Nama pendamping disimpan.",
     "nameError": "Nama tidak dapat disimpan. Silakan coba lagi.",
     "settingsTab": "Pengaturan",
-    "accountOnly": "Masuk untuk mengganti nama atau mematikan pendamping. Ukuran dan gaya putaran disimpan di perangkat ini.",
+    "accountOnly": "Masuk untuk mengganti nama atau mematikan pendamping. Ukuran, gaya putaran, dan obrolan AI disimpan di perangkat ini.",
     "activeLabel": "Tampilkan pendamping",
     "activeHelp": "Jika dimatikan, maskot dihapus dari semua halaman. Nyalakan lagi di sini kapan saja.",
     "sizeLabel": "Ukuran",
@@ -639,7 +638,260 @@
       "personal_unavailable": "Gemini sementara tidak tersedia untuk key itu. Silakan coba lagi nanti.",
       "unauthenticated": "Sesi masukmu telah berakhir. Masuk kembali untuk melanjutkan obrolan.",
       "unavailable": "Layanan obrolan tidak dapat dijangkau. Silakan coba lagi.",
-      "unknown": "Pertanyaanmu belum dapat dijawab saat ini. Silakan coba lagi."
+      "unknown": "Pertanyaanmu belum dapat dijawab saat ini. Silakan coba lagi.",
+      "ai_disabled": "Obrolan AI sedang dimatikan di pengaturanmu. Nyalakan di Pengaturan untuk memakainya."
+    },
+    "askTab": "Tanya",
+    "modeGroup": "Mode jawaban",
+    "faqMode": "FAQ",
+    "aiMode": "Obrolan AI",
+    "faqBanner": "Kamu sedang memakai FAQ. Jawabannya sudah ditulis oleh tim Cherenkov, dan tidak ada yang kamu lakukan di sini yang dikirim ke AI.",
+    "aiBanner": "Kamu sedang memakai obrolan AI. Balasannya dihasilkan Gemini dari Google dan bisa salah. Apa yang kamu ketik dikirim ke Google.",
+    "aiOffNote": "Obrolan AI sedang dimatikan, jadi hanya FAQ yang tersedia.",
+    "aiTurnOn": "Nyalakan di Pengaturan",
+    "subtitleFaq": "FAQ · jawaban tertulis",
+    "subtitleAi": "Obrolan AI · balasan buatan",
+    "faq": {
+      "hello": "Halo, aku {name}. Pilih satu pertanyaan, atau cari. Ini jawaban yang sudah tertulis, jadi aku hanya bisa menjawab yang tercantum.",
+      "searchLabel": "Cari di FAQ",
+      "searchPlaceholder": "Cari pertanyaan…",
+      "clearSearch": "Hapus pencarian",
+      "groupsLabel": "Topik",
+      "allGroups": "Semua topik",
+      "count": "{count, plural, other {# pertanyaan}}",
+      "noResults": "Tidak ada pertanyaan yang cocok dengan “{query}”. Coba kata yang lebih sedikit atau berbeda.",
+      "tryAi": "Beralih ke obrolan AI",
+      "alsoAsk": "Kamu juga bisa bertanya",
+      "allQuestions": "Semua pertanyaan",
+      "hideAll": "Sembunyikan semua pertanyaan",
+      "startOver": "Mulai dari awal",
+      "groups": {
+        "start": "Memulai",
+        "reading": "Membaca dan visualisasi",
+        "planner": "Perencana belajar dan kuis",
+        "timer": "Timer dan progres",
+        "neutrino": "Neutrino, FAQ, dan AI",
+        "account": "Akun dan privasi",
+        "help": "Melapor dan berkontribusi"
+      },
+      "links": {
+        "about": "Baca halaman Tentang",
+        "account": "Buka akunmu",
+        "archive": "Buka arsip",
+        "contributing": "Baca cara berkontribusi",
+        "docsNeutrino": "Baca panduan Neutrino",
+        "docsPlanner": "Baca tentang perencana",
+        "docsReading": "Baca cara membaca editorial",
+        "docsStart": "Baca Memulai",
+        "docsViz": "Baca tentang visualisasi",
+        "docsWriting": "Baca cara menulis editorial",
+        "forgotPassword": "Reset kata sandimu",
+        "login": "Masuk",
+        "materials": "Jelajahi materi",
+        "planner": "Buka perencana belajar",
+        "privacy": "Baca halaman Privasi",
+        "progress": "Buka Progres",
+        "review": "Buka Soal yang salah",
+        "signup": "Buat akun",
+        "syllabus": "Buka silabus",
+        "timer": "Buka timer"
+      },
+      "items": {
+        "what-is": {
+          "q": "Apa itu Project Cherenkov?",
+          "a": "Arsip editorial dan perencana belajar untuk Olimpiade Sains Nasional (OSN) Indonesia, mencakup informatika, fisika, dan astronomi. Setiap editorial menjelaskan satu gagasan secara lengkap, misalnya bukti, penurunan rumus, atau teknik, dan dilengkapi visualisasi interaktif yang bisa kamu ubah dan telusuri langkah demi langkah."
+        },
+        "account-needed": {
+          "q": "Apakah aku perlu akun?",
+          "a": "Tidak. Semuanya bisa dibaca tanpa akun: silabus, materi, editorial, visualisasi, pencarian, timer, dan FAQ ini.\n\nAkun diperlukan untuk perencana belajar, kuis topik, menyimpan sesi timer yang sudah selesai, halaman progres, dan obrolan AI."
+        },
+        "three-sections": {
+          "q": "Apa bedanya silabus, materi, dan editorial?",
+          "a": "Silabus memuat cakupan resmi OSN untuk tiap mata pelajaran, topik demi topik, dan menunjukkan topik mana yang sudah punya materi atau editorial.\n\nMateri adalah uraian singkat satu topik silabus, cocok untuk mengulang dengan cepat.\n\nEditorial adalah isi arsip: satu gagasan ditulis lengkap, dengan visualisasi yang berfungsi dan bukti yang utuh."
+        },
+        "where-begin": {
+          "q": "Sebaiknya mulai dari mana?",
+          "a": "Kalau ingin tahu apa yang perlu dipelajari, buka silabus dan pilih mata pelajaranmu. Kalau kamu membuat kesalahan tertentu atau ingin tahu mengapa sesuatu benar, pakai filter di arsip, yang disusun menurut prinsip dan jenis kesalahan, bukan menurut bab. Kalau hanya butuh penyegaran cepat untuk satu topik, cari materinya."
+        },
+        "subjects-coverage": {
+          "q": "Mata pelajaran apa saja yang tercakup, dan apakah semuanya sudah ditulis?",
+          "a": "Silabus mencakup informatika, fisika, dan astronomi. Situs ini masih berkembang, jadi belum setiap topik silabus punya materi atau editorial; silabus menunjukkan mana yang sudah ada. Soal kuis pun belum merata: fisika paling banyak, sedangkan informatika dan astronomi lebih sedikit, sehingga sebagian topiknya belum bisa dikonfirmasi lewat kuis."
+        },
+        "language": {
+          "q": "Bisakah aku mengganti bahasa?",
+          "a": "Bisa. Pakai tombol ID / EN di bagian atas untuk beralih antara antarmuka bahasa Indonesia dan Inggris. Setiap editorial dan materi ditulis dalam satu bahasa dan tampil apa adanya di kedua antarmuka. Beberapa halaman dokumentasi saat ini hanya tersedia dalam bahasa Inggris."
+        },
+        "search": {
+          "q": "Bagaimana cara mencari di situs ini?",
+          "a": "Tekan Ctrl+K (Cmd+K di Mac) atau pakai tombol cari di bagian atas. Pencarian mencakup editorial, materi, topik silabus, dan dokumentasi. Pencarian berjalan di browsermu, jadi apa yang kamu ketik tidak dikirim ke server."
+        },
+        "phone": {
+          "q": "Apakah bisa dipakai di ponsel?",
+          "a": "Bisa. Tidak ada bagian situs yang bergantung pada hover, dan kontrol visualisasi bisa dipakai lewat sentuhan atau keyboard. Di layar sempit (lebar di bawah 640 px), Neutrino terbuka sebagai panel bawah, bukan panel mengambang."
+        },
+        "anatomy": {
+          "q": "Bagaimana editorial disusun?",
+          "a": "Editorial dibuka dengan hook, satu kalimat tentang hal yang mengejutkan, lalu masalah dan gagasannya: inti pemikiran yang dinyatakan sebelum aljabar yang berat. Berikutnya ada visualisasi interaktif di bawah “Coba sendiri”, lalu bukti lengkap dengan setiap langkahnya, dan terakhir tag untuk menemukan editorial terkait. Visualisasi sengaja diletakkan sebelum bukti, supaya kamu melihat klaimnya dulu sebelum membaca argumennya.\n\nRumus disusun dengan KaTeX dan juga tersedia sebagai MathML yang bisa dibaca pembaca layar."
+        },
+        "principle-error": {
+          "q": "Apa itu “prinsip” dan “jenis kesalahan”?",
+          "a": "Keduanya ada di dekat bagian atas setiap editorial. Prinsip adalah gagasan umum yang diajarkan editorial itu, yang berlaku melampaui satu soal. Jenis kesalahan adalah kesalahan spesifik yang diluruskannya, kalau ada. Filter arsip memakai keduanya, jadi mengikuti satu prinsip dari editorial ke editorial berikutnya adalah cara yang baik untuk menemukan lebih banyak tulisan tentang gagasan yang sama."
+        },
+        "try-first": {
+          "q": "Apa fungsi “Coba dulu sendiri”?",
+          "a": "Pada editorial yang menaruh buktinya di blok solusi, mengaktifkan “Coba dulu sendiri” menutup solusi di balik tombol “Tampilkan solusi” supaya kamu bisa mencoba soalnya sendiri. Pengaturan ini nonaktif secara bawaan dan hanya disimpan di browsermu."
+        },
+        "viz-controls": {
+          "q": "Bagaimana cara memakai visualisasi?",
+          "a": "Kebanyakan berbagi satu bilah kontrol: mundur dan maju satu langkah, putar dan jeda, reset, serta penggeser untuk melompat ke langkah atau waktu mana pun. Tidak ada yang berjalan sebelum kamu menekan Putar. Visualisasi bergaya sandbox juga punya penggeser untuk besaran utamanya, seperti sudut peluncuran atau eksentrisitas orbit.\n\nSemuanya bisa dipakai dengan keyboard. Tab berpindah antar kontrol, Spasi atau Enter menekan tombol, dan pada penggeser, tombol panah mengubah nilai satu langkah, Page Up dan Page Down satu langkah yang lebih besar, serta Home dan End melompat ke ujung."
+        },
+        "viz-broken": {
+          "q": "Visualisasi tidak termuat. Apa yang harus kulakukan?",
+          "a": "Visualisasi dimuat setelah halaman, jadi kamu mungkin melihat placeholder sebentar. Visualisasi butuh JavaScript, tetapi teks editorial, termasuk bukti lengkapnya, tetap tersedia tanpa itu. Kalau muncul pesan kesalahan konfigurasi, yang bermasalah adalah pengaturan editorialnya, bukan browsermu, jadi mohon laporkan dengan alamat halaman dan apa yang kamu lakukan sebelumnya."
+        },
+        "syllabus-link": {
+          "q": "Bagaimana silabus dan editorial saling terhubung?",
+          "a": "Editorial atau materi bisa ditautkan ke satu topik silabus. Kalau begitu, halamannya menaut balik ke topik itu, dan baris topik di silabus menaut ke depan ke editorial atau materinya. Pakai silabus sebagai daftar isi dan editorial sebagai pembahasan mendalam."
+        },
+        "planner-what": {
+          "q": "Apa yang dilakukan perencana belajar?",
+          "a": "Perencana menyusun jadwal belajar adaptif untuk tahap OSN: kabupaten/kota (OSN-K), provinsi (OSN-P), serta semifinal dan final nasional. Ia mengasumsikan kamu sudah tahu banyak hal dan berusaha memakai waktumu di bagian yang paling membantu. Kamu perlu akun untuk memakainya."
+        },
+        "planner-setup": {
+          "q": "Bagaimana cara menyiapkan rencanaku?",
+          "a": "Saat pertama kali membuka perencana, kamu diminta mengisi mata pelajaran, tahap yang dituju, tahun ujian, jam belajar per minggu, dan zona waktu (bawaannya Asia/Jakarta). Lalu kamu menilai setiap topik silabus dari 1 (“hampir tidak tahu”) sampai 5 (“bisa mengajarkannya”). Topik yang tidak kamu nilai dihitung sebagai “tidak ada pendapat”. Semua ini bisa diubah nanti dari dasbor."
+        },
+        "planner-confirm": {
+          "q": "Mengapa rencanaku dimulai dengan kuis?",
+          "a": "Penilaian diri adalah sinyal yang lemah, jadi perencana meminta kamu mengonfirmasi apa yang kamu bilang sudah kamu kuasai. Topik yang kamu nilai tinggi dikuis lebih dulu, supaya tebakan yang terlalu percaya diri cepat ketahuan; topik yang kamu nilai rendah dikonfirmasi paling akhir. Jawaban kuis lalu memperbarui perkiraan perencana tentang apa yang kamu kuasai, dan perkiraan itu perlahan memudar seiring waktu untuk memperhitungkan lupa."
+        },
+        "planner-contents": {
+          "q": "Apa saja isi rencana?",
+          "a": "Setelah kuis konfirmasi, rencana berisi sesi belajar yang diurutkan menurut perkiraan keuntunganmu per jam, ulasan berjarak yang dihitung mundur dari tanggal ujianmu, serta masa penyangga sebelum ujian dengan satu putaran ulasan campuran terakhir. Setiap hari mencampur beberapa topik, bukan satu blok panjang, dan setiap butir menyebutkan alasannya ada di sana. Dasbor menampilkan tugas hari ini, yang terlambat, yang berikutnya, dan minggu-minggu ke depan."
+        },
+        "planner-short": {
+          "q": "Bagaimana kalau jam belajar mingguanku tidak cukup?",
+          "a": "Dasbor menampilkan banner berisi kekurangannya, topik yang tidak muat, dan sesi ulasan yang dilewati. Kamu bisa menambah jam belajar per minggu atau mengubah targetmu, lalu membuat ulang rencana."
+        },
+        "planner-regen": {
+          "q": "Apakah membuat ulang rencana menghapus progresku?",
+          "a": "Tidak. Membuat ulang rencana mempertahankan butir yang sudah kamu selesaikan dan tidak pernah menjadwal ulang belajar yang sudah selesai. Ini hanya terjadi saat kamu memintanya, dan banner memberi tahu kalau pengaturan atau jawaban kuismu berubah sejak rencana dibuat. “Hari ini” mengikuti zona waktu di pengaturanmu, bukan zona waktu server."
+        },
+        "planner-quiz": {
+          "q": "Bagaimana kuis topik bekerja?",
+          "a": "Setiap halaman topik di perencana punya kuis pilihan ganda. Tingkat kesulitannya mengikuti tahap yang kamu tuju: soal dasar sampai menengah untuk OSN-K, menengah sampai lanjutan untuk OSN-P, dan lanjutan untuk semifinal dan final. Jawaban yang benar tidak dikirim ke browsermu sebelum kamu mengirim jawaban. Lulus kuis suatu topik otomatis menyelesaikan butir konfirmasinya di rencanamu."
+        },
+        "planner-trust": {
+          "q": "Seberapa jauh aku boleh memercayai rencana ini?",
+          "a": "Anggap sebagai panduan yang beralasan, bukan jaminan. Tingkat penguasaan target belum dikalibrasi pada siswa sungguhan, dan tanggal ujian 2027 diproyeksikan dari 2026, bukan diumumkan. Rencana juga hanya tahu apa yang kamu sampaikan dan apa yang diukur kuis, dan sebagian mata pelajaran masih punya sedikit soal kuis."
+        },
+        "timer-how": {
+          "q": "Bagaimana timer belajar bekerja?",
+          "a": "Pilih preset (fokus 25 menit dengan istirahat 5 menit, 50/10, atau 90/5) atau atur sendiri lamanya: fokus 1 sampai 180 menit dan istirahat 1 sampai 60 menit. Jalankan di tab Timer Neutrino atau di halaman Timer. Keduanya memakai satu timer yang sama, jadi timer yang sedang berjalan terlihat di kedua tempat, dan karena statusnya disimpan di browsermu, memuat ulang halaman tidak menghilangkannya."
+        },
+        "timer-count": {
+          "q": "Apa yang dihitung sebagai waktu belajar?",
+          "a": "Hanya waktu fokus. Istirahat tidak pernah dicatat. Waktu dihitung dari stempel waktu, bukan dengan menghitung detak, sehingga laptop yang tertidur atau tab di latar belakang tidak bisa menggelembungkannya: kalau perangkat tertidur selama satu blok, blok itu dikreditkan paling banyak sepanjang waktu yang direncanakan."
+        },
+        "timer-save": {
+          "q": "Mengapa sesiku tidak tersimpan?",
+          "a": "Sesi yang selesai hanya disimpan kalau kamu sudah masuk dan menekan “Selesai dan simpan”. Server juga memeriksa bahwa sesi berlangsung paling sedikit satu menit dan paling lama 12 jam, tidak berada di masa depan, dan tidak tumpang tindih dengan sesi lain. Kamu juga bisa mencatat waktu belajar di luar timer secara manual."
+        },
+        "progress-page": {
+          "q": "Apa yang ditampilkan halaman Progres?",
+          "a": "Hari aktif minggu ini, menit per hari, waktu per topik, dan peta cakupan silabus. Suatu hari dihitung aktif kalau kamu mencatat paling sedikit 10 menit atau mengerjakan kuis; membuka situs tidak dihitung dan tidak ada streak. Peta memisahkan “data belum cukup” dari “belum diketahui” dan menunjukkan berapa jawaban yang mendasari setiap perkiraan. Halaman ini bersifat pribadi."
+        },
+        "missed-questions": {
+          "q": "Di mana aku bisa menemukan soal yang kujawab salah?",
+          "a": "Di halaman Soal yang salah, yang bisa difilter menurut mata pelajaran, topik, status, dan seberapa baru kamu salah. Kamu bisa mencoba ulang suatu soal atau meminta melihat jawabannya. Mencoba ulang hanya latihan: ia bisa menyelesaikan satu kesalahan, tetapi tidak pernah mengubah perkiraan penguasaan atau rencanamu."
+        },
+        "neutrino-what": {
+          "q": "Apa itu Neutrino?",
+          "a": "Neutrino adalah kisi kecil bercahaya yang melayang di setiap halaman. Klik untuk membuka panel dengan tiga tab: Tanya, tempat kamu bisa memakai FAQ ini atau obrolan AI; Timer, timer belajar; dan Pengaturan. Kamu bisa menggesernya ke mana saja, mengubah ukuran panelnya, menyembunyikannya, dan mengganti namanya kalau sudah masuk."
+        },
+        "faq-vs-ai": {
+          "q": "Apa bedanya FAQ dan obrolan AI?",
+          "a": "FAQ selalu terbuka lebih dulu. Jawabannya ditulis oleh tim Cherenkov, mengarahkan ke halaman yang tepat, dan tidak ada yang kamu lakukan di sana yang dikirim ke AI. FAQ bisa dipakai tanpa akun, tetapi hanya bisa menjawab pertanyaan yang tercantum.\n\nObrolan AI menjawab pertanyaan belajar bebas dengan balasan yang dihasilkan Gemini dari Google. Ia butuh akun, dibatasi per hari, dan bisa salah. Pakai tombol FAQ dan Obrolan AI di bagian atas tab Tanya untuk beralih; keterangan di bawahnya selalu menyebutkan mana yang sedang kamu pakai."
+        },
+        "ai-trust": {
+          "q": "Bisakah aku memercayai jawaban AI?",
+          "a": "Anggap sebagai petunjuk, bukan otoritas. Neutrino diarahkan untuk lebih mengutamakan petunjuk, penjelasan, dan memeriksa penalaranmu daripada memberi jawaban tanpa penjelasan, serta mengatakan kalau tidak yakin, tetapi model bahasa tetap bisa salah dengan penuh percaya diri, terutama pada angka pasti, bukti, dan soal olimpiade. Ia tidak bisa melihat halaman yang sedang kamu baca atau rencanamu, dan tidak mengenal isi Cherenkov kecuali kamu mengetikkannya. Periksa hal yang penting dengan editorial, materi, atau gurumu."
+        },
+        "ai-limits": {
+          "q": "Berapa banyak pesan AI yang bisa kukirim?",
+          "a": "Maksimal {limit} permintaan per akun per hari, dihitung per hari UTC, jadi hitungan kembali ke nol pada tengah malam UTC (pukul 07.00 di Jakarta). Permintaan yang gagal dan percobaan ulang masing-masing dihitung. Satu pesan bisa sampai {chars} karakter, hanya {history} pesan terakhirmu yang ikut dikirim, dan balasan dibuat singkat. Kuota Google sendiri berlaku terpisah, jadi AI bisa tidak tersedia meski permintaanmu masih tersisa."
+        },
+        "ai-privacy": {
+          "q": "Apa yang terjadi pada apa yang kuketik di obrolan AI?",
+          "a": "Pesanmu dikirim dari browser ke server Cherenkov lalu ke layanan Gemini milik Google, yang memprosesnya menurut ketentuan Google sendiri dan boleh menyimpannya untuk waktu terbatas. Cherenkov tidak menyimpannya di luar percakapan yang terbuka di browsermu. Jangan mengetik kata sandi atau informasi pribadi. Kalau usiamu di bawah 18 tahun, pakai obrolan AI hanya dengan sepengetahuan dan izin orang tua atau wali. FAQ tidak pernah mengirim apa pun ke AI."
+        },
+        "ai-key": {
+          "q": "Apa itu opsi “pakai Gemini key milikku”?",
+          "a": "Setelah terjadi galat kuota, ketersediaan, atau konfigurasi server, Neutrino bisa menawarkan untuk mencoba sekali lagi dengan Gemini API key milikmu sendiri. Opsi ini sepenuhnya sukarela. Key dikirim ke server Cherenkov dan Google hanya untuk satu permintaan itu, tidak disimpan, dan kolomnya dikosongkan sesudahnya. Key tidak menambah batas harian, dan kamu hanya boleh memasukkan key yang kamu kendalikan."
+        },
+        "ai-off": {
+          "q": "Bisakah aku mematikan AI tetapi tetap memakai Neutrino?",
+          "a": "Bisa. Di Pengaturan (atau di halaman Akun) matikan “Gunakan obrolan AI”. Tombol Obrolan AI akan hilang, tidak ada yang bisa dikirim ke AI, dan maskot, FAQ, serta timer tetap berjalan seperti biasa. Nyalakan lagi kapan saja. Pilihan ini disimpan di akunmu kalau kamu sudah masuk, dan di perangkat ini kalau belum.\n\nUntuk menghapus Neutrino sepenuhnya, matikan “Tampilkan pendamping” di Pengaturan (butuh akun). Tombol × pada maskot hanya menyembunyikannya sampai halaman dimuat ulang."
+        },
+        "neutrino-settings": {
+          "q": "Apa saja yang bisa kuubah di pengaturan Neutrino?",
+          "a": "Buka tab Pengaturan, atau pergi ke halaman Akun; keduanya mengubah pengaturan yang sama. Kamu bisa memilih ukuran maskot (kecil, sedang, atau besar) dan cara berputarnya (Otomatis, 3D, atau Sederhana), serta menyalakan atau mematikan obrolan AI, yang disimpan di perangkat ini kalau kamu belum masuk. Kalau sudah masuk, kamu juga bisa mengganti nama (1 sampai 32 karakter) dan mematikan seluruh pendamping. Kalau sistemmu meminta gerakan dikurangi, maskot tetap diam."
+        },
+        "neutrino-move": {
+          "q": "Bagaimana cara menggeser atau menyembunyikan Neutrino?",
+          "a": "Geser ke mana saja di halaman. Dengan keyboard, fokuskan lalu pakai tombol panah (tahan Shift untuk langkah lebih besar); Enter membukanya. Posisinya diingat di perangkat ini, dan “Reset posisi” di Pengaturan mengembalikannya ke pojok kanan bawah. Tombol × kecil yang muncul saat kamu mengarahkan kursor atau memfokuskannya menyembunyikannya sampai halaman dimuat ulang."
+        },
+        "neutrino-resize": {
+          "q": "Bisakah aku memperbesar atau memperkecil panelnya?",
+          "a": "Bisa, di layar selebar minimal 640 px. Panel tetap menempel pada maskot, jadi yang kamu tarik adalah dua tepi yang menjauhi maskot, atau sudut di antaranya, yang menampilkan pegangan kecil. Tarik ke arah mana pun; panel tidak akan menyusut di bawah ukuran minimum yang masih nyaman atau keluar dari layar. Dengan keyboard, fokuskan sebuah tepi lalu tekan tombol panah (tahan Shift untuk langkah lebih besar). Klik dua kali pada tepi atau pakai “Reset ukuran panel” di Pengaturan untuk kembali ke ukuran bawaan. Ukurannya diingat di perangkat ini."
+        },
+        "neutrino-float": {
+          "q": "Bisakah Neutrino dibuka di jendelanya sendiri?",
+          "a": "Di Chrome desktop versi terbaru, bisa: pilih Apungkan di header panel untuk membukanya di jendela terpisah yang tetap berada di atas jendela lain, berguna untuk menjaga timer tetap terlihat. Fitur ini memakai Document Picture-in-Picture milik Chrome, jadi biarkan tab Cherenkov tetap terbuka. Di browser lain, pakai panel di halaman, yang memiliki semua yang dimiliki jendela mengambang."
+        },
+        "faq-miss": {
+          "q": "Pertanyaanku tidak ada di sini. Bagaimana sekarang?",
+          "a": "Coba kata lain di kotak pencarian, karena pencarian melihat jawaban dan juga pertanyaan. Kalau sudah masuk, beralih ke obrolan AI untuk pertanyaan belajar bebas. Untuk cara kerja situs, dokumentasi lebih mendalam daripada FAQ ini, dan footer memuat kontak tim."
+        },
+        "data-stored": {
+          "q": "Data apa yang disimpan Cherenkov tentang aku?",
+          "a": "Tanpa akun, tidak ada selain log server biasa yang disimpan penyedia hosting. Timer, “Coba dulu sendiri”, pencarian, serta posisi dan ukuran panel Neutrino semuanya tetap di browsermu.\n\nDengan akun, disimpan alamat emailmu, data masukmu (kata sandi disimpan dalam bentuk hash; untuk masuk dengan Google, nama dan email Googlemu) dan data belajar yang kamu buat: jawaban kuis dan percobaan ulang, sesi belajar, halaman yang kamu tandai sudah dipahami, serta pengaturan dan penilaian perencanamu. Hanya cookie yang diperlukan untuk masuk, bahasa, dan tema yang dipasang, tanpa cookie iklan atau pelacakan."
+        },
+        "data-delete": {
+          "q": "Bisakah aku menghapus datakku?",
+          "a": "Kamu bisa menghapus sesi belajar satu per satu di halaman Progres. Untuk menghapus akunmu, atau meminta akses atau koreksi atas datamu, kirim email ke proyek; alamatnya ada di halaman Privasi dan di footer. Pesan obrolan tidak disimpan Cherenkov di luar percakapan yang terbuka di browsermu."
+        },
+        "roles": {
+          "q": "Apa itu “Inchoatus” dan “Primus Inter Pares”?",
+          "a": "Keduanya adalah dua peran akun yang tampil di halaman Akunmu. Inchoatus adalah anggota biasa yang sudah masuk: kamu bisa memakai perencana, kuis, dan alat lainnya, tetapi tidak bisa mengedit konten situs. Primus Inter Pares bisa menulis dan mengedit konten di alat penyuntingan situs, dan diberikan kepada akun yang emailnya ada di daftar editor proyek."
+        },
+        "password": {
+          "q": "Bagaimana cara mengganti atau mereset kata sandiku?",
+          "a": "Saat sudah masuk, pakai bagian kata sandi di halaman Akunmu: di sana kamu bisa mengganti kata sandi, atau membuatnya kalau kamu mendaftar dengan Google. Kalau lupa, halaman masuk punya tautan “Lupa kata sandi?” yang mengirim tautan reset ke emailmu. Tautan itu hanya muncul kalau layanan email situs sudah disiapkan, jadi kalau tidak terlihat, hubungi tim."
+        },
+        "report": {
+          "q": "Bagaimana cara melaporkan kesalahan atau bug?",
+          "a": "Buka issue di halaman GitHub proyek atau kirim email ke tim, sebutkan halaman mana dan apa yang salah. Untuk visualisasi yang bermasalah, sertakan alamat halaman, browser dan perangkatmu, serta apa yang kamu lakukan sebelumnya. Tautan repositori dan alamat kontak ada di footer dan di halaman Tentang."
+        },
+        "accessibility": {
+          "q": "Aku menemukan masalah aksesibilitas.",
+          "a": "Tolong laporkan: laporan aksesibilitas diperlakukan sebagai bug. Sebutkan apa yang kamu pakai (pembaca layar, hanya keyboard, zoom, perangkat switch) dan apa yang menghalangi, supaya masalahnya bisa direproduksi."
+        },
+        "contribute": {
+          "q": "Bolehkah aku berkontribusi?",
+          "a": "Boleh. Proyek ini open source dengan lisensi MIT dan setiap editorial adalah berkas yang dilacak git. Kamu bisa menulis editorial atau materi sebagai berkas .mdx lewat pull request, menerjemahkan halaman dokumentasi atau teks antarmuka, atau menyumbang kode. Panduan kontribusi menjelaskan tiap jalurnya."
+        }
+      }
+    },
+    "aiLabel": "Gunakan obrolan AI",
+    "aiHelp": "Jika dimatikan, Neutrino hanya menampilkan FAQ dan tidak ada yang pernah dikirim ke layanan AI. Pendamping, FAQ, dan timernya tetap ada.",
+    "resetPanelSize": "Reset ukuran panel",
+    "panelSizeReset": "Ukuran panel dikembalikan.",
+    "resize": {
+      "hint": "Tarik untuk mengubah ukuran. Klik dua kali untuk mengembalikan.",
+      "width": "Lebar panel",
+      "height": "Tinggi panel",
+      "corner": "Ubah ukuran panel"
     }
   },
   "timer": {

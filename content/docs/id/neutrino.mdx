@@ -1,20 +1,29 @@
 ---
 title: "Pendamping belajar Neutrino"
-description: "Buka pendamping belajar mengambang, gunakan timer, dan bertanya tentang informatika, fisika, atau astronomi."
+description: "Buka pendamping belajar, cari jawaban di FAQ-nya, gunakan timer, dan ngobrol dengan AI opsional tentang informatika, fisika, atau astronomi."
 section: start
 order: 35
-updatedAt: "2026-10-31"
+updatedAt: "2026-11-02"
 ---
 
 Neutrino dapat digunakan dengan dua cara: klik maskotnya yang bercahaya (di kanan bawah secara bawaan) untuk membuka pendamping langsung di halaman, lalu pilih **Apungkan** di dalam pendamping untuk membuka jendela terpisah di atas jendela lain. Jendela mengambang menggunakan Document Picture-in-Picture dari Chrome, jadi gunakan Chrome desktop versi terbaru dan biarkan tab Cherenkov tetap terbuka. Pendamping di halaman tetap bisa digunakan tanpa dukungan Picture-in-Picture.
 
 ## Maskot
 
-Maskot Neutrino adalah kisi kecil yang bercahaya dengan inti terang dan cincin di sekelilingnya. Maskot berputar pelan saat kamu belajar dan berputar lebih cepat ketika sedang memikirkan jawaban obrolan.
+Maskot Neutrino adalah kisi kecil yang bercahaya dengan inti terang dan cincin di sekelilingnya. Maskot berputar pelan saat kamu belajar dan berputar lebih cepat ketika sedang memikirkan balasan obrolan AI.
 
 - **Pindahkan:** geser ke mana saja di halaman. Klik maskot (atau tekan Enter saat maskot terfokus) untuk membuka pendamping. Dengan keyboard, fokuskan maskot lalu gunakan tombol panah untuk memindahkannya; tahan Shift untuk langkah lebih besar. Posisinya diingat di perangkat ini.
 - **Sembunyikan sementara:** arahkan kursor atau fokuskan maskot lalu gunakan tombol × kecil, atau pilih **Sembunyikan sampai halaman dimuat ulang** di tab **Pengaturan** pendamping. Tombol kecil di kanan bawah akan memunculkannya kembali.
 - **Gerakan:** jika sistemmu meminta gerakan dikurangi, maskot tetap diam.
+
+## Tanya: FAQ dan obrolan AI
+
+Tab **Tanya** punya dua mode, yang diganti dengan tombol **FAQ** dan **Obrolan AI** di bagian atas. Keterangan di bawah tombol selalu menyebutkan mode mana yang sedang kamu pakai, dan baris di bawah nama Neutrino di header mengulanginya.
+
+- **FAQ** adalah tempat pendamping mulai setiap kali. Jawabannya ditulis oleh tim Cherenkov dan mengarah ke halaman situs yang tepat. FAQ bisa dipakai tanpa akun, dan tidak ada yang kamu lakukan di sana yang dikirim ke AI. Pilih pertanyaan dari daftar, cari, atau persempit menurut topik; jawabannya muncul beserta tautan dan beberapa pertanyaan lanjutan. Teks yang kamu ketik di kotak pencarian tetap di browsermu.
+- **Obrolan AI** menjawab pertanyaan belajar bebas dengan balasan yang dihasilkan Gemini dari Google. Ia butuh akun, dihitung dalam batas harian di bawah, dan bisa salah. Lihat [Obrolan belajar](#obrolan-belajar).
+
+Jika obrolan AI dimatikan di Pengaturan, tab Tanya hanya menampilkan FAQ.
 
 ## Pengaturan
 
@@ -24,8 +33,17 @@ Buka pendamping lalu pilih **Pengaturan**, atau buka **Akun → Pendamping belaj
 | --- | --- | --- |
 | Nama | Nama yang ditampilkan pada pendamping. | Akunmu (jika sudah masuk) |
 | Tampilkan pendamping | Matikan maskot di semua halaman. Nyalakan lagi di sini atau di Akun. | Akunmu (jika sudah masuk) |
+| Gunakan obrolan AI | Matikan hanya AI-nya. Tombol Obrolan AI hilang, server menolak permintaan obrolan untuk akunmu, dan maskot, FAQ, serta timer tetap berjalan. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
 | Ukuran | Kecil, sedang, atau besar. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
 | Gaya putaran | **Otomatis** memakai putaran 3D yang halus dan beralih ke putaran sederhana jika perangkatmu kesulitan. **3D** selalu memakai putaran 3D. **Sederhana** memakai putaran datar yang lebih hemat daya. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
+
+## Mengubah ukuran panel
+
+Di layar selebar minimal 640 px, ukuran panel bisa diubah. Panel tetap menempel pada maskot, jadi yang kamu tarik adalah dua tepi yang menjauhi maskot (dan sudut di antaranya, yang ditandai pegangan kecil); dua tepi lainnya tetap di tempat. Di pojok kanan bawah bawaan, itu berarti tepi atas dan kiri. Panel tidak akan menyusut di bawah ukuran minimum yang nyaman atau keluar dari layar.
+
+- **Keyboard:** fokuskan sebuah tepi (Tab) lalu gunakan tombol panah, yang menggeser tepi itu; tahan Shift untuk langkah lebih besar.
+- **Reset:** klik dua kali pada tepi, atau pilih **Reset ukuran panel** di Pengaturan.
+- Ukurannya diingat di perangkat ini. Di layar sempit, panel berupa panel bawah dengan tinggi tetap.
 
 ## Nama dan timer
 
@@ -35,7 +53,7 @@ Pendamping ini menyertakan timer belajar Cherenkov. Timer menggunakan status yan
 
 ## Obrolan belajar
 
-Obrolan belajar hanya tersedia saat kamu sudah masuk. Neutrino menggunakan Gemini API dari Google untuk menjawab pertanyaan singkat tentang belajar. Fitur ini cocok untuk penjelasan, contoh, memeriksa penalaran, dan petunjuk. Jangan kirim kata sandi, informasi pribadi, atau hal yang tidak ingin kamu bagikan dengan layanan AI.
+Obrolan belajar adalah mode AI pada tab Tanya. Fitur ini hanya tersedia saat kamu sudah masuk dan belum mematikannya. Neutrino menggunakan Gemini API dari Google untuk menjawab pertanyaan singkat tentang belajar. Fitur ini cocok untuk penjelasan, contoh, memeriksa penalaran, dan petunjuk. Jangan kirim kata sandi, informasi pribadi, atau hal yang tidak ingin kamu bagikan dengan layanan AI.
 
 Cherenkov membatasi **10 permintaan obrolan per akun per hari UTC**. Permintaan ke penyedia yang gagal dan percobaan ulang tetap dihitung sebagai permintaan. Batas ini sama untuk konfigurasi Gemini Cherenkov dan key pribadi. Pesan dibatasi hingga 1.200 karakter, hanya enam pesan percakapan terbaru yang dikirim, dan jawaban dibatasi hingga 256 token keluaran. Batas ini membantu menjaga penggunaan fitur tetap sesuai dengan kuota API bersama yang kecil; Google juga memiliki batas kuota model dan proyeknya sendiri.
 

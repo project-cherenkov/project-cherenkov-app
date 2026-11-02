@@ -3,6 +3,13 @@
 // the launcher (rendering), so the allowed values live in exactly one place.
 
 export const COMPANION_NAME_MAX = 32;
+
+// Study chat budget. Shared by the chat route (enforcement) and the FAQ
+// (explanation), so the answer a student reads can never disagree with the
+// limit the server applies.
+export const COMPANION_DAILY_LIMIT = 10;
+export const COMPANION_MAX_MESSAGE_CHARS = 1200;
+export const COMPANION_MAX_HISTORY = 6;
 export const DEFAULT_COMPANION_NAME = "Neutrino";
 
 export const COMPANION_SIZES = ["small", "medium", "large"] as const;
@@ -23,6 +30,8 @@ export type CompanionRotation = (typeof COMPANION_ROTATIONS)[number];
 export type CompanionPrefs = {
   name: string;
   enabled: boolean;
+  // Turns off only the AI chat. The companion, its FAQ and its timer stay.
+  aiEnabled: boolean;
   size: CompanionSize;
   rotation: CompanionRotation;
 };
@@ -30,6 +39,7 @@ export type CompanionPrefs = {
 export const DEFAULT_COMPANION_PREFS: CompanionPrefs = {
   name: DEFAULT_COMPANION_NAME,
   enabled: true,
+  aiEnabled: true,
   size: "medium",
   rotation: "auto",
 };
@@ -71,6 +81,10 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
     if (typeof input.enabled !== "boolean") return null;
     patch.enabled = input.enabled;
   }
+  if ("aiEnabled" in input) {
+    if (typeof input.aiEnabled !== "boolean") return null;
+    patch.aiEnabled = input.aiEnabled;
+  }
   if ("size" in input) {
     if (!isCompanionSize(input.size)) return null;
     patch.size = input.size;
@@ -88,6 +102,7 @@ export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
   return {
     name: normalizeCompanionName(input.name) ?? DEFAULT_COMPANION_PREFS.name,
     enabled: typeof input.enabled === "boolean" ? input.enabled : DEFAULT_COMPANION_PREFS.enabled,
+    aiEnabled: typeof input.aiEnabled === "boolean" ? input.aiEnabled : DEFAULT_COMPANION_PREFS.aiEnabled,
     size: isCompanionSize(input.size) ? input.size : DEFAULT_COMPANION_PREFS.size,
     rotation: isCompanionRotation(input.rotation) ? input.rotation : DEFAULT_COMPANION_PREFS.rotation,
   };

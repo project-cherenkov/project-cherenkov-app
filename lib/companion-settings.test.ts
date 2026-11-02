@@ -11,6 +11,7 @@ describe("parseCompanionPatch", () => {
   it("accepts a single valid field and returns only that field", () => {
     expect(parseCompanionPatch({ size: "large" })).toEqual({ size: "large" });
     expect(parseCompanionPatch({ enabled: false })).toEqual({ enabled: false });
+    expect(parseCompanionPatch({ aiEnabled: false })).toEqual({ aiEnabled: false });
     expect(parseCompanionPatch({ rotation: "flat" })).toEqual({ rotation: "flat" });
   });
 
@@ -24,6 +25,8 @@ describe("parseCompanionPatch", () => {
   it("rejects the whole request when any field is invalid", () => {
     expect(parseCompanionPatch({ size: "large", rotation: "spin" })).toBeNull();
     expect(parseCompanionPatch({ enabled: "yes" })).toBeNull();
+    expect(parseCompanionPatch({ aiEnabled: "no" })).toBeNull();
+    expect(parseCompanionPatch({ aiEnabled: 0 })).toBeNull();
     expect(parseCompanionPatch({ size: "huge" })).toBeNull();
   });
 
@@ -47,6 +50,17 @@ describe("normalizeCompanionPrefs", () => {
       ...DEFAULT_COMPANION_PREFS,
       size: "large",
     });
+  });
+});
+
+describe("the AI switch", () => {
+  it("is on by default, and independent of the companion itself", () => {
+    expect(DEFAULT_COMPANION_PREFS.aiEnabled).toBe(true);
+    expect(normalizeCompanionPrefs({ aiEnabled: false })).toMatchObject({ aiEnabled: false, enabled: true });
+    expect(normalizeCompanionPrefs({ enabled: false })).toMatchObject({ aiEnabled: true, enabled: false });
+  });
+  it("ignores a stored value that is not a boolean", () => {
+    expect(normalizeCompanionPrefs({ aiEnabled: "false" }).aiEnabled).toBe(true);
   });
 });
 

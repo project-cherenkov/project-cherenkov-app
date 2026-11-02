@@ -15,6 +15,7 @@ export async function GET() {
       .select({
         name: companionSettings.name,
         enabled: companionSettings.enabled,
+        aiEnabled: companionSettings.aiEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       })
@@ -54,6 +55,7 @@ export async function PATCH(request: Request) {
       .returning({
         name: companionSettings.name,
         enabled: companionSettings.enabled,
+        aiEnabled: companionSettings.aiEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       });

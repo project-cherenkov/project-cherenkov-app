@@ -14,17 +14,19 @@ import {
 const CHANGE_EVENT = "neutrino-prefs-changed";
 const STORAGE_KEY = "neutrino-prefs-v1";
 
-// Per-device values that make sense without an account. Name and "enabled"
-// are account features and are never read from or written to local storage.
+// Per-device values that make sense without an account (size, rotation and
+// the AI switch). Name and "enabled" are account features and are never read
+// from or written to local storage.
 function readLocal(): Partial<CompanionPrefs> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    const { size, rotation } = normalizeCompanionPrefs(JSON.parse(raw));
+    const { size, rotation, aiEnabled } = normalizeCompanionPrefs(JSON.parse(raw));
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     return {
       ...("size" in parsed ? { size } : {}),
       ...("rotation" in parsed ? { rotation } : {}),
+      ...("aiEnabled" in parsed ? { aiEnabled } : {}),
     };
   } catch {
     return {};
@@ -33,7 +35,7 @@ function readLocal(): Partial<CompanionPrefs> {
 
 function writeLocal(prefs: CompanionPrefs) {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ size: prefs.size, rotation: prefs.rotation }));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ size: prefs.size, rotation: prefs.rotation, aiEnabled: prefs.aiEnabled }));
   } catch {
     // Private mode / blocked storage: the setting just lasts for this page view.
   }
@@ -101,7 +103,11 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
       // Signed-out visitors cannot change account-only fields.
       const effective: CompanionPatch = signedIn
         ? patch
-        : { ...(patch.size ? { size: patch.size } : {}), ...(patch.rotation ? { rotation: patch.rotation } : {}) };
+        : {
+            ...(patch.size ? { size: patch.size } : {}),
+            ...(patch.rotation ? { rotation: patch.rotation } : {}),
+            ...(typeof patch.aiEnabled === "boolean" ? { aiEnabled: patch.aiEnabled } : {}),
+          };
       const next = { ...previous, ...effective };
       setPrefs(next);
       writeLocal(next);
