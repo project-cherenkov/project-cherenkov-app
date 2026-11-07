@@ -140,13 +140,18 @@ export async function loadPlanningState(
 }
 
 export function toSchedulerTopics(state: PlanningState): SchedulerTopic[] {
-  return state.topics.map((t) => ({
-    key: t.row.id,
-    sectionId: t.sectionId,
-    order: t.row.order,
-    effort: t.effort,
-    selfRating: t.selfRating,
-    estimate: t.estimate,
-    canConfirm: t.canConfirm,
-  }));
+  return state.topics.map((t) => {
+    let newest: Date | null = null;
+    for (const a of t.answers) if (!newest || a.answeredAt > newest) newest = a.answeredAt;
+    return {
+      key: t.row.id,
+      sectionId: t.sectionId,
+      order: t.row.order,
+      effort: t.effort,
+      selfRating: t.selfRating,
+      estimate: t.estimate,
+      canConfirm: t.canConfirm,
+      lastAnswerOn: newest ? todayInTimeZone(newest, state.settings.timezone) : null,
+    };
+  });
 }

@@ -155,6 +155,8 @@ function makePlanServiceDeps(exec: Executor): PlanServiceDeps {
           topicId: planItems.topicId,
           kind: planItems.kind,
           scheduledFor: planItems.scheduledFor,
+          minutes: planItems.minutes,
+          completedAt: planItems.completedAt,
         })
         .from(planItems)
         .where(and(eq(planItems.planId, planId), isNotNull(planItems.completedAt)));

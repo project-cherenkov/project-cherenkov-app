@@ -9,6 +9,7 @@
 //   * "today" is the student's calendar day, not the server's;
 //   * an infeasible plan is reported, never silently squeezed;
 //   * switching subject (or leftover Phase 2 rows) replaces the old items.
+import { todayInTimeZone } from "./osn-stages";
 import { scheduleStudyPlan, type FrozenItem } from "./plan-scheduler";
 import {
   loadPlanningState,
@@ -31,6 +32,10 @@ export interface CompletedItemRow {
   topicId: string;
   kind: PlanItemKind;
   scheduledFor: string;
+  // Optional so older callers and fakes keep working; without them an item
+  // counts as one whole pass and as done on its scheduled day.
+  minutes?: number | null;
+  completedAt?: Date | null;
 }
 
 export interface PlanWriteDeps {
@@ -97,6 +102,8 @@ export async function generateStudyPlanCore(
     topicKey: c.topicId,
     kind: c.kind,
     scheduledFor: c.scheduledFor,
+    minutes: c.minutes ?? null,
+    completedOn: c.completedAt ? todayInTimeZone(c.completedAt, settings.timezone) : null,
   }));
 
   const result = scheduleStudyPlan({

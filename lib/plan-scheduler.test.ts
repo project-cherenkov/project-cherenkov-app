@@ -307,3 +307,95 @@ describe("scheduleStudyPlan — interleaving", () => {
     }
   });
 });
+
+describe("study progress in minutes (partial passes, re-study, today's budget)", () => {
+  const study = (items: PlannedItem[], key: string) =>
+    items.filter((i) => i.topicKey === key && i.kind === "study");
+  const sumMin = (items: PlannedItem[]) => items.reduce((s, i) => s + i.minutes, 0);
+
+  it("keeps the unfinished part of a multi-session study pass after one session is done", () => {
+    // 5 h/week = 43 min/day, so a 60-minute topic is split 43 + 17.
+    const t = topic(0, { rating: 2, wrong: 3 });
+    const base = input([t], { hoursPerWeek: 5 });
+    expect(sumMin(study(scheduleStudyPlan(base).items, t.key))).toBe(60);
+
+    const resumed = scheduleStudyPlan({
+      ...base,
+      frozen: [{ topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -1), minutes: 43 }],
+    });
+    const left = study(resumed.items, t.key);
+    expect(sumMin(left)).toBe(17);
+    expect(left[0]!.reason).toBe("study_continue");
+  });
+
+  it("treats a completed item with no recorded minutes as a whole pass (older rows)", () => {
+    const t = topic(0, { rating: 2, wrong: 3 });
+    const r = scheduleStudyPlan(
+      input([t], { hoursPerWeek: 5, frozen: [{ topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -1) }] }),
+    );
+    expect(study(r.items, t.key)).toHaveLength(0);
+  });
+
+  it("schedules a fresh study pass when a fully studied topic is answered badly afterwards", () => {
+    const t: SchedulerTopic = { ...topic(0, { rating: 3, wrong: 6 }), lastAnswerOn: addDays(TODAY, -1) };
+    expect(t.estimate.status).toBe("not_known");
+    const r = scheduleStudyPlan(
+      input([t], {
+        hoursPerWeek: 10,
+        frozen: [{ topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -20), minutes: 60 }],
+      }),
+    );
+    const again = study(r.items, t.key);
+    expect(sumMin(again)).toBe(60);
+    expect(again[0]!.reason).toBe("study_weak"); // a new pass, not a continuation
+  });
+
+  it("does not restart a pass that was studied after the newest answer", () => {
+    const t: SchedulerTopic = { ...topic(0, { rating: 3, wrong: 6 }), lastAnswerOn: addDays(TODAY, -5) };
+    const r = scheduleStudyPlan(
+      input([t], {
+        hoursPerWeek: 10,
+        frozen: [
+          { topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -20), minutes: 60 },
+          { topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -2), minutes: 60 },
+        ],
+      }),
+    );
+    expect(study(r.items, t.key)).toHaveLength(0);
+  });
+
+  it("does not restart a half-done first pass just because a quiz was taken in between", () => {
+    const t: SchedulerTopic = { ...topic(0, { rating: 3, wrong: 6 }), lastAnswerOn: addDays(TODAY, -1) };
+    const r = scheduleStudyPlan(
+      input([t], {
+        hoursPerWeek: 5,
+        frozen: [{ topicKey: t.key, kind: "study", scheduledFor: addDays(TODAY, -3), minutes: 43 }],
+      }),
+    );
+    expect(sumMin(study(r.items, t.key))).toBe(17);
+  });
+
+  it("subtracts what was already done today from today's budget only", () => {
+    // Rated 5 => no study needed; each topic just gets a 10-minute quiz.
+    const topics = Array.from({ length: 14 }, (_, i) => topic(i, { rating: 5 }));
+    const done = topics.slice(8).map((t) => ({
+      topicKey: t.key, kind: "confirm" as const, scheduledFor: TODAY, minutes: 10,
+    }));
+    const r = scheduleStudyPlan(input(topics.slice(0, 8), { hoursPerWeek: 7, frozen: done }));
+    // 60 min/day, 60 already done today (6 quizzes): nothing new fits today...
+    const per = minutesPerDay(r.items);
+    expect(per.get(TODAY) ?? 0).toBe(0);
+    // ...but tomorrow has the full budget again.
+    expect(per.get(addDays(TODAY, 1)) ?? 0).toBeGreaterThan(0);
+    for (const m of per.values()) expect(m).toBeLessThanOrEqual(r.dailyMinutes);
+  });
+
+  it("counts an overdue item ticked off today against today's budget", () => {
+    const topics = Array.from({ length: 8 }, (_, i) => topic(i, { rating: 5 }));
+    const frozen = [
+      { topicKey: "x", kind: "review" as const, scheduledFor: addDays(TODAY, -3), completedOn: TODAY, minutes: 30 },
+    ];
+    const r = scheduleStudyPlan(input(topics, { hoursPerWeek: 7, frozen }));
+    expect(minutesPerDay(r.items).get(TODAY) ?? 0).toBeLessThanOrEqual(r.dailyMinutes - 30);
+  });
+});

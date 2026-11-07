@@ -76,6 +76,10 @@ export interface SchedulerTopic {
   // Whether any quiz question exists for this topic at the chosen stage's
   // difficulty. Without one a confirmation quiz cannot be scheduled.
   canConfirm: boolean;
+  // Calendar day ("YYYY-MM-DD", student's zone) of the newest recorded quiz
+  // answer, if any. Lets the scheduler tell whether a failed result came AFTER
+  // the last study pass (then the topic needs studying again) or before it.
+  lastAnswerOn?: string | null;
 }
 
 // A completed plan item. Completed items are history: they stay in the plan
@@ -84,6 +88,11 @@ export interface FrozenItem {
   topicKey: string;
   kind: PlanItemKind;
   scheduledFor: string; // "YYYY-MM-DD"
+  // Planned minutes of the item. Missing/null (older rows) means "all of it".
+  minutes?: number | null;
+  // Day the student ticked it off, when that differs from `scheduledFor`
+  // (an overdue item done today used today's time).
+  completedOn?: string | null;
 }
 
 export interface SchedulerInput {
@@ -154,6 +163,10 @@ interface Pending {
 interface TopicPlan {
   topic: SchedulerTopic;
   needsStudy: boolean;
+  // Study minutes still to schedule for this topic (0 when needsStudy is false).
+  studyMinutesLeft: number;
+  // Study minutes already completed in the current pass.
+  studyMinutesDone: number;
   needsConfirm: boolean;
   need: number;
   reviewMinutes: number;
@@ -205,11 +218,28 @@ function planTopic(topic: SchedulerTopic, input: SchedulerInput, frozen: FrozenI
   const { estimate: est } = topic;
   const target = input.masteryTarget;
   const verified = est.status !== "unverified";
-  const studyDone = frozen.some((f) => f.kind === "study");
   const confirmDone = frozen.some((f) => f.kind === "confirm");
+  const total = SCHEDULER_PARAMS.studyMinutesByEffort[topic.effort] ?? 60;
+
+  // Study progress is counted in minutes, not as a yes/no: finishing one of two
+  // sessions of a topic must leave the other one on the plan. A completed item
+  // without a recorded length counts as a whole pass (older rows).
+  const doneOn = (f: FrozenItem) => f.completedOn ?? f.scheduledFor;
+  const studyItems = frozen.filter((f) => f.kind === "study");
+  const minutesOf = (f: FrozenItem) => f.minutes ?? total;
+  // A topic that was studied in full and THEN answered badly needs a fresh
+  // pass. Study done on or after the newest answer belongs to that new pass;
+  // an answer taken between two halves of one pass does not restart it.
+  const lastAnswerOn = topic.lastAnswerOn ?? null;
+  const before = lastAnswerOn ? studyItems.filter((f) => doneOn(f) < lastAnswerOn) : [];
+  const beforeMinutes = before.reduce((sum, f) => sum + minutesOf(f), 0);
+  const restudy = est.status === "not_known" && lastAnswerOn !== null && beforeMinutes >= total;
+  const counted = restudy ? studyItems.filter((f) => !before.includes(f)) : studyItems;
+  const studyMinutesDone = counted.reduce((sum, f) => sum + minutesOf(f), 0);
+  const studyMinutesLeft = Math.max(0, total - studyMinutesDone);
 
   const needsStudy =
-    !studyDone &&
+    studyMinutesLeft > 0 &&
     (est.status === "not_known" ||
       est.status === "uncertain" ||
       (est.status === "unverified" && est.pHat < target));
@@ -225,7 +255,15 @@ function planTopic(topic: SchedulerTopic, input: SchedulerInput, frozen: FrozenI
     SCHEDULER_PARAMS.minReviewMinutes,
     roundTo5(studyMinutes * SCHEDULER_PARAMS.reviewFraction),
   );
-  return { topic, needsStudy, needsConfirm, need, reviewMinutes };
+  return {
+    topic,
+    needsStudy,
+    studyMinutesLeft: needsStudy ? studyMinutesLeft : 0,
+    studyMinutesDone,
+    needsConfirm,
+    need,
+    reviewMinutes,
+  };
 }
 
 // Confirmation tier from the self-rating: high-rated topics first (the
@@ -280,6 +318,15 @@ export function scheduleStudyPlan(input: SchedulerInput): ScheduleResult {
   const P = SCHEDULER_PARAMS;
   const dailyMinutes = Math.max(1, Math.round((input.hoursPerWeek * 60) / 7));
   const windowDays = daysBetween(input.today, input.examDate);
+
+  // Time already spent today by items the student completed today. Regenerating
+  // mid-day must not hand out a second full day's budget.
+  const spentToday = Math.min(
+    dailyMinutes,
+    (input.frozen ?? [])
+      .filter((f) => (f.completedOn ?? f.scheduledFor) === input.today)
+      .reduce((sum, f) => sum + (f.minutes ?? 0), 0),
+  );
 
   if (windowDays <= 0) return emptyResult("no_days", windowDays, dailyMinutes);
   if (input.topics.length === 0) return emptyResult("no_topics", windowDays, dailyMinutes);
@@ -339,7 +386,7 @@ export function scheduleStudyPlan(input: SchedulerInput): ScheduleResult {
       });
     }
     if (plan.needsStudy) {
-      const total = P.studyMinutesByEffort[topic.effort] ?? 60;
+      const total = plan.studyMinutesLeft;
       const size = Math.min(total, dailyMinutes);
       const sessions = Math.ceil(total / size);
       const gain = (plan.need * learnability(topic.estimate.pHat)) / (total / 60);
@@ -355,7 +402,7 @@ export function scheduleStudyPlan(input: SchedulerInput): ScheduleResult {
         const minutes = s === sessions - 1 ? total - size * (sessions - 1) : size;
         previous = make(plan, {
           kind: "study",
-          reason: s === 0 ? firstReason : "study_continue",
+          reason: s === 0 && plan.studyMinutesDone === 0 ? firstReason : "study_continue",
           minutes,
           earliest: 0,
           gain,
@@ -422,7 +469,7 @@ export function scheduleStudyPlan(input: SchedulerInput): ScheduleResult {
     cmp(a.seq, b.seq);
 
   for (let day = 0; day < windowDays; day++) {
-    let remaining = dailyMinutes;
+    let remaining = day === 0 ? dailyMinutes - spentToday : dailyMinutes;
     let reviewMinutesUsed = 0;
     const today: Pending[] = [];
 
@@ -514,7 +561,7 @@ export function scheduleStudyPlan(input: SchedulerInput): ScheduleResult {
     feasible: droppedNew.length === 0,
     items,
     requiredMinutes: essentialMinutes,
-    availableMinutes: windowDays * dailyMinutes,
+    availableMinutes: windowDays * dailyMinutes - spentToday,
     shortfallMinutes: droppedNew.reduce((sum, item) => sum + item.minutes, 0),
     skippedReviewCount: dropped.length - droppedNew.length,
     droppedTopicKeys,
