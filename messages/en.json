@@ -123,6 +123,12 @@
     "trajectoryLabel": "Trajectory diagram: launch speed {speed} metres per second at {angle} degrees. Use the sliders below to change the launch.",
     "trajectoryLegendLaunch": "{angle}° launch (yours)",
     "trajectoryLegendComplement": "{angle}° launch, the complementary angle",
+    "trajectoryHandleLabel": "Launch angle. Drag the handle, or use the arrow keys; hold Shift for bigger steps.",
+    "challengeTarget": "Target: land {range} m away, give or take {tolerance} m.",
+    "challengeSuccess": "On target! You landed {landing} m away.",
+    "challengeMissShort": "You landed {landing} m away, {gap} m short. Try again.",
+    "challengeMissLong": "You landed {landing} m away, {gap} m too far. Try again.",
+    "challengeHintLabel": "Hint",
     "loading": "Loading visualization…"
   },
   "about": {

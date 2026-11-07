@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
 import { Slider } from "@/components/ui/slider";
+import { setupCanvasForDpr } from "@/components/viz/shared/canvas-dpr";
 import { themeColors } from "@/lib/theme-colors";
 import {
   fluxAt,
@@ -92,16 +93,8 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = setupCanvasForDpr(canvas, width, CANVAS_HEIGHT);
     if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = width * dpr;
-    canvas.height = CANVAS_HEIGHT * dpr;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${CANVAS_HEIGHT}px`;
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, width, CANVAS_HEIGHT);
 
     // ResizeObserver can report a 0-width box (hidden/collapsed container,
     // first layout pass). Without this guard `fit` goes negative, the ellipse

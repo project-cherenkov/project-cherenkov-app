@@ -123,6 +123,12 @@
     "trajectoryLabel": "Diagram lintasan: kecepatan awal {speed} meter per detik pada sudut {angle} derajat. Gunakan penggeser di bawahnya untuk mengubah peluncuran.",
     "trajectoryLegendLaunch": "peluncuran {angle}° (milikmu)",
     "trajectoryLegendComplement": "peluncuran {angle}°, sudut komplementer",
+    "trajectoryHandleLabel": "Sudut peluncuran. Seret gagangnya, atau gunakan tombol panah; tahan Shift untuk langkah lebih besar.",
+    "challengeTarget": "Target: mendarat {range} m jauhnya, selisih paling banyak {tolerance} m.",
+    "challengeSuccess": "Tepat sasaran! Kamu mendarat {landing} m jauhnya.",
+    "challengeMissShort": "Kamu mendarat {landing} m jauhnya, kurang {gap} m. Coba lagi.",
+    "challengeMissLong": "Kamu mendarat {landing} m jauhnya, terlalu jauh {gap} m. Coba lagi.",
+    "challengeHintLabel": "Petunjuk",
     "loading": "Memuat visualisasi…"
   },
   "about": {

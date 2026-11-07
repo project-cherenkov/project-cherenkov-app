@@ -70,6 +70,24 @@ Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbo
 - `content/editorials/physics/projectile-range-symmetry.mdx` for `trajectory-sandbox`
 - `content/editorials/astronomy/eccentric-transit-duration.mdx` for `orbital-sandbox`
 
+## Adding a challenge to a trajectory sandbox
+
+A `trajectory-sandbox` can pose a problem instead of only offering sliders. Add an optional `challenge` next to `speedRange` and `angleRange` in `vizConfig.value`:
+
+```yaml
+challenge:
+  prompt: "Land the ball on the marker. Use $R = v^2 \\sin 2\\theta / g$ to plan your launch."
+  target: { rangeM: 60, toleranceM: 2 }
+  hint: "Two different angles reach the same range."
+  successNote: "That is the symmetry behind this editorial."
+```
+
+`prompt`, `hint` and `successNote` are Markdown with `$...$` math. The reader sets a launch, presses Play, and when the flight ends the page checks that the landing is within `toleranceM` of `rangeM`. After two misses the hint appears. Attempts are counted in the reader's browser only.
+
+The page refuses to build a challenge that cannot be won. `rangeM` and `toleranceM` must be positive numbers, and some setting the sliders can actually produce (in whole steps of 1 m/s and 1°, within `speedRange` and `angleRange`, or the defaults of 5 to 40 m/s and 5° to 85°) must land inside the tolerance. If it cannot, the visualization shows a configuration error. Check a new target with `pnpm test`, or open the page.
+
+Keystatic does not know about `challenge` yet, so an editorial that has one cannot be opened in the Keystatic form (the same limit as a programmable scene). Edit it in the file.
+
 ## Materials
 
 A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syllabus topic id), `summary` (up to 280 characters) and a body. There is at most one material per topic. A visualization is optional: set `vizConfig` the same way as for an editorial (the first three engines; the scene builder only writes editorials) and place `<Interactive />` where it belongs. With `discriminant: none`, or no `vizConfig` at all, a material simply has no visualization. See `content/materials/informatics/binary-search.mdx` for an example.

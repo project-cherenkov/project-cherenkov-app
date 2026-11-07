@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { PlaybackControls } from "@/components/viz/playback-controls";
@@ -9,8 +9,8 @@ import { setupCanvasForDpr } from "@/components/viz/shared/canvas-dpr";
 import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import { ELEMENT_TEMPLATES } from "./element-templates";
 import type { ScaleFns } from "./element-templates";
-import { renderElements, resolveElementParams } from "./render-elements";
-import type { ComposedSceneConfig } from "./types";
+import { interpolateStepOverrides, renderElements, resolveElementParams } from "./render-elements";
+import type { ComposedSceneConfig, SceneStep } from "./types";
 
 // Re-exported from render-elements.ts (PROG-002 extraction) so
 // index.test.tsx's existing `import { ComposedScene, resolveElementParams }
@@ -20,6 +20,28 @@ import type { ComposedSceneConfig } from "./types";
 export { resolveElementParams };
 
 const STEP_INTERVAL_MS = 900; // matches graph-array-stepper's own autoplay cadence
+// R1: how long numeric params glide between two adjacent steps. Deliberately
+// shorter than STEP_INTERVAL_MS so autoplay's next tick always lands after
+// the previous glide has settled.
+const STEP_TWEEN_MS = 400;
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+// A glide in progress. `from` is whatever was ON SCREEN when the glide began
+// (the previous step, or a synthetic mid-glide step if the reader clicked
+// again before the last glide finished), so an interrupted glide restarts from
+// the displayed state rather than jumping back to the step that was heading
+// away. `to` is the step index being approached. `id` lets the rAF loop
+// ignore a superseded glide.
+interface StepTween {
+  id: number;
+  from: SceneStep | undefined;
+  to: number;
+  progress: number; // 0..1, linear; easing is applied in interpolateStepOverrides
+}
 
 // Merges the two rendering patterns FR-3/FR-4/A-2 both call for in one
 // component: continuous, slider/control-driven rendering (like
@@ -31,6 +53,9 @@ const STEP_INTERVAL_MS = 900; // matches graph-array-stepper's own autoplay cade
 // editorial page.
 export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
   const t = useTranslations("viz");
+  // R4: ties the canvas to the current step's note so assistive tech gets
+  // what the picture is showing, not only the fixed canvasLabel.
+  const noteId = useId();
 
   const [width, setWidth] = useState(320);
   const [stepIndex, setStepIndex] = useState(0);
@@ -42,8 +67,14 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
   // mutating base params permanently").
   const [controlValues, setControlValues] = useState<Record<string, number | boolean>>({});
 
+  const [tween, setTween] = useState<StepTween | null>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // The step params that were last drawn (possibly a synthetic mid-glide
+  // step) — the starting point for the next glide. Written after commit.
+  const displayedStepRef = useRef<SceneStep | undefined>(undefined);
+  const tweenIdRef = useRef(0);
 
   const steps = useMemo(() => config.steps ?? [], [config.steps]);
   const hasSteps = steps.length > 0;
@@ -65,7 +96,51 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
   useEffect(() => {
     setStepIndex(0);
     setIsPlaying(false);
+    setTween(null); // a new config always snaps, never glides from the old one
   }, [config]);
+
+  // Single entry point for every step change, so the animate-or-snap rule
+  // lives in one place. A glide is started only for a move of exactly one
+  // step; scrubbing/jumping further, reset, a new config and
+  // prefers-reduced-motion all snap. The tween state is set in the same
+  // batch as stepIndex, so there is never a frame that shows the new step
+  // snapped before the glide begins.
+  const goToStep = useCallback(
+    (next: number, animate: boolean) => {
+      const target = Math.min(Math.max(next, 0), Math.max(steps.length - 1, 0));
+      if (target === stepIndex) return;
+      if (animate && Math.abs(target - stepIndex) === 1 && !prefersReducedMotion()) {
+        tweenIdRef.current += 1;
+        setTween({ id: tweenIdRef.current, from: displayedStepRef.current, to: target, progress: 0 });
+      } else {
+        setTween(null);
+      }
+      setStepIndex(target);
+    },
+    [stepIndex, steps.length],
+  );
+
+  // Drives one glide with requestAnimationFrame (the same loop style
+  // trajectory-sandbox and orbital-sandbox use for continuous motion).
+  // Keyed on the glide's id, so a newer glide cancels this one via cleanup.
+  const tweenId = tween?.id;
+  useEffect(() => {
+    if (tweenId === undefined) return;
+    let raf = 0;
+    let startedAt: number | undefined;
+    function frame(now: number) {
+      if (startedAt === undefined) startedAt = now;
+      const progress = Math.min((now - startedAt) / STEP_TWEEN_MS, 1);
+      if (progress >= 1) {
+        setTween((prev) => (prev && prev.id === tweenId ? null : prev));
+        return;
+      }
+      setTween((prev) => (prev && prev.id === tweenId ? { ...prev, progress } : prev));
+      raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [tweenId]);
 
   // Autoplay through timeline steps. graph-array-stepper's own steps are
   // the same "discrete, author-authored sequence" shape (not a continuous
@@ -78,9 +153,9 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
       setIsPlaying(false);
       return;
     }
-    const id = setTimeout(() => setStepIndex((i) => i + 1), STEP_INTERVAL_MS);
+    const id = setTimeout(() => goToStep(stepIndex + 1, true), STEP_INTERVAL_MS);
     return () => clearTimeout(id);
-  }, [isPlaying, stepIndex, steps.length, hasSteps]);
+  }, [isPlaying, stepIndex, steps.length, hasSteps, goToStep]);
 
   // A single, uniform design-space -> render-space scale factor, driven
   // only by the ResizeObserver-tracked width — same "one scale factor
@@ -101,6 +176,21 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
 
   const currentStep = hasSteps ? steps[Math.min(stepIndex, steps.length - 1)] : undefined;
 
+  // What is actually drawn: the target step itself, or — while a glide toward
+  // it is running — a synthetic step of interpolated overrides. The step
+  // NOTE below always follows `currentStep`, so the text changes immediately
+  // while the picture eases into place.
+  const renderedStep = useMemo(() => {
+    if (tween && tween.to === stepIndex && currentStep) {
+      return interpolateStepOverrides(config.elements, tween.from, currentStep, tween.progress);
+    }
+    return currentStep;
+  }, [tween, stepIndex, currentStep, config.elements]);
+
+  useEffect(() => {
+    displayedStepRef.current = renderedStep;
+  }, [renderedStep]);
+
   // Draw. Depends on `config` itself (not just its sub-fields) so a wholly
   // new config (e.g. the builder's live preview after an edit) always
   // triggers a redraw, even if some individual field happens to be `===`
@@ -116,12 +206,8 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
     // (mirrors viz-engine.tsx's guard-then-render dispatch for the other
     // engines) — renderElements' own per-element template lookup below is
     // just belt-and-suspenders for the same reason it always was.
-    renderElements(ctx, config.elements, config.controls, controlValues, currentStep, scale);
-  }, [config, width, renderedHeight, scale, currentStep, controlValues]);
-
-  function clampStep(next: number) {
-    setStepIndex(Math.min(Math.max(next, 0), Math.max(steps.length - 1, 0)));
-  }
+    renderElements(ctx, config.elements, config.controls, controlValues, renderedStep, scale);
+  }, [config, width, renderedHeight, scale, renderedStep, controlValues]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -148,14 +234,17 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
           data-testid="composed-scene-canvas"
           role="img"
           aria-label={t("canvasLabel")}
+          aria-describedby={currentStep?.note ? noteId : undefined}
         />
       </div>
 
       {currentStep?.note && (
-        <MarkdownText
-          text={currentStep.note}
-          className="text-sm text-foreground/75"
-        />
+        <div id={noteId}>
+          <MarkdownText
+            text={currentStep.note}
+            className="text-sm text-foreground/75"
+          />
+        </div>
       )}
 
       {hasSteps && (
@@ -166,15 +255,18 @@ export function ComposedScene({ config }: { config: ComposedSceneConfig }) {
           onPlayPause={() => setIsPlaying((p) => !p)}
           onStep={(dir) => {
             setIsPlaying(false);
-            clampStep(stepIndex + dir);
+            goToStep(stepIndex + dir, true);
           }}
           onScrub={(v) => {
             setIsPlaying(false);
-            clampStep(v);
+            // Dragging the scrubber fires one change per step, so it would
+            // otherwise start a glide per notch; a scrub is direct
+            // manipulation and should track the pointer, so it snaps.
+            goToStep(v, false);
           }}
           onReset={() => {
             setIsPlaying(false);
-            setStepIndex(0);
+            goToStep(0, false);
           }}
           label={t("stepCounter", { current: stepIndex + 1, total: steps.length })}
         />

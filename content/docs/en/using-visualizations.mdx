@@ -25,10 +25,15 @@ A short label beside the controls shows where you are, for example "Step 3 of 8"
 
 Sandbox-style visualizations expose their key quantities as sliders, such as the launch angle of a projectile or the eccentricity of an orbit. Drag a slider, or focus it and use the arrow keys, and the picture updates.
 
+Some visualizations ask a question. A trajectory sandbox can show a target on the ground: set the launch, press Play, and you are told whether you landed on it. After two misses a hint appears. Your attempts are not saved anywhere and start again when you reload the page.
+
+Where a visualization moves between steps, the picture glides to the next step instead of jumping. If your device is set to reduce motion, it jumps instead.
+
 ## Keyboard use
 
 - Tab moves between controls, and the focus ring shows where you are.
 - Space or Enter activates a button.
+- The launch handle in a trajectory sandbox is focusable too: Left / Right (or Down / Up) change the angle by 1°, Shift with an arrow by 5°, and Home / End jump to the smallest or largest angle.
 - On a slider, Left / Right (or Down / Up) change the value by one step, Page Up / Page Down by a larger step, and Home / End jump to the minimum or maximum.
 
 ## The kinds of visualization
@@ -36,7 +41,7 @@ Sandbox-style visualizations expose their key quantities as sliders, such as the
 | Kind | What you can do |
 | --- | --- |
 | Graph / array stepper | Step through an algorithm on an array or graph, with pointers, highlighted cells and a one-line note per step. |
-| Trajectory sandbox | Change the launch speed and angle and watch the path. |
+| Trajectory sandbox | Change the launch speed and angle and watch the path. Drag the round handle at the launch point to aim, or use the angle slider. Some come with a target to hit. |
 | Orbital sandbox | Change eccentricity and mass ratio and watch the orbit and a schematic transit light curve. |
 | Composed scene | A custom scene built from reusable shapes, curves and labels, with optional sliders and steps. |
 | Programmable scene | A custom scene driven by a small sandboxed program, built visually from blocks. |

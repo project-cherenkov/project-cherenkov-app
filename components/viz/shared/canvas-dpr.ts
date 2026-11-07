@@ -1,16 +1,18 @@
-// Small shared helper extracted per SCENE-004 ("shared scale/coordinate
-// helpers ... extract these from the existing engines if not already
-// factored out"). trajectory-sandbox/index.tsx and orbital-sandbox/index.tsx
-// each inline this exact devicePixelRatio + canvas-buffer-size dance
-// independently (see trajectory-sandbox/index.tsx's own draw effect);
-// composed-scene needs the identical setup, so it's factored out here
-// rather than duplicated a third time.
+// Shared devicePixelRatio + canvas-buffer-size setup, used by every canvas
+// engine (composed-scene, programmable-scene, trajectory-sandbox,
+// orbital-sandbox).
 //
-// Per CR-3 ("No change to graph-array-stepper, trajectory-sandbox, or
-// orbital-sandbox's existing config shapes, type guards, or rendering")
-// and the worker instructions' scope discipline, the two existing engines
-// are deliberately NOT retrofitted to use this helper — see the
-// implementation report's Additional Findings.
+// History: extracted per SCENE-004 ("shared scale/coordinate helpers ...
+// extract these from the existing engines if not already factored out") for
+// composed-scene. trajectory-sandbox and orbital-sandbox were deliberately
+// left inlining the same few lines, because CR-3 ("No change to
+// graph-array-stepper, trajectory-sandbox, or orbital-sandbox's existing
+// config shapes, type guards, or rendering") applied to that build. The
+// project owner has since lifted that constraint for the visualization
+// improvements in docs/viz-interaction-improvements.md (R3 extends the
+// trajectory guard; R4 retrofits this helper into both engines). The
+// retrofit is behaviour-preserving: it sets the same buffer and CSS sizes,
+// scales by the same ratio and clears the same rectangle.
 export function setupCanvasForDpr(
   canvas: HTMLCanvasElement,
   widthPx: number,
