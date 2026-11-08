@@ -27,6 +27,10 @@ describe("velite.config vizEngines", () => {
     expect(schema.safeParse("programmable-scene").success).toBe(true);
   });
 
+  it("accepts blackbody-spectrum-comparison", () => {
+    expect(schema.safeParse("blackbody-spectrum-comparison").success).toBe(true);
+  });
+
   it("still accepts all four pre-existing values, unchanged", () => {
     for (const value of ["graph-array-stepper", "trajectory-sandbox", "orbital-sandbox", "none"]) {
       expect(schema.safeParse(value).success).toBe(true);
@@ -71,7 +75,7 @@ describe("velite.config publishedAt guard (F-04)", () => {
   });
 });
 
-// Confirms the four real editorials left after F-04's cleanup all clear
+// Confirms every real editorial clears
 // the new guard — reads their actual frontmatter directly (via
 // gray-matter, already a project dependency) rather than depending on a
 // full `pnpm generate` run.
@@ -86,7 +90,9 @@ describe("velite.config publishedAt guard — real content", () => {
       entry.toString().endsWith(".mdx"),
     );
 
-    expect(files.length).toBe(4);
+    // Only guards against the glob silently matching nothing; the number of
+    // editorials is expected to grow, so it is not pinned.
+    expect(files.length).toBeGreaterThan(0);
     for (const file of files) {
       const raw = readFileSync(join(root, file.toString()), "utf-8");
       const { data } = matter(raw);

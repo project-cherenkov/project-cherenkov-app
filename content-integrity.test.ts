@@ -3,6 +3,7 @@ import { join } from "node:path";
 import matter from "gray-matter";
 import { describe, expect, it } from "vitest";
 
+import { isBlackbodySpectrumComparisonConfig } from "./components/viz/blackbody-spectrum-comparison/types";
 import { isGraphArrayStepperConfig } from "./components/viz/graph-array-stepper/types";
 import { isSafePracticeUrl } from "./lib/practice-links";
 import { SUBJECTS } from "./lib/subjects";
@@ -81,6 +82,24 @@ describe("materials ↔ visualization integrity", () => {
         expect(isGraphArrayStepperConfig(viz.value)).toBe(true);
       }
     });
+  }
+});
+
+// An editorial's visualization must use a known engine, and the engines whose
+// configs are hand-written in frontmatter must pass their own type guard: an
+// invalid one would only show as a config error on the reader's screen.
+describe("editorials ↔ visualization integrity", () => {
+  for (const e of readAll("editorials")) {
+    const viz = e.data.vizConfig as { discriminant?: string; value?: unknown } | undefined;
+    if (!viz) continue;
+    it(`${e.subject}/${e.slug} uses a known engine`, () => {
+      expect(vizEngines as readonly string[]).toContain(viz.discriminant);
+    });
+    if (viz.discriminant === "blackbody-spectrum-comparison") {
+      it(`${e.subject}/${e.slug} has a config the blackbody engine accepts`, () => {
+        expect(isBlackbodySpectrumComparisonConfig(viz.value)).toBe(true);
+      });
+    }
   }
 });
 

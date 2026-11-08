@@ -8,12 +8,13 @@ import type { Editorial } from "#content";
 import { isGraphArrayStepperConfig } from "./graph-array-stepper/types";
 import { isTrajectorySandboxConfig } from "./trajectory-sandbox/types";
 import { isOrbitalSandboxConfig } from "./orbital-sandbox/types";
+import { isBlackbodySpectrumComparisonConfig } from "./blackbody-spectrum-comparison/types";
 import { isComposedSceneConfig } from "./composed-scene/types";
 import { isProgrammableSceneConfig } from "./programmable-scene/types";
 
 // Each engine is its own dynamic import (ssr: false — they're all
 // canvas/SVG + browser APIs like ResizeObserver) so an editorial page only
-// downloads the one engine it actually uses, never all three
+// downloads the one engine it actually uses, never all of them
 // (spec §8: "code-split visualization... bundles per editorial page rather
 // than loading them globally").
 const GraphArrayStepper = dynamic(
@@ -26,6 +27,11 @@ const TrajectorySandbox = dynamic(
 );
 const OrbitalSandbox = dynamic(
   () => import("./orbital-sandbox").then((m) => m.OrbitalSandbox),
+  { ssr: false, loading: () => <VizSkeleton /> },
+);
+const BlackbodySpectrumComparison = dynamic(
+  () =>
+    import("./blackbody-spectrum-comparison").then((m) => m.BlackbodySpectrumComparison),
   { ssr: false, loading: () => <VizSkeleton /> },
 );
 const ComposedScene = dynamic(
@@ -89,6 +95,16 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
       return (
         <VizFrame>
           <OrbitalSandbox config={value} />
+        </VizFrame>
+      );
+
+    case "blackbody-spectrum-comparison":
+      if (!isBlackbodySpectrumComparisonConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
+      }
+      return (
+        <VizFrame>
+          <BlackbodySpectrumComparison config={value} />
         </VizFrame>
       );
 

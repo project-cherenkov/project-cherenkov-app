@@ -132,6 +132,12 @@ export default async function EditorialPage({
           </span>
         )}
       </div>
+      <p className="label-code mt-2">
+        {t("lastUpdatedLabel")}:{" "}
+        {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+          new Date(editorial.updatedAt ?? editorial.publishedAt),
+        )}
+      </p>
 
       <h1 className="mt-3 text-3xl font-bold text-foreground">
         {editorial.title}

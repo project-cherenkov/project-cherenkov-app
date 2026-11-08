@@ -27,6 +27,7 @@ Editorials and materials are plain MDX files committed to the repository. Conten
 | `errorType` | Optional. The specific mistake it corrects. Free text. |
 | `vizConfig` | Which visualization engine to use, and its configuration. |
 | `publishedAt` | An ISO date, 2020 or later. Earlier dates are rejected as placeholder data. |
+| `updatedAt` | Optional ISO date for the last editorial or visualization update. Falls back to `publishedAt` when omitted. |
 | `status` | `published` (the default) or `archived`. Archived editorials are visible to editors only and hidden from everyone else. |
 | `author` | Who wrote it. |
 | `syllabusTopic` | Optional. A topic id from the syllabus for the same subject. |
@@ -64,11 +65,12 @@ Use `practiceLinks` to point at problems that belong to someone else. Link only:
 
 ## Choosing a visualization engine
 
-Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `composed-scene` or `programmable-scene`. The first three are configured in frontmatter. The last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
+Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `blackbody-spectrum-comparison`, `composed-scene` or `programmable-scene`. The first four are configured in frontmatter. The last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
 
 - `content/editorials/informatics/binary-search-on-answer.mdx` for `graph-array-stepper`
 - `content/editorials/physics/projectile-range-symmetry.mdx` for `trajectory-sandbox`
 - `content/editorials/astronomy/eccentric-transit-duration.mdx` for `orbital-sandbox`
+- `content/editorials/astronomy/why-classical-blackbody-radiation-fails.mdx` for `blackbody-spectrum-comparison`
 
 ## Adding a challenge to a trajectory sandbox
 

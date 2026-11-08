@@ -101,6 +101,7 @@ function vizConfigConditional(
         { label: "Graph / array stepper", value: "graph-array-stepper" },
         { label: "Trajectory sandbox", value: "trajectory-sandbox" },
         { label: "Orbital sandbox", value: "orbital-sandbox" },
+        { label: "Blackbody spectrum comparison", value: "blackbody-spectrum-comparison" },
         { label: "Composed scene", value: "composed-scene" },
         { label: "Programmable scene", value: "programmable-scene" },
         { label: "None", value: "none" },
@@ -208,6 +209,24 @@ function vizConfigConditional(
         massRatioRange: fields.array(fields.number({ label: "Bound" }), {
           label: "Mass ratio slider range [min, max]",
           itemLabel: (props) => String(props.value ?? ""),
+        }),
+      }),
+
+      "blackbody-spectrum-comparison": fields.object({
+        // Every field is optional: the engine fixes the physics and the
+        // 100–100,000 nm display window, and these only set the temperature
+        // slider (defaults 6000 K, [3000, 12000] K, step 250 K).
+        temperatureK: fields.number({
+          label: "Initial temperature (K)",
+          description: "Defaults to 6000 K in the engine if left unset. Must lie inside the slider range.",
+        }),
+        temperatureRangeK: fields.array(fields.number({ label: "Bound" }), {
+          label: "Temperature slider range [min, max] (K)",
+          itemLabel: (props) => String(props.value ?? ""),
+        }),
+        temperatureStepK: fields.number({
+          label: "Temperature slider step (K)",
+          description: "Defaults to 250 K in the engine if left unset.",
         }),
       }),
 

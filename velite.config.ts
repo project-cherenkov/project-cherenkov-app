@@ -27,6 +27,7 @@ export const vizEngines = [
   "graph-array-stepper",
   "trajectory-sandbox",
   "orbital-sandbox",
+  "blackbody-spectrum-comparison",
   "composed-scene",
   "programmable-scene",
   "none",
@@ -72,6 +73,7 @@ const editorials = defineCollection({
         .refine((value) => new Date(value).getUTCFullYear() >= MIN_PUBLISHED_YEAR, (value) => ({
           message: `publishedAt "${value}" is before ${MIN_PUBLISHED_YEAR} — looks like placeholder/test data, not a real publish date.`,
         })),
+      updatedAt: s.isodate().optional(),
       author: s.string(),
       // Optional link into the syllabus (a topic id from lib/syllabus). Empty
       // string is what Keystatic writes for "none", so normalise it away.

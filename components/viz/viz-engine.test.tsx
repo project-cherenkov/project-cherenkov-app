@@ -49,6 +49,28 @@ describe("VizEngine dispatch", () => {
     expect(html).not.toContain("vizMissing");
   });
 
+  it("renders VizConfigError for an invalid blackbody-spectrum-comparison config", () => {
+    const html = renderToStaticMarkup(
+      <VizEngine
+        editorial={{
+          vizConfig: { discriminant: "blackbody-spectrum-comparison", value: { temperatureRangeK: [0, 100] } },
+        }}
+      />,
+    );
+    expect(html).toContain("vizConfigError");
+    expect(html).not.toContain("vizMissing");
+  });
+
+  it("does not fall through to VizConfigError/VizMissing for a valid (even empty) blackbody config", () => {
+    for (const value of [{}, { temperatureK: 6000, temperatureRangeK: [3000, 12000], temperatureStepK: 250 }]) {
+      const html = renderToStaticMarkup(
+        <VizEngine editorial={{ vizConfig: { discriminant: "blackbody-spectrum-comparison", value } }} />,
+      );
+      expect(html).not.toContain("vizConfigError");
+      expect(html).not.toContain("vizMissing");
+    }
+  });
+
   it("still renders VizMissing for vizConfig.discriminant: none, unaffected by the new case", () => {
     const html = renderToStaticMarkup(
       <VizEngine editorial={{ vizConfig: { discriminant: "none", value: {} } }} />,

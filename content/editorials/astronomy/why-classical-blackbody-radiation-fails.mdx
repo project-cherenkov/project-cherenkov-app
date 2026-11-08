@@ -1,0 +1,103 @@
+---
+title: "Why the Rayleigh–Jeans Law Predicts an Ultraviolet Catastrophe"
+subject: astronomy
+status: published
+hook: "A formula that works at long wavelengths predicts unlimited radiation at short wavelengths, but real blackbody spectra do not behave that way."
+tags: ["blackbody-radiation", "quantum-physics", "rayleigh-jeans-law", "plancks-law"]
+principle: quantum-suppression-of-high-frequency-radiation
+errorType: extrapolating-rayleigh-jeans-law-to-short-wavelengths
+vizConfig:
+  discriminant: blackbody-spectrum-comparison
+  value:
+    temperatureK: 6000
+    temperatureRangeK: [3000, 12000]
+    temperatureStepK: 250
+publishedAt: "2026-11-08"
+updatedAt: "2026-11-08"
+author: "Renee"
+syllabusTopic: "electromagnetic-theory"
+---
+
+## The problem
+
+Imagine a cavity whose walls are held at a fixed temperature. After reaching thermal equilibrium, the cavity contains electromagnetic radiation with a continuous spectrum. Classical physics gives a formula for how much radiation appears at each wavelength. If we extend that formula towards shorter and shorter wavelengths, its predicted spectral radiance keeps increasing. The prediction becomes unlimited as the wavelength approaches zero.
+
+That result is difficult to accept. A body at a finite temperature should not emit an infinite amount of energy. Why does the classical formula predict it, and what does the observed spectrum do instead?
+
+## The idea
+
+The formula is the Rayleigh–Jeans law. It is not wrong everywhere. It is an approximation that works when the wavelength is long compared with the characteristic thermal wavelength. The mistake is treating it as valid at every wavelength.
+
+In the classical picture, each electromagnetic mode in a cavity receives an average energy of approximately $kT$, where $k$ is the Boltzmann constant and $T$ is temperature. A cavity has more available modes at higher frequencies. Classical theory therefore predicts increasing radiation as frequency rises. It does not provide a mechanism that suppresses the contribution from very high frequencies.
+
+Planck's law changes the result. It accounts for energy exchange in discrete quanta, each with energy $h\nu$, where $h$ is the Planck constant and $\nu$ is frequency. A high-frequency quantum carries more energy, so it is less likely to be thermally excited. The spectrum consequently falls at short wavelengths instead of increasing without limit.
+
+Switch between the Rayleigh–Jeans law, Planck's law, and both curves together. Move the temperature slider and inspect where the two laws agree and where they separate. The horizontal axis is wavelength, so move toward the left to examine the short-wavelength limit. The plot shows spectral radiance per unit wavelength over a finite range, not the total emitted power, and its left edge is not zero wavelength.
+
+<Interactive />
+
+<Solution>
+
+## Full argument
+
+A *blackbody* is an ideal object that absorbs all incident radiation and emits radiation determined only by its temperature. Let $T$ be its absolute temperature in kelvin, and let $\lambda$ be wavelength in metres. The spectral radiance per unit wavelength, $B_\lambda$, measures radiated power per unit area, per unit wavelength interval, and per unit solid angle. Its SI unit is $\mathrm{W\,m^{-3}\,sr^{-1}}$.
+
+Planck's law gives the spectrum:
+
+$$
+B_\lambda(T)=\frac{2hc^2}{\lambda^5}\frac{1}{e^{hc/(\lambda kT)}-1}.
+$$
+
+Here $h$ is the Planck constant, $c$ is the speed of light in vacuum, and $k$ is the Boltzmann constant. Define the dimensionless quantity
+
+$$
+x=\frac{hc}{\lambda kT}.
+$$
+
+At long wavelengths, $x$ is much smaller than one. The exponential can then be approximated by its first two terms: $e^x\approx 1+x$. Therefore, $e^x-1\approx x$. Substituting this approximation into Planck's law gives
+
+$$
+\begin{aligned}
+B_\lambda(T)&\approx \frac{2hc^2}{\lambda^5}\frac{1}{x}\\
+&=\frac{2hc^2}{\lambda^5}\frac{\lambda kT}{hc}\\
+&=\frac{2ckT}{\lambda^4}.
+\end{aligned}
+$$
+
+This is the Rayleigh–Jeans law in wavelength form. The derivation also identifies its limit: it requires $hc/(\lambda kT)\ll 1$. It is therefore a long-wavelength approximation, not a formula for the entire spectrum.
+
+The ultraviolet catastrophe appears when this restriction is ignored. The total radiance is obtained by integrating spectral radiance over all wavelengths. If the Rayleigh–Jeans expression were valid everywhere, its wavelength dependence would make the integral proportional to
+
+$$
+\int_0^\infty \lambda^{-4}\,d\lambda.
+$$
+
+Introduce a positive lower wavelength cutoff $\epsilon$. The integral from $\epsilon$ to infinity is
+
+$$
+\int_\epsilon^\infty \lambda^{-4}\,d\lambda
+=\left[-\frac{1}{3\lambda^3}\right]_\epsilon^\infty
+=\frac{1}{3\epsilon^3}.
+$$
+
+As $\epsilon$ approaches zero, this expression grows without limit. Thus the classical extrapolation predicts an infinite total radiance. The problem is not that the Rayleigh–Jeans approximation fails at long wavelengths. It is that the approximation has been extended into a regime where its condition is false.
+
+Planck's law avoids this divergence. At short wavelengths, $x$ is much larger than one, so $e^x-1\approx e^x$. The spectrum then behaves as
+
+$$
+B_\lambda(T)\approx \frac{2hc^2}{\lambda^5}e^{-hc/(\lambda kT)}.
+$$
+
+The exponential suppression dominates the factor $\lambda^{-5}$ as $\lambda$ approaches zero, and the spectral radiance tends to zero. At long wavelengths, Planck's law approaches the Rayleigh–Jeans expression, whose $\lambda^{-4}$ tail is integrable at infinity. The Planck spectrum therefore has a finite integral over all wavelengths.
+
+The physical change is energy quantization. Planck's model assigns energy exchanges in quanta of size $h\nu$, with $\nu=c/\lambda$. In thermal equilibrium, the mean thermal energy above the zero-point energy of a quantized oscillator mode is $h\nu/[e^{h\nu/(kT)}-1]$. When $h\nu$ is much larger than the thermal energy scale $kT$, the mode's thermal occupation is exponentially suppressed. Classical equipartition instead assigns the same average energy $kT$ to every mode, regardless of frequency. That assumption is the source of the high-frequency excess.
+
+The integrated Planck spectrum is finite and proportional to the fourth power of temperature. In the notation of *Fundamental Astronomy*, the total intensity is $B(T)=AT^4$, where $A=2\pi^4k^4/(15c^2h^3)$. For isotropic blackbody radiation, the emitted flux is $F=\pi B(T)=\sigma T^4$, the Stefan–Boltzmann law. This is a finite result for every finite temperature.
+
+**Where the argument applies.** The derivation assumes an ideal blackbody in thermal equilibrium. Real stars and other hot objects are not perfect blackbodies, although their continuous spectra can often be approximated by blackbody spectra. The visualization uses the ideal spectrum and a finite wavelength interval. It illustrates the divergence through the rising Rayleigh–Jeans curve, but it does not draw the zero-wavelength limit itself.
+
+</Solution>
+
+## Further reading
+
+Karttunen et al. (eds.), *Fundamental Astronomy*, 6th edition, Chapter 5, Sections 5.1 and 5.7, especially pp. 103 and 111–113.
