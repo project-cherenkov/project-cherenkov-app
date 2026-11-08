@@ -3,7 +3,12 @@
     "name": "Cherenkov",
     "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi: bukti lengkap dan visualisasi yang bisa Anda manipulasi untuk setiap ide, diarsipkan berdasarkan kesalahan yang dikoreksinya, dengan silabus OSN dan perencana belajar.",
     "homeTitle": "Project Cherenkov: editorial olimpiade interaktif",
-    "ogDescription": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi."
+    "ogDescription": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi.",
+    "languageNames": {
+      "id": "Indonesia",
+      "en": "Inggris"
+    },
+    "translationNotice": "Halaman ini belum diterjemahkan ke bahasa {requestedLanguage}. Halaman yang ditampilkan dalam bahasa {displayedLanguage}."
   },
   "nav": {
     "home": "Beranda",
@@ -515,7 +520,6 @@
     "previous": "Sebelumnya",
     "next": "Berikutnya",
     "updated": "Terakhir diperbarui {date}",
-    "fallbackNotice": "Halaman ini belum diterjemahkan, jadi yang ditampilkan adalah versi aslinya dalam bahasa Inggris.",
     "sections": {
       "start": "Mulai di sini",
       "reading": "Membaca dan menggunakan situs",

@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { Github } from "lucide-react";
+import { Github, Menu, X } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { BrandMark } from "@/components/site/brand-mark";
@@ -33,6 +33,7 @@ const localeOptions = [
 
 export function SiteHeader() {
   const t = useTranslations("nav");
+  const tFooter = useTranslations("footer");
   const currentLocale = useLocale();
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -73,6 +74,22 @@ export function SiteHeader() {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [mobileMenuOpen]);
+
+  /* A drawer that stays open after the route changes (browser back) or after
+     the window is widened to the desktop ribbons would keep the body scroll
+     locked behind an interface that no longer shows it. */
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 857px)");
+    function onChange(event: MediaQueryListEvent) {
+      if (event.matches) setMobileMenuOpen(false);
+    }
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   /* Lock body scroll when mobileMenuOpen is true */
   useEffect(() => {
@@ -115,7 +132,9 @@ export function SiteHeader() {
       <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-2 px-3 py-3.5 sm:gap-3 sm:px-6 overflow-visible">
         <Link href="/" className="flex items-center gap-2 z-10 shrink-0">
           <BrandMark className="h-6 w-6 text-cherenkov-blue-700 dark:text-cherenkov-blue-pastel" />
-          <span className="font-heading text-base font-bold tracking-tight text-foreground">
+          {/* Below 360px the bar cannot hold the wordmark beside the controls and
+              the ribbon; the mark stays and the name is kept for screen readers. */}
+          <span className="sr-only font-heading text-base font-bold tracking-tight text-foreground min-[360px]:not-sr-only">
             cherenkov
           </span>
         </Link>
@@ -219,23 +238,30 @@ export function SiteHeader() {
               <Github className="h-4 w-4" aria-hidden />
             </a>
 
-            {/* Single Bookmark Menu Toggle: Displays at 856px or smaller */}
-            {/* No aria-label on purpose: the visible word "Menu" IS the
-                accessible name (WCAG 2.5.3 Label in Name). The old label,
-                "Toggle Navigation", did not contain the visible text. */}
+            {/* Menu ribbon, shown below 857px. It hangs from the top edge like the
+                desktop ribbons but is drawn at the artwork's own proportions
+                (64x72 against 285x300) and carries an icon, so it reads as a
+                button and shows its state: a hamburger when closed, a cross when
+                open. It no longer slides down when open, which is what used to
+                park it on top of the first drawer row.
+                No aria-label on purpose: the visible word "Menu" IS the
+                accessible name (WCAG 2.5.3 Label in Name); aria-expanded
+                carries the open/closed state. */}
             <button
               ref={menuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
-              className={[
-                "group relative min-[857px]:hidden -mt-2 inline-flex h-20 w-16 items-center justify-center p-1 pt-3 transition-transform duration-300 ease-out focus:outline-none z-30",
-                mobileMenuOpen ? "translate-y-5" : "hover:translate-y-2",
-              ].join(" ")}
+              className="group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
             >
               <NavRibbonArt className="pointer-events-none drop-shadow-md" />
-              <span className="relative z-10 text-center font-mono font-bold text-white dark:text-slate-100 text-[10px] uppercase tracking-widest leading-none pb-2">
+              {mobileMenuOpen ? (
+                <X className="relative z-10 h-4 w-4 text-white dark:text-slate-100" aria-hidden />
+              ) : (
+                <Menu className="relative z-10 h-4 w-4 text-white dark:text-slate-100" aria-hidden />
+              )}
+              <span className="relative z-10 text-center font-mono text-xs font-bold uppercase leading-none tracking-wider text-white dark:text-slate-100">
                 {t("menu")}
               </span>
             </button>
@@ -243,92 +269,117 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile/Tablet Drawer Menu */}
+      {/* Mobile/Tablet Drawer Menu.
+          Laid over the page (absolute, under the bar) instead of inside the
+          flow, so opening it no longer pushes the page down, and a scrim dims
+          what is behind it and closes it on tap. Its top padding clears the
+          ribbon's tip, which hangs ~13px below the bar. Both layers sit under
+          the bar's own controls (z-10) so the ribbon is drawn over the drawer
+          and keeps its V-shaped tip. */}
       {mobileMenuOpen && (
-        <div
-          id="mobile-nav"
-          className="min-[857px]:hidden border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur"
-        >
-          <nav
-            aria-label={t("mainNavigation")}
-            className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wide"
+        <>
+          <div
+            aria-hidden="true"
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute inset-x-0 top-full z-[1] h-[100dvh] bg-cherenkov-ink/40 min-[857px]:hidden"
+          />
+          <div
+            id="mobile-nav"
+            className="absolute inset-x-0 top-full z-[2] max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain border-t border-border bg-background px-4 pb-4 pt-5 shadow-lg min-[857px]:hidden"
           >
-            {navItems.map((item) => {
-              const isActive = item.href
-                ? item.activeFor
-                  ? item.activeFor.some((href) => isWithin(pathname, href))
-                  : pathname === item.href
-                : false;
+            <nav
+              aria-label={t("mainNavigation")}
+              className="mx-auto flex max-w-5xl flex-col gap-1 font-mono text-sm uppercase tracking-wide"
+            >
+              {navItems.map((item) => {
+                const isActive = item.href
+                  ? item.activeFor
+                    ? item.activeFor.some((href) => isWithin(pathname, href))
+                    : pathname === item.href
+                  : false;
 
-              const linkClasses = [
-                "flex items-center rounded-md px-3 py-2.5 transition-colors font-semibold",
-                isActive
-                  ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                  : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
-              ].join(" ");
+                const rowClasses = (active: boolean) =>
+                  [
+                    "flex min-h-12 items-center rounded-md px-3 font-semibold transition-colors",
+                    active
+                      ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                      : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+                  ].join(" ");
 
-              if (item.isExternal) {
-                return (
-                  <NextLink
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={linkClasses}
-                  >
-                    {item.label}
-                  </NextLink>
-                );
-              }
-
-              if (item.children) {
-                return (
-                  <div key={item.href} className="flex flex-col gap-2">
-                    <Link
-                      href={item.href!}
+                if (item.isExternal) {
+                  return (
+                    <NextLink
+                      key={item.href}
+                      href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={linkClasses}
+                      className={rowClasses(false)}
                     >
                       {item.label}
-                    </Link>
-                    <div className="ml-3 flex flex-col gap-1 border-l border-border pl-3">
-                      {item.children.map((child) => {
-                        const childActive = isWithin(pathname, child.href);
-                        return (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            aria-current={childActive ? "page" : undefined}
-                            className={[
-                              "flex min-h-11 items-center rounded-md px-3 transition-colors",
-                              childActive
-                                ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                                : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
-                            ].join(" ")}
-                          >
-                            {child.label}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              }
+                    </NextLink>
+                  );
+                }
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href!}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={linkClasses}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+                if (item.children) {
+                  // The group's own row is a plain link: the child that is
+                  // current carries the fill, so two rows are never filled
+                  // for one page.
+                  return (
+                    <div key={item.href} className="flex flex-col gap-1">
+                      <Link
+                        href={item.href!}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={rowClasses(false)}
+                      >
+                        {item.label}
+                      </Link>
+                      <div className="ml-3 flex flex-col gap-1 border-l border-border pl-3">
+                        {item.children.map((child) => {
+                          const childActive = isWithin(pathname, child.href);
+                          return (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              aria-current={childActive ? "page" : undefined}
+                              className={rowClasses(childActive)}
+                            >
+                              {child.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href!}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={rowClasses(isActive)}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+
+              {/* The bar hides the GitHub icon below 640px, which left no way
+                  to reach the repository on a phone. It is a row here instead. */}
+              <a
+                href="https://github.com/project-cherenkov/project-cherenkov-app"
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-12 items-center gap-2 rounded-md px-3 font-semibold text-foreground transition-colors hover:bg-slate-100 sm:hidden dark:hover:bg-slate-800"
+              >
+                <Github className="h-4 w-4" aria-hidden />
+                {t("repo")}
+                <span className="sr-only"> {tFooter("opensInNewTab")}</span>
+              </a>
+            </nav>
+          </div>
+        </>
       )}
     </header>
   );

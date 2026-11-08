@@ -61,7 +61,7 @@ export default async function SubjectSyllabusPage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <Link href="/syllabus" className="label-code hover:text-foreground">
+      <Link href="/syllabus" className="label-code inline-flex min-h-11 items-center hover:text-foreground">
         ← {t("title")}
       </Link>
 

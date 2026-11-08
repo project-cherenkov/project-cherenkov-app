@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { DocMDX } from "@/components/docs/doc-mdx";
 import { JsonLd } from "@/components/seo/json-ld";
+import { TranslationNotice } from "@/components/site/translation-notice";
 import { Link } from "@/i18n/routing";
 import { DOCS_SOURCE_LOCALE } from "@/lib/docs-core";
 import { getAllDocSlugs, getDocLocales, getDocNeighbours, getDocPage } from "@/lib/docs";
@@ -96,12 +97,12 @@ export default async function DocPage({
       {updated && <p className="mt-1 text-xs text-muted-foreground">{t("updated", { date: updated })}</p>}
 
       {isFallback && (
-        <p
-          role="note"
-          className="mt-4 rounded-md border border-dashed border-cherenkov-pink-pastel bg-cherenkov-pink/20 p-3 text-sm text-foreground/80"
-        >
-          {t("fallbackNotice")}
-        </p>
+        <TranslationNotice
+          message={tSite("translationNotice", {
+            requestedLanguage: tSite(`languageNames.${locale}`),
+            displayedLanguage: tSite(`languageNames.${doc.locale}`),
+          })}
+        />
       )}
 
       {doc.toc.length > 1 && (

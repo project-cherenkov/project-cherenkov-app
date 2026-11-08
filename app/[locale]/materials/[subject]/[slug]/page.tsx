@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { MaterialMDX } from "@/components/material-mdx";
 import { MaterialNav, type MaterialNavSection } from "@/components/site/material-nav";
+import { TranslationNotice } from "@/components/site/translation-notice";
 import { UnderstoodButton } from "@/components/understood-button";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbJsonLd } from "@/lib/seo";
@@ -72,6 +73,7 @@ export default async function MaterialPage({
   const archived = material.status === "archived";
 
   const t = await getTranslations("materials");
+  const tSite = await getTranslations("site");
   const ts = await getTranslations("syllabus");
   const location = getTopicLocation(subject, material.topic);
   const coverage = buildSubjectCoverage(syllabus, getAllMaterials(), getAllEditorials());
@@ -117,9 +119,18 @@ export default async function MaterialPage({
             { name: material.title },
           ])}
         />
-        <Link href="/materials" className="label-code hover:text-foreground">
+        <Link href="/materials" className="label-code inline-flex min-h-11 items-center hover:text-foreground">
           ← {t("backToMaterials")}
         </Link>
+
+        {locale === "id" && (
+          <TranslationNotice
+            message={tSite("translationNotice", {
+              requestedLanguage: tSite("languageNames.id"),
+              displayedLanguage: tSite("languageNames.en"),
+            })}
+          />
+        )}
 
         {archived && (
           <p

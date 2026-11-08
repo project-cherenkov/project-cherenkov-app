@@ -3,7 +3,12 @@
     "name": "Cherenkov",
     "tagline": "Interactive olympiad editorials for informatics, physics and astronomy: a full proof and a visualization you can manipulate for every idea, filed by the mistake it corrects, with an OSN syllabus and study planner.",
     "homeTitle": "Project Cherenkov: interactive olympiad editorials",
-    "ogDescription": "Interactive olympiad editorials for informatics, physics and astronomy."
+    "ogDescription": "Interactive olympiad editorials for informatics, physics and astronomy.",
+    "languageNames": {
+      "id": "Indonesian",
+      "en": "English"
+    },
+    "translationNotice": "This page has not been translated into {requestedLanguage} yet. The page shown is in {displayedLanguage}."
   },
   "nav": {
     "home": "Home",
@@ -159,7 +164,7 @@
     "eyebrow": "about.md",
     "title": "About",
     "intro": "Project Cherenkov is an open-source archive of interactive olympiad editorials for informatics, physics and astronomy. Each editorial explains one idea in full: a proof or derivation, and a visualization you can manipulate. Editorials are filed by the mistake they correct, not by syllabus chapter.\n\nAround the archive sit a syllabus and short materials, for browsing by topic, and a study planner with a companion called Neutrino. The syllabus and the planner follow the Indonesian OSN today.",
-    "whyText": "Why it looks and sounds like this:",
+    "whyText": "Why it looks and sounds like this and documentations:",
     "whyLink": "Inspiration and philosophy",
     "teamHeading": "Team",
     "teamPlaceholder": "[PLACEHOLDER: team bios TBD]",
@@ -515,7 +520,6 @@
     "previous": "Previous",
     "next": "Next",
     "updated": "Last updated {date}",
-    "fallbackNotice": "This page has not been translated yet, so you are reading the English original.",
     "sections": {
       "start": "Start here",
       "reading": "Reading and using the site",

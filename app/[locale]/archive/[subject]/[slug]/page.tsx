@@ -7,6 +7,7 @@ import { getAllEditorials, getEditorial, isArchivedEditorial } from "@/lib/conte
 import { isEditorRequest } from "@/lib/editor-access";
 import { EditorialMDX } from "@/components/editorial-mdx";
 import { PracticeLinks } from "@/components/site/practice-links";
+import { TranslationNotice } from "@/components/site/translation-notice";
 import { UnderstoodButton } from "@/components/understood-button";
 import { JsonLd } from "@/components/seo/json-ld";
 import { articleJsonLd, breadcrumbJsonLd, isIndexableEditorial } from "@/lib/seo";
@@ -105,9 +106,18 @@ export default async function EditorialPage({
           ]}
         />
       )}
-      <Link href="/archive" className="label-code hover:text-foreground">
+      <Link href="/archive" className="label-code inline-flex min-h-11 items-center hover:text-foreground">
         ← {t("backToArchive")}
       </Link>
+
+      {locale === "id" && (
+        <TranslationNotice
+          message={tSite("translationNotice", {
+            requestedLanguage: tSite("languageNames.id"),
+            displayedLanguage: tSite("languageNames.en"),
+          })}
+        />
+      )}
 
       {archived && (
         <p
@@ -123,12 +133,22 @@ export default async function EditorialPage({
         <span className="label-code rounded bg-muted px-2 py-0.5 text-brand">
           {editorial.subject}
         </span>
-        <span className="label-code">
-          {t("principleLabel")}: {editorial.principle}
+        {/* The values are kebab-case identifiers; shown in capitals they ran
+            to 44 characters and broke across lines mid-word on a phone. The
+            label stays in the mono-caps voice, the value is plain and may
+            wrap anywhere, and each pair gets its own line below sm. */}
+        <span className="label-code w-full sm:w-auto">
+          {t("principleLabel")}:{" "}
+          <span className="normal-case tracking-normal text-foreground/80 [overflow-wrap:anywhere]">
+            {editorial.principle}
+          </span>
         </span>
         {editorial.errorType && (
-          <span className="label-code">
-            {t("errorTypeLabel")}: {editorial.errorType}
+          <span className="label-code w-full sm:w-auto">
+            {t("errorTypeLabel")}:{" "}
+            <span className="normal-case tracking-normal text-foreground/80 [overflow-wrap:anywhere]">
+              {editorial.errorType}
+            </span>
           </span>
         )}
       </div>

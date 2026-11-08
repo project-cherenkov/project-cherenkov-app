@@ -73,25 +73,29 @@ export default async function AboutPage({
             // a small joke, and a sign that people made this. Do not remove or
             // "fix" it. It has no contact line on purpose.
             return (
-              <li key={member.name} className="flex gap-4">
+              <li key={member.name} className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4 gap-y-2">
                 {member.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element -- arbitrary Blob host, not worth a remotePatterns entry for three photos
                   <img
                     src={member.photoUrl}
                     alt={member.name}
-                    className="h-16 w-16 flex-none rounded-full object-cover"
+                    className="h-16 w-16 flex-none rounded-full object-cover sm:row-span-2"
                   />
                 ) : (
-                  <div className="h-16 w-16 flex-none rounded-full bg-cherenkov-blue/20" />
+                  <div className="h-16 w-16 flex-none rounded-full bg-cherenkov-blue/20 sm:row-span-2" />
                 )}
-                <div className="min-w-0 max-w-prose">
+                <div className="min-w-0 self-center sm:self-end">
                   <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (
                     <p className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
                       {member.role}
                     </p>
                   )}
-                  {bio && <p className="mt-1 text-sm text-foreground/80">{bio}</p>}
+                </div>
+                {/* Below sm the bio spans the photo's column too, so it is no
+                    longer squeezed into ~60% of a phone's width beside it. */}
+                <div className="col-span-2 min-w-0 max-w-prose sm:col-span-1 sm:col-start-2">
+                  {bio && <p className="text-sm text-foreground/80">{bio}</p>}
                   {member.personalContacts.length > 0 && (
                     <div className="mt-1 flex flex-wrap gap-x-4">
                       {member.personalContacts.map((contact) => (

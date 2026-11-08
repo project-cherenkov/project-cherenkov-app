@@ -18,7 +18,7 @@ function NavList({ sections }: { sections: DocsNavSection[] }) {
       {sections.map(({ section, entries }) => (
         <div key={section}>
           <p className="label-code mb-2">{t(`sections.${section}`)}</p>
-          <ul className="space-y-0.5 border-l border-border">
+          <ul className="space-y-0.5 border-l border-border-strong">
             {entries.map((entry) => {
               const href = `/docs/${entry.slug}`;
               const active = pathname === href;
@@ -31,7 +31,7 @@ function NavList({ sections }: { sections: DocsNavSection[] }) {
                       "-ml-px flex min-h-11 items-center border-l-2 px-3 text-sm transition-colors",
                       active
                         ? "border-cherenkov-blue-700 font-semibold text-foreground dark:border-cherenkov-blue-pastel"
-                        : "border-transparent text-muted-foreground hover:text-foreground",
+                        : "border-transparent text-foreground/80 hover:text-foreground",
                     ].join(" ")}
                   >
                     {entry.title}
@@ -54,7 +54,10 @@ export function DocsNav({ sections }: { sections: DocsNavSection[] }) {
   const t = useTranslations("docs");
   return (
     <>
-      <nav aria-label={t("navLabel")} className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+      <nav
+        aria-label={t("navLabel")}
+        className="hidden lg:sticky lg:top-24 lg:block lg:self-start lg:rounded-lg lg:border lg:border-border lg:bg-card/50 lg:p-4"
+      >
         <NavList sections={sections} />
       </nav>
       <details className="rounded-md border border-border lg:hidden">

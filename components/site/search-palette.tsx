@@ -114,7 +114,7 @@ export function SearchPalette() {
         }}
       >
         <DialogContent
-          className="top-24 max-w-xl -translate-y-0"
+          className="top-16 max-w-xl -translate-y-0 p-4 sm:top-24 sm:p-6 [&>button]:right-4 [&>button]:top-[1.3rem] sm:[&>button]:right-5 sm:[&>button]:top-[1.8rem]"
           onOpenAutoFocus={(event) => {
             event.preventDefault();
             inputRef.current?.focus();
@@ -140,7 +140,7 @@ export function SearchPalette() {
             }}
             onKeyDown={onInputKeyDown}
             placeholder={t("placeholder")}
-            className="w-full rounded-md border border-border bg-background px-3 py-2 pr-10 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-cherenkov-blue-pastel"
+            className="w-full text-ellipsis rounded-md border border-border bg-background px-3 py-2 pr-11 text-base text-foreground placeholder:text-sm sm:placeholder:text-base outline-none focus-visible:ring-2 focus-visible:ring-cherenkov-blue-pastel"
           />
 
           <ul id={listId} role="listbox" aria-label={t("results")} className="mt-3 max-h-80 overflow-y-auto">

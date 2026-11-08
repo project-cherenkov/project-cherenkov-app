@@ -84,7 +84,7 @@ export function TryFirstToggle() {
         type="checkbox"
         checked={tryFirst}
         onChange={(event) => setTryFirst(event.target.checked)}
-        className="mt-0.5 h-4 w-4"
+        className="mt-0.5 h-5 w-5 flex-none"
       />
       <span>
         <span className="font-medium text-foreground">{t("tryFirstLabel")}</span>

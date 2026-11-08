@@ -24,7 +24,7 @@ export function EditorialCard({
   return (
     <Link
       href={`/archive/${editorial.subject}/${editorial.slug}`}
-      className="group flex h-full flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-600 dark:hover:border-cherenkov-blue-pastel"
+      className="group flex h-full min-w-0 flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-600 dark:hover:border-cherenkov-blue-pastel"
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
