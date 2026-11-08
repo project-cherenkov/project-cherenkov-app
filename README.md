@@ -20,7 +20,7 @@
 
 ## I. Short description
 
-Project Cherenkov is an Indonesian OSN (olympiad) editorial archive and study planner for informatics, physics and astronomy. Each editorial is a self-contained write-up of one idea, such as a proof, a derivation or a technique, and comes with a working interactive visualisation. The visualisation is how the idea is explored.
+Project Cherenkov is a growing, open-source archive of olympiad ideas made visible, for informatics, physics and astronomy. Each editorial is a full proof or derivation paired with a working interactive visualisation, and is filed by the mistake it corrects. Today the project is Indonesia-first: the syllabus is the Indonesian OSN syllabus, and the study planner and its Neutrino companion follow the OSN stages. It is not limited to Indonesian olympiads, but no international syllabus or planner is built yet. Main writing is in English; the interface is bilingual (English and Indonesian). See [`docs/project/overview.md`](docs/project/overview.md) for the broader definition.
 
 The public site has three sections, joined by the OSN syllabus:
 
@@ -32,7 +32,7 @@ The public site has three sections, joined by the OSN syllabus:
 
 The editorial archive is indexed by principle (the general idea an editorial teaches) and error type (the specific mistake it corrects), and not by subject chapter. The goal is to let someone arrive because they made a specific mistake or want to understand a specific idea. The syllabus and materials sections are the place for browsing by topic.
 
-This repo contains Phase 1 (the public archive, syllabus, materials, and documentation), Phase 2 (user accounts and core topic progress), and the implemented Phase 3 adaptive study planner (OSN path). Visitors can browse, read, and interact with all public content without an account; signed-in users can configure their OSN stage, weekly hours, and topic self-ratings to generate an adaptively scheduled study plan, track daily sessions and reviews, and verify mastery through topic quizzes. See `docs/phase-3-planner.md` for the Phase 3 planner architecture.
+This repo contains Phase 1 (the public archive, syllabus, materials, and documentation), Phase 2 (user accounts and core topic progress), and the implemented Phase 3 adaptive study planner (OSN path). Visitors can browse, read, and interact with all public content without an account; signed-in users can configure their OSN stage, weekly hours, and topic self-ratings to generate an adaptively scheduled study plan, track daily sessions and reviews, and verify mastery through topic quizzes. See `docs/product/phase-3-planner.md` for the Phase 3 planner architecture.
 
 Content is git-committed MDX, not stored in a database: there is no CRUD backend for editorials or materials, only files under `content/`, compiled at build time. Editing happens either by editing those files directly, or through an in-site CMS layer ([Section VII](#vii-editing-content-in-the-browser-keystatic)) that writes back to the same files.
 
@@ -68,9 +68,9 @@ These documents live in their own files and not inside the README. The site foot
 
 Hosting: [Vercel](https://vercel.com). The live deployment is available at [project-cherenkov-app.vercel.app/en](https://project-cherenkov-app.vercel.app/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js, so no `vercel.json` is needed. See [Section XI](#xi-deploying) for deployment details.
 
-`next.config.mjs` also applies baseline security headers to every route (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`). There is no Content-Security-Policy yet; a real one has to be worked out against Keystatic's admin UI and Vercel Blob's image host (see `docs/deployment-readiness.md`).
+`next.config.mjs` also applies baseline security headers to every route (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`). There is no Content-Security-Policy yet; a real one has to be worked out against Keystatic's admin UI and Vercel Blob's image host (see `docs/history/deployment-readiness.md`).
 
-Phase 3 adaptive scheduling is implemented (`docs/phase-3-planner.md`). The earlier design sketch is preserved in `docs/phase-3-architecture.md`.
+Phase 3 adaptive scheduling is implemented (`docs/product/phase-3-planner.md`). The earlier design sketch is preserved in `docs/history/phase-3-architecture.md`.
 
 ---
 
@@ -191,22 +191,10 @@ drizzle/                         committed SQL migrations (drizzle/meta is git-i
 scripts/                         seed-topics.ts, seed-quiz-questions.ts,
                                   simulate-planner.ts, check-blockly-bundle-isolation.ts
 middleware.ts                    locale routing, admin-surface gate, planner auth gate
-docs/                            see the list below
+docs/                            developer notes; index in docs/README.md
 ```
 
-Docs in `docs/`:
-
-| File | What it is |
-| --- | --- |
-| `seo-and-accessibility.md` | How indexing is switched on, what each page declares to search engines, the accessibility decisions and how to verify them, and the open launch decisions. |
-| `cherenkov-env-vars-guide.md` | Every environment variable, what it unlocks, and how to obtain it, for both local development and Vercel. |
-| `scene-builder-github-auth.md` | Walkthrough and troubleshooting for the scene builder's GitHub authorisation step ([FAQ F](#f-why-do-i-see-github-authorization-required-in-the-scene-builder-even-though-im-already-logged-into-keystatic)). |
-| `phase-3-planner.md` | The Phase 3 adaptive planner as built: student settings, topic self-ratings, mastery estimation, scheduler pipeline, regeneration, and feasibility. Code is the source of truth. |
-| `planner-context-transfer.md` | Domain research, pedagogical rationale, and architectural decisions behind the Phase 3 scheduler. |
-| `phase-3-architecture.md` | The original Phase 2/3 design sketch (historical; `phase-3-planner.md` and the code supersede it where they differ). |
-| `phase-2-architecture.md` | The original Phase 2 design sketch. Historical: Phase 2 is built, and its own header says so. |
-| `deployment-readiness.md` | The Phase 1 deployment-hardening write-up. Historical: it predates the scene builder, the planner and the syllabus/materials sections, so treat it as context and not as a current file or dependency list. |
-| `design-report.md` | The UI design review: the colour palette (tokens, hero band, computed contrast), what the design pass fixed, what is still open and why, and a browser checklist. Code is the source of truth for token values. |
+Developer-facing notes live in `docs/`. Start with [`docs/README.md`](docs/README.md), which indexes every file and says which one decides each topic.
 
 ---
 
@@ -267,7 +255,7 @@ Use any other port value you prefer. If the port is still busy, the app will con
 
 ### Environment variables
 
-The public site needs none of the variables below. Accounts, planner pages, quizzes and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero configuration. `.env.example` has the current defaults; [`docs/cherenkov-env-vars-guide.md`](docs/cherenkov-env-vars-guide.md) has the full walkthrough for each variable. The short, deployment-oriented summary:
+The public site needs none of the variables below. Accounts, planner pages, quizzes and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero configuration. `.env.example` has the current defaults; [`docs/engineering/cherenkov-env-vars-guide.md`](docs/engineering/cherenkov-env-vars-guide.md) has the full walkthrough for each variable. The short, deployment-oriented summary:
 
 | Variable | Required? | Purpose | How to get it (summary) |
 | --- | --- | --- | --- |
@@ -278,7 +266,7 @@ The public site needs none of the variables below. Accounts, planner pages, quiz
 | `ADMIN_EMAILS` | Required for CMS editing / scene builder, and assigns the admin role | Comma-separated email allow-list for content editors. Required for team-photo uploads, saving/creating scenes in the scene builder (in local mode too), and grants the Primus Inter Pares role on `/account`. Non-admin users receive the Inchoatus role. | Add a list such as `editor@example.com, second-editor@example.com` to `.env.local` or Vercel's environment variables. |
 | `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the upload after authorisation succeeds. Without it, the route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it, and let Vercel create the variable automatically. |
 | `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset. Set it to `https://project-cherenkov-app.vercel.app` in Vercel, or to the eventual custom domain. | Use the deployed origin. |
-| `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | The switch that lets search engines index the site. Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login, signup and planner pages stay `noindex` regardless, as do editorials still carrying a placeholder author. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/seo-and-accessibility.md` is done. |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | The switch that lets search engines index the site. Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login, signup and planner pages stay `noindex` regardless, as do editorials still carrying a placeholder author. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/engineering/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/engineering/seo-and-accessibility.md` is done. |
 | `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public site or CI's unit tests. | Create a Neon project and copy the connection string from Neon → Connection Details. |
 | `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. | Run `openssl rand -base64 32` and paste the result. |
 | `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. | Set to your deployed origin. |
@@ -550,7 +538,7 @@ Saving posts the draft to `POST /api/scene-builder` (with `engine` set to `compo
 - Local (default, no env vars): writes the change straight to the target file on disk.
 - GitHub (`KEYSTATIC_GITHUB_CLIENT_ID` set): commits the change to a brand-new branch (`keystatic/scene-builder-<slug>-<timestamp>`; `keystatic/scene-builder-create-<slug>-<timestamp>` for a new stub) off the repository's default branch. This does not open or merge a pull request automatically. The author still opens a PR on GitHub to publish the change.
 
-GitHub mode needs its own authorisation step first, via a dedicated GitHub OAuth flow (`app/api/scene-builder/github-oauth/{start,callback}/route.ts`, `lib/scene-builder-oauth.ts`). It is separate from both Keystatic's own admin-UI session and Better Auth's session, so that a temporary, deployment-mode-specific OAuth token never needs a schema migration onto the durable user/session tables. It reuses the already-configured `KEYSTATIC_GITHUB_CLIENT_ID`/`KEYSTATIC_GITHUB_CLIENT_SECRET`/`KEYSTATIC_SECRET` variables rather than provisioning new ones, and keeps the resulting GitHub access token in its own short-lived (1 hour), HMAC-signed, `httpOnly` cookie. Hitting a "GitHub authorization required" 401 from either "Save to editorial" or "New visualization" means this step hasn't been done yet (or its token expired). See [`docs/scene-builder-github-auth.md`](docs/scene-builder-github-auth.md) for the walkthrough and troubleshooting checklist (also linked from FAQ F below).
+GitHub mode needs its own authorisation step first, via a dedicated GitHub OAuth flow (`app/api/scene-builder/github-oauth/{start,callback}/route.ts`, `lib/scene-builder-oauth.ts`). It is separate from both Keystatic's own admin-UI session and Better Auth's session, so that a temporary, deployment-mode-specific OAuth token never needs a schema migration onto the durable user/session tables. It reuses the already-configured `KEYSTATIC_GITHUB_CLIENT_ID`/`KEYSTATIC_GITHUB_CLIENT_SECRET`/`KEYSTATIC_SECRET` variables rather than provisioning new ones, and keeps the resulting GitHub access token in its own short-lived (1 hour), HMAC-signed, `httpOnly` cookie. Hitting a "GitHub authorization required" 401 from either "Save to editorial" or "New visualization" means this step hasn't been done yet (or its token expired). See [`docs/engineering/scene-builder-github-auth.md`](docs/engineering/scene-builder-github-auth.md) for the walkthrough and troubleshooting checklist (also linked from FAQ F below).
 
 Access is gated the same way as the rest of the CMS write surface: `/keystatic/scene-builder`, `/api/scene-builder/*` and the OAuth routes all fall under `middleware.ts`'s admin-surface gate ([Section VII](#vii-editing-content-in-the-browser-keystatic)), so on a deployed build they 404 together with `/keystatic` unless GitHub-storage mode is configured. Each API handler also re-checks the caller's session and `ADMIN_EMAILS` membership per request, the same defence-in-depth pattern `/api/team-photo` uses.
 
@@ -653,9 +641,9 @@ The repository is intended to deploy on Vercel and can be deployed with zero req
 6. When the repository is connected to Vercel, every PR gets its own preview deploy by Vercel's default behaviour; this is hosting configuration rather than a repository guarantee.
 7. CI runs independently of Vercel. `.github/workflows/ci.yml` runs on Node 22: install (frozen lockfile) → `pnpm generate` → lint → typecheck → test → build, on every push and pull request to `main`. The build step includes the Blockly bundle-isolation check. No Phase 2 variables are configured in CI on purpose: the tests are unit tests that need no live database.
 
-Before a fully polished public launch, read `docs/deployment-readiness.md` (keeping in mind it is a historical Phase 1 document) and resolve:
+Before a fully polished public launch, read `docs/history/deployment-readiness.md` (keeping in mind it is a historical Phase 1 document) and resolve:
 
-- The site is `noindex, nofollow` on every page (`app/[locale]/layout.tsx`) until the remaining placeholder content is cleared. See [Section XIII](#xiii-current-status-and-open-questions) for what is left.
+- The site is `noindex, nofollow` on every page (`app/[locale]/layout.tsx`) until the launch decisions are settled (for example, every editorial still has a placeholder author). See [Section XIII](#xiii-current-status-and-open-questions) for what is left.
 - Whether/when to set up a real GitHub OAuth App (plus `KEYSTATIC_SECRET`) so `/keystatic` and the scene builder become reachable in production ([Section VII](#vii-editing-content-in-the-browser-keystatic)).
 
 The repository and deployment status are external to the codebase. What remains in the tracked project is content polish and the production CMS gate.
@@ -684,11 +672,11 @@ The taxonomy isn't finalised yet, and there isn't enough real content to know wh
 
 ### E. "Is the site ready to be indexed?"
 
-The code is ready; the switch is still off. Every page ships `noindex, nofollow` until the environment variable `NEXT_PUBLIC_ALLOW_INDEXING` is set to `1` (it replaces the old hard-coded `robots: { index: false, follow: false }` in `app/[locale]/layout.tsx`, so going live no longer needs a code change). Even with it on, account/login/signup/planner pages stay `noindex`, and so does any editorial whose author is still the `PLACEHOLDER …` value or that is tagged `fixture`. Those are also left out of the sitemap and `/llms.txt`. At the time of writing every editorial still has the placeholder author, so the archive itself would remain `noindex` after flipping the switch until real author names are entered. `docs/seo-and-accessibility.md` has the full pre-launch checklist.
+The code is ready; the switch is still off. Every page ships `noindex, nofollow` until the environment variable `NEXT_PUBLIC_ALLOW_INDEXING` is set to `1` (it replaces the old hard-coded `robots: { index: false, follow: false }` in `app/[locale]/layout.tsx`, so going live no longer needs a code change). Even with it on, account/login/signup/planner pages stay `noindex`, and so does any editorial whose author is still the `PLACEHOLDER …` value or that is tagged `fixture`. Those are also left out of the sitemap and `/llms.txt`. At the time of writing every editorial still has the placeholder author, so the archive itself would remain `noindex` after flipping the switch until real author names are entered. `docs/engineering/seo-and-accessibility.md` has the full pre-launch checklist.
 
 ### F. "Why do I see 'GitHub authorization required...' in the scene builder even though I'm already logged into `/keystatic`?"
 
-Because Keystatic's own login and the scene builder's own GitHub access are two separate OAuth handshakes by design ([Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder)), so being logged into `/keystatic` does not also authorise the scene builder. Follow the link the error itself shows ("Authorize with GitHub"), or see [`docs/scene-builder-github-auth.md`](docs/scene-builder-github-auth.md) for the full walkthrough and a troubleshooting checklist if it still doesn't go through. The authorisation is also time-limited (1 hour), so seeing this again later isn't a regression.
+Because Keystatic's own login and the scene builder's own GitHub access are two separate OAuth handshakes by design ([Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder)), so being logged into `/keystatic` does not also authorise the scene builder. Follow the link the error itself shows ("Authorize with GitHub"), or see [`docs/engineering/scene-builder-github-auth.md`](docs/engineering/scene-builder-github-auth.md) for the full walkthrough and a troubleshooting checklist if it still doesn't go through. The authorisation is also time-limited (1 hour), so seeing this again later isn't a regression.
 
 ---
 
@@ -699,7 +687,7 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 - Not built: a Content-Security-Policy (CSP). The checked-in quiz bank is now bootstrap data only; seeding inserts missing questions and does not overwrite admin edits. Only reviewed, non-archived questions are served to students.
 - Planner and calibration placeholders: `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
 - Content is thin. There are three real editorials plus one implementation fixture, and one material (`binary-search`) in total. Of the syllabus, only informatics has a material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.
-- About page. `content/team/index.json` currently has four entries, including the placeholder entry named "placeholder" ("the holder of place"), and all four render on the page. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The site stays `noindex`/`nofollow` unless indexing is enabled through the documented environment switch; the placeholder entry remains content to resolve before indexing.
+- About page. `content/team/index.json` has four entries and all four render on the page. The entry named "placeholder" ("the holder of place") is intentional: a small joke and a sign that people made this. Do not remove it or treat it as content to resolve; it has no contact line on purpose. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The About page says what the project is; the reasoning behind its look and tone is at `/docs/philosophy`, which is awaiting the owner's review before it merges to `main`. The site stays `noindex`/`nofollow` unless indexing is enabled through the documented environment switch.
 - Physics syllabus source. `lib/syllabus/data/physics.ts` records the source label, `OSN 2026` edition, and URL. Its comment states that the lists have not yet been compared with the 2026 PDF because the PDF host blocks automated access, so `accessed` remains unset.
 - Keystatic and the scene builder stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` and `KEYSTATIC_SECRET` are configured.
 - The `vizConfig.discriminant: "none"` schema-vs-spec conflict (FAQ C) and the free-text `principle`/`errorType` taxonomy (FAQ D) are both still open.

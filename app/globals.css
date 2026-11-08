@@ -112,7 +112,7 @@
 /* Hero band: a blue glow top-left and a pink glow top-right that fade to
    transparent, so the page colour shows through and there is no hard edge in
    either theme. Light uses the same recipe as dark with different strengths.
-   Keep small text on the band at >= 4.5:1 (see docs/design-report.md). */
+   Keep small text on the band at >= 4.5:1 (see docs/design/colour.md). */
 @layer components {
   .hero-band {
     background-image:

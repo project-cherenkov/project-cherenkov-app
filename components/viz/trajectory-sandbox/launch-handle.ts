@@ -1,5 +1,5 @@
 // Geometry for the draggable launch-angle handle (R2,
-// docs/viz-interaction-improvements.md). Pure functions, no React, so the
+// docs/design/visualization-interactions.md). Pure functions, no React, so the
 // drawing code, the handle element and the tests all share one definition.
 //
 // Why the handle sits at a FIXED radius from the launch origin rather than at

@@ -1,9 +1,9 @@
 {
   "site": {
     "name": "Cherenkov",
-    "tagline": "Editorial olimpiade OSN interaktif untuk informatika, fisika, dan astronomi. Setiap bukti disertai visualisasi yang bisa Anda manipulasi.",
-    "homeTitle": "Cherenkov: editorial OSN informatika, fisika, astronomi",
-    "ogDescription": "Editorial olimpiade dengan visualisasi yang bisa Anda manipulasi."
+    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi: bukti lengkap dan visualisasi yang bisa Anda manipulasi untuk setiap ide, diarsipkan berdasarkan kesalahan yang dikoreksinya, dengan silabus OSN dan perencana belajar.",
+    "homeTitle": "Project Cherenkov: editorial olimpiade interaktif",
+    "ogDescription": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi."
   },
   "nav": {
     "home": "Beranda",
@@ -29,8 +29,8 @@
   },
   "home": {
     "eyebrow": "readme.md",
-    "heroTitle": "Membuat ide menjadi terlihat",
-    "heroBody": "Setiap editorial ditulis oleh seseorang yang bersaing di bidang itu. Instagram membawa pancingan, yaitu ide yang mengejutkan dalam beberapa detik. Situs ini membawa sisanya: bukti lengkap dan visualisasi interaktif yang bisa Anda manipulasi.",
+    "heroTitle": "From Curiosity to Visualization",
+    "heroBody": "Setiap editorial menjelaskan satu ide secara utuh: buktinya, dan visualisasi yang bisa Anda manipulasi, diarsipkan berdasarkan kesalahan yang dikoreksinya. Instagram membawa pancingannya; situs ini membawa sisanya.",
     "ctaPlan": "Rencanakan belajarku",
     "recentEyebrow": "requirements.txt",
     "recentHeading": "Edisi terbaru",
@@ -158,17 +158,20 @@
   "about": {
     "eyebrow": "about.md",
     "title": "Tentang",
-    "philosophyPlaceholder": "Observatorium neutrino tidak pernah melihat neutrino secara langsung, karena ia melewati materi biasa hampir setiap saat. Yang terdeteksi adalah kilatan cahaya yang ditinggalkan neutrino pada saat-saat langka saat ia berinteraksi, dan kilatan itu cukup untuk melacak kembali asalnya. Itu inti proyek ini. Penalaran yang memecahkan masalah sulit biasanya tak terlihat, dan mudah diabaikan tanpa sadar ia pernah hadir. Visualisasi adalah kilatan itu: saat penalaran itu menjadi sesuatu yang bisa Anda lihat dan lacak sendiri.",
+    "intro": "Project Cherenkov adalah arsip editorial olimpiade interaktif sumber terbuka untuk informatika, fisika, dan astronomi. Setiap editorial menjelaskan satu ide secara utuh: bukti atau penurunan rumus, beserta visualisasi yang bisa Anda manipulasi. Editorial diarsipkan berdasarkan kesalahan yang dikoreksinya, bukan berdasarkan bab silabus.\n\nDi sekitar arsip ini ada silabus dan materi singkat untuk menelusuri per topik, serta perencana belajar dengan pendamping bernama Neutrino. Saat ini silabus dan perencana mengikuti OSN Indonesia.",
+    "whyText": "Mengapa tampilan dan nadanya seperti ini:",
+    "whyLink": "Inspirasi dan filosofi (dalam bahasa Inggris)",
     "teamHeading": "Tim",
     "teamPlaceholder": "[PLACEHOLDER: bio tim belum ditulis]",
     "repoHeading": "Sumber",
     "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git, jadi riwayat commit-nya terbuka. Berkontribusilah di GitHub.",
     "contactHeading": "Kontak",
     "contactPlaceholder": "[PLACEHOLDER: informasi kontak belum ditulis]",
-    "metaDescription": "Tentang Project Cherenkov: arsip editorial olimpiade interaktif sumber terbuka untuk siswa OSN Indonesia, dan gagasan di baliknya."
+    "metaDescription": "Project Cherenkov adalah arsip editorial olimpiade interaktif sumber terbuka untuk informatika, fisika, dan astronomi, dengan silabus OSN dan perencana belajar."
   },
   "footer": {
-    "tagline": "Ide yang tampak jelas.",
+    "tagline": "From Curiosity to Visualization.",
+    "motto": "Cognitio · Humanitas · Exploratio",
     "madeBy": "Proyek repo publik oleh tim Cherenkov.",
     "lastUpdatedOn": "Terakhir Diperbarui Pada",
     "license": "Lisensi",

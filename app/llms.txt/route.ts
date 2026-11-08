@@ -9,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 // and gives an AI assistant a factual, link-rich summary to cite instead of
 // guessing. It is a courtesy index, not an access-control mechanism: whether
 // AI crawlers may *train* on the content is a separate policy decision made
-// in robots.ts (see docs/seo-and-accessibility.md).
+// in robots.ts (see docs/engineering/seo-and-accessibility.md).
 //
 // While indexing is switched off (NEXT_PUBLIC_ALLOW_INDEXING unset) this
 // returns a one-line notice rather than advertising a site that has asked not

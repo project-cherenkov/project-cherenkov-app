@@ -25,7 +25,7 @@ export interface QuizDialogProps {
 type Feedback = { questionId: string; correct: boolean }[];
 
 // QUIZ-001. First real use of components/ui/dialog.tsx and tabs.tsx
-// (previously imported nowhere — see docs/deployment-readiness.md). Tabs
+// (previously imported nowhere — see docs/history/deployment-readiness.md). Tabs
 // page through a topic's questions inside one Dialog; submitting calls
 // lib/quiz-actions.ts's Server Action, which is the only place that ever
 // sees `questions` alongside their real correct answers.

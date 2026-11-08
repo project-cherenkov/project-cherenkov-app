@@ -16,7 +16,7 @@ export interface TrajectorySandboxConfig {
   speedRange?: [number, number];
   angleRange?: [number, number];
   /**
-   * R3 (docs/viz-interaction-improvements.md): optional predict -> act ->
+   * R3 (docs/design/visualization-interactions.md): optional predict -> act ->
    * check problem layered on the sandbox. Purely additive: a config without
    * it behaves exactly as before. See isTrajectorySandboxConfig for the
    * "guaranteed solvable" rule.

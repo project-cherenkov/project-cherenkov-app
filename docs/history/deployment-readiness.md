@@ -1,6 +1,8 @@
 # Deployment readiness: Phase 1
 
-> Historical note: This write-up documents the initial Phase 1 deployment-hardening pass. It predates the scene builder, the syllabus and materials sections, accounts, in-app documentation, and the Phase 2/3 study planner. For current deployment details and environment variables, consult `README.md` and `docs/cherenkov-env-vars-guide.md`.
+> Moved from docs/deployment-readiness.md on 2026-11-08.
+
+> Historical note: This write-up documents the initial Phase 1 deployment-hardening pass. It predates the scene builder, the syllabus and materials sections, accounts, in-app documentation, and the Phase 2/3 study planner. For current deployment details and environment variables, consult `README.md` and `docs/engineering/cherenkov-env-vars-guide.md`.
 
 Written against the "Feature Architect" process used elsewhere in this repo
 (see the `spec §…`, `BLOB-…`, `CMS-…` comments throughout the codebase).
@@ -35,7 +37,7 @@ New files:
   sitemap is generated from `getAllEditorials()`, so it can't drift from
   what's actually published.
 - `app/icon.svg`: see §4.
-- `docs/deployment-readiness.md`: this file.
+- `docs/history/deployment-readiness.md`: this file.
 
 Modified files:
 - `middleware.ts`: added the admin-surface gate (§3).
@@ -46,7 +48,7 @@ Modified files:
 
 Untouched, and why: `velite.config.ts`, `keystatic.config.ts`'s schema,
 all three viz engines, `lib/content.ts`, all page components' actual
-logic, Phase 2 (`docs/phase-2-architecture.md`, `drizzle-orm`,
+logic, Phase 2 (`docs/history/phase-2-architecture.md`, `drizzle-orm`,
 `better-auth`, etc. stay exactly as reserved-but-unbuilt). None of this
 needed to change for deployment readiness, and the brief explicitly asks
 to avoid unrelated expansion.

@@ -1,10 +1,12 @@
 # Project Cherenkov visualizations: what to learn from Brilliant, and what to change
 
+> Moved from docs/viz-interaction-improvements.md on 2026-11-08.
+
 Audience: contributors (human or AI agent) who will improve the viz engines in `components/viz/`.
 Written 7 November 2026 from a read of the repo snapshot `project-cherenkov-app-main` (zip dated 3 Nov 2026) and public information about Brilliant.org.
 How to read this: Section 0 is the whole story. Section 1 is what Brilliant does. Section 2 is what Cherenkov does today. Section 3 is the gap. Section 4 is the recommendations, in priority order, each with acceptance criteria. Section 5 lists what not to do. Section 6 lists open questions. Section 7 lists sources and how far to trust each.
 
-Labels used throughout (same convention as `docs/planner-context-transfer.md`):
+Labels used throughout (same convention as `docs/product/planner-context-transfer.md`):
 - [USER-DECIDED]: the project owner said this explicitly. Do not change without asking.
 - [OBSERVED]: read directly in the repo or on a public page during this review.
 - [RESEARCHED]: taken from a published source listed in Section 7.

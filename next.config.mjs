@@ -87,7 +87,7 @@ const nextConfig = {
   // emits). Deliberately NOT included: a Content-Security-Policy — a real
   // one needs to be worked out against Keystatic's admin UI and Vercel
   // Blob's image host, which is a bigger, separate decision (Recommended,
-  // not Required, for this pass — see docs/deployment-readiness.md).
+  // not Required, for this pass — see docs/history/deployment-readiness.md).
   async headers() {
     return [
       {

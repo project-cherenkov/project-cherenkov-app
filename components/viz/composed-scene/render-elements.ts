@@ -100,7 +100,7 @@ function valueDuringStep(
   return spec.default;
 }
 
-// R1 (docs/viz-interaction-improvements.md): the params to draw while
+// R1 (docs/design/visualization-interactions.md): the params to draw while
 // gliding from `fromStep` to `toStep`, `t` in [0, 1] (clamped).
 //
 // Returns a synthetic SceneStep holding, for every param either step

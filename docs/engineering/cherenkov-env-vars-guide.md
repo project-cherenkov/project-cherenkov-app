@@ -1,5 +1,7 @@
 # Project Cherenkov environment variables guide
 
+> Moved from docs/cherenkov-env-vars-guide.md on 2026-11-08.
+
 This document covers every environment variable the app recognizes, what it
 unlocks, whether you actually need it, and exactly how to obtain the value,
 based on how each variable is used in the codebase (`lib/auth.ts`,
@@ -709,7 +711,7 @@ What it does: The global toggle controlling whether search engine crawlers are a
 
 Private and unready pages stay protected: Account, login, signup, planner pages, editorials still carrying a `PLACEHOLDER ...` author or tagged `fixture`, and docs fallback pages stay `noindex` regardless of this setting.
 
-See `docs/seo-and-accessibility.md` for the full pre-launch checklist.
+See `docs/engineering/seo-and-accessibility.md` for the full pre-launch checklist.
 
 ### Local development
 
@@ -721,7 +723,7 @@ NEXT_PUBLIC_ALLOW_INDEXING=1
 
 ### Vercel deployment
 
-Where to set it: Vercel dashboard → Settings → Environment Variables. Set `Key: NEXT_PUBLIC_ALLOW_INDEXING` and `Value: 1` once all launch checklist items in `docs/seo-and-accessibility.md` are completed.
+Where to set it: Vercel dashboard → Settings → Environment Variables. Set `Key: NEXT_PUBLIC_ALLOW_INDEXING` and `Value: 1` once all launch checklist items in `docs/engineering/seo-and-accessibility.md` are completed.
 
 ---
 

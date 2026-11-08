@@ -1,6 +1,8 @@
 # Project Cherenkov study planner: research findings and context transfer
 
-> Update 5 Oct 2026: Section 8 steps 4–6 are now built (`lib/plan-scheduler.ts`, `scripts/simulate-planner.ts`, the `/planner` UI). See `docs/phase-3-planner.md`. Effort values and all [PLACEHOLDER] numbers are still unresolved.
+> Moved from docs/planner-context-transfer.md on 2026-11-08.
+
+> Update 5 Oct 2026: Section 8 steps 4–6 are now built (`lib/plan-scheduler.ts`, `scripts/simulate-planner.ts`, the `/planner` UI). See `docs/product/phase-3-planner.md`. Effort values and all [PLACEHOLDER] numbers are still unresolved.
 
 Audience: contributors who will design, build or maintain the Phase 3 study planner.
 Written 3 October 2026, revised 4 October 2026 after the open questions in Section 6 were answered.
@@ -46,7 +48,7 @@ Biggest blocker is data, not math. The repo has about 4 planner topics, almost n
 
 Project Cherenkov is a Next.js website for an Indonesian olympiad (OSN) editorial project covering informatics, physics, astronomy. The site has editorials (full proofs paired with interactive visualizations), "materials" (breakdown of the official syllabus), and a "syllabus" section.
 - Stack: Next.js 15 (App Router) + TypeScript, Tailwind, shadcn/ui, MDX via Velite, next-intl, Neon Postgres + Drizzle ORM (0.45) + Better Auth, Vitest 2, pnpm 9.15, hosted on Vercel.
-- Phase 1: public archive, no login. Phase 2: optional accounts + a basic study planner (built). Phase 3: this task, adaptive planner (documented as a sketch in `docs/phase-3-architecture.md`, "not implemented").
+- Phase 1: public archive, no login. Phase 2: optional accounts + a basic study planner (built). Phase 3: this task, adaptive planner (documented as a sketch in `docs/history/phase-3-architecture.md`, "not implemented").
 - The project owner wants placeholder labels for undecided content.
 - The repo owner treats code as the source of truth over README/docs.
 
@@ -63,7 +65,7 @@ Behaviour, as described in an earlier research note written after reading the co
 - `topics` rows are derived from editorials, not from the syllabus (`lib/seed/derive-topics.ts`; its `order` is publication order, flagged in code as "not a real curriculum order").
 - Regenerating a plan deletes and reinserts `plan_items` without `completedAt`, so already-mastered topics get rescheduled (bug candidate).
 - "Today" comes from the server clock (UTC on Vercel), but students are UTC+7, so for ~7 hours a day the planner's "today" is yesterday.
-- `docs/phase-2-architecture.md` says "TKA/UTBK" while the rest of the project is OSN. The project owner has settled this: OSN for Phase 3.
+- `docs/history/phase-2-architecture.md` says "TKA/UTBK" while the rest of the project is OSN. The project owner has settled this: OSN for Phase 3.
 
 ### 1.2 The syllabus data (important for this task)
 
@@ -214,7 +216,7 @@ Tests to write (repo uses Vitest, pure-function style):
 - every topic that needs work appears at least once; no day exceeds capacity; same inputs ⇒ same output; frozen/completed items never move; infeasible inputs are reported, not hidden; no more than two consecutive blocks from one section; mastery estimate: no data ⇒ "unverified"; self-rating prior is outweighed by a few real answers.
 - A simulation harness (simulated learner with exponential forgetting) to compare: current even-spread, the Phase 3 priority-sort, and the new scheduler on mean retrievability at exam day, worst-topic retrievability, coverage, and fraction flagged infeasible. State clearly it tests logic, not real-world effectiveness.
 
-Known issues in the Phase 3 sketch (`docs/phase-3-architecture.md`): its formula `priority = base_order_weight + weakness_weight × subject_multiplier` applies the subject multiplier to the weakness term only, it is a reorderer not a scheduler (each topic appears once, so it cannot place reviews), and it pushes mastered topics *later or out*, which is the opposite of what spacing research supports for an exam. With single-subject plans, a subject multiplier is no longer needed.
+Known issues in the Phase 3 sketch (`docs/history/phase-3-architecture.md`): its formula `priority = base_order_weight + weakness_weight × subject_multiplier` applies the subject multiplier to the weakness term only, it is a reorderer not a scheduler (each topic appears once, so it cannot place reviews), and it pushes mastered topics *later or out*, which is the opposite of what spacing research supports for an exam. With single-subject plans, a subject multiplier is no longer needed.
 
 ---
 

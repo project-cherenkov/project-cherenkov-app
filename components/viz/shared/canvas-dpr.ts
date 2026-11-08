@@ -9,7 +9,7 @@
 // graph-array-stepper, trajectory-sandbox, or orbital-sandbox's existing
 // config shapes, type guards, or rendering") applied to that build. The
 // project owner has since lifted that constraint for the visualization
-// improvements in docs/viz-interaction-improvements.md (R3 extends the
+// improvements in docs/design/visualization-interactions.md (R3 extends the
 // trajectory guard; R4 retrofits this helper into both engines). The
 // retrofit is behaviour-preserving: it sets the same buffer and CSS sizes,
 // scales by the same ratio and clears the same rectangle.

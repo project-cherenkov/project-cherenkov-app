@@ -1,6 +1,8 @@
 # Phase 3 planner (OSN path): how it works now
 
-Research and reasoning: the context-transfer document (`docs/planner-context-transfer.md`). This file describes what is built. Code is the source of truth.
+> Moved from docs/phase-3-planner.md on 2026-11-08.
+
+Research and reasoning: the context-transfer document (`docs/product/planner-context-transfer.md`). This file describes what is built. Code is the source of truth.
 
 ## Flow the student sees (`/planner`)
 1. Settings: subject, OSN stage, exam year, hours per week (`user_planner_settings`).

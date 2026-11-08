@@ -1,5 +1,7 @@
 # Authorizing the scene builder's GitHub access
 
+> Moved from docs/scene-builder-github-auth.md on 2026-11-08.
+
 For whoever hits **"GitHub authorization required. Visit
 /api/scene-builder/github-oauth/start, then try again."** while using
 `/keystatic/scene-builder` (either its "New visualization" flow or "Save to
@@ -93,4 +95,4 @@ authorization, check these in order:
 | Where the 401 is raised | `app/api/scene-builder/route.ts` (save), `app/api/scene-builder/new/route.ts` (create) |
 | Client-side detection + "Authorize with GitHub" link | `lib/scene-builder-oauth-client.ts`, used from `components/site/scene-builder/new-visualization-form.tsx` and `scene-builder-app.tsx` |
 | Admin allowlist | `lib/admin-guard.ts`, `ADMIN_EMAILS` |
-| Env var reference | `docs/cherenkov-env-vars-guide.md` |
+| Env var reference | `docs/engineering/cherenkov-env-vars-guide.md` |

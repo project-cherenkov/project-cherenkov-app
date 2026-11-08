@@ -1,5 +1,7 @@
 # Syllabus sources
 
+> Moved from docs/syllabus-sources.md on 2026-11-08.
+
 Where the topic lists in `lib/syllabus/data/*.ts` come from, and how far each
 was checked. All "accessed" dates are 24 October 2026.
 

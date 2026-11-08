@@ -15,7 +15,7 @@ vi.mock("next-intl", async (importOriginal) => {
 import { ComposedScene } from "./index";
 import type { ComposedSceneConfig } from "./types";
 
-// R1 (docs/viz-interaction-improvements.md): the stateful part of the glide —
+// R1 (docs/design/visualization-interactions.md): the stateful part of the glide —
 // when it runs, when it snaps, and that it never skips a step.
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;

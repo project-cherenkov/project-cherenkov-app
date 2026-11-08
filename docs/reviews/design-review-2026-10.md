@@ -1,5 +1,7 @@
 # Design review and palette
 
+> Moved from docs/design-report.md on 2026-11-08.
+
 Findings from a design review of the web app, the colour palette that came out
 of it, and what is still open. Written for whoever touches the UI next (human
 or agent). Token values live in `app/globals.css` and `tailwind.config.ts`; if
@@ -44,66 +46,10 @@ browser. Date of review: 10 October 2026.
 
 ## 2. The palette
 
-The brand hues are unchanged (`#5BCEFA` blue, `#F5A9B8` pink). The problem was
-proportion, not hue: about 95% of most pages was white or flat gray plus slate
-text, and the pastels, at about 1.8:1 against white, cannot be used for text,
-links or borders. The fix is to tint the neutrals, give color some large
-areas, and use the deeper brand steps for anything that carries meaning.
-
-The dark theme is deliberately blue: the ink navy is the water, the blue glow
-is the radiation. The light theme uses a barely-pink white so that the band,
-which ends in pink, fades into the page without a muddy gray-lilac middle.
-Keep that tint faint. If the page becomes visibly pink it competes with the
-blue, and the pink tags lose their contrast.
-
-| Token | Light | Dark |
-|---|---|---|
-| `--background` | `349 33% 97%` (`#FAF5F6`, `cherenkov-pink-50`) | `205 66% 13%` (`#0B2436`, `cherenkov-ink`) |
-| `--foreground` | `205 66% 13%` (`#0B2436`) | `165 100% 97%` (`#EFFFFB`, `cherenkov-cream`) |
-| `--card` | `0 0% 100%` (white, lifts off the page) | `206 66% 17%` (`#0F3049`, lighter than the page) |
-| `--border` | `349 61% 88%` (`#F3CED5`, `cherenkov-pink-200`) | `204 53% 26%` (`#1F4A66`) |
-| `--ring` | unchanged (`#0A88B8`-range) | unchanged (`#8AD7FF`-range) |
-| `.hero-band` | blue glow `#5BCEFA` at 28% top-left, pink glow `#F5A9B8` at 30% top-right | same glows at 30% and 18% |
-| Browser theme color | `#FAF5F6` | `#0B2436` |
-
-Rules for using the palette:
-
-1. Blue is dominant (about 70%), pink is a small highlight (about 30%).
-2. Pastels (`cherenkov-blue`, `cherenkov-pink`, the `-pastel` and `-alt`
-   colors) are fills and glows, never text. For text, links, outlines and
-   active states use `cherenkov-blue-800` or `-900` in light and `cherenkov-
-   blue-300` or `-400` in dark.
-3. Keep the reading area calm: no gradients or tints behind article, proof or
-   table text. Bold color belongs in the hero, navigation, cards and empty
-   states.
-4. Small text placed on the hero band must be checked against the glow peaks
-   (the table below). The home eyebrow uses `text-cherenkov-blue-800
-   dark:text-cherenkov-blue-300` for this reason; the generic `label-code`
-   color is too weak on the dark glow.
-5. Prefer `slate-600` for secondary text in light mode. `slate-500` passes on
-   white cards (4.76:1) but not on the tinted page (4.41:1).
-
-Computed contrast ratios (glow "peak" means the wash at full strength, the
-worst case for text over it):
-
-| Pair | Ratio | Result |
-|---|---|---|
-| Light: body `#0B2436` on page / on blue peak / on pink peak | 14.7 / 12.7 / 12.5:1 | Pass |
-| Light: hero eyebrow `#0C698D` on page / blue peak / pink peak | 5.7 / 4.9 / 4.8:1 | Pass |
-| Light: hero eyebrow where the two glows would overlap | 4.3:1 | Fails for 12px text, but the glow centers are far apart (20% and 90% of the width) |
-| Light: hero paragraph (foreground at 80%) on blue peak | 7.2:1 | Pass |
-| Light: secondary text `slate-600` on page | 7.0:1 | Pass |
-| Light: button text `slate-900` on `#5BCEFA` | 9.9:1 | Pass |
-| Light: outline border `slate-500` on page / on blue peak | 4.4 / 3.8:1 | Pass (3:1 for UI boundaries) |
-| Light: focus ring `#0A88B8` on page | 3.7:1 | Pass (3:1) |
-| Light: white card vs page / pink-200 border vs page | 1.08 / 1.33:1 | Decorative only; card separation is faint (see O12) |
-| Dark: body on navy / on blue glow peak | 15.4 / 7.6:1 | Pass |
-| Dark: hero eyebrow `#97DCF6` on navy / on glow peak | 10.5 / 5.2:1 | Pass |
-| Dark: hero paragraph (foreground at 80%) on glow peak | 5.5:1 | Pass |
-| Dark: secondary text `slate-400` on navy / on card | 6.2 / 5.3:1 | Pass |
-| Dark: outline border `slate-400` on navy / on glow peak | 6.2 / 3.1:1 | Pass, with little margin |
-| Dark: focus ring `#8AD7FF` on navy | 10.0:1 | Pass |
-| Dark: card vs page / border vs page / border vs card | 1.17 / 1.69 / 1.45:1 | Decorative; better than the old 1.09 / 1.29, still subtle |
+Moved. The palette, its rules and the computed contrast table now live in
+[`docs/design/colour.md`](../design/colour.md), which is the source of truth
+for colour decisions. The brand hues are unchanged (`#5BCEFA` blue,
+`#F5A9B8` pink). References to "section 2" elsewhere in this review mean that file.
 
 ## 3. Open findings
 

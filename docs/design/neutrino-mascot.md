@@ -1,5 +1,7 @@
 # Neutrino mascot: how it works now
 
+> Moved from docs/neutrino-mascot.md on 2026-11-08.
+
 The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, animated SVG. This file records what is built and why. Code is the source of truth.
 
 ## What the student sees
@@ -43,8 +45,26 @@ The animation loop uses the `requestAnimationFrame` of the window that owns the 
 - Mascot button: name, `aria-expanded`, `aria-haspopup="dialog"`, `aria-controls`, a screen-reader description of drag and arrow keys. The panel is a non-modal `role="dialog"`; Escape closes it and returns focus to the mascot. Targets are at least 44px (the small hide button has a 44px hit area).
 - Dragging has a keyboard alternative (arrows) and a Reset position button, as required for any drag-only interaction.
 
+## Planned moods
+
+Two moods exist today: idle and thinking (`MascotMood` in `components/study/manifold-mascot.tsx`). Planned, none implemented yet:
+
+- **Correct quiz answer.** A short, distinct reaction when the student answers a quiz question correctly.
+- **A visualization playing.** A mood shown while an editorial's visualization is running.
+- Others later (for example timer running, break, or session finished).
+
+Keep the set of moods small and visually distinct, so that each one can be told apart at a glance and none becomes noise.
+
+To add a mood, follow the recipe under "Deliberately not built yet": add a value to `MascotMood`, a `data-mood` rule in `app/globals.css`, and a branch in `stepMotion`.
+
+### Design direction: the flash (proposed)
+
+The project's central image is a neutrino that is nearly invisible until something happens, and then flashes (see [inspiration and philosophy](../project/inspiration-and-philosophy.md)). The mascot can carry that story: quiet by default, with a flash when something becomes clear. The correct-answer mood is the natural first flash. This is a direction to record, not something to build now.
+
+Constraints for when it is built: the flash must be a single soft brightening, not a strobe, and must stay well inside WCAG 2.3.1; it must respect `prefers-reduced-motion` (a still frame or a static cue); and the "Nothing flashes" statement under "Accessibility and comfort" will need updating at that point.
+
 ## Deliberately not built yet
-- More states (for example timer running, break, or session finished). The structure supports it: add a value to `MascotMood`, a `data-mood` rule in `globals.css`, and a branch in `stepMotion`.
+- More states. The structure supports it: add a value to `MascotMood`, a `data-mood` rule in `globals.css`, and a branch in `stepMotion`. See "Planned moods" below for which ones are intended.
 - Persisting the dock position (and panel size) to the account (it is per device on purpose, because the viewport differs per device).
 - Name and "show the companion" for signed-out visitors (they are account features).
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { Link } from "@/i18n/routing";
 import { getTeam, resolveMemberBio } from "@/lib/team";
 import { pageMetadata } from "@/lib/seo-metadata";
 
@@ -11,8 +12,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
-  // A dedicated search-snippet description: the philosophy paragraph opens
-  // with neutrinos, which says nothing about what the site is.
+  // A dedicated search-snippet description, kept short and literal. The About
+  // page says what the project is; the reasoning behind its look and tone is
+  // on /docs/philosophy.
   return pageMetadata({
     locale,
     path: "/about",
@@ -37,12 +39,22 @@ export default async function AboutPage({
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
       <div className="mt-6 space-y-4 text-foreground/80">
-        {t("philosophyPlaceholder")
+        {t("intro")
           .split(/\n\s*\n/)
           .filter(Boolean)
           .map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+        <p>
+          {t("whyText")}{" "}
+          <Link
+            href="/docs/philosophy"
+            className="text-cherenkov-blue-800 underline dark:text-cherenkov-blue-pastel"
+          >
+            {t("whyLink")}
+          </Link>
+          .
+        </p>
       </div>
 
       <h2 className="heading-section mt-10">{t("teamHeading")}</h2>
@@ -57,6 +69,9 @@ export default async function AboutPage({
             // See lib/team.ts's resolveMemberBio comment for why this
             // isn't a plain `locale === "id" ? bioId : bioEn` lookup.
             const bio = resolveMemberBio(member, locale);
+            // The "placeholder" entry ("the holder of place") is intentional:
+            // a small joke, and a sign that people made this. Do not remove or
+            // "fix" it. It has no contact line on purpose.
             return (
               <li key={member.name} className="flex gap-4">
                 {member.photoUrl ? (
@@ -101,7 +116,7 @@ export default async function AboutPage({
 
       <h2 className="heading-section mt-10">{t("repoHeading")}</h2>
       <p className="mt-2 text-foreground/80">{t("repoBody")}</p>
-      {/* Repo URL confirmed — see docs/deployment-readiness.md re: this repo being private. */}
+      {/* Repo URL confirmed — see docs/history/deployment-readiness.md re: this repo being private. */}
       <a
         href="https://github.com/project-cherenkov/project-cherenkov-app"
         target="_blank"

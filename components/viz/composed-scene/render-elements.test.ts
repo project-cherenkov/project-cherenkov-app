@@ -86,7 +86,7 @@ describe("renderElements", () => {
   });
 });
 
-// R1 (docs/viz-interaction-improvements.md): glide between adjacent steps.
+// R1 (docs/design/visualization-interactions.md): glide between adjacent steps.
 describe("easeInOut", () => {
   it("maps 0 -> 0, 0.5 -> 0.5, 1 -> 1 and clamps outside [0, 1]", () => {
     expect(easeInOut(0)).toBe(0);

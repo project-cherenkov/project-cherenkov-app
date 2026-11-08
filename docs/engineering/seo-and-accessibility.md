@@ -1,5 +1,7 @@
 # SEO, accessibility and the `/docs` pages
 
+> Moved from docs/seo-and-accessibility.md on 2026-11-08.
+
 Engineering notes for the pass that added the documentation pages and
 improved search-engine and accessibility behaviour. Written for whoever
 touches this next (human or agent); the user-facing explanation of the docs
@@ -123,4 +125,4 @@ not touched).
   licensing decision (the repo is MIT; the content's licence isn't stated) to
   make in `app/robots.ts`.
 - The `/keystatic` link, the `new Function()` MDX evaluation and the lack of
-  a Content-Security-Policy are unchanged (see `deployment-readiness.md`).
+  a Content-Security-Policy are unchanged (see `../history/deployment-readiness.md`).

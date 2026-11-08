@@ -27,6 +27,9 @@ export function SiteFooter() {
       <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <p className="label-code mb-2">footer.md</p>
         <p>{t("tagline")}</p>
+        <p lang="la" className="mt-0.5 text-xs">
+          {t("motto")}
+        </p>
         <p className="mt-1">{t("madeBy")}</p>
         <p className="mt-1">
           {t("lastUpdatedOn")}: {formatCommitDate(lastUpdatedAt, locale)}

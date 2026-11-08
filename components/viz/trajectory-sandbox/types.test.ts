@@ -74,7 +74,7 @@ describe("isTrajectorySandboxConfig", () => {
   });
 });
 
-// R3 (docs/viz-interaction-improvements.md): the optional `challenge` field.
+// R3 (docs/design/visualization-interactions.md): the optional `challenge` field.
 // Default ranges are speed 5..40 m/s, angle 5..85°, g = 9.8, so the furthest
 // reachable landing is about 40² · sin(90°) / 9.8 ≈ 163 m and the nearest
 // about 5² · sin(10°) / 9.8 ≈ 0.44 m.
