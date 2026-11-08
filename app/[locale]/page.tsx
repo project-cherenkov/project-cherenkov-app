@@ -47,8 +47,8 @@ export default async function HomePage({
       />
       <section className="hero-band">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
-          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)]">
-            <div>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)] lg:items-start">
+            <div className="lg:pt-10">
             <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
             <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("heroTitle")}

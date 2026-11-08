@@ -36,7 +36,7 @@ export function ArchiveFilters({
   const hasActiveFilters = FILTER_KEYS.some((key) => searchParams.get(key));
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-end gap-3">
       <FilterSelect
         label={t("subject")}
         allLabel={t("allSubjects")}
@@ -63,7 +63,7 @@ export function ArchiveFilters({
         <button
           type="button"
           onClick={() => router.push(pathname, { scroll: false })}
-          className="label-code rounded-md border border-border-strong px-3 py-2 hover:bg-muted"
+          className="label-code inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 hover:bg-muted"
         >
           {t("clear")}
         </button>
@@ -86,7 +86,7 @@ function FilterSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex flex-col gap-1">
+    <label className="flex w-full min-w-0 flex-col gap-1 sm:w-auto">
       <span className="label-code">{label}</span>
       {/* Native <select> on purpose — best touch target + keyboard support
           on mobile for free, no custom listbox to maintain (spec §7/§8:
@@ -94,7 +94,7 @@ function FilterSelect({
       <Select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-auto min-w-[9rem]"
+        className="sm:w-auto sm:min-w-[9rem] sm:max-w-full"
       >
         <option value="">{allLabel}</option>
         {options.map((opt) => (

@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
-import { formatCommitTimestamp } from "@/lib/last-updated";
+import { formatCommitDate } from "@/lib/last-updated";
 
 const gitHubBase = "https://github.com/project-cherenkov/project-cherenkov-app/blob/main";
 const lastUpdatedAt = process.env.NEXT_PUBLIC_LAST_UPDATED_AT;
@@ -10,6 +10,7 @@ const linkClass = "inline-flex min-h-8 items-center underline hover:text-foregro
 
 export function SiteFooter() {
   const t = useTranslations("footer");
+  const locale = useLocale();
   if (!lastUpdatedAt) {
     throw new Error("NEXT_PUBLIC_LAST_UPDATED_AT is not configured.");
   }
@@ -28,7 +29,7 @@ export function SiteFooter() {
         <p>{t("tagline")}</p>
         <p className="mt-1">{t("madeBy")}</p>
         <p className="mt-1">
-          {t("lastUpdatedOn")}: {formatCommitTimestamp(lastUpdatedAt)}
+          {t("lastUpdatedOn")}: {formatCommitDate(lastUpdatedAt, locale)}
         </p>
 
         <nav

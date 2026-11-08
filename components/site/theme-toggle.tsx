@@ -33,7 +33,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       aria-label={t("toggleTheme")}
-      className="h-11 w-11 rounded-md text-muted-foreground hover:bg-card hover:text-foreground"
+      className="h-10 w-10 rounded-md text-muted-foreground hover:bg-card hover:text-foreground sm:h-11 sm:w-11"
     >
       {mounted && resolvedTheme === "dark" ? (
         <Sun className="h-4 w-4" aria-hidden />

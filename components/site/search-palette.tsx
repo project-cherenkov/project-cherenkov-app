@@ -98,7 +98,7 @@ export function SearchPalette() {
         onClick={() => setOpen(true)}
         aria-label={t("open")}
         aria-keyshortcuts="Control+K Meta+K"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border p-2 text-muted-foreground hover:bg-card hover:text-foreground"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border p-2 text-muted-foreground hover:bg-card hover:text-foreground sm:h-11 sm:w-11"
       >
         <Search className="h-4 w-4" aria-hidden />
       </button>

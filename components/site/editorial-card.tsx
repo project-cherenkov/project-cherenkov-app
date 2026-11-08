@@ -24,18 +24,20 @@ export function EditorialCard({
   return (
     <Link
       href={`/archive/${editorial.subject}/${editorial.slug}`}
-      className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-600 dark:hover:border-cherenkov-blue-pastel"
+      className="group flex h-full flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-cherenkov-blue-600 dark:hover:border-cherenkov-blue-pastel"
     >
-      <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
-        {subjectLabel[editorial.subject]}
-      </span>
-      {/* Only ever rendered for editors: public lists never contain archived
-          editorials (lib/content.ts). */}
-      {editorial.status === "archived" && (
-        <span className="label-code ml-2 inline-block rounded border border-border-strong px-2 py-0.5 text-foreground">
-          {t("archivedBadge")}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
+          {subjectLabel[editorial.subject]}
         </span>
-      )}
+        {/* Only ever rendered for editors: public lists never contain archived
+            editorials (lib/content.ts). */}
+        {editorial.status === "archived" && (
+          <span className="label-code inline-block rounded border border-border-strong px-2 py-0.5 text-foreground">
+            {t("archivedBadge")}
+          </span>
+        )}
+      </div>
 
       <Heading className="mt-3 text-lg font-semibold text-foreground group-hover:underline">
         {editorial.title}
@@ -59,7 +61,7 @@ export function EditorialCard({
         ))}
       </div>
 
-      <p className="mt-4 text-xs text-foreground/75">
+      <p className="mt-auto pt-4 text-xs text-foreground/75">
         {t("byAuthor", { author: editorial.author })}
       </p>
     </Link>

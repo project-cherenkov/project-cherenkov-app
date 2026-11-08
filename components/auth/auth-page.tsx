@@ -49,7 +49,7 @@ export function AuthPage({
       </div>
       <aside className="order-2 rounded-lg border border-border bg-muted/40 p-6 sm:p-8">
         <p className="label-code">{t("benefits.eyebrow")}</p>
-        <h1 className="mt-2 text-3xl font-bold text-foreground">{t("benefits.title")}</h1>
+        <h2 className="mt-2 text-3xl font-bold text-foreground">{t("benefits.title")}</h2>
         <p className="mt-3 text-foreground/75">{t("benefits.body")}</p>
         <ul className="mt-6 space-y-4">
           {(["planner", "progress", "practice"] as const).map((key) => (

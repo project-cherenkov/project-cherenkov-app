@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
@@ -10,6 +9,7 @@ import { Github } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { BrandMark } from "@/components/site/brand-mark";
+import { NavRibbonArt } from "@/components/site/nav-ribbon-art";
 
 // The "Archive" bookmark stands for three sections (see archive-subnav.tsx), so
 // it stays highlighted on any of them, not just on /archive itself.
@@ -112,7 +112,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur overflow-visible">
-      <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6 overflow-visible">
+      <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-2 px-3 py-3.5 sm:gap-3 sm:px-6 overflow-visible">
         <Link href="/" className="flex items-center gap-2 z-10 shrink-0">
           <BrandMark className="h-6 w-6 text-cherenkov-blue-700 dark:text-cherenkov-blue-pastel" />
           <span className="font-heading text-base font-bold tracking-tight text-foreground">
@@ -120,7 +120,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-2 overflow-visible">
+        <div className="flex items-center gap-1 sm:gap-2 overflow-visible">
           {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
           <nav
             aria-label={t("mainNavigation")}
@@ -140,14 +140,7 @@ export function SiteHeader() {
 
               const content = (
                 <>
-                  <Image
-                    src="/navbar-banner-extended.png"
-                    alt=""
-                    fill
-                    sizes="96px"
-                    priority
-                    className="object-fill pointer-events-none drop-shadow-md"
-                  />
+                  <NavRibbonArt className="pointer-events-none drop-shadow-md" />
                   <span className="relative z-10 text-center font-bold text-white dark:text-slate-100 text-[11px] leading-tight px-1 pb-3">
                     {item.label}
                   </span>
@@ -176,14 +169,14 @@ export function SiteHeader() {
           </nav>
 
           {/* Controls Right */}
-          <div className="flex items-center gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
             <SearchPalette />
             <ThemeToggle />
 
             <div
               role="group"
               aria-label={t("language")}
-              className="flex items-center gap-1 rounded-full border border-border bg-white/70 p-1 shadow-sm dark:bg-slate-800/70"
+              className="flex items-center gap-0.5 rounded-full border border-border bg-white/70 p-0.5 shadow-sm sm:gap-1 sm:p-1 dark:bg-slate-800/70"
             >
               {localeOptions.map(({ code, label, name, flag }) => {
                 const isActive = code === currentLocale;
@@ -197,7 +190,7 @@ export function SiteHeader() {
                     hrefLang={code}
                     aria-current={isActive ? "true" : undefined}
                     className={[
-                      "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 transition-colors text-xs",
+                      "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2 transition-colors text-xs sm:px-2.5",
                       isActive
                         ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white",
@@ -241,14 +234,7 @@ export function SiteHeader() {
                 mobileMenuOpen ? "translate-y-5" : "hover:translate-y-2",
               ].join(" ")}
             >
-              <Image
-                src="/navbar-banner-extended.png"
-                alt=""
-                fill
-                sizes="64px"
-                priority
-                className="object-fill pointer-events-none drop-shadow-md"
-              />
+              <NavRibbonArt className="pointer-events-none drop-shadow-md" />
               <span className="relative z-10 text-center font-mono font-bold text-white dark:text-slate-100 text-[10px] uppercase tracking-widest leading-none pb-2">
                 {t("menu")}
               </span>
