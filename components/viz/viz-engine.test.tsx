@@ -71,6 +71,23 @@ describe("VizEngine dispatch", () => {
     }
   });
 
+  it("renders VizConfigError for an invalid relative-period-sandbox config", () => {
+    const html = renderToStaticMarkup(
+      <VizEngine editorial={{ vizConfig: { discriminant: "relative-period-sandbox", value: { mode: "mars" } } }} />,
+    );
+    expect(html).toContain("vizConfigError");
+  });
+
+  it("accepts valid relative-period-sandbox configs, including an empty one", () => {
+    for (const value of [{}, { mode: "planetary-orbits", periodADays: 365.2564, periodBDays: 4330.6 }]) {
+      const html = renderToStaticMarkup(
+        <VizEngine editorial={{ vizConfig: { discriminant: "relative-period-sandbox", value } }} />,
+      );
+      expect(html).not.toContain("vizConfigError");
+      expect(html).not.toContain("vizMissing");
+    }
+  });
+
   it("still renders VizMissing for vizConfig.discriminant: none, unaffected by the new case", () => {
     const html = renderToStaticMarkup(
       <VizEngine editorial={{ vizConfig: { discriminant: "none", value: {} } }} />,

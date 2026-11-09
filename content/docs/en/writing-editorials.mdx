@@ -30,7 +30,7 @@ Editorials and materials are plain MDX files committed to the repository. Conten
 | `updatedAt` | Optional ISO date for the last editorial or visualization update. Falls back to `publishedAt` when omitted. |
 | `status` | `published` (the default) or `archived`. Archived editorials are visible to editors only and hidden from everyone else. |
 | `author` | Who wrote it. |
-| `syllabusTopic` | Optional. A topic id from the syllabus for the same subject. |
+| `syllabusTopic` | Optional. A topic id, or a subtopic id, from the syllabus for the same subject. |
 | `practiceLinks` | Optional. A list of `{ title, url, checkedOn }` for practice problems on other sites (for example TLX). `url` must be `https://`. See below. |
 
 The body is everything after the frontmatter, written in Markdown/MDX.
@@ -65,12 +65,13 @@ Use `practiceLinks` to point at problems that belong to someone else. Link only:
 
 ## Choosing a visualization engine
 
-Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `blackbody-spectrum-comparison`, `composed-scene` or `programmable-scene`. The first four are configured in frontmatter. The last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
+Set `vizConfig.discriminant` to one of `graph-array-stepper`, `trajectory-sandbox`, `orbital-sandbox`, `blackbody-spectrum-comparison`, `relative-period-sandbox`, `composed-scene` or `programmable-scene`. The first five are configured in frontmatter. The last two are built visually in [the scene builder](/docs/scene-builder). Copy from these real examples:
 
 - `content/editorials/informatics/binary-search-on-answer.mdx` for `graph-array-stepper`
 - `content/editorials/physics/projectile-range-symmetry.mdx` for `trajectory-sandbox`
 - `content/editorials/astronomy/eccentric-transit-duration.mdx` for `orbital-sandbox`
 - `content/editorials/astronomy/why-classical-blackbody-radiation-fails.mdx` for `blackbody-spectrum-comparison`
+- `content/editorials/astronomy/why-a-sidereal-day-is-shorter.mdx` for `relative-period-sandbox`
 
 ## Adding a challenge to a trajectory sandbox
 
@@ -92,11 +93,11 @@ Keystatic does not know about `challenge` yet, so an editorial that has one cann
 
 ## Materials
 
-A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syllabus topic id), `summary` (up to 280 characters) and a body. There is at most one material per topic. A visualization is optional: set `vizConfig` the same way as for an editorial (the first three engines; the scene builder only writes editorials) and place `<Interactive />` where it belongs. With `discriminant: none`, or no `vizConfig` at all, a material simply has no visualization. See `content/materials/informatics/binary-search.mdx` for an example.
+A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syllabus topic id or subtopic id), `summary` (up to 280 characters) and a body. There is at most one material per topic or subtopic. A visualization is optional: set `vizConfig` the same way as for an editorial (the first three engines; the scene builder only writes editorials) and place `<Interactive />` where it belongs. With `discriminant: none`, or no `vizConfig` at all, a material simply has no visualization. See `content/materials/informatics/binary-search.mdx` for an example.
 
 ## Checking your work
 
-Run `pnpm generate` to validate frontmatter and `pnpm test` to check that every material and editorial points at a real syllabus topic. Never rename a syllabus topic's `id`. Change its `name` instead.
+Run `pnpm generate` to validate frontmatter and `pnpm test` to check that every material and editorial points at a real syllabus topic. Never rename a syllabus topic's or subtopic's `id`. Change its `name` instead.
 
 ## Editing in the browser
 

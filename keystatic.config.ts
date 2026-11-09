@@ -102,6 +102,7 @@ function vizConfigConditional(
         { label: "Trajectory sandbox", value: "trajectory-sandbox" },
         { label: "Orbital sandbox", value: "orbital-sandbox" },
         { label: "Blackbody spectrum comparison", value: "blackbody-spectrum-comparison" },
+        { label: "Relative period sandbox", value: "relative-period-sandbox" },
         { label: "Composed scene", value: "composed-scene" },
         { label: "Programmable scene", value: "programmable-scene" },
         { label: "None", value: "none" },
@@ -227,6 +228,37 @@ function vizConfigConditional(
         temperatureStepK: fields.number({
           label: "Temperature slider step (K)",
           description: "Defaults to 250 K in the engine if left unset.",
+        }),
+      }),
+
+      "relative-period-sandbox": fields.object({
+        // Every field is optional: the engine fixes the physics and the slider
+        // ranges, and these only choose the opening mode and each slider's
+        // starting value (days). Values must lie inside the slider range.
+        mode: fields.select({
+          label: "Opening mode",
+          description: "Defaults to Earth's day in the engine if left unset. The reader can switch modes.",
+          options: [
+            { label: "Earth's day", value: "earth-day" },
+            { label: "Planetary orbits", value: "planetary-orbits" },
+          ],
+          defaultValue: "earth-day",
+        }),
+        siderealRotationDays: fields.number({
+          label: "Sidereal rotation period (d)",
+          description: "Earth's day mode. 0.5 to 2. Defaults to 0.9972696723.",
+        }),
+        earthOrbitPeriodDays: fields.number({
+          label: "Earth's orbital period (d)",
+          description: "Earth's day mode. 10 to 1000. Defaults to 365.2564.",
+        }),
+        periodADays: fields.number({
+          label: "Period of planet A (d)",
+          description: "Planetary orbits mode. 50 to 5000. Defaults to 365.2564.",
+        }),
+        periodBDays: fields.number({
+          label: "Period of planet B (d)",
+          description: "Planetary orbits mode. 50 to 10000. Defaults to 4330.6.",
         }),
       }),
 

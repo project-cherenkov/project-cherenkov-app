@@ -8,6 +8,26 @@ export type SyllabusLocale = "id" | "en";
 // unofficial translation and the UI says so (see syllabus.translationNote).
 export type LocalizedText = Record<SyllabusLocale, string>;
 
+// A finer-grained slice of one topic. Subtopics are Project Cherenkov's OWN
+// subdivision: the source syllabus does not list them, so a subtopic's `detail`
+// is written here and is never a quotation of the source. They exist because a
+// material or editorial is often about one idea inside a broad topic (for
+// example "Sidereal and synodic periods" inside "The Solar System") and
+// should be findable by that name.
+//
+// Subtopics are a presentation and content-linking layer ONLY. The planner,
+// quiz bank, mastery estimates and study timer all stay at topic level: they
+// know nothing about subtopics and never will unless that is built on purpose.
+export interface SyllabusSubtopic {
+  // Stable slug. Shares ONE namespace with topic ids inside a subject (a
+  // subtopic id may not equal any topic id or any other subtopic id), so a
+  // single `topic` / `syllabusTopic` frontmatter value can name either.
+  id: string;
+  name: LocalizedText;
+  // Scope note written by Cherenkov, in the subject's source language.
+  detail?: string;
+}
+
 export interface SyllabusTopic {
   // Stable slug, unique within its subject. Materials and editorials point at
   // this (`topic` / `syllabusTopic` frontmatter), so renaming one is a
@@ -21,6 +41,9 @@ export interface SyllabusTopic {
   // as medium (2). Set it per topic when someone who knows the material has
   // an opinion; never fill it in from a guess.
   effort?: 1 | 2 | 3;
+  // Optional Cherenkov-authored subdivisions of this topic (see
+  // SyllabusSubtopic). Leave unset for a topic that needs none.
+  subtopics?: SyllabusSubtopic[];
 }
 
 export interface SyllabusSection {

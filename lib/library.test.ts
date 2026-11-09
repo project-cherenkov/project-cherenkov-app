@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildSubjectCoverage, getSectionNeighbours, type EditorialRef, type MaterialRef } from "./library";
+import { buildSubjectCoverage, findCoverageEntry, getSectionNeighbours, type EditorialRef, type MaterialRef } from "./library";
 import type { SubjectSyllabus } from "./syllabus";
 
 const name = (en: string) => ({ id: en, en });
@@ -81,5 +81,57 @@ describe("getSectionNeighbours", () => {
 
   it("returns nothing for an unknown topic", () => {
     expect(getSectionNeighbours(coverage, "zzz")).toEqual({});
+  });
+});
+
+describe("subtopics", () => {
+  const sub: SubjectSyllabus = {
+    ...syllabus,
+    sections: [
+      {
+        id: "s1", part: "theory", name: name("S1"),
+        topics: [
+          { id: "a", name: name("A") },
+          { id: "b", name: name("B"), subtopics: [{ id: "b1", name: name("B1") }, { id: "b2", name: name("B2") }] },
+          { id: "c", name: name("C") },
+        ],
+      },
+    ],
+  };
+
+  it("attaches content to a subtopic without counting it on the parent", () => {
+    const result = buildSubjectCoverage(sub, [material("b1"), material("c")], [editorial("e1", "b1"), editorial("e2", "b")]);
+    const b = result.sections[0]!.topics[1]!;
+    expect(b.material).toBeUndefined();
+    expect(b.editorials.map((e) => e.slug)).toEqual(["e2"]);
+    expect(b.subtopics[0]!.material?.slug).toBe("b1");
+    expect(b.subtopics[0]!.editorials.map((e) => e.slug)).toEqual(["e1"]);
+    expect(result.topicCount).toBe(3);
+    expect(result.subtopicCount).toBe(2);
+    expect(result.materialCount).toBe(2);
+    expect(result.editorialCount).toBe(2);
+  });
+
+  it("covers a topic once however many of its subtopics have materials", () => {
+    const result = buildSubjectCoverage(sub, [material("b1"), material("b2"), material("b")], []);
+    expect(result.materialCount).toBe(3);
+    expect(result.coveredTopicCount).toBe(1);
+    expect(buildSubjectCoverage(sub, [], []).coveredTopicCount).toBe(0);
+  });
+
+  it("findCoverageEntry finds a topic or a subtopic", () => {
+    const result = buildSubjectCoverage(sub, [], []);
+    expect(findCoverageEntry(result, "b2")?.subtopic?.subtopic.id).toBe("b2");
+    expect(findCoverageEntry(result, "b2")?.topic.topic.id).toBe("b");
+    expect(findCoverageEntry(result, "c")?.subtopic).toBeUndefined();
+    expect(findCoverageEntry(result, "zzz")).toBeUndefined();
+  });
+
+  it("previous/next walks a topic's materials, then its subtopics', in order", () => {
+    const result = buildSubjectCoverage(sub, [material("a"), material("b1"), material("b2"), material("c")], []);
+    expect(getSectionNeighbours(result, "b1").previous?.slug).toBe("a");
+    expect(getSectionNeighbours(result, "b1").next?.slug).toBe("b2");
+    expect(getSectionNeighbours(result, "b2").next?.slug).toBe("c");
+    expect(getSectionNeighbours(result, "c").previous?.slug).toBe("b2");
   });
 });

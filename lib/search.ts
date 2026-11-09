@@ -47,7 +47,7 @@ export interface SearchSources {
 export function buildSearchIndex(sources: SearchSources, locale: string): SearchEntry[] {
   const entries: SearchEntry[] = [];
 
-  // topic id -> localized names, per subject
+  // topic or subtopic id -> localized names, per subject
   const topicNames = new Map<string, string>();
   const sectionNames = new Map<string, string>();
   const topicHasMaterial = new Set(
@@ -61,16 +61,38 @@ export function buildSearchIndex(sources: SearchSources, locale: string): Search
         sectionNames.set(key, localize(section.name, locale));
         // A topic that has a material is found through the material; listing
         // both would show the same name twice.
-        if (topicHasMaterial.has(key)) continue;
-        entries.push({
-          id: `topic:${key}`,
-          kind: "topic",
-          title: localize(topic.name, locale),
-          summary: localize(section.name, locale),
-          href: `/syllabus/${syllabus.subject}#topic-${topic.id}`,
-          subject: syllabus.subject,
-          keywords: topic.detail ? [topic.detail] : [],
-        });
+        if (!topicHasMaterial.has(key)) {
+          entries.push({
+            id: `topic:${key}`,
+            kind: "topic",
+            title: localize(topic.name, locale),
+            summary: localize(section.name, locale),
+            href: `/syllabus/${syllabus.subject}#topic-${topic.id}`,
+            subject: syllabus.subject,
+            keywords: topic.detail ? [topic.detail] : [],
+          });
+        }
+
+        // Subtopics are searchable the same way. Their summary names the
+        // parent topic, and the parent's name is a keyword, so searching
+        // "solar system" still finds them.
+        for (const subtopic of topic.subtopics ?? []) {
+          const subKey = `${syllabus.subject}/${subtopic.id}`;
+          // Materials and editorials that point at a subtopic get its own
+          // name plus its parent topic's name as keywords.
+          topicNames.set(subKey, localize(subtopic.name, locale));
+          sectionNames.set(subKey, localize(section.name, locale));
+          if (topicHasMaterial.has(subKey)) continue;
+          entries.push({
+            id: `topic:${subKey}`,
+            kind: "topic",
+            title: localize(subtopic.name, locale),
+            summary: `${localize(section.name, locale)} › ${localize(topic.name, locale)}`,
+            href: `/syllabus/${syllabus.subject}#topic-${subtopic.id}`,
+            subject: syllabus.subject,
+            keywords: [localize(topic.name, locale), ...(subtopic.detail ? [subtopic.detail] : [])],
+          });
+        }
       }
     }
   }

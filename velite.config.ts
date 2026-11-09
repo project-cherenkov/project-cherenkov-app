@@ -28,6 +28,7 @@ export const vizEngines = [
   "trajectory-sandbox",
   "orbital-sandbox",
   "blackbody-spectrum-comparison",
+  "relative-period-sandbox",
   "composed-scene",
   "programmable-scene",
   "none",

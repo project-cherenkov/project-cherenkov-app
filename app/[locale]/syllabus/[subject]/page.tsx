@@ -6,7 +6,7 @@ import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { SyllabusToggleAll } from "@/components/site/syllabus-toggle-all";
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getAllMaterials } from "@/lib/content";
-import { buildSubjectCoverage, type SectionEntry } from "@/lib/library";
+import { buildSubjectCoverage, type EditorialRef, type MaterialRef, type SectionEntry } from "@/lib/library";
 import {
   getSyllabus,
   localize,
@@ -175,55 +175,126 @@ async function SectionBlock({
       </summary>
 
       <ol className="divide-y divide-border border-t border-border">
-        {topics.map(({ topic, material, editorials }) => (
+        {topics.map(({ topic, material, editorials, subtopics }) => (
           <li
             key={topic.id}
             id={topicAnchor(topic.id)}
-            className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6"
+            className="px-4 py-3"
           >
-            <div className="min-w-0">
-              <h3 className="font-medium text-foreground">{localize(topic.name, locale)}</h3>
-              {topic.detail && (
-                <p
-                  lang={sourceLang}
-                  className="mt-1 text-sm text-foreground/75"
-                >
-                  {topic.detail}
-                </p>
-              )}
-              {editorials.length > 0 && (
-                <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                  <span className="label-code">{t("editorialsLabel")}</span>
-                  {editorials.map((editorial) => (
-                    <Link
-                      key={editorial.slug}
-                      href={`/archive/${editorial.subject}/${editorial.slug}`}
-                      className="text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
-                    >
-                      {editorial.title}
-                    </Link>
-                  ))}
-                </p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+              <div className="min-w-0">
+                <h3 className="font-medium text-foreground">{localize(topic.name, locale)}</h3>
+                {topic.detail && (
+                  <p
+                    lang={sourceLang}
+                    className="mt-1 text-sm text-foreground/75"
+                  >
+                    {topic.detail}
+                  </p>
+                )}
+                <EditorialLinks editorials={editorials} label={t("editorialsLabel")} />
+              </div>
+
+              {/* A topic that is broken into subtopics keeps its "coming
+                  soon" for the subtopics themselves: the topic's own row
+                  only shows a link when a material points at the topic. */}
+              {(material || subtopics.length === 0) && (
+                <MaterialLink
+                  material={material}
+                  subject={subject}
+                  readLabel={t("readMaterial")}
+                  soonLabel={t("comingSoon")}
+                />
               )}
             </div>
 
-            <div className="shrink-0 sm:text-right">
-              {material ? (
-                <Link
-                  href={`/materials/${subject}/${material.slug}`}
-                  className="inline-flex min-h-11 items-center font-mono text-xs uppercase tracking-wide text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
-                >
-                  {t("readMaterial")} →
-                </Link>
-              ) : (
-                <span className="label-code inline-flex min-h-11 items-center">
-                  {t("comingSoon")}
-                </span>
-              )}
-            </div>
+            {subtopics.length > 0 && (
+              <div className="mt-3 border-l-2 border-border pl-4">
+                <p className="label-code">{t("subtopicsLabel")}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{t("subtopicsNote")}</p>
+                <ol className="mt-2 divide-y divide-border">
+                  {subtopics.map(({ subtopic, material: subMaterial, editorials: subEditorials }) => (
+                    <li
+                      key={subtopic.id}
+                      id={topicAnchor(subtopic.id)}
+                      className="flex flex-col gap-2 py-2.5 sm:flex-row sm:items-start sm:justify-between sm:gap-6"
+                    >
+                      <div className="min-w-0">
+                        <h4 className="font-medium text-foreground">
+                          {localize(subtopic.name, locale)}
+                        </h4>
+                        {subtopic.detail && (
+                          <p lang={sourceLang} className="mt-1 text-sm text-foreground/75">
+                            {subtopic.detail}
+                          </p>
+                        )}
+                        <EditorialLinks editorials={subEditorials} label={t("editorialsLabel")} />
+                      </div>
+                      <MaterialLink
+                        material={subMaterial}
+                        subject={subject}
+                        readLabel={t("readMaterial")}
+                        soonLabel={t("comingSoon")}
+                      />
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
           </li>
         ))}
       </ol>
     </details>
+  );
+}
+
+function EditorialLinks({
+  editorials,
+  label,
+}: {
+  editorials: EditorialRef[];
+  label: string;
+}) {
+  if (editorials.length === 0) return null;
+  return (
+    <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+      <span className="label-code">{label}</span>
+      {editorials.map((editorial) => (
+        <Link
+          key={editorial.slug}
+          href={`/archive/${editorial.subject}/${editorial.slug}`}
+          className="text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
+        >
+          {editorial.title}
+        </Link>
+      ))}
+    </p>
+  );
+}
+
+function MaterialLink({
+  material,
+  subject,
+  readLabel,
+  soonLabel,
+}: {
+  material: MaterialRef | undefined;
+  subject: string;
+  readLabel: string;
+  soonLabel: string;
+}) {
+  return (
+    <div className="shrink-0 sm:text-right">
+      {material ? (
+        <Link
+          href={`/materials/${subject}/${material.slug}`}
+          className="inline-flex min-h-11 items-center font-mono text-xs uppercase tracking-wide text-cherenkov-blue-800 underline-offset-4 hover:underline dark:text-cherenkov-blue-pastel"
+        >
+          {readLabel} →
+        </Link>
+      ) : (
+        <span className="label-code inline-flex min-h-11 items-center">{soonLabel}</span>
+      )}
+    </div>
   );
 }

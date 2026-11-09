@@ -1,4 +1,4 @@
-import { practical, section, topic } from "../define";
+import { practical, section, subtopic, topic } from "../define";
 import type { SubjectSyllabus } from "../types";
 
 // Source language: English (official). Indonesian names are unofficial glosses.
@@ -15,6 +15,12 @@ import type { SubjectSyllabus } from "../types";
 // for punctuation. "(Q)" is the source's marker for "qualitative understanding
 // only". The source's general remarks: SI units are used unless stated, and
 // standard solutions need no complex numbers or differential equations.
+//
+// Subtopics (the fifth argument of `topic`) are NOT part of the IOAA syllabus.
+// They are Project Cherenkov's own finer slices of a source topic, added where
+// a material or editorial is about one idea inside a broad topic. The topic
+// and its `detail` stay exactly as transcribed; a subtopic's `detail` is
+// written here, not quoted. The syllabus page says so to readers.
 //
 // Topic ids that existed under the Junior transcription are kept (planner rows
 // and the quiz bank point at them). Dropped because the senior syllabus has no
@@ -64,7 +70,11 @@ export const astronomy: SubjectSyllabus = {
       topic("the-sun", "Matahari", "The Sun",
         "Solar structure; solar surface activity; solar rotation; solar radiation and the solar constant; solar neutrinos (Q); Sun–Earth relations; role of magnetic fields (Q); solar wind and radiation pressure; heliosphere (Q); magnetosphere (Q)."),
       topic("solar-system-bodies", "Benda-benda Tata Surya", "The Solar System",
-        "Earth–Moon system; precession; nutation; libration; formation and evolution of the Solar System (Q); structure and components of the Solar System (Q); structure and orbits of Solar System objects; sidereal and synodic periods; retrograde motion; outer reaches of the Solar System (Q)."),
+        "Earth–Moon system; precession; nutation; libration; formation and evolution of the Solar System (Q); structure and components of the Solar System (Q); structure and orbits of Solar System objects; sidereal and synodic periods; retrograde motion; outer reaches of the Solar System (Q).",
+        [
+          subtopic("sidereal-synodic-periods", "Periode Sideris dan Sinodis", "Sidereal and synodic periods",
+            "Periods measured against a distant celestial reference versus a moving one; the mean solar day; recurrence times of planetary configurations such as opposition."),
+        ]),
       topic("space-exploration", "Eksplorasi Antariksa", "Space exploration",
         "Satellite trajectories and transfers; human exploration of the Solar System (Q); planetary missions (Q); gravitational sling-shot effect; space-based instruments (Q)."),
       topic("solar-system-phenomena", "Fenomena Tata Surya", "Phenomena",

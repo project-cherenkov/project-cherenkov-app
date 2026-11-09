@@ -132,3 +132,46 @@ describe("searchEntries", () => {
     expect(searchEntries(index, "s", 2)).toHaveLength(2);
   });
 });
+
+describe("buildSearchIndex with subtopics", () => {
+  const withSub = {
+    ...syllabus,
+    sections: [
+      {
+        ...syllabus.sections[0]!,
+        topics: [
+          {
+            id: "sorting",
+            name: { en: "Sorting", id: "Pengurutan" },
+            subtopics: [{ id: "merge-sort", name: { en: "Merge sort", id: "Urut gabung" }, detail: "divide and merge" }],
+          },
+        ],
+      },
+    ],
+  } as SubjectSyllabus;
+
+  it("lists a subtopic with no material as a topic entry that names its parent", () => {
+    const index = buildSearchIndex({ ...sources, syllabi: [withSub], materials: [] }, "en");
+    const entry = index.find((e) => e.id === "topic:informatics/merge-sort");
+    expect(entry).toMatchObject({
+      kind: "topic",
+      title: "Merge sort",
+      summary: "Algorithms › Sorting",
+      href: "/syllabus/informatics#topic-merge-sort",
+    });
+    expect(entry?.keywords).toContain("Sorting");
+  });
+
+  it("lists a subtopic once: through its material when it has one", () => {
+    const index = buildSearchIndex(
+      {
+        ...sources,
+        syllabi: [withSub],
+        materials: [{ subject: "informatics", slug: "merge", title: "Merging", summary: "s", topic: "merge-sort" }],
+      },
+      "en",
+    );
+    expect(index.some((e) => e.id === "topic:informatics/merge-sort")).toBe(false);
+    expect(index.find((e) => e.id === "material:informatics/merge")?.keywords).toContain("Merge sort");
+  });
+});

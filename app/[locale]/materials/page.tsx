@@ -45,12 +45,29 @@ export default async function MaterialsIndexPage({
       <div className="mt-8 space-y-10">
         {getAllSyllabi().map((syllabus) => {
           const coverage = buildSubjectCoverage(syllabus, materials, editorials);
+          // One card per material, in syllabus order. A material on a subtopic
+          // is listed after its parent topic's own, labelled "Topic › Subtopic".
           const withMaterial = coverage.sections
             .map((entry) => ({
-              ...entry,
-              topics: entry.topics.filter((topic) => topic.material),
+              section: entry.section,
+              items: entry.topics.flatMap((topic) => [
+                ...(topic.material
+                  ? [{ key: topic.topic.id, material: topic.material, label: localize(topic.topic.name, locale) }]
+                  : []),
+                ...topic.subtopics.flatMap((sub) =>
+                  sub.material
+                    ? [
+                        {
+                          key: sub.subtopic.id,
+                          material: sub.material,
+                          label: `${localize(topic.topic.name, locale)} › ${localize(sub.subtopic.name, locale)}`,
+                        },
+                      ]
+                    : [],
+                ),
+              ]),
             }))
-            .filter((entry) => entry.topics.length > 0);
+            .filter((entry) => entry.items.length > 0);
 
           return (
             <section key={syllabus.subject} id={syllabus.subject} aria-labelledby={`${syllabus.subject}-heading`}>
@@ -60,7 +77,7 @@ export default async function MaterialsIndexPage({
                 </h2>
                 <p className="label-code">
                   {t("coverage", {
-                    covered: coverage.materialCount,
+                    covered: coverage.coveredTopicCount,
                     total: coverage.topicCount,
                   })}{" "}
                   ·{" "}
@@ -79,21 +96,21 @@ export default async function MaterialsIndexPage({
                 </p>
               ) : (
                 <div className="mt-4 space-y-6">
-                  {withMaterial.map(({ section, topics }) => (
+                  {withMaterial.map(({ section, items }) => (
                     <div key={section.id}>
                       <h3 className="heading-section mb-2 text-lg">{localize(section.name, locale)}</h3>
                       <ul className="grid gap-3 sm:grid-cols-2">
-                        {topics.map(({ topic, material }) => (
-                          <li key={topic.id}>
+                        {items.map(({ key, material, label }) => (
+                          <li key={key}>
                             <Link
-                              href={`/materials/${syllabus.subject}/${material!.slug}`}
+                              href={`/materials/${syllabus.subject}/${material.slug}`}
                               className="group block h-full rounded-lg border border-border bg-card p-4 transition-colors hover:border-cherenkov-blue-pastel"
                             >
                               <span className="font-semibold text-foreground group-hover:underline">
-                                {material!.title}
+                                {material.title}
                               </span>
                               <span className="mt-1 block text-sm text-foreground/75">
-                                {localize(topic.name, locale)}
+                                {label}
                               </span>
                             </Link>
                           </li>

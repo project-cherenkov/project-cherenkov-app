@@ -9,6 +9,7 @@ import { isGraphArrayStepperConfig } from "./graph-array-stepper/types";
 import { isTrajectorySandboxConfig } from "./trajectory-sandbox/types";
 import { isOrbitalSandboxConfig } from "./orbital-sandbox/types";
 import { isBlackbodySpectrumComparisonConfig } from "./blackbody-spectrum-comparison/types";
+import { isRelativePeriodSandboxConfig } from "./relative-period-sandbox/types";
 import { isComposedSceneConfig } from "./composed-scene/types";
 import { isProgrammableSceneConfig } from "./programmable-scene/types";
 
@@ -32,6 +33,10 @@ const OrbitalSandbox = dynamic(
 const BlackbodySpectrumComparison = dynamic(
   () =>
     import("./blackbody-spectrum-comparison").then((m) => m.BlackbodySpectrumComparison),
+  { ssr: false, loading: () => <VizSkeleton /> },
+);
+const RelativePeriodSandbox = dynamic(
+  () => import("./relative-period-sandbox").then((m) => m.RelativePeriodSandbox),
   { ssr: false, loading: () => <VizSkeleton /> },
 );
 const ComposedScene = dynamic(
@@ -105,6 +110,16 @@ export function VizEngine({ editorial }: { editorial: VizEditorial }) {
       return (
         <VizFrame>
           <BlackbodySpectrumComparison config={value} />
+        </VizFrame>
+      );
+
+    case "relative-period-sandbox":
+      if (!isRelativePeriodSandboxConfig(value)) {
+        return <VizConfigError engine={discriminant} />;
+      }
+      return (
+        <VizFrame>
+          <RelativePeriodSandbox config={value} />
         </VizFrame>
       );
 

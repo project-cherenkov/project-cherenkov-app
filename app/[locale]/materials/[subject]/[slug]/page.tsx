@@ -12,7 +12,7 @@ import { pageMetadata } from "@/lib/seo-metadata";
 import { Link } from "@/i18n/routing";
 import { getAllEditorials, getAllMaterials, getMaterial, isArchivedMaterial } from "@/lib/content";
 import { isEditorRequest } from "@/lib/editor-access";
-import { buildSubjectCoverage, getSectionNeighbours } from "@/lib/library";
+import { buildSubjectCoverage, findCoverageEntry, getSectionNeighbours } from "@/lib/library";
 import { getSyllabus, getTopicLocation, localize, topicAnchor } from "@/lib/syllabus";
 // Imported here, not globally — KaTeX's CSS only ships to pages that render
 // math (Non-Functional Requirements §8), same as the editorial page.
@@ -77,14 +77,17 @@ export default async function MaterialPage({
   const ts = await getTranslations("syllabus");
   const location = getTopicLocation(subject, material.topic);
   const coverage = buildSubjectCoverage(syllabus, getAllMaterials(), getAllEditorials());
-  const topicEntry = coverage.sections
-    .flatMap((entry) => entry.topics)
-    .find((entry) => entry.topic.id === material.topic);
-  const related = topicEntry?.editorials ?? [];
+  // `material.topic` may name a topic or one of its subtopics. Editorials
+  // listed under a material are the ones attached to that exact id.
+  const match = findCoverageEntry(coverage, material.topic);
+  const related = match?.subtopic?.editorials ?? match?.topic.editorials ?? [];
   const { previous, next } = getSectionNeighbours(coverage, material.topic);
 
   // Chapter sidebar, in syllabus order (R1). Practical sections carry no
-  // linkable topics, so only sections with topics appear.
+  // linkable topics, so only sections with topics appear. Subtopics nest
+  // under their topic.
+  const hrefOf = (entry: { material?: { subject: string; slug: string } }) =>
+    entry.material ? `/materials/${entry.material.subject}/${entry.material.slug}` : null;
   const navSections: MaterialNavSection[] = coverage.sections
     .filter((entry) => entry.topics.length > 0)
     .map((entry) => ({
@@ -93,10 +96,14 @@ export default async function MaterialPage({
       topics: entry.topics.map((topicEntry) => ({
         id: topicEntry.topic.id,
         name: localize(topicEntry.topic.name, locale),
-        href: topicEntry.material
-          ? `/materials/${topicEntry.material.subject}/${topicEntry.material.slug}`
-          : null,
+        href: hrefOf(topicEntry),
         current: topicEntry.topic.id === material.topic,
+        subtopics: topicEntry.subtopics.map((subEntry) => ({
+          id: subEntry.subtopic.id,
+          name: localize(subEntry.subtopic.name, locale),
+          href: hrefOf(subEntry),
+          current: subEntry.subtopic.id === material.topic,
+        })),
       })),
     }));
 
@@ -148,10 +155,11 @@ export default async function MaterialPage({
           </span>
           {location && (
             <Link
-              href={`/syllabus/${subject}#${topicAnchor(location.topic.id)}`}
+              href={`/syllabus/${subject}#${topicAnchor((location.subtopic ?? location.topic).id)}`}
               className="label-code underline-offset-4 hover:underline"
             >
               {t("inSyllabus")}: {localize(location.section.name, locale)} › {localize(location.topic.name, locale)}
+              {location.subtopic ? ` › ${localize(location.subtopic.name, locale)}` : ""}
             </Link>
           )}
         </div>

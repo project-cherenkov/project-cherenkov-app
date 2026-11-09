@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getAllSyllabi, getTopicCount } from "../syllabus";
 import { SUBJECTS } from "../subjects";
-import { practical, section, topic } from "../syllabus/define";
+import { practical, section, subtopic, topic } from "../syllabus/define";
 import type { SubjectSyllabus } from "../syllabus/types";
 import { deriveSyllabusTopics } from "./derive-syllabus-topics";
 
@@ -84,5 +84,41 @@ describe("deriveSyllabusTopics on the real syllabus", () => {
       const orders = rows.filter((r) => r.subject === subject).map((r) => r.order);
       expect(orders).toEqual(orders.map((_, i) => i));
     }
+  });
+});
+
+describe("deriveSyllabusTopics with subtopics", () => {
+  const WITH_SUB: SubjectSyllabus = {
+    ...TINY,
+    sections: [
+      section("a", "Bagian A", "Section A", [
+        topic("a1", "A satu", "A one", undefined, [subtopic("a1x", "A satu x", "A one x")]),
+        topic("a2", "A dua", "A two"),
+      ]),
+    ],
+  };
+
+  it("emits rows for topics only, never for subtopics", () => {
+    expect(deriveSyllabusTopics([WITH_SUB], []).map((r) => r.syllabusTopicId)).toEqual(["a1", "a2"]);
+  });
+
+  it("rolls an editorial on a subtopic up to its parent topic", () => {
+    const rows = deriveSyllabusTopics(
+      [WITH_SUB],
+      [{ subject: "physics", slug: "sub-ed", publishedAt: "2026-09-01", syllabusTopic: "a1x" }],
+    );
+    expect(rows[0]!.editorialSlug).toBe("sub-ed");
+    expect(rows[1]!.editorialSlug).toBeNull();
+  });
+
+  it("still picks the earliest across a topic's own and its subtopics' editorials", () => {
+    const rows = deriveSyllabusTopics(
+      [WITH_SUB],
+      [
+        { subject: "physics", slug: "direct", publishedAt: "2026-09-05", syllabusTopic: "a1" },
+        { subject: "physics", slug: "via-sub", publishedAt: "2026-09-01", syllabusTopic: "a1x" },
+      ],
+    );
+    expect(rows[0]!.editorialSlug).toBe("via-sub");
   });
 });

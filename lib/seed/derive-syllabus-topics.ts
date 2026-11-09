@@ -11,8 +11,12 @@
 //                      old publication-date order this IS the syllabus order
 //   editorialSlug   <- the earliest-published editorial that points at this
 //                      topic through its `syllabusTopic` frontmatter, if any.
-//                      topics.editorial_slug holds one link, so any further
-//                      editorials on the same topic are not linked here.
+//                      An editorial that points at one of the topic's
+//                      SUBTOPICS counts as pointing at the topic: planner rows
+//                      exist per topic only, so subtopic content rolls up to
+//                      its parent. topics.editorial_slug holds one link, so
+//                      any further editorials on the same topic are not
+//                      linked here.
 import type { Subject } from "../subjects";
 import type { SubjectSyllabus } from "../syllabus/types";
 
@@ -37,11 +41,27 @@ export function deriveSyllabusTopics(
   syllabi: SubjectSyllabus[],
   editorials: SyllabusEditorialLike[],
 ): DerivedSyllabusTopic[] {
+  // (subject, subtopicId) -> parent topic id, so an editorial on a subtopic
+  // rolls up to the topic the planner schedules.
+  const parentOf = new Map<string, string>();
+  for (const syllabus of syllabi) {
+    for (const section of syllabus.sections) {
+      for (const topic of section.topics) {
+        for (const subtopic of topic.subtopics ?? []) {
+          parentOf.set(`${syllabus.subject}\u0000${subtopic.id}`, topic.id);
+        }
+      }
+    }
+  }
+
   // (subject, topicId) -> primary editorial slug
   const primary = new Map<string, SyllabusEditorialLike>();
   for (const editorial of editorials) {
     if (!editorial.syllabusTopic) continue;
-    const key = `${editorial.subject}\u0000${editorial.syllabusTopic}`;
+    const topicId =
+      parentOf.get(`${editorial.subject}\u0000${editorial.syllabusTopic}`) ??
+      editorial.syllabusTopic;
+    const key = `${editorial.subject}\u0000${topicId}`;
     const current = primary.get(key);
     if (
       !current ||

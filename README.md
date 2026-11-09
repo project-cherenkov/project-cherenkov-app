@@ -26,7 +26,7 @@ The public site has three sections, joined by the OSN syllabus:
 
 | Section | What it is | Where it lives |
 | --- | --- | --- |
-| Syllabus | The official OSN scope for each subject, topic by topic, showing which topics already have a material and/or editorials. | `lib/syllabus/data/*.ts` (structured data, not MDX) |
+| Syllabus | The official OSN scope for each subject, topic by topic, showing which topics already have a material and/or editorials. | `lib/syllabus/data/*.ts` (structured data, not MDX). A topic may carry optional Cherenkov-authored `subtopics` (the 5th argument of `topic(...)`, built with `subtopic(...)`); they are not in the source syllabus, share one id namespace with topics, can hold a material and editorials of their own, and are invisible to the planner, which stays at topic level. |
 | Materials | Short, unsigned, topic-by-topic breakdowns of the syllabus. No visualisation requirement. | `content/materials/<subject>/*.mdx` |
 | Editorials | The archive proper: full write-ups, each with a working visualisation. | `content/editorials/<subject>/*.mdx` |
 
@@ -55,7 +55,7 @@ These documents live in their own files and not inside the README. The site foot
 | Styling | [Tailwind CSS](https://tailwindcss.com/) 3 + hand-rolled shadcn/ui-style primitives (`components/ui/`, built on Radix) + [next-themes](https://github.com/pacocoursey/next-themes) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for colour and spacing, so hex values are not scattered through components. Light/dark theme follows the system by default, with a manual toggle. |
 | Content pipeline | MDX compiled with [Velite](https://velite.js.org) | Three collections (`editorials`, `materials` and `docs`), each with a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualisation-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` and `lib/docs.ts` query Velite's generated `#content` collections; page routes never import `#content` directly. |
 | Math typesetting | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML at build time, so a reader's browser never runs math-rendering JS or reflows the page after load. |
-| Visualisations | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Six engines (`components/viz/`), dispatched by `vizConfig.discriminant` in an editorial's frontmatter (see [Section V](#v-content-model-writing-an-editorial)): four purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox, a blackbody spectrum comparison) plus two authored visually: `composed-scene` (template-driven) and `programmable-scene` (a sandboxed, block-authored program). See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder). D3 is used narrowly for its scale maths, not as a full charting layer, since each engine's rendering is bespoke. |
+| Visualisations | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Seven engines (`components/viz/`), dispatched by `vizConfig.discriminant` in an editorial's frontmatter (see [Section V](#v-content-model-writing-an-editorial)): five purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox, a blackbody spectrum comparison, a relative period sandbox) plus two authored visually: `composed-scene` (template-driven) and `programmable-scene` (a sandboxed, block-authored program). See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder). D3 is used narrowly for its scale maths, not as a full charting layer, since each engine's rendering is bespoke. |
 | Block editor | [Blockly](https://developers.google.com/blockly) | Authoring-only dependency of the scene builder's `programmable-scene` mode. It is kept out of every reader-facing page's JavaScript; `pnpm build` ends with a script that fails the build if it leaks (see [Section IV](#iv-getting-started)). |
 | i18n | [next-intl](https://next-intl.dev/) | Locale-prefixed routing (`id`/`en`) via `middleware.ts` and `i18n/routing.ts`. See [Section X](#x-internationalisation). |
 | CMS | [Keystatic](https://keystatic.com/) | In-site editing at `/keystatic`, mirroring `velite.config.ts`'s schema field-for-field (`keystatic.config.ts`): three editorial collections, three materials collections, and a `team` singleton. Local-storage mode in development, GitHub-storage mode (real OAuth-backed auth) in production. See [Section VII](#vii-editing-content-in-the-browser-keystatic). |
@@ -291,7 +291,7 @@ Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter is validate
 | `tags` | string[] | Short, lowercase. |
 | `principle` | string | The general idea this editorial teaches. Free text on purpose. See [Section XIII](#xiii-current-status-and-open-questions). |
 | `errorType` | string, optional | The specific mistake this editorial corrects. Also free text. |
-| `vizConfig` | `{ discriminant, value }` | `discriminant` is `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"blackbody-spectrum-comparison"` \| `"composed-scene"` \| `"programmable-scene"` \| `"none"`, and it selects which engine to render. `value` is that engine's own config object; see the engine-by-engine notes below. The first four engines are hand-written per visualisation type; `composed-scene` and `programmable-scene` are authored visually rather than by hand. See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder). `"none"` is a legal schema value but a flagged content error in the UI. See FAQ C. There is no separate `vizEngine` frontmatter key: `discriminant` is the sole engine selector, in both the real content files and the Keystatic CMS field config. |
+| `vizConfig` | `{ discriminant, value }` | `discriminant` is `"graph-array-stepper"` \| `"trajectory-sandbox"` \| `"orbital-sandbox"` \| `"blackbody-spectrum-comparison"` \| `"relative-period-sandbox"` \| `"composed-scene"` \| `"programmable-scene"` \| `"none"`, and it selects which engine to render. `value` is that engine's own config object; see the engine-by-engine notes below. The first five engines are hand-written per visualisation type; `composed-scene` and `programmable-scene` are authored visually rather than by hand. See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder). `"none"` is a legal schema value but a flagged content error in the UI. See FAQ C. There is no separate `vizEngine` frontmatter key: `discriminant` is the sole engine selector, in both the real content files and the Keystatic CMS field config. |
 | `publishedAt` | ISO date, year 2020 or later | Earlier dates are rejected at build time as placeholder/test data. |
 | `status` | `published` (default) or `archived` | Published is visible to everyone. Archived is visible to editors only (signed in, email in `ADMIN_EMAILS`): it appears in the archive list with an "Archived" badge and opens by direct URL, and is left out of every public list, search, the sitemap and `llms.txt`. Visitors get a 404. |
 | `author` | string | n/a |
@@ -309,6 +309,7 @@ Real, complete examples to copy from:
 - `content/editorials/physics/projectile-range-symmetry.mdx` (`trajectory-sandbox`)
 - `content/editorials/astronomy/eccentric-transit-duration.mdx` (`orbital-sandbox`)
 - `content/editorials/astronomy/why-classical-blackbody-radiation-fails.mdx` (`blackbody-spectrum-comparison`)
+- `content/editorials/astronomy/why-a-sidereal-day-is-shorter.mdx` and `content/materials/astronomy/sidereal-synodic-periods.mdx` (`relative-period-sandbox`)
 
 There is also `content/editorials/informatics/programmable-scene-fixture.mdx` (`programmable-scene`). It is an implementation fixture, not a real editorial: a one-circle program that exists to prove the engine round-trips end to end. It has a placeholder author and currently appears in the archive like any other editorial. No editorial uses `composed-scene` yet.
 
@@ -364,6 +365,17 @@ vizConfig:
     temperatureK: 6000 # optional, default 6000
     temperatureRangeK: [3000, 12000] # optional slider bounds
     temperatureStepK: 250 # optional, default 250
+```
+
+`relative-period-sandbox`: one instrument with two modes, built on the idea that a recurrence interval depends on the reference the motion is measured against. *Earth's day* shows Earth's orbit and an orientation dial with a fixed star reference, a Sun direction and a marked meridian, and derives the mean solar day from the sidereal rotation and orbital periods (`1/τ = 1/τ* − 1/P`). *Planetary orbits* shows two coplanar circular orbits and derives the synodic period (`1/S = |1/P_A − 1/P_B|`). Both are exact evaluations of the closed-form equations under constant mean angular velocities; orbit radii and sizes are schematic and not to scale. Playback runs one synodic cycle in 12 seconds, starts paused, never loops (the relative configuration repeats but absolute longitudes do not) and holds at the end; equal periods have no finite synodic period and the engine says so. Every config field is optional: `mode` (`earth-day` or `planetary-orbits`) chooses the opening mode, and `siderealRotationDays` (0.5 to 2), `earthOrbitPeriodDays` (10 to 1000), `periodADays` (50 to 5000) and `periodBDays` (50 to 10000) set the slider starts; a value outside its slider range is rejected. Two buttons in Earth's day mode jump to the sidereal return and the solar return, because those events are under a degree apart on the dial and the scrubber cannot land on the first. Colours come from the theme tokens, as for the blackbody engine.
+
+```yaml
+vizConfig:
+  discriminant: relative-period-sandbox
+  value:
+    mode: planetary-orbits
+    periodADays: 365.2564
+    periodBDays: 4330.6
 ```
 
 `composed-scene`: a general-purpose engine: a scene made of reusable element templates (shapes, curves, text, a slider-bound marker, an array-with-pointers widget) instead of one bespoke renderer per visualisation type. Its `vizConfig.value` is a structured object (canvas size, elements, optional controls, optional steps) that's impractical to hand-write in frontmatter, so it's authored visually instead, at `/keystatic/scene-builder`. See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder) for the full shape and the authoring workflow.

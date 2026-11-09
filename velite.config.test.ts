@@ -27,6 +27,10 @@ describe("velite.config vizEngines", () => {
     expect(schema.safeParse("programmable-scene").success).toBe(true);
   });
 
+  it("accepts relative-period-sandbox", () => {
+    expect(schema.safeParse("relative-period-sandbox").success).toBe(true);
+  });
+
   it("accepts blackbody-spectrum-comparison", () => {
     expect(schema.safeParse("blackbody-spectrum-comparison").success).toBe(true);
   });

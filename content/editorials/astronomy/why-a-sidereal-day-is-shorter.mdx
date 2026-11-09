@@ -1,0 +1,85 @@
+---
+title: "Why a Sidereal Day Is Shorter Than a Mean Solar Day"
+subject: astronomy
+status: published
+hook: "Earth rotates once relative to the stars in about 23 hours 56 minutes, yet our clocks use a 24-hour mean solar day. Earth's orbital motion accounts for the difference."
+tags: ["sidereal-day", "solar-day", "earth-rotation"]
+principle: "relative-angular-motion"
+errorType: "confusing-sidereal-and-solar-days"
+vizConfig:
+  discriminant: relative-period-sandbox
+  value:
+    mode: earth-day
+    siderealRotationDays: 0.9972696723
+    earthOrbitPeriodDays: 365.2564
+publishedAt: "2026-11-08"
+author: "Renee"
+syllabusTopic: "sidereal-synodic-periods"
+---
+
+## The problem
+
+A familiar fact about Earth sounds contradictory. One rotation relative to the distant stars takes about 23 hours, 56 minutes and 4 seconds. Yet an ordinary day on our clocks is 24 hours. Has Earth failed to complete a full rotation by the time the next day begins, or do the two measurements describe different motions? The distinction matters because a period is incomplete unless its reference is specified. Returning to the same direction relative to the stars is not the same event as bringing the Sun back to the same position in the sky. The first interval is a sidereal day. The second, when averaged over the year, is a mean solar day.
+
+## The idea
+
+Imagine marking one meridian on Earth and asking when it points in the same direction again. Against a distant-star reference, Earth needs one sidereal rotation. But Earth does not stay in the same place during that rotation. It also moves forward along its orbit around the Sun. When the meridian has completed 360 degrees relative to the stars, its direction relative to the Sun has therefore changed slightly. Earth must rotate a little farther before the Sun returns to the meridian.
+
+The extra rotation is not a defect in the definition of a day. It follows from measuring the same rotating planet against two different references. A sidereal day measures rotation relative to the celestial reference. A solar day measures the recurrence of the Sun's apparent position. The everyday 24-hour day is the mean solar day; the interval between actual solar noons varies slightly during the year.
+
+In the visualization, keep the star reference fixed, then watch Earth's orbital position and marked meridian advance. Compare the instant the meridian returns to the star direction with the instant it faces the Sun again.
+
+<Interactive />
+
+<Solution>
+
+## Full derivation
+
+Let $P$ be Earth's sidereal orbital period around the Sun, in days. Let $\tau_*$ be Earth's sidereal rotation period, in days, and let $\tau$ be the mean solar day, also in days. Assume prograde rotation, a circular orbit, and constant mean angular velocities. Treat the distant-star direction as fixed over this short interval. The angular velocities below are measured in radians per day.
+
+Earth's rotation advances its orientation at the angular rate
+
+$$
+\omega_* = \frac{2\pi}{\tau_*}.
+$$
+
+Meanwhile, Earth's orbital motion changes the direction from Earth to the Sun at the rate
+
+$$
+\omega_{\mathrm{orb}} = \frac{2\pi}{P}.
+$$
+
+The Sun returns to the same meridian when the relative angle has advanced by one complete turn. During one mean solar day, this gives
+
+$$
+(\omega_* - \omega_{\mathrm{orb}})\tau = 2\pi.
+$$
+
+Substituting the angular rates and dividing by $2\pi\tau$ gives
+
+$$
+\boxed{\frac{1}{\tau} = \frac{1}{\tau_*} - \frac{1}{P}}.
+$$
+
+Rearrange to find the sidereal rotation period:
+
+$$
+\frac{1}{\tau_*} = \frac{1}{\tau} + \frac{1}{P}.
+$$
+
+For Earth, take $\tau=1\,\mathrm{d}$ and $P=365.2564\,\mathrm{d}$. Then
+
+$$
+\tau_* = \frac{1}{1+1/365.2564}\,\mathrm{d}
+       \approx 0.99726967\,\mathrm{d}.
+$$
+
+Converting this interval to hours gives approximately $23\,\mathrm{h}\ 56\,\mathrm{min}\ 4.10\,\mathrm{s}$ of mean solar time. This agrees with the sidereal-day value tabulated in *Fundamental Astronomy*. During one day, Earth advances by about $360^\circ/365.2564 \approx 0.9856^\circ$ along its orbit. That small orbital advance explains why the rotation measured against the Sun takes longer than the rotation measured against the stars.
+
+**Where the model is simplified.** The derivation uses mean angular velocities and a circular-orbit approximation. Earth's actual orbit is slightly elliptical, and the Sun's apparent motion is not uniform along the ecliptic. Therefore, an apparent solar day is not exactly 24 hours every day. The 24-hour value here is the mean solar day used for ordinary timekeeping. The book's precise sidereal-time definition uses the vernal equinox as the reference; the fixed-star picture is the introductory geometric interpretation.
+
+</Solution>
+
+## Further reading
+
+Karttunen et al., *Fundamental Astronomy*, 6th edition, Section 2.13, pp. 34–36, and Table C.4, p. 479.

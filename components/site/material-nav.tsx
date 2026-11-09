@@ -11,6 +11,8 @@ export interface MaterialNavTopic {
   // null when no material has been written for this topic yet.
   href: string | null;
   current: boolean;
+  // Cherenkov-authored slices of this topic, shown indented beneath it.
+  subtopics?: MaterialNavTopic[];
 }
 
 export interface MaterialNavSection {
@@ -67,7 +69,12 @@ export function MaterialNav({
         <ul className="space-y-2">
           {sections.map((section) => (
             <li key={section.id}>
-              <details open={section.topics.some((topic) => topic.current)} className="group">
+              <details
+                open={section.topics.some(
+                  (topic) => topic.current || topic.subtopics?.some((sub) => sub.current),
+                )}
+                className="group"
+              >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded px-1 py-1.5 text-sm font-semibold text-foreground hover:bg-muted">
                   <span>{section.name}</span>
                   <ChevronDown
@@ -78,24 +85,15 @@ export function MaterialNav({
                 <ul className="mt-1 space-y-0.5 border-l border-border pl-3">
                   {section.topics.map((topic) => (
                     <li key={topic.id}>
-                      {topic.href ? (
-                        <Link
-                          href={topic.href}
-                          aria-current={topic.current ? "page" : undefined}
-                          className={[
-                            "block rounded px-2 py-1 text-sm",
-                            topic.current
-                              ? "bg-foreground font-medium text-background"
-                              : "text-cherenkov-blue-800 hover:bg-muted dark:text-cherenkov-blue-pastel",
-                          ].join(" ")}
-                        >
-                          {topic.name}
-                        </Link>
-                      ) : (
-                        <span className="block px-2 py-1 text-sm text-muted-foreground">
-                          {topic.name}
-                          <span className="ml-1.5 text-xs italic">({labels.comingSoon})</span>
-                        </span>
+                      <NavEntry topic={topic} comingSoon={labels.comingSoon} />
+                      {topic.subtopics && topic.subtopics.length > 0 && (
+                        <ul className="ml-3 mt-0.5 space-y-0.5 border-l border-border pl-3">
+                          {topic.subtopics.map((sub) => (
+                            <li key={sub.id}>
+                              <NavEntry topic={sub} comingSoon={labels.comingSoon} />
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </li>
                   ))}
@@ -106,5 +104,33 @@ export function MaterialNav({
         </ul>
       </nav>
     </div>
+  );
+}
+
+function NavEntry({ topic, comingSoon }: { topic: MaterialNavTopic; comingSoon: string }) {
+  // A topic with no material of its own but with subtopics is a heading for
+  // them, not a gap: "coming soon" belongs on the subtopics that lack one.
+  const isHeading = !topic.href && (topic.subtopics?.length ?? 0) > 0;
+  if (isHeading) {
+    return <span className="block px-2 py-1 text-sm text-foreground/75">{topic.name}</span>;
+  }
+  return topic.href ? (
+    <Link
+      href={topic.href}
+      aria-current={topic.current ? "page" : undefined}
+      className={[
+        "block rounded px-2 py-1 text-sm",
+        topic.current
+          ? "bg-foreground font-medium text-background"
+          : "text-cherenkov-blue-800 hover:bg-muted dark:text-cherenkov-blue-pastel",
+      ].join(" ")}
+    >
+      {topic.name}
+    </Link>
+  ) : (
+    <span className="block px-2 py-1 text-sm text-muted-foreground">
+      {topic.name}
+      <span className="ml-1.5 text-xs italic">({comingSoon})</span>
+    </span>
   );
 }

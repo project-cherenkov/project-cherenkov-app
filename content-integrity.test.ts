@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { describe, expect, it } from "vitest";
 
 import { isBlackbodySpectrumComparisonConfig } from "./components/viz/blackbody-spectrum-comparison/types";
+import { isRelativePeriodSandboxConfig } from "./components/viz/relative-period-sandbox/types";
 import { isGraphArrayStepperConfig } from "./components/viz/graph-array-stepper/types";
 import { isSafePracticeUrl } from "./lib/practice-links";
 import { SUBJECTS } from "./lib/subjects";
@@ -81,6 +82,9 @@ describe("materials ↔ visualization integrity", () => {
       if (viz.discriminant === "graph-array-stepper") {
         expect(isGraphArrayStepperConfig(viz.value)).toBe(true);
       }
+      if (viz.discriminant === "relative-period-sandbox") {
+        expect(isRelativePeriodSandboxConfig(viz.value)).toBe(true);
+      }
     });
   }
 });
@@ -95,6 +99,11 @@ describe("editorials ↔ visualization integrity", () => {
     it(`${e.subject}/${e.slug} uses a known engine`, () => {
       expect(vizEngines as readonly string[]).toContain(viz.discriminant);
     });
+    if (viz.discriminant === "relative-period-sandbox") {
+      it(`${e.subject}/${e.slug} has a config the relative-period engine accepts`, () => {
+        expect(isRelativePeriodSandboxConfig(viz.value)).toBe(true);
+      });
+    }
     if (viz.discriminant === "blackbody-spectrum-comparison") {
       it(`${e.subject}/${e.slug} has a config the blackbody engine accepts`, () => {
         expect(isBlackbodySpectrumComparisonConfig(viz.value)).toBe(true);
