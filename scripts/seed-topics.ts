@@ -19,10 +19,10 @@ import { getAllEditorials } from "../lib/content";
 import { db } from "../lib/db";
 import { deriveSyllabusTopics } from "../lib/seed/derive-syllabus-topics";
 import { seedSyllabusTopics } from "../lib/seed/seed-db";
-import { getAllSyllabi } from "../lib/syllabus";
+import { getPlannerSyllabi } from "../lib/syllabus";
 
 async function main() {
-  const derived = deriveSyllabusTopics(getAllSyllabi(), getAllEditorials());
+  const derived = deriveSyllabusTopics(getPlannerSyllabi(), getAllEditorials());
   const report = await seedSyllabusTopics(db, derived);
 
   console.log(

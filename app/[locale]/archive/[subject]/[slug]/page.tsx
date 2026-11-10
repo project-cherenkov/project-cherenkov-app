@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
-import { getAllEditorials, getEditorial, isArchivedEditorial } from "@/lib/content";
+import { getAllEditorials, getEditorial, isDraftEditorial, resolveEditorialText } from "@/lib/content";
 import { isEditorRequest } from "@/lib/editor-access";
 import { EditorialMDX } from "@/components/editorial-mdx";
 import { PracticeLinks } from "@/components/site/practice-links";
@@ -16,20 +16,20 @@ import { pageMetadata } from "@/lib/seo-metadata";
 // pages that actually render math (Non-Functional Requirements §8).
 import "katex/dist/katex.min.css";
 
-// Published editorials resolve for everyone. An archived one resolves only for
+// Published editorials resolve for everyone. An draft one resolves only for
 // an editor; for anyone else it is indistinguishable from a page that does not
 // exist. The editor check (which reads the session, making the request
-// dynamic) runs only when the item is archived, so published pages stay
+// dynamic) runs only when the item is a draft, so published pages stay
 // statically generated.
 async function resolveEditorial(subject: string, slug: string) {
   const published = getEditorial(subject, slug);
   if (published) return published;
-  if (!isArchivedEditorial(subject, slug)) return undefined;
+  if (!isDraftEditorial(subject, slug)) return undefined;
   if (!(await isEditorRequest())) return undefined;
-  return getEditorial(subject, slug, { includeArchived: true });
+  return getEditorial(subject, slug, { includeDrafts: true });
 }
 
-// Only published editorials are prerendered; archived ones render on demand.
+// Only published editorials are prerendered; draft ones render on demand.
 export function generateStaticParams() {
   return getAllEditorials().map((editorial) => ({
     subject: editorial.subject,
@@ -43,22 +43,26 @@ export async function generateMetadata({
   params: Promise<{ locale: string; subject: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, subject, slug } = await params;
-  // Archived: never expose its title/description in metadata (this runs for
+  // Draft: never expose its title/description in metadata (this runs for
   // every visitor, editor or not) and keep it out of search either way.
-  if (isArchivedEditorial(subject, slug)) {
+  if (isDraftEditorial(subject, slug)) {
     return { robots: { index: false, follow: false } };
   }
   const editorial = getEditorial(subject, slug);
   if (!editorial) return {};
+  const { text, isFallback, locales } = resolveEditorialText(editorial, locale);
   return pageMetadata({
     locale,
     path: `/archive/${subject}/${slug}`,
-    title: editorial.title,
-    description: editorial.hook,
+    title: text.title,
+    description: text.hook,
     ogType: "article",
-    // Implementation fixtures and placeholder-author stubs stay out of search
-    // even once the rest of the site is opened up.
-    noindex: !isIndexableEditorial(editorial),
+    // A fallback is the original's text under another language's URL: keep it
+    // out of search and point at the real page. Implementation fixtures and
+    // placeholder-author stubs stay out of search even once the rest is open.
+    noindex: isFallback || !isIndexableEditorial(editorial),
+    canonicalLocale: isFallback ? text.locale : locale,
+    availableLocales: locales,
     article: {
       publishedTime: editorial.publishedAt,
       authors: [editorial.author],
@@ -77,7 +81,9 @@ export default async function EditorialPage({
   setRequestLocale(locale);
   const editorial = await resolveEditorial(subject, slug);
   if (!editorial) notFound();
-  const archived = editorial.status === "archived";
+  const draft = editorial.status === "draft";
+  // The visitor's language where a translation exists, else the original.
+  const { text, isFallback } = resolveEditorialText(editorial, locale);
 
   const t = await getTranslations("editorial");
   const tSite = await getTranslations("site");
@@ -90,13 +96,13 @@ export default async function EditorialPage({
           data={[
             breadcrumbJsonLd(locale, [
               { name: tArchive("title"), path: "/archive" },
-              { name: editorial.title },
+              { name: text.title },
             ]),
             articleJsonLd({
               locale,
               path: `/archive/${subject}/${slug}`,
-              headline: editorial.title,
-              description: editorial.hook,
+              headline: text.title,
+              description: text.hook,
               author: editorial.author,
               publishedAt: editorial.publishedAt,
               keywords: editorial.tags,
@@ -110,22 +116,22 @@ export default async function EditorialPage({
         ← {t("backToArchive")}
       </Link>
 
-      {locale === "id" && (
+      {isFallback && (
         <TranslationNotice
           message={tSite("translationNotice", {
-            requestedLanguage: tSite("languageNames.id"),
-            displayedLanguage: tSite("languageNames.en"),
+            requestedLanguage: tSite(`languageNames.${locale}`),
+            displayedLanguage: tSite(`languageNames.${text.locale}`),
           })}
         />
       )}
 
-      {archived && (
+      {draft && (
         <p
           role="note"
           className="mt-4 rounded-md border border-border-strong bg-muted px-3 py-2 text-sm text-foreground"
         >
-          <span className="label-code mr-2">{t("archivedBadge")}</span>
-          {t("archivedNotice")}
+          <span className="label-code mr-2">{t("draftBadge")}</span>
+          {t("draftNotice")}
         </p>
       )}
 
@@ -160,16 +166,16 @@ export default async function EditorialPage({
       </p>
 
       <h1 className="mt-3 text-3xl font-bold text-foreground">
-        {editorial.title}
+        {text.title}
       </h1>
-      <p className="mt-2 text-lg text-foreground/75">{editorial.hook}</p>
+      <p className="mt-2 text-lg text-foreground/75">{text.hook}</p>
       <p className="mt-1 text-xs text-muted-foreground">
         {t("byAuthor", { author: editorial.author })}
       </p>
 
       {/* Progress is only recorded for published pages (the study-session
-          action validates against the public list), so archived pages omit it. */}
-      {!archived && (
+          action validates against the public list), so draft pages omit it. */}
+      {!draft && (
         <UnderstoodButton kind="editorial" subject={editorial.subject} slug={editorial.slug} />
       )}
 
@@ -178,7 +184,7 @@ export default async function EditorialPage({
             the tag" visualization fallback, based on the actual rendered
             body — see components/editorial-mdx.tsx (F-05). */}
         <EditorialMDX
-          code={editorial.body}
+          code={text.body}
           vizConfig={editorial.vizConfig}
         />
       </div>

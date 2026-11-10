@@ -25,6 +25,7 @@ const STATIC_PATHS = [
   ...SUBJECTS.map((subject) => `/syllabus/${subject}`),
   "/materials",
   "/docs",
+  "/updates",
   "/about",
   "/privacy",
   "/terms",

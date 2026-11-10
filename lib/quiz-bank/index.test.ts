@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getTopicCount } from "../syllabus";
+import { getPlannerTopicCount } from "../syllabus";
 import { QUESTION_DIFFICULTIES } from "../planner-vocab";
 import { getBankCoverage, QUIZ_BANK, validateQuizBank } from ".";
 import type { BankQuestion } from "./types";
@@ -58,7 +58,7 @@ describe("the shipped quiz bank", () => {
 
   it("covers every physics topic at every difficulty", () => {
     const physics = getBankCoverage().filter((row) => row.subject === "physics");
-    expect(physics).toHaveLength(getTopicCount("physics"));
+    expect(physics).toHaveLength(getPlannerTopicCount("physics"));
     for (const row of physics) {
       for (const d of QUESTION_DIFFICULTIES) {
         expect(row.counts[d], `${row.topicId} / ${d}`).toBeGreaterThanOrEqual(1);
@@ -69,12 +69,18 @@ describe("the shipped quiz bank", () => {
   it("does not hide topics without questions from the coverage report", () => {
     const all = getBankCoverage();
     const total = (["informatics", "physics", "astronomy"] as const).reduce(
-      (n, s) => n + getTopicCount(s),
+      (n, s) => n + getPlannerTopicCount(s),
       0,
     );
     expect(all).toHaveLength(total);
     const empty = all.find((r) => r.subject === "informatics" && r.topicId === "language-syntax");
     expect(empty?.counts).toEqual({ basic: 0, intermediate: 0, advanced: 0 });
+  });
+
+  it("the coverage report lists only OSN-based topics, never an IPhO-only one", () => {
+    const rows = getBankCoverage().filter((row) => row.subject === "physics");
+    expect(rows.some((row) => row.topicId === "relativity")).toBe(false);
+    expect(rows.some((row) => row.topicId === "kinematics")).toBe(true);
   });
 
   it("keeps the correct answer from always sitting in the same position", () => {

@@ -3,9 +3,16 @@ import { describe, expect, it } from "vitest";
 import { SUBJECTS } from "../subjects";
 import {
   SYLLABI,
+  describeTopicCoverage,
   getAllSyllabi,
+  getPlannerSyllabus,
+  getPlannerTopicCount,
+  getPlannerTopicLocation,
+  getPrimarySource,
   getSyllabus,
   getTopicCount,
+  sectionSourceIds,
+  topicLanguage,
   getSubtopicCount,
   getTopicLocation,
   localize,
@@ -118,19 +125,74 @@ describe("subtopics", () => {
 });
 
 describe("syllabus sources", () => {
-  it.each(SUBJECTS)("%s: a source URL is https and a checked date is a real ISO date", (subject) => {
-    const { source } = SYLLABI[subject];
-    if (source.url) expect(source.url).toMatch(/^https:\/\//);
-    if (source.accessed) {
-      expect(source.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(Number.isNaN(Date.parse(source.accessed))).toBe(false);
+  it.each(SUBJECTS)("%s: source URLs are https and checked dates are real ISO dates", (subject) => {
+    for (const source of SYLLABI[subject].sources) {
+      if (source.url) expect(source.url, source.id).toMatch(/^https:\/\//);
+      if (source.accessed) {
+        expect(source.accessed, source.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(Number.isNaN(Date.parse(source.accessed)), source.id).toBe(false);
+      }
     }
   });
 
+  it.each(SUBJECTS)("%s: source ids are unique, kebab-case and described in both locales", (subject) => {
+    const ids = SYLLABI[subject].sources.map((source) => source.id);
+    expect(ids.length).toBeGreaterThan(0);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const source of SYLLABI[subject].sources) {
+      expect(source.id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(source.short.trim(), source.id).not.toBe("");
+      expect(source.label.trim(), source.id).not.toBe("");
+      expect(source.issuer.trim(), source.id).not.toBe("");
+      if (source.note) {
+        expect(source.note.id.trim(), source.id).not.toBe("");
+        expect(source.note.en.trim(), source.id).not.toBe("");
+      }
+    }
+  });
+
+  it.each(SUBJECTS)("%s: every topic names at least one registered source", (subject) => {
+    const registered = new Set(SYLLABI[subject].sources.map((source) => source.id));
+    for (const section of SYLLABI[subject].sections) {
+      for (const entry of section.topics) {
+        expect(entry.in.length, entry.id).toBeGreaterThan(0);
+        expect(new Set(entry.in).size, entry.id).toBe(entry.in.length);
+        for (const id of entry.in) expect(registered.has(id), `${entry.id} -> ${id}`).toBe(true);
+        // A reference only makes sense for a source the topic is listed in.
+        for (const [id, ref] of Object.entries(entry.refs ?? {})) {
+          expect(entry.in, `${entry.id} ref ${id}`).toContain(id);
+          expect(ref.trim(), `${entry.id} ref ${id}`).not.toBe("");
+        }
+      }
+      for (const id of section.in ?? []) expect(registered.has(id), `${section.id} -> ${id}`).toBe(true);
+      if (section.part === "practical") expect((section.in ?? []).length, section.id).toBeGreaterThan(0);
+    }
+  });
+
+  it.each(SUBJECTS)("%s: a source marked unchecked carries no checked date, and a compared one does", (subject) => {
+    for (const source of SYLLABI[subject].sources) {
+      if (source.verification === "compared") expect(source.accessed, source.id).toBeDefined();
+      else expect(source.accessed, source.id).toBeUndefined();
+    }
+  });
+
+  it("the primary source is the one the planner is built on", () => {
+    expect(getPrimarySource(SYLLABI.physics).id).toBe("osn");
+    expect(getPrimarySource(SYLLABI.informatics).id).toBe("osn");
+    expect(getPrimarySource(SYLLABI.astronomy).id).toBe("ioaa");
+  });
+
+  it("topic language follows the topic's first source", () => {
+    const physics = SYLLABI.physics;
+    expect(topicLanguage(physics, getTopicLocation("physics", "kinematics")!.topic)).toBe("id");
+    expect(topicLanguage(physics, getTopicLocation("physics", "relativity")!.topic)).toBe("en");
+    expect(topicLanguage(SYLLABI.astronomy, getTopicLocation("astronomy", "celestial-mechanics")!.topic)).toBe("en");
+  });
+
   it("astronomy follows the senior IOAA syllabus, not the Junior one", () => {
-    const { source } = SYLLABI.astronomy;
-    expect(source.label).not.toMatch(/junior/i);
-    expect(source.url ?? "").not.toMatch(/junior/i);
+    const [source] = SYLLABI.astronomy.sources;
+    expect(source!.label).not.toMatch(/junior/i);
+    expect(source!.url ?? "").not.toMatch(/junior/i);
     // Topics that exist only in the senior syllabus.
     for (const id of ["nuclear-physics", "interstellar-medium", "accretion-processes"]) {
       expect(getTopicLocation("astronomy", id), id).toBeDefined();
@@ -144,5 +206,77 @@ describe("syllabus sources", () => {
   it("astronomy has the senior syllabus's practical part", () => {
     const practical = SYLLABI.astronomy.sections.filter((s) => s.part === "practical");
     expect(practical.map((s) => s.id)).toEqual(["practical-observations", "practical-data-analysis"]);
+  });
+});
+
+// The ids the planner, quiz bank, editorials and materials already point at.
+// Adding sources must never rename or drop one. Add to this list, never edit it.
+const FROZEN_OSN_TOPIC_IDS: Record<string, string[]> = {
+  physics: [
+    "vectors", "kinematics", "statics", "dynamics", "energy-momentum", "rotation-rigid-body",
+    "gravitation", "fluids", "oscillations", "waves", "electrostatics", "magnetostatics",
+    "circuits", "electrodynamics", "heat-temperature", "entropy", "laws-of-thermodynamics",
+  ],
+};
+
+describe("syllabus membership", () => {
+  it("existing physics topic ids are unchanged and still in the OSN source", () => {
+    for (const id of FROZEN_OSN_TOPIC_IDS.physics!) {
+      const located = getTopicLocation("physics", id);
+      expect(located, id).toBeDefined();
+      expect(located!.topic.in, id).toContain("osn");
+    }
+  });
+
+  it("IPhO-only physics topics are not OSN topics and cannot reach the planner", () => {
+    for (const id of ["relativity", "interference-diffraction", "calculus", "statistical-physics"]) {
+      const located = getTopicLocation("physics", id);
+      expect(located!.topic.in, id).toEqual(["ipho"]);
+      expect(getPlannerTopicLocation("physics", id), id).toBeUndefined();
+    }
+    const planner = getPlannerSyllabus("physics")!;
+    const ids = planner.sections.flatMap((s) => s.topics.map((t) => t.id));
+    expect(ids).toHaveLength(FROZEN_OSN_TOPIC_IDS.physics!.length);
+    expect(ids).not.toContain("relativity");
+    expect(getPlannerTopicCount("physics")).toBe(ids.length);
+    // Sections with nothing left are dropped from the planner view.
+    expect(planner.sections.some((s) => s.id === "optics")).toBe(false);
+  });
+
+  it("the planner view of informatics and astronomy is the whole syllabus", () => {
+    for (const subject of ["informatics", "astronomy"] as const) {
+      expect(getPlannerTopicCount(subject)).toBe(getTopicCount(subject));
+    }
+  });
+
+  it("describeTopicCoverage reports the sources that list a topic", () => {
+    const physics = SYLLABI.physics;
+    const kinematics = describeTopicCoverage(physics, getTopicLocation("physics", "kinematics")!.topic);
+    expect(kinematics.listedIn.map((s) => s.id)).toEqual(["osn", "ipho"]);
+    expect(kinematics.inPrimary).toBe(true);
+    const relativity = describeTopicCoverage(physics, getTopicLocation("physics", "relativity")!.topic);
+    expect(relativity.listedIn.map((s) => s.id)).toEqual(["ipho"]);
+    expect(relativity.inPrimary).toBe(false);
+  });
+
+  it("IOI is named only for informatics topics the IOI text lists, with a code", () => {
+    for (const section of SYLLABI.informatics.sections) {
+      for (const entry of section.topics) {
+        if (entry.in.includes("ioi")) expect(entry.refs?.ioi, entry.id).toBeDefined();
+      }
+    }
+    // Left as OSN-only on purpose: the IOI text does not name them as included.
+    for (const id of ["number-theory", "probability", "simple-sorts", "weighted-graphs", "modular-exponentiation"]) {
+      expect(getTopicLocation("informatics", id)!.topic.in, id).toEqual(["osn"]);
+    }
+  });
+
+  it("sectionSourceIds is computed from topics, or from the section for a practical one", () => {
+    const optics = SYLLABI.physics.sections.find((s) => s.id === "optics")!;
+    expect(sectionSourceIds(SYLLABI.physics, optics)).toEqual(["ipho"]);
+    const mechanics = SYLLABI.physics.sections.find((s) => s.id === "mechanics")!;
+    expect(sectionSourceIds(SYLLABI.physics, mechanics)).toEqual(["osn", "ipho"]);
+    const skills = SYLLABI.physics.sections.find((s) => s.id === "practical-experimental-skills")!;
+    expect(sectionSourceIds(SYLLABI.physics, skills)).toEqual(["ipho"]);
   });
 });

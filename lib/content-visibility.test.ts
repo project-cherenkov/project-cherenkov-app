@@ -17,35 +17,35 @@ import {
   getAllMaterials,
   getArchiveFacets,
   getEditorial,
-  isArchivedEditorial,
+  isDraftEditorial,
 } from "@/lib/content";
 import { isIndexableEditorial } from "@/lib/seo";
 
 const FIXTURE = ["informatics", "programmable-scene-fixture"] as const;
 
-describe("published / archived visibility", () => {
-  it("the programmable scene fixture is archived", () => {
-    expect(isArchivedEditorial(...FIXTURE)).toBe(true);
+describe("published / draft visibility", () => {
+  it("the programmable scene fixture is draft", () => {
+    expect(isDraftEditorial(...FIXTURE)).toBe(true);
   });
 
-  it("public helpers never return archived editorials", () => {
+  it("public helpers never return draft editorials", () => {
     expect(getAllEditorials().every((e) => e.status === "published")).toBe(true);
     expect(getEditorial(...FIXTURE)).toBeUndefined();
     expect(filterEditorials({}).some((e) => e.slug === FIXTURE[1])).toBe(false);
   });
 
-  it("includeArchived (editors only) returns them", () => {
-    expect(getAllEditorials({ includeArchived: true }).some((e) => e.slug === FIXTURE[1])).toBe(true);
-    expect(getEditorial(...FIXTURE, { includeArchived: true })?.status).toBe("archived");
-    expect(filterEditorials({}, { includeArchived: true }).length).toBeGreaterThan(
+  it("includeDrafts (editors only) returns them", () => {
+    expect(getAllEditorials({ includeDrafts: true }).some((e) => e.slug === FIXTURE[1])).toBe(true);
+    expect(getEditorial(...FIXTURE, { includeDrafts: true })?.status).toBe("draft");
+    expect(filterEditorials({}, { includeDrafts: true }).length).toBeGreaterThan(
       filterEditorials({}).length,
     );
   });
 
   it("archive facets follow the same visibility", () => {
-    const fixture = getEditorial(...FIXTURE, { includeArchived: true })!;
+    const fixture = getEditorial(...FIXTURE, { includeDrafts: true })!;
     const publicFacets = getArchiveFacets();
-    const editorFacets = getArchiveFacets({}, { includeArchived: true });
+    const editorFacets = getArchiveFacets({}, { includeDrafts: true });
     // The fixture's principle is its own; it only shows up for editors.
     expect(publicFacets.principles).not.toContain(fixture.principle);
     expect(editorFacets.principles).toContain(fixture.principle);
@@ -55,8 +55,8 @@ describe("published / archived visibility", () => {
     expect(getAllMaterials().every((m) => m.status === "published")).toBe(true);
   });
 
-  it("an archived editorial is never indexable, whatever its author", () => {
-    expect(isIndexableEditorial({ tags: [], author: "Renee", status: "archived" })).toBe(false);
+  it("a draft editorial is never indexable, whatever its author", () => {
+    expect(isIndexableEditorial({ tags: [], author: "Renee", status: "draft" })).toBe(false);
     expect(isIndexableEditorial({ tags: [], author: "Renee", status: "published" })).toBe(true);
   });
 

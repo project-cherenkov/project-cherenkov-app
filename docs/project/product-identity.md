@@ -45,7 +45,7 @@ There are two layers.
 - **Content layer.** English and universal. Editorials and materials are written in English and are not specific to one country's olympiad.
 - **Pathway layer.** Indonesia-first: the OSN syllabus, the OSN planner with its stage dates, and the Indonesian interface.
 
-Do not claim an international syllabus or planner until they are built. The plan is in [syllabus expansion](../product/syllabus-expansion.md).
+The syllabus pages draw on national and international sources (OSN, plus IPhO, IOI and IOAA) and label every topic with the syllabuses that list it; each page says where its content comes from and how far it was compared. The planner, quiz bank and mastery estimates are still OSN-only. Do not claim an international planner until one is built. See [syllabus expansion](../product/syllabus-expansion.md).
 
 ## Voice
 
@@ -74,7 +74,7 @@ Open: the domain name (see below), and whether the tagline gets an Indonesian gl
 ## Do not
 
 - Do not add subjects outside the boundary.
-- Do not claim an international syllabus, an international planner or editorial authorship credentials that the repository cannot support.
+- Do not claim an international planner, or editorial authorship credentials, that the repository cannot support. Claim an international syllabus source only as far as its provenance block says it was compared.
 - Do not use "CHE" as a public label.
 - Do not use the free `vercel.app` subdomain as the public face once a domain exists.
 - Do not buy or register a domain on the project's behalf without the owner. The recommendation is a `.org` or `.com` on "projectcherenkov", with an optional `.id` redirecting to it; avoid cheap novelty TLDs.

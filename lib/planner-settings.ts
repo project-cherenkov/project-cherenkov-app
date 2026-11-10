@@ -19,7 +19,7 @@ import {
   SELF_RATING_MIN,
 } from "./planner-vocab";
 import { isKnownSubject, type Subject } from "./subjects";
-import { getTopicCount, getTopicLocation } from "./syllabus";
+import { getPlannerTopicCount, getPlannerTopicLocation } from "./syllabus";
 
 // ---------------------------------------------------------------------------
 // Settings
@@ -149,7 +149,7 @@ export function validateSelfRatings(
 ): RatingsValidation {
   if (!Array.isArray(input)) return { ok: false, error: "Ratings must be a list." };
   if (input.length === 0) return { ok: false, error: "No ratings submitted." };
-  if (input.length > getTopicCount(subject)) {
+  if (input.length > getPlannerTopicCount(subject)) {
     return { ok: false, error: "More ratings than topics in this subject." };
   }
 
@@ -161,7 +161,7 @@ export function validateSelfRatings(
       unknown
     >;
     const id = item.syllabusTopicId;
-    if (typeof id !== "string" || !getTopicLocation(subject, id)) {
+    if (typeof id !== "string" || !getPlannerTopicLocation(subject, id)) {
       return { ok: false, error: `Unknown topic: ${String(id)}` };
     }
     if (seen.has(id)) return { ok: false, error: `Topic rated twice: ${id}` };

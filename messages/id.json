@@ -84,8 +84,8 @@
     "count": "{count, plural, other {# edisi}}"
   },
   "editorial": {
-    "archivedBadge": "Diarsipkan",
-    "archivedNotice": "Hanya editor yang dapat melihat edisi ini. Pengunjung akan melihat halaman 404.",
+    "draftBadge": "Draf",
+    "draftNotice": "Hanya editor yang dapat melihat edisi ini. Pengunjung akan melihat halaman 404.",
     "sections": {
       "hook": "Pembuka",
       "problem": "Soal",
@@ -227,7 +227,8 @@
     "contact": "Kontak",
     "docs": "Dokumentasi",
     "navLabel": "Informasi situs",
-    "opensInNewTab": "(terbuka di tab baru)"
+    "opensInNewTab": "(terbuka di tab baru)",
+    "updates": "Pembaruan"
   },
   "phase2": {
     "benefits": {
@@ -374,7 +375,6 @@
     },
     "source": "Sumber",
     "accessed": "Diakses {date}",
-    "translationNote": "Redaksi resminya dalam bahasa {language}. Terjemahan di sini tidak resmi, jadi periksa sumbernya jika ragu.",
     "stats": {
       "topics": "topik",
       "materials": "materi",
@@ -394,11 +394,41 @@
     "editorialsLabel": "Editorial:",
     "subtopicsLabel": "Subtopik",
     "subtopicsNote": "Subtopik ini adalah pemecahan topik di atas oleh Project Cherenkov sendiri. Silabus sumber tidak mencantumkannya.",
-    "subjectDescription": "Silabus {subject} OSN, topik demi topik (sumber: {source}). Lihat topik mana yang sudah punya materi atau editorial interaktif."
+    "subjectDescription": "Silabus {subject}, topik demi topik, dari {source}. Lihat topik mana yang sudah punya materi atau editorial interaktif.",
+    "provenance": {
+      "heading": "Dari mana ini berasal",
+      "intro": "Project Cherenkov menulis silabus ini sendiri dari sumber-sumber di bawah. Setiap topik diberi label silabus mana saja yang mencantumkannya.",
+      "issuedBy": "Diterbitkan oleh {issuer}",
+      "edition": "Edisi: {edition}",
+      "officialLanguage": "Bahasa resmi: {language}",
+      "unofficialGloss": "Nama dalam bahasa {language} adalah terjemahan tidak resmi buatan Project Cherenkov, jadi periksa sumbernya jika ragu.",
+      "lastCompared": "Terakhir dibandingkan {date}",
+      "notDated": "Belum ada tanggal perbandingan",
+      "openSource": "Buka sumber",
+      "nationalKind": "Silabus nasional",
+      "internationalKind": "Silabus internasional",
+      "ownWork": "Yang dibuat sendiri oleh Project Cherenkov: subtopik, terjemahan ke bahasa lainnya, dan pemasangan topik dengan sumber yang tidak menyatakannya sendiri. Penunjuk bagian seperti “IPhO §2.4.3” menyebut tempat di sumber tempat sebuah topik berasal."
+    },
+    "verification": {
+      "compared": "Sudah dibandingkan dengan dokumen primernya",
+      "secondary": "Hanya dikenal dari ringkasan sekunder",
+      "notCompared": "Belum dibandingkan"
+    },
+    "coverage": {
+      "legend": "Setiap label menyebut silabus mana saja yang mencantumkan topiknya. “Belum terkonfirmasi” berarti kami belum menemukan topik itu di sumber tersebut; bukan berarti topiknya dikecualikan.",
+      "listedIn": "{sources}",
+      "only": "Hanya {source}",
+      "notConfirmed": "Ada di silabus {sources}; belum terkonfirmasi di panduan {primary}",
+      "reference": "{source} {ref}"
+    },
+    "filter": {
+      "label": "Tampilkan topik dari",
+      "all": "Semua sumber"
+    }
   },
   "materials": {
-    "archivedBadge": "Diarsipkan",
-    "archivedNotice": "Hanya editor yang dapat melihat materi ini. Pengunjung akan melihat halaman 404.",
+    "draftBadge": "Draf",
+    "draftNotice": "Hanya editor yang dapat melihat materi ini. Pengunjung akan melihat halaman 404.",
     "eyebrow": "materials.md",
     "title": "Materi",
     "description": "Silabus yang diuraikan topik demi topik. Catatan rujukan tanpa nama penulis, disusun mengikuti silabus.",
@@ -1091,6 +1121,20 @@
     "terms": {
       "title": "Ketentuan Penggunaan",
       "description": "Aturan memakai Project Cherenkov: akun, penggunaan yang diperbolehkan, lisensi konten, dan fitur AI."
+    }
+  },
+  "updates": {
+    "eyebrow": "updates.md",
+    "title": "Pembaruan",
+    "description": "Perubahan pada silabus, konten, dan fitur yang akan membuat Anda bertindak berbeda jika mengetahuinya.",
+    "feed": "Berlangganan lewat RSS",
+    "empty": "Belum ada pembaruan.",
+    "types": {
+      "syllabus": "Silabus",
+      "content": "Konten",
+      "feature": "Fitur",
+      "fix": "Perbaikan",
+      "notice": "Pemberitahuan"
     }
   }
 }

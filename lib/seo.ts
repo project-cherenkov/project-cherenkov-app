@@ -284,13 +284,13 @@ export function articleJsonLd(input: {
 }
 
 /**
- * Archived editorials (visible to editors only), implementation fixtures and
+ * Draft editorials (visible to editors only), implementation fixtures and
  * unfinished stubs must not be offered to search engines or AI crawlers.
- * Archived ones are already left out of the sitemap and llms.txt because the
+ * Draft ones are already left out of the sitemap and llms.txt because the
  * public content helpers skip them; checking `status` here is the second
  * line of defence for any page that renders one for an editor.
  * content/editorials/informatics/programmable-scene-fixture.mdx is the
- * current example: archived, tagged "fixture", with a placeholder author.
+ * current example: draft, tagged "fixture", with a placeholder author.
  */
 export function isIndexableEditorial(editorial: {
   tags: readonly string[];
@@ -298,7 +298,7 @@ export function isIndexableEditorial(editorial: {
   status?: string;
 }): boolean {
   return (
-    editorial.status !== "archived" &&
+    editorial.status !== "draft" &&
     !editorial.tags.includes("fixture") &&
     !/^PLACEHOLDER\b/i.test(editorial.author.trim())
   );

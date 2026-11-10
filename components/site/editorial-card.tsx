@@ -30,11 +30,11 @@ export function EditorialCard({
         <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
           {subjectLabel[editorial.subject]}
         </span>
-        {/* Only ever rendered for editors: public lists never contain archived
+        {/* Only ever rendered for editors: public lists never contain draft
             editorials (lib/content.ts). */}
-        {editorial.status === "archived" && (
+        {editorial.status === "draft" && (
           <span className="label-code inline-block rounded border border-border-strong px-2 py-0.5 text-foreground">
-            {t("archivedBadge")}
+            {t("draftBadge")}
           </span>
         )}
       </div>

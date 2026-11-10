@@ -5,16 +5,15 @@ import type { SubjectSyllabus } from "./syllabus";
 
 const syllabus = {
   subject: "informatics",
-  sourceLang: "en",
-  source: { label: "t" },
+  sources: [],
   sections: [
     {
       id: "algo",
       name: { en: "Algorithms", id: "Algoritma" },
       part: "theory",
       topics: [
-        { id: "binary-search", name: { en: "Binary search", id: "Pencarian biner" } },
-        { id: "sorting", name: { en: "Sorting", id: "Pengurutan" }, detail: "merge sort, quicksort" },
+        { id: "binary-search", in: [], name: { en: "Binary search", id: "Pencarian biner" } },
+        { id: "sorting", in: [], name: { en: "Sorting", id: "Pengurutan" }, detail: "merge sort, quicksort" },
       ],
     },
   ],

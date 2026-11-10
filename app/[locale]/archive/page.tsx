@@ -42,13 +42,13 @@ export default async function ArchivePage({
   setRequestLocale(locale);
   const params = await searchParams;
   const t = await getTranslations("archive");
-  // Editors also see archived editorials here (marked with an "Archived"
+  // Editors also see draft editorials here (marked with a "Draft"
   // badge on the card); everyone else sees published ones only. This page
   // already renders per request because of searchParams, so reading the
   // session costs nothing extra.
-  const includeArchived = await isEditorRequest();
-  const facets = getArchiveFacets(params, { includeArchived });
-  const results = filterEditorials(params, { includeArchived });
+  const includeDrafts = await isEditorRequest();
+  const facets = getArchiveFacets(params, { includeDrafts });
+  const results = filterEditorials(params, { includeDrafts });
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">

@@ -1,5 +1,5 @@
 import type { Subject } from "../subjects";
-import { getAllSyllabi, getTopicLocation } from "../syllabus";
+import { getPlannerSyllabi, getPlannerTopicLocation } from "../syllabus";
 import { QUESTION_DIFFICULTIES, type QuestionDifficulty } from "../planner-vocab";
 import { astronomyQuestions } from "./astronomy";
 import { informaticsQuestions } from "./informatics";
@@ -32,7 +32,7 @@ export function validateQuizBank(bank: BankQuestion[]): string[] {
       problems.push(`${where}: key does not match its subject/topic/difficulty (expected prefix "${expectedKey}")`);
     }
 
-    if (!getTopicLocation(q.subject, q.topicId)) {
+    if (!getPlannerTopicLocation(q.subject, q.topicId)) {
       problems.push(`${where}: no syllabus topic "${q.topicId}" in ${q.subject}`);
     }
     if (!(QUESTION_DIFFICULTIES as readonly string[]).includes(q.difficulty)) {
@@ -67,7 +67,7 @@ export interface TopicCoverage {
 // visible, not absent.
 export function getBankCoverage(bank: BankQuestion[] = QUIZ_BANK): TopicCoverage[] {
   const rows: TopicCoverage[] = [];
-  for (const syllabus of getAllSyllabi()) {
+  for (const syllabus of getPlannerSyllabi()) {
     for (const section of syllabus.sections) {
       for (const topic of section.topics) {
         const counts = { basic: 0, intermediate: 0, advanced: 0 };

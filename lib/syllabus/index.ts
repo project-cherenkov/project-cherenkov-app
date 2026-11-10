@@ -10,15 +10,18 @@ import type {
   SubjectSyllabus,
   SyllabusLocale,
   SyllabusSection,
+  SyllabusSource,
   SyllabusSubtopic,
   SyllabusTopic,
 } from "./types";
 
 export type {
   LocalizedText,
+  SourceVerification,
   SubjectSyllabus,
   SyllabusLocale,
   SyllabusSection,
+  SyllabusSource,
   SyllabusSubtopic,
   SyllabusTopic,
 } from "./types";
@@ -122,4 +125,113 @@ export function topicSelectOptions(
       })),
     ]),
   );
+}
+
+// --- Sources -----------------------------------------------------------------
+
+export function getSource(
+  syllabus: SubjectSyllabus,
+  sourceId: string,
+): SyllabusSource | undefined {
+  return syllabus.sources.find((entry) => entry.id === sourceId);
+}
+
+// The source the planner, quiz bank and mastery estimates are built on.
+export function getPrimarySource(syllabus: SubjectSyllabus): SyllabusSource {
+  return syllabus.sources[0]!;
+}
+
+// The language of a topic's OFFICIAL wording: that of its first source. The
+// other language in `name` is an unofficial gloss.
+export function topicLanguage(
+  syllabus: SubjectSyllabus,
+  topic: SyllabusTopic,
+): SyllabusLocale {
+  const first = topic.in[0] ? getSource(syllabus, topic.in[0]) : undefined;
+  return first?.language ?? getPrimarySource(syllabus).language;
+}
+
+// Sources that list a section: its topics' sources, or its own for a practical
+// section. In registry order so the output is stable.
+export function sectionSourceIds(
+  syllabus: SubjectSyllabus,
+  entry: SyllabusSection,
+): string[] {
+  const found = new Set<string>(entry.in ?? []);
+  for (const topic of entry.topics) for (const id of topic.in) found.add(id);
+  return syllabus.sources.map((source) => source.id).filter((id) => found.has(id));
+}
+
+// What a badge needs to say about one topic. Generated from membership alone,
+// so adding a source to the registry needs no change here.
+export interface TopicSourceCoverage {
+  // Sources that list the topic, in registry order.
+  listedIn: SyllabusSource[];
+  // True when the topic is in the primary source.
+  inPrimary: boolean;
+  // True when the subject has only one source, so there is nothing to compare.
+  singleSource: boolean;
+}
+
+export function describeTopicCoverage(
+  syllabus: SubjectSyllabus,
+  topic: SyllabusTopic,
+): TopicSourceCoverage {
+  const listedIn = syllabus.sources.filter((source) => topic.in.includes(source.id));
+  return {
+    listedIn,
+    inPrimary: topic.in.includes(getPrimarySource(syllabus).id),
+    singleSource: syllabus.sources.length < 2,
+  };
+}
+
+// --- Planner view -----------------------------------------------------------
+//
+// The planner, quiz bank, mastery estimates and study timer know only the
+// PRIMARY source's topics. Anything that feeds them must use these instead of
+// SYLLABI / getSyllabus / getAllSyllabi, which also list topics that come only
+// from another source (for example IPhO-only physics topics). Subtopics follow
+// their parent topic.
+
+export function isPlannerTopic(syllabus: SubjectSyllabus, topic: SyllabusTopic): boolean {
+  return topic.in.includes(getPrimarySource(syllabus).id);
+}
+
+export function toPlannerSyllabus(syllabus: SubjectSyllabus): SubjectSyllabus {
+  return {
+    ...syllabus,
+    sections: syllabus.sections
+      .map((entry) => ({
+        ...entry,
+        topics: entry.topics.filter((topic) => isPlannerTopic(syllabus, topic)),
+      }))
+      // Keep practical sections (they have no topics); drop theory sections
+      // that have nothing left.
+      .filter((entry) => entry.part === "practical" || entry.topics.length > 0),
+  };
+}
+
+export function getPlannerSyllabus(subject: string): SubjectSyllabus | undefined {
+  const syllabus = getSyllabus(subject);
+  return syllabus ? toPlannerSyllabus(syllabus) : undefined;
+}
+
+export function getPlannerSyllabi(): SubjectSyllabus[] {
+  return getAllSyllabi().map(toPlannerSyllabus);
+}
+
+export function getPlannerTopicLocation(
+  subject: string,
+  topicId: string,
+): LocatedTopic | undefined {
+  const located = getTopicLocation(subject, topicId);
+  const syllabus = getSyllabus(subject);
+  if (!located || !syllabus) return undefined;
+  return isPlannerTopic(syllabus, located.topic) ? located : undefined;
+}
+
+export function getPlannerTopicCount(subject: Subject): number {
+  return getPlannerSyllabi()
+    .find((entry) => entry.subject === subject)!
+    .sections.reduce((total, entry) => total + entry.topics.length, 0);
 }

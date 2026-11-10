@@ -55,8 +55,7 @@ export default async function SyllabusIndexPage({
                 {t(`subjects.${syllabus.subject}`)}
               </h2>
               <p className="mt-1 text-sm text-foreground/75">
-                {syllabus.source.label}
-                {syllabus.source.edition ? ` · ${syllabus.source.edition}` : ""}
+                {syllabus.sources.map((source) => source.short).join(" · ")}
               </p>
               <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 font-mono text-xs">
                 <Stat label={t("stats.topics")} value={coverage.topicCount} />

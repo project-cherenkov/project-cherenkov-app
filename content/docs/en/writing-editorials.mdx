@@ -28,7 +28,7 @@ Editorials and materials are plain MDX files committed to the repository. Conten
 | `vizConfig` | Which visualization engine to use, and its configuration. |
 | `publishedAt` | An ISO date, 2020 or later. Earlier dates are rejected as placeholder data. |
 | `updatedAt` | Optional ISO date for the last editorial or visualization update. Falls back to `publishedAt` when omitted. |
-| `status` | `published` (the default) or `archived`. Archived editorials are visible to editors only and hidden from everyone else. |
+| `status` | `published` (the default) or `draft`. Draft editorials are visible to editors only and hidden from everyone else. |
 | `author` | Who wrote it. |
 | `syllabusTopic` | Optional. A topic id, or a subtopic id, from the syllabus for the same subject. |
 | `practiceLinks` | Optional. A list of `{ title, url, checkedOn }` for practice problems on other sites (for example TLX). `url` must be `https://`. See below. |
@@ -98,6 +98,10 @@ A material is shorter and unsigned. It has a `title`, `subject`, `topic` (a syll
 ## Checking your work
 
 Run `pnpm generate` to validate frontmatter and `pnpm test` to check that every material and editorial points at a real syllabus topic. Never rename a syllabus topic's or subtopic's `id`. Change its `name` instead.
+
+## Languages
+
+An editorial or material is written in one language, set by the optional `language` field (`en` by default). To translate it, add a file next to it named `<slug>.id.mdx` (or `.en.mdx`) holding only the translated `title`, `hook` (`summary` for a material) and body. Readers in that language get the translation; everyone else sees the original with a notice. You never switch the notice off by hand: it appears only while the translation is missing.
 
 ## Editing in the browser
 

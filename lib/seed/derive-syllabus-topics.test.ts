@@ -7,8 +7,7 @@ import { deriveSyllabusTopics } from "./derive-syllabus-topics";
 
 const TINY: SubjectSyllabus = {
   subject: "physics",
-  sourceLang: "id",
-  source: { label: "test" },
+  sources: [],
   sections: [
     section("a", "Bagian A", "Section A", [
       topic("a1", "A satu", "A one"),

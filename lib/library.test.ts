@@ -7,18 +7,19 @@ const name = (en: string) => ({ id: en, en });
 
 const syllabus: SubjectSyllabus = {
   subject: "informatics",
-  sourceLang: "en",
-  source: { label: "fixture" },
+  sources: [
+    { id: "fixture", kind: "national", short: "F", label: "fixture", issuer: "fixture", language: "en", verification: "not-compared" },
+  ],
   sections: [
     {
       id: "s1", part: "theory", name: name("S1"),
       topics: [
-        { id: "a", name: name("A") },
-        { id: "b", name: name("B") },
-        { id: "c", name: name("C") },
+        { id: "a", name: name("A"), in: ["fixture"] },
+        { id: "b", name: name("B"), in: ["fixture"] },
+        { id: "c", name: name("C"), in: ["fixture"] },
       ],
     },
-    { id: "s2", part: "theory", name: name("S2"), topics: [{ id: "d", name: name("D") }] },
+    { id: "s2", part: "theory", name: name("S2"), in: ["fixture"], topics: [{ id: "d", name: name("D"), in: ["fixture"] }] },
     { id: "p1", part: "practical", name: name("P1"), topics: [], note: "x" },
   ],
 };
@@ -91,9 +92,9 @@ describe("subtopics", () => {
       {
         id: "s1", part: "theory", name: name("S1"),
         topics: [
-          { id: "a", name: name("A") },
-          { id: "b", name: name("B"), subtopics: [{ id: "b1", name: name("B1") }, { id: "b2", name: name("B2") }] },
-          { id: "c", name: name("C") },
+          { id: "a", name: name("A"), in: ["fixture"] },
+          { id: "b", name: name("B"), in: ["fixture"], subtopics: [{ id: "b1", name: name("B1") }, { id: "b2", name: name("B2") }] },
+          { id: "c", name: name("C"), in: ["fixture"] },
         ],
       },
     ],

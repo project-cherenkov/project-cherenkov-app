@@ -84,8 +84,8 @@
     "count": "{count, plural, =0 {No editorials} one {# editorial} other {# editorials}}"
   },
   "editorial": {
-    "archivedBadge": "Archived",
-    "archivedNotice": "Only editors can see this editorial. Visitors get a 404.",
+    "draftBadge": "Draft",
+    "draftNotice": "Only editors can see this editorial. Visitors get a 404.",
     "sections": {
       "hook": "The hook",
       "problem": "The problem",
@@ -227,7 +227,8 @@
     "contact": "Contact",
     "docs": "Docs",
     "navLabel": "Site information",
-    "opensInNewTab": "(opens in a new tab)"
+    "opensInNewTab": "(opens in a new tab)",
+    "updates": "Updates"
   },
   "phase2": {
     "benefits": {
@@ -374,7 +375,6 @@
     },
     "source": "Source",
     "accessed": "Accessed {date}",
-    "translationNote": "The official wording is in {language}. Translations here are unofficial, so check the source if in doubt.",
     "stats": {
       "topics": "topics",
       "materials": "materials",
@@ -394,11 +394,41 @@
     "editorialsLabel": "Editorials:",
     "subtopicsLabel": "Subtopics",
     "subtopicsNote": "These subtopics are Project Cherenkov's own breakdown of the topic above. The source syllabus does not list them.",
-    "subjectDescription": "The {subject} syllabus for the Indonesian OSN, topic by topic (source: {source}). See which topics already have a material or an interactive editorial."
+    "subjectDescription": "The {subject} syllabus, topic by topic, from {source}. See which topics already have a material or an interactive editorial.",
+    "provenance": {
+      "heading": "Where this comes from",
+      "intro": "Project Cherenkov writes this syllabus itself, from the sources below. Each topic is labelled with the syllabuses that list it.",
+      "issuedBy": "Issued by {issuer}",
+      "edition": "Edition: {edition}",
+      "officialLanguage": "Official language: {language}",
+      "unofficialGloss": "Names in {language} are unofficial glosses written by Project Cherenkov, so check the source if in doubt.",
+      "lastCompared": "Last compared {date}",
+      "notDated": "No comparison date recorded",
+      "openSource": "Open the source",
+      "nationalKind": "National syllabus",
+      "internationalKind": "International syllabus",
+      "ownWork": "What is Project Cherenkov’s own: the subtopics, the translations into the other language, and the pairing of a topic with a source that does not state it itself. Section pointers such as “IPhO §2.4.3” name the place in the source where a topic comes from."
+    },
+    "verification": {
+      "compared": "Compared with the primary document",
+      "secondary": "Known from secondary summaries only",
+      "notCompared": "Not yet compared"
+    },
+    "coverage": {
+      "legend": "Each label says which syllabuses list the topic. “Not confirmed” means we have not found the topic in that source; it does not mean the topic is excluded.",
+      "listedIn": "{sources}",
+      "only": "{source} only",
+      "notConfirmed": "In the {sources} syllabus; not confirmed in the {primary} guide",
+      "reference": "{source} {ref}"
+    },
+    "filter": {
+      "label": "Show topics from",
+      "all": "All sources"
+    }
   },
   "materials": {
-    "archivedBadge": "Archived",
-    "archivedNotice": "Only editors can see this material. Visitors get a 404.",
+    "draftBadge": "Draft",
+    "draftNotice": "Only editors can see this material. Visitors get a 404.",
     "eyebrow": "materials.md",
     "title": "Materials",
     "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",
@@ -1091,6 +1121,20 @@
     "terms": {
       "title": "Terms of Use",
       "description": "The rules for using Project Cherenkov: accounts, acceptable use, content licences and AI features."
+    }
+  },
+  "updates": {
+    "eyebrow": "updates.md",
+    "title": "Updates",
+    "description": "Changes to the syllabus, content and features that you would act on differently for knowing.",
+    "feed": "Subscribe with RSS",
+    "empty": "No updates yet.",
+    "types": {
+      "syllabus": "Syllabus",
+      "content": "Content",
+      "feature": "Feature",
+      "fix": "Fix",
+      "notice": "Notice"
     }
   }
 }

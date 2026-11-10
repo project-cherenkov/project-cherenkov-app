@@ -1,6 +1,6 @@
 # Syllabus expansion: national and international sources
 
-> Written 2026-11-08. Status: plan only. Nothing here is built, and no code in `lib/syllabus` has changed. The goal is decided; the model and the wording of the labels are proposed and need the owner's confirmation.
+> Written 2026-11-08. **Status (2026-11-10): built.** The model below shipped as a source registry plus per-topic `in` and `refs` (see the README, section VI), with the label wording generated from membership. The planner, quiz bank and mastery stay OSN-only through `getPlannerSyllabus`. Still open: comparing the 2026 OSN physics list with the PDF (so physics OSN `accessed` stays unset), confirming the official IPhO copy, and checking for an IOI 2026 syllabus version. The text below is the original plan.
 
 Related: [syllabus sources](syllabus-sources.md), [product identity](../project/product-identity.md).
 

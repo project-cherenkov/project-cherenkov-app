@@ -11,6 +11,18 @@ was checked. All "accessed" dates are 24 October 2026.
 | Astronomy | IOAA Syllabus (senior) | Yes, section by section | Matches (was Junior IOAA before) |
 | Physics | Ministry OSN guide, syllabus appendix | **No** — PDF host blocks automated access | Unverified for 2026 |
 
+## Update, 2026-11-10
+
+Each subject now has a source registry in code (`lib/syllabus/data/*.ts`), shown on the syllabus pages.
+
+| Subject | Sources (first = primary) | Status |
+| --- | --- | --- |
+| Physics | OSN guide (2026 list, `accessed` unset: **secondary** only); IPhO syllabus 2014/2015 (compared 2026-11-10 on the host copy `ipho2024.ir`; official copy not opened) | 17 OSN topics, 5 of the IPhO headings paired by owner judgement at heading level, 16 IPhO-only topics added |
+| Informatics | IA TOKI list (compared 2026-10-24); IOI syllabus, version used for IOI 2025 (compared 2026-11-10) | 53 topics also in IOI with the IOI's own code; `number-theory`, `probability`, `simple-sorts`, `weighted-graphs` and `modular-exponentiation` left OSN-only because the IOI text does not name them as included |
+| Astronomy | IOAA syllabus (compared 2026-10-24); OSN 2025 guide (says astronomy follows IOAA; it lists no topics) | every topic lists both, with the guide's note shown |
+
+Still to do by hand: compare the 2026 OSN guide's physics and informatics appendix with the data; open the official IPhO page; check for an IOI 2026 version; redo a topic-by-topic IOAA comparison if a current date is wanted. The IOI's six categories (included, outside focus, excluded, …) are not modelled.
+
 ## What is and isn't confirmed
 
 - **Informatics.** The IA TOKI page says it follows the IOI syllabus "with

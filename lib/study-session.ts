@@ -15,7 +15,7 @@
 //    from logging the same hour twice.
 // Study minutes are never fed into the mastery estimate.
 import { isKnownSubject, type Subject } from "./subjects";
-import { getTopicLocation } from "./syllabus";
+import { getPlannerTopicLocation } from "./syllabus";
 
 export const SESSION_LIMITS = {
   minSeconds: 60,
@@ -90,7 +90,7 @@ export function validateSession(
     }
     subject = input.subject;
     if (input.syllabusTopicId) {
-      if (!getTopicLocation(subject, input.syllabusTopicId)) {
+      if (!getPlannerTopicLocation(subject, input.syllabusTopicId)) {
         return { ok: false, reason: "invalid_topic" };
       }
       syllabusTopicId = input.syllabusTopicId;

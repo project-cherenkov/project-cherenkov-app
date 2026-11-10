@@ -1,3 +1,4 @@
+import { editorialTranslations, materialTranslations, updates, editorials as allEditorials, materials as allMaterials } from "./.velite";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
@@ -22,7 +23,7 @@ function readAll(kind: "materials" | "editorials") {
   for (const subject of SUBJECTS) {
     let names: string[] = [];
     try {
-      names = readdirSync(join(root, "content", kind, subject)).filter((f) => f.endsWith(".mdx"));
+      names = readdirSync(join(root, "content", kind, subject)).filter((f) => f.endsWith(".mdx") && !/\.(en|id)\.mdx$/.test(f));
     } catch {
       continue; // no content for this subject yet
     }
@@ -210,5 +211,40 @@ describe("docs integrity", () => {
         }
       }
     }
+  });
+});
+
+describe("translations and updates", () => {
+  it("every editorial and material translation has an original with the same subject and slug", () => {
+    for (const t of editorialTranslations) {
+      expect(
+        allEditorials.some((e) => e.subject === t.subject && e.slug === t.slug && e.language !== t.locale),
+        `editorial translation ${t.subject}/${t.slug}.${t.locale}`,
+      ).toBe(true);
+    }
+    for (const t of materialTranslations) {
+      expect(
+        allMaterials.some((m) => m.subject === t.subject && m.slug === t.slug && m.language !== t.locale),
+        `material translation ${t.subject}/${t.slug}.${t.locale}`,
+      ).toBe(true);
+    }
+  });
+
+  it("every update has exactly one original with a date and a type, and no orphan translation", () => {
+    const slugs = new Set(updates.map((u) => u.slug));
+    for (const slug of slugs) {
+      const versions = updates.filter((u) => u.slug === slug);
+      const originals = versions.filter((u) => u.isOriginal);
+      expect(originals, slug).toHaveLength(1);
+      expect(originals[0]!.date, slug).toBeDefined();
+      expect(originals[0]!.type, slug).toBeDefined();
+      const locales = versions.map((u) => u.locale);
+      expect(new Set(locales).size, `${slug}: one version per language`).toBe(locales.length);
+    }
+  });
+
+  it("no content uses the retired status \"archived\"", () => {
+    for (const e of allEditorials) expect(e.status).not.toBe("archived");
+    for (const m of allMaterials) expect(m.status).not.toBe("archived");
   });
 });

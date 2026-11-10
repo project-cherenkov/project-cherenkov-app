@@ -107,8 +107,7 @@ describe("minutesByTopic", () => {
 describe("buildCoverage", () => {
   const syllabus = {
     subject: "informatics",
-    sourceLang: "en",
-    source: { label: "test" },
+    sources: [],
     sections: [
       {
         id: "s1",

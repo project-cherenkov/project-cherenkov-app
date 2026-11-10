@@ -3,6 +3,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 import { extractToc, rehypeHeadingIds } from "./lib/docs-headings";
+import { CONTENT_LOCALES, DEFAULT_CONTENT_LANGUAGE, splitTranslationSuffix } from "./lib/content-language";
 import { isSafePracticeUrl } from "./lib/practice-links";
 
 // Mirrors the frontmatter schema from the build spec, Section 6.
@@ -37,12 +38,12 @@ export const vizEngines = [
 const subjects = ["informatics", "physics", "astronomy"] as const;
 
 // Visibility of an editorial or material. "published" is visible to every
-// visitor; "archived" is visible to editors only (lib/editor-access.ts) and is
+// visitor; "draft" is visible to editors only (lib/editor-access.ts) and is
 // left out of every public surface: the archive and materials lists, the home
 // page, the syllabus and planner, search, the sitemap and llms.txt. It
 // defaults to "published" so content written before this field existed (and
 // anything Keystatic saves without it) keeps its current behaviour.
-export const contentStatuses = ["published", "archived"] as const;
+export const contentStatuses = ["published", "draft"] as const;
 
 // F-04 guard: reject placeholder/test `publishedAt` values (the two junk
 // editorials removed in this same change had `publishedAt` values in the
@@ -51,14 +52,24 @@ export const contentStatuses = ["published", "archived"] as const;
 // editorial will clear it easily.
 export const MIN_PUBLISHED_YEAR = 2020;
 
+// Globs (relative to a collection's folder) that match translation files.
+const TRANSLATION_IGNORE = CONTENT_LOCALES.map((locale) => `**/*.${locale}.mdx`);
+const TRANSLATION_PATTERN = (folder: string) =>
+  TRANSLATION_IGNORE.map((glob) => `${folder}/${glob}`);
+
 const editorials = defineCollection({
   name: "Editorial",
-  pattern: "editorials/**/*.mdx",
+  // `<slug>.id.mdx` / `<slug>.en.mdx` are translations of `<slug>.mdx`: they
+  // live in their own collection below, so they are not editorials of their own.
+  pattern: ["editorials/**/*.mdx", ...TRANSLATION_IGNORE.map((glob) => `!editorials/${glob}`)],
   schema: s
     .object({
       title: s.string().max(120),
       subject: s.enum(subjects),
       status: s.enum(contentStatuses).default("published"),
+      // The language the original is written in. A translation file adds
+      // another; see lib/content-language.ts for why no flag marks a gap.
+      language: s.enum(CONTENT_LOCALES).default(DEFAULT_CONTENT_LANGUAGE),
       hook: s.string().max(280),
       tags: s.array(s.string()),
       principle: s.string(), // open string — see note above
@@ -121,12 +132,13 @@ const editorials = defineCollection({
 // lib/syllabus for the same `subject`; content-integrity.test.ts enforces it.
 const materials = defineCollection({
   name: "Material",
-  pattern: "materials/**/*.mdx",
+  pattern: ["materials/**/*.mdx", ...TRANSLATION_IGNORE.map((glob) => `!materials/${glob}`)],
   schema: s
     .object({
       title: s.string().max(120),
       subject: s.enum(subjects),
       status: s.enum(contentStatuses).default("published"),
+      language: s.enum(CONTENT_LOCALES).default(DEFAULT_CONTENT_LANGUAGE),
       topic: s.string(),
       summary: s.string().max(280),
       vizConfig: s
@@ -142,6 +154,80 @@ const materials = defineCollection({
     .transform((data) => {
       const slug = data.slug.split("/").pop() as string;
       return { ...data, slug, url: `/materials/${data.subject}/${slug}` };
+    }),
+});
+
+// Translations of an editorial or material. Only the reader-facing text is
+// translated; the subject, topic, visualization and everything else come from
+// the original, so a translation cannot drift from it. The file name decides
+// which original it belongs to and which language it is in.
+const editorialTranslations = defineCollection({
+  name: "EditorialTranslation",
+  pattern: TRANSLATION_PATTERN("editorials"),
+  schema: s
+    .object({
+      title: s.string().max(120),
+      hook: s.string().max(280),
+      body: s.mdx(),
+      slug: s.path(),
+    })
+    .transform((data) => {
+      const { slug, locale } = splitTranslationSuffix(data.slug.split("/").pop() as string);
+      return { ...data, slug, locale: locale ?? DEFAULT_CONTENT_LANGUAGE, subject: data.slug.split("/")[1] as string };
+    }),
+});
+
+const materialTranslations = defineCollection({
+  name: "MaterialTranslation",
+  pattern: TRANSLATION_PATTERN("materials"),
+  schema: s
+    .object({
+      title: s.string().max(120),
+      summary: s.string().max(280),
+      body: s.mdx(),
+      slug: s.path(),
+    })
+    .transform((data) => {
+      const { slug, locale } = splitTranslationSuffix(data.slug.split("/").pop() as string);
+      return { ...data, slug, locale: locale ?? DEFAULT_CONTENT_LANGUAGE, subject: data.slug.split("/")[1] as string };
+    }),
+});
+
+// Updates: a dated, typed log of changes that someone relying on the site
+// would act on differently for knowing (a syllabus change, new content, a
+// feature, a fix that affected them, a notice). The closed set of types is on
+// purpose: no "miscellaneous", so every entry has to say what kind of change
+// it is. Files are `updates/<date>-<slug>.mdx`, with an optional translation
+// `updates/<date>-<slug>.id.mdx`. `date` and `type` belong to the original; a
+// translation carries only the translated text.
+export const updateTypes = ["syllabus", "content", "feature", "fix", "notice"] as const;
+
+const updates = defineCollection({
+  name: "Update",
+  pattern: "updates/**/*.mdx",
+  schema: s
+    .object({
+      title: s.string().max(120),
+      summary: s.string().max(280),
+      date: s.isodate().optional(),
+      type: s.enum(updateTypes).optional(),
+      language: s.enum(CONTENT_LOCALES).optional(),
+      body: s.mdx(),
+      slug: s.path(),
+    })
+    .transform((data, { addIssue }) => {
+      const fileSlug = data.slug.split("/").pop() as string;
+      const { slug, locale } = splitTranslationSuffix(fileSlug);
+      const isOriginal = locale === undefined;
+      if (isOriginal && (!data.date || !data.type)) {
+        addIssue({ code: "custom", message: `update "${fileSlug}" needs a date and a type` });
+      }
+      return {
+        ...data,
+        slug,
+        isOriginal,
+        locale: locale ?? data.language ?? DEFAULT_CONTENT_LANGUAGE,
+      };
     }),
 });
 
@@ -192,7 +278,7 @@ const docs = defineCollection({
 
 export default defineConfig({
   root: "content",
-  collections: { editorials, materials, docs },
+  collections: { editorials, materials, editorialTranslations, materialTranslations, updates, docs },
   mdx: {
     // $inline$ and $$display$$ math in editorial prose compiles to static
     // KaTeX HTML at build time — no client JS, no reflow (spec §3's reason

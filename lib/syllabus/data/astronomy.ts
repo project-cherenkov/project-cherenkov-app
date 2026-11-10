@@ -1,4 +1,4 @@
-import { practical, section, subtopic, topic } from "../define";
+import { defineSyllabus, inSources, practical, section, subtopic, topic } from "../define";
 import type { SubjectSyllabus } from "../types";
 
 // Source language: English (official). Indonesian names are unofficial glosses.
@@ -27,14 +27,48 @@ import type { SubjectSyllabus } from "../types";
 // counterpart: the "space-sciences" section and its "cosmonautics" topic.
 // "exoplanets" and "space-exploration" moved to the sections where the senior
 // syllabus lists them.
-export const astronomy: SubjectSyllabus = {
+//
+// Second source: the 2025 OSN guide, Appendix 3 (Indonesian, official). It does
+// not list astronomy topics itself: it says OSN astronomy follows the IOAA
+// syllabus and links it. So every topic below lists both sources, and the
+// source note says why. IOAA stays first because the topic list, and the planner
+// built on it, come from the IOAA text.
+export const astronomy: SubjectSyllabus = defineSyllabus({
   subject: "astronomy",
-  sourceLang: "en",
-  source: {
-    label: "IOAA Syllabus — International Olympiad on Astronomy and Astrophysics",
-    url: "https://ioaastrophysics.org/resources/IOAA%20Syllabus",
-    accessed: "2026-10-24",
-  },
+  defaultIn: ["ioaa", "osn"],
+  sources: [
+    {
+      id: "ioaa",
+      kind: "international",
+      short: "IOAA",
+      label: "IOAA Syllabus",
+      issuer: "International Olympiad on Astronomy and Astrophysics",
+      url: "https://ioaastrophysics.org/resources/IOAA%20Syllabus",
+      language: "en",
+      accessed: "2026-10-24",
+      verification: "compared",
+      note: {
+        id: "Halaman IOAA tidak menyebut edisi. Section dicocokkan satu per satu; perbandingan topik demi topik belum dilakukan ulang.",
+        en: "The IOAA page states no edition. Sections were compared one by one; a topic-by-topic comparison has not been redone.",
+      },
+    },
+    {
+      id: "osn",
+      kind: "national",
+      short: "OSN",
+      label: "Panduan OSN SMA/MA/SMK/MAK/Sederajat — Lampiran 3 “Silabus OSN”, Cabang Astronomi",
+      issuer: "Pusat Prestasi Nasional, Kemendikdasmen",
+      edition: "OSN 2025",
+      url: "https://pusatprestasinasional.kemdikbud.go.id/uploads/lampiran/Panduan%20OSN%20SMA%20Tahun%202025..pdf",
+      language: "id",
+      accessed: "2026-11-10",
+      verification: "compared",
+      note: {
+        id: "Panduan 2025 tidak mendaftar topik astronomi; ia menyatakan OSN Astronomi mengikuti silabus IOAA. Panduan 2026 belum dibaca langsung.",
+        en: "The 2025 guide does not list astronomy topics; it says OSN astronomy follows the IOAA syllabus. The 2026 guide has not been read directly.",
+      },
+    },
+  ],
   sections: [
     section("basic-astrophysics", "Astrofisika Dasar", "Basic Astrophysics", [
       topic("celestial-mechanics", "Mekanika Benda Langit", "Celestial mechanics",
@@ -119,4 +153,4 @@ export const astronomy: SubjectSyllabus = {
     practical("practical-data-analysis", "Praktikum: Analisis Data", "Practical: Data analysis",
       "Calculation and analysis of the astronomical data given in the problems. Additional requirements: proper identification of error sources; proper use of graph paper with different scales (for example polar and logarithmic) and finding an approximate “best fit” line; familiarity with basic geometric instruments (ruler, compass, protractor, set-square); knowledge of the most common experimental techniques for measuring the physical quantities in the theory part."),
   ],
-};
+});

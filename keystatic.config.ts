@@ -316,10 +316,10 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     status: fields.select({
       label: "Status",
       description:
-        "Published: visible to everyone. Archived: visible to editors only, and left out of every public list, search and the sitemap.",
+        "Published: visible to everyone. Draft: visible to editors only, and left out of every public list, search and the sitemap.",
       options: [
         { label: "Published", value: "published" },
-        { label: "Archived (editors only)", value: "archived" },
+        { label: "Draft (editors only)", value: "draft" },
       ],
       defaultValue: "published",
     }),
@@ -349,6 +349,9 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
     }),
     vizConfig: vizConfigConditional(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
+    // Optional; mirrors the optional `updatedAt` in velite.config.ts so editorials
+    // that carry it can still be opened and saved in Keystatic.
+    updatedAt: fields.date({ label: "Updated at" }),
     author: fields.text({ label: "Author", validation: { isRequired: true } }),
     // Optional link into the syllabus. Written as "" when unset; velite.config.ts
     // normalises that back to undefined.
@@ -413,10 +416,10 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
     status: fields.select({
       label: "Status",
       description:
-        "Published: visible to everyone. Archived: visible to editors only, and left out of every public list, search and the sitemap.",
+        "Published: visible to everyone. Draft: visible to editors only, and left out of every public list, search and the sitemap.",
       options: [
         { label: "Published", value: "published" },
-        { label: "Archived (editors only)", value: "archived" },
+        { label: "Draft (editors only)", value: "draft" },
       ],
       defaultValue: "published",
     }),

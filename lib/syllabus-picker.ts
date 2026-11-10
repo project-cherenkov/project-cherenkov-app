@@ -1,7 +1,7 @@
 // Serializable subject -> section -> topic options for the timer's pickers,
 // localized. Pure: the caller passes the subject label lookup.
 import { SUBJECTS, type Subject } from "./subjects";
-import { getSyllabus, localize } from "./syllabus";
+import { getPlannerSyllabus, localize } from "./syllabus";
 
 export interface PickerSubjectOption {
   subject: Subject;
@@ -14,7 +14,7 @@ export function buildPickerSubjects(
   labelFor: (subject: Subject) => string,
 ): PickerSubjectOption[] {
   return SUBJECTS.flatMap((subject) => {
-    const syllabus = getSyllabus(subject);
+    const syllabus = getPlannerSyllabus(subject);
     if (!syllabus) return [];
     return [
       {

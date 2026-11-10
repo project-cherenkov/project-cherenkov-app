@@ -1,22 +1,31 @@
 // Thin query layer over Velite's generated content. Nothing in app/ should
 // import "#content" directly — go through these helpers so filtering/sorting
 // logic lives in one place instead of being copy-pasted into every page.
-import { editorials, materials, type Editorial, type Material } from "#content";
+import {
+  editorialTranslations,
+  editorials,
+  materialTranslations,
+  materials,
+  type Editorial,
+  type Material,
+} from "#content";
+
+import { pickVersion, type LanguageVersion } from "@/lib/content-language";
 
 export type Subject = Editorial["subject"];
 
 // Visibility. Every helper below returns PUBLISHED content only unless the
-// caller passes { includeArchived: true }. That is deliberate: the sitemap,
+// caller passes { includeDrafts: true }. That is deliberate: the sitemap,
 // search index, llms.txt, home page, syllabus and planner all call these
-// helpers with no arguments, so an archived item can never leak into them by
+// helpers with no arguments, so a draft item can never leak into them by
 // accident. Only code that has first confirmed the visitor is an editor
 // (lib/editor-access.ts) may opt in.
 export interface VisibilityOptions {
-  includeArchived?: boolean;
+  includeDrafts?: boolean;
 }
 
 function isVisible(item: { status: string }, options: VisibilityOptions): boolean {
-  return options.includeArchived === true || item.status === "published";
+  return options.includeDrafts === true || item.status === "published";
 }
 
 export function getAllEditorials(options: VisibilityOptions = {}): Editorial[] {
@@ -43,11 +52,11 @@ export function getEditorial(
   );
 }
 
-// True when the editorial exists but is archived. Lets a page tell "does not
+// True when the editorial exists but is a draft. Lets a page tell "does not
 // exist" apart from "exists, editors only" without exposing any of its content.
-export function isArchivedEditorial(subject: string, slug: string): boolean {
+export function isDraftEditorial(subject: string, slug: string): boolean {
   return editorials.some(
-    (e) => e.subject === subject && e.slug === slug && e.status === "archived",
+    (e) => e.subject === subject && e.slug === slug && e.status === "draft",
   );
 }
 
@@ -127,8 +136,73 @@ export function getMaterial(
   );
 }
 
-export function isArchivedMaterial(subject: string, slug: string): boolean {
+export function isDraftMaterial(subject: string, slug: string): boolean {
   return materials.some(
-    (m) => m.subject === subject && m.slug === slug && m.status === "archived",
+    (m) => m.subject === subject && m.slug === slug && m.status === "draft",
   );
+}
+
+// --- Language ----------------------------------------------------------------
+//
+// An editorial or material is written in one language (`language`, default
+// "en") and may have translations (`<slug>.id.mdx`). These pick the text for
+// the visitor's language and say whether it is a fallback. The notice is
+// derived from that, never stored: once a translation exists the page stops
+// showing it. See lib/content-language.ts.
+
+export interface EditorialText extends LanguageVersion {
+  title: string;
+  hook: string;
+  body: string;
+}
+
+export interface MaterialText extends LanguageVersion {
+  title: string;
+  summary: string;
+  body: string;
+}
+
+export interface ResolvedText<T extends LanguageVersion> {
+  text: T;
+  isFallback: boolean;
+  // Languages the item genuinely exists in.
+  locales: string[];
+}
+
+export function resolveEditorialText(
+  editorial: Editorial,
+  locale: string,
+): ResolvedText<EditorialText> {
+  const original: EditorialText = {
+    locale: editorial.language,
+    isOriginal: true,
+    title: editorial.title,
+    hook: editorial.hook,
+    body: editorial.body,
+  };
+  const translations: EditorialText[] = editorialTranslations
+    .filter((t) => t.subject === editorial.subject && t.slug === editorial.slug)
+    .map((t) => ({ locale: t.locale, isOriginal: false, title: t.title, hook: t.hook, body: t.body }));
+  const versions = [original, ...translations];
+  const picked = pickVersion(versions, locale)!;
+  return { text: picked.version, isFallback: picked.isFallback, locales: versions.map((v) => v.locale) };
+}
+
+export function resolveMaterialText(
+  material: Material,
+  locale: string,
+): ResolvedText<MaterialText> {
+  const original: MaterialText = {
+    locale: material.language,
+    isOriginal: true,
+    title: material.title,
+    summary: material.summary,
+    body: material.body,
+  };
+  const translations: MaterialText[] = materialTranslations
+    .filter((t) => t.subject === material.subject && t.slug === material.slug)
+    .map((t) => ({ locale: t.locale, isOriginal: false, title: t.title, summary: t.summary, body: t.body }));
+  const versions = [original, ...translations];
+  const picked = pickVersion(versions, locale)!;
+  return { text: picked.version, isFallback: picked.isFallback, locales: versions.map((v) => v.locale) };
 }

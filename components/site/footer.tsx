@@ -42,6 +42,9 @@ export function SiteFooter() {
           <Link href="/docs" className={linkClass}>
             {t("docs")}
           </Link>
+          <Link href="/updates" className={linkClass}>
+            {t("updates")}
+          </Link>
           <a href={`${gitHubBase}/LICENSE`} target="_blank" rel="noopener noreferrer" className={linkClass}>
             {t("license")}
             {external}

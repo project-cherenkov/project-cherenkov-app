@@ -26,7 +26,7 @@ import {
   loadUnderstoodMarks,
 } from "@/lib/study-session-db";
 import { SUBJECTS, isKnownSubject, type Subject } from "@/lib/subjects";
-import { getSyllabus, getTopicLocation, localize } from "@/lib/syllabus";
+import { getPlannerSyllabus, getTopicLocation, localize } from "@/lib/syllabus";
 
 // Private progress views (R4). Everything is derived from what the student
 // did: logged sessions, quiz attempts and their own "understood" marks.
@@ -93,7 +93,7 @@ export default async function ProgressPage({
   }));
 
   // Coverage for the chosen subject.
-  const syllabus = getSyllabus(subject)!;
+  const syllabus = getPlannerSyllabus(subject)!;
   const materials = getAllMaterials().filter((m) => m.subject === subject);
   const materialSlugByTopic = new Map(materials.map((m) => [m.topic, m.slug]));
   const understoodMaterials = new Set(
