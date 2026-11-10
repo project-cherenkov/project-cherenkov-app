@@ -42,7 +42,7 @@ export interface OgCardProps {
 // The picture below is that construction, drawn to scale: the pink particle,
 // the circles it left behind, and the blue envelope they form.
 const U_OVER_V = 0.75; // cos θ
-const THETA = Math.acos(U_OVER_V); // angle between track and emitted light
+const _THETA = Math.acos(U_OVER_V); // angle between track and emitted light
 const HALF_ANGLE = Math.asin(U_OVER_V); // half-opening of the cone (90° − θ)
 
 const APEX = { x: 790, y: 318 };

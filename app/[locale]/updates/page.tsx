@@ -60,7 +60,7 @@ export default async function UpdatesPage({
                     {t(`types.${type}`)}
                   </span>
                   <time dateTime={published} className="label-code">
-                    {date.format(new Date(`${published}T00:00:00Z`))}
+                    {date.format(new Date(published.includes("T") ? published : `${published}T00:00:00Z`))}
                   </time>
                 </p>
                 <h2 className="mt-2 text-xl font-semibold text-foreground">{update.title}</h2>

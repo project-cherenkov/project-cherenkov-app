@@ -1,4 +1,4 @@
-import { siteUrl } from "@/lib/site";
+
 import { localizedUrl, DEFAULT_LOCALE } from "@/lib/seo";
 import { getUpdates } from "@/lib/updates";
 
@@ -21,7 +21,7 @@ export function GET() {
         `      <title>${escapeXml(update.title)}</title>`,
         `      <link>${escapeXml(link)}</link>`,
         `      <guid isPermaLink="true">${escapeXml(link)}</guid>`,
-        `      <pubDate>${new Date(`${date}T00:00:00Z`).toUTCString()}</pubDate>`,
+        `      <pubDate>${new Date(date.includes("T") ? date : `${date}T00:00:00Z`).toUTCString()}</pubDate>`,
         `      <description>${escapeXml(update.summary)}</description>`,
         "    </item>",
       ].join("\n");

@@ -1,4 +1,4 @@
-import { defineSyllabus, inSources, practical, section, subtopic, topic } from "../define";
+import { defineSyllabus, practical, section, subtopic, topic } from "../define";
 import type { SubjectSyllabus } from "../types";
 
 // Source language: English (official). Indonesian names are unofficial glosses.
