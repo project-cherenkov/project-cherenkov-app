@@ -8,6 +8,7 @@ import { useSession } from "@/lib/auth-client";
 import { Github, Menu, X } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { UpdatesBell } from "@/components/site/updates-bell";
 import { BrandMark } from "@/components/site/brand-mark";
 import { NavRibbonArt } from "@/components/site/nav-ribbon-art";
 
@@ -31,7 +32,7 @@ const localeOptions = [
   { code: "id", label: "ID", name: "Bahasa Indonesia", flag: "🇮🇩" },
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) {
   const t = useTranslations("nav");
   const tFooter = useTranslations("footer");
   const currentLocale = useLocale();
@@ -190,6 +191,7 @@ export function SiteHeader() {
           {/* Controls Right */}
           <div className="flex items-center gap-0.5 sm:gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
             <SearchPalette />
+            <UpdatesBell latestUpdateDate={latestUpdateDate} />
             <ThemeToggle />
 
             <div

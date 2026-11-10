@@ -43,6 +43,13 @@
       "when": 1793559106601,
       "tag": "0005_neutrino_ai_toggle",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793635500000,
+      "tag": "0006_updates_notification_setting",
+      "breakpoints": true
     }
   ]
 }

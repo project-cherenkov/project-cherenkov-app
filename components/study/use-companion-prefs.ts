@@ -15,8 +15,8 @@ const CHANGE_EVENT = "neutrino-prefs-changed";
 const STORAGE_KEY = "neutrino-prefs-v1";
 
 // Per-device values that make sense without an account (size, rotation and
-// the AI switch). Name and "enabled" are account features and are never read
-// from or written to local storage.
+// the AI switch). Name, "enabled" and updates notifications are account
+// features and are never read from or written to local storage.
 function readLocal(): Partial<CompanionPrefs> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);

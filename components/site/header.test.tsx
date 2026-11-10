@@ -23,6 +23,7 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
       archive: "Archive",
+      updates: "Updates",
       about: "About",
       repo: "GitHub",
       edit: "Edit",
@@ -64,6 +65,7 @@ describe("SiteHeader — session awareness", () => {
     const html = renderToStaticMarkup(<SiteHeader />);
 
     expect(html).toContain("Archive");
+    expect(html).toContain("Updates");
     expect(html).toContain("About");
     expect(html).toContain('aria-label="GitHub"');
     expect(html).toContain('aria-label="Toggle theme"');

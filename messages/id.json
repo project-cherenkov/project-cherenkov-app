@@ -13,6 +13,7 @@
   "nav": {
     "home": "Beranda",
     "archive": "Arsip",
+    "updates": "Pembaruan",
     "about": "Tentang",
     "repo": "GitHub",
     "edit": "Edit",
@@ -26,6 +27,7 @@
     "archiveSections": "Bagian arsip",
     "account": "Akun",
     "docs": "Dokumentasi",
+    "unreadUpdates": "Pembaruan yang belum dibaca",
     "menu": "Menu",
     "skipToContent": "Lewati ke konten utama",
     "mainNavigation": "Navigasi utama",
@@ -710,6 +712,8 @@
     "accountOnly": "Masuk untuk mengganti nama atau mematikan pendamping. Ukuran, gaya putaran, dan obrolan AI disimpan di perangkat ini.",
     "activeLabel": "Tampilkan pendamping",
     "activeHelp": "Jika dimatikan, maskot dihapus dari semua halaman. Nyalakan lagi di sini kapan saja.",
+    "updatesLabel": "Tampilkan notifikasi pembaruan",
+    "updatesHelp": "Tampilkan titik merah pada bel pembaruan jika ada berita yang belum kamu baca.",
     "sizeLabel": "Ukuran",
     "sizes": {
       "small": "Kecil",

@@ -13,6 +13,7 @@ import { InPageNeutrino } from "@/components/study/neutrino-launcher";
 import { fontVariableClasses } from "@/lib/fonts";
 import { OG_LOCALES, isAppLocale, robotsFor } from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
+import { getLatestUpdateDate } from "@/lib/updates";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -84,6 +85,7 @@ export default async function LocaleLayout({
   // Enables static rendering for this locale (next-intl requirement).
   setRequestLocale(locale);
   const messages = await getMessages();
+  const latestUpdateDate = getLatestUpdateDate();
 
   return (
     <html lang={locale} suppressHydrationWarning className={fontVariableClasses}>
@@ -92,7 +94,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider locale={locale} messages={messages}>
             <SkipLink />
             <div className="flex min-h-screen flex-col">
-              <SiteHeader />
+              <SiteHeader latestUpdateDate={latestUpdateDate} />
               {/* tabIndex={-1} lets the skip link move focus here; the ring is
                   suppressed because the whole region lighting up is noise. */}
               <main

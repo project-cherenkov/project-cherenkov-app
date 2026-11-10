@@ -13,6 +13,7 @@
   "nav": {
     "home": "Home",
     "archive": "Archive",
+    "updates": "Updates",
     "about": "About",
     "repo": "GitHub",
     "edit": "Edit",
@@ -26,6 +27,7 @@
     "archiveSections": "Archive sections",
     "account": "Account",
     "docs": "Docs",
+    "unreadUpdates": "Unread updates",
     "menu": "Menu",
     "skipToContent": "Skip to main content",
     "mainNavigation": "Main navigation",
@@ -710,6 +712,8 @@
     "accountOnly": "Sign in to rename the companion or turn it off. Size, rotation and AI chat are saved on this device.",
     "activeLabel": "Show the companion",
     "activeHelp": "When off, the mascot is removed from every page. Turn it back on here at any time.",
+    "updatesLabel": "Show update notifications",
+    "updatesHelp": "Show a red dot on the updates bell when there is news you have not read.",
     "sizeLabel": "Size",
     "sizes": {
       "small": "Small",

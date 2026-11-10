@@ -32,6 +32,7 @@ export type CompanionPrefs = {
   enabled: boolean;
   // Turns off only the AI chat. The companion, its FAQ and its timer stay.
   aiEnabled: boolean;
+  updatesEnabled: boolean;
   size: CompanionSize;
   rotation: CompanionRotation;
 };
@@ -40,6 +41,7 @@ export const DEFAULT_COMPANION_PREFS: CompanionPrefs = {
   name: DEFAULT_COMPANION_NAME,
   enabled: true,
   aiEnabled: true,
+  updatesEnabled: true,
   size: "medium",
   rotation: "auto",
 };
@@ -85,6 +87,10 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
     if (typeof input.aiEnabled !== "boolean") return null;
     patch.aiEnabled = input.aiEnabled;
   }
+  if ("updatesEnabled" in input) {
+    if (typeof input.updatesEnabled !== "boolean") return null;
+    patch.updatesEnabled = input.updatesEnabled;
+  }
   if ("size" in input) {
     if (!isCompanionSize(input.size)) return null;
     patch.size = input.size;
@@ -103,6 +109,7 @@ export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
     name: normalizeCompanionName(input.name) ?? DEFAULT_COMPANION_PREFS.name,
     enabled: typeof input.enabled === "boolean" ? input.enabled : DEFAULT_COMPANION_PREFS.enabled,
     aiEnabled: typeof input.aiEnabled === "boolean" ? input.aiEnabled : DEFAULT_COMPANION_PREFS.aiEnabled,
+    updatesEnabled: typeof input.updatesEnabled === "boolean" ? input.updatesEnabled : DEFAULT_COMPANION_PREFS.updatesEnabled,
     size: isCompanionSize(input.size) ? input.size : DEFAULT_COMPANION_PREFS.size,
     rotation: isCompanionRotation(input.rotation) ? input.rotation : DEFAULT_COMPANION_PREFS.rotation,
   };

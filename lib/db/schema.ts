@@ -482,6 +482,7 @@ export const companionSettings = pgTable(
     // Off = the AI chat is hidden and refused by the server; the companion,
     // its FAQ and its timer stay.
     aiEnabled: boolean("ai_enabled").notNull().default(true),
+    updatesEnabled: boolean("updates_enabled").notNull().default(true),
     size: text("size").notNull().default("medium"),
     rotation: text("rotation").notNull().default("auto"),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),

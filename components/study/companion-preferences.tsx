@@ -149,6 +149,21 @@ export function CompanionPreferences({
               <span className="block text-xs text-muted-foreground">{t("activeHelp")}</span>
             </span>
           </label>
+          {/* This account setting must stay in this shared component so it is
+              always available in both Account and Neutrino settings. */}
+          <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+            <input
+              type="checkbox"
+              role="switch"
+              checked={prefs.updatesEnabled}
+              onChange={(event) => void apply({ updatesEnabled: event.target.checked })}
+              className="mt-1 h-5 w-5 shrink-0"
+            />
+            <span>
+              <span className="block font-medium">{t("updatesLabel")}</span>
+              <span className="block text-xs text-muted-foreground">{t("updatesHelp")}</span>
+            </span>
+          </label>
         </>
       ) : (
         <p className="rounded-md bg-muted/60 p-3 text-xs text-muted-foreground">{t("accountOnly")}</p>

@@ -8,6 +8,7 @@ import { breadcrumbJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { getUpdates } from "@/lib/updates";
 import "katex/dist/katex.min.css";
+import { UpdatesReadMarker } from "@/components/site/updates-read-marker";
 
 export async function generateMetadata({
   params,
@@ -39,6 +40,7 @@ export default async function UpdatesPage({
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <JsonLd data={breadcrumbJsonLd(locale, [{ name: t("title") }])} />
+      <UpdatesReadMarker latestUpdateDate={entries[0]?.date} />
       <p className="label-code">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
@@ -53,7 +55,7 @@ export default async function UpdatesPage({
       ) : (
         <ol className="mt-8 space-y-10">
           {entries.map(({ update, date: published, type, isFallback }) => (
-            <li key={update.slug} id={update.slug} lang={update.locale}>
+            <li key={update.slug} id={update.slug} lang={update.locale} className="border-t border-border pt-8 first:border-t-0 first:pt-0">
               <article>
                 <p className="flex flex-wrap items-center gap-2">
                   <span className="label-code rounded bg-muted px-2 py-0.5 text-foreground/80">

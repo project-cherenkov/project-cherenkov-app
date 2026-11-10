@@ -16,6 +16,7 @@ export async function GET() {
         name: companionSettings.name,
         enabled: companionSettings.enabled,
         aiEnabled: companionSettings.aiEnabled,
+        updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       })
@@ -56,6 +57,7 @@ export async function PATCH(request: Request) {
         name: companionSettings.name,
         enabled: companionSettings.enabled,
         aiEnabled: companionSettings.aiEnabled,
+        updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       });

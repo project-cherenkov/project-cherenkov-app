@@ -51,6 +51,7 @@ export default async function AccountPage() {
         name: companionSettings.name,
         enabled: companionSettings.enabled,
         aiEnabled: companionSettings.aiEnabled,
+        updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
       })
