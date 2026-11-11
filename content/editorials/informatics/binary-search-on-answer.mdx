@@ -2,7 +2,7 @@
 title: "Binary search on the answer: why the predicate must be monotonic"
 subject: informatics
 status: published
-hook: "Binary search doesn't need a sorted array. It needs a predicate that flips exactly once."
+hook: "Binary search works on a yes/no test that changes from 'no' to 'yes' exactly once. A sorted array is just the most common way to get one."
 tags: ["binary-search", "monotonic-predicate", "searching"]
 principle: "monotonic-predicate-search"
 errorType: "assumed-sortedness-instead-of-monotonicity"
@@ -30,27 +30,32 @@ syllabusTopic: binary-search
 
 ## The problem
 
-Most students meet binary search as "the trick for sorted arrays." That is
-true, but sortedness is not the *reason* binary search works, and treating
-it as the reason breaks once problems stop handing you a sorted array
-directly. "Find the smallest value of $x$ satisfying some condition"
-problems are an example: no array is sorted, because there is no array at
-all.
+Most students first meet binary search as "the trick for sorted arrays."
+That is true, but sortedness is not the *reason* it works. Relying on it
+fails as soon as a problem stops handing you a sorted array. Take "find
+the smallest value of $x$ that satisfies some condition." Nothing is
+sorted there, because there is no array at all.
 
 ## The idea
 
-Binary search needs a predicate $P(i)$ over index $i$ that is monotonic:
-false for a while, then true for the rest. $P(0), P(1), \dots, P(n-1)$
-looks like $F, F, \dots, F, T, T, \dots, T$ with exactly one flip.
-Sortedness is the most common way that condition shows up. For "first
-index with $a_i \ge \text{target}$," the predicate
-$P(i) := a_i \ge \text{target}$ is monotonic precisely because the array is
-sorted. But plenty of monotonic predicates come from unsorted data, such as
-"smallest speed that finishes the race in time" or "smallest budget that
-satisfies every constraint," and binary search applies to all of them the
-same way.
+Binary search needs a *predicate*: a yes/no question $P(i)$ about each
+index $i$. The predicate must be *monotonic*, which means it changes
+only once, from false to true and never back. Written out,
+$P(0), P(1), \dots, P(n-1)$ looks like $F, F, \dots, F, T, T, \dots, T$
+with exactly one flip. Binary search finds that flip.
 
-The array below is sorted so the predicate is easy to see. Watch what the
+Sortedness is the most common way to get such a predicate. For "first
+index with $a_i \ge \text{target}$," the predicate
+$P(i) := a_i \ge \text{target}$ is monotonic precisely because the array
+is sorted. But many monotonic predicates have no sorted array behind
+them. Two examples are "smallest speed that finishes the race in time"
+and "smallest budget that satisfies every constraint." If one speed
+finishes the race in time, every faster speed does too, so the answers
+go no, no, no, yes, yes, yes as the speed rises. Binary search handles
+all of these the same way.
+
+The array below is sorted so the predicate is easy to see. The target is
+$10$, so the predicate asks "is this number at least 10?" Watch what the
 search tracks: the place where the predicate flips.
 
 <Interactive />
@@ -59,37 +64,42 @@ search tracks: the place where the predicate flips.
 
 ## Full proof
 
-**Claim.** If $P$ is monotonic over $\{0, \dots, n-1\}$, the loop invariant
-"the answer lies in $[lo, hi]$" holds at every step, and the loop
-terminates with the correct answer (or no answer, if $P$ is never true).
+**Claim.** If $P$ is monotonic over $\{0, \dots, n-1\}$, the loop
+invariant "the answer lies in $[lo, hi]$" holds at every step. (A loop
+invariant is a statement that stays true after every pass through the
+loop.) The loop also terminates with the correct answer, or with no
+answer if $P$ is never true.
 
 **Invariant.** At the start of every iteration, no index has been ruled
-out incorrectly: the first index where $P$ is true, if one exists, lies in
-$[lo, hi]$.
+out incorrectly: the first index where $P$ is true, if one exists, lies
+in $[lo, hi]$.
 
-**Base case.** Initially $lo = 0$, $hi = n-1$, so the invariant holds
+**Base case.** Initially $lo = 0$ and $hi = n-1$, so the invariant holds
 trivially: the first true index, if any, is within $[0, n-1]$.
 
-**Inductive step.** Let $mid = \lfloor (lo+hi)/2 \rfloor$.
+**Inductive step.** Let $mid = \lfloor (lo+hi)/2 \rfloor$, the middle
+index rounded down.
 
-- If $P(mid)$ is true: because $P$ is monotonic, every index $\ge mid$ is
-  also true, so $mid$ is a valid candidate and the first true index is
-  either $mid$ itself or something smaller. Recording $mid$ as the best
-  answer so far and setting $hi = mid - 1$ preserves the invariant.
+- If $P(mid)$ is true: because $P$ is monotonic, every index $\ge mid$
+  is also true. So $mid$ is a valid candidate, and the first true index
+  is either $mid$ itself or something smaller. Recording $mid$ as the
+  best answer so far and setting $hi = mid - 1$ preserves the invariant.
 - If $P(mid)$ is false: monotonicity means every index $\le mid$ is also
   false, so the first true index (if any) must be strictly greater than
   $mid$. Setting $lo = mid + 1$ preserves the invariant.
 
 **Termination.** Each iteration strictly shrinks $hi - lo$, so the loop
-ends in $O(\log n)$ steps. When $lo > hi$, the invariant's search window is
-empty, and the best candidate recorded along the way is exactly the first
-index where $P$ is true. $\blacksquare$
+ends in $O(\log n)$ steps. In words, doubling the size of the search
+range adds only about one more step. When $lo > hi$, the search window
+is empty, and the best candidate recorded along the way is exactly the
+first index where $P$ is true. $\blacksquare$
 
-**Where it breaks in practice.** The error this editorial is filed under,
-assuming sortedness instead of monotonicity, shows up when someone binary
-searches over a value that *looks* array-like (a range of possible answers)
-without checking that the predicate is monotonic over that range. A
-predicate that is true, false, true is not safe to binary search, even if
-the "array" it is defined over happens to be sorted numbers.
+**Where it breaks in practice.** The error this editorial is filed
+under, assuming sortedness instead of monotonicity, shows up when
+someone binary searches over a value that *looks* array-like (a range of
+possible answers). If they never check that the predicate is monotonic
+over that range, the search can fail. A predicate that is true, false,
+true is not safe to binary search, even if the "array" it is defined
+over happens to be sorted numbers.
 
 </Solution>

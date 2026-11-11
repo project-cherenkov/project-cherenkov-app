@@ -22,25 +22,35 @@ author: "Renee"
 
 ## The problem
 
-Two planets share an orbital period, a star and a planet-to-star size
-ratio. One is on a circular orbit and the other on an eccentric one. Do
-their transits (the dip in starlight while the planet crosses the star's
-disc) last the same amount of time? It is tempting to say yes, since "same
-period, same sizes" sounds like it should fix everything else. It does not.
+Two planets orbit the same star. They have the same orbital period and
+the same planet-to-star size ratio. One orbit is a circle. The other is
+a stretched oval, which astronomers call an *eccentric* orbit (the more
+stretched, the higher the eccentricity). Do their transits last the same
+amount of time? A transit is the dip in starlight while the planet
+crosses the star's disc.
+
+It's tempting to say yes, because "same period, same sizes" sounds like
+it should settle everything. In fact the durations differ, and the
+reason is the planet's speed.
 
 ## The idea
 
-A planet on an eccentric orbit does not move at constant angular speed. It
-moves fastest near periapsis (closest approach) and slowest near apoapsis
-(farthest point). That is Kepler's second law: equal areas are swept in
-equal times. If a transit happens near periapsis, the planet is moving
-quickly through that part of its orbit and crosses the star's disc quickly.
-Near apoapsis it moves slowly, and the same crossing takes longer.
+A planet on an eccentric orbit does not move at a constant speed. It
+moves fastest at periapsis (its closest approach to the star) and
+slowest at apoapsis (its farthest point). That is Kepler's second law:
+the line from the star to the planet sweeps out equal areas in equal
+times.
 
-The sandbox below assumes the simplest case, a transit aligned with
-periapsis. One eccentricity value drives both the orbit shape and the
-transit light curve underneath it. Push eccentricity up and the dip
-narrows.
+Think of a car crossing a bridge of fixed length. The faster the car,
+the shorter the crossing. The star's disc is the bridge. If the transit
+happens near periapsis, the planet is moving quickly and crosses
+quickly. Near apoapsis it moves slowly, so the same crossing takes
+longer.
+
+The sandbox below covers the simplest case, a transit lined up with
+periapsis. A single eccentricity value sets both the shape of the orbit
+and the light curve (the graph of brightness over time) underneath it.
+Push eccentricity up and the dip gets narrower.
 
 <Interactive />
 
@@ -48,41 +58,47 @@ narrows.
 
 ## Full proof
 
-**Setup.** Mean anomaly $M$ increases uniformly in time by definition:
-$M = nt$, where $n = 2\pi/T$ is the mean motion and $T$ is the orbital
-period. Kepler's equation relates $M$ to the eccentric anomaly $E$:
+**Setup.** By definition, the mean anomaly $M$ increases uniformly in
+time: $M = nt$. Here $n = 2\pi/T$ is the mean motion and $T$ is the
+orbital period. Think of $M$ as the hand of a steady clock, while the
+planet's real position and speed vary. Kepler's equation relates $M$ to
+the eccentric anomaly $E$, an angle that locates the planet on its
+orbit:
 
 $$M = E - e\sin E \implies \frac{dM}{dE} = 1 - e\cos E$$
 
-**Modeling convention.** Treat a transit as the planet crossing a fixed
-window of eccentric anomaly $[-\Delta E, \Delta E]$ centered on periapsis
-($E = 0$). This is a simplification. A real transit is a fixed window of
-*true* anomaly (the star's actual angular size as seen from the planet),
-and the two agree only to leading order for small $\Delta E$, which is the
-regime a distant star's disc puts us in anyway. This is exactly the
-convention the interactive above computes.
+**Modelling convention.** We treat a transit as the planet crossing a
+fixed window of eccentric anomaly $[-\Delta E, \Delta E]$, centred on
+periapsis ($E = 0$). This is a simplification. A real transit is a fixed
+window of *true* anomaly, which is set by the star's actual angular size
+as seen from the planet. The two agree only to leading order for small
+$\Delta E$, and a distant star's disc puts us in that regime anyway.
+This is exactly the convention the interactive above computes.
 
 **Duration.** Because $M$ is uniform in time, the time spent between
 $E=-\Delta E$ and $E=\Delta E$ is:
 
 $$\Delta t = \frac{\Delta M}{n} = \frac{1}{n}\int_{-\Delta E}^{\Delta E} (1 - e\cos E)\, dE$$
 
-For small $\Delta E$, $\cos E \approx 1$ across the whole window, giving:
+For small $\Delta E$, $\cos E \approx 1$ across the whole window, which
+gives:
 
 $$\Delta t \approx \frac{2\Delta E(1-e)}{n} = \frac{\Delta E (1-e)\, T}{\pi} \qquad \blacksquare$$
 
-**Consequence.** For a periapsis-aligned transit, duration shrinks linearly
-toward zero as $e \to 1$, because the planet is moving fastest exactly where
-the transit happens. Flip the alignment to apoapsis and the sign of the
-effect flips too: eccentricity would *lengthen* the transit instead.
+**Consequence.** For a transit lined up with periapsis, the duration
+shrinks linearly toward zero as $e \to 1$, because the planet is moving
+fastest exactly where the transit happens. Flip the alignment to
+apoapsis and the effect reverses: eccentricity would *lengthen* the
+transit instead.
 
-**Where it breaks in practice.** The error this editorial is filed under,
-assuming constant orbital speed, is really two errors that compound: (1)
-forgetting that speed varies around an eccentric orbit at all, and (2)
-even granting that, assuming the *transit* necessarily lands at periapsis.
-Real transiting systems can have any argument of periapsis, and duration
-depends on both. This sandbox fixes the alignment to periapsis to isolate
-the eccentricity effect. Don't reach for the formula above on a system
-where periapsis alignment isn't given.
+**Where it breaks in practice.** The error this editorial is filed
+under, assuming constant orbital speed, is really two errors that
+compound. First, forgetting that speed varies around an eccentric orbit
+at all. Second, even granting that, assuming the *transit* necessarily
+lands at periapsis. Real transiting systems can have any argument of
+periapsis (an angle that fixes where periapsis lies relative to our line
+of sight), and duration depends on both. This sandbox fixes the
+alignment to periapsis to isolate the eccentricity effect. Don't reach
+for the formula above on a system where periapsis alignment isn't given.
 
 </Solution>

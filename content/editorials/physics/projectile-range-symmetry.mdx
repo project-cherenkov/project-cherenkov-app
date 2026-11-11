@@ -2,7 +2,7 @@
 title: "Projectile range symmetry: why 30° and 60° land in the same place"
 subject: physics
 status: published
-hook: "Two launch angles, one range. The landing point is the same and the flight is not."
+hook: "Two different launch angles can land in exactly the same place, yet the two flights look very different."
 tags: ["projectile-motion", "kinematics", "trigonometric-identity"]
 principle: "trigonometric-symmetry-in-kinematics"
 errorType: "conflating-equal-range-with-equal-trajectory"
@@ -22,22 +22,30 @@ author: "Renee"
 
 Launch a projectile at $30°$ and it lands some distance away. Launch it
 again at the same speed but at $60°$, and it lands in *exactly the same
-spot*. This is not a coincidence specific to $30$ and $60$: for any angle
-$\theta$, launching at $\theta$ and at $90° - \theta$ gives the same range.
+spot*. The same thing happens for any angle $\theta$: launching at
+$\theta$ and at $90° - \theta$ gives the same range, the horizontal
+distance travelled. (Here we assume flat ground and no air resistance.)
 Why?
 
 ## The idea
 
-Range depends on launch angle only through $\sin(2\theta)$, and
-$\sin(2\theta) = \sin(180° - 2\theta) = \sin\big(2(90° - \theta)\big)$, so
-the sine function's own symmetry does the work. Two complementary angles
-($\theta$ and $90° - \theta$) put the same $2\theta$ value, reflected
-across $90°$, inside the sine, and $\sin$ treats those two inputs
-identically.
+Start with what changes as you tilt the launch. A shallow launch sends
+the projectile forward quickly but keeps it in the air only briefly. A
+steep launch keeps it in the air for a long time but gives it little
+forward speed. Range is forward speed times time in the air, and for
+angles that add up to $90°$ these two effects trade off exactly.
 
-Drag the angle slider below $45°$ and above it. The range markers line up
-for complementary pairs, but the *shape* of the flight differs: a low,
-fast, flat arc and a high, slow, steep one reach the same point by very
+The maths shows why. Range depends on the launch angle only through
+$\sin(2\theta)$, and the sine function has a symmetry:
+$\sin(2\theta) = \sin(180° - 2\theta) = \sin\big(2(90° - \theta)\big)$.
+That symmetry does the work. Two angles that add up to $90°$ are called
+complementary. For the complementary pair $\theta$ and $90° - \theta$,
+the values inside the sine are $2\theta$ and $180° - 2\theta$. These are
+mirror images across $90°$, and the sine gives the same result for both.
+
+Drag the angle slider below $45°$ and above it. The range markers line
+up for complementary pairs, but the *shape* of the flight differs. A
+low, flat arc and a high, steep one reach the same point by very
 different paths.
 
 <Interactive />
@@ -47,11 +55,13 @@ different paths.
 ## Full proof
 
 **Setup.** Launch speed $v_0$, launch angle $\theta$, no air resistance,
-flat ground. Position at time $t$:
+flat ground. The horizontal position $x$ and the height $y$ at time $t$
+are:
 
 $$x(t) = v_0 \cos\theta \cdot t, \qquad y(t) = v_0 \sin\theta \cdot t - \tfrac{1}{2} g t^2$$
 
-**Time of flight.** Landing is $y(t) = 0$ for $t > 0$:
+**Time of flight.** The projectile lands when $y(t) = 0$ for $t > 0$
+(the solution $t = 0$ is the launch itself):
 
 $$t = 0 \quad\text{or}\quad t = \frac{2 v_0 \sin\theta}{g}$$
 
@@ -71,14 +81,13 @@ and since $\sin(180° - x) = \sin(x)$ for any $x$:
 
 $$\sin(180° - 2\theta) = \sin(2\theta) \implies R(90° - \theta) = R(\theta) \qquad \blacksquare$$
 
-**Where it breaks in practice.** The error this editorial is filed under,
-treating equal range as equal trajectory, shows up whenever a problem asks
-about the *flight itself* (maximum height, flight time, vertical impact
-speed) and not just where it lands. Those quantities are not symmetric
-under $\theta \leftrightarrow 90° - \theta$: maximum height scales with
-$\sin^2\theta$, which differs for complementary angles unless
-$\theta = 45°$. Same landing spot, different everything else along the
-way. The sandbox above shows the whole arc, not just the endpoint, so you
-can see it.
+**Where it breaks in practice.** The error this editorial is filed
+under, treating equal range as equal trajectory, shows up whenever a
+problem asks about the *flight itself* (maximum height, flight time,
+vertical impact speed) and not just where it lands. Those quantities are
+not symmetric under $\theta \leftrightarrow 90° - \theta$: maximum
+height scales with $\sin^2\theta$, which differs for complementary
+angles unless $\theta = 45°$. The sandbox above shows the whole arc, not
+just the endpoint, so you can see it.
 
 </Solution>
