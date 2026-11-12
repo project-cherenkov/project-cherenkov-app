@@ -101,6 +101,20 @@ const nextConfig = {
       },
     ];
   },
+
+  // Old *.vercel.app production host -> custom domain. Matches the exact
+  // host only, so preview deployments (different *.vercel.app hosts) are
+  // untouched. Next applies config redirects before middleware runs.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "project-cherenkov-app.vercel.app" }],
+        destination: "https://www.projectcherenkov.dev/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
