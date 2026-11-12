@@ -9,6 +9,7 @@ export interface UpdateLike {
   slug: string;
   title: string;
   summary: string;
+  author?: string | undefined;
   date?: string | undefined;
   type?: UpdateType | undefined;
   locale: string;
@@ -21,6 +22,7 @@ export interface ResolvedUpdate<T extends UpdateLike> {
   // Date and type always come from the original.
   date: string;
   type: UpdateType;
+  author?: string | undefined;
   // True when the visitor's language has no version and the original is shown.
   isFallback: boolean;
   // Languages this update genuinely exists in.
@@ -46,6 +48,7 @@ export function resolveUpdates<T extends UpdateLike>(
       update: picked.version,
       date: original.date,
       type: original.type,
+      author: original.author,
       isFallback: picked.isFallback,
       locales: versionLocales(versions),
     });

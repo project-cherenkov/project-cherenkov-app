@@ -212,6 +212,7 @@ const updates = defineCollection({
       date: s.isodate().optional(),
       type: s.enum(updateTypes).optional(),
       language: s.enum(CONTENT_LOCALES).optional(),
+      author: s.string().optional(),
       body: s.mdx(),
       slug: s.path(),
     })

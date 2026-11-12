@@ -54,7 +54,7 @@ export default async function UpdatesPage({
         <p className="mt-8 text-foreground/75">{t("empty")}</p>
       ) : (
         <ol className="mt-8 space-y-10">
-          {entries.map(({ update, date: published, type, isFallback }) => (
+          {entries.map(({ update, date: published, type, author, isFallback }) => (
             <li key={update.slug} id={update.slug} lang={update.locale} className="border-t border-border pt-8 first:border-t-0 first:pt-0">
               <article>
                 <p className="flex flex-wrap items-center gap-2">
@@ -66,6 +66,7 @@ export default async function UpdatesPage({
                   </time>
                 </p>
                 <h2 className="mt-2 text-xl font-semibold text-foreground">{update.title}</h2>
+                {author && <p className="mt-1 text-sm text-foreground/70">{tSite("byAuthor", { author })}</p>}
                 {/* Shown per entry, and only while this entry has no version in
                     the reader's language: adding the translation file removes it. */}
                 {isFallback && (
