@@ -41,7 +41,7 @@ authoring tool"](../README.md#the-authoring-tool-keystaticscene-builder)):
    this proactively (or the link isn't available for some reason), visit
    directly:
    ```
-   https://project-cherenkov-app.vercel.app/api/scene-builder/github-oauth/start
+   https://www.projectcherenkov.dev/api/scene-builder/github-oauth/start
    ```
    (`http://localhost:3000/...` in local GitHub-mode development.)
 3. Approve access on GitHub's consent screen.
@@ -67,8 +67,8 @@ authorization, check these in order:
 3. The GitHub App's redirect URIs match exactly. Under the App's
    *Identifying and authorizing users* settings, all four of these need to
    be registered (two per environment, one per OAuth flow):
-   - `https://project-cherenkov-app.vercel.app/api/keystatic/github/oauth/callback`
-   - `https://project-cherenkov-app.vercel.app/api/scene-builder/github-oauth/callback`
+   - `https://www.projectcherenkov.dev/api/keystatic/github/oauth/callback`
+   - `https://www.projectcherenkov.dev/api/scene-builder/github-oauth/callback`
    - `http://localhost:3000/api/keystatic/github/oauth/callback`
    - `http://localhost:3000/api/scene-builder/github-oauth/callback`
    A mismatch here shows up as GitHub itself rejecting the callback (a

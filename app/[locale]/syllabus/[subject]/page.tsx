@@ -40,13 +40,20 @@ export async function generateMetadata({
   if (!syllabus) return {};
   const t = await getTranslations({ locale, namespace: "syllabus" });
   const name = t(`subjects.${syllabus.subject}`);
+  const sources = syllabus.sources.map((source) => source.short);
   return pageMetadata({
     locale,
     path: `/syllabus/${subject}`,
-    title: name,
+    title: t("subjectTitle", {
+      // Sentence-initial in English ("Physics olympiad syllabus"), mid-sentence
+      // in Indonesian ("Silabus olimpiade fisika"), so the casing follows the
+      // language's own template.
+      subject: locale === "en" ? name : name.toLocaleLowerCase(locale),
+      sources: sources.join(", "),
+    }),
     description: t("subjectDescription", {
-      subject: name,
-      source: syllabus.sources.map((source) => source.short).join(", "),
+      subjectLower: name.toLocaleLowerCase(locale),
+      sources: new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(sources),
     }),
   });
 }
@@ -77,9 +84,19 @@ export default async function SubjectSyllabusPage({
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
         <p className="label-code">
-          {t("counts.topics", { count: coverage.topicCount })} ·{" "}
-          {t("counts.materials", { count: coverage.materialCount })} ·{" "}
-          {t("counts.editorials", { count: coverage.editorialCount })}
+          {[
+            t("counts.topics", { count: coverage.topicCount }),
+            // Zero counts read as emptiness; say "coming" once instead.
+            ...(coverage.materialCount > 0
+              ? [t("counts.materials", { count: coverage.materialCount })]
+              : []),
+            ...(coverage.editorialCount > 0
+              ? [t("counts.editorials", { count: coverage.editorialCount })]
+              : []),
+            ...(coverage.materialCount === 0 && coverage.editorialCount === 0
+              ? [t("counts.coming")]
+              : []),
+          ].join(" · ")}
         </p>
         <SyllabusToggleAll
           targetId={LIST_ID}
@@ -387,23 +404,46 @@ async function SourceBadges({
 async function Provenance({ syllabus, locale }: { syllabus: SubjectSyllabus; locale: string }) {
   const t = await getTranslations("syllabus");
   const date = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" });
+  // One line of sources above the topic list; the full account sits in a
+  // <details> so the topics, which most visitors came for, are on the first
+  // screen and the provenance is one click away for those who want it.
+  const summary = syllabus.sources
+    .map(
+      (source) =>
+        `${source.short} (${t(source.kind === "national" ? "provenance.nationalKind" : "provenance.internationalKind").toLocaleLowerCase(locale)})`,
+    )
+    .join("; ");
   return (
-    <section aria-labelledby="provenance-heading" className="mt-4 rounded-lg border border-border bg-card p-4">
-      <h2 id="provenance-heading" className="heading-section">
+    <section aria-labelledby="provenance-heading" className="mt-4 rounded-lg border border-border bg-card">
+      <h2 id="provenance-heading" className="sr-only">
         {t("provenance.heading")}
       </h2>
-      <p className="mt-1 text-sm text-foreground/75">{t("provenance.intro")}</p>
-      <ul className="mt-3 divide-y divide-border">
-        {syllabus.sources.map((source) => (
-          <ProvenanceSource
-            key={source.id}
-            source={source}
-            locale={locale}
-            comparedOn={source.accessed ? date.format(new Date(`${source.accessed}T00:00:00Z`)) : null}
-          />
-        ))}
-      </ul>
-      <p className="mt-3 text-sm text-muted-foreground">{t("provenance.ownWork")}</p>
+      <details className="group">
+        <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-sm [&::-webkit-details-marker]:hidden">
+          <span className="text-foreground/85">{t("provenance.summary", { sources: summary })}</span>
+          <span className="inline-flex items-center gap-1 font-medium text-brand underline underline-offset-4">
+            <ChevronRight
+              aria-hidden
+              className="h-4 w-4 shrink-0 transition-transform group-open:rotate-90 motion-reduce:transition-none"
+            />
+            {t("provenance.toggle")}
+          </span>
+        </summary>
+        <div className="border-t border-border p-4">
+          <p className="text-sm text-foreground/75">{t("provenance.intro")}</p>
+          <ul className="mt-3 divide-y divide-border">
+            {syllabus.sources.map((source) => (
+              <ProvenanceSource
+                key={source.id}
+                source={source}
+                locale={locale}
+                comparedOn={source.accessed ? date.format(new Date(`${source.accessed}T00:00:00Z`)) : null}
+              />
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-muted-foreground">{t("provenance.ownWork")}</p>
+        </div>
+      </details>
     </section>
   );
 }

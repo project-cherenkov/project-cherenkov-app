@@ -17,8 +17,8 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: "/syllabus",
-    title: t("title"),
-    description: t("description"),
+    title: t("metaTitle"),
+    description: t("metaDescription"),
   });
 }
 

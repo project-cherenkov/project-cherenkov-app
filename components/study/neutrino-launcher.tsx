@@ -279,7 +279,7 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
                   <textarea id="neutrino-message" rows={2} maxLength={1200} value={draft} disabled={!signedIn || busy} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border bg-background px-3 py-2 text-sm" />
                   <button type="submit" disabled={!signedIn || busy || !draft.trim()} className="h-11 rounded-md bg-cherenkov-blue-800 px-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{t("send")}</button>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
                   <span>{t("dailyLimit")}</span>
                   <Link href="/docs/neutrino" className="underline underline-offset-2">{t("help")}</Link>
                 </div>

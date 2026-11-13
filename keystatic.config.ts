@@ -347,6 +347,13 @@ function editorialSchema(subject: "astronomy" | "physics" | "informatics") {
       label: "Error type",
       description: "Free text, optional. See the note on principle.",
     }),
+    vizDescription: fields.text({
+      label: "Visualization description",
+      description:
+        "Optional. One plain sentence stating what the visualization shows (its result). Shown as a caption under it, and read by search engines, AI tools and screen readers.",
+      multiline: true,
+      validation: { length: { max: 400 } },
+    }),
     vizConfig: vizConfigConditional(subject),
     publishedAt: fields.date({ label: "Published at", validation: { isRequired: true } }),
     // Optional; mirrors the optional `updatedAt` in velite.config.ts so editorials

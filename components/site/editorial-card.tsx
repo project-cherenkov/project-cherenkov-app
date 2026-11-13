@@ -1,12 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { humanizeSlug } from "@/lib/utils";
 import type { Editorial } from "#content";
-
-const subjectLabel: Record<Editorial["subject"], string> = {
-  informatics: "informatics",
-  physics: "physics",
-  astronomy: "astronomy",
-};
 
 // `headingLevel` keeps the document outline valid: 2 where the card sits
 // directly under the page's <h1> (the archive listing), 3 (default) where it
@@ -20,6 +15,7 @@ export function EditorialCard({
 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const t = useTranslations("editorial");
+  const tSubjects = useTranslations("syllabus.subjects");
 
   return (
     <Link
@@ -28,7 +24,7 @@ export function EditorialCard({
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="label-code inline-block rounded bg-muted px-2 py-0.5 text-brand">
-          {subjectLabel[editorial.subject]}
+          {tSubjects(editorial.subject)}
         </span>
         {/* Only ever rendered for editors: public lists never contain draft
             editorials (lib/content.ts). */}
@@ -42,11 +38,11 @@ export function EditorialCard({
       <Heading className="mt-3 text-lg font-semibold text-foreground group-hover:underline">
         {editorial.title}
       </Heading>
-      {/* The principle slug can be 40+ characters. It sits under the title on
-          one truncated line (full text on hover/focus via title) instead of
-          wrapping into two lines of mono caps beside the subject chip. */}
-      <p className="label-mono mt-1 truncate" title={editorial.principle}>
-        {editorial.principle}
+      {/* The principle is a long phrase. It is shown in sentence case and
+          allowed to wrap (two lines at most) rather than being cut off with
+          an ellipsis, which hid the part that matters on a phone. */}
+      <p className="label-mono mt-1 line-clamp-2 [overflow-wrap:anywhere]">
+        {humanizeSlug(editorial.principle)}
       </p>
       <p className="mt-1.5 text-sm text-foreground/75">{editorial.hook}</p>
 

@@ -34,6 +34,7 @@ export default async function UpdatesPage({
   setRequestLocale(locale);
   const t = await getTranslations("updates");
   const tSite = await getTranslations("site");
+  const tEditorial = await getTranslations("editorial");
   const entries = getUpdates(locale);
   const date = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" });
 
@@ -66,7 +67,7 @@ export default async function UpdatesPage({
                   </time>
                 </p>
                 <h2 className="mt-2 text-xl font-semibold text-foreground">{update.title}</h2>
-                {author && <p className="mt-1 text-sm text-foreground/70">{tSite("byAuthor", { author })}</p>}
+                {author && <p className="mt-1 text-sm text-foreground/70">{tEditorial("byAuthor", { author })}</p>}
                 {/* Shown per entry, and only while this entry has no version in
                     the reader's language: adding the translation file removes it. */}
                 {isFallback && (

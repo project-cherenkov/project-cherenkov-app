@@ -64,6 +64,7 @@ export interface ArchiveFilters {
   subject?: string;
   principle?: string;
   errorType?: string;
+  tag?: string;
 }
 
 export function filterEditorials(
@@ -74,6 +75,7 @@ export function filterEditorials(
     if (filters.subject && e.subject !== filters.subject) return false;
     if (filters.principle && e.principle !== filters.principle) return false;
     if (filters.errorType && e.errorType !== filters.errorType) return false;
+    if (filters.tag && !e.tags.includes(filters.tag)) return false;
     return true;
   });
 }

@@ -70,7 +70,28 @@ function VizFrame({ children }: { children: ReactNode }) {
   );
 }
 
-export function VizEngine({ editorial }: { editorial: VizEditorial }) {
+// `description` is the authored one-sentence result of the visualization. It is
+// a visible caption (not hidden text): the canvas itself is opaque to
+// crawlers, AI tools and screen readers, and a sighted learner also gets the
+// point before they start moving sliders.
+export function VizEngine({
+  editorial,
+  description,
+}: {
+  editorial: VizEditorial;
+  description?: string;
+}) {
+  const inner = <VizEngineBase editorial={editorial} />;
+  if (!description || editorial.vizConfig.discriminant === "none") return inner;
+  return (
+    <figure className="m-0">
+      {inner}
+      <figcaption className="mt-2 text-sm leading-snug text-foreground/80">{description}</figcaption>
+    </figure>
+  );
+}
+
+function VizEngineBase({ editorial }: { editorial: VizEditorial }) {
   const { discriminant, value } = editorial.vizConfig;
   switch (discriminant) {
     case "graph-array-stepper":

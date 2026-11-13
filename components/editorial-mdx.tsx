@@ -27,8 +27,11 @@ type VizEditorial = Pick<Editorial, "vizConfig">;
 export function EditorialMDX({
   code,
   vizConfig,
+  vizDescription,
 }: {
   code: string;
+  /** One-sentence result of the visualization, shown as its caption. */
+  vizDescription?: string;
 } & VizEditorial) {
   const t = useTranslations("editorial");
   const Component = useMDXComponent(code);
@@ -37,7 +40,7 @@ export function EditorialMDX({
     function Interactive() {
       return (
         <div className="not-prose my-8">
-          <VizEngine editorial={{ vizConfig }} />
+          <VizEngine editorial={{ vizConfig }} description={vizDescription} />
         </div>
       );
     }
@@ -69,11 +72,11 @@ export function EditorialMDX({
             {forgotToEmbedTag && (
               <p className="label-code mb-2 text-amber-600">{t("vizFallbackNotice")}</p>
             )}
-            <VizEngine editorial={{ vizConfig }} />
+            <VizEngine editorial={{ vizConfig }} description={vizDescription} />
           </div>
         )}
         {tree}
       </>
     );
-  }, [Component, vizConfig, t]);
+  }, [Component, vizConfig, vizDescription, t]);
 }

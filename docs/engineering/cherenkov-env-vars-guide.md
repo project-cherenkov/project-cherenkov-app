@@ -134,7 +134,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ### Vercel deployment
 
-Value: `https://project-cherenkov-app.vercel.app`
+Value: `https://www.projectcherenkov.dev`
 
 How to get it:
 
@@ -257,7 +257,7 @@ BETTER_AUTH_URL=http://localhost:3000
 
 ### Vercel deployment
 
-Value: `https://project-cherenkov-app.vercel.app`, the same
+Value: `https://www.projectcherenkov.dev`, the same
 value as `NEXT_PUBLIC_SITE_URL`, just as its own variable since Better Auth
 reads it independently.
 
@@ -302,13 +302,13 @@ either way. The only difference is which redirect URI(s) you register.
    client per environment):
 
    ```
-   https://project-cherenkov-app.vercel.app/api/auth/callback/google
+   https://www.projectcherenkov.dev/api/auth/callback/google
    http://localhost:3000/api/auth/callback/google
    ```
 
    (this is Better Auth's standard callback path, confirmed in `lib/auth.ts`).
    Optionally also add an Authorized JavaScript origin of
-   `https://project-cherenkov-app.vercel.app` (no trailing path): not
+   `https://www.projectcherenkov.dev` (no trailing path): not
    strictly required for Better Auth's flow, but harmless to include.
 6. Click Create. Google shows a Client ID (ends in
    `.apps.googleusercontent.com`) and a Client Secret: copy both. The
@@ -415,9 +415,9 @@ their own callback path:
 
 ```
 http://localhost:3000/api/keystatic/github/oauth/callback
-https://project-cherenkov-app.vercel.app/api/keystatic/github/oauth/callback
+https://www.projectcherenkov.dev/api/keystatic/github/oauth/callback
 http://localhost:3000/api/scene-builder/github-oauth/callback
-https://project-cherenkov-app.vercel.app/api/scene-builder/github-oauth/callback
+https://www.projectcherenkov.dev/api/scene-builder/github-oauth/callback
 ```
 
 (Keystatic's own admin login uses the first path; the scene builder's

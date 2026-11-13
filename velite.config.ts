@@ -74,6 +74,10 @@ const editorials = defineCollection({
       tags: s.array(s.string()),
       principle: s.string(), // open string — see note above
       errorType: s.string().optional(), // open string — see note above
+      // One plain sentence stating what the visualization shows (its result),
+      // rendered as a visible caption. Canvases are invisible to crawlers,
+      // AI tools and screen readers, so this is the text equivalent.
+      vizDescription: s.string().max(400).optional(),
       vizConfig: s
         .object({
           discriminant: s.enum(vizEngines),

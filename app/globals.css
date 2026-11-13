@@ -286,3 +286,12 @@
   outline-offset: 2px;
   box-shadow: 0 0 0 5px var(--mf-plate-b);
 }
+
+/* Display maths wider than the column scrolls inside its own box instead of
+   pushing the whole page sideways (WCAG 1.4.10 Reflow: two-dimensional
+   scrolling is allowed only for content that needs it). */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}

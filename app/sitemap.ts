@@ -1,9 +1,19 @@
 import type { MetadataRoute } from "next";
-import { getAllEditorials, getAllMaterials } from "@/lib/content";
+import {
+  getAllEditorials,
+  getAllMaterials,
+  resolveEditorialText,
+  resolveMaterialText,
+} from "@/lib/content";
 import { getAllDocSlugs, getDocLocales, getDocPage } from "@/lib/docs";
 import { routing } from "@/i18n/routing";
 import { SUBJECTS } from "@/lib/subjects";
-import { isIndexableEditorial, languageAlternates, localizedUrl } from "@/lib/seo";
+import {
+  DEFAULT_LOCALE,
+  isIndexableEditorial,
+  languageAlternates,
+  localizedUrl,
+} from "@/lib/seo";
 
 // DEPLOYMENT-READINESS ADDITION, not part of the original spec — no
 // sitemap existed at all. Generated from the same Velite-backed content
@@ -54,16 +64,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const path of STATIC_PATHS) {
     add(path, routing.locales, { changeFrequency: path === "" ? "weekly" : "monthly" });
   }
+  // Only the languages a page really exists in: an editorial written in
+  // English has no indexable /id/ URL (that one is a noindex fallback).
   for (const editorial of editorials) {
-    add(`/archive/${editorial.subject}/${editorial.slug}`, routing.locales, {
-      lastModified: new Date(editorial.publishedAt),
-      changeFrequency: "yearly",
+    const { locales } = resolveEditorialText(editorial, DEFAULT_LOCALE);
+    add(`/archive/${editorial.subject}/${editorial.slug}`, locales, {
+      lastModified: new Date(editorial.updatedAt ?? editorial.publishedAt),
     });
   }
   for (const material of materials) {
-    add(`/materials/${material.subject}/${material.slug}`, routing.locales, {
-      changeFrequency: "monthly",
-    });
+    const { locales } = resolveMaterialText(material, DEFAULT_LOCALE);
+    add(`/materials/${material.subject}/${material.slug}`, locales);
   }
   for (const slug of getAllDocSlugs()) {
     const locales = getDocLocales(slug);

@@ -58,6 +58,7 @@ export async function generateMetadata({
     description: text.summary,
     ogType: "article",
     noindex: isFallback,
+    followLinks: isFallback,
     canonicalLocale: isFallback ? text.locale : locale,
     availableLocales: locales,
     article: { section: material.subject },
@@ -125,7 +126,7 @@ export default async function MaterialPage({
           }}
         />
       </aside>
-      <article className="min-w-0 max-w-3xl">
+      <article lang={text.locale} className="min-w-0 max-w-3xl">
         <JsonLd
           data={breadcrumbJsonLd(locale, [
             { name: t("title"), path: "/materials" },

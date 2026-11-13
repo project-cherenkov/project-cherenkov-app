@@ -62,6 +62,13 @@ describe("indexing switch", () => {
     expect(robotsFor()).toEqual({ index: true, follow: true });
     expect(robotsFor({ noindex: true })).toEqual({ index: false, follow: false });
   });
+
+  it("language fallbacks are noindex but still follow links", () => {
+    vi.stubEnv("NEXT_PUBLIC_ALLOW_INDEXING", "1");
+    expect(robotsFor({ noindex: true, followLinks: true })).toEqual({ index: false, follow: true });
+    vi.stubEnv("NEXT_PUBLIC_ALLOW_INDEXING", "");
+    expect(robotsFor({ noindex: true, followLinks: true })).toEqual({ index: false, follow: false });
+  });
 });
 
 describe("truncate", () => {
@@ -95,6 +102,20 @@ describe("buildPageMetadata", () => {
       expect.objectContaining({ url: expect.stringMatching(/\/id\/opengraph-image\?v=\d+$/), width: 1200, height: 630 }),
     ]);
     expect(meta.twitter?.images).toEqual([expect.stringMatching(/\/id\/opengraph-image\?v=\d+$/)]);
+  });
+
+  it("uses the page's own share card when `imagePath` is given", () => {
+    const meta = buildPageMetadata({ ...base, path: "/archive/physics/x", imagePath: "/archive/physics/x/opengraph-image" });
+    expect(meta.openGraph?.images).toEqual([
+      expect.objectContaining({ url: expect.stringMatching(/\/id\/archive\/physics\/x\/opengraph-image\?v=\d+$/) }),
+    ]);
+    expect(meta.twitter?.images).toEqual([expect.stringMatching(/\/id\/archive\/physics\/x\/opengraph-image\?v=\d+$/)]);
+  });
+
+  it("advertises the RSS feed on every page", () => {
+    expect(buildPageMetadata(base).alternates?.types).toEqual({
+      "application/rss+xml": expect.stringMatching(/\/updates\/feed\.xml$/),
+    });
   });
 
   it("can canonicalise to a different locale (used for untranslated docs)", () => {
@@ -156,6 +177,40 @@ describe("JSON-LD", () => {
       keywords: "a, b",
       articleSection: "physics",
     });
+  });
+});
+
+describe("Article JSON-LD details", () => {
+  const input = {
+    locale: "id",
+    path: "/archive/physics/x",
+    headline: "H",
+    description: "D",
+    author: "Ada",
+    publishedAt: "2026-02-03",
+    siteName: "Project Cherenkov",
+  };
+
+  it("carries dateModified, image, author url and the language the text is written in", () => {
+    const ld = articleJsonLd({
+      ...input,
+      modifiedAt: "2026-03-04",
+      image: "https://example.test/card.png",
+      authorUrl: "https://example.test/id/about",
+      textLanguage: "en",
+    });
+    expect(ld).toMatchObject({
+      dateModified: "2026-03-04",
+      image: ["https://example.test/card.png"],
+      author: { name: "Ada", url: "https://example.test/id/about" },
+      inLanguage: "en",
+    });
+  });
+
+  it("falls back to the URL's locale and omits image when none is given", () => {
+    const ld = articleJsonLd(input);
+    expect(ld).toMatchObject({ inLanguage: "id" });
+    expect(ld).not.toHaveProperty("image");
   });
 });
 

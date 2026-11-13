@@ -57,7 +57,7 @@ export default async function AboutPage({
         </p>
       </div>
 
-      <h2 className="heading-section mt-10">{t("teamHeading")}</h2>
+      <h2 id="team" className="heading-section mt-10 scroll-mt-24">{t("teamHeading")}</h2>
       {members.length === 0 ? (
         // No entries in content/team/ yet — keep the existing placeholder
         // copy rather than rendering an empty list. This text is a COPY-001

@@ -41,11 +41,11 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(siteUrl),
     title: { default: t("homeTitle"), template: `%s | ${t("name")}` },
-    description: t("tagline"),
+    description: t("homeDescription"),
     applicationName: t("name"),
     openGraph: {
       title: t("homeTitle"),
-      description: t("tagline"),
+      description: t("homeDescription"),
       siteName: t("name"),
       locale: ogLocale,
       alternateLocale: routing.locales

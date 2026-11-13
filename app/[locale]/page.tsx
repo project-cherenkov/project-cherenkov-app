@@ -5,7 +5,8 @@ import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { JsonLd } from "@/components/seo/json-ld";
-import { getRecentEditorials } from "@/lib/content";
+import { getAllEditorials, getAllMaterials, getRecentEditorials } from "@/lib/content";
+import { getAllSyllabi } from "@/lib/syllabus";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { HomeVisualizations } from "@/components/site/home-visualizations";
@@ -22,7 +23,7 @@ export async function generateMetadata({
     path: "/",
     title: t("homeTitle"),
     absoluteTitle: true,
-    description: t("tagline"),
+    description: t("homeDescription"),
   });
 }
 
@@ -36,13 +37,18 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const tSite = await getTranslations("site");
   const recent = getRecentEditorials();
+  const counts = {
+    editorials: getAllEditorials().length,
+    materials: getAllMaterials().length,
+    syllabuses: getAllSyllabi().length,
+  };
 
   return (
     <div>
       <JsonLd
         data={[
           organizationJsonLd(tSite("name")),
-          websiteJsonLd({ siteName: tSite("name"), description: tSite("tagline"), locale }),
+          websiteJsonLd({ siteName: tSite("name"), description: tSite("homeDescription"), locale }),
         ]}
       />
       <section className="hero-band">
@@ -50,7 +56,9 @@ export default async function HomePage({
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)] lg:items-start">
             <div className="lg:pt-10">
             <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
-            <h1 className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            {/* The tagline is English in both languages by decision (see
+                docs/project/product-identity.md), so it is marked as such. */}
+            <h1 lang="en" className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("heroTitle")}
             </h1>
             <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
@@ -62,7 +70,7 @@ export default async function HomePage({
                 {t("ctaArchive")}
               </Link>
               <Link
-                href="/planner"
+                href="/docs/study-planner"
                 className={buttonVariants({ variant: "outline", size: "lg" })}
               >
                 {t("ctaPlan")}
@@ -84,6 +92,7 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
+            <p className="label-code mt-4">{t("counts", counts)}</p>
             </div>
             {/* ONE instance, placed by the grid: beside the text from lg up,
                 under it below. It used to be rendered twice (one copy hidden

@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 // the "nothing that depends on hover" rule in spec §7 for the viz sliders.
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    /** Spoken value with its unit ("20 m/s"). Keeps the name stable, so a screen reader does not say the number twice. */
+    valueText?: string;
+  }
+>(({ className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, valueText, ...props }, ref) => (
   // The slider's accessible name has to sit on the THUMB (the element with
   // role="slider"), not on Radix's root wrapper. This used to hard-code
   // aria-label="value" on the thumb, which overrode every caller's own label —
@@ -30,6 +33,7 @@ const Slider = React.forwardRef<
       className="block h-6 w-6 rounded-full border-2 border-cherenkov-blue-700 bg-white shadow transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-cherenkov-blue-pastel dark:bg-slate-900"
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
+      aria-valuetext={valueText}
     />
   </SliderPrimitive.Root>
 ));

@@ -4,6 +4,7 @@ import { Select } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
+import { humanizeSlug } from "@/lib/utils";
 
 interface ArchiveFiltersProps {
   subjects: string[];
@@ -11,7 +12,12 @@ interface ArchiveFiltersProps {
   errorTypes: string[];
 }
 
-const FILTER_KEYS = ["subject", "principle", "errorType"] as const;
+const SUBJECT_KEYS = ["informatics", "physics", "astronomy"];
+function isKnownSubject(value: string): value is "informatics" | "physics" | "astronomy" {
+  return SUBJECT_KEYS.includes(value);
+}
+
+const FILTER_KEYS = ["subject", "principle", "errorType", "tag"] as const;
 
 export function ArchiveFilters({
   subjects,
@@ -19,6 +25,7 @@ export function ArchiveFilters({
   errorTypes,
 }: ArchiveFiltersProps) {
   const t = useTranslations("archive.filters");
+  const tSubjects = useTranslations("syllabus.subjects");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,6 +49,7 @@ export function ArchiveFilters({
         allLabel={t("allSubjects")}
         value={searchParams.get("subject") ?? ""}
         options={subjects}
+        labelFor={(value) => (isKnownSubject(value) ? tSubjects(value) : value)}
         onChange={(v) => setFilter("subject", v)}
       />
       <FilterSelect
@@ -49,6 +57,7 @@ export function ArchiveFilters({
         allLabel={t("allPrinciples")}
         value={searchParams.get("principle") ?? ""}
         options={principles}
+        labelFor={humanizeSlug}
         onChange={(v) => setFilter("principle", v)}
       />
       <FilterSelect
@@ -56,8 +65,15 @@ export function ArchiveFilters({
         allLabel={t("allErrorTypes")}
         value={searchParams.get("errorType") ?? ""}
         options={errorTypes}
+        labelFor={humanizeSlug}
         onChange={(v) => setFilter("errorType", v)}
       />
+
+      {searchParams.get("tag") && (
+        <span className="label-mono inline-flex min-h-11 items-center rounded-full bg-cherenkov-pink/40 px-3 text-foreground dark:bg-cherenkov-pink/25">
+          {t("tag")}: {searchParams.get("tag")}
+        </span>
+      )}
 
       {hasActiveFilters && (
         <button
@@ -77,12 +93,14 @@ function FilterSelect({
   allLabel,
   value,
   options,
+  labelFor,
   onChange,
 }: {
   label: string;
   allLabel: string;
   value: string;
   options: string[];
+  labelFor?: (value: string) => string;
   onChange: (value: string) => void;
 }) {
   return (
@@ -99,7 +117,7 @@ function FilterSelect({
         <option value="">{allLabel}</option>
         {options.map((opt) => (
           <option key={opt} value={opt}>
-            {opt}
+            {labelFor ? labelFor(opt) : opt}
           </option>
         ))}
       </Select>

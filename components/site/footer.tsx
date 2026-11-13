@@ -10,6 +10,7 @@ const linkClass = "inline-flex min-h-8 items-center underline hover:text-foregro
 
 export function SiteFooter() {
   const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
   const locale = useLocale();
   if (!lastUpdatedAt) {
     throw new Error("NEXT_PUBLIC_LAST_UPDATED_AT is not configured.");
@@ -26,7 +27,7 @@ export function SiteFooter() {
     <footer className="border-t border-border">
       <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <p className="label-code mb-2">footer.md</p>
-        <p>{t("tagline")}</p>
+        <p lang="en">{t("tagline")}</p>
         <p lang="la" className="mt-0.5 text-xs">
           {t("motto")}
         </p>
@@ -39,6 +40,20 @@ export function SiteFooter() {
           aria-label={t("navLabel")}
           className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs uppercase tracking-wide"
         >
+          {/* The main sections, so every one of them is a single hop from any
+              page for crawlers and for people who scrolled to the bottom. */}
+          <Link href="/syllabus" className={linkClass}>
+            {tNav("syllabus")}
+          </Link>
+          <Link href="/materials" className={linkClass}>
+            {tNav("materials")}
+          </Link>
+          <Link href="/archive" className={linkClass}>
+            {tNav("editorials")}
+          </Link>
+          <Link href="/about" className={linkClass}>
+            {tNav("about")}
+          </Link>
           <Link href="/docs" className={linkClass}>
             {t("docs")}
           </Link>

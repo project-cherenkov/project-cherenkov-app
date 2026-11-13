@@ -89,8 +89,8 @@ function mount(config: TrajectorySandboxConfig) {
 
 const handle = () => container.querySelector<HTMLElement>('[data-testid="trajectory-angle-handle"]')!;
 const byLabel = (label: string) => container.querySelector<HTMLElement>(`[aria-label="${label}"]`)!;
-const angleThumb = () => container.querySelector<HTMLElement>('[role="slider"][aria-label^="θ"]')!;
-const speedThumb = () => container.querySelector<HTMLElement>('[role="slider"][aria-label^="v₀"]')!;
+const angleThumb = () => container.querySelector<HTMLElement>(`[role="slider"][aria-label="${en.viz.trajectoryAngleName}"]`)!;
+const speedThumb = () => container.querySelector<HTMLElement>(`[role="slider"][aria-label="${en.viz.trajectorySpeedName}"]`)!;
 const text = () => container.textContent ?? "";
 
 function press(el: HTMLElement, key: string, init: KeyboardEventInit = {}) {

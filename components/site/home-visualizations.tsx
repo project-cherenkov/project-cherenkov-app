@@ -105,7 +105,7 @@ export function HomeVisualizations() {
       onTouchEnd={handleTouchEnd}
     >
       <div className="mb-3 flex items-start justify-between gap-3">
-        <p className="label-code">{t("visualizations.eyebrow")}</p>
+        <h2 className="label-code">{t("visualizations.eyebrow")}</h2>
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -155,7 +155,7 @@ export function HomeVisualizations() {
                 isActive ? "" : "invisible",
               ].join(" ")}
             >
-              <h2 className="text-lg font-semibold text-foreground">{slide.label}</h2>
+              <h3 className="text-lg font-semibold text-foreground">{slide.label}</h3>
               <p className="mb-3 text-sm text-muted-foreground">{slide.subject}</p>
               <VizEngine editorial={{ vizConfig: slide.config }} />
             </div>

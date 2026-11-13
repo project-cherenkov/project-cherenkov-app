@@ -12,6 +12,7 @@ interface ArchiveSearchParams {
   subject?: string;
   principle?: string;
   errorType?: string;
+  tag?: string;
 }
 
 export async function generateMetadata({
@@ -26,8 +27,8 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: "/archive",
-    title: t("title"),
-    description: t("description"),
+    title: t("metaTitle"),
+    description: t("metaDescription"),
   });
 }
 

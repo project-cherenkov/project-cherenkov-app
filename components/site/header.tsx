@@ -154,14 +154,14 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                 : false;
 
               const bookmarkStyle = [
-                "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus:outline-none",
+                "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus-visible:outline-none",
                 isActive ? "translate-y-3 z-30" : "z-20 hover:translate-y-9",
               ].join(" ");
 
               const content = (
                 <>
                   <NavRibbonArt className="pointer-events-none drop-shadow-md" />
-                  <span className="relative z-10 text-center font-bold text-white dark:text-slate-100 text-[11px] leading-tight px-1 pb-3">
+                  <span className="relative z-10 text-center font-bold text-white dark:text-slate-100 text-xs leading-tight px-1 pb-3">
                     {item.label}
                   </span>
                 </>
@@ -255,7 +255,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               onClick={() => setMobileMenuOpen((prev) => !prev)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
-              className="group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
+              className="group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
             >
               <NavRibbonArt className="pointer-events-none drop-shadow-md" />
               {mobileMenuOpen ? (

@@ -319,6 +319,8 @@ export function TrajectorySandbox({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SliderField
           label={`v₀ = ${speed.toFixed(0)} m/s`}
+          name={t("trajectorySpeedName")}
+          valueText={`${speed.toFixed(0)} m/s`}
           value={speed}
           min={speedRange[0]}
           max={speedRange[1]}
@@ -327,6 +329,8 @@ export function TrajectorySandbox({
         />
         <SliderField
           label={`θ = ${angleDeg.toFixed(0)}°`}
+          name={t("trajectoryAngleName")}
+          valueText={`${angleDeg.toFixed(0)}°`}
           value={angleDeg}
           min={angleRange[0]}
           max={angleRange[1]}
@@ -476,6 +480,8 @@ export function TrajectorySandbox({
 
 function SliderField({
   label,
+  name,
+  valueText,
   value,
   min,
   max,
@@ -483,6 +489,8 @@ function SliderField({
   onChange,
 }: {
   label: string;
+  name: string;
+  valueText: string;
   value: number;
   min: number;
   max: number;
@@ -493,7 +501,8 @@ function SliderField({
     <label className="flex flex-col gap-1">
       <span className="label-mono">{label}</span>
       <Slider
-        aria-label={label}
+        aria-label={name}
+        valueText={valueText}
         min={min}
         max={max}
         step={step}

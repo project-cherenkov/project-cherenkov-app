@@ -1,6 +1,6 @@
 {
   "site": {
-    "name": "Cherenkov",
+    "name": "Project Cherenkov",
     "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi: bukti lengkap dan visualisasi yang bisa Anda manipulasi untuk setiap ide, diarsipkan berdasarkan kesalahan yang dikoreksinya, dengan silabus OSN dan perencana belajar.",
     "homeTitle": "Project Cherenkov: editorial olimpiade interaktif",
     "ogDescription": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi.",
@@ -8,7 +8,8 @@
       "id": "Indonesia",
       "en": "Inggris"
     },
-    "translationNotice": "Halaman ini belum diterjemahkan ke bahasa {requestedLanguage}. Halaman yang ditampilkan dalam bahasa {displayedLanguage}."
+    "translationNotice": "Halaman ini belum diterjemahkan ke bahasa {requestedLanguage}. Halaman yang ditampilkan dalam bahasa {displayedLanguage}.",
+    "homeDescription": "Editorial olimpiade interaktif untuk fisika, astronomi, dan informatika: bukti lengkap, visualisasi yang bisa dicoba, silabus OSN, dan perencana belajar."
   },
   "nav": {
     "home": "Beranda",
@@ -37,11 +38,11 @@
   "home": {
     "eyebrow": "readme.md",
     "heroTitle": "From Curiosity to Visualization",
-    "heroBody": "Setiap editorial menjelaskan satu ide secara utuh: buktinya, dan visualisasi yang bisa Anda manipulasi, diarsipkan berdasarkan kesalahan yang dikoreksinya. Instagram membawa pancingannya; situs ini membawa sisanya.",
-    "ctaPlan": "Rencanakan belajarku",
+    "heroBody": "Arsip ide olimpiade yang dibuat terlihat: setiap ide berupa bukti lengkap dengan visualisasi interaktif, diarsipkan berdasarkan kesalahan yang dikoreksinya.",
+    "ctaPlan": "Cara kerja perencana belajar",
     "recentEyebrow": "requirements.txt",
     "recentHeading": "Edisi terbaru",
-    "ctaArchive": "Jelajahi arsip",
+    "ctaArchive": "Jelajahi editorial",
     "ctaAbout": "Baca filosofinya",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
     "ctaSyllabus": "Lihat silabus",
@@ -67,11 +68,12 @@
         "2": "8 terlalu kecil, jadi geser batas bawah ke depan.",
         "3": "Kedua batas bertemu di nilai pertama yang paling sedikit bernilai 10."
       }
-    }
+    },
+    "counts": "{editorials, plural, other {# editorial}} · {materials, plural, other {# materi}} · {syllabuses, plural, other {# silabus}}"
   },
   "archive": {
     "eyebrow": "archive.log",
-    "title": "Arsip",
+    "title": "Editorial",
     "description": "Diindeks berdasarkan prinsip dan jenis kesalahan, bukan berdasarkan bab.",
     "filters": {
       "subject": "Bidang",
@@ -80,10 +82,13 @@
       "allSubjects": "Semua bidang",
       "allPrinciples": "Semua prinsip",
       "allErrorTypes": "Semua jenis kesalahan",
-      "clear": "Hapus filter"
+      "clear": "Hapus filter",
+      "tag": "Tag"
     },
     "empty": "Tidak ada edisi yang cocok dengan filter ini.",
-    "count": "{count, plural, other {# edisi}}"
+    "count": "{count, plural, other {# edisi}}",
+    "metaTitle": "Editorial olimpiade",
+    "metaDescription": "Semua editorial olimpiade fisika, astronomi, dan informatika, diarsipkan berdasarkan kesalahan yang dikoreksinya dan diindeks menurut prinsip dan jenis kesalahan."
   },
   "editorial": {
     "draftBadge": "Draf",
@@ -114,7 +119,12 @@
       "checkedOn": "tautan dicek {date}",
       "stale": "Sudah lama dicek, jadi mungkin sudah pindah.",
       "opensNewTab": "(terbuka di tab baru)"
-    }
+    },
+    "relatedHeading": "Lanjut membaca",
+    "filterByPrinciple": "Lihat semua editorial dengan prinsip ini",
+    "filterByErrorType": "Lihat semua editorial dengan jenis kesalahan ini",
+    "filterByTag": "Lihat semua editorial dengan tag {tag}",
+    "byAuthorLink": "Ditulis oleh <link>{author}</link>"
   },
   "viz": {
     "play": "Putar",
@@ -202,7 +212,11 @@
     "relativePeriodFacingSun": "Meridian bertanda menunjuk Matahari",
     "relativePeriodAlt": "Model {mode} berada pada {cyclePosition}% dari satu siklus sinodis. {primaryLabel} adalah {primaryValue}; {secondaryLabel} adalah {secondaryValue}; periode kembalinya yang dihitung adalah {synodicValue}.",
     "relativePeriodAltNoCycle": "Model {mode}. {primaryLabel} adalah {primaryValue}; {secondaryLabel} adalah {secondaryValue}. Tidak ada periode sinodis berhingga: konfigurasi relatif tidak berubah.",
-    "loading": "Memuat visualisasi…"
+    "loading": "Memuat visualisasi…",
+    "trajectorySpeedName": "Kecepatan awal",
+    "trajectoryAngleName": "Sudut luncur",
+    "orbitalEccentricityName": "Eksentrisitas orbit",
+    "orbitalMassRatioName": "Rasio massa planet terhadap bintang"
   },
   "about": {
     "eyebrow": "about.md",
@@ -360,7 +374,8 @@
   "notFound": {
     "heading": "Halaman tidak ditemukan",
     "body": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
-    "cta": "Kembali ke beranda"
+    "cta": "Kembali ke beranda",
+    "title": "Halaman tidak ditemukan"
   },
   "syllabus": {
     "eyebrow": "syllabus.md",
@@ -385,7 +400,8 @@
     "counts": {
       "topics": "{count, plural, other {# topik}}",
       "materials": "{count, plural, other {# materi}}",
-      "editorials": "{count, plural, other {# editorial}}"
+      "editorials": "{count, plural, other {# editorial}}",
+      "coming": "materi dan editorial: segera hadir"
     },
     "theory": "Teori",
     "practical": "Praktikum",
@@ -396,7 +412,7 @@
     "editorialsLabel": "Editorial:",
     "subtopicsLabel": "Subtopik",
     "subtopicsNote": "Subtopik ini adalah pemecahan topik di atas oleh Project Cherenkov sendiri. Silabus sumber tidak mencantumkannya.",
-    "subjectDescription": "Silabus {subject}, topik demi topik, dari {source}. Lihat topik mana yang sudah punya materi atau editorial interaktif.",
+    "subjectDescription": "Semua topik silabus {subjectLower} {sources}, lengkap dengan sumber tiap topik dan tautan ke materi dan editorial.",
     "provenance": {
       "heading": "Dari mana ini berasal",
       "intro": "Project Cherenkov menulis silabus ini sendiri dari sumber-sumber di bawah. Setiap topik diberi label silabus mana saja yang mencantumkannya.",
@@ -409,7 +425,9 @@
       "openSource": "Buka sumber",
       "nationalKind": "Silabus nasional",
       "internationalKind": "Silabus internasional",
-      "ownWork": "Yang dibuat sendiri oleh Project Cherenkov: subtopik, terjemahan ke bahasa lainnya, dan pemasangan topik dengan sumber yang tidak menyatakannya sendiri. Penunjuk bagian seperti “IPhO §2.4.3” menyebut tempat di sumber tempat sebuah topik berasal."
+      "ownWork": "Yang dibuat sendiri oleh Project Cherenkov: subtopik, terjemahan ke bahasa lainnya, dan pemasangan topik dengan sumber yang tidak menyatakannya sendiri. Penunjuk bagian seperti “IPhO §2.4.3” menyebut tempat di sumber tempat sebuah topik berasal.",
+      "summary": "Sumber: {sources}",
+      "toggle": "Cara membandingkannya"
     },
     "verification": {
       "compared": "Sudah dibandingkan dengan dokumen primernya",
@@ -426,7 +444,10 @@
     "filter": {
       "label": "Tampilkan topik dari",
       "all": "Semua sumber"
-    }
+    },
+    "subjectTitle": "Silabus olimpiade {subject} ({sources})",
+    "metaDescription": "Cakupan tiap bidang olimpiade, topik demi topik, lengkap dengan sumber tiap topik dan tautan ke materi dan editorial.",
+    "metaTitle": "Silabus olimpiade (OSN, IPhO, IOI, IOAA)"
   },
   "materials": {
     "draftBadge": "Draf",

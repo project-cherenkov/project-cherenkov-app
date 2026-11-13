@@ -45,9 +45,14 @@ export function isIndexingEnabled(
   return value === "1" || value === "true";
 }
 
-export function robotsFor(options: { noindex?: boolean } = {}): NonNullable<Metadata["robots"]> {
+export function robotsFor(
+  options: { noindex?: boolean; followLinks?: boolean } = {},
+): NonNullable<Metadata["robots"]> {
   const index = isIndexingEnabled() && !options.noindex;
-  return { index, follow: index };
+  // Language fallbacks are noindex but still pass link signals ("noindex,
+  // follow"); everything else that is noindex stays "nofollow".
+  const follow = index || (isIndexingEnabled() && options.followLinks === true);
+  return { index, follow };
 }
 
 // --- URLs --------------------------------------------------------------------
@@ -107,6 +112,14 @@ export interface PageMetaInput {
   noindex?: boolean;
   /** Locales this page genuinely exists in. Defaults to every locale. */
   availableLocales?: readonly string[];
+  /**
+   * Path (WITHOUT the locale prefix) of this page's own share card, e.g.
+   * "/archive/astronomy/why-a-sidereal-day-is-shorter/opengraph-image".
+   * Defaults to the site-wide card.
+   */
+  imagePath?: string;
+  /** `noindex` but keep following links (language fallbacks). */
+  followLinks?: boolean;
   /** Which locale's URL is canonical. Defaults to `locale`. */
   canonicalLocale?: string;
   article?: {
@@ -127,6 +140,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     absoluteTitle = false,
     ogType = "website",
     noindex = false,
+    followLinks = false,
     availableLocales = LOCALES,
     canonicalLocale = locale,
     article,
@@ -137,10 +151,11 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
   const known = isAppLocale(locale) ? locale : DEFAULT_LOCALE;
   // A page that defines its own `openGraph` REPLACES its parent's, including
   // the file-based image from app/[locale]/opengraph-image.tsx — so say which
-  // image to use explicitly. Pages with their own opengraph-image file (the
-  // editorials) still override this, because file-based images win.
+  // image to use explicitly. An explicit entry here also beats a page's own
+  // opengraph-image file in the built output, so pages with their own card
+  // (the editorials) must pass `imagePath` rather than rely on the file.
   const image = {
-    url: `${localizedUrl(known, "/opengraph-image")}?v=${OG_IMAGE_VERSION}`,
+    url: `${localizedUrl(known, input.imagePath ?? "/opengraph-image")}?v=${OG_IMAGE_VERSION}`,
     width: 1200,
     height: 630,
     alt: fullTitle,
@@ -152,8 +167,11 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     alternates: {
       canonical,
       languages: languageAlternates(path, availableLocales),
+      // Feed discovery: this replaces the layout's `alternates`, so it has to
+      // be repeated here for every page that builds its own metadata.
+      types: { "application/rss+xml": `${siteUrl}/updates/feed.xml` },
     },
-    robots: robotsFor({ noindex }),
+    robots: robotsFor({ noindex, followLinks }),
     openGraph: {
       type: ogType,
       siteName,
@@ -201,15 +219,24 @@ export function serializeJsonLd(data: JsonLdObject | JsonLdObject[]): string {
 export const ORGANIZATION_ID = `${siteUrl}/#organization`;
 export const WEBSITE_ID = `${siteUrl}/#website`;
 
+// Other names the project goes by. "Cherenkov" alone is also a physics term,
+// so the full name is the primary one and the short form an alias.
+export const ORGANIZATION_ALTERNATE_NAMES = ["Cherenkov"];
+// Public profiles that identify the same entity. Add the project's social
+// accounts here once they are settled.
+export const ORGANIZATION_SAME_AS = [REPO_URL];
+
 export function organizationJsonLd(siteName: string): JsonLdObject {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
     name: siteName,
+    alternateName: ORGANIZATION_ALTERNATE_NAMES,
     url: siteUrl,
-    logo: `${siteUrl}/icon.svg`,
-    sameAs: [REPO_URL],
+    // PNG for consumers that do not read SVG; Google wants at least 112 px.
+    logo: `${siteUrl}/icon-512.png`,
+    sameAs: ORGANIZATION_SAME_AS,
   };
 }
 
@@ -260,6 +287,12 @@ export function articleJsonLd(input: {
   keywords?: string[];
   section?: string;
   siteName: string;
+  /** Absolute URL of the page's share card. */
+  image?: string;
+  /** Absolute URL of the author's page (the team entry on About). */
+  authorUrl?: string;
+  /** Language the text is actually written in (not the URL's locale). */
+  textLanguage?: string;
   type?: "Article" | "TechArticle";
   authorType?: "Person" | "Organization";
 }): JsonLdObject {
@@ -272,11 +305,16 @@ export function articleJsonLd(input: {
     description: input.description,
     url,
     mainEntityOfPage: url,
-    inLanguage: input.locale,
+    inLanguage: input.textLanguage ?? input.locale,
     isAccessibleForFree: true,
     datePublished: input.publishedAt,
     dateModified: input.modifiedAt ?? input.publishedAt,
-    author: { "@type": input.authorType ?? "Person", name: input.author },
+    ...(input.image ? { image: [input.image] } : {}),
+    author: {
+      "@type": input.authorType ?? "Person",
+      name: input.author,
+      ...(input.authorUrl ? { url: input.authorUrl } : {}),
+    },
     publisher: { "@id": ORGANIZATION_ID, "@type": "Organization", name: input.siteName },
     ...(input.keywords && input.keywords.length > 0 ? { keywords: input.keywords.join(", ") } : {}),
     ...(input.section ? { articleSection: input.section } : {}),

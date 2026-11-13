@@ -147,6 +147,8 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SliderField
           label={`e = ${eccentricity.toFixed(2)}`}
+          name={t("orbitalEccentricityName")}
+          valueText={eccentricity.toFixed(2)}
           value={eccentricity}
           min={config.eccentricityRange?.[0] ?? 0}
           max={config.eccentricityRange?.[1] ?? 0.85}
@@ -155,6 +157,8 @@ export function OrbitalSandbox({ config }: { config: OrbitalSandboxConfig }) {
         />
         <SliderField
           label={`M_planet / M_star ≈ ${massRatio.toFixed(3)}`}
+          name={t("orbitalMassRatioName")}
+          valueText={massRatio.toFixed(3)}
           value={massRatio}
           min={config.massRatioRange?.[0] ?? 0}
           max={config.massRatioRange?.[1] ?? 0.2}
@@ -277,6 +281,8 @@ function lightCurvePoints(
 
 function SliderField({
   label,
+  name,
+  valueText,
   value,
   min,
   max,
@@ -284,6 +290,8 @@ function SliderField({
   onChange,
 }: {
   label: string;
+  name: string;
+  valueText: string;
   value: number;
   min: number;
   max: number;
@@ -294,7 +302,8 @@ function SliderField({
     <label className="flex flex-col gap-1">
       <span className="label-mono">{label}</span>
       <Slider
-        aria-label={label}
+        aria-label={name}
+        valueText={valueText}
         min={min}
         max={max}
         step={step}
