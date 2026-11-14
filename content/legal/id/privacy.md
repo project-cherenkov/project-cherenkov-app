@@ -1,18 +1,18 @@
 # Kebijakan Privasi
 
-Terakhir diperbarui: 31 Oktober 2026. Kebijakan ini menjelaskan apa yang dilakukan Project Cherenkov ("kami") terhadap data pribadi. Dokumen ini disusun oleh tim proyek, bukan nasihat hukum, dan perlu ditinjau oleh ahli hukum sebelum peluncuran. Jika versi Indonesia dan Inggris berbeda, mohon beri tahu kami.
-
-<!-- OWNER: pastikan semua pernyataan masih sesuai dengan kondisi produksi sebelum dipublikasikan. -->
+Terakhir diperbarui: 14 November 2026. Kebijakan ini menjelaskan apa yang dilakukan Project Cherenkov ("kami") terhadap data pribadi. Dokumen ini disusun oleh tim proyek, bukan nasihat hukum, dan perlu ditinjau oleh ahli hukum sebelum peluncuran. Jika versi Indonesia dan Inggris berbeda, mohon beri tahu kami.
 
 ## 1. Siapa yang bertanggung jawab
 
-Project Cherenkov adalah proyek yang dijalankan siswa/mahasiswa. Pihak yang bertanggung jawab atas data Anda adalah pemilik proyek, yang dapat dihubungi di projectcherenkov@gmail.com.
+Project Cherenkov adalah proyek yang dijalankan siswa/mahasiswa. Situs web tersedia di https://www.projectcherenkov.dev/. Pihak yang bertanggung jawab atas data Anda adalah pemilik proyek, yang dapat dihubungi di projectcherenkov@gmail.com.
 
 ## 2. Data yang kami kumpulkan
 
-Tanpa akun, kami tidak mengumpulkan data tentang Anda selain log server biasa yang disimpan penyedia hosting. Pengatur waktu belajar, preferensi "coba dulu", dan pencarian situs berjalan di peramban Anda dan tidak dikirim kepada kami.
+Tanpa akun, kami tidak mengumpulkan data tentang Anda selain log server biasa yang disimpan penyedia hosting. Pengatur waktu belajar, preferensi "coba dulu", pencarian situs, dan visualisasi yang Anda pilih untuk beranda ("Pilihanmu") berjalan di peramban Anda dan tidak dikirim kepada kami.
 
-Dengan akun, kami menyimpan alamat email, kredensial masuk (kata sandi disimpan dalam bentuk hash; jika Anda masuk dengan Google, kami menerima email dan nama akun Google Anda), serta data belajar yang Anda buat: jawaban kuis dan percobaan ulang, sesi belajar (kapan, berapa lama, mata pelajaran), halaman yang ditandai sudah dipahami, serta pengaturan dan penilaian diri di perencana. Anda bisa melihatnya di halaman Progres dan Soal yang Salah, dan menghapus sesi belajar satu per satu di sana.
+Dengan akun, kami menyimpan alamat email, kredensial masuk (kata sandi disimpan dalam bentuk hash; jika Anda masuk dengan Google, kami menerima email dan nama akun Google Anda), serta data belajar yang Anda buat: jawaban kuis dan percobaan ulang, sesi belajar (kapan, berapa lama, mata pelajaran), halaman yang ditandai sudah dipahami, serta pengaturan dan penilaian diri di perencana, dan visualisasi yang Anda pilih untuk beranda. Anda bisa melihatnya di halaman Progres dan Soal yang Salah, dan menghapus sesi belajar satu per satu di sana.
+
+Jika Anda meminta pengaturan ulang kata sandi, kami menggunakan alamat email akun Anda untuk mengirim tautan pengaturan ulang satu kali. Alamat email, isi pesan pengaturan ulang, dan metadata pengiriman dikirim ke Resend, penyedia email transaksional kami, untuk tujuan ini.
 
 ## 3. Pendamping obrolan Neutrino (AI pihak ketiga)
 
@@ -24,7 +24,7 @@ Kami memakai data Anda untuk menyediakan fitur akun, kuis, dan perencana yang An
 
 ## 5. Siapa yang menerima data
 
-Penyedia layanan yang menjalankan situs untuk kami: hosting (saat ini Vercel), basis data (saat ini Neon), Google (masuk dengan Google dan obrolan Neutrino), dan penyedia email bila email diaktifkan. Mereka memproses data hanya untuk menyediakan layanan itu. Kami tidak menjual data pribadi.
+Penyedia layanan yang menjalankan situs untuk kami: hosting (saat ini Vercel), basis data (saat ini Neon), Google (masuk dengan Google dan obrolan Neutrino), dan Resend (email pengaturan ulang kata sandi). Mereka memproses data hanya untuk menyediakan layanan itu. Kami tidak menjual data pribadi.
 
 ## 6. Lokasi pemrosesan
 
@@ -32,7 +32,7 @@ Penyedia tersebut dapat memproses data di luar Indonesia, termasuk di Amerika Se
 
 ## 7. Berapa lama data disimpan
 
-Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Pesan obrolan tidak kami simpan di luar percakapan di peramban Anda; masa simpan di Google ditentukan oleh Google.
+Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Pesan obrolan tidak kami simpan di luar percakapan di peramban Anda; masa simpan di Google ditentukan oleh Google. Penanganan dan penyimpanan data email pengaturan ulang kata sandi oleh Resend diatur oleh kebijakan privasi dan ketentuan layanannya.
 
 ## 8. Hak Anda
 
@@ -40,9 +40,9 @@ Berdasarkan UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi, Anda dapat me
 
 ## 9. Anak dan remaja
 
-Beberapa fitur ditujukan bagi pelajar sekolah menengah. Jika Anda berusia di bawah 18 tahun, pakailah akun dan obrolan Neutrino hanya dengan sepengetahuan dan izin orang tua atau wali. Kami tidak dengan sengaja mengumpulkan data lebih dari yang diperlukan fitur di atas, dan akan menghapus data anak atas permintaan orang tua atau wali.
+Beberapa fitur ditujukan bagi pelajar sekolah menengah, tetapi obrolan Neutrino hanya ditujukan bagi pengguna yang berusia minimal 18 tahun. Kami tidak dengan sengaja mengumpulkan data lebih dari yang diperlukan fitur di atas, dan akan menghapus data anak atas permintaan orang tua atau wali.
 
-<!-- OWNER DECISION: ketentuan Gemini API membatasi penggunaan pada layanan yang kemungkinan diakses pengguna di bawah 18 tahun, dan PP 17/2025 (PP Tunas) membebankan kewajiban pada layanan yang dapat dipakai anak. Putuskan apakah Neutrino dibatasi untuk dewasa atau diganti sebelum peluncuran, lalu perbarui bagian ini. -->
+Pembatasan Neutrino ini mengikuti Ketentuan Gemini API Google, yang membatasi penggunaan pada layanan yang ditujukan untuk, atau kemungkinan diakses oleh, orang berusia di bawah 18 tahun. Konten edukasi umum di situs dapat tetap diakses oleh pengguna yang lebih muda, tetapi mereka tidak boleh menggunakan obrolan Neutrino.
 
 ## 10. Cookie
 

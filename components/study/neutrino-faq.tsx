@@ -37,12 +37,15 @@ export function NeutrinoFaq({
   name,
   onNavigate,
   onSwitchToAi,
+  banner,
 }: {
   name: string;
   /** Called when an answer's link is followed (the in-page panel closes itself). */
   onNavigate?: () => void;
   /** Present only when AI chat is available, to offer it when nothing matches. */
   onSwitchToAi?: () => void;
+  /** Optional notice banner (e.g. FAQ pre-written note) placed inside the scrollable container. */
+  banner?: React.ReactNode;
 }) {
   const t = useTranslations("companion");
   const searchId = useId();
@@ -181,6 +184,7 @@ export function NeutrinoFaq({
 
   return (
     <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto p-3">
+      {banner}
       <p className="rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("faq.hello", { name })}</p>
 
       {history.length > 0 ? (

@@ -13,6 +13,8 @@ describe("parseCompanionPatch", () => {
     expect(parseCompanionPatch({ enabled: false })).toEqual({ enabled: false });
     expect(parseCompanionPatch({ aiEnabled: false })).toEqual({ aiEnabled: false });
     expect(parseCompanionPatch({ rotation: "flat" })).toEqual({ rotation: "flat" });
+    expect(parseCompanionPatch({ aiBannerDismissed: true })).toEqual({ aiBannerDismissed: true });
+    expect(parseCompanionPatch({ faqBannerDismissed: true })).toEqual({ faqBannerDismissed: true });
   });
 
   it("trims the name and enforces 1-32 characters", () => {
@@ -27,6 +29,8 @@ describe("parseCompanionPatch", () => {
     expect(parseCompanionPatch({ enabled: "yes" })).toBeNull();
     expect(parseCompanionPatch({ aiEnabled: "no" })).toBeNull();
     expect(parseCompanionPatch({ aiEnabled: 0 })).toBeNull();
+    expect(parseCompanionPatch({ aiBannerDismissed: "true" })).toBeNull();
+    expect(parseCompanionPatch({ faqBannerDismissed: 1 })).toBeNull();
     expect(parseCompanionPatch({ size: "huge" })).toBeNull();
   });
 

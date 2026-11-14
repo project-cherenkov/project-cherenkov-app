@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { JsonLd } from "@/components/seo/json-ld";
 import { getRecentEditorials } from "@/lib/content";
+import { getHomeVizCandidates } from "@/lib/home-viz-candidates";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { HomeVisualizations } from "@/components/site/home-visualizations";
@@ -37,6 +38,7 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const tSite = await getTranslations("site");
   const recent = getRecentEditorials();
+  const vizCandidates = getHomeVizCandidates(locale);
 
   return (
     <div>
@@ -48,14 +50,15 @@ export default async function HomePage({
       />
       <section className="hero-band">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)] lg:items-start">
-            <div className="lg:pt-10">
+          <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-6 lg:items-start">
+            <div className="lg:col-start-1 lg:row-start-1 lg:pt-10">
             <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
             {/* The tagline is English in both languages by decision (see
                 docs/project/product-identity.md), so it is marked as such. */}
             <h1 lang="en" className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("heroTitle")}
             </h1>
+            <Credo className="mt-5" />
             <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
 
             {/* One primary and one secondary action. Syllabus, Docs and About
@@ -87,13 +90,13 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
-            <Credo className="mt-5" />
             </div>
-            {/* ONE instance, placed by the grid: beside the text from lg up,
-                under it below. It used to be rendered twice (one copy hidden
-                with CSS at each breakpoint), which mounted every simulation
-                twice and put two copies of its headings in the DOM. */}
-            <HomeVisualizations />
+            {/* ONE instance, placed by the grid. It renders two grid items:
+                the picker, under the text on the left from lg up, and the
+                visualization on the right; below lg they stack in that
+                order. (It used to be rendered twice, one copy hidden with CSS
+                at each breakpoint, which mounted every simulation twice.) */}
+            <HomeVisualizations candidates={vizCandidates} />
           </div>
         </div>
       </section>

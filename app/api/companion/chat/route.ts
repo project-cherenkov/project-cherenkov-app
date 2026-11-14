@@ -76,6 +76,12 @@ export async function POST(request: Request) {
       .where(eq(companionSettings.userId, user.id))
       .limit(1);
     if (setting && !setting.aiEnabled) return NextResponse.json({ error: "ai_disabled" }, { status: 403 });
+    const [acknowledgement] = await db
+      .select({ aiAcknowledged: companionSettings.aiAcknowledged })
+      .from(companionSettings)
+      .where(eq(companionSettings.userId, user.id))
+      .limit(1);
+    if (!acknowledgement?.aiAcknowledged) return NextResponse.json({ error: "acknowledgement_required" }, { status: 403 });
   } catch {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }

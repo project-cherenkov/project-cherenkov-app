@@ -64,6 +64,12 @@ describe("NeutrinoFaq", () => {
     expect(byText(question("what-is"))).toBeTruthy();
   });
 
+  it("renders a custom banner at the top of the scrollable container when provided", () => {
+    render({ banner: <div data-testid="faq-banner">FAQ Banner Test</div> });
+    expect(container.querySelector('[data-testid="faq-banner"]')).toBeTruthy();
+    expect(container.textContent).toContain("FAQ Banner Test");
+  });
+
   it("shows the answer with its links, and the follow-up questions, when one is picked", () => {
     render();
     act(() => byText(question("timer-save"))!.click());

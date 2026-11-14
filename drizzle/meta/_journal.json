@@ -50,6 +50,27 @@
       "when": 1793635500000,
       "tag": "0006_updates_notification_setting",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793721900000,
+      "tag": "0007_home_viz_picks",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793808000000,
+      "tag": "0008_neutrino_ai_acknowledgement",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794662400000,
+      "tag": "0009_neutrino_banner_dismissals",
+      "breakpoints": true
     }
   ]
 }

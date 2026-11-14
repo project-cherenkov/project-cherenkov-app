@@ -13,8 +13,13 @@ const CELL_HEIGHT = 44;
 
 export function GraphArrayStepper({
   config,
+  noteLang,
 }: {
   config: GraphArrayStepperConfig;
+  // Language of the authored step notes, when it differs from the page's
+  // (a translated page shows an editorial's English notes). Marks the notes,
+  // and the image description that repeats them, for screen readers (WCAG 3.1.2).
+  noteLang?: string;
 }) {
   const { array, steps } = config;
   const t = useTranslations("viz");
@@ -83,6 +88,7 @@ export function GraphArrayStepper({
             width={width}
             height={CELL_HEIGHT + 40}
             role="img"
+            lang={step?.note ? noteLang : undefined}
             aria-label={step?.note ?? t("stepCounter", { current: stepIndex + 1, total: steps.length })}
           >
             {array.map((value, i) => {
@@ -138,6 +144,7 @@ export function GraphArrayStepper({
               s.note ? (
                 <div
                   key={i}
+                  lang={noteLang}
                   aria-hidden={i === stepIndex ? undefined : true}
                   className={`col-start-1 row-start-1 ${i === stepIndex ? "" : "invisible"}`}
                 >

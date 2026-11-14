@@ -482,14 +482,40 @@ export const companionSettings = pgTable(
     // Off = the AI chat is hidden and refused by the server; the companion,
     // its FAQ and its timer stay.
     aiEnabled: boolean("ai_enabled").notNull().default(true),
+    aiAcknowledged: boolean("ai_acknowledged").notNull().default(false),
     updatesEnabled: boolean("updates_enabled").notNull().default(true),
     size: text("size").notNull().default("medium"),
     rotation: text("rotation").notNull().default("auto"),
+    aiBannerDismissed: boolean("ai_banner_dismissed").notNull().default(false),
+    faqBannerDismissed: boolean("faq_banner_dismissed").notNull().default(false),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
     check("companion_settings_size_check", sql`${table.size} IN ('small', 'medium', 'large')`),
     check("companion_settings_rotation_check", sql`${table.rotation} IN ('auto', '3d', 'flat')`),
+  ],
+);
+
+// The visualizations a signed-in visitor chose for the home hero (see
+// lib/home-viz-picks.ts). One row per account; no row means "the defaults".
+// `picks` is a JSON array of "<subject>/<slug>" keys, 1 to 3 of them. The CHECK
+// must stay in sync with MIN/MAX_HOME_VIZ_PICKS. Keys are not foreign keys:
+// editorials live in files, not in the database, and an unpublished editorial
+// is simply skipped when the home page resolves the list.
+export const homeVizPicks = pgTable(
+  "home_viz_picks",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => user.id, { onDelete: "cascade" }),
+    picks: jsonb("picks").$type<string[]>().notNull(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    check(
+      "home_viz_picks_picks_check",
+      sql`jsonb_typeof(${table.picks}) = 'array' and jsonb_array_length(${table.picks}) between 1 and 3`,
+    ),
   ],
 );
 

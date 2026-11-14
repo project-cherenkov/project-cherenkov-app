@@ -77,11 +77,15 @@ function VizFrame({ children }: { children: ReactNode }) {
 export function VizEngine({
   editorial,
   description,
+  contentLang,
 }: {
   editorial: VizEditorial;
   description?: string;
+  // Language of the prose written into the configuration (step notes), when it
+  // is not the page's language. Only the engines that carry such prose use it.
+  contentLang?: string;
 }) {
-  const inner = <VizEngineBase editorial={editorial} />;
+  const inner = <VizEngineBase editorial={editorial} contentLang={contentLang} />;
   if (!description || editorial.vizConfig.discriminant === "none") return inner;
   return (
     <figure className="m-0">
@@ -91,7 +95,13 @@ export function VizEngine({
   );
 }
 
-function VizEngineBase({ editorial }: { editorial: VizEditorial }) {
+function VizEngineBase({
+  editorial,
+  contentLang,
+}: {
+  editorial: VizEditorial;
+  contentLang?: string;
+}) {
   const { discriminant, value } = editorial.vizConfig;
   switch (discriminant) {
     case "graph-array-stepper":
@@ -100,7 +110,7 @@ function VizEngineBase({ editorial }: { editorial: VizEditorial }) {
       }
       return (
         <VizFrame>
-          <GraphArrayStepper config={value} />
+          <GraphArrayStepper config={value} noteLang={contentLang} />
         </VizFrame>
       );
 

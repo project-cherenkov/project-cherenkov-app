@@ -33,6 +33,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `design/colour.md` | Palette, tokens, roles, proportion, contrast, and the colour role audit. | current |
 | `design/neutrino-mascot.md` | How the Neutrino mascot works now, and the moods planned next. | current |
 | `design/visualization-interactions.md` | Review of the visualization engines against Brilliant, with prioritised recommendations. | review |
+| `design/home-visualization-picker.md` | The home hero's "Your picks": behaviour, storage, accessibility, and measured engine heights. | current |
 | `product/syllabus-sources.md` | Where the topic lists in `lib/syllabus/data/*.ts` come from, and how far each was checked. | current |
 | `product/syllabus-expansion.md` | Plan for labelling national (OSN) and international (IOI, IPhO, IOAA) syllabus topics. Design only; not built. | current |
 | `product/phase-3-planner.md` | The OSN study planner as built. | current |

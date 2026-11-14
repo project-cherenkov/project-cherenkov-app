@@ -16,9 +16,12 @@ export async function GET() {
         name: companionSettings.name,
         enabled: companionSettings.enabled,
         aiEnabled: companionSettings.aiEnabled,
+        aiAcknowledged: companionSettings.aiAcknowledged,
         updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
+        aiBannerDismissed: companionSettings.aiBannerDismissed,
+        faqBannerDismissed: companionSettings.faqBannerDismissed,
       })
       .from(companionSettings)
       .where(eq(companionSettings.userId, user.id))
@@ -57,9 +60,12 @@ export async function PATCH(request: Request) {
         name: companionSettings.name,
         enabled: companionSettings.enabled,
         aiEnabled: companionSettings.aiEnabled,
+        aiAcknowledged: companionSettings.aiAcknowledged,
         updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
+        aiBannerDismissed: companionSettings.aiBannerDismissed,
+        faqBannerDismissed: companionSettings.faqBannerDismissed,
       });
     return NextResponse.json(normalizeCompanionPrefs(saved));
   } catch {

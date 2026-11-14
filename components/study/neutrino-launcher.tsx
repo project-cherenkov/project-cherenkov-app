@@ -37,7 +37,7 @@ type CompanionWindow = Window & {
 
 type Message = { role: "user" | "model"; text: string };
 type AnswerMode = "faq" | "ai";
-type ChatError = "ai_disabled" | "cherenkov_limit" | "provider_quota" | "provider_unavailable" | "configuration" | "personal_key" | "personal_quota" | "personal_unavailable" | "unauthenticated" | "unavailable" | "unknown";
+type ChatError = "ai_disabled" | "acknowledgement_required" | "cherenkov_limit" | "provider_quota" | "provider_unavailable" | "configuration" | "personal_key" | "personal_quota" | "personal_unavailable" | "unauthenticated" | "unavailable" | "unknown";
 
 const POSITION_KEY = "neutrino-position-v1";
 const HIDDEN_KEY = "neutrino-hidden-v1";
@@ -69,12 +69,49 @@ function writeSession(key: string, value: string | null) {
   }
 }
 
-function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNavigate, embedded = false, messages, setMessages, busy, setBusy, mascot, openFloating, floatingUnsupported = false, onResetPosition, onResetPanelSize, onHideUntilReload }: {
+function CompanionPanel({
+  name,
+  signedIn,
+  aiEnabled,
+  aiAcknowledged,
+  aiBannerDismissed = false,
+  faqBannerDismissed = false,
+  onDismissAiBanner,
+  onDismissFaqBanner,
+  mode,
+  setMode,
+  onRequestAi,
+  aiNoticeOpen,
+  onCloseAiNotice,
+  onAcknowledgeAi,
+  close,
+  onNavigate,
+  embedded = false,
+  messages,
+  setMessages,
+  busy,
+  setBusy,
+  mascot,
+  openFloating,
+  floatingUnsupported = false,
+  onResetPosition,
+  onResetPanelSize,
+  onHideUntilReload,
+}: {
   name: string;
   signedIn: boolean;
   aiEnabled: boolean;
+  aiAcknowledged: boolean;
+  aiBannerDismissed?: boolean;
+  faqBannerDismissed?: boolean;
+  onDismissAiBanner?: () => void;
+  onDismissFaqBanner?: () => void;
   mode: AnswerMode;
   setMode: (mode: AnswerMode) => void;
+  onRequestAi: () => void;
+  aiNoticeOpen: boolean;
+  onCloseAiNotice: () => void;
+  onAcknowledgeAi: () => Promise<void>;
   close: () => void;
   onNavigate?: () => void;
   embedded?: boolean;
@@ -95,6 +132,7 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
   const [error, setError] = useState<ChatError | null>(null);
   const [personalKey, setPersonalKey] = useState("");
   const [keyConsent, setKeyConsent] = useState(false);
+  const [noticeChecked, setNoticeChecked] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -153,7 +191,7 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
 
   return (
     <div className={`flex ${embedded ? "h-full" : "h-screen"} flex-col bg-background text-foreground`}>
-      <header className="flex items-center justify-between border-b border-border px-4 py-3">
+      <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
         <div className="flex min-w-0 items-center gap-2">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
             <ManifoldMascot size={36} mood={mascot} lite />
@@ -176,9 +214,9 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
         </div>
       </header>
 
-      {floatingUnsupported ? <p role="status" className="border-b border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground">{t("unsupported")}</p> : null}
+      {floatingUnsupported ? <p role="status" className="shrink-0 border-b border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground">{t("unsupported")}</p> : null}
 
-      <nav aria-label={t("tools")} className="grid grid-cols-3 gap-1 border-b border-border p-2">
+      <nav aria-label={t("tools")} className="grid shrink-0 grid-cols-3 gap-1 border-b border-border p-2">
         <button type="button" onClick={() => setTab("ask")} aria-pressed={tab === "ask"} className={tabClass(tab === "ask")}>
           <MessageCircleQuestion className="h-4 w-4" aria-hidden /> {t("askTab")}
         </button>
@@ -206,42 +244,73 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
         </div>
       ) : (
         <>
-          <div className="space-y-2 border-b border-border p-2">
-            {aiEnabled ? (
+          {aiEnabled ? (
+            <div className="shrink-0 border-b border-border p-2">
               <div role="group" aria-label={t("modeGroup")} className="grid grid-cols-2 gap-1 rounded-lg bg-muted/60 p-1">
                 <button type="button" onClick={() => setMode("faq")} aria-pressed={mode === "faq"} className={modeClass(mode === "faq")}>
                   <CircleHelp className="h-4 w-4" aria-hidden /> {t("faqMode")}
                 </button>
-                <button type="button" onClick={() => setMode("ai")} aria-pressed={mode === "ai"} className={modeClass(mode === "ai")}>
+                <button type="button" onClick={onRequestAi} aria-pressed={mode === "ai"} className={modeClass(mode === "ai")}>
                   <Bot className="h-4 w-4" aria-hidden /> {t("aiMode")}
                 </button>
               </div>
-            ) : null}
-            {mode === "ai" && aiEnabled ? (
-              <p role="status" className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-2 text-xs text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
-                <Bot className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden /> <span>{t("aiBanner")}</span>
-              </p>
-            ) : (
-              <p role="status" className="flex items-start gap-2 rounded-md border border-border bg-muted/40 px-2.5 py-2 text-xs text-muted-foreground">
-                <CircleHelp className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span>
-                  {t("faqBanner")}
-                  {!aiEnabled ? (
-                    <>
-                      {" "}{t("aiOffNote")}{" "}
-                      <button type="button" onClick={() => setTab("settings")} className="underline underline-offset-2">{t("aiTurnOn")}</button>
-                    </>
-                  ) : null}
-                </span>
-              </p>
-            )}
-          </div>
+            </div>
+          ) : null}
 
           {mode === "faq" || !aiEnabled ? (
-            <NeutrinoFaq name={name} onNavigate={onNavigate} onSwitchToAi={aiEnabled ? () => setMode("ai") : undefined} />
+            <NeutrinoFaq
+              name={name}
+              onNavigate={onNavigate}
+              onSwitchToAi={aiEnabled ? onRequestAi : undefined}
+              banner={
+                !faqBannerDismissed ? (
+                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-border bg-muted/40 p-2.5 pr-8 text-xs text-muted-foreground">
+                    <CircleHelp className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                    <span className="flex-1">
+                      {t("faqBanner")}
+                      {!aiEnabled ? (
+                        <>
+                          {" "}{t("aiOffNote")}{" "}
+                          <button type="button" onClick={() => setTab("settings")} className="underline underline-offset-2">{t("aiTurnOn")}</button>
+                        </>
+                      ) : null}
+                    </span>
+                    {onDismissFaqBanner ? (
+                      <button
+                        type="button"
+                        onClick={onDismissFaqBanner}
+                        aria-label={t("dismissFaqBanner")}
+                        title={t("dismissFaqBanner")}
+                        className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+                      >
+                        <X className="h-3.5 w-3.5" aria-hidden />
+                      </button>
+                    ) : null}
+                  </div>
+                ) : null
+              }
+            />
           ) : (
             <>
               <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
+                {!aiBannerDismissed ? (
+                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-2.5 pr-8 text-xs text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+                    <Bot className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                    <span className="flex-1">{t("aiBanner")}</span>
+                    {onDismissAiBanner ? (
+                      <button
+                        type="button"
+                        onClick={onDismissAiBanner}
+                        aria-label={t("dismissAiBanner")}
+                        title={t("dismissAiBanner")}
+                        className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-amber-900/70 hover:bg-amber-200/50 hover:text-amber-950 dark:text-amber-200/70 dark:hover:bg-amber-900/50 dark:hover:text-amber-100"
+                      >
+                        <X className="h-3.5 w-3.5" aria-hidden />
+                      </button>
+                    ) : null}
+                  </div>
+                ) : null}
+
                 {!signedIn ? (
                   <div className="rounded-lg border border-border bg-card p-4 text-sm">
                     <p className="font-medium">{t("signInTitle")}</p>
@@ -261,7 +330,7 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
               </div>
 
               {canTryPersonalKey ? (
-                <form className="space-y-2 border-t border-border bg-muted/30 p-3" onSubmit={(event) => { event.preventDefault(); void send(true); }}>
+                <form className="shrink-0 space-y-2 border-t border-border bg-muted/30 p-3" onSubmit={(event) => { event.preventDefault(); void send(true); }}>
                   <p className="text-sm font-medium">{t("personalKeyTitle")}</p>
                   <p className="text-xs text-muted-foreground">{t("personalKeyNotice")}</p>
                   <label className="flex items-start gap-2 text-xs">
@@ -273,7 +342,7 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
                 </form>
               ) : null}
 
-              <form className="border-t border-border p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
+              <form className="shrink-0 border-t border-border p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
                 <label htmlFor="neutrino-message" className="sr-only">{t("messageLabel")}</label>
                 <div className="flex items-end gap-2">
                   <textarea id="neutrino-message" rows={2} maxLength={1200} value={draft} disabled={!signedIn || busy} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border bg-background px-3 py-2 text-sm" />
@@ -288,6 +357,24 @@ function CompanionPanel({ name, signedIn, aiEnabled, mode, setMode, close, onNav
           )}
         </>
       )}
+      {aiNoticeOpen ? (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/90 p-4" role="dialog" aria-modal="true" aria-labelledby="neutrino-ai-notice-title">
+          <div className="w-full max-w-md space-y-4 rounded-xl border border-border bg-background p-5 shadow-xl">
+            <div>
+              <h2 id="neutrino-ai-notice-title" className="text-base font-semibold">{t("aiNoticeTitle")}</h2>
+              <p className="mt-2 text-sm text-muted-foreground">{t("aiNoticeBody")}</p>
+            </div>
+            <label className="flex items-start gap-3 text-sm">
+              <input type="checkbox" checked={noticeChecked} onChange={(event) => setNoticeChecked(event.target.checked)} className="mt-1 h-4 w-4 shrink-0" />
+              <span>{t("aiNoticeConsent")}</span>
+            </label>
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={onCloseAiNotice} className="min-h-10 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted">{t("cancel")}</button>
+              <button type="button" onClick={() => void onAcknowledgeAi()} disabled={!noticeChecked} className="min-h-10 rounded-md bg-foreground px-3 text-sm font-medium text-background disabled:opacity-50">{t("aiNoticeContinue")}</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -298,7 +385,7 @@ export function InPageNeutrino() {
   const t = useTranslations("companion");
   const { data: session } = useSession();
   const signedIn = Boolean(session);
-  const { prefs } = useCompanionPrefs(signedIn);
+  const { prefs, update: updatePrefs } = useCompanionPrefs(signedIn);
   const panelId = useId();
   const helpId = useId();
 
@@ -309,6 +396,7 @@ export function InPageNeutrino() {
   const [pipWindow, setPipWindow] = useState<Window | null>(null);
   const [pipRoot, setPipRoot] = useState<HTMLDivElement | null>(null);
   const [floatingUnsupported, setFloatingUnsupported] = useState(false);
+  const [aiNoticeOpen, setAiNoticeOpen] = useState(false);
 
   const [hiddenForNow, setHiddenForNow] = useState(false);
   const [fellBack, setFellBack] = useState(false);
@@ -396,6 +484,21 @@ export function InPageNeutrino() {
   function closePanel() {
     restoreFocus.current = true;
     setOpen(false);
+  }
+
+  function requestAi() {
+    if (prefs.aiAcknowledged) {
+      setMode("ai");
+    } else {
+      setAiNoticeOpen(true);
+    }
+  }
+
+  async function acknowledgeAi() {
+    const result = await updatePrefs({ aiAcknowledged: true });
+    if (result === "error") return;
+    setAiNoticeOpen(false);
+    setMode("ai");
   }
 
   function savePosition(next: DockPosition) {
@@ -573,8 +676,17 @@ export function InPageNeutrino() {
               name={prefs.name}
               signedIn={signedIn}
               aiEnabled={aiEnabled}
+              aiAcknowledged={prefs.aiAcknowledged}
+              aiBannerDismissed={prefs.aiBannerDismissed}
+              faqBannerDismissed={prefs.faqBannerDismissed}
+              onDismissAiBanner={() => void updatePrefs({ aiBannerDismissed: true })}
+              onDismissFaqBanner={() => void updatePrefs({ faqBannerDismissed: true })}
               mode={mode}
               setMode={setMode}
+              onRequestAi={requestAi}
+              aiNoticeOpen={aiNoticeOpen}
+              onCloseAiNotice={() => setAiNoticeOpen(false)}
+              onAcknowledgeAi={acknowledgeAi}
               close={closePanel}
               onNavigate={closePanel}
               embedded
@@ -613,8 +725,17 @@ export function InPageNeutrino() {
               name={prefs.name}
               signedIn={signedIn}
               aiEnabled={aiEnabled}
+              aiAcknowledged={prefs.aiAcknowledged}
+              aiBannerDismissed={prefs.aiBannerDismissed}
+              faqBannerDismissed={prefs.faqBannerDismissed}
+              onDismissAiBanner={() => void updatePrefs({ aiBannerDismissed: true })}
+              onDismissFaqBanner={() => void updatePrefs({ faqBannerDismissed: true })}
               mode={mode}
               setMode={setMode}
+              onRequestAi={requestAi}
+              aiNoticeOpen={aiNoticeOpen}
+              onCloseAiNotice={() => setAiNoticeOpen(false)}
+              onAcknowledgeAi={acknowledgeAi}
               close={() => pipWindow.close()}
               messages={messages}
               setMessages={setMessages}

@@ -21,12 +21,15 @@ function readLocal(): Partial<CompanionPrefs> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    const { size, rotation, aiEnabled } = normalizeCompanionPrefs(JSON.parse(raw));
+    const { size, rotation, aiEnabled, aiAcknowledged, aiBannerDismissed, faqBannerDismissed } = normalizeCompanionPrefs(JSON.parse(raw));
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     return {
       ...("size" in parsed ? { size } : {}),
       ...("rotation" in parsed ? { rotation } : {}),
       ...("aiEnabled" in parsed ? { aiEnabled } : {}),
+      ...("aiAcknowledged" in parsed ? { aiAcknowledged } : {}),
+      ...("aiBannerDismissed" in parsed ? { aiBannerDismissed } : {}),
+      ...("faqBannerDismissed" in parsed ? { faqBannerDismissed } : {}),
     };
   } catch {
     return {};
@@ -35,7 +38,14 @@ function readLocal(): Partial<CompanionPrefs> {
 
 function writeLocal(prefs: CompanionPrefs) {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ size: prefs.size, rotation: prefs.rotation, aiEnabled: prefs.aiEnabled }));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      size: prefs.size,
+      rotation: prefs.rotation,
+      aiEnabled: prefs.aiEnabled,
+      aiAcknowledged: prefs.aiAcknowledged,
+      aiBannerDismissed: prefs.aiBannerDismissed,
+      faqBannerDismissed: prefs.faqBannerDismissed,
+    }));
   } catch {
     // Private mode / blocked storage: the setting just lasts for this page view.
   }
@@ -56,7 +66,18 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
   // Load: device values first (instant, works signed out), then the account.
   useEffect(() => {
     let cancelled = false;
-    if (!initial) setPrefs((current) => ({ ...current, ...readLocal() }));
+    if (!initial) {
+      const local = readLocal();
+      setPrefs((current) => ({
+        ...current,
+        ...local,
+        ...(signedIn ? {
+          aiAcknowledged: current.aiAcknowledged,
+          aiBannerDismissed: current.aiBannerDismissed,
+          faqBannerDismissed: current.faqBannerDismissed,
+        } : {}),
+      }));
+    }
     if (!signedIn) {
       setPrefs((current) => ({ ...current, name: DEFAULT_COMPANION_PREFS.name, enabled: true }));
       setReady(true);
@@ -107,6 +128,9 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
             ...(patch.size ? { size: patch.size } : {}),
             ...(patch.rotation ? { rotation: patch.rotation } : {}),
             ...(typeof patch.aiEnabled === "boolean" ? { aiEnabled: patch.aiEnabled } : {}),
+            ...(typeof patch.aiAcknowledged === "boolean" ? { aiAcknowledged: patch.aiAcknowledged } : {}),
+            ...(typeof patch.aiBannerDismissed === "boolean" ? { aiBannerDismissed: patch.aiBannerDismissed } : {}),
+            ...(typeof patch.faqBannerDismissed === "boolean" ? { faqBannerDismissed: patch.faqBannerDismissed } : {}),
           };
       const next = { ...previous, ...effective };
       setPrefs(next);

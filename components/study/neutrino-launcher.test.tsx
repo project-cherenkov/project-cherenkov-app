@@ -77,11 +77,19 @@ describe("answer mode", () => {
   it("switches to AI chat, says so, and asks a signed-out student to sign in", async () => {
     await openPanel();
     act(() => byText("AI chat")!.click());
+    expect(panel()!.textContent).toContain("Before using AI chat");
+    const notice = panel()!.querySelector<HTMLInputElement>('input[type="checkbox"]')!;
+    act(() => notice.click());
+    await act(async () => {
+      byText("Confirm and continue")!.click();
+      await Promise.resolve();
+    });
     expect(byText("AI chat")!.getAttribute("aria-pressed")).toBe("true");
     expect(panel()!.textContent).toContain("You are using AI chat");
     expect(panel()!.textContent).toContain("sent to Google");
     expect(panel()!.textContent).toContain("Sign in to use AI chat");
     expect(panel()!.textContent).toContain("AI chat · generated replies");
+    expect(JSON.parse(window.localStorage.getItem("neutrino-prefs-v1")!).aiAcknowledged).toBe(true);
     act(() => byText("FAQ")!.click());
     expect(panel()!.textContent).toContain("You are using the FAQ");
   });
@@ -107,6 +115,32 @@ describe("answer mode", () => {
     act(() => byText("Ask")!.click());
     expect(byText("AI chat")).toBeUndefined();
     expect(panel()!.textContent).toContain("You are using the FAQ");
+  });
+
+  it("allows dismissing the FAQ notice with a cross and persists the choice", async () => {
+    await openPanel();
+    expect(panel()!.textContent).toContain("You are using the FAQ");
+    const dismissBtn = panel()!.querySelector<HTMLButtonElement>('button[aria-label="Dismiss FAQ notice"]')!;
+    expect(dismissBtn).toBeTruthy();
+    await act(async () => {
+      dismissBtn.click();
+    });
+    expect(panel()!.textContent).not.toContain("You are using the FAQ");
+    expect(JSON.parse(window.localStorage.getItem("neutrino-prefs-v1")!).faqBannerDismissed).toBe(true);
+  });
+
+  it("allows dismissing the AI chat notice with a cross and persists the choice", async () => {
+    window.localStorage.setItem("neutrino-prefs-v1", JSON.stringify({ aiAcknowledged: true }));
+    await openPanel();
+    act(() => byText("AI chat")!.click());
+    expect(panel()!.textContent).toContain("You are using AI chat");
+    const dismissBtn = panel()!.querySelector<HTMLButtonElement>('button[aria-label="Dismiss AI notice"]')!;
+    expect(dismissBtn).toBeTruthy();
+    await act(async () => {
+      dismissBtn.click();
+    });
+    expect(panel()!.textContent).not.toContain("You are using AI chat");
+    expect(JSON.parse(window.localStorage.getItem("neutrino-prefs-v1")!).aiBannerDismissed).toBe(true);
   });
 });
 

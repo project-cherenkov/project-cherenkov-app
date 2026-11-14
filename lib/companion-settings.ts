@@ -32,18 +32,24 @@ export type CompanionPrefs = {
   enabled: boolean;
   // Turns off only the AI chat. The companion, its FAQ and its timer stay.
   aiEnabled: boolean;
+  aiAcknowledged: boolean;
   updatesEnabled: boolean;
   size: CompanionSize;
   rotation: CompanionRotation;
+  aiBannerDismissed: boolean;
+  faqBannerDismissed: boolean;
 };
 
 export const DEFAULT_COMPANION_PREFS: CompanionPrefs = {
   name: DEFAULT_COMPANION_NAME,
   enabled: true,
   aiEnabled: true,
+  aiAcknowledged: false,
   updatesEnabled: true,
   size: "medium",
   rotation: "auto",
+  aiBannerDismissed: false,
+  faqBannerDismissed: false,
 };
 
 export type CompanionPatch = Partial<CompanionPrefs>;
@@ -87,6 +93,10 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
     if (typeof input.aiEnabled !== "boolean") return null;
     patch.aiEnabled = input.aiEnabled;
   }
+  if ("aiAcknowledged" in input) {
+    if (typeof input.aiAcknowledged !== "boolean") return null;
+    patch.aiAcknowledged = input.aiAcknowledged;
+  }
   if ("updatesEnabled" in input) {
     if (typeof input.updatesEnabled !== "boolean") return null;
     patch.updatesEnabled = input.updatesEnabled;
@@ -99,6 +109,14 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
     if (!isCompanionRotation(input.rotation)) return null;
     patch.rotation = input.rotation;
   }
+  if ("aiBannerDismissed" in input) {
+    if (typeof input.aiBannerDismissed !== "boolean") return null;
+    patch.aiBannerDismissed = input.aiBannerDismissed;
+  }
+  if ("faqBannerDismissed" in input) {
+    if (typeof input.faqBannerDismissed !== "boolean") return null;
+    patch.faqBannerDismissed = input.faqBannerDismissed;
+  }
   return Object.keys(patch).length > 0 ? patch : null;
 }
 
@@ -109,8 +127,11 @@ export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
     name: normalizeCompanionName(input.name) ?? DEFAULT_COMPANION_PREFS.name,
     enabled: typeof input.enabled === "boolean" ? input.enabled : DEFAULT_COMPANION_PREFS.enabled,
     aiEnabled: typeof input.aiEnabled === "boolean" ? input.aiEnabled : DEFAULT_COMPANION_PREFS.aiEnabled,
+    aiAcknowledged: typeof input.aiAcknowledged === "boolean" ? input.aiAcknowledged : DEFAULT_COMPANION_PREFS.aiAcknowledged,
     updatesEnabled: typeof input.updatesEnabled === "boolean" ? input.updatesEnabled : DEFAULT_COMPANION_PREFS.updatesEnabled,
     size: isCompanionSize(input.size) ? input.size : DEFAULT_COMPANION_PREFS.size,
     rotation: isCompanionRotation(input.rotation) ? input.rotation : DEFAULT_COMPANION_PREFS.rotation,
+    aiBannerDismissed: typeof input.aiBannerDismissed === "boolean" ? input.aiBannerDismissed : DEFAULT_COMPANION_PREFS.aiBannerDismissed,
+    faqBannerDismissed: typeof input.faqBannerDismissed === "boolean" ? input.faqBannerDismissed : DEFAULT_COMPANION_PREFS.faqBannerDismissed,
   };
 }

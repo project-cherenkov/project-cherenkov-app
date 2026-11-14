@@ -1,83 +1,72 @@
 "use client";
 
-import { useState, type TouchEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useId, useRef, useState, type KeyboardEvent, type TouchEvent } from "react";
+import { useLocale, useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/routing";
+import { useSession } from "@/lib/auth-client";
 import { VizEngine } from "@/components/viz/viz-engine";
+import { HomeVizChooser } from "@/components/site/home-viz-chooser";
+import { useHomeVizPicks } from "@/components/site/use-home-viz-picks";
+import type { HomeVizCandidate } from "@/lib/home-viz-candidates";
+import { resolveHomeVizPicks } from "@/lib/home-viz-picks";
 
-const projectile = {
-  discriminant: "trajectory-sandbox" as const,
-  value: {
-    physicsType: "projectile" as const,
-    gravity: 9.8,
-    initial: { speed: 20, angleDeg: 30 },
-    speedRange: [5, 40] as [number, number],
-    angleRange: [5, 85] as [number, number],
-  },
-};
-
-const orbit = {
-  discriminant: "orbital-sandbox" as const,
-  value: {
-    eccentricity: 0.3,
-    semiMajorAxisPx: 130,
-    periodSeconds: 6,
-    massRatio: 0.05,
-    transitDepth: 0.015,
-    eccentricityRange: [0, 0.8] as [number, number],
-    massRatioRange: [0, 0.15] as [number, number],
-  },
-};
-
-// The step notes are read aloud and shown on screen, so they come from the
-// message catalogue (home.visualizations.binarySearchNotes) in the page's own
-// language. They used to be hard-coded English, which also made the Indonesian
-// home page announce English text without a lang attribute (WCAG 3.1.2).
-const BINARY_SEARCH_STEPS = [
-  { pointers: { lo: 0, mid: 4 }, highlight: [4] },
-  { pointers: { lo: 0, hi: 4, mid: 2 }, highlight: [2] },
-  { pointers: { lo: 3, hi: 4, mid: 3 }, highlight: [3] },
-  { pointers: { lo: 4, hi: 4 }, highlight: [4] },
-];
-
-export function HomeVisualizations() {
-  const t = useTranslations("home");
-  const [activeIndex, setActiveIndex] = useState(0);
+// The home hero's visualizations: one to three the visitor has chosen, shown
+// one at a time. It renders TWO grid items, not one wrapper, because the hero
+// places them in different cells:
+//   1. the picker (a list of tabs plus the active one's description), in the
+//      left column under the credo, and
+//   2. the stage (the visualization itself), in the right column.
+// Below `lg` the grid stacks and the DOM order is the reading order: the tabs,
+// then the panel they control.
+//
+// The picks come from `candidates`, built on the server from the published
+// editorials (lib/home-viz-candidates.ts), so nothing here keeps its own copy
+// of a visualization's configuration.
+//
+// Every pick is mounted at once and the inactive ones are hidden; the reason
+// is in the comment above the stage.
+export function HomeVisualizations({ candidates }: { candidates: HomeVizCandidate[] }) {
+  const t = useTranslations("home.visualizations");
+  const locale = useLocale();
+  const { data: session } = useSession();
+  const { saved, ready, save } = useHomeVizPicks(Boolean(session));
+  const baseId = useId();
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [activeKey, setActiveKey] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
-  const binarySearch = {
-    discriminant: "graph-array-stepper" as const,
-    value: {
-      array: [2, 4, 6, 8, 10, 12, 14, 16],
-      steps: BINARY_SEARCH_STEPS.map((step, index) => ({
-        ...step,
-        note: t(`visualizations.binarySearchNotes.${index}`),
-      })),
-    },
-  };
+  const byKey = new Map(candidates.map((candidate) => [candidate.key, candidate]));
+  const pickKeys = resolveHomeVizPicks(saved, [...byKey.keys()]);
+  const picks = pickKeys.map((key) => byKey.get(key)!);
+  const activeIndex = Math.max(0, pickKeys.indexOf(activeKey ?? ""));
+  const active = picks[activeIndex];
 
-  const slides = [
-    {
-      subject: t("visualizations.physics"),
-      label: t("visualizations.projectile"),
-      ariaLabel: t("visualizations.projectileAria"),
-      config: projectile,
-    },
-    {
-      subject: t("visualizations.astronomy"),
-      label: t("visualizations.orbit"),
-      ariaLabel: t("visualizations.orbitAria"),
-      config: orbit,
-    },
-    {
-      subject: t("visualizations.informatics"),
-      label: t("visualizations.binarySearch"),
-      ariaLabel: t("visualizations.binarySearchAria"),
-      config: binarySearch,
-    },
-  ];
+  if (!active) return null;
 
-  function move(direction: 1 | -1) {
-    setActiveIndex((index) => (index + direction + slides.length) % slides.length);
+  const subjectLabel = (subject: HomeVizCandidate["subject"]) => t(subject);
+  const tabId = (key: string) => `${baseId}-tab-${key.replace("/", "-")}`;
+  const panelId = `${baseId}-panel`;
+
+  function select(index: number) {
+    const next = picks[(index + picks.length) % picks.length];
+    if (next) setActiveKey(next.key);
+  }
+
+  // Arrow keys move focus between the tabs; Enter or Space (a button's own
+  // behaviour) selects. Switching mounts an engine, so it is not done on focus.
+  function handleTabKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const keys = ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    const current = tabRefs.current.findIndex((el) => el === document.activeElement);
+    if (current < 0) return;
+    event.preventDefault();
+    let target = current;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") target = current + 1;
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") target = current - 1;
+    if (event.key === "Home") target = 0;
+    if (event.key === "End") target = picks.length - 1;
+    tabRefs.current[(target + picks.length) % picks.length]?.focus();
   }
 
   function handleTouchStart(event: TouchEvent<HTMLDivElement>) {
@@ -89,107 +78,185 @@ export function HomeVisualizations() {
     const touchX = event.changedTouches[0]?.clientX;
     if (touchX === undefined) return;
     const distance = touchX - touchStart;
-    if (Math.abs(distance) >= 40) move(distance > 0 ? -1 : 1);
+    if (Math.abs(distance) >= 40) select(activeIndex + (distance > 0 ? -1 : 1));
     setTouchStart(null);
   }
 
-  const active = slides[activeIndex] ?? slides[0]!;
+  const titleLang = (candidate: HomeVizCandidate) =>
+    candidate.titleLang === locale ? undefined : candidate.titleLang;
+  const descLang = (candidate: HomeVizCandidate) =>
+    candidate.descriptionLang === locale ? undefined : candidate.descriptionLang;
 
   return (
-    <div
-      className="min-w-0"
-      role="group"
-      aria-roledescription="carousel"
-      aria-label={t("visualizations.slides")}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <h2 className="label-code">{t("visualizations.eyebrow")}</h2>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => move(-1)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-lg text-foreground hover:bg-muted"
-            aria-label={t("visualizations.previous")}
-          >
-            <span aria-hidden="true">←</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => move(1)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-lg text-foreground hover:bg-muted"
-            aria-label={t("visualizations.next")}
-          >
-            <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Layout-stable stage. Every slide sits in the SAME grid cell and the
-          inactive ones are only hidden with `visibility`, so the stage is
-          always as tall as the tallest slide at the current width, whichever
-          slide is showing. Before this, the stage took the height of the one
-          visible simulation (three very different heights), and the hero's
-          vertically centred text column, the heading and everything below
-          the hero moved every time the slide changed. Inactive slides are
-          `inert` + aria-hidden, so they are neither focusable nor announced.
-          The engines are idle until played (no autoplay), so keeping all
-          three mounted costs three small chunks, not three animation loops. */}
-      {/* min-h ≈ the loaded height of the stage (measured: ~600px, ~655px when
-          the sliders stack on a phone), so the hero does not jump by ~350px
-          when the three engine chunks arrive and replace their skeletons. */}
-      <div className="grid min-h-[41rem] sm:min-h-[37.25rem]">
-        {slides.map((slide, index) => {
-          const isActive = index === activeIndex;
-          return (
-            <div
-              key={slide.label}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={slide.ariaLabel}
-              aria-hidden={isActive ? undefined : true}
-              inert={!isActive}
-              className={[
-                "col-start-1 row-start-1 flex min-w-0 flex-col [&>div:last-child]:grow",
-                isActive ? "" : "invisible",
-              ].join(" ")}
-            >
-              <h3 className="text-lg font-semibold text-foreground">{slide.label}</h3>
-              <p className="mb-3 text-sm text-muted-foreground">{slide.subject}</p>
-              <VizEngine editorial={{ vizConfig: slide.config }} />
-            </div>
-          );
-        })}
-      </div>
-
-      <p role="status" className="sr-only">
-        {`${active.label}: ${activeIndex + 1} ${t("visualizations.of")} ${slides.length}`}
-      </p>
-
-      <div className="mt-2 flex justify-center">
-        {slides.map((item, index) => (
-          <button
-            key={item.label}
-            type="button"
-            onClick={() => setActiveIndex(index)}
-            aria-label={`${item.label}: ${index + 1} ${t("visualizations.of")} ${slides.length}`}
-            aria-current={index === activeIndex ? "true" : undefined}
-            // A 10px dot is a 10px target (WCAG 2.5.8 asks for 24px). The
-            // button is 40px square and the dot is drawn inside it, so the
-            // look is unchanged and the hit area is not.
-            className="group inline-flex h-10 w-10 items-center justify-center"
-          >
-            <span
-              aria-hidden="true"
-              className={[
-                "h-2.5 w-2.5 rounded-full border border-brand transition-colors group-hover:bg-brand/40",
-                index === activeIndex ? "bg-brand" : "bg-transparent",
-              ].join(" ")}
+    <>
+      <section
+        aria-labelledby={`${baseId}-picks-heading`}
+        className="min-w-0 lg:col-start-1 lg:row-start-2"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 id={`${baseId}-picks-heading`} className="label-code">
+            {t("picks.title")}
+          </h2>
+          {candidates.length > 1 ? (
+            <HomeVizChooser
+              candidates={candidates}
+              picks={pickKeys}
+              hasSavedChoice={saved !== null}
+              subjectLabel={subjectLabel}
+              onSave={save}
+              onUseDefaults={() => {
+                save(null);
+                setActiveKey(null);
+              }}
             />
-          </button>
-        ))}
+          ) : null}
+        </div>
+
+        {/* Below lg the tabs are one scrolling row so the list does not push
+            the visualization far down; from lg up they are a column. */}
+        <div
+          role="tablist"
+          aria-label={t("picks.tablistLabel")}
+          onKeyDown={handleTabKeyDown}
+          className="mt-2 flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
+        >
+          {picks.map((candidate, index) => {
+            const selected = index === activeIndex;
+            return (
+              <button
+                key={candidate.key}
+                ref={(el) => {
+                  tabRefs.current[index] = el;
+                }}
+                type="button"
+                role="tab"
+                id={tabId(candidate.key)}
+                aria-selected={selected}
+                aria-controls={panelId}
+                tabIndex={selected ? 0 : -1}
+                onClick={() => setActiveKey(candidate.key)}
+                className={[
+                  "min-h-11 w-56 shrink-0 rounded-md border px-3 py-2 text-left transition-colors lg:w-full",
+                  selected
+                    ? "border-brand bg-card shadow-sm"
+                    : "border-border hover:bg-muted",
+                ].join(" ")}
+              >
+                <span
+                  lang={titleLang(candidate)}
+                  className={`block text-sm leading-snug ${selected ? "font-semibold" : "font-medium"}`}
+                >
+                  {candidate.title}
+                </span>
+                <span className="label-mono block">{subjectLabel(candidate.subject)}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-3 text-sm">
+          {active.description && (
+            <p
+              lang={descLang(active)}
+              className="line-clamp-4 max-w-md leading-snug text-foreground/80 lg:line-clamp-none"
+            >
+              {active.description}
+            </p>
+          )}
+          <Link
+            href={`/archive/${active.subject}/${active.slug}`}
+            className="mt-1 inline-flex min-h-11 items-center font-medium text-brand underline-offset-4 hover:underline"
+          >
+            {t("picks.openEditorial")}
+            <span className="sr-only">: </span>
+            <span lang={titleLang(active)} className="sr-only">
+              {active.title}
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <div
+        role="tabpanel"
+        id={panelId}
+        aria-labelledby={tabId(active.key)}
+        aria-busy={!ready}
+        className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <h2 className="label-code">{t("eyebrow")}</h2>
+          {picks.length > 1 && (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => select(activeIndex - 1)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-lg text-foreground hover:bg-muted"
+                aria-label={t("previous")}
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => select(activeIndex + 1)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-lg text-foreground hover:bg-muted"
+                aria-label={t("next")}
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* All the picks (at most three) are mounted in ONE grid cell and the
+            inactive ones are hidden, so the stage is always as tall as the
+            tallest pick and does not change height as the visitor switches
+            (the layout shift fixed in docs/reviews/audit-2026-10-31.md). This
+            is not optional: the engines differ a lot in height. Measured in a
+            browser at 1280 px: projectile and binary search 596 px, eccentric
+            orbit 599, blackbody 827, sidereal day 1190. A hidden engine keeps
+            its slider state, so switching back finds it as it was.
+
+            STAGE_MIN_HEIGHT: the floor below is the loaded height of the three
+            default picks. A visitor whose picks are taller still sees one jump
+            when the engines replace their skeletons. */}
+        <div className="grid min-h-[41rem] min-w-0 sm:min-h-[37.25rem]">
+          {picks.map((candidate, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <div
+                key={candidate.key}
+                inert={!isActive}
+                aria-hidden={isActive ? undefined : true}
+                className={`col-start-1 row-start-1 flex min-w-0 flex-col [&>div:last-child]:grow ${
+                  isActive ? "" : "invisible"
+                }`}
+              >
+                <h3 lang={titleLang(candidate)} className="text-lg font-semibold text-foreground">
+                  {candidate.title}
+                </h3>
+                <p className="mb-3 text-sm text-muted-foreground">{subjectLabel(candidate.subject)}</p>
+                {ready ? (
+                  <VizEngine
+                    editorial={{ vizConfig: candidate.vizConfig }}
+                    contentLang={descLang(candidate)}
+                  />
+                ) : (
+                  <div
+                    aria-hidden="true"
+                    className="animate-pulse rounded-lg border border-border bg-card"
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <p role="status" className="sr-only">
+          {`${active.title}: ${activeIndex + 1} ${t("of")} ${picks.length}`}
+        </p>
       </div>
-    </div>
+    </>
   );
 }
