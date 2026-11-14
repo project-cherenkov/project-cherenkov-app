@@ -68,8 +68,7 @@
         "2": "8 terlalu kecil, jadi geser batas bawah ke depan.",
         "3": "Kedua batas bertemu di nilai pertama yang paling sedikit bernilai 10."
       }
-    },
-    "counts": "{editorials, plural, other {# editorial}} · {materials, plural, other {# materi}} · {syllabuses, plural, other {# silabus}}"
+    }
   },
   "archive": {
     "eyebrow": "archive.log",

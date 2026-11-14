@@ -96,16 +96,19 @@ describe("SiteHeader — session awareness", () => {
     expect(html).not.toContain("Sign Up");
   });
 
-  it("renders both locale options with flags and locale labels", () => {
+  it("renders both locale options with text labels and no flag characters", () => {
     mockUseSession.mockReturnValue({ data: null });
 
     const html = renderToStaticMarkup(<SiteHeader />);
 
     expect(html).toContain("EN");
     expect(html).toContain("ID");
-    expect(html).toContain("<svg");
     expect(html).toContain('href="/id/about"');
     expect(html).toContain('href="/en/about"');
+    // Regional-indicator symbols are what a flag emoji is made of.
+    expect(html).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]/u);
+    // The full language name stays available to screen readers (WCAG 2.5.3).
+    expect(html).toContain("Bahasa Indonesia");
   });
 });
 

@@ -5,11 +5,11 @@ import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
 import { EditorialCard } from "@/components/site/editorial-card";
 import { JsonLd } from "@/components/seo/json-ld";
-import { getAllEditorials, getAllMaterials, getRecentEditorials } from "@/lib/content";
-import { getAllSyllabi } from "@/lib/syllabus";
+import { getRecentEditorials } from "@/lib/content";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { pageMetadata } from "@/lib/seo-metadata";
 import { HomeVisualizations } from "@/components/site/home-visualizations";
+import { Credo } from "@/components/site/credo";
 
 export async function generateMetadata({
   params,
@@ -37,11 +37,6 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const tSite = await getTranslations("site");
   const recent = getRecentEditorials();
-  const counts = {
-    editorials: getAllEditorials().length,
-    materials: getAllMaterials().length,
-    syllabuses: getAllSyllabi().length,
-  };
 
   return (
     <div>
@@ -92,7 +87,7 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
-            <p className="label-code mt-4">{t("counts", counts)}</p>
+            <Credo className="mt-5" />
             </div>
             {/* ONE instance, placed by the grid: beside the text from lg up,
                 under it below. It used to be rendered twice (one copy hidden

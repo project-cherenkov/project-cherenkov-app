@@ -32,6 +32,15 @@
        --highlight is too pale to draw a line with on a white card (about 1.9:1),
        so light uses a deeper pink, 5.3:1 on --card. */
     --viz-secondary: 348 79% 46%;
+
+    /* Home credo, "Exploratio" (components/site/credo.tsx). Its resting colour
+       is the page foreground; the three stops are the colours it passes
+       through. Each stop is at least 4.5:1 on the page and on both hero glow
+       peaks (docs/design/colour.md), which pale pink on this pale page, or ink
+       on the dark one, would not be. */
+    --credo-rest: #0b2436; /* cherenkov-ink */
+    --credo-stop-1: #0c698d; /* cherenkov-blue-800 */
+    --credo-stop-2: #aa1835; /* cherenkov-pink-700 */
   }
 
   .dark {
@@ -47,6 +56,10 @@
     --brand: 196 84% 78%; /* cherenkov-blue-300 */
     --highlight: 348 79% 81%; /* cherenkov-pink */
     --viz-secondary: 348 79% 81%; /* cherenkov-pink: 7.3:1 on --card */
+
+    --credo-rest: #faf5f6; /* cherenkov-pink-50, the light page colour */
+    --credo-stop-1: #97dcf6; /* cherenkov-blue-300 */
+    --credo-stop-2: #f3ced5; /* cherenkov-pink-200: pink-300 is 3.8:1 on the dark blue glow peak */
   }
 
   body {
@@ -126,6 +139,94 @@
     background-image:
       radial-gradient(ellipse at 20% 0%, rgba(91, 206, 250, 0.3), transparent 60%),
       radial-gradient(ellipse at 90% 10%, rgba(231, 49, 85, 0.22), transparent 55%);
+  }
+}
+
+/* Nav ribbons (components/site/nav-ribbon-art.tsx, header.tsx).
+
+   The artwork reads these variables; this block is the only place the ribbon
+   colours are set. Pink appears only on hover or focus, and on the current
+   page, where it is drawn thicker, so the two read differently without
+   colour: hover and focus drop the ribbon 8px with a 2px rim, the current
+   page drops it 12px with a 4px rim (and `aria-current` names it for screen
+   readers). The mobile Menu button counts as "current" while it is open.
+   Contrast figures are in docs/design/colour.md.
+
+   Light: a pale blue ribbon with a blue hairline. Its fill is barely distinct
+   from the page and melts into the hero's blue glow (about 1.1:1), so the
+   hairline (5.7:1 on the page) is what draws the shape.
+   Dark: the ribbon is lifted to cherenkov-blue-900 so it reads against the
+   page. It used to equal the page colour, which left only the pink rim to
+   draw it. */
+@layer components {
+  .nav-ribbon {
+    --ribbon-fill: #dceff8; /* new shade, between blue-100 and blue-200 */
+    --ribbon-edge: #0c698d; /* cherenkov-blue-800 */
+    --ribbon-edge-width: 1.5px;
+    --ribbon-inset: rgb(12 105 141 / 0.35);
+    --ribbon-sparkle: #0c698d;
+    --ribbon-label: #0b2436; /* cherenkov-ink, 13.4:1 on the fill */
+  }
+  .dark .nav-ribbon {
+    --ribbon-fill: #0b4c65; /* cherenkov-blue-900 */
+    --ribbon-edge: #20bcf8; /* cherenkov-blue-500, 7.3:1 on the page, 3.6:1 on the strongest blue glow */
+    --ribbon-inset: rgb(239 255 251 / 0.4);
+    --ribbon-sparkle: #effffb; /* cherenkov-cream */
+    --ribbon-label: #effffb; /* cherenkov-cream, 9.1:1 on the fill */
+  }
+  .nav-ribbon:is(:hover, :focus-visible) {
+    --ribbon-edge: #e73155; /* cherenkov-pink-500, 3.9:1 on the page */
+    --ribbon-edge-width: 2px;
+  }
+  .dark .nav-ribbon:is(:hover, :focus-visible) {
+    --ribbon-edge: #ef9faf; /* cherenkov-pink-300, 4.6:1 on the fill */
+  }
+  .nav-ribbon:is([aria-current], [aria-expanded="true"]) {
+    --ribbon-fill: #f9dce3; /* new shade, a pink tint between pink-100 and pink-200 */
+    --ribbon-edge: #e73155;
+    --ribbon-edge-width: 4px;
+    --ribbon-sparkle: #aa1835; /* cherenkov-pink-700 */
+  }
+  .dark .nav-ribbon:is([aria-current], [aria-expanded="true"]) {
+    --ribbon-fill: #0b4c65;
+    --ribbon-edge: #ef9faf;
+    --ribbon-sparkle: #ef9faf;
+  }
+  .nav-ribbon-label {
+    color: var(--ribbon-label);
+  }
+}
+
+/* Home credo: the word "Exploratio" (components/site/credo.tsx) plays one slow
+   colour pass when the page loads and then rests in the page foreground.
+   - 4.6 s (plus a 0.4 s delay) is under the 5 s limit in WCAG 2.2.2 (Pause, Stop, Hide), so no
+     pause control is required. Change the count below to `infinite` for a
+     perpetual cycle, and then add one, or accept the risk that 2.2.2 applies.
+   - Nothing changes faster than about one colour per 1.6 s, far below the
+     three-flashes-per-second limit of WCAG 2.3.1, and the stops differ in hue
+     more than in brightness.
+   - Reduced motion turns it off: the word just keeps its resting colour. */
+@layer components {
+  .credo-exploratio {
+    color: var(--credo-rest);
+    animation: credo-cycle 4.6s ease-in-out 0.4s 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .credo-exploratio {
+      animation: none;
+    }
+  }
+}
+@keyframes credo-cycle {
+  0%,
+  100% {
+    color: var(--credo-rest);
+  }
+  33% {
+    color: var(--credo-stop-1);
+  }
+  66% {
+    color: var(--credo-stop-2);
   }
 }
 

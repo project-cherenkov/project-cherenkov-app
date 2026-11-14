@@ -68,8 +68,7 @@
         "2": "8 is too small, so move the lower bound forward.",
         "3": "The bounds meet at the first value that is at least 10."
       }
-    },
-    "counts": "{editorials, plural, one {# editorial} other {# editorials}} · {materials, plural, one {# material} other {# materials}} · {syllabuses, plural, one {# syllabus} other {# syllabuses}}"
+    }
   },
   "archive": {
     "eyebrow": "archive.log",

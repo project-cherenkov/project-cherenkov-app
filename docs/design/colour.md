@@ -113,3 +113,32 @@ A static search of `components/viz/**`, `components/study/**`, `components/plann
 | `app/globals.css`: hero band | Pink glow, top right, fading to the page. | Neutral (decorative, within the proportion rule). | None. |
 | `--highlight` token / `highlight` colour | Defined in `app/globals.css` and `tailwind.config.ts`. | Not applicable. No use found in the searched folders. | Check whether it is still needed before relying on it. |
 | `components/planner/**`, `components/quiz/**` | No pink token use found. | Not applicable. | If pink is added there, follow the roles above. |
+
+## Home credo and nav ribbons (added 2026-11-14)
+
+Both were redone for the home hero and header. Figures were computed with the WCAG 2.x relative-luminance formula against the page and against the hero glow at full strength ("peak": light blue `#CDEAF7`, light pink `#F8DEE3`, dark blue `#235771`, dark pink `#3B273D`). They have not been checked in a browser.
+
+**Credo (`components/site/credo.tsx`).** The motto, one word per role, replaces the old counts line.
+
+| Word | Light | Dark | Lowest ratio (page / blue peak / pink peak) |
+|---|---|---|---|
+| Cognitio | blue-800 `#0C698D` | blue-300 `#97DCF6` | light 5.7 / 4.9 / 4.8; dark 10.5 / 5.2 / 9.0 |
+| Humanitas | pink-700 `#AA1835` | pink-200 `#F3CED5` | light 6.7 / 5.8 / 5.7; dark 11.1 / 5.5 / 9.5 |
+| Exploratio (resting) | ink `#0B2436` | pink-50 `#FAF5F6` | light 14.7 / 12.7 / 12.5; dark 14.7 / 7.3 / 12.6 |
+
+Dark Humanitas uses pink-200, not pink-300: pink-300 is 3.8:1 on the dark blue glow peak, which fails for 14px text. Exploratio's resting colour is the contrary of the page, which is the page's own foreground, and then it plays one 4.6 s pass through blue and pink. Every stop, and every blend between stops, stays at or above 4.8:1 in light and 5.1:1 in dark at the glow peaks.
+
+**Nav ribbons (`app/globals.css`, "Nav ribbons").** Colours are CSS variables set per theme and per state.
+
+| State | Light | Dark |
+|---|---|---|
+| Rest | fill `#DCEFF8`, blue-800 hairline 1.5px (5.7:1 on the page), ink label (13.4:1) | fill blue-900 (1.7:1 on the page), blue-500 hairline 1.5px (7.3:1 on the page, 3.6:1 on the strongest blue glow), cream label (9.1:1) |
+| Hover or focus | pink-500 rim 2px (3.9:1 on the page, 3.3:1 on the glow peaks), drop 8px | pink-300 rim 2px (7.8:1 on the page, 4.6:1 on the fill) |
+| Current page, or Menu open | fill `#F9DCE3`, pink-500 rim 4px, drop 12px, ink label (12.4:1) | blue-900 fill, pink-300 rim 4px, drop 12px |
+
+Justifications for the changes (the roles table above is a working convention, and these are deliberate departures):
+
+- `#DCEFF8` (new, between blue-100 and blue-200) is the light ribbon fill: a light blue so the ribbon belongs to the phenomenon, pale enough that the ink label has 13:1. Its edge against the page is only 1.1:1, so the blue hairline carries the shape.
+- `#F9DCE3` (new, between pink-100 and pink-200) is the current-page tint: the learner's place in the site. Pale pink cannot define a shape on this pale pink page, so the saturated pink-500 rim does that work.
+- Pink on the current page reverses the "blue for active states" convention above. It is justified by the learner role ("where you are") and by proportion: one pink ribbon instead of four all-pink-trimmed ones lowers total pink and helps the 70/30 balance.
+- Pink-300 on the dark ribbon is the lightest pink that keeps 4.5:1 against the blue-900 fill; pink-400 is about 3.0:1.

@@ -27,9 +27,13 @@ function isWithin(pathname: string, href: string) {
 // `name` is the language's own name for itself and is deliberately NOT
 // translated: someone who needs to find the Indonesian site should be able to
 // find "Bahasa Indonesia" even when the page is currently in English.
+//
+// There are no flags: a flag stands for a country, not a language, and Windows
+// ships no flag emoji at all, so there it drew the two letters "GB" and "ID"
+// beside the visible EN / ID label.
 const localeOptions = [
-  { code: "en", label: "EN", name: "English", flag: "🇬🇧" },
-  { code: "id", label: "ID", name: "Bahasa Indonesia", flag: "🇮🇩" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "id", label: "ID", name: "Bahasa Indonesia" },
 ] as const;
 
 export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) {
@@ -154,14 +158,17 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                 : false;
 
               const bookmarkStyle = [
-                "group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus-visible:outline-none",
-                isActive ? "translate-y-3 z-30" : "z-20 hover:translate-y-9",
+                "nav-ribbon group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus-visible:outline-none",
+                // Current page: drops 12px. Hover or keyboard focus: drops 8px.
+                // (It dropped 36px on hover until now; docs/reviews/design-
+                // review-2026-10.md already described 8px.)
+                isActive ? "translate-y-3 z-30" : "z-20 hover:translate-y-2 focus-visible:translate-y-2",
               ].join(" ");
 
               const content = (
                 <>
                   <NavRibbonArt className="pointer-events-none drop-shadow-md" />
-                  <span className="relative z-10 text-center font-bold text-white dark:text-slate-100 text-xs leading-tight px-1 pb-3">
+                  <span className="nav-ribbon-label relative z-10 text-center font-bold text-xs leading-tight px-1 pb-3">
                     {item.label}
                   </span>
                 </>
@@ -199,7 +206,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               aria-label={t("language")}
               className="flex items-center gap-0.5 rounded-full border border-border bg-white/70 p-0.5 shadow-sm sm:gap-1 sm:p-1 dark:bg-slate-800/70"
             >
-              {localeOptions.map(({ code, label, name, flag }) => {
+              {localeOptions.map(({ code, label, name }) => {
                 const isActive = code === currentLocale;
 
                 return (
@@ -211,15 +218,12 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                     hrefLang={code}
                     aria-current={isActive ? "true" : undefined}
                     className={[
-                      "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2 transition-colors text-xs sm:px-2.5",
+                      "inline-flex min-h-9 items-center rounded-full px-2 transition-colors text-xs sm:px-2.5",
                       isActive
                         ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white",
                     ].join(" ")}
                   >
-                    <span aria-hidden="true" className="hidden min-[420px]:inline">
-                      {flag}
-                    </span>
                     <span className="font-semibold leading-none">{label}</span>
                     {/* Full language name for screen readers, appended to the
                         visible code so the accessible name starts with what is
@@ -255,15 +259,15 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               onClick={() => setMobileMenuOpen((prev) => !prev)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
-              className="group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
+              className="nav-ribbon group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
             >
               <NavRibbonArt className="pointer-events-none drop-shadow-md" />
               {mobileMenuOpen ? (
-                <X className="relative z-10 h-4 w-4 text-white dark:text-slate-100" aria-hidden />
+                <X className="nav-ribbon-label relative z-10 h-4 w-4" aria-hidden />
               ) : (
-                <Menu className="relative z-10 h-4 w-4 text-white dark:text-slate-100" aria-hidden />
+                <Menu className="nav-ribbon-label relative z-10 h-4 w-4" aria-hidden />
               )}
-              <span className="relative z-10 text-center font-mono text-xs font-bold uppercase leading-none tracking-wider text-white dark:text-slate-100">
+              <span className="nav-ribbon-label relative z-10 text-center font-mono text-xs font-bold uppercase leading-none tracking-wider">
                 {t("menu")}
               </span>
             </button>

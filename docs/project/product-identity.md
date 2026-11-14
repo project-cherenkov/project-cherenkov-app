@@ -56,7 +56,7 @@ The voice borrows from file labels (`readme.md`, `about.md`, `requirements.txt`)
 | Element | Where it appears |
 | --- | --- |
 | Tagline | Home hero heading (`home.heroTitle`), footer (`footer.tagline`) |
-| Motto | Footer, under the tagline (`footer.motto`) |
+| Motto | Footer, under the tagline (`footer.motto`); home hero, below the links, one word per colour (`components/site/credo.tsx`, a constant, not a message) |
 | Descriptive sentence | Site tagline and meta description (`site.tagline`) |
 | Wordmark | Site header, lowercase "cherenkov" |
 | Mark | Site header and favicon (`components/site/brand-mark.tsx`) |
