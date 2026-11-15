@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { BookOpen, Bot, CircleHelp, ExternalLink, GripHorizontal, MessageCircleQuestion, Settings2, X } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { useSession } from "@/lib/auth-client";
 import { StudyTimer } from "@/components/study/study-timer";
 import { ManifoldMascot, type MascotMood } from "@/components/study/manifold-mascot";
+import { CompanionTrail } from "@/components/study/companion-trail";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { NeutrinoFaq } from "@/components/study/neutrino-faq";
 import { useCompanionPrefs } from "@/components/study/use-companion-prefs";
-import { COMPANION_SIZE_PX } from "@/lib/companion-settings";
+import { COMPANION_SIZE_PX, DEFAULT_COMPANION_PREFS, DEFAULT_DRIFT_SPEED } from "@/lib/companion-settings";
 import {
   DEFAULT_DOCK_POSITION,
   clampPixels,
@@ -41,6 +42,7 @@ type ChatError = "ai_disabled" | "acknowledgement_required" | "cherenkov_limit" 
 
 const POSITION_KEY = "neutrino-position-v1";
 const HIDDEN_KEY = "neutrino-hidden-v1";
+const INTRO_KEY = "neutrino-intro-dismissed-v1";
 const SLOW_KEY = "neutrino-3d-slow-v1";
 const PANEL_SIZE_KEY = "neutrino-panel-size-v1";
 
@@ -96,6 +98,7 @@ function CompanionPanel({
   floatingUnsupported = false,
   onResetPosition,
   onResetPanelSize,
+  onResetAll,
   onHideUntilReload,
 }: {
   name: string;
@@ -124,6 +127,7 @@ function CompanionPanel({
   floatingUnsupported?: boolean;
   onResetPosition?: () => void;
   onResetPanelSize?: () => void;
+  onResetAll?: () => void;
   onHideUntilReload?: () => void;
 }) {
   const t = useTranslations("companion");
@@ -239,6 +243,7 @@ function CompanionPanel({
             variant="compact"
             onResetPosition={onResetPosition}
             onResetPanelSize={onResetPanelSize}
+            onResetAll={onResetAll}
             onHideUntilReload={onHideUntilReload}
           />
         </div>
@@ -383,6 +388,7 @@ function CompanionPanel({
 // and the panel can be popped out into a floating window.
 export function InPageNeutrino() {
   const t = useTranslations("companion");
+  const pathname = usePathname();
   const { data: session } = useSession();
   const signedIn = Boolean(session);
   const { prefs, update: updatePrefs } = useCompanionPrefs(signedIn);
@@ -391,6 +397,10 @@ export function InPageNeutrino() {
 
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [resetMotion, setResetMotion] = useState(false);
+  const [introVisible, setIntroVisible] = useState(false);
+  const [openAnchor, setOpenAnchor] = useState<{ left: number; top: number } | null>(null);
+  const [driftPaused, setDriftPaused] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [busy, setBusy] = useState(false);
   const [pipWindow, setPipWindow] = useState<Window | null>(null);
@@ -409,6 +419,7 @@ export function InPageNeutrino() {
   // null = the default panel size. liveFrame is the panel while an edge is being dragged.
   const [panelSize, setPanelSize] = useState<PanelSize | null>(null);
   const [liveFrame, setLiveFrame] = useState<PanelFrame | null>(null);
+  const [pageMood, setPageMood] = useState<MascotMood>("idle");
 
   const dockRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -416,9 +427,11 @@ export function InPageNeutrino() {
   const resizeRef = useRef<{ id: number; startX: number; startY: number; start: PanelFrame; edges: PanelEdge[]; last: PanelFrame } | null>(null);
   const suppressClickUntil = useRef(0);
   const restoreFocus = useRef(false);
+  const previousPath = useRef(pathname);
+  const driftTimer = useRef<number | null>(null);
 
   const size = COMPANION_SIZE_PX[prefs.size];
-  const mood: MascotMood = busy ? "thinking" : "idle";
+  const mood: MascotMood = busy ? "thinking" : open ? "curious" : pageMood;
   const showDock = mounted && prefs.enabled;
   const aiEnabled = prefs.aiEnabled;
   const use3d = prefs.rotation === "3d" || (prefs.rotation === "auto" && !fellBack);
@@ -435,11 +448,20 @@ export function InPageNeutrino() {
     }
     setHiddenForNow(readSession(HIDDEN_KEY) === "1");
     setFellBack(readSession(SLOW_KEY) === "1");
+    try { setIntroVisible(window.localStorage.getItem(INTRO_KEY) !== "1"); } catch { /* Keep the intro optional when storage is unavailable. */ }
     const measure = () => setViewport({ width: window.innerWidth, height: window.innerHeight });
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, []);
+
+  useEffect(() => {
+    if (previousPath.current === pathname) return;
+    previousPath.current = pathname;
+    setPageMood("curious");
+    const timeout = window.setTimeout(() => setPageMood("idle"), 2200);
+    return () => window.clearTimeout(timeout);
+  }, [pathname]);
 
   // Choosing "Automatic" again gives 3D another chance.
   useEffect(() => {
@@ -452,6 +474,16 @@ export function InPageNeutrino() {
     if (!showDock || hiddenForNow) setOpen(false);
   }, [showDock, hiddenForNow]);
 
+  useEffect(() => {
+    if (!open && !pipWindow) return;
+    if (driftTimer.current !== null) window.clearTimeout(driftTimer.current);
+    driftTimer.current = null;
+  }, [open, pipWindow]);
+
+  useEffect(() => () => {
+    if (driftTimer.current !== null) window.clearTimeout(driftTimer.current);
+  }, []);
+
   // Turning the AI off drops back to the FAQ, and turning it on again does not
   // silently put the student back in a mode that sends text to an AI service.
   useEffect(() => {
@@ -463,6 +495,7 @@ export function InPageNeutrino() {
     const onClose = () => {
       setPipWindow(null);
       setPipRoot(null);
+      pauseDriftForCooldown();
     };
     pipWindow.addEventListener("pagehide", onClose);
     return () => pipWindow.removeEventListener("pagehide", onClose);
@@ -484,6 +517,18 @@ export function InPageNeutrino() {
   function closePanel() {
     restoreFocus.current = true;
     setOpen(false);
+    setOpenAnchor(null);
+    pauseDriftForCooldown();
+  }
+
+  function pauseDriftForCooldown() {
+    setDriftPaused(true);
+    if (driftTimer.current !== null) window.clearTimeout(driftTimer.current);
+    driftTimer.current = window.setTimeout(() => {
+      driftTimer.current = null;
+      if (dragRef.current) return;
+      setDriftPaused(false);
+    }, 5_000);
   }
 
   function requestAi() {
@@ -512,6 +557,9 @@ export function InPageNeutrino() {
 
   function resetPosition() {
     savePosition(DEFAULT_DOCK_POSITION);
+    const next = positionToPixels(DEFAULT_DOCK_POSITION, viewport, size);
+    if (open) setOpenAnchor(next);
+    resetDockMotion();
   }
 
   function savePanelSize(next: PanelSize | null) {
@@ -522,6 +570,31 @@ export function InPageNeutrino() {
     } catch {
       // Not persisted; the size still applies for this page view.
     }
+  }
+
+  function resetDockMotion() {
+    setResetMotion(true);
+    window.requestAnimationFrame(() => setResetMotion(false));
+  }
+
+  function resetAllLayout() {
+    savePosition(DEFAULT_DOCK_POSITION);
+    savePanelSize(null);
+    try { window.localStorage.removeItem(INTRO_KEY); } catch { /* Defaults still apply for this visit. */ }
+    setIntroVisible(true);
+    writeSession(HIDDEN_KEY, null);
+    writeSession(SLOW_KEY, null);
+    setHiddenForNow(false);
+    setFellBack(false);
+    setDriftPaused(true);
+    if (driftTimer.current !== null) window.clearTimeout(driftTimer.current);
+    driftTimer.current = window.setTimeout(() => {
+      driftTimer.current = null;
+      setDriftPaused(false);
+    }, 5_000);
+    const next = positionToPixels(DEFAULT_DOCK_POSITION, viewport, COMPANION_SIZE_PX[DEFAULT_COMPANION_PREFS.size]);
+    setOpenAnchor(next);
+    resetDockMotion();
   }
 
   function onResizeDown(event: PointerEvent<HTMLElement>, edges: PanelEdge[], frame: PanelFrame) {
@@ -571,11 +644,17 @@ export function InPageNeutrino() {
 
   const basePx = positionToPixels(position, viewport, size);
   const px = dragPx ?? basePx;
+  const roamX = Math.max(0, position.x > 0.5 ? px.left - 12 : viewport.width - size - 12 - px.left);
+  const roamY = Math.max(0, position.y > 0.5 ? px.top - 12 : viewport.height - size - 12 - px.top);
 
   function onPointerDown(event: PointerEvent<HTMLButtonElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    pauseDriftForCooldown();
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = { id: event.pointerId, startX: event.clientX, startY: event.clientY, left: basePx.left, top: basePx.top, moved: false, last: basePx };
+    const rect = event.currentTarget.getBoundingClientRect();
+    const visualPosition = { left: rect.left, top: rect.top };
+    setDragPx(visualPosition);
+    dragRef.current = { id: event.pointerId, startX: event.clientX, startY: event.clientY, ...visualPosition, moved: false, last: visualPosition };
   }
 
   function onPointerMove(event: PointerEvent<HTMLButtonElement>) {
@@ -586,6 +665,7 @@ export function InPageNeutrino() {
     // A small threshold keeps an ordinary click from nudging the mascot.
     if (!drag.moved && Math.hypot(dx, dy) < 6) return;
     drag.moved = true;
+    pauseDriftForCooldown();
     drag.last = clampPixels(drag.left + dx, drag.top + dy, viewport, size);
     setDragPx(drag.last);
   }
@@ -594,14 +674,24 @@ export function InPageNeutrino() {
     const drag = dragRef.current;
     if (!drag || drag.id !== event.pointerId) return;
     dragRef.current = null;
-    if (!drag.moved) return;
+    if (!drag.moved) {
+      setDragPx(null);
+      pauseDriftForCooldown();
+      return;
+    }
+    pauseDriftForCooldown();
     // The browser still fires a click after a drag; ignore it.
     suppressClickUntil.current = performance.now() + 300;
-    if (commit) savePosition(pixelsToPosition(drag.last.left, drag.last.top, viewport, size));
+    if (commit) {
+      savePosition(pixelsToPosition(drag.last.left, drag.last.top, viewport, size));
+      if (open) setOpenAnchor({ left: drag.last.left, top: drag.last.top });
+      resetDockMotion();
+    }
     setDragPx(null);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    pauseDriftForCooldown();
     const step = event.shiftKey ? 64 : 16;
     const delta: Record<string, [number, number]> = {
       ArrowLeft: [-step, 0],
@@ -612,14 +702,26 @@ export function InPageNeutrino() {
     const move = delta[event.key];
     if (!move) return;
     event.preventDefault();
-    const next = clampPixels(basePx.left + move[0], basePx.top + move[1], viewport, size);
+    const rect = dockRef.current?.getBoundingClientRect();
+    const next = clampPixels((rect?.left ?? basePx.left) + move[0], (rect?.top ?? basePx.top) + move[1], viewport, size);
     savePosition(pixelsToPosition(next.left, next.top, viewport, size));
+    if (open) setOpenAnchor(next);
+    resetDockMotion();
   }
 
   function onClick() {
     if (performance.now() < suppressClickUntil.current) return;
+    if (introVisible) {
+      setIntroVisible(false);
+      try { window.localStorage.setItem(INTRO_KEY, "1"); } catch { /* Dismissed for this visit. */ }
+    }
+    pauseDriftForCooldown();
     if (open) closePanel();
-    else setOpen(true);
+    else {
+      const rect = dockRef.current?.getBoundingClientRect();
+      if (rect) setOpenAnchor({ left: rect.left, top: rect.top });
+      setOpen(true);
+    }
   }
 
   async function openFloating() {
@@ -645,7 +747,8 @@ export function InPageNeutrino() {
     }
   }
 
-  const placement = open ? placePanel({ left: px.left, top: px.top, size }, viewport, panelSize ?? {}) : null;
+  const panelAnchor = dragPx ?? openAnchor ?? px;
+  const placement = open ? placePanel({ ...panelAnchor, size }, viewport, panelSize ?? {}) : null;
   const sheetOpen = placement?.mode === "sheet";
   const frame: PanelFrame | null = placement?.mode === "floating" ? (liveFrame ?? placement) : null;
 
@@ -699,6 +802,7 @@ export function InPageNeutrino() {
               floatingUnsupported={floatingUnsupported}
               onResetPosition={resetPosition}
               onResetPanelSize={placement.mode === "floating" ? () => savePanelSize(null) : undefined}
+              onResetAll={resetAllLayout}
               onHideUntilReload={() => { closePanel(); hideUntilReload(); }}
             />
           </div>
@@ -748,14 +852,41 @@ export function InPageNeutrino() {
         : null}
 
       {showDock && !hiddenForNow ? (
+        <CompanionTrail
+          targetRef={dockRef}
+          enabled={prefs.ambientMotion}
+          active={!open && !pipWindow && (!driftPaused || Boolean(dragPx))}
+        />
+      ) : null}
+
+      {showDock && !hiddenForNow ? (
         <div
           role="region"
           aria-label={prefs.name}
           className="neutrino-dock group fixed z-50"
           data-dragging={dragPx ? "true" : "false"}
+          data-ambient={prefs.ambientMotion ? "true" : "false"}
+          data-paused={driftPaused ? "true" : "false"}
+          data-open={open ? "true" : "false"}
+          data-motion-reset={resetMotion ? "true" : "false"}
           hidden={sheetOpen}
-          style={{ left: px.left, top: px.top, width: size, height: size }}
+          style={{ left: px.left, top: px.top, width: size, height: size, "--roam-x": `${position.x > 0.5 ? -roamX : roamX}px`, "--roam-y": `${position.y > 0.5 ? -roamY : roamY}px`, "--drift-duration": `${(12 * 100 / (prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED)).toFixed(1)}s` } as CSSProperties}
         >
+          {introVisible && !open ? (
+            <div className={`absolute top-1/2 z-10 -translate-y-1/2 ${position.x > 0.5 ? "right-full mr-3" : "left-full ml-3"}`}>
+              <button type="button" onClick={onClick} className="whitespace-nowrap rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground shadow-lg">
+                {t("introPrompt")}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIntroVisible(false); try { window.localStorage.setItem(INTRO_KEY, "1"); } catch { /* Dismissed for this visit. */ } }}
+                aria-label={t("dismissIntro")}
+                className="neutrino-focus absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground shadow"
+              >
+                <X className="h-3 w-3" aria-hidden />
+              </button>
+            </div>
+          ) : null}
           <button
             ref={dockRef}
             type="button"
@@ -770,6 +901,8 @@ export function InPageNeutrino() {
             onPointerMove={onPointerMove}
             onPointerUp={(event) => endDrag(event, true)}
             onPointerCancel={(event) => endDrag(event, false)}
+            onFocus={pauseDriftForCooldown}
+            onBlur={pauseDriftForCooldown}
             className="neutrino-plate neutrino-focus block h-full w-full cursor-grab rounded-full shadow-xl active:cursor-grabbing"
           >
             <ManifoldMascot

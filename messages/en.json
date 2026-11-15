@@ -783,6 +783,15 @@
       "large": "Large"
     },
     "rotationLabel": "Rotation style",
+    "introPrompt": "Ask, study, or start a timer",
+    "dismissIntro": "Dismiss introduction",
+    "ambientMotionLabel": "Drift and traces",
+    "ambientMotionHelp": "Let Neutrino roam the screen, leaving lattice fragments and star-like sparkles. The trail also appears while you drag it. This setting is saved on this device.",
+    "driftSpeedLabel": "Neutrino drift speed",
+    "driftSpeedHelp": "Choose how quickly Neutrino roams. This setting is saved on this device.",
+    "resetSpeed": "Reset",
+    "speedSlow": "Slower",
+    "speedFast": "Faster",
     "rotations": {
       "auto": {
         "label": "Automatic",
@@ -1072,6 +1081,8 @@
     "aiHelp": "When off, Neutrino shows only the FAQ and nothing is ever sent to an AI service. The companion, its FAQ and its timer stay.",
     "resetPanelSize": "Reset panel size",
     "panelSizeReset": "Panel size reset.",
+    "resetAll": "Reset all companion settings",
+    "resetAllDone": "All companion settings were reset.",
     "resize": {
       "hint": "Drag to resize. Double-click to reset.",
       "width": "Panel width",

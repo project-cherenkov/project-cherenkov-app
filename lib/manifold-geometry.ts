@@ -103,7 +103,7 @@ export function projectLattice(
 // Motion
 // ---------------------------------------------------------------------------
 
-export type MotionMood = "idle" | "thinking";
+export type MotionMood = "idle" | "thinking" | "curious";
 
 // radians per second
 export const IDLE_YAW_SPEED = 0.1;

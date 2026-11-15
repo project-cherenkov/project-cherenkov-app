@@ -6,7 +6,8 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 
 ## What the student sees
 - A dark circular plate holding a glowing icosahedral lattice, a bright core, and a tilted pink/blue "Cherenkov shock boundary" ring with a highlight travelling around it.
-- **Idle:** gentle vertical hover, slow core pulse, slow drift, and every 6 to 11 seconds one eased full turn ("spins sometimes").
+- **Idle:** gentle vertical hover, slow core pulse, and a screen-wide roam on an eased cycle. The speed slider adjusts the 12-second base cycle from 8 to 24 seconds; the default is 0.7×. The roam pauses while the panel is open, the mascot is focused, or it is being dragged. Fading lattice fragments and star-like sparkles follow its path and pointer drags when "Drift and traces" is enabled.
+- A one-time, dismissible prompt introduces the companion's Ask, study, and timer functions.
 - **Thinking** (while a chat reply is pending): fast steady spin, streaming trails, quicker pulse, small node shimmer.
 - Drag it anywhere (pointer), or focus it and use the arrow keys (Shift = bigger steps). Click or Enter opens the panel. Position is stored as a fraction of the available space in `localStorage` (`neutrino-position-v1`), so resizing or rotating a phone never strands it off-screen.
 - The panel has three tabs: Ask, Study timer, Settings. It opens beside the mascot (above or below, whichever has room) and as a bottom sheet under 640px wide.
@@ -20,6 +21,8 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 | `enabled` | boolean | `companion_settings.enabled` | not available |
 | `size` | small 56px, medium 76px, large 104px | `companion_settings.size` | `localStorage` (`neutrino-prefs-v1`) |
 | `rotation` | `auto`, `3d`, `flat` | `companion_settings.rotation` | `localStorage` (`neutrino-prefs-v1`) |
+| `driftSpeed` | 50–150%, 10% steps | `localStorage` (`neutrino-prefs-v1`) | `localStorage` (`neutrino-prefs-v1`) |
+| `ambientMotion` | boolean | `localStorage` (`neutrino-prefs-v1`) | `localStorage` (`neutrino-prefs-v1`) |
 | `aiEnabled` | boolean | `companion_settings.ai_enabled` (migration `0005_neutrino_ai_toggle`) | `localStorage` (`neutrino-prefs-v1`) |
 
 `aiEnabled` switches off only the AI chat. The chat route also refuses (`403 ai_disabled`) for an account whose row says it is off, before the daily budget is touched, so a stale tab or hand-made request cannot bypass it.
@@ -47,7 +50,7 @@ The animation loop uses the `requestAnimationFrame` of the window that owns the 
 
 ## Planned moods
 
-Two moods exist today: idle and thinking (`MascotMood` in `components/study/manifold-mascot.tsx`). Planned, none implemented yet:
+Idle, curious, and thinking moods are wired in (`MascotMood` in `components/study/manifold-mascot.tsx`): curious follows a page change or an open panel; thinking marks a pending AI response. Planned next:
 
 - **Correct quiz answer.** A short, distinct reaction when the student answers a quiz question correctly.
 - **A visualization playing.** A mood shown while an editorial's visualization is running.

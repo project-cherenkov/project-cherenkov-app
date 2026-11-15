@@ -6,11 +6,17 @@ import {
   COMPANION_NAME_MAX,
   COMPANION_ROTATIONS,
   COMPANION_SIZES,
+  DEFAULT_COMPANION_PREFS,
+  DEFAULT_DRIFT_SPEED,
+  MOTION_SPEED_MAX,
+  MOTION_SPEED_MIN,
+  MOTION_SPEED_STEP,
   type CompanionPrefs,
 } from "@/lib/companion-settings";
 import { useCompanionPrefs, type PrefsSaveResult } from "@/components/study/use-companion-prefs";
+import { Slider } from "@/components/ui/slider";
 
-type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset";
+type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset" | "resetAllDone";
 
 const optionLabel =
   "flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
@@ -70,6 +76,7 @@ export function CompanionPreferences({
   variant = "card",
   onResetPosition,
   onResetPanelSize,
+  onResetAll,
   onHideUntilReload,
 }: {
   signedIn: boolean;
@@ -77,6 +84,7 @@ export function CompanionPreferences({
   variant?: "card" | "compact";
   onResetPosition?: () => void;
   onResetPanelSize?: () => void;
+  onResetAll?: () => void;
   onHideUntilReload?: () => void;
 }) {
   const t = useTranslations("companion");
@@ -101,6 +109,17 @@ export function CompanionPreferences({
     setStatus(result === "saved" ? "nameSaved" : "nameError");
   }
 
+  async function resetAll() {
+    setStatus("saving");
+    const result = await update(DEFAULT_COMPANION_PREFS);
+    if (result === "error") {
+      setStatus("error");
+      return;
+    }
+    onResetAll?.();
+    setStatus("resetAllDone");
+  }
+
   const message =
     status === "nameSaved" ? t("nameSaved")
     : status === "nameError" ? t("nameError")
@@ -109,6 +128,7 @@ export function CompanionPreferences({
     : status === "error" ? t("prefsError")
     : status === "positionReset" ? t("positionReset")
     : status === "panelSizeReset" ? t("panelSizeReset")
+    : status === "resetAllDone" ? t("resetAllDone")
     : "";
 
   const body = (
@@ -203,8 +223,61 @@ export function CompanionPreferences({
         }))}
       />
 
-      {onResetPosition || onResetPanelSize || onHideUntilReload ? (
+      <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+        <input
+          type="checkbox"
+          role="switch"
+          checked={prefs.ambientMotion}
+          onChange={(event) => void apply({ ambientMotion: event.target.checked })}
+          className="mt-1 h-5 w-5 shrink-0"
+        />
+        <span>
+          <span className="block font-medium">{t("ambientMotionLabel")}</span>
+          <span className="block text-xs text-muted-foreground">{t("ambientMotionHelp")}</span>
+        </span>
+      </label>
+
+      <div className="space-y-2">
+        <div className="flex items-center justify-between gap-3">
+          <span id={`${fieldId}-drift-speed-label`} className="text-sm font-medium">{t("driftSpeedLabel")}</span>
+          <span className="flex items-center gap-2">
+            <output className="text-sm tabular-nums text-muted-foreground">{((prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED) / 100).toFixed(1)}×</output>
+            <button
+              type="button"
+              onClick={() => void apply({ driftSpeed: DEFAULT_DRIFT_SPEED })}
+              disabled={(prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED) === DEFAULT_DRIFT_SPEED}
+              aria-label={`${t("resetSpeed")} ${t("driftSpeedLabel")}`}
+              className="min-h-8 rounded-md px-2 text-xs text-cherenkov-blue-700 underline underline-offset-2 disabled:cursor-default disabled:text-muted-foreground disabled:no-underline dark:text-cherenkov-blue-pastel"
+            >
+              {t("resetSpeed")}
+            </button>
+          </span>
+        </div>
+        <Slider
+          aria-labelledby={`${fieldId}-drift-speed-label`}
+          value={[prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED]}
+          min={MOTION_SPEED_MIN}
+          max={MOTION_SPEED_MAX}
+          step={MOTION_SPEED_STEP}
+          valueText={`${((prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED) / 100).toFixed(1)}×`}
+          onValueChange={(values) => { if (values[0] !== undefined) void apply({ driftSpeed: values[0] }); }}
+        />
+        <div className="flex justify-between text-xs text-muted-foreground"><span>{t("speedSlow")}</span><span>{t("speedFast")}</span></div>
+        <p className="text-xs text-muted-foreground">{t("driftSpeedHelp")}</p>
+      </div>
+
+      {onResetPosition || onResetPanelSize || onResetAll || onHideUntilReload ? (
         <div className="flex flex-wrap gap-2">
+          {onResetAll ? (
+            <button
+              type="button"
+              onClick={() => void resetAll()}
+              disabled={status === "saving"}
+              className="min-h-11 rounded-md border border-cherenkov-blue-700 px-4 text-sm font-medium text-cherenkov-blue-700 hover:bg-muted disabled:opacity-50 dark:border-cherenkov-blue-pastel dark:text-cherenkov-blue-pastel"
+            >
+              {t("resetAll")}
+            </button>
+          ) : null}
           {onResetPosition ? (
             <button
               type="button"

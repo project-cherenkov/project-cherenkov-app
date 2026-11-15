@@ -21,7 +21,7 @@ function readLocal(): Partial<CompanionPrefs> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    const { size, rotation, aiEnabled, aiAcknowledged, aiBannerDismissed, faqBannerDismissed } = normalizeCompanionPrefs(JSON.parse(raw));
+    const { size, rotation, aiEnabled, aiAcknowledged, aiBannerDismissed, faqBannerDismissed, ambientMotion, driftSpeed } = normalizeCompanionPrefs(JSON.parse(raw));
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     return {
       ...("size" in parsed ? { size } : {}),
@@ -30,6 +30,8 @@ function readLocal(): Partial<CompanionPrefs> {
       ...("aiAcknowledged" in parsed ? { aiAcknowledged } : {}),
       ...("aiBannerDismissed" in parsed ? { aiBannerDismissed } : {}),
       ...("faqBannerDismissed" in parsed ? { faqBannerDismissed } : {}),
+      ...("ambientMotion" in parsed ? { ambientMotion } : {}),
+      ...("driftSpeed" in parsed ? { driftSpeed } : {}),
     };
   } catch {
     return {};
@@ -45,6 +47,8 @@ function writeLocal(prefs: CompanionPrefs) {
       aiAcknowledged: prefs.aiAcknowledged,
       aiBannerDismissed: prefs.aiBannerDismissed,
       faqBannerDismissed: prefs.faqBannerDismissed,
+      ambientMotion: prefs.ambientMotion,
+      driftSpeed: prefs.driftSpeed,
     }));
   } catch {
     // Private mode / blocked storage: the setting just lasts for this page view.
@@ -66,8 +70,8 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
   // Load: device values first (instant, works signed out), then the account.
   useEffect(() => {
     let cancelled = false;
+    const local = readLocal();
     if (!initial) {
-      const local = readLocal();
       setPrefs((current) => ({
         ...current,
         ...local,
@@ -77,6 +81,8 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
           faqBannerDismissed: current.faqBannerDismissed,
         } : {}),
       }));
+    } else {
+      setPrefs((current) => ({ ...current, ambientMotion: local.ambientMotion ?? current.ambientMotion, driftSpeed: local.driftSpeed ?? current.driftSpeed }));
     }
     if (!signedIn) {
       setPrefs((current) => ({ ...current, name: DEFAULT_COMPANION_PREFS.name, enabled: true }));
@@ -91,7 +97,8 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
       .then((response) => (response.ok ? response.json() : null))
       .then((data: unknown) => {
         if (cancelled || !data) return;
-        setPrefs(normalizeCompanionPrefs(data));
+        const localPrefs = readLocal();
+        setPrefs({ ...normalizeCompanionPrefs(data), ambientMotion: localPrefs.ambientMotion ?? DEFAULT_COMPANION_PREFS.ambientMotion, driftSpeed: localPrefs.driftSpeed ?? DEFAULT_COMPANION_PREFS.driftSpeed });
       })
       .catch(() => undefined)
       .finally(() => {
@@ -122,7 +129,7 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
     async (patch: CompanionPatch): Promise<PrefsSaveResult> => {
       const previous = prefsRef.current;
       // Signed-out visitors cannot change account-only fields.
-      const effective: CompanionPatch = signedIn
+      const requested: CompanionPatch = signedIn
         ? patch
         : {
             ...(patch.size ? { size: patch.size } : {}),
@@ -131,11 +138,17 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
             ...(typeof patch.aiAcknowledged === "boolean" ? { aiAcknowledged: patch.aiAcknowledged } : {}),
             ...(typeof patch.aiBannerDismissed === "boolean" ? { aiBannerDismissed: patch.aiBannerDismissed } : {}),
             ...(typeof patch.faqBannerDismissed === "boolean" ? { faqBannerDismissed: patch.faqBannerDismissed } : {}),
+            ...(typeof patch.ambientMotion === "boolean" ? { ambientMotion: patch.ambientMotion } : {}),
+            ...(typeof patch.driftSpeed === "number" ? { driftSpeed: patch.driftSpeed } : {}),
           };
-      const next = { ...previous, ...effective };
+      const effective = { ...requested };
+      delete effective.ambientMotion;
+      delete effective.driftSpeed;
+      const next = { ...previous, ...requested };
       setPrefs(next);
       writeLocal(next);
       window.dispatchEvent(new CustomEvent(CHANGE_EVENT, { detail: next }));
+      if (Object.keys(effective).length === 0) return "local";
       if (!signedIn) return "local";
       try {
         const response = await fetch("/api/companion/settings", {
@@ -144,7 +157,7 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
           body: JSON.stringify(effective),
         });
         if (!response.ok) throw new Error("save failed");
-        const saved = normalizeCompanionPrefs(await response.json());
+        const saved = { ...normalizeCompanionPrefs(await response.json()), ambientMotion: next.ambientMotion, driftSpeed: next.driftSpeed };
         setPrefs(saved);
         window.dispatchEvent(new CustomEvent(CHANGE_EVENT, { detail: saved }));
         return "saved";

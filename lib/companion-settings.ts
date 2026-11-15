@@ -27,6 +27,11 @@ export const COMPANION_SIZE_PX: Record<CompanionSize, number> = {
 export const COMPANION_ROTATIONS = ["auto", "3d", "flat"] as const;
 export type CompanionRotation = (typeof COMPANION_ROTATIONS)[number];
 
+export const MOTION_SPEED_MIN = 50;
+export const MOTION_SPEED_MAX = 150;
+export const MOTION_SPEED_STEP = 10;
+export const DEFAULT_DRIFT_SPEED = 70;
+
 export type CompanionPrefs = {
   name: string;
   enabled: boolean;
@@ -36,6 +41,8 @@ export type CompanionPrefs = {
   updatesEnabled: boolean;
   size: CompanionSize;
   rotation: CompanionRotation;
+  ambientMotion: boolean;
+  driftSpeed: number;
   aiBannerDismissed: boolean;
   faqBannerDismissed: boolean;
 };
@@ -48,6 +55,8 @@ export const DEFAULT_COMPANION_PREFS: CompanionPrefs = {
   updatesEnabled: true,
   size: "medium",
   rotation: "auto",
+  ambientMotion: true,
+  driftSpeed: DEFAULT_DRIFT_SPEED,
   aiBannerDismissed: false,
   faqBannerDismissed: false,
 };
@@ -123,6 +132,9 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
 /** Builds a complete, valid prefs object from untrusted data (storage, API). */
 export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
   const input = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+  const speed = typeof input.driftSpeed === "number" && Number.isFinite(input.driftSpeed)
+    ? Math.min(MOTION_SPEED_MAX, Math.max(MOTION_SPEED_MIN, Math.round(input.driftSpeed / MOTION_SPEED_STEP) * MOTION_SPEED_STEP))
+    : DEFAULT_COMPANION_PREFS.driftSpeed;
   return {
     name: normalizeCompanionName(input.name) ?? DEFAULT_COMPANION_PREFS.name,
     enabled: typeof input.enabled === "boolean" ? input.enabled : DEFAULT_COMPANION_PREFS.enabled,
@@ -131,6 +143,8 @@ export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
     updatesEnabled: typeof input.updatesEnabled === "boolean" ? input.updatesEnabled : DEFAULT_COMPANION_PREFS.updatesEnabled,
     size: isCompanionSize(input.size) ? input.size : DEFAULT_COMPANION_PREFS.size,
     rotation: isCompanionRotation(input.rotation) ? input.rotation : DEFAULT_COMPANION_PREFS.rotation,
+    ambientMotion: typeof input.ambientMotion === "boolean" ? input.ambientMotion : DEFAULT_COMPANION_PREFS.ambientMotion,
+    driftSpeed: speed,
     aiBannerDismissed: typeof input.aiBannerDismissed === "boolean" ? input.aiBannerDismissed : DEFAULT_COMPANION_PREFS.aiBannerDismissed,
     faqBannerDismissed: typeof input.faqBannerDismissed === "boolean" ? input.faqBannerDismissed : DEFAULT_COMPANION_PREFS.faqBannerDismissed,
   };

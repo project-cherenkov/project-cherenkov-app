@@ -783,6 +783,15 @@
       "large": "Besar"
     },
     "rotationLabel": "Gaya putaran",
+    "introPrompt": "Tanya, belajar, atau mulai timer",
+    "dismissIntro": "Tutup pengantar",
+    "ambientMotionLabel": "Gerakan dan jejak",
+    "ambientMotionHelp": "Biarkan Neutrino menjelajahi layar dengan fragmen kisi dan kilau seperti bintang. Jejak juga muncul saat kamu menyeretnya. Pengaturan ini disimpan di perangkat ini.",
+    "driftSpeedLabel": "Kecepatan gerak Neutrino",
+    "driftSpeedHelp": "Atur seberapa cepat Neutrino bergerak. Pengaturan ini disimpan di perangkat ini.",
+    "resetSpeed": "Reset",
+    "speedSlow": "Lebih lambat",
+    "speedFast": "Lebih cepat",
     "rotations": {
       "auto": {
         "label": "Otomatis",
@@ -1072,6 +1081,8 @@
     "aiHelp": "Jika dimatikan, Neutrino hanya menampilkan FAQ dan tidak ada yang pernah dikirim ke layanan AI. Pendamping, FAQ, dan timernya tetap ada.",
     "resetPanelSize": "Reset ukuran panel",
     "panelSizeReset": "Ukuran panel dikembalikan.",
+    "resetAll": "Reset semua pengaturan pendamping",
+    "resetAllDone": "Semua pengaturan pendamping telah direset.",
     "resize": {
       "hint": "Tarik untuk mengubah ukuran. Klik dua kali untuk mengembalikan.",
       "width": "Lebar panel",

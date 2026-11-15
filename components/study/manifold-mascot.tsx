@@ -11,7 +11,7 @@ import {
   type Projected,
 } from "@/lib/manifold-geometry";
 
-export type MascotMood = "idle" | "thinking";
+export type MascotMood = "idle" | "thinking" | "curious";
 export type MascotRotation = "3d" | "flat";
 
 const CENTER = 60;
