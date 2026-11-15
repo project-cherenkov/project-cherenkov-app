@@ -6,7 +6,7 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 
 ## What the student sees
 - A dark circular plate holding a glowing icosahedral lattice, a bright core, and a tilted pink/blue "Cherenkov shock boundary" ring with a highlight travelling around it.
-- **Idle:** gentle vertical hover, slow core pulse, and a screen-wide roam on an eased cycle. The speed slider adjusts the 12-second base cycle from 8 to 24 seconds; the default is 0.7×. The roam pauses while the panel is open, the mascot is focused, or it is being dragged. Fading lattice fragments and star-like sparkles follow its path and pointer drags when "Drift and traces" is enabled.
+- **Idle:** gentle vertical hover, slow core pulse, and a screen-wide roam made of random legs: each picks a new destination anywhere on screen, follows a gently curved route with a varied easing, then rests for a random moment (see `use-companion-wander.ts`). The speed slider scales travel speed from 0.5× to 1.5×; the default is 0.7×. The roam pauses while the panel is open, the mascot is focused, or it is being dragged. Fading lattice fragments and star-like sparkles follow its path and pointer drags when "Drift and traces" is enabled.
 - A one-time, dismissible prompt introduces the companion's Ask, study, and timer functions.
 - **Thinking** (while a chat reply is pending): fast steady spin, streaming trails, quicker pulse, small node shimmer.
 - Drag it anywhere (pointer), or focus it and use the arrow keys (Shift = bigger steps). Click or Enter opens the panel. Position is stored as a fraction of the available space in `localStorage` (`neutrino-position-v1`), so resizing or rotating a phone never strands it off-screen.

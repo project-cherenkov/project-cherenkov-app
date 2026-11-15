@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
+import { useEffect, useId, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { BookOpen, Bot, CircleHelp, ExternalLink, GripHorizontal, MessageCircleQuestion, Settings2, X } from "lucide-react";
@@ -12,9 +12,11 @@ import { CompanionTrail } from "@/components/study/companion-trail";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { NeutrinoFaq } from "@/components/study/neutrino-faq";
 import { useCompanionPrefs } from "@/components/study/use-companion-prefs";
+import { useCompanionWander } from "@/components/study/use-companion-wander";
 import { COMPANION_SIZE_PX, DEFAULT_COMPANION_PREFS, DEFAULT_DRIFT_SPEED } from "@/lib/companion-settings";
 import {
   DEFAULT_DOCK_POSITION,
+  DOCK_MARGIN,
   clampPixels,
   keyboardResize,
   parseStoredPanelSize,
@@ -422,6 +424,7 @@ export function InPageNeutrino() {
   const [pageMood, setPageMood] = useState<MascotMood>("idle");
 
   const dockRef = useRef<HTMLButtonElement>(null);
+  const wanderRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const dragRef = useRef<{ id: number; startX: number; startY: number; left: number; top: number; moved: boolean; last: { left: number; top: number } } | null>(null);
   const resizeRef = useRef<{ id: number; startX: number; startY: number; start: PanelFrame; edges: PanelEdge[]; last: PanelFrame } | null>(null);
@@ -644,8 +647,21 @@ export function InPageNeutrino() {
 
   const basePx = positionToPixels(position, viewport, size);
   const px = dragPx ?? basePx;
-  const roamX = Math.max(0, position.x > 0.5 ? px.left - 12 : viewport.width - size - 12 - px.left);
-  const roamY = Math.max(0, position.y > 0.5 ? px.top - 12 : viewport.height - size - 12 - px.top);
+
+  // Random wandering: offsets from the resting spot that keep it on screen.
+  useCompanionWander({
+    ref: wanderRef,
+    enabled: showDock && !hiddenForNow && prefs.ambientMotion && !dragPx && !resetMotion,
+    paused: driftPaused || open || Boolean(pipWindow),
+    speed: prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED,
+    bounds: {
+      minX: DOCK_MARGIN - basePx.left,
+      maxX: viewport.width - size - DOCK_MARGIN - basePx.left,
+      minY: DOCK_MARGIN - basePx.top,
+      maxY: viewport.height - size - DOCK_MARGIN - basePx.top,
+    },
+    resetKey: [Math.round(basePx.left), Math.round(basePx.top), viewport.width, viewport.height, size].join("|"),
+  });
 
   function onPointerDown(event: PointerEvent<HTMLButtonElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -861,6 +877,7 @@ export function InPageNeutrino() {
 
       {showDock && !hiddenForNow ? (
         <div
+          ref={wanderRef}
           role="region"
           aria-label={prefs.name}
           className="neutrino-dock group fixed z-50"
@@ -870,7 +887,7 @@ export function InPageNeutrino() {
           data-open={open ? "true" : "false"}
           data-motion-reset={resetMotion ? "true" : "false"}
           hidden={sheetOpen}
-          style={{ left: px.left, top: px.top, width: size, height: size, "--roam-x": `${position.x > 0.5 ? -roamX : roamX}px`, "--roam-y": `${position.y > 0.5 ? -roamY : roamY}px`, "--drift-duration": `${(12 * 100 / (prefs.driftSpeed ?? DEFAULT_DRIFT_SPEED)).toFixed(1)}s` } as CSSProperties}
+          style={{ left: px.left, top: px.top, width: size, height: size }}
         >
           {introVisible && !open ? (
             <div className={`absolute top-1/2 z-10 -translate-y-1/2 ${position.x > 0.5 ? "right-full mr-3" : "left-full ml-3"}`}>
