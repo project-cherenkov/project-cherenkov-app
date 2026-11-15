@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classifyAuthError, classifyCallbackError } from "./auth-error-messages";
+import { authCodeKey, classifyAuthError, classifyCallbackError, classifyVerificationLinkError } from "./auth-error-messages";
 
 describe("classifyAuthError", () => {
   it("classifies a thrown TypeError (failed fetch) as network", () => {
@@ -96,5 +96,33 @@ describe("classifyCallbackError", () => {
 
   it("falls back to unknown for an unrecognized value", () => {
     expect(classifyCallbackError("some_future_error_code")).toBe("unknown");
+  });
+});
+
+describe("authCodeKey (verification codes)", () => {
+  it("recognises the codes the resend-verification action can return", () => {
+    expect(authCodeKey("EMAIL_ALREADY_VERIFIED")).toBe("EMAIL_ALREADY_VERIFIED");
+    expect(authCodeKey("VERIFICATION_EMAIL_NOT_ENABLED")).toBe("VERIFICATION_EMAIL_NOT_ENABLED");
+  });
+
+  it("does not take EMAIL_ALREADY_VERIFIED for EMAIL_NOT_VERIFIED, or the reverse", () => {
+    expect(authCodeKey("EMAIL_NOT_VERIFIED")).toBe("EMAIL_NOT_VERIFIED");
+    expect(authCodeKey("EMAIL_ALREADY_VERIFIED")).not.toBe("EMAIL_NOT_VERIFIED");
+  });
+});
+
+describe("classifyVerificationLinkError", () => {
+  it("is null when the link worked (no error parameter)", () => {
+    expect(classifyVerificationLinkError(null)).toBeNull();
+    expect(classifyVerificationLinkError(undefined)).toBeNull();
+    expect(classifyVerificationLinkError("")).toBeNull();
+  });
+
+  it("separates an expired link from every other rejection", () => {
+    expect(classifyVerificationLinkError("token_expired")).toBe("expired");
+    expect(classifyVerificationLinkError("TOKEN_EXPIRED")).toBe("expired");
+    for (const value of ["invalid_token", "user_not_found", "unauthorized", "anything-else"]) {
+      expect(classifyVerificationLinkError(value)).toBe("invalid");
+    }
   });
 });

@@ -7,7 +7,7 @@ const fixture = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/auth-guard", () => ({ getCurrentUser: async () => fixture.user }));
-vi.mock("@/lib/admin-guard", () => ({ isAdminEmail: () => fixture.isAdmin }));
+vi.mock("@/lib/admin-guard", () => ({ isVerifiedAdmin: () => fixture.isAdmin }));
 vi.mock("@/lib/db", () => ({
   db: {
     select: () => { fixture.dbCalls++; throw new Error("database must not be queried before authorization"); },

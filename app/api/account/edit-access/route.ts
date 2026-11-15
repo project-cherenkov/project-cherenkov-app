@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail, isAdminSurfaceEnabled } from "@/lib/admin-guard";
+import { isVerifiedAdmin, isAdminSurfaceEnabled } from "@/lib/admin-guard";
 
 // Answers one question for the site header: "should THIS visitor be shown the
 // Edit (CMS) link?". It exists so the header can stay a static, cacheable
@@ -11,10 +11,10 @@ import { isAdminEmail, isAdminSurfaceEnabled } from "@/lib/admin-guard";
 // are still gated by middleware.ts and Keystatic's own GitHub login; a wrong
 // answer here can only show or hide a link. Same rule as the Account page's
 // "Primus Inter Pares" role (lib/account-roles.ts): the email is in
-// ADMIN_EMAILS. The link is also hidden when the admin surface is switched
+// ADMIN_EMAILS AND verified. The link is also hidden when the admin surface is switched
 // off, because it would just lead to a 404.
 export async function GET() {
   const user = await getCurrentUser();
-  const canEdit = Boolean(user) && isAdminEmail(user!.email) && isAdminSurfaceEnabled();
+  const canEdit = user !== null && isVerifiedAdmin(user) && isAdminSurfaceEnabled();
   return NextResponse.json({ canEdit }, { headers: { "Cache-Control": "no-store" } });
 }

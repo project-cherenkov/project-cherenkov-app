@@ -29,7 +29,7 @@ export function SiteFooter() {
         <p className="label-code mb-2">footer.md</p>
         <p lang="en">{t("tagline")}</p>
         <p lang="la" className="mt-0.5 text-xs">
-          {t("motto")}
+          Cognitio · Humanitas · <span className="credo-exploratio">Exploratio</span>
         </p>
         <p className="mt-1">{t("madeBy")}</p>
         <p className="mt-1">

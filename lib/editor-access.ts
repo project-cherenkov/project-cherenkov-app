@@ -2,8 +2,9 @@
 //
 // "Editor" means the same thing everywhere else on the site (the Account
 // page's "Primus Inter Pares" role, the header's Edit link — see
-// app/api/account/edit-access/route.ts): signed in, email in ADMIN_EMAILS, and
-// the admin surface switched on. Draft editorials and materials are shown
+// app/api/account/edit-access/route.ts): signed in, a VERIFIED email in
+// ADMIN_EMAILS (lib/admin-guard.ts isVerifiedAdmin), and the admin surface
+// switched on. Draft editorials and materials are shown
 // only when this is true.
 //
 // Unlike the Edit link, which is a display hint, this one GATES content, so it
@@ -13,13 +14,13 @@
 // involved (or on a page that is already dynamic), never on every request to a
 // published page.
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail, isAdminSurfaceEnabled } from "@/lib/admin-guard";
+import { isVerifiedAdmin, isAdminSurfaceEnabled } from "@/lib/admin-guard";
 
 export async function isEditorRequest(): Promise<boolean> {
   try {
     if (!isAdminSurfaceEnabled()) return false;
     const user = await getCurrentUser();
-    return user !== null && isAdminEmail(user.email);
+    return user !== null && isVerifiedAdmin(user);
   } catch {
     return false;
   }

@@ -4,7 +4,7 @@ Terakhir diperbarui: 14 November 2026. Kebijakan ini menjelaskan apa yang dilaku
 
 ## 1. Siapa yang bertanggung jawab
 
-Project Cherenkov adalah proyek yang dijalankan siswa/mahasiswa. Situs web tersedia di https://www.projectcherenkov.dev/. Pihak yang bertanggung jawab atas data Anda adalah pemilik proyek, yang dapat dihubungi di projectcherenkov@gmail.com.
+Project Cherenkov adalah proyek yang dijalankan siswa/mahasiswa. Situs web tersedia di https://www.projectcherenkov.dev/. Pihak yang bertanggung jawab atas data Anda adalah pemilik proyek, yang dapat dihubungi di [PLACEHOLDER: contact email].
 
 ## 2. Data yang kami kumpulkan
 
@@ -12,7 +12,7 @@ Tanpa akun, kami tidak mengumpulkan data tentang Anda selain log server biasa ya
 
 Dengan akun, kami menyimpan alamat email, kredensial masuk (kata sandi disimpan dalam bentuk hash; jika Anda masuk dengan Google, kami menerima email dan nama akun Google Anda), serta data belajar yang Anda buat: jawaban kuis dan percobaan ulang, sesi belajar (kapan, berapa lama, mata pelajaran), halaman yang ditandai sudah dipahami, serta pengaturan dan penilaian diri di perencana, dan visualisasi yang Anda pilih untuk beranda. Anda bisa melihatnya di halaman Progres dan Soal yang Salah, dan menghapus sesi belajar satu per satu di sana.
 
-Jika Anda meminta pengaturan ulang kata sandi, kami menggunakan alamat email akun Anda untuk mengirim tautan pengaturan ulang satu kali. Alamat email, isi pesan pengaturan ulang, dan metadata pengiriman dikirim ke Resend, penyedia email transaksional kami, untuk tujuan ini.
+Kami menggunakan alamat email akun Anda untuk mengirim email tentang akun Anda: pesan untuk memverifikasi alamat saat Anda membuat akun, tautan satu kali jika Anda meminta pengaturan ulang kata sandi, dan pemberitahuan keamanan, misalnya pesan bahwa kata sandi Anda telah diganti. Alamat email, isi pesan, dan metadata pengiriman dibagikan kepada Resend, penyedia layanan email kami, hanya untuk tujuan ini.
 
 ## 3. Pendamping obrolan Neutrino (AI pihak ketiga)
 
@@ -24,7 +24,7 @@ Kami memakai data Anda untuk menyediakan fitur akun, kuis, dan perencana yang An
 
 ## 5. Siapa yang menerima data
 
-Penyedia layanan yang menjalankan situs untuk kami: hosting (saat ini Vercel), basis data (saat ini Neon), Google (masuk dengan Google dan obrolan Neutrino), dan Resend (email pengaturan ulang kata sandi). Mereka memproses data hanya untuk menyediakan layanan itu. Kami tidak menjual data pribadi.
+Penyedia layanan yang menjalankan situs untuk kami: hosting (saat ini Vercel), basis data (saat ini Neon), Google (masuk dengan Google dan obrolan Neutrino), dan Resend (email akun: verifikasi, pengaturan ulang kata sandi, dan pemberitahuan keamanan). Mereka memproses data hanya untuk menyediakan layanan itu. Kami tidak menjual data pribadi.
 
 ## 6. Lokasi pemrosesan
 
@@ -32,11 +32,11 @@ Penyedia tersebut dapat memproses data di luar Indonesia, termasuk di Amerika Se
 
 ## 7. Berapa lama data disimpan
 
-Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Pesan obrolan tidak kami simpan di luar percakapan di peramban Anda; masa simpan di Google ditentukan oleh Google. Penanganan dan penyimpanan data email pengaturan ulang kata sandi oleh Resend diatur oleh kebijakan privasi dan ketentuan layanannya.
+Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Pesan obrolan tidak kami simpan di luar percakapan di peramban Anda; masa simpan di Google ditentukan oleh Google. Penanganan dan penyimpanan data email akun oleh Resend diatur oleh kebijakan privasi dan ketentuan layanannya.
 
 ## 8. Hak Anda
 
-Berdasarkan UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi, Anda dapat meminta akses, perbaikan, penghapusan, atau pembatasan penggunaan data pribadi Anda, menarik persetujuan, dan menerima salinan data yang Anda berikan. Kirim email kepada kami dan kami akan menanggapi dalam waktu yang wajar.
+Berdasarkan UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi, Anda dapat meminta akses, perbaikan, penghapusan, atau pembatasan penggunaan data pribadi Anda, menarik persetujuan, dan menerima salinan data yang Anda berikan. Anda juga dapat menghapus akun sendiri dari halaman Akun (kami mengirim tautan konfirmasi ke email Anda terlebih dahulu); untuk hal lain, kirim email kepada kami dan kami akan menanggapi dalam waktu yang wajar.
 
 ## 9. Anak dan remaja
 
@@ -58,4 +58,4 @@ Kami akan mengubah kebijakan ini ketika praktik kami berubah dan menampilkan tan
 
 ## 13. Kontak
 
-Email proyek: projectcherenkov@gmail.com
+Email proyek: [PLACEHOLDER: contact email]

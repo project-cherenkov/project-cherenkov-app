@@ -1,7 +1,7 @@
 import { and, asc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import { db } from "@/lib/db";
 import { quizQuestions, topics } from "@/lib/db/schema";
 import { parseQuizQuestionInput } from "@/lib/quiz-admin";
@@ -9,7 +9,7 @@ import { parseQuizQuestionInput } from "@/lib/quiz-admin";
 async function requireEditor() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
-  if (!isAdminEmail(user.email)) return NextResponse.json({ error: "Content editor authorization required." }, { status: 403 });
+  if (!isVerifiedAdmin(user)) return NextResponse.json({ error: "Content editor authorization required." }, { status: 403 });
   return null;
 }
 

@@ -40,6 +40,9 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `product/planner-context-transfer.md` | Research and reasoning behind the planner's design. | current |
 | `engineering/cherenkov-env-vars-guide.md` | Every environment variable, what it unlocks and how to obtain it. | current |
 | `engineering/scene-builder-github-auth.md` | Walkthrough for the scene builder's GitHub authorisation step. | current |
+| `engineering/email-and-domain.md` | Sending identity, the email checklist, rollout order for editor verification, preview deployments, database notes. | current |
+| `engineering/account-email-flows.md` | How verification, password reset, change password, account deletion, linking and rate limits work; rotating the Resend key. | current |
+| `engineering/security-headers.md` | The report-only Content-Security-Policy and `security.txt`. | current |
 | `engineering/seo-and-accessibility.md` | How indexing is switched on, what pages declare to search engines, accessibility decisions. | current |
 | `reviews/audit-2026-10-31.md` | Design, accessibility, SEO and legal audit of 31 October 2026. | review |
 | `reviews/design-review-2026-10.md` | UI design review of October 2026: what changed, open findings, browser checklist. The palette moved to `design/colour.md`. | review |
@@ -68,4 +71,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | Syllabus sources | `product/syllabus-sources.md` |
 | Planner | `product/phase-3-planner.md` |
 | Environment variables | `engineering/cherenkov-env-vars-guide.md` |
+| Email sending, verification and the editor rollout | `engineering/email-and-domain.md` |
+| Account email flows | `engineering/account-email-flows.md` |
+| Security headers | `engineering/security-headers.md` |
 | SEO and accessibility | `engineering/seo-and-accessibility.md` |

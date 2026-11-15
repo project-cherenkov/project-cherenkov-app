@@ -41,7 +41,7 @@ describe("GET /api/scene-builder/github-oauth/callback — returnTo handling", (
       getCurrentUser: async () => ({ id: "user-1", email: "admin@example.com" }),
     }));
     vi.doMock("@/lib/admin-guard", () => ({
-      isAdminEmail: () => true,
+      isVerifiedAdmin: () => true,
     }));
     vi.stubGlobal(
       "fetch",

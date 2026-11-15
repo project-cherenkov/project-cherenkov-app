@@ -42,4 +42,4 @@ We may update these terms and will show the date above. For material changes we 
 
 ## 10. Contact
 
-Project email: <projectcherenkov@gmail.com>
+Project email: [PLACEHOLDER: contact email]

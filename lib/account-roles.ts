@@ -5,7 +5,8 @@
 //   Primus Inter Pares signed in AND has edit access
 //
 // "Edit access" is the same rule the CMS write surface already uses: the
-// account's email is in ADMIN_EMAILS (lib/admin-guard.ts isAdminEmail).
+// account's email is in ADMIN_EMAILS AND verified (lib/admin-guard.ts
+// isVerifiedAdmin). An unverified admin-email account is Inchoatus.
 // Being able to open /keystatic additionally needs the deployment's
 // Keystatic/GitHub setup; this role says who is ALLOWED to edit.
 export const ACCOUNT_ROLES = ["inchoatus", "primus_inter_pares"] as const;

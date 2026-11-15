@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { isEmailConfigured, sendEmail } from "./email";
+import { buildPayload, isEmailConfigured, sendEmail } from "./email";
 
 describe("lib/email", () => {
   beforeEach(() => {
@@ -32,5 +32,53 @@ describe("lib/email", () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response("no", { status: 422 })));
     await expect(sendEmail({ to: "a@b.c", subject: "s", text: "t" })).rejects.toThrow(/422/);
     vi.unstubAllGlobals();
+  });
+});
+
+describe("buildPayload", () => {
+  beforeEach(() => {
+    delete process.env.EMAIL_REPLY_TO;
+  });
+  afterEach(() => {
+    delete process.env.EMAIL_REPLY_TO;
+  });
+
+  it("sends plain text only, with no reply_to, when nothing optional is set", () => {
+    const payload = buildPayload({ from: "f@x.y", to: "a@b.c", subject: "s", text: "t" });
+    expect(payload).toEqual({ from: "f@x.y", to: "a@b.c", subject: "s", text: "t" });
+    expect(payload).not.toHaveProperty("reply_to");
+    expect(payload).not.toHaveProperty("html");
+  });
+
+  it("adds html and reply_to when given, keeping the text fallback", () => {
+    const payload = buildPayload({
+      from: "f@x.y",
+      to: "a@b.c",
+      subject: "s",
+      text: "t",
+      html: "<p>t</p>",
+      replyTo: "help@x.y",
+    });
+    expect(payload).toMatchObject({ text: "t", html: "<p>t</p>", reply_to: "help@x.y" });
+  });
+
+  it("falls back to EMAIL_REPLY_TO, and a per-message replyTo wins over it", () => {
+    process.env.EMAIL_REPLY_TO = " env@x.y ";
+    expect(buildPayload({ from: "f", to: "a", subject: "s", text: "t" })).toMatchObject({ reply_to: "env@x.y" });
+    expect(buildPayload({ from: "f", to: "a", subject: "s", text: "t", replyTo: "own@x.y" })).toMatchObject({
+      reply_to: "own@x.y",
+    });
+  });
+
+  it("ignores a blank EMAIL_REPLY_TO", () => {
+    process.env.EMAIL_REPLY_TO = "   ";
+    expect(buildPayload({ from: "f", to: "a", subject: "s", text: "t" })).not.toHaveProperty("reply_to");
+  });
+
+  it("does not make EMAIL_REPLY_TO part of isEmailConfigured()", () => {
+    delete process.env.RESEND_API_KEY;
+    delete process.env.EMAIL_FROM;
+    process.env.EMAIL_REPLY_TO = "help@x.y";
+    expect(isEmailConfigured()).toBe(false);
   });
 });

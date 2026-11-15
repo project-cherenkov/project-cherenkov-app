@@ -12,6 +12,7 @@ export interface UpdateLike {
   author?: string | undefined;
   date?: string | undefined;
   type?: UpdateType | undefined;
+  pinned?: boolean | undefined;
   locale: string;
   isOriginal: boolean;
 }
@@ -27,6 +28,8 @@ export interface ResolvedUpdate<T extends UpdateLike> {
   isFallback: boolean;
   // Languages this update genuinely exists in.
   locales: string[];
+  // Pinned updates sort to the top of the list, above date order.
+  pinned: boolean;
 }
 
 export function resolveUpdates<T extends UpdateLike>(
@@ -51,10 +54,14 @@ export function resolveUpdates<T extends UpdateLike>(
       author: original.author,
       isFallback: picked.isFallback,
       locales: versionLocales(versions),
+      pinned: original.pinned ?? false,
     });
   }
-  // Newest first; the slug breaks ties so the order is stable.
+  // Pinned first; then newest first; the slug breaks ties so the order is stable.
   return resolved.sort(
-    (a, b) => b.date.localeCompare(a.date) || a.update.slug.localeCompare(b.update.slug),
+    (a, b) =>
+      Number(b.pinned) - Number(a.pinned) ||
+      b.date.localeCompare(a.date) ||
+      a.update.slug.localeCompare(b.update.slug),
   );
 }

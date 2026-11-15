@@ -197,8 +197,9 @@
   }
 }
 
-/* Home credo: the word "Exploratio" (components/site/credo.tsx) plays one slow
-   colour pass when the page loads and then rests in the page foreground.
+/* The word "Exploratio" plays one slow colour pass wherever the credo is shown
+   (components/site/credo.tsx and components/site/footer.tsx), then rests in
+   the page foreground.
    - 4.6 s (plus a 0.4 s delay) is under the 5 s limit in WCAG 2.2.2 (Pause, Stop, Hide), so no
      pause control is required. Change the count below to `infinite` for a
      perpetual cycle, and then add one, or accept the risk that 2.2.2 applies.

@@ -217,6 +217,9 @@ const updates = defineCollection({
       type: s.enum(updateTypes).optional(),
       language: s.enum(CONTENT_LOCALES).optional(),
       author: s.string().optional(),
+      // Pinned updates always appear at the top of /updates regardless of date.
+      // Only originals should set this; translations inherit the value from their original.
+      pinned: s.boolean().default(false),
       body: s.mdx(),
       slug: s.path(),
     })

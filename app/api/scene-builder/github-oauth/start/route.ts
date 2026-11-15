@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import {
   createGithubOauthState,
   GITHUB_OAUTH_STATE_COOKIE,
@@ -12,7 +12,7 @@ const OAUTH_COOKIE_MAX_AGE_SECONDS = 600; // matches scene-builder-oauth.ts's 10
 
 // This route sits under /api/scene-builder, already covered by
 // middleware.ts's ADMIN_SURFACE_PREFIXES env-level gate — but per NFR-4
-// ("session + isAdminEmail check before touching anything else"), it also
+// ("session + isVerifiedAdmin check before touching anything else"), it also
 // does its own per-request check here, same as the write-back route,
 // rather than relying solely on that outer gate.
 export async function GET(request: Request) {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   if (!user) {
     return NextResponse.json({ error: "Authentication required." }, { status: 401 });
   }
-  if (!isAdminEmail(user.email)) {
+  if (!isVerifiedAdmin(user)) {
     return NextResponse.json({ error: "Content editor authorization required." }, { status: 403 });
   }
 

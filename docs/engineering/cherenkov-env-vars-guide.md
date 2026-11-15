@@ -39,12 +39,15 @@ step depending on which context you're configuring.
 | `BETTER_AUTH_URL` | Required *if* using accounts | With `DATABASE_URL` | Free |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | "Continue with Google" button | Optional | Free |
 | `GEMINI_API_KEY` | Neutrino's signed-in study chat | Optional; without it, chat needs a user's one-request key | Gemini API usage limits apply |
-| `RESEND_API_KEY` / `EMAIL_FROM` | Password-reset emails (the "Forgot password?" link and `/forgot-password`, `/reset-password`). Both must be set; with neither, reset is off and those pages 404. `EMAIL_FROM` must be a sender verified at the provider, e.g. `Cherenkov <no-reply@your-domain>`. | Optional | Free tier at Resend (provider is a swappable choice; see `lib/email.ts`) |
+| `RESEND_API_KEY` / `EMAIL_FROM` | Account emails: verification, password reset, "password changed" notices and account-deletion confirmation. Both must be set; with neither, all of those are off and their pages 404. `EMAIL_FROM` must be a sender on a domain verified at the provider, e.g. `Project Cherenkov <no-reply@mail.projectcherenkov.dev>`. See `engineering/email-and-domain.md`. | Optional | Free tier at Resend (provider is a swappable choice; see `lib/email.ts`) |
+| `EMAIL_REPLY_TO` | A monitored address replies should go to. Unset means no Reply-To header. | Optional | Free |
+| `ALLOW_UNVERIFIED_EDITORS` | TEMPORARY rollout switch: `true` lets editors in `ADMIN_EMAILS` keep access before they verify their email. Remove it once they have. | Optional, temporary | Free |
+| `AUTH_RATE_LIMIT_STORAGE` | `memory` switches auth rate limiting back to per-instance memory. Only an escape hatch for deploying before migration `0010` is applied. | Optional, temporary | Free |
 | `KEYSTATIC_GITHUB_CLIENT_ID` / `_SECRET` | `/keystatic` admin UI and scene builder in production | Optional | Free |
 | `NEXT_PUBLIC_KEYSTATIC_GITHUB_ENABLED` | Client-side GitHub mode flag (auto-derived in `next.config.mjs`) | Do not set manually | Free |
 | `KEYSTATIC_SECRET` | Required *if* using Keystatic GitHub mode / scene builder | With Keystatic vars | Free |
 | `KEYSTATIC_GITHUB_REPO` | Which repo Keystatic and scene builder commit to | Optional (has a default) | Free |
-| `ADMIN_EMAILS` | Authorizes CMS writes, scene builder save/create, and grants `Primus Inter Pares` role | Required for CMS editing / admin role | Free |
+| `ADMIN_EMAILS` | Authorizes CMS writes, scene builder save/create, and grants `Primus Inter Pares` role, to accounts whose email is also VERIFIED (when email is configured) | Required for CMS editing / admin role | Free |
 | `BLOB_READ_WRITE_TOKEN` | Team-photo upload feature | Optional | Free (Vercel Blob) |
 
 ---
@@ -262,6 +265,12 @@ value as `NEXT_PUBLIC_SITE_URL`, just as its own variable since Better Auth
 reads it independently.
 
 Where to set it: Vercel dashboard → Settings → Environment Variables.
+
+Preview deployments: this value is normally inherited by Preview, so it points
+at the live site. On a Vercel Preview deployment the app uses that
+deployment's own host (`VERCEL_URL`) instead, so emailed links stay on the
+preview. Production and local development still use this variable exactly as
+set. See `engineering/email-and-domain.md`.
 
 ---
 
@@ -562,13 +571,20 @@ administrative write access and roles across the app:
 
 1. CMS editing and scene builder: `app/api/scene-builder/route.ts` and
    `app/api/scene-builder/new/route.ts` verify that the caller is signed in and
-   their email passes `isAdminEmail(user.email)` before allowing scenes to be
+   their email passes `isVerifiedAdmin(user)` before allowing scenes to be
    saved or stub editorials to be created (required in local mode too).
 2. Team-photo uploads: `app/api/team-photo/route.ts` checks `getCurrentUser()`
-   first, then calls `isAdminEmail(user.email)` before accepting the upload.
+   first, then calls `isVerifiedAdmin(user)` before accepting the upload.
 3. Account roles: On `/[locale]/account`, users whose email appears in
-   `ADMIN_EMAILS` are assigned the `Primus Inter Pares` role (with edit
-   access indicator); other signed-in users receive the standard `Inchoatus` role.
+   `ADMIN_EMAILS` AND verified are assigned the `Primus Inter Pares` role (with
+   edit access indicator); other signed-in users, including an unverified
+   account that uses an editor address, receive the standard `Inchoatus` role.
+
+An address on the list is not enough on its own: anyone can register an
+account with any address, so editor power needs a verified address
+(`lib/admin-guard.ts` `isVerifiedAdmin`). Verification is enforced only when
+email is configured (otherwise nobody could verify). `ALLOW_UNVERIFIED_EDITORS=true`
+turns the requirement off temporarily during rollout.
 
 Required? Required if you want to use the scene builder (save or "New
 visualization"), upload team photos, or assign admin status on `/account`. If

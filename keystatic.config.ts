@@ -501,6 +501,59 @@ export default config({
       }
     : { kind: "local" },
   collections: {
+    updates: collection({
+      label: "Updates",
+      slugField: "slug",
+      path: "content/updates/*",
+      format: { contentField: "content" },
+      schema: {
+        slug: fields.slug({
+          name: {
+            label: "Slug",
+            description:
+              "Sets the MDX filename (content/updates/<slug>.mdx). Must start with the date, e.g. 2026-11-15-my-update.",
+          },
+        }),
+        title: fields.text({
+          label: "Title",
+          validation: { isRequired: true, length: { max: 120 } },
+        }),
+        summary: fields.text({
+          label: "Summary",
+          multiline: true,
+          validation: { isRequired: true, length: { max: 280 } },
+        }),
+        date: fields.date({ label: "Date", validation: { isRequired: true } }),
+        type: fields.select({
+          label: "Type",
+          options: [
+            { label: "Syllabus", value: "syllabus" },
+            { label: "Content", value: "content" },
+            { label: "Feature", value: "feature" },
+            { label: "Fix", value: "fix" },
+            { label: "Notice", value: "notice" },
+          ],
+          defaultValue: "notice",
+        }),
+        language: fields.select({
+          label: "Language",
+          description: "The language this entry is written in.",
+          options: [
+            { label: "English", value: "en" },
+            { label: "Indonesian", value: "id" },
+          ],
+          defaultValue: "en",
+        }),
+        author: fields.text({ label: "Author (optional)" }),
+        pinned: fields.checkbox({
+          label: "Pinned",
+          description:
+            "Pinned updates always appear at the top of the /updates page, above date order. Only set this on originals, not on translation files.",
+          defaultValue: false,
+        }),
+        content: fields.mdx({ label: "Body" }),
+      },
+    }),
     astronomyEditorials: collection({
       label: "Editorials: Astronomy",
       slugField: "slug",

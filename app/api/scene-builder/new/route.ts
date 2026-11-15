@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import { createGithubClient } from "@/lib/scene-builder-github";
 import { GITHUB_TOKEN_COOKIE, readCookie, readGithubToken } from "@/lib/scene-builder-oauth";
 import { isGithubModeConfigured } from "@/lib/scene-builder-write";
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   if (!user) {
     return NextResponse.json({ error: "Authentication required." }, { status: 401 });
   }
-  if (!isAdminEmail(user.email)) {
+  if (!isVerifiedAdmin(user)) {
     return NextResponse.json({ error: "Content editor authorization required." }, { status: 403 });
   }
 

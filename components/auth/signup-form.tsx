@@ -59,7 +59,11 @@ export function SignupForm({ googleEnabled }: SignupFormProps) {
     setError(null);
     startTransition(async () => {
       try {
-        const result = await signUp.email({ email, password, name });
+        // D1 = Option B: the new account is signed in straight away, and the
+        // verification email (sent by the server when email is configured) lands
+        // on the locale-prefixed confirmation page. Verification gates privileged
+        // features only, so there is no "check your inbox" wall here.
+        const result = await signUp.email({ email, password, name, callbackURL: `/${locale}/email-verified` });
         if (result.error) {
           const codeKey = authCodeKey(result.error.code);
           setError(codeKey ? tCodes(codeKey) : (result.error.message ?? t("genericError")));

@@ -1,5 +1,6 @@
 import createNextIntlPlugin from "next-intl/plugin";
 import { execFileSync } from "node:child_process";
+import { CSP_HEADER_NAME, buildContentSecurityPolicy } from "./lib/csp.mjs";
 
 // Points next-intl at the request-time config (locale detection, message loading).
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
@@ -84,10 +85,11 @@ const nextConfig = {
   // any public Vercel deployment should ship with, and doesn't constrain
   // anything Phase 1 or Phase 2 currently do (no third-party embeds, no
   // iframes, no inline-script requirements beyond what Next.js itself
-  // emits). Deliberately NOT included: a Content-Security-Policy — a real
-  // one needs to be worked out against Keystatic's admin UI and Vercel
-  // Blob's image host, which is a bigger, separate decision (Recommended,
-  // not Required, for this pass — see docs/history/deployment-readiness.md).
+  // emits). A Content-Security-Policy is sent in REPORT-ONLY mode only (see
+  // lib/csp.mjs): it logs to the browser console and blocks nothing. An
+  // enforcing policy needs to be worked out against Keystatic's admin UI,
+  // Vercel Blob's image host, KaTeX and the Blockly scene builder first (see
+  // docs/history/deployment-readiness.md).
   async headers() {
     return [
       {
@@ -97,6 +99,10 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          {
+            key: CSP_HEADER_NAME,
+            value: buildContentSecurityPolicy({ isProduction: process.env.NODE_ENV === "production" }),
+          },
         ],
       },
     ];

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import {
   GITHUB_OAUTH_STATE_COOKIE,
   GITHUB_RETURN_TO_COOKIE,
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
   if (!user) {
     return NextResponse.json({ error: "Authentication required." }, { status: 401 });
   }
-  if (!isAdminEmail(user.email)) {
+  if (!isVerifiedAdmin(user)) {
     return NextResponse.json({ error: "Content editor authorization required." }, { status: 403 });
   }
 

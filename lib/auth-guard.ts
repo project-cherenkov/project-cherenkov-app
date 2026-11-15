@@ -36,6 +36,9 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string;
+  // Needed by lib/admin-guard.ts isVerifiedAdmin(): an editor email only counts
+  // once the address has been verified.
+  emailVerified: boolean;
 }
 
 // For Server Components / Server Actions, which only have next/headers, not
@@ -61,5 +64,6 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     id: session.user.id,
     email: session.user.email,
     name: session.user.name,
+    emailVerified: session.user.emailVerified === true,
   };
 }

@@ -71,6 +71,13 @@
       "when": 1794662400000,
       "tag": "0009_neutrino_banner_dismissals",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794700000000,
+      "tag": "0010_auth_rate_limit",
+      "breakpoints": true
     }
   ]
 }

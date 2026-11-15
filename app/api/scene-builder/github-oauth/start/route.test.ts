@@ -4,7 +4,7 @@ vi.mock("@/lib/auth-guard", () => ({
   getCurrentUser: async () => ({ id: "user-1", email: "admin@example.com" }),
 }));
 vi.mock("@/lib/admin-guard", () => ({
-  isAdminEmail: () => true,
+  isVerifiedAdmin: () => true,
 }));
 
 import { GET } from "./route";

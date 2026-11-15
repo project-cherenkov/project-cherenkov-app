@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { account, user } from "@/lib/db/schema";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import { resolveRole, type AccountRole } from "@/lib/account-roles";
 
 export interface AccountDetails {
@@ -49,5 +49,5 @@ export async function getAccountDetails(userId: string): Promise<AccountDetails 
     .select({ providerId: account.providerId })
     .from(account)
     .where(eq(account.userId, userId));
-  return buildAccountDetails(row, accounts.map((a) => a.providerId), isAdminEmail(row.email));
+  return buildAccountDetails(row, accounts.map((a) => a.providerId), isVerifiedAdmin(row));
 }

@@ -55,9 +55,13 @@ export function PasswordSettings({
     setError(null);
     startTransition(async () => {
       try {
+        // T4: end every other session. Whoever else was signed in under the old
+        // password (a lost phone, a shared computer) loses access; this device
+        // gets a fresh session from the same response and stays signed in.
         const result = await authClient.changePassword({
           currentPassword,
           newPassword,
+          revokeOtherSessions: true,
         });
         if (result.error) {
           setError(result.error.message ?? t("genericError"));
@@ -86,7 +90,7 @@ export function PasswordSettings({
       </p>
       {sent ? (
         <p role="status" className="mt-4 text-sm text-foreground/75">
-          {hasPassword ? t("changed") : t("sent")}
+          {hasPassword ? t("changedSignedOut") : t("sent")}
         </p>
       ) : hasPassword ? (
         <form onSubmit={changePassword} className="mt-4 flex flex-col gap-4">

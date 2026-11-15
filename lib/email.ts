@@ -1,4 +1,5 @@
-// Minimal transactional-email sender, used only for password-reset links.
+// Minimal transactional-email sender: verification links, password-reset links
+// and security notices (see lib/email-templates.ts for the copy).
 //
 // DECISION FOR THE OWNER: the project had no email provider. This uses the
 // Resend HTTP API because it needs no extra dependency (one fetch) and has a
@@ -9,7 +10,13 @@
 // it did before.
 //
 //   RESEND_API_KEY   API key from the provider
-//   EMAIL_FROM       a verified sender, e.g. "Cherenkov <no-reply@your-domain>"
+//   EMAIL_FROM       a verified sender on the SENDING subdomain, e.g.
+//                    "Project Cherenkov <no-reply@mail.your-domain>". The root
+//                    domain is kept free to receive mail (see
+//                    docs/engineering/email-and-domain.md).
+//   EMAIL_REPLY_TO   optional. A monitored address replies should go to.
+//                    Unset means no Reply-To header is sent. It plays no part
+//                    in isEmailConfigured().
 export function isEmailConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 }
@@ -17,10 +24,14 @@ export function isEmailConfigured(): boolean {
 export interface OutgoingEmail {
   to: string;
   subject: string;
+  // Always required: it is the fallback for clients that do not render HTML.
   text: string;
+  html?: string;
+  // Overrides EMAIL_REPLY_TO for this message only.
+  replyTo?: string;
 }
 
-export async function sendEmail({ to, subject, text }: OutgoingEmail): Promise<void> {
+export async function sendEmail({ to, subject, text, html, replyTo }: OutgoingEmail): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) {
@@ -32,9 +43,30 @@ export async function sendEmail({ to, subject, text }: OutgoingEmail): Promise<v
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from, to, subject, text }),
+    body: JSON.stringify(buildPayload({ from, to, subject, text, html, replyTo })),
   });
   if (!response.ok) {
     throw new Error(`Email provider rejected the message (HTTP ${response.status}).`);
   }
+}
+
+// Pure, so the Reply-To / HTML handling is unit-tested without a network call.
+// Resend's field is `reply_to`; optional fields are omitted entirely when unset.
+export function buildPayload({
+  from,
+  to,
+  subject,
+  text,
+  html,
+  replyTo,
+}: OutgoingEmail & { from: string }): Record<string, unknown> {
+  const reply = (replyTo ?? process.env.EMAIL_REPLY_TO)?.trim();
+  return {
+    from,
+    to,
+    subject,
+    text,
+    ...(html ? { html } : {}),
+    ...(reply ? { reply_to: reply } : {}),
+  };
 }

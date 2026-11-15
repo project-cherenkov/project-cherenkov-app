@@ -10,6 +10,9 @@ import { Link } from "@/i18n/routing";
 import { SignOutButton } from "@/components/account/sign-out-button";
 import { AuthPage } from "@/components/auth/auth-page";
 import { isEmailConfigured } from "@/lib/email";
+import { editorsMustVerifyEmail, isAdminEmail } from "@/lib/admin-guard";
+import { DeleteAccount } from "@/components/account/delete-account";
+import { EmailVerification } from "@/components/account/email-verification";
 import { PasswordSettings } from "@/components/account/password-settings";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { DEFAULT_COMPANION_PREFS, normalizeCompanionPrefs } from "@/lib/companion-settings";
@@ -67,6 +70,10 @@ export default async function AccountPage() {
 
   const providerLabel = (id: string) =>
     id === "credential" ? t("providerPassword") : id === "google" ? "Google" : id;
+  const emailEnabled = isEmailConfigured();
+  // An address on the editor list that is not verified yet: explain why there is
+  // no edit access, instead of leaving the editor guessing.
+  const needsVerifyForEdit = !details.hasEditAccess && !details.emailVerified && editorsMustVerifyEmail() && isAdminEmail(details.email);
   const joined = new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(details.createdAt);
 
   return (
@@ -76,14 +83,22 @@ export default async function AccountPage() {
 
       <dl className="mt-8 divide-y divide-border rounded-lg border border-border bg-card">
         <Row label={t("username")} value={details.name} />
-        <Row label={t("email")} value={details.email} />
+        <Row
+          label={t("email")}
+          value={
+            <span>
+              {details.email}
+              {emailEnabled ? <EmailVerification email={details.email} verified={details.emailVerified} /> : null}
+            </span>
+          }
+        />
         <Row
           label={t("role")}
           value={
             <span>
               <span className="font-mono font-semibold">{ROLE_LABELS[details.role]}</span>
               <span className="mt-1 block text-sm text-foreground/75">
-                {t(details.hasEditAccess ? "roleEditorHint" : "roleMemberHint")}
+                {t(details.hasEditAccess ? "roleEditorHint" : needsVerifyForEdit ? "roleVerifyHint" : "roleMemberHint")}
               </span>
             </span>
           }
@@ -99,6 +114,10 @@ export default async function AccountPage() {
         hasPassword={details.providers.includes("credential")}
         resetEnabled={isEmailConfigured()}
       />
+
+      {emailEnabled ? (
+        <DeleteAccount email={details.email} hasPassword={details.providers.includes("credential")} />
+      ) : null}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Link

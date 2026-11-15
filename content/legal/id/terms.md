@@ -42,4 +42,4 @@ Kami dapat memperbarui ketentuan ini dan menampilkan tanggalnya di atas. Untuk p
 
 ## 10. Kontak
 
-Email proyek: <projectcherenkov@gmail.com>
+Email proyek: [PLACEHOLDER: contact email]

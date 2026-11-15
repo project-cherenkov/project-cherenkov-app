@@ -6,6 +6,7 @@ import {
   timestamp,
   uuid,
   integer,
+  bigint,
   jsonb,
   numeric,
   date,
@@ -147,6 +148,18 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+// Better Auth rate-limit counters (rateLimit.storage = "database" in
+// lib/auth-rate-limit.ts). Shape taken from the installed better-auth@1.4.22
+// get-tables output: key (unique), count, lastRequest as a bigint of epoch
+// milliseconds. The table must exist BEFORE the code that uses it is deployed:
+// see drizzle/0010_auth_rate_limit.sql and lib/auth-rate-limit.ts.
+export const rateLimit = pgTable("rate_limit", {
+  id: text("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  count: integer("count").notNull(),
+  lastRequest: bigint("last_request", { mode: "number" }).notNull(),
+});
 
 // ===========================================================================
 // Phase 2 app tables — DB-002 (topics, quiz_questions), QUIZ-001

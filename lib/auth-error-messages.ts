@@ -164,6 +164,8 @@ const AUTH_CODE_KEYS = [
   "PASSWORD_TOO_LONG",
   "USER_ALREADY_EXISTS",
   "EMAIL_NOT_VERIFIED",
+  "EMAIL_ALREADY_VERIFIED",
+  "VERIFICATION_EMAIL_NOT_ENABLED",
   "INVALID_TOKEN",
 ] as const;
 
@@ -175,4 +177,17 @@ export function authCodeKey(code: unknown): AuthCodeKey | null {
   // Longest-first so INVALID_EMAIL_OR_PASSWORD is not taken for INVALID_EMAIL.
   const sorted = [...AUTH_CODE_KEYS].sort((a, b) => b.length - a.length);
   return sorted.find((key) => upper === key || upper.startsWith(`${key}_`)) ?? null;
+}
+
+// The emailed verification link lands on /[locale]/email-verified. When Better
+// Auth rejects the token it redirects there with `?error=<value>` (values read
+// from the installed 1.4.22 email-verification route: "token_expired",
+// "invalid_token", "user_not_found", "unauthorized"). Only expiry gets its own
+// wording; everything else is "invalid", because the next step is the same:
+// sign in and ask for a new link from the Account page.
+export type VerificationLinkProblem = "expired" | "invalid";
+
+export function classifyVerificationLinkError(errorParam: string | null | undefined): VerificationLinkProblem | null {
+  if (!errorParam) return null;
+  return errorParam.toLowerCase() === "token_expired" ? "expired" : "invalid";
 }

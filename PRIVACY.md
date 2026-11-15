@@ -4,7 +4,7 @@ Last updated: 14 November 2026. This policy describes what Project Cherenkov ("w
 
 ## 1. Who is responsible
 
-Project Cherenkov is a student-run project. The website is available at https://www.projectcherenkov.dev/. The person responsible for your data is the project owner, reachable at projectcherenkov@gmail.com.
+Project Cherenkov is a student-run project. The website is available at https://www.projectcherenkov.dev/. The person responsible for your data is the project owner, reachable at [PLACEHOLDER: contact email].
 
 ## 2. What we collect
 
@@ -12,7 +12,7 @@ Without an account we collect nothing about you beyond ordinary server logs kept
 
 With an account we store your email address, your sign-in credentials (passwords are stored hashed; if you use Google sign-in we receive your Google account email and name), and the study data you create: quiz answers and retries, study sessions (when, how long, subject), pages you marked as understood, and planner settings and self-ratings, and which visualizations you chose for the home page. You can see this on your Progress and Missed questions pages and delete individual study sessions there.
 
-If you request a password reset, we use your account email address to send a one-time reset link. The email address, reset message and delivery metadata are sent to Resend, our transactional email provider, for this purpose.
+We use your account email address to send you emails about your account: a message to verify the address when you create an account, a one-time link if you request a password reset, and security notices, such as a message telling you that your password was changed. The email address, the message and delivery metadata are shared with Resend, our email service provider, for this purpose only.
 
 ## 3. The Neutrino chat companion (third-party AI)
 
@@ -24,7 +24,7 @@ We use your data to provide the account, quiz and planner features you ask for (
 
 ## 5. Who receives it
 
-Service providers that run the site for us: hosting (currently Vercel), the database (currently Neon), Google (sign-in and the Neutrino chat), and Resend (password-reset emails). They process data only to provide those services. We do not sell personal data.
+Service providers that run the site for us: hosting (currently Vercel), the database (currently Neon), Google (sign-in and the Neutrino chat), and Resend (account emails: verification, password reset and security notices). They process data only to provide those services. We do not sell personal data.
 
 ## 6. Where it is processed
 
@@ -32,11 +32,11 @@ These providers may process data outside Indonesia, including in the United Stat
 
 ## 7. How long we keep it
 
-Account and study data are kept until you delete your account or ask us to delete it. Server logs are kept by the hosting provider for its standard period. Chat messages are not stored by us beyond the conversation in your browser; Google's retention is set by Google. Resend's handling and retention of password-reset email data are governed by Resend's privacy policy and service terms.
+Account and study data are kept until you delete your account or ask us to delete it. Server logs are kept by the hosting provider for its standard period. Chat messages are not stored by us beyond the conversation in your browser; Google's retention is set by Google. Resend's handling and retention of account email data are governed by Resend's privacy policy and service terms.
 
 ## 8. Your rights
 
-Under Indonesian Law No. 27 of 2022 on Personal Data Protection you may ask to access, correct, delete or restrict the use of your personal data, to withdraw consent, and to receive a copy of data you provided. Email us and we will respond within a reasonable time. If you are in another jurisdiction, you may have additional rights.
+Under Indonesian Law No. 27 of 2022 on Personal Data Protection you may ask to access, correct, delete or restrict the use of your personal data, to withdraw consent, and to receive a copy of data you provided. You can delete your account yourself from your Account page (we email a confirmation link to your address first); for anything else, email us and we will respond within a reasonable time. If you are in another jurisdiction, you may have additional rights.
 
 ## 9. Children and teenagers
 
@@ -58,4 +58,4 @@ We will change this policy when our practices change and show the new date at th
 
 ## 13. Contact
 
-Project email: projectcherenkov@gmail.com
+Project email: [PLACEHOLDER: contact email]

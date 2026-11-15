@@ -1,7 +1,7 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
-import { isAdminEmail } from "@/lib/admin-guard";
+import { isVerifiedAdmin } from "@/lib/admin-guard";
 import { sanitizeBlobPathSegment } from "./sanitize";
 import { matchesImageMagicBytes } from "./magic-bytes";
 
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       { status: 401 },
     );
   }
-  if (!isAdminEmail(user.email)) {
+  if (!isVerifiedAdmin(user)) {
     return NextResponse.json(
       { error: "Content editor authorization required." },
       { status: 403 },

@@ -1,3 +1,5 @@
+import { isEmailConfigured } from "@/lib/email";
+
 // Single source of truth for whether the CMS "write surface" — the
 // Keystatic admin UI, its API route, and the team-photo upload path — is
 // reachable at all.
@@ -51,4 +53,29 @@ export function isAdminEmail(email: string): boolean {
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
   return allowed.includes(email.trim().toLowerCase());
+}
+
+// Editors must prove they own the address in ADMIN_EMAILS.
+//
+// isAdminEmail() only says the ADDRESS is on the allow-list. Anyone can register
+// an account with any address, so on its own it let an attacker who registered an
+// editor's address first pass every editor check. Use isVerifiedAdmin() at every
+// place that grants editor power; never isAdminEmail() alone.
+//
+// Verification is enforced only when it can actually be completed, i.e. when
+// outgoing email is configured (lib/email.ts). A deployment without email behaves
+// exactly as before, because nobody there could ever verify.
+//
+// ALLOW_UNVERIFIED_EDITORS=true is a TEMPORARY rollout switch: it turns the
+// verification requirement off so editors keep access while they verify their
+// addresses. Remove it as soon as every editor shows as verified on the Account
+// page (rollout order: docs/engineering/email-and-domain.md).
+export function editorsMustVerifyEmail(): boolean {
+  if (!isEmailConfigured()) return false;
+  return process.env.ALLOW_UNVERIFIED_EDITORS?.trim().toLowerCase() !== "true";
+}
+
+export function isVerifiedAdmin(user: { email: string; emailVerified: boolean }): boolean {
+  if (!isAdminEmail(user.email)) return false;
+  return editorsMustVerifyEmail() ? user.emailVerified === true : true;
 }
