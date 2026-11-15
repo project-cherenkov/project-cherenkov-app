@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ErrorState } from "@/components/site/error-state";
+import { flavourFor } from "@/lib/error-flavour";
 
 // TICKET-01 / ARCH-002: baseline catch-all error boundary. Next.js's App
 // Router requires error.tsx to be a Client Component; it replaces this
@@ -21,15 +22,19 @@ export default function LocaleError({
   reset: () => void;
 }) {
   const t = useTranslations("error");
+  const locale = useLocale();
 
   return (
     <div className="flex min-h-screen items-center justify-center">
       <ErrorState
         eyebrow="error.log"
+        code="ERR"
         heading={t("heading")}
         body={t("body")}
         ctaLabel={t("retry")}
         onRetry={reset}
+        flavour={flavourFor(locale, "error")}
+        anotherLabel={t("another")}
       />
     </div>
   );

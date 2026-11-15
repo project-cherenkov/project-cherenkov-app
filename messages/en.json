@@ -388,13 +388,15 @@
   "error": {
     "heading": "Something went wrong",
     "body": "An unexpected error occurred while rendering this page. You can try again, or head back to the archive.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "another": "Show another fragment"
   },
   "notFound": {
     "heading": "Page not found",
     "body": "The page you are looking for doesn't exist or has been moved.",
     "cta": "Back to home",
-    "title": "Page not found"
+    "title": "Page not found",
+    "another": "Show another fragment"
   },
   "syllabus": {
     "eyebrow": "syllabus.md",

@@ -1,7 +1,8 @@
 ﻿import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ErrorState } from "@/components/site/error-state";
+import { flavourFor } from "@/lib/error-flavour";
 
 // Own title, and no description: the layout's default is the home page's, which
 // is wrong for an error page.
@@ -13,14 +14,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function NotFound() {
   const t = useTranslations("notFound");
+  const locale = useLocale();
 
   return (
     <ErrorState
       eyebrow="404.md"
+      code="404"
       heading={t("heading")}
       body={t("body")}
       ctaLabel={t("cta")}
       ctaHref="/"
+      flavour={flavourFor(locale, "notFound")}
+      anotherLabel={t("another")}
+      echoPath
     />
   );
 }

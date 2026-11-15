@@ -96,7 +96,9 @@ app/[locale]/                    routes (everything is locale-prefixed)
   planner/[subject]/[chapter]/   topic status, linked editorial, and quiz (the
                                   "chapter" segment contains the topic ID)
   timer/                         public study timer; saving sessions requires an account
-  error.tsx, not-found.tsx       locale-scoped error and 404 pages
+  error.tsx, not-found.tsx       locale-scoped error and 404 pages (the corrupted screen,
+                                  components/site/error-state.tsx; its extra flavour
+                                  line is edited in lib/error-flavour.ts)
 app/keystatic/                   Keystatic admin UI (gated in production, Section VII)
   layout.tsx                     its OWN root layout (<html lang="en">) + the floating
                                   "+ New visualization" button. There is no

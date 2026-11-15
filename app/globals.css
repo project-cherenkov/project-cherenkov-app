@@ -413,3 +413,231 @@
   overflow-y: hidden;
   max-width: 100%;
 }
+
+/* ---------------------------------------------------------------------------
+   Corrupted error screen: the 404 and the error fallback
+   (components/site/error-state.tsx; the extra line of text is edited in
+   lib/error-flavour.ts).
+
+   Corrupted blocks jump sideways around a calm, opaque text panel, and the big
+   code ("404", "ERR") splits into two offset, clipped copies. The blocks only
+   move a few times per cycle, staggered, never all at once, so nothing flashes
+   more than about three times a second (WCAG 2.3.1). The block layer is
+   aria-hidden with pointer-events: none and is never placed over the panel, so
+   the text keeps its normal contrast. Reduced motion: no animation, a still
+   corrupted mask.
+
+   Palette. Blue is the phenomenon and carries the screen (docs/design/colour.md:
+   about 70% blue, 30% pink); pink is a small highlight.
+   - Light: a pale blue field with light blue and light pink blocks, and a few
+     ink and deep-blue blocks so the corruption stays visible.
+   - Dark: the water. A field darker than the page, lifted-ink blocks, and
+     dimmed blue and pale pink; nothing brighter than the pastels.
+   Retune either theme by editing the variables below. The pastels are fills
+   here, never text (colour.md rule 2): the text is on the panel, in the
+   semantic tokens.
+   --------------------------------------------------------------------------- */
+@layer components {
+  .corrupt {
+    --cx-field: #e8f3f8; /* cherenkov-blue-100 */
+    --cx-ink: #0b2436; /* cherenkov-ink */
+    --cx-deep: #0c698d; /* cherenkov-blue-800 */
+    --cx-blue: #97dcf6; /* cherenkov-blue-300 */
+    --cx-pale: #cbeaf6; /* cherenkov-blue-200 */
+    --cx-pink: #f3ced5; /* cherenkov-pink-200 */
+    --cx-slice-a: #ed647f; /* cherenkov-pink-400: the warm slice in the big code */
+    --cx-slice-b: #20bcf8; /* cherenkov-blue-500: the cold slice */
+    --cx-dim: 1;
+    --cx-amp: 1;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    min-height: min(32rem, calc(100svh - 14rem));
+    padding: clamp(2.5rem, 9vw, 5rem) clamp(1rem, 5vw, 3rem);
+    border-radius: 0.75rem;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 3px, rgb(11 36 54 / 0.06) 3px 4px),
+      var(--cx-field);
+  }
+  .dark .corrupt {
+    --cx-field: #071a29; /* darker than the page (#0b2436) */
+    --cx-ink: #184058; /* lifted ink */
+    --cx-deep: #0a88b8; /* cherenkov-blue-700 */
+    --cx-blue: #97dcf6; /* cherenkov-blue-300 */
+    --cx-pale: #1f4a66; /* the dark border colour */
+    --cx-pink: #f3ced5; /* cherenkov-pink-200 */
+    --cx-slice-a: #ef9faf; /* cherenkov-pink-300 */
+    --cx-slice-b: #57cdfa; /* cherenkov-blue-400 */
+    --cx-dim: 0.55; /* blocks are dimmer on the dark field */
+    background:
+      repeating-linear-gradient(0deg, transparent 0 3px, rgb(239 255 251 / 0.05) 3px 4px),
+      var(--cx-field);
+  }
+  .corrupt[data-settling] {
+    --cx-amp: 2.6;
+  }
+
+  .corrupt .cx-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .corrupt .cx-frag {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    height: var(--h);
+    background: var(--tone);
+    opacity: calc(var(--o) * var(--cx-dim));
+    animation: cx-jitter var(--dur) steps(1, end) var(--delay) infinite;
+  }
+  .corrupt[data-settling] .cx-frag {
+    animation-duration: calc(var(--dur) * 0.4);
+  }
+  .corrupt .cx-panel {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 34rem;
+    padding: clamp(1.5rem, 5vw, 2.25rem);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    background: hsl(var(--card));
+  }
+
+  /* The big code: two offset, clipped copies. The copies are decorative and
+     hidden from assistive technology. */
+  .corrupt .cx-code {
+    position: relative;
+    margin: 0 0 0.25rem;
+    font-size: clamp(4.5rem, 22vw, 7.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: hsl(var(--foreground));
+  }
+  .corrupt .cx-code::before,
+  .corrupt .cx-code::after {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .corrupt .cx-code::before {
+    color: var(--cx-slice-a);
+    transform: translateX(calc(6px * var(--cx-amp)));
+    clip-path: inset(16% 0 56% 0);
+    animation: cx-slice-a 3.3s steps(1, end) infinite;
+  }
+  .corrupt .cx-code::after {
+    color: var(--cx-slice-b);
+    transform: translateX(calc(-6px * var(--cx-amp)));
+    clip-path: inset(60% 0 8% 0);
+    animation: cx-slice-b 4.1s steps(1, end) infinite;
+  }
+
+  /* The customisable line (lib/error-flavour.ts). A fixed minimum height, so the
+     buttons do not jump when it appears after load or when it is swapped. */
+  .corrupt .cx-flavour {
+    margin: 1.25rem 0 0;
+    min-height: 4.5em;
+    padding-left: 0.75rem;
+    border-left: 3px solid hsl(var(--viz-secondary));
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: hsl(var(--brand));
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Outside @layer on purpose: error-state.tsx builds these class names at run
+   time (`cx-tone-${tone}`), so Tailwind's scan of the source cannot see them and
+   would drop them from a layered rule, leaving the blocks transparent. */
+.cx-tone-ink {
+  --tone: var(--cx-ink);
+}
+.cx-tone-deep {
+  --tone: var(--cx-deep);
+}
+.cx-tone-blue {
+  --tone: var(--cx-blue);
+}
+.cx-tone-pale {
+  --tone: var(--cx-pale);
+}
+.cx-tone-pink {
+  --tone: var(--cx-pink);
+}
+
+@keyframes cx-jitter {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: calc(var(--o) * var(--cx-dim));
+  }
+  14% {
+    transform: translate3d(calc(var(--dx) * var(--cx-amp)), 0, 0);
+  }
+  17% {
+    transform: translate3d(calc(var(--dx) * var(--cx-amp) * -0.6), 0, 0);
+    opacity: calc(var(--o) * var(--cx-dim) * 0.6);
+  }
+  21% {
+    transform: translate3d(0, 0, 0);
+    opacity: calc(var(--o) * var(--cx-dim));
+  }
+  58% {
+    transform: translate3d(calc(var(--dx) * var(--cx-amp) * 0.4), 0, 0);
+  }
+  61% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes cx-slice-a {
+  0% {
+    clip-path: inset(16% 0 56% 0);
+    opacity: 0.95;
+  }
+  21% {
+    clip-path: inset(42% 0 30% 0);
+  }
+  46% {
+    clip-path: inset(0 0 80% 0);
+    opacity: 0.6;
+  }
+  73% {
+    clip-path: inset(68% 0 4% 0);
+    opacity: 0.95;
+  }
+}
+@keyframes cx-slice-b {
+  0% {
+    clip-path: inset(60% 0 8% 0);
+    opacity: 0.95;
+  }
+  29% {
+    clip-path: inset(6% 0 74% 0);
+    opacity: 0.6;
+  }
+  57% {
+    clip-path: inset(34% 0 40% 0);
+    opacity: 0.95;
+  }
+  84% {
+    clip-path: inset(82% 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corrupt *,
+  .corrupt *::before,
+  .corrupt *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
