@@ -8,6 +8,7 @@
       "id": "Indonesia",
       "en": "Inggris"
     },
+    "close": "Tutup",
     "translationNotice": "Halaman ini belum diterjemahkan ke bahasa {requestedLanguage}. Halaman yang ditampilkan dalam bahasa {displayedLanguage}.",
     "homeDescription": "Editorial olimpiade interaktif untuk fisika, astronomi, dan informatika: bukti lengkap, visualisasi yang bisa dicoba, silabus OSN, dan perencana belajar."
   },
@@ -40,15 +41,15 @@
     "heroTitle": "From Curiosity to Visualization",
     "heroBody": "Arsip ide olimpiade yang dibuat terlihat: setiap ide berupa bukti lengkap dengan visualisasi interaktif, diarsipkan berdasarkan kesalahan yang dikoreksinya.",
     "ctaPlan": "Cara kerja perencana belajar",
-    "recentEyebrow": "requirements.txt",
     "recentHeading": "Edisi terbaru",
     "ctaArchive": "Jelajahi editorial",
     "ctaAbout": "Baca filosofinya",
+    "seeAll": "Lihat semua editorial",
     "recentEmpty": "Belum ada edisi yang diterbitkan.",
     "ctaSyllabus": "Lihat silabus",
     "ctaDocs": "Baca dokumentasi",
     "visualizations": {
-      "eyebrow": "CATATAN INTERAKTIF",
+      "eyebrow": "Catatan interaktif",
       "physics": "Fisika",
       "astronomy": "Astronomi",
       "informatics": "Informatika",
@@ -102,6 +103,9 @@
       "tags": "Tag"
     },
     "principleLabel": "Prinsip",
+    "mistakeLabel": "Kesalahan yang diluruskan",
+    "contentsLabel": "Di halaman ini",
+    "moreTags": "+{count} lagi",
     "errorTypeLabel": "Jenis kesalahan",
     "lastUpdatedLabel": "Terakhir diperbarui",
     "byAuthor": "Ditulis oleh {author}",
@@ -248,8 +252,7 @@
   },
   "phase2": {
     "benefits": {
-      "eyebrow": "MENGAPA MEMBUAT AKUN?",
-      "title": "Manfaat Akun",
+      "title": "Yang kamu dapat dengan akun",
       "body": "Akun gratis mengubah Cherenkov dari perpustakaan menjadi teman belajar.",
       "accessWithoutAccount": "Kamu tetap dapat mengakses editorial, materi, silabus, dan visualisasi interaktif tanpa akun.",
       "planner": "Buat rencana belajar OSN berdasarkan mata pelajaran, bab, dan tingkat ujian yang kamu tuju.",
@@ -413,6 +416,15 @@
     },
     "source": "Sumber",
     "accessed": "Diakses {date}",
+    "descriptions": {
+      "informatics": "Algoritma, struktur data, dan pemecahan masalah sesuai silabus olimpiade informatika.",
+      "astronomy": "Mekanika benda langit, pengamatan, astrofisika, dan langit malam sesuai silabus olimpiade astronomi.",
+      "physics": "Mekanika, gelombang, kalor, listrik, dan fisika modern sesuai silabus olimpiade fisika."
+    },
+    "coverage": {
+      "label": "{covered} dari {total} topik sudah punya materi atau editorial"
+    },
+    "open": "Buka silabus",
     "stats": {
       "topics": "topik",
       "materials": "materi",
@@ -491,7 +503,7 @@
     "vizFallbackNotice": "Tag <Interactive /> pada materi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya."
   },
   "account": {
-    "eyebrow": "ACCOUNT.MD",
+    "eyebrow": "account.md",
     "title": "Akun kamu",
     "username": "Nama pengguna",
     "email": "Email",
@@ -573,7 +585,7 @@
       "topics_not_seeded": "Topik untuk bidang ini belum dimuat ke database. Minta admin menjalankan seed."
     },
     "onboarding": {
-      "eyebrow": "PLANNER.MD",
+      "eyebrow": "planner.md",
       "title": "Susun rencana belajar OSN",
       "step1": "Langkah 1: Kamu menyiapkan apa?",
       "step1Body": "Pilih satu bidang, tingkat OSN yang dituju, dan berapa jam seminggu kamu bisa belajar.",
@@ -586,7 +598,7 @@
       "generate": "Buat rencanaku"
     },
     "plan": {
-      "eyebrow": "PLANNER.MD",
+      "eyebrow": "planner.md",
       "title": "Rencana belajarmu",
       "daysLeft": "{days} hari sampai tingkat ini dimulai",
       "hoursPerWeek": "{hours} jam/minggu",
@@ -697,7 +709,7 @@
     "help": "Bantuan"
   },
   "review": {
-    "eyebrow": "REVIEW.MD",
+    "eyebrow": "review.md",
     "title": "Soal yang salah",
     "intro": "Semua soal kuis yang kamu jawab salah, supaya bisa dicoba lagi.",
     "practiceNote": "Mencoba ulang hanyalah latihan: bisa menyelesaikan satu soal yang salah, tetapi tidak mengubah rencana atau estimasi penguasaanmu.",
@@ -1093,7 +1105,7 @@
     }
   },
   "timer": {
-    "eyebrow": "TIMER.MD",
+    "eyebrow": "timer.md",
     "title": "Timer belajar",
     "intro": "Belajar dalam blok fokus dengan istirahat singkat. Hanya waktu fokus yang dihitung sebagai waktu belajar.",
     "presetsLabel": "Panjang blok",
@@ -1148,7 +1160,7 @@
     }
   },
   "progress": {
-    "eyebrow": "PROGRESS.MD",
+    "eyebrow": "progress.md",
     "title": "Progresmu",
     "intro": "Apa yang benar-benar sudah kamu lakukan: waktu belajar, hasil kuis, dan topik yang kamu tandai sudah paham.",
     "privacyNote": "Hanya kamu yang bisa melihat halaman ini.",

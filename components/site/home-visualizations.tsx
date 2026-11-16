@@ -12,13 +12,8 @@ import type { HomeVizCandidate } from "@/lib/home-viz-candidates";
 import { resolveHomeVizPicks } from "@/lib/home-viz-picks";
 
 // The home hero's visualizations: one to three the visitor has chosen, shown
-// one at a time. It renders TWO grid items, not one wrapper, because the hero
-// places them in different cells:
-//   1. the picker (a list of tabs plus the active one's description), in the
-//      left column under the credo, and
-//   2. the stage (the visualization itself), in the right column.
-// Below `lg` the grid stacks and the DOM order is the reading order: the tabs,
-// then the panel they control.
+// one at a time. On wide screens the picker and its caption share the top row
+// with the hero text, and the stage spans the full row below.
 //
 // The picks come from `candidates`, built on the server from the published
 // editorials (lib/home-viz-candidates.ts), so nothing here keeps its own copy
@@ -88,105 +83,30 @@ export function HomeVisualizations({ candidates }: { candidates: HomeVizCandidat
     candidate.descriptionLang === locale ? undefined : candidate.descriptionLang;
 
   return (
-    <>
+    <div className="contents">
       <section
         aria-labelledby={`${baseId}-picks-heading`}
-        className="min-w-0 lg:col-start-1 lg:row-start-2"
+        className="min-w-0 lg:col-start-2 lg:row-start-1"
       >
         <div className="flex items-center justify-between gap-3">
-          <h2 id={`${baseId}-picks-heading`} className="label-code">
-            {t("picks.title")}
-          </h2>
-          {candidates.length > 1 ? (
-            <HomeVizChooser
-              candidates={candidates}
-              picks={pickKeys}
-              hasSavedChoice={saved !== null}
-              subjectLabel={subjectLabel}
-              onSave={save}
-              onUseDefaults={() => {
-                save(null);
-                setActiveKey(null);
-              }}
-            />
-          ) : null}
-        </div>
-
-        {/* Below lg the tabs are one scrolling row so the list does not push
-            the visualization far down; from lg up they are a column. */}
-        <div
-          role="tablist"
-          aria-label={t("picks.tablistLabel")}
-          onKeyDown={handleTabKeyDown}
-          className="mt-2 flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
-        >
-          {picks.map((candidate, index) => {
-            const selected = index === activeIndex;
-            return (
-              <button
-                key={candidate.key}
-                ref={(el) => {
-                  tabRefs.current[index] = el;
+          <div className="flex items-center gap-3">
+            <h2 id={`${baseId}-picks-heading`} className="label-code">
+              {t("picks.title")}
+            </h2>
+            {candidates.length > 1 ? (
+              <HomeVizChooser
+                candidates={candidates}
+                picks={pickKeys}
+                hasSavedChoice={saved !== null}
+                subjectLabel={subjectLabel}
+                onSave={save}
+                onUseDefaults={() => {
+                  save(null);
+                  setActiveKey(null);
                 }}
-                type="button"
-                role="tab"
-                id={tabId(candidate.key)}
-                aria-selected={selected}
-                aria-controls={panelId}
-                tabIndex={selected ? 0 : -1}
-                onClick={() => setActiveKey(candidate.key)}
-                className={[
-                  "min-h-11 w-56 shrink-0 rounded-md border px-3 py-2 text-left transition-colors lg:w-full",
-                  selected
-                    ? "border-brand bg-card shadow-sm"
-                    : "border-border hover:bg-muted",
-                ].join(" ")}
-              >
-                <span
-                  lang={titleLang(candidate)}
-                  className={`block text-sm leading-snug ${selected ? "font-semibold" : "font-medium"}`}
-                >
-                  {candidate.title}
-                </span>
-                <span className="label-mono block">{subjectLabel(candidate.subject)}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-3 text-sm">
-          {active.description && (
-            <p
-              lang={descLang(active)}
-              className="line-clamp-4 max-w-md leading-snug text-foreground/80 lg:line-clamp-none"
-            >
-              {active.description}
-            </p>
-          )}
-          <Link
-            href={`/archive/${active.subject}/${active.slug}`}
-            className="mt-1 inline-flex min-h-11 items-center font-medium text-brand underline-offset-4 hover:underline"
-          >
-            {t("picks.openEditorial")}
-            <span className="sr-only">: </span>
-            <span lang={titleLang(active)} className="sr-only">
-              {active.title}
-            </span>
-          </Link>
-        </div>
-      </section>
-
-      <div
-        role="tabpanel"
-        id={panelId}
-        aria-labelledby={tabId(active.key)}
-        aria-busy={!ready}
-        className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="mb-3 flex items-start justify-between gap-3">
-          <h2 className="label-code">{t("eyebrow")}</h2>
+              />
+            ) : null}
+          </div>
           {picks.length > 1 && (
             <div className="flex items-center gap-2">
               <button
@@ -209,6 +129,79 @@ export function HomeVisualizations({ candidates }: { candidates: HomeVizCandidat
           )}
         </div>
 
+        {/* One scrolling row on a phone; on wider screens the tabs share the
+            width. Attached to the stage below, so choosing and viewing are one
+            gesture. */}
+        <div
+          role="tablist"
+          aria-label={t("picks.tablistLabel")}
+          onKeyDown={handleTabKeyDown}
+          className="mt-2 flex gap-2 overflow-x-auto pb-1 lg:overflow-visible lg:pb-0"
+        >
+          {picks.map((candidate, index) => {
+            const selected = index === activeIndex;
+            return (
+              <button
+                key={candidate.key}
+                ref={(el) => {
+                  tabRefs.current[index] = el;
+                }}
+                type="button"
+                role="tab"
+                id={tabId(candidate.key)}
+                aria-selected={selected}
+                aria-controls={panelId}
+                tabIndex={selected ? 0 : -1}
+                onClick={() => setActiveKey(candidate.key)}
+                className={[
+                  "min-h-11 w-44 shrink-0 rounded-md border px-3 py-2 text-left transition-colors lg:w-0 lg:flex-1",
+                  selected
+                    ? "border-brand bg-card shadow-sm"
+                    : "border-border hover:bg-muted",
+                ].join(" ")}
+              >
+                <span
+                  lang={titleLang(candidate)}
+                  className={`line-clamp-2 block text-sm leading-snug ${selected ? "font-semibold" : "font-medium"}`}
+                >
+                  {candidate.title}
+                </span>
+                <span className="label-mono block">{subjectLabel(candidate.subject)}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* The caption stays with the picker on wide screens, before the
+            full-width stage. */}
+        <div className="mt-3 text-sm lg:mt-3">
+          {active.description && (
+            <p lang={descLang(active)} className="max-w-prose leading-snug text-foreground/80">
+              {active.description}
+            </p>
+          )}
+          <Link
+            href={`/archive/${active.subject}/${active.slug}`}
+            className="mt-1 inline-flex min-h-11 items-center font-medium text-brand underline-offset-4 hover:underline"
+          >
+            {t("picks.openEditorial")}
+            <span className="sr-only">: </span>
+            <span lang={titleLang(active)} className="sr-only">
+              {active.title}
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <div
+        role="tabpanel"
+        id={panelId}
+        aria-labelledby={tabId(active.key)}
+        aria-busy={!ready}
+        className="mt-3 min-w-0 lg:col-span-2 lg:col-start-1 lg:row-start-2"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* All the picks (at most three) are mounted in ONE grid cell and the
             inactive ones are hidden, so the stage is always as tall as the
             tallest pick and does not change height as the visitor switches
@@ -221,7 +214,7 @@ export function HomeVisualizations({ candidates }: { candidates: HomeVizCandidat
             STAGE_MIN_HEIGHT: the floor below is the loaded height of the three
             default picks. A visitor whose picks are taller still sees one jump
             when the engines replace their skeletons. */}
-        <div className="grid min-h-[41rem] min-w-0 sm:min-h-[37.25rem]">
+        <div className="grid min-h-[34rem] min-w-0 sm:min-h-[33rem]">
           {picks.map((candidate, index) => {
             const isActive = index === activeIndex;
             return (
@@ -257,6 +250,6 @@ export function HomeVisualizations({ candidates }: { candidates: HomeVizCandidat
           {`${active.title}: ${activeIndex + 1} ${t("of")} ${picks.length}`}
         </p>
       </div>
-    </>
+    </div>
   );
 }

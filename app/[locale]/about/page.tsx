@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MemberPhoto } from "@/components/site/member-photo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
@@ -35,7 +36,7 @@ export default async function AboutPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-      <p className="label-code">{t("eyebrow")}</p>
+      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
       <div className="mt-6 space-y-4 text-foreground/80">
@@ -74,16 +75,11 @@ export default async function AboutPage({
             // "fix" it. It has no contact line on purpose.
             return (
               <li key={member.name} className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4 gap-y-2">
-                {member.photoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- arbitrary Blob host, not worth a remotePatterns entry for three photos
-                  <img
-                    src={member.photoUrl}
-                    alt={member.name}
-                    className="h-16 w-16 flex-none rounded-full object-cover sm:row-span-2"
-                  />
-                ) : (
-                  <div className="h-16 w-16 flex-none rounded-full bg-cherenkov-blue/20 sm:row-span-2" />
-                )}
+                <MemberPhoto
+                  src={member.photoUrl}
+                  name={member.name}
+                  className="h-16 w-16 flex-none rounded-full sm:row-span-2"
+                />
                 <div className="min-w-0 self-center sm:self-end">
                   <p className="font-semibold text-foreground">{member.name}</p>
                   {member.role && (

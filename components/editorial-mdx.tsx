@@ -70,7 +70,7 @@ export function EditorialMDX({
         {!embedsInteractive && (
           <div className="not-prose my-8">
             {forgotToEmbedTag && (
-              <p className="label-code mb-2 text-amber-600">{t("vizFallbackNotice")}</p>
+              <p className="label-code mb-2 text-warning">{t("vizFallbackNotice")}</p>
             )}
             <VizEngine editorial={{ vizConfig }} description={vizDescription} />
           </div>

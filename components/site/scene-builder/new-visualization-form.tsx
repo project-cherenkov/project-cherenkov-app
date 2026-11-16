@@ -83,7 +83,7 @@ export function NewVisualizationForm() {
       <label className="flex flex-col gap-1">
         <span className="text-xs text-muted-foreground">Subject</span>
         <select
-          className="rounded-md border border-border bg-transparent px-2 py-1"
+          className="rounded-md border border-border-strong bg-transparent px-2 py-1"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         >
@@ -103,7 +103,7 @@ export function NewVisualizationForm() {
         <input
           type="text"
           placeholder="A short, descriptive title"
-          className="rounded-md border border-border bg-transparent px-2 py-1"
+          className="rounded-md border border-border-strong bg-transparent px-2 py-1"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -114,7 +114,7 @@ export function NewVisualizationForm() {
         <input
           type="text"
           placeholder="binary-search-on-answer"
-          className="rounded-md border border-border bg-transparent px-2 py-1"
+          className="rounded-md border border-border-strong bg-transparent px-2 py-1"
           value={effectiveSlug}
           onChange={(e) => {
             setSlugTouched(true);
@@ -158,7 +158,7 @@ export function NewVisualizationForm() {
         {status === "creating" ? "Creating…" : "Create and open the scene builder"}
       </button>
       {status === "error" && error && (
-        <div className="text-sm text-red-700">
+        <div className="text-sm text-danger">
           <p>{error}</p>
           {needsGithubAuth && (
             <a

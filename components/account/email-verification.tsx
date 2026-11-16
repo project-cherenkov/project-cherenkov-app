@@ -47,7 +47,7 @@ export function EmailVerification({ email, verified }: { email: string; verified
 
   return (
     <span className="mt-1 block text-sm">
-      <span className={verified ? "font-medium text-foreground" : "font-medium text-amber-700 dark:text-amber-400"}>
+      <span className={verified ? "font-medium text-foreground" : "font-medium text-warning"}>
         {verified ? t("verified") : t("unverified")}
       </span>
       {!verified ? (
@@ -68,7 +68,7 @@ export function EmailVerification({ email, verified }: { email: string; verified
               {isPending ? t("sending") : t("send")}
             </Button>
             {error ? (
-              <span role="alert" className="mt-2 block text-red-700 dark:text-red-400">
+              <span role="alert" className="mt-2 block text-danger">
                 {error}
               </span>
             ) : null}

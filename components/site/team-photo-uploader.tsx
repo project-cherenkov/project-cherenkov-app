@@ -50,7 +50,7 @@ export function TeamPhotoUploader() {
         }}
       />
       {status === "uploading" && <p className="mt-2 text-muted-foreground">Uploading…</p>}
-      {status === "error" && error && <p className="mt-2 text-red-700">{error}</p>}
+      {status === "error" && error && <p className="mt-2 text-danger">{error}</p>}
       {status === "done" && url && (
         <p className="mt-2 break-all text-foreground/80">
           Uploaded. Paste this URL into the team singleton&apos;s Photo URL field:{" "}

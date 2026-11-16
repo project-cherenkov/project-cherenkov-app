@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { Github, Menu, X } from "lucide-react";
+import { FileText, Github, Menu, X } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { UpdatesBell } from "@/components/site/updates-bell";
@@ -88,7 +88,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
   }, [pathname]);
 
   useEffect(() => {
-    const query = window.matchMedia("(min-width: 857px)");
+    const query = window.matchMedia("(min-width: 960px)");
     function onChange(event: MediaQueryListEvent) {
       if (event.matches) setMobileMenuOpen(false);
     }
@@ -96,16 +96,22 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
     return () => query.removeEventListener("change", onChange);
   }, []);
 
-  /* Lock body scroll when mobileMenuOpen is true */
+  /* Lock body scroll when mobileMenuOpen is true. The same flag is exposed as
+     `data-nav-open` on <html> so the floating companion (z-50, outside this
+     header's z-40 stacking context) can step aside: it used to stay bright
+     above the dimmed page and over the open menu (see app/globals.css). */
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.dataset.navOpen = "true";
     } else {
       document.body.style.overflow = "";
+      delete document.documentElement.dataset.navOpen;
     }
 
     return () => {
       document.body.style.overflow = "";
+      delete document.documentElement.dataset.navOpen;
     };
   }, [mobileMenuOpen]);
 
@@ -145,10 +151,10 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2 overflow-visible">
-          {/* Desktop Navigation: Active at 857px and above with fixed dimensions */}
+          {/* Desktop Navigation: Active at 960px and above with fixed dimensions */}
           <nav
             aria-label={t("mainNavigation")}
-            className="hidden min-[857px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0"
+            className="hidden min-[960px]:flex items-center gap-2 font-mono text-xs uppercase tracking-wide overflow-visible z-20 shrink-0"
           >
             {navItems.map((item) => {
               const isActive = item.href
@@ -158,7 +164,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                 : false;
 
               const bookmarkStyle = [
-                "nav-ribbon group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus-visible:outline-none",
+                "nav-ribbon group relative -mt-2 inline-flex h-28 w-24 shrink-0 items-center justify-center p-2 pt-4 transition-transform duration-300 ease-out focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
                 // Current page: drops 12px. Hover or keyboard focus: drops 8px.
                 // (It dropped 36px on hover until now; docs/reviews/design-
                 // review-2026-10.md already described 8px.)
@@ -198,6 +204,14 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
           {/* Controls Right */}
           <div className="flex items-center gap-0.5 sm:gap-1.5 font-mono text-xs z-10 overflow-visible shrink-0">
             <SearchPalette />
+            <Link
+              href="/docs"
+              aria-label={t("docs")}
+              title={t("docs")}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <FileText className="h-4 w-4" aria-hidden />
+            </Link>
             <UpdatesBell latestUpdateDate={latestUpdateDate} />
             <ThemeToggle />
 
@@ -244,7 +258,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               <Github className="h-4 w-4" aria-hidden />
             </a>
 
-            {/* Menu ribbon, shown below 857px. It hangs from the top edge like the
+            {/* Menu ribbon, shown below 960px. It hangs from the top edge like the
                 desktop ribbons but is drawn at the artwork's own proportions
                 (64x72 against 285x300) and carries an icon, so it reads as a
                 button and shows its state: a hamburger when closed, a cross when
@@ -259,7 +273,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               onClick={() => setMobileMenuOpen((prev) => !prev)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
-              className="nav-ribbon group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none min-[857px]:hidden [@media(hover:hover)]:hover:translate-y-1"
+              className="nav-ribbon group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 min-[960px]:hidden [@media(hover:hover)]:hover:translate-y-1"
             >
               <NavRibbonArt className="pointer-events-none drop-shadow-md" />
               {mobileMenuOpen ? (
@@ -287,15 +301,15 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
           <div
             aria-hidden="true"
             onClick={() => setMobileMenuOpen(false)}
-            className="absolute inset-x-0 top-full z-[1] h-[100dvh] bg-cherenkov-ink/40 min-[857px]:hidden"
+            className="absolute inset-x-0 top-full z-[1] h-[100dvh] bg-cherenkov-ink/40 min-[960px]:hidden"
           />
           <div
             id="mobile-nav"
-            className="absolute inset-x-0 top-full z-[2] max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain border-t border-border bg-background px-4 pb-4 pt-5 shadow-lg min-[857px]:hidden"
+            className="absolute inset-x-0 top-full z-[2] max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain border-t border-border bg-background px-4 pb-4 pt-5 shadow-lg min-[960px]:hidden"
           >
             <nav
               aria-label={t("mainNavigation")}
-              className="mx-auto flex max-w-5xl flex-col gap-1 font-mono text-sm uppercase tracking-wide"
+              className="mx-auto flex max-w-5xl flex-col gap-1 text-base"
             >
               {navItems.map((item) => {
                 const isActive = item.href

@@ -35,13 +35,14 @@ export default async function SyllabusIndexPage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <p className="label-code">{t("eyebrow")}</p>
+      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {getAllSyllabi().map((syllabus) => {
           const coverage = buildSubjectCoverage(syllabus, materials, editorials);
+          const empty = coverage.materialCount === 0 && coverage.editorialCount === 0;
           return (
             <Link
               key={syllabus.subject}
@@ -55,26 +56,41 @@ export default async function SyllabusIndexPage({
                 {t(`subjects.${syllabus.subject}`)}
               </h2>
               <p className="mt-1 text-sm text-foreground/75">
-                {syllabus.sources.map((source) => source.short).join(" · ")}
+                {t(`descriptions.${syllabus.subject}`)}
               </p>
-              <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 font-mono text-xs">
-                <Stat label={t("stats.topics")} value={coverage.topicCount} />
-                <Stat label={t("stats.materials")} value={coverage.materialCount} />
-                <Stat label={t("stats.editorials")} value={coverage.editorialCount} />
-              </dl>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {syllabus.sources.map((source) => source.short).join(", ")}
+              </p>
+              {empty ? (
+                <p className="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">
+                  {t("counts.coming")}
+                </p>
+              ) : (
+                <>
+                  <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 text-xs text-foreground">
+                    <dd>{t("counts.topics", { count: coverage.topicCount })}</dd>
+                    <dd>{t("counts.materials", { count: coverage.materialCount })}</dd>
+                    <dd>{t("counts.editorials", { count: coverage.editorialCount })}</dd>
+                  </dl>
+                  <div
+                    className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted"
+                    role="img"
+                    aria-label={t("coverage.label", { covered: coverage.coveredTopicCount, total: coverage.topicCount })}
+                  >
+                    <div
+                      className="h-full rounded-full bg-brand"
+                      style={{ width: `${coverage.topicCount ? Math.round((coverage.coveredTopicCount / coverage.topicCount) * 100) : 0}%` }}
+                    />
+                  </div>
+                </>
+              )}
+              <span className="mt-4 text-sm font-medium text-brand group-hover:underline">
+                {t("open")} <span aria-hidden="true">›</span>
+              </span>
             </Link>
           );
         })}
       </div>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div>
-      <dd className="text-lg font-semibold text-foreground">{value}</dd>
-      <dt className="text-muted-foreground">{label}</dt>
     </div>
   );
 }

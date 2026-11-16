@@ -52,7 +52,7 @@ export function DeleteAccount({ email, hasPassword }: { email: string; hasPasswo
   }
 
   return (
-    <section className="mt-8 rounded-lg border border-red-300 bg-card p-5 dark:border-red-900 sm:p-6">
+    <section className="mt-8 rounded-lg border border-danger-border bg-card p-5 sm:p-6">
       <h2 className="text-lg font-semibold text-foreground">{t("title")}</h2>
       <p className="mt-1 text-sm text-foreground/75">{t("body")}</p>
       {sent ? (
@@ -78,7 +78,7 @@ export function DeleteAccount({ email, hasPassword }: { email: string; hasPasswo
             </label>
           ) : null}
           {error ? (
-            <p role="alert" className="text-sm text-red-700 dark:text-red-400">
+            <p role="alert" className="text-sm text-danger">
               {error}
             </p>
           ) : null}

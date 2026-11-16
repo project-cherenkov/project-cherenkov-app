@@ -28,7 +28,7 @@ export function ResetPasswordForm() {
     return (
       <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
         <h1 className="mb-3 text-2xl font-semibold text-foreground">{t("title")}</h1>
-        <p role="alert" className="text-sm text-red-700 dark:text-red-400">
+        <p role="alert" className="text-sm text-danger">
           {t("invalidToken")}
         </p>
         <Link href="/forgot-password" className={buttonVariants({ className: "mt-6" })}>
@@ -80,7 +80,7 @@ export function ResetPasswordForm() {
             />
           </label>
           {error ? (
-            <p role="alert" className="text-sm text-red-700 dark:text-red-400">
+            <p role="alert" className="text-sm text-danger">
               {error}
             </p>
           ) : null}

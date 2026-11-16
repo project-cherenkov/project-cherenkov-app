@@ -120,9 +120,9 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   {index + 1}
                   {graded ? (
                     graded.correct ? (
-                      <Check className="h-3 w-3 text-emerald-700 dark:text-emerald-400" aria-hidden />
+                      <Check className="h-3 w-3 text-success" aria-hidden />
                     ) : (
-                      <X className="h-3 w-3 text-red-700 dark:text-red-400" aria-hidden />
+                      <X className="h-3 w-3 text-danger" aria-hidden />
                     )
                   ) : answered ? (
                     <Check className="h-3 w-3" aria-hidden />
@@ -164,8 +164,8 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   <p
                     className={
                       result.correct
-                        ? "mt-2 text-sm text-emerald-700 dark:text-emerald-400"
-                        : "mt-2 text-sm text-red-700 dark:text-red-400"
+                        ? "mt-2 text-sm text-success"
+                        : "mt-2 text-sm text-danger"
                     }
                   >
                     {result.correct ? t("correct") : t("incorrect")}
@@ -178,7 +178,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
 
         <div className="mt-4">
           {submitError ? (
-            <p role="alert" className="mb-2 text-sm text-red-700 dark:text-red-400">
+            <p role="alert" className="mb-2 text-sm text-danger">
               {submitError === "unauthenticated"
                 ? t("submitErrorUnauthenticated")
                 : t("submitErrorGeneric")}

@@ -8,6 +8,7 @@
       "id": "Indonesian",
       "en": "English"
     },
+    "close": "Close",
     "translationNotice": "This page has not been translated into {requestedLanguage} yet. The page shown is in {displayedLanguage}.",
     "homeDescription": "Interactive olympiad editorials for physics, astronomy and informatics: a full proof and a visualisation for each idea, plus an OSN syllabus and study planner."
   },
@@ -40,15 +41,15 @@
     "heroTitle": "From Curiosity to Visualization",
     "heroBody": "An archive of olympiad ideas made visible: each one a full proof with an interactive visualization, filed by the mistake it corrects.",
     "ctaPlan": "How the study planner works",
-    "recentEyebrow": "requirements.txt",
     "recentHeading": "Recent editorials",
     "ctaArchive": "Browse the editorials",
     "ctaAbout": "Read the philosophy",
+    "seeAll": "See all editorials",
     "recentEmpty": "No editorials published yet.",
     "ctaSyllabus": "See the syllabus",
     "ctaDocs": "Read the docs",
     "visualizations": {
-      "eyebrow": "INTERACTIVE FIELD NOTES",
+      "eyebrow": "Interactive field notes",
       "physics": "Physics",
       "astronomy": "Astronomy",
       "informatics": "Informatics",
@@ -102,6 +103,9 @@
       "tags": "Tags"
     },
     "principleLabel": "Principle",
+    "mistakeLabel": "The mistake this fixes",
+    "contentsLabel": "On this page",
+    "moreTags": "+{count} more",
     "errorTypeLabel": "Error type",
     "lastUpdatedLabel": "Last updated",
     "byAuthor": "Written by {author}",
@@ -248,8 +252,7 @@
   },
   "phase2": {
     "benefits": {
-      "eyebrow": "WHY MAKE AN ACCOUNT?",
-      "title": "Account Benefits",
+      "title": "What an account gives you",
       "body": "A free account turns Cherenkov from a library into a study companion.",
       "accessWithoutAccount": "You can still access editorials, materials, the syllabus, and interactive visualizations without an account.",
       "planner": "Build a personal OSN study plan with subjects, chapters, and your target exam stage in one place.",
@@ -413,6 +416,15 @@
     },
     "source": "Source",
     "accessed": "Accessed {date}",
+    "descriptions": {
+      "informatics": "Algorithms, data structures and problem solving, as set for the national informatics olympiad.",
+      "astronomy": "Celestial mechanics, observation, astrophysics and the sky, as set for the astronomy olympiad.",
+      "physics": "Mechanics, waves, heat, electricity and modern physics, as set for the physics olympiad."
+    },
+    "coverage": {
+      "label": "{covered} of {total} topics have a material or an editorial"
+    },
+    "open": "Open syllabus",
     "stats": {
       "topics": "topics",
       "materials": "materials",
@@ -491,7 +503,7 @@
     "vizFallbackNotice": "This material's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it."
   },
   "account": {
-    "eyebrow": "ACCOUNT.MD",
+    "eyebrow": "account.md",
     "title": "Your account",
     "username": "Username",
     "email": "Email",
@@ -573,7 +585,7 @@
       "topics_not_seeded": "The topics for this subject have not been loaded into the database yet. Ask an admin to run the seed."
     },
     "onboarding": {
-      "eyebrow": "PLANNER.MD",
+      "eyebrow": "planner.md",
       "title": "Build your OSN study plan",
       "step1": "Step 1: What are you preparing for?",
       "step1Body": "Pick one subject, the OSN stage you are aiming for, and how many hours a week you can study.",
@@ -586,7 +598,7 @@
       "generate": "Generate my plan"
     },
     "plan": {
-      "eyebrow": "PLANNER.MD",
+      "eyebrow": "planner.md",
       "title": "Your study plan",
       "daysLeft": "{days} days until the stage starts",
       "hoursPerWeek": "{hours} h/week",
@@ -697,7 +709,7 @@
     "help": "Help"
   },
   "review": {
-    "eyebrow": "REVIEW.MD",
+    "eyebrow": "review.md",
     "title": "Missed questions",
     "intro": "Every quiz question you got wrong, so you can try it again.",
     "practiceNote": "Retrying is practice: it can resolve a miss, but it does not change your plan or your mastery estimate.",
@@ -1093,7 +1105,7 @@
     }
   },
   "timer": {
-    "eyebrow": "TIMER.MD",
+    "eyebrow": "timer.md",
     "title": "Study timer",
     "intro": "Work in focus blocks with short breaks. Only focus time counts as study time.",
     "presetsLabel": "Block length",
@@ -1148,7 +1160,7 @@
     }
   },
   "progress": {
-    "eyebrow": "PROGRESS.MD",
+    "eyebrow": "progress.md",
     "title": "Your progress",
     "intro": "What you have actually done: study time, quiz results and the topics you marked as understood.",
     "privacyNote": "Only you can see this page.",

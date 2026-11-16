@@ -60,7 +60,7 @@ export function TakingTooLongNotice({ show }: { show: boolean }) {
     <p
       role="status"
       data-testid="programmable-scene-budget-notice"
-      className="text-sm text-amber-600 dark:text-amber-400"
+      className="text-sm text-warning"
     >
       {t("programmableSceneBudgetNotice")}
     </p>

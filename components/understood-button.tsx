@@ -73,7 +73,7 @@ export function UnderstoodButton({
         {understood ? t("marked") : t("mark")}
       </button>
       {failed ? (
-        <p role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400">
+        <p role="alert" className="mt-1 text-xs text-danger">
           {t("error")}
         </p>
       ) : null}

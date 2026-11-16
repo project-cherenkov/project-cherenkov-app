@@ -93,7 +93,7 @@ export function ManualSessionForm({
       </Button>
       <div role="status" aria-live="polite" className="min-h-5 text-sm">
         {message ? (
-          <p className={message.kind === "ok" ? "text-emerald-700 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}>
+          <p className={message.kind === "ok" ? "text-success" : "text-danger"}>
             {message.text}
           </p>
         ) : null}

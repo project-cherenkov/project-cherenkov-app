@@ -47,7 +47,7 @@ export function MaterialMDX({
       <>
         {hasViz && !embedsInteractive && (
           <div className="not-prose my-8">
-            <p className="label-code mb-2 text-amber-600">{t("vizFallbackNotice")}</p>
+            <p className="label-code mb-2 text-warning">{t("vizFallbackNotice")}</p>
             <VizEngine editorial={{ vizConfig }} />
           </div>
         )}

@@ -46,14 +46,14 @@ export function PlanDashboard({ data }: { data: PlanData }) {
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-10 sm:px-6">
       <header>
-        <p className="label-code">{t("eyebrow")}</p>
+        <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
         <p className="mt-2 text-foreground/75">
           {stage.label[locale as "en" | "id"]} · {data.settings.subject} ·{" "}
           {t("daysLeft", { days: data.daysLeft })} · {t("hoursPerWeek", { hours: data.settings.hoursPerWeek })}
         </p>
         {data.stageDates?.status === "projected" ? (
-          <p className="mt-1 text-sm font-medium text-amber-700 dark:text-amber-400">{t("projectedDates")}</p>
+          <p className="mt-1 text-sm font-medium text-warning">{t("projectedDates")}</p>
         ) : null}
         {/* Shown only when a person recorded checking the dates (SCHEDULE_VERIFIED_ON). */}
         {data.stageDates?.verifiedOn ? (
@@ -64,7 +64,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
       </header>
 
       {!summary.feasible ? (
-        <div role="status" className="rounded-lg border border-amber-500/60 bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+        <div role="status" className="rounded-lg border border-warning-border bg-warning-bg p-4 text-sm text-foreground">
           <p className="font-semibold">{t("infeasibleTitle")}</p>
           <p className="mt-1">
             {t("infeasibleBody", {
@@ -89,7 +89,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
           <Button size="sm" onClick={regenerate} disabled={pending}>{t("regenerate")}</Button>
         </div>
       ) : null}
-      {error ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
+      {error ? <p role="alert" className="text-sm text-danger">{error}</p> : null}
 
       <section aria-labelledby="today-heading">
         <h2 id="today-heading" className="text-xl font-semibold text-foreground">{t("today")}</h2>
@@ -98,7 +98,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
         ) : null}
         {todayList.overdue.length > 0 ? (
           <div className="mt-3">
-            <h3 className="font-mono text-xs uppercase tracking-wide text-red-700 dark:text-red-400">{t("overdue")}</h3>
+            <h3 className="font-mono text-xs uppercase tracking-wide text-danger">{t("overdue")}</h3>
             <ItemList items={todayList.overdue} locale={locale} subject={data.settings.subject} showDate />
           </div>
         ) : null}
@@ -271,7 +271,7 @@ function ItemList({
                 {done ? t("undo") : t("markDone")}
               </Button>
             ) : done ? (
-              <span className="text-xs text-emerald-700 dark:text-emerald-400">{t("quizTaken")}</span>
+              <span className="text-xs text-success">{t("quizTaken")}</span>
             ) : (
               <Link href={`/planner/${subject}/${item.topicId}`} className={buttonVariants({ size: "sm" })}>
                 {t("takeQuiz")}

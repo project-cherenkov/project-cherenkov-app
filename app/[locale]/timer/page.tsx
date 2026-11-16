@@ -69,7 +69,7 @@ export default async function TimerPage() {
       {user ? <PlannerSubnav /> : null}
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-10 sm:px-6">
         <header>
-          <p className="label-code">{t("eyebrow")}</p>
+          <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
           <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
           <p className="mt-2 text-foreground/75">{t("intro")}</p>
         </header>

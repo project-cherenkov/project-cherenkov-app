@@ -19,7 +19,7 @@ import { Slider } from "@/components/ui/slider";
 type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset" | "resetAllDone";
 
 const optionLabel =
-  "flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
+  "flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-strong bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
   "peer-checked:border-foreground peer-checked:bg-muted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring hover:bg-muted/60";
 
 function RadioGroup<T extends string>({
@@ -144,13 +144,13 @@ export function CompanionPreferences({
                 onChange={(event) => { setName(event.target.value); setStatus("idle"); }}
                 maxLength={COMPANION_NAME_MAX}
                 required
-                className="h-11 w-full rounded-md border border-border bg-background px-3"
+                className="h-11 w-full rounded-md border border-border-strong bg-background px-3"
               />
             </label>
             <button
               type="submit"
               disabled={status === "saving" || !name.trim() || name.trim() === prefs.name}
-              className="mt-auto h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted disabled:opacity-50"
+              className="mt-auto h-11 rounded-md border border-border-strong px-4 text-sm font-medium hover:bg-muted disabled:opacity-50"
             >
               {status === "saving" ? t("saving") : t("saveName")}
             </button>
@@ -282,7 +282,7 @@ export function CompanionPreferences({
             <button
               type="button"
               onClick={() => { onResetPosition(); setStatus("positionReset"); }}
-              className="min-h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+              className="min-h-11 rounded-md border border-border-strong px-4 text-sm font-medium hover:bg-muted"
             >
               {t("resetPosition")}
             </button>
@@ -291,7 +291,7 @@ export function CompanionPreferences({
             <button
               type="button"
               onClick={() => { onResetPanelSize(); setStatus("panelSizeReset"); }}
-              className="min-h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+              className="min-h-11 rounded-md border border-border-strong px-4 text-sm font-medium hover:bg-muted"
             >
               {t("resetPanelSize")}
             </button>
@@ -300,7 +300,7 @@ export function CompanionPreferences({
             <button
               type="button"
               onClick={onHideUntilReload}
-              className="min-h-11 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+              className="min-h-11 rounded-md border border-border-strong px-4 text-sm font-medium hover:bg-muted"
             >
               {t("hideNow")}
             </button>

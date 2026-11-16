@@ -113,7 +113,7 @@ export function PasswordSettings({
             />
           </label>
           {error ? (
-            <p role="alert" className="text-sm text-red-700 dark:text-red-400">
+            <p role="alert" className="text-sm text-danger">
               {error}
             </p>
           ) : null}
@@ -124,7 +124,7 @@ export function PasswordSettings({
       ) : (
         <>
           {error ? (
-            <p role="alert" className="mt-4 text-sm text-red-700 dark:text-red-400">
+            <p role="alert" className="mt-4 text-sm text-danger">
               {error}
             </p>
           ) : null}

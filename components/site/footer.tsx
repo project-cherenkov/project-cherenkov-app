@@ -26,7 +26,6 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-muted-foreground sm:px-6">
-        <p className="label-code mb-2">footer.md</p>
         <p lang="en">{t("tagline")}</p>
         <p lang="la" className="mt-0.5 text-xs">
           Cognitio · Humanitas · <span className="credo-exploratio">Exploratio</span>

@@ -63,6 +63,27 @@ const config: Config = {
         "border-strong": "hsl(var(--border-strong) / <alpha-value>)",
         brand: "hsl(var(--brand) / <alpha-value>)",
         highlight: "hsl(var(--highlight) / <alpha-value>)",
+        chip: {
+          DEFAULT: "hsl(var(--chip-bg) / <alpha-value>)",
+          foreground: "hsl(var(--chip-fg) / <alpha-value>)",
+        },
+        // Status meanings (see app/globals.css). `text-danger` is text,
+        // `bg-danger-bg` a quiet fill, `border-danger-border` its edge.
+        danger: {
+          DEFAULT: "hsl(var(--danger) / <alpha-value>)",
+          bg: "hsl(var(--danger-bg) / <alpha-value>)",
+          border: "hsl(var(--danger-border) / <alpha-value>)",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success) / <alpha-value>)",
+          bg: "hsl(var(--success-bg) / <alpha-value>)",
+          border: "hsl(var(--success-border) / <alpha-value>)",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning) / <alpha-value>)",
+          bg: "hsl(var(--warning-bg) / <alpha-value>)",
+          border: "hsl(var(--warning-border) / <alpha-value>)",
+        },
       },
       fontFamily: {
         // Blue and white are literal to Cherenkov radiation (the glow emitted when

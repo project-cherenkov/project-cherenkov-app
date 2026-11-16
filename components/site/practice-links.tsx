@@ -39,7 +39,7 @@ export async function PracticeLinks({ links }: { links: PracticeLink[] }) {
                 {t("practice.checkedOn", { date: formatDate(link.checkedOn) })}
               </span>
               {stale ? (
-                <span className="ml-2 text-xs font-medium text-amber-700 dark:text-amber-400">
+                <span className="ml-2 text-xs font-medium text-warning">
                   {t("practice.stale")}
                 </span>
               ) : null}

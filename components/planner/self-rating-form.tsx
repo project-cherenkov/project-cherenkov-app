@@ -103,7 +103,7 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
         <p className="text-sm text-foreground/75">
           {t("progress", { rated: ratedCount, total: topics.length })}
         </p>
-        {error ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
+        {error ? <p role="alert" className="text-sm text-danger">{error}</p> : null}
         <Button onClick={submit} disabled={pending}>{submitLabel}</Button>
       </div>
     </div>

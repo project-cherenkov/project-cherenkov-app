@@ -209,7 +209,7 @@ function VizMissing() {
 function VizConfigError({ engine }: { engine: string }) {
   const t = useTranslations("editorial");
   return (
-    <div className="rounded-md border border-dashed border-red-300 bg-red-50 p-4 text-sm text-red-700">
+    <div className="rounded-md border border-dashed border-danger-border bg-danger-bg p-4 text-sm text-danger">
       {t("vizConfigError", { engine })}
     </div>
   );

@@ -38,7 +38,7 @@ export function ParamField({
         <span className="label-code text-foreground/75">{spec.label}</span>
         <select
           id={inputId}
-          className="rounded-md border border-border bg-transparent px-2 py-1"
+          className="rounded-md border border-border-strong bg-transparent px-2 py-1"
           value={typeof value === "string" ? value : String(spec.default)}
           onChange={(e) => onChange(e.target.value)}
         >
@@ -60,7 +60,7 @@ export function ParamField({
           id={inputId}
           type="text"
           maxLength={spec.maxLength}
-          className="rounded-md border border-border bg-transparent px-2 py-1"
+          className="rounded-md border border-border-strong bg-transparent px-2 py-1"
           value={typeof value === "string" ? value : String(spec.default)}
           onChange={(e) => onChange(e.target.value)}
         />
@@ -79,7 +79,7 @@ export function ParamField({
         min={spec.min}
         max={spec.max}
         step={spec.step ?? 1}
-        className="rounded-md border border-border bg-transparent px-2 py-1"
+        className="rounded-md border border-border-strong bg-transparent px-2 py-1"
         value={numericValue}
         onChange={(e) => {
           const next = e.target.valueAsNumber;

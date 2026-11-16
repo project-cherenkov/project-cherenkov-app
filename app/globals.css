@@ -41,6 +41,27 @@
     --credo-rest: #0b2436; /* cherenkov-ink */
     --credo-stop-1: #0c698d; /* cherenkov-blue-800 */
     --credo-stop-2: #aa1835; /* cherenkov-pink-700 */
+
+    /* Tag chips: a pink that survives the theme switch. The old chip was
+       `bg-cherenkov-pink/25` over the card colour, which on the dark theme
+       blended to a blue-grey (hue 228, 17% saturation) and lost the learner
+       colour. Light: 10.2:1 text on chip; dark: 7.9:1 (docs/design/colour.md). */
+    --chip-bg: 348 79% 92%;
+    --chip-fg: 349 70% 22%;
+
+    /* Status tokens, one set per meaning. Replace the raw red/emerald/amber
+       utilities with a dark: pair each. `--danger` etc. are TEXT/ACCENT
+       colours (at least 4.5:1 on the page); `-bg` is a quiet fill and
+       `-border` its edge. */
+    --danger: 0 74% 42%; /* #B91C1C */
+    --danger-bg: 0 86% 97%;
+    --danger-border: 0 94% 82%;
+    --success: 162 93% 24%; /* #047857 */
+    --success-bg: 152 81% 96%;
+    --success-border: 152 76% 62%;
+    --warning: 26 83% 31%; /* #92400E */
+    --warning-bg: 48 100% 96%;
+    --warning-border: 46 97% 65%;
   }
 
   .dark {
@@ -60,6 +81,19 @@
     --credo-rest: #faf5f6; /* cherenkov-pink-50, the light page colour */
     --credo-stop-1: #97dcf6; /* cherenkov-blue-300 */
     --credo-stop-2: #f3ced5; /* cherenkov-pink-200: pink-300 is 3.8:1 on the dark blue glow peak */
+
+    --chip-bg: 348 45% 28%;
+    --chip-fg: 348 79% 90%;
+
+    --danger: 0 91% 71%; /* #F87171 */
+    --danger-bg: 0 60% 14%;
+    --danger-border: 0 63% 31%;
+    --success: 158 64% 52%; /* #34D399 */
+    --success-bg: 165 60% 10%;
+    --success-border: 164 94% 19%;
+    --warning: 43 96% 56%; /* #FBBF24 */
+    --warning-bg: 32 60% 12%;
+    --warning-border: 26 83% 31%;
   }
 
   body {
@@ -102,7 +136,7 @@
    white) for the same reason. */
 @layer components {
   .label-code {
-    @apply font-mono text-xs uppercase tracking-wider text-muted-foreground;
+    @apply font-mono text-xs text-muted-foreground;
   }
 
   /* A real section heading. The mono-caps .label-code is 12px, SMALLER than the
@@ -200,9 +234,10 @@
 /* The word "Exploratio" plays one slow colour pass wherever the credo is shown
    (components/site/credo.tsx and components/site/footer.tsx), then rests in
    the page foreground.
-   - 4.6 s (plus a 0.4 s delay) is under the 5 s limit in WCAG 2.2.2 (Pause, Stop, Hide), so no
-     pause control is required. Change the count below to `infinite` for a
-     perpetual cycle, and then add one, or accept the risk that 2.2.2 applies.
+   - It plays ONCE (iteration count 1, fill `both` so it ends on the resting
+     colour). 4.6 s (plus a 0.4 s delay) is under the 5 s limit in WCAG 2.2.2
+     (Pause, Stop, Hide), so no pause control is required. An `infinite`
+     count would make this perpetual page text and would need one.
    - Nothing changes faster than about one colour per 1.6 s, far below the
      three-flashes-per-second limit of WCAG 2.3.1, and the stops differ in hue
      more than in brightness.
@@ -210,7 +245,7 @@
 @layer components {
   .credo-exploratio {
     color: var(--credo-rest);
-    animation: credo-cycle 4.6s ease-in-out 0.4s infinite;
+    animation: credo-cycle 4.6s ease-in-out 0.4s infinite both;
   }
   @media (prefers-reduced-motion: reduce) {
     .credo-exploratio {
@@ -640,4 +675,11 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* The floating companion sits above the header's stacking context, so it used
+   to stay bright over the open mobile menu and its scrim. While the menu is
+   open it steps aside (the header sets data-nav-open on <html>). */
+html[data-nav-open="true"] .neutrino-dock {
+  visibility: hidden;
 }

@@ -141,8 +141,8 @@ export function QuizBankManager() {
         <label className="grid min-w-0 gap-1 text-sm md:col-span-2">Explanation
           <textarea required rows={3} className="w-full min-w-0 max-w-full rounded-md border border-border-strong bg-background px-3 py-2" value={form.explanation} onChange={(event) => setForm((current) => ({ ...current, explanation: event.target.value }))} />
         </label>
-        {error && <p role="alert" className="text-sm text-red-700 md:col-span-2">{error}</p>}
-        {message && <p role="status" className="text-sm text-emerald-700 md:col-span-2">{message}</p>}
+        {error && <p role="alert" className="text-sm text-danger md:col-span-2">{error}</p>}
+        {message && <p role="status" className="text-sm text-success md:col-span-2">{message}</p>}
         <div className="flex gap-2 md:col-span-2"><Button type="submit" disabled={saving}>{saving ? "Saving..." : form.id ? "Save changes" : "Save draft"}</Button>
           {form.id && <Button type="button" variant="outline" onClick={() => setForm(emptyForm())}>Cancel edit</Button>}</div>
       </form>

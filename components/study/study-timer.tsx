@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { Maximize2, Minimize2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ToggleChip } from "@/components/ui/toggle-chip";
 import { Link } from "@/i18n/routing";
 import { logStudySession } from "@/lib/study-session-actions";
 import {
@@ -263,27 +265,20 @@ export function StudyTimer({
               {TIMER_PRESETS.map((option) => {
                 const selected = option.focusMin === preset.focusMin && option.breakMin === preset.breakMin;
                 return (
-                  <button
+                  <ToggleChip
                     key={`${option.focusMin}-${option.breakMin}`}
-                    type="button"
-                    aria-pressed={selected}
+                    selected={selected}
                     onClick={() => setPreset(option)}
-                    className={[
-                      "min-h-10 rounded-md border px-3 text-sm font-medium",
-                      selected
-                        ? "border-cherenkov-blue-800 bg-cherenkov-blue-800 text-white dark:border-cherenkov-blue-pastel dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink"
-                        : "border-border text-foreground hover:bg-muted",
-                    ].join(" ")}
                   >
                     {t("preset", { focus: option.focusMin, rest: option.breakMin })}
-                  </button>
+                  </ToggleChip>
                 );
               })}
             </div>
             <div className="grid grid-cols-2 gap-3 sm:max-w-sm">
               <label className="space-y-1 text-sm">
                 <span className="font-medium text-foreground">{t("customFocus")}</span>
-                <input
+                <Input
                   type="number"
                   inputMode="numeric"
                   min={TIMER_LIMITS.minFocusMin}
@@ -291,12 +286,11 @@ export function StudyTimer({
                   value={preset.focusMin}
                   onChange={(event) => setPreset({ ...preset, focusMin: Number(event.target.value) })}
                   onBlur={() => setPreset(clampPreset(preset))}
-                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-foreground"
                 />
               </label>
               <label className="space-y-1 text-sm">
                 <span className="font-medium text-foreground">{t("customBreak")}</span>
-                <input
+                <Input
                   type="number"
                   inputMode="numeric"
                   min={TIMER_LIMITS.minBreakMin}
@@ -304,7 +298,6 @@ export function StudyTimer({
                   value={preset.breakMin}
                   onChange={(event) => setPreset({ ...preset, breakMin: Number(event.target.value) })}
                   onBlur={() => setPreset(clampPreset(preset))}
-                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-foreground"
                 />
               </label>
             </div>
@@ -340,8 +333,8 @@ export function StudyTimer({
           <p
             className={
               message.kind === "ok"
-                ? "text-emerald-700 dark:text-emerald-400"
-                : "text-red-600 dark:text-red-400"
+                ? "text-success"
+                : "text-danger"
             }
           >
             {message.text}

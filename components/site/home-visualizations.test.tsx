@@ -91,6 +91,13 @@ describe("HomeVisualizations (server render)", () => {
     expect(out).toContain("Open the editorial");
   });
 
+  it("places the active caption before the full-width visualization panel", () => {
+    const out = html();
+    expect(out.indexOf("Projectile range symmetry: description.")).toBeLessThan(
+      out.indexOf('role="tabpanel"'),
+    );
+  });
+
   it("offers Change, and the heading for the list", () => {
     const out = html();
     expect(out).toContain(">Change<");

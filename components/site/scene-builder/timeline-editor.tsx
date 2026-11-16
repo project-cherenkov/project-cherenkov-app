@@ -107,7 +107,7 @@ export function TimelineEditor({
                 </div>
               </div>
               <textarea
-                className="rounded-md border border-border bg-transparent px-2 py-1 text-sm"
+                className="rounded-md border border-border-strong bg-transparent px-2 py-1 text-sm"
                 placeholder="Step note — Markdown and $KaTeX$ supported"
                 value={step.note ?? ""}
                 onChange={(e) => onUpdateNote(index, e.target.value)}

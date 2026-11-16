@@ -140,7 +140,7 @@ export function SearchPalette() {
             }}
             onKeyDown={onInputKeyDown}
             placeholder={t("placeholder")}
-            className="w-full text-ellipsis rounded-md border border-border bg-background px-3 py-2 pr-11 text-base text-foreground placeholder:text-sm sm:placeholder:text-base outline-none focus-visible:ring-2 focus-visible:ring-cherenkov-blue-pastel"
+            className="w-full text-ellipsis rounded-md border border-border-strong bg-background px-3 py-2 pr-11 text-base text-foreground placeholder:text-sm sm:placeholder:text-base outline-none focus-visible:ring-2 focus-visible:ring-cherenkov-blue-pastel"
           />
 
           <ul id={listId} role="listbox" aria-label={t("results")} className="mt-3 max-h-80 overflow-y-auto">

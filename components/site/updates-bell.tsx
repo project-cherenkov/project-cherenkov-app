@@ -59,7 +59,7 @@ export function UpdatesBell({ latestUpdateDate }: { latestUpdateDate?: string })
     >
       <Bell className="h-4 w-4" aria-hidden />
       {signedIn && prefs.updatesEnabled && unread ? (
-        <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-600" aria-hidden />
+        <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-danger" aria-hidden />
       ) : null}
     </Link>
   );

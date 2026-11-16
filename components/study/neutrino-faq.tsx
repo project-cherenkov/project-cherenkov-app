@@ -16,11 +16,11 @@ import {
 } from "@/lib/neutrino-faq";
 
 const questionButton =
-  "min-h-11 w-full rounded-lg border border-border bg-background px-3 py-2 text-left text-sm hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "min-h-11 w-full rounded-lg border border-border-strong bg-background px-3 py-2 text-left text-sm hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 const pillButton =
-  "inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex min-h-11 items-center rounded-full border border-border-strong px-4 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 const linkChip =
-  "inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm font-medium underline-offset-4 hover:bg-muted hover:underline";
+  "inline-flex min-h-11 items-center rounded-full border border-border-strong px-4 text-sm font-medium underline-offset-4 hover:bg-muted hover:underline";
 
 function reducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -115,7 +115,7 @@ export function NeutrinoFaq({
             autoComplete="off"
             spellCheck={false}
             maxLength={80}
-            className="h-11 w-full rounded-md border border-border bg-background pl-9 pr-11 text-sm"
+            className="h-11 w-full rounded-md border border-border-strong bg-background pl-9 pr-11 text-sm"
           />
           {query ? (
             <button
@@ -134,7 +134,7 @@ export function NeutrinoFaq({
           <select
             value={group ?? ""}
             onChange={(event) => setGroup(isGroup(event.target.value) ? event.target.value : null)}
-            className="h-11 w-full rounded-md border border-border bg-background px-3 text-sm"
+            className="h-11 w-full rounded-md border border-border-strong bg-background px-3 text-sm"
           >
             <option value="">{t("faq.allGroups")}</option>
             {FAQ_GROUPS.map((id) => (

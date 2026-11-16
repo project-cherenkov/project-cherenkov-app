@@ -76,7 +76,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
             <option key={s} value={s}>{t(`subjects.${s}`)}</option>
           ))}
         </select>
-        {errors.subject ? <span role="alert" className="text-xs text-red-600 dark:text-red-400">{errors.subject}</span> : null}
+        {errors.subject ? <span role="alert" className="text-xs text-danger">{errors.subject}</span> : null}
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
@@ -86,7 +86,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
             <option key={s} value={s}>{STAGES[s].label[locale]}</option>
           ))}
         </select>
-        {errors.stage ? <span role="alert" className="text-xs text-red-600 dark:text-red-400">{errors.stage}</span> : null}
+        {errors.stage ? <span role="alert" className="text-xs text-danger">{errors.stage}</span> : null}
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
@@ -96,7 +96,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
-        {errors.examYear ? <span role="alert" className="text-xs text-red-600 dark:text-red-400">{errors.examYear}</span> : null}
+        {errors.examYear ? <span role="alert" className="text-xs text-danger">{errors.examYear}</span> : null}
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
@@ -112,7 +112,7 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
           onChange={(e) => setHours(e.target.value)}
           required
         />
-        {errors.hoursPerWeek ? <span role="alert" className="text-xs text-red-600 dark:text-red-400">{errors.hoursPerWeek}</span> : null}
+        {errors.hoursPerWeek ? <span role="alert" className="text-xs text-danger">{errors.hoursPerWeek}</span> : null}
       </label>
 
       <div className="sm:col-span-2 space-y-2">
@@ -123,8 +123,8 @@ export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProp
             {windowInfo.verifiedOn ? <> {t("datesVerified", { date: windowInfo.verifiedOn })}</> : null}
           </p>
         ) : null}
-        {errors.timezone ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{errors.timezone}</p> : null}
-        {generalError ? <p role="alert" className="text-sm text-red-600 dark:text-red-400">{generalError}</p> : null}
+        {errors.timezone ? <p role="alert" className="text-sm text-danger">{errors.timezone}</p> : null}
+        {generalError ? <p role="alert" className="text-sm text-danger">{generalError}</p> : null}
         <Button type="submit" disabled={pending}>{submitLabel ?? t("save")}</Button>
       </div>
     </form>

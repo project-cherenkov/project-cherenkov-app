@@ -42,7 +42,7 @@ export default async function UpdatesPage({
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <JsonLd data={breadcrumbJsonLd(locale, [{ name: t("title") }])} />
       <UpdatesReadMarker latestUpdateDate={entries[0]?.date} />
-      <p className="label-code">{t("eyebrow")}</p>
+      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
       <p className="mt-2 text-sm">

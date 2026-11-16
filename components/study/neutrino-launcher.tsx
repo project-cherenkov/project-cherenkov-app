@@ -45,6 +45,7 @@ type ChatError = "ai_disabled" | "acknowledgement_required" | "cherenkov_limit" 
 const POSITION_KEY = "neutrino-position-v1";
 const HIDDEN_KEY = "neutrino-hidden-v1";
 const INTRO_KEY = "neutrino-intro-dismissed-v1";
+const INTRO_VISIBLE_MS = 6000;
 const SLOW_KEY = "neutrino-3d-slow-v1";
 const PANEL_SIZE_KEY = "neutrino-panel-size-v1";
 
@@ -301,7 +302,7 @@ function CompanionPanel({
             <>
               <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
                 {!aiBannerDismissed ? (
-                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-2.5 pr-8 text-xs text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-2.5 pr-8 text-xs text-foreground">
                     <Bot className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
                     <span className="flex-1">{t("aiBanner")}</span>
                     {onDismissAiBanner ? (
@@ -310,7 +311,7 @@ function CompanionPanel({
                         onClick={onDismissAiBanner}
                         aria-label={t("dismissAiBanner")}
                         title={t("dismissAiBanner")}
-                        className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-amber-900/70 hover:bg-amber-200/50 hover:text-amber-950 dark:text-amber-200/70 dark:hover:bg-amber-900/50 dark:hover:text-amber-100"
+                        className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-warning-border/40 hover:text-foreground"
                       >
                         <X className="h-3.5 w-3.5" aria-hidden />
                       </button>
@@ -333,7 +334,7 @@ function CompanionPanel({
                   </div>
                 ))}
                 {busy ? <p className="text-sm text-muted-foreground">{t("thinking")}</p> : null}
-                {error ? <div role="alert" className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-100">{t(`errors.${error}`)}</div> : null}
+                {error ? <div role="alert" className="rounded-lg border border-danger-border bg-danger-bg p-3 text-sm text-foreground">{t(`errors.${error}`)}</div> : null}
               </div>
 
               {canTryPersonalKey ? (
@@ -344,7 +345,7 @@ function CompanionPanel({
                     <input type="checkbox" checked={keyConsent} onChange={(event) => setKeyConsent(event.target.checked)} className="mt-0.5" />
                     <span>{t("personalKeyConsent")}</span>
                   </label>
-                  <input type="password" autoComplete="off" spellCheck={false} maxLength={256} value={personalKey} onChange={(event) => setPersonalKey(event.target.value)} placeholder={t("personalKeyPlaceholder")} className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm" />
+                  <input type="password" autoComplete="off" spellCheck={false} maxLength={256} value={personalKey} onChange={(event) => setPersonalKey(event.target.value)} placeholder={t("personalKeyPlaceholder")} className="h-10 w-full rounded-md border border-border-strong bg-background px-3 text-sm" />
                   <button type="submit" disabled={!keyConsent || !personalKey.trim() || busy} className="h-10 w-full rounded-md bg-foreground px-3 text-sm font-medium text-background disabled:opacity-50">{t("personalKeyRetry")}</button>
                 </form>
               ) : null}
@@ -352,7 +353,7 @@ function CompanionPanel({
               <form className="shrink-0 border-t border-border p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
                 <label htmlFor="neutrino-message" className="sr-only">{t("messageLabel")}</label>
                 <div className="flex items-end gap-2">
-                  <textarea id="neutrino-message" rows={2} maxLength={1200} value={draft} disabled={!signedIn || busy} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border bg-background px-3 py-2 text-sm" />
+                  <textarea id="neutrino-message" rows={2} maxLength={1200} value={draft} disabled={!signedIn || busy} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border-strong bg-background px-3 py-2 text-sm" />
                   <button type="submit" disabled={!signedIn || busy || !draft.trim()} className="h-11 rounded-md bg-cherenkov-blue-800 px-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{t("send")}</button>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
@@ -425,6 +426,12 @@ export function InPageNeutrino() {
 
   const dockRef = useRef<HTMLButtonElement>(null);
   const wanderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!introVisible) return;
+    const timer = window.setTimeout(() => setIntroVisible(false), INTRO_VISIBLE_MS);
+    return () => window.clearTimeout(timer);
+  }, [introVisible]);
   const panelRef = useRef<HTMLElement>(null);
   const dragRef = useRef<{ id: number; startX: number; startY: number; left: number; top: number; moved: boolean; last: { left: number; top: number } } | null>(null);
   const resizeRef = useRef<{ id: number; startX: number; startY: number; start: PanelFrame; edges: PanelEdge[]; last: PanelFrame } | null>(null);
@@ -451,7 +458,15 @@ export function InPageNeutrino() {
     }
     setHiddenForNow(readSession(HIDDEN_KEY) === "1");
     setFellBack(readSession(SLOW_KEY) === "1");
-    try { setIntroVisible(window.localStorage.getItem(INTRO_KEY) !== "1"); } catch { /* Keep the intro optional when storage is unavailable. */ }
+    // The intro bubble shows ONCE. The dismissal is stored when it is first
+    // shown (not only when it is clicked), and it hides itself after
+    // INTRO_VISIBLE_MS, so a roaming dock never carries a speech bubble over the
+    // text a first-time visitor is reading.
+    try {
+      const firstView = window.localStorage.getItem(INTRO_KEY) !== "1";
+      setIntroVisible(firstView);
+      if (firstView) window.localStorage.setItem(INTRO_KEY, "1");
+    } catch { /* Keep the intro optional when storage is unavailable. */ }
     const measure = () => setViewport({ width: window.innerWidth, height: window.innerHeight });
     measure();
     window.addEventListener("resize", measure);

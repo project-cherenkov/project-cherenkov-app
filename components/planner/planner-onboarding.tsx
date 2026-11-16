@@ -17,7 +17,7 @@ export function PlannerOnboarding({ data }: { data: Data }) {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-4 py-10 sm:px-6">
       <header>
-        <p className="label-code">{t("eyebrow")}</p>
+        <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
         <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       </header>
 
@@ -41,7 +41,7 @@ export function PlannerOnboarding({ data }: { data: Data }) {
             <h2 className="text-xl font-semibold text-foreground">{t("step2")}</h2>
             <p className="text-sm text-foreground/75">{t("step2Body")}</p>
             {data.topicsMissing ? (
-              <p role="alert" className="text-sm text-red-600 dark:text-red-400">{t("topicsMissing")}</p>
+              <p role="alert" className="text-sm text-danger">{t("topicsMissing")}</p>
             ) : (
               <SelfRatingForm topics={data.topics} submitLabel={t("generate")} onDone={() => router.refresh()} />
             )}

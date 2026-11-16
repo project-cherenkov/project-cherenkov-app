@@ -92,7 +92,7 @@ export function SceneInspector({
             <span className="label-code text-foreground/75">Name (optional)</span>
             <input
               type="text"
-              className="rounded-md border border-border bg-transparent px-2 py-1"
+              className="rounded-md border border-border-strong bg-transparent px-2 py-1"
               value={selected.label ?? ""}
               onChange={(e) => onUpdateLabel(selected.id, e.target.value)}
             />

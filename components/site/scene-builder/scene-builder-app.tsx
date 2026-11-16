@@ -64,7 +64,7 @@ function TargetEditorialFields({
         <label className="flex flex-col gap-1">
           <span className="text-xs text-muted-foreground">Subject</span>
           <select
-            className="rounded-md border border-border bg-transparent px-2 py-1"
+            className="rounded-md border border-border-strong bg-transparent px-2 py-1"
             value={subject}
             onChange={(e) => onSubjectChange(e.target.value)}
           >
@@ -83,7 +83,7 @@ function TargetEditorialFields({
           <input
             type="text"
             placeholder="binary-search-on-answer"
-            className="rounded-md border border-border bg-transparent px-2 py-1"
+            className="rounded-md border border-border-strong bg-transparent px-2 py-1"
             value={slug}
             onChange={(e) => onSlugChange(e.target.value)}
           />
@@ -111,7 +111,7 @@ function TargetEditorialFields({
 // page reload would lose them.
 function SaveError({ error, needsGithubAuth }: { error: string; needsGithubAuth: boolean }) {
   return (
-    <div className="text-sm text-red-700">
+    <div className="text-sm text-danger">
       <p>{error}</p>
       {needsGithubAuth && (
         <a
@@ -320,7 +320,7 @@ export function SceneBuilderApp({
               <SaveError error={saveError} needsGithubAuth={needsGithubAuth} />
             )}
             {saveStatus === "done" && saveMessage && (
-              <p className="text-sm text-emerald-700 dark:text-emerald-400">{saveMessage}</p>
+              <p className="text-sm text-success">{saveMessage}</p>
             )}
 
             {isProgramValid && (
@@ -430,7 +430,7 @@ export function SceneBuilderApp({
             <SaveError error={saveError} needsGithubAuth={needsGithubAuth} />
           )}
           {saveStatus === "done" && saveMessage && (
-            <p className="text-sm text-emerald-700 dark:text-emerald-400">{saveMessage}</p>
+            <p className="text-sm text-success">{saveMessage}</p>
           )}
         </div>
 

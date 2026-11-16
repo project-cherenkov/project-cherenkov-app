@@ -8,6 +8,8 @@ import { getAllEditorials, getEditorial, isDraftEditorial, resolveEditorialText 
 import { isEditorRequest } from "@/lib/editor-access";
 import { EditorialMDX } from "@/components/editorial-mdx";
 import { EditorialCard } from "@/components/site/editorial-card";
+import { EditorialContents } from "@/components/site/editorial-contents";
+import { chipClasses } from "@/components/ui/chip";
 import { PracticeLinks } from "@/components/site/practice-links";
 import { TranslationNotice } from "@/components/site/translation-notice";
 import { UnderstoodButton } from "@/components/understood-button";
@@ -121,7 +123,8 @@ export default async function EditorialPage({
   const tSyllabus = await getTranslations("syllabus");
 
   return (
-    <article lang={text.locale} className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 xl:grid xl:max-w-[67rem] xl:grid-cols-[minmax(0,48rem)_14rem] xl:justify-center xl:gap-12 xl:px-6">
+    <article lang={text.locale} className="min-w-0">
       {isIndexableEditorial(editorial) && !isFallback && (
         <JsonLd
           data={[
@@ -170,64 +173,64 @@ export default async function EditorialPage({
         </p>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-2">
+      {/* Title first. The error type used to be 12px mono text in a stack of
+          metadata above the title, so the first screen was mostly filing
+          information. Order now: title, dek, the mistake this fixes, one meta
+          row. */}
+      <h1 className="mt-4 text-3xl font-bold text-foreground">{text.title}</h1>
+      <p className="mt-2 text-lg text-foreground/75">{text.hook}</p>
+
+      {/* "Filed by the mistake it corrects": the site's differentiator, so it
+          gets the page's one pink element (a rule), with ink text. */}
+      {editorial.errorType && (
+        <aside className="mt-6 border-l-4 border-cherenkov-pink-500 pl-4">
+          <p className="text-sm text-muted-foreground">{t("mistakeLabel")}</p>
+          <Link
+            href={`/archive?errorType=${encodeURIComponent(editorial.errorType)}`}
+            title={t("filterByErrorType")}
+            className="inline-flex min-h-6 items-center text-lg font-medium text-foreground underline-offset-4 [overflow-wrap:anywhere] hover:underline"
+          >
+            {humanizeSlug(editorial.errorType)}
+          </Link>
+        </aside>
+      )}
+
+      <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
         <Link
           href={`/archive?subject=${encodeURIComponent(editorial.subject)}`}
-          className="label-code inline-flex min-h-6 items-center rounded bg-muted px-2 py-0.5 text-brand hover:underline"
+          className="inline-flex min-h-6 items-center rounded bg-muted px-2 py-0.5 text-brand hover:underline"
         >
           {tSyllabus(`subjects.${editorial.subject}`)}
         </Link>
-      </div>
-      {/* Principle and error type are the site's filing system ("filed by the
-          mistake it corrects"), so each gets its own labelled line in plain
-          sentence case and links to every editorial that shares it. */}
-      <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-[max-content_minmax(0,1fr)]">
-        <dt className="label-code self-baseline">{t("principleLabel")}</dt>
-        <dd className="m-0 self-baseline [overflow-wrap:anywhere]">
-          <Link
-            href={`/archive?principle=${encodeURIComponent(editorial.principle)}`}
-            className="text-foreground underline underline-offset-4 hover:text-brand"
-            title={t("filterByPrinciple")}
-          >
-            {humanizeSlug(editorial.principle)}
-          </Link>
-        </dd>
-        {editorial.errorType && (
-          <>
-            <dt className="label-code self-baseline">{t("errorTypeLabel")}</dt>
-            <dd className="m-0 self-baseline [overflow-wrap:anywhere]">
+        <Link
+          href={`/archive?principle=${encodeURIComponent(editorial.principle)}`}
+          title={t("filterByPrinciple")}
+          className="inline-flex min-h-6 items-center text-foreground underline underline-offset-4 [overflow-wrap:anywhere] hover:text-brand"
+        >
+          {humanizeSlug(editorial.principle)}
+        </Link>
+        <span>
+          {t("lastUpdatedLabel")}{" "}
+          {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+            new Date(editorial.updatedAt ?? editorial.publishedAt),
+          )}
+        </span>
+        <span>
+          {t.rich("byAuthorLink", {
+            author: editorial.author,
+            link: (chunks) => (
               <Link
-                href={`/archive?errorType=${encodeURIComponent(editorial.errorType)}`}
-                className="text-foreground underline underline-offset-4 hover:text-brand"
-                title={t("filterByErrorType")}
+                href="/about#team"
+                className="inline-flex min-h-6 items-center underline underline-offset-4 hover:text-foreground"
               >
-                {humanizeSlug(editorial.errorType)}
+                {chunks}
               </Link>
-            </dd>
-          </>
-        )}
-      </dl>
-      <p className="label-code mt-2">
-        {t("lastUpdatedLabel")}:{" "}
-        {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
-          new Date(editorial.updatedAt ?? editorial.publishedAt),
-        )}
+            ),
+          })}
+        </span>
       </p>
 
-      <h1 className="mt-3 text-3xl font-bold text-foreground">
-        {text.title}
-      </h1>
-      <p className="mt-2 text-lg text-foreground/75">{text.hook}</p>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {t.rich("byAuthorLink", {
-          author: editorial.author,
-          link: (chunks) => (
-            <Link href="/about#team" className="underline underline-offset-4 hover:text-foreground">
-              {chunks}
-            </Link>
-          ),
-        })}
-      </p>
+      <EditorialContents bodyId="editorial-body" variant="jump" />
 
       {/* Progress is only recorded for published pages (the study-session
           action validates against the public list), so draft pages omit it. */}
@@ -235,7 +238,7 @@ export default async function EditorialPage({
         <UnderstoodButton kind="editorial" subject={editorial.subject} slug={editorial.slug} />
       )}
 
-      <div className="prose prose-slate mt-8 max-w-none dark:prose-invert">
+      <div id="editorial-body" className="prose prose-slate mt-8 max-w-none dark:prose-invert">
         {/* EditorialMDX itself decides whether to also render the "forgot
             the tag" visualization fallback, based on the actual rendered
             body — see components/editorial-mdx.tsx (F-05). */}
@@ -257,7 +260,7 @@ export default async function EditorialPage({
             key={tag}
             href={`/archive?tag=${encodeURIComponent(tag)}`}
             title={t("filterByTag", { tag })}
-            className="inline-flex min-h-6 items-center rounded-full bg-cherenkov-pink/40 px-2.5 py-0.5 font-mono text-xs text-foreground/80 hover:underline"
+            className={`${chipClasses("tag")} inline-flex min-h-6 items-center hover:underline`}
           >
             {tag}
           </Link>
@@ -277,5 +280,9 @@ export default async function EditorialPage({
         </section>
       )}
     </article>
+    <aside className="hidden xl:block xl:pt-16">
+      <EditorialContents bodyId="editorial-body" variant="rail" />
+    </aside>
+    </div>
   );
 }

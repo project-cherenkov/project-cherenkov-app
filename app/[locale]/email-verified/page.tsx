@@ -54,7 +54,7 @@ export default async function Page({
       <h1 className="mb-3 text-2xl font-semibold text-foreground">
         {t(problem === "expired" ? "expiredHeading" : "invalidHeading")}
       </h1>
-      <p role="alert" className="text-sm text-red-700 dark:text-red-400">
+      <p role="alert" className="text-sm text-danger">
         {t(problem === "expired" ? "expiredBody" : "invalidBody")}
       </p>
       <Link href="/login" className={buttonVariants({ className: "mt-6" })}>

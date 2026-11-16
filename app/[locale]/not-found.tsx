@@ -17,7 +17,13 @@ export default function NotFound() {
   const locale = useLocale();
 
   return (
-    <ErrorState
+    <>
+      {/* generateMetadata is not applied to not-found in this setup, so a 404
+          showed the home page's <title>. React 19 hoists a <title> rendered
+          here into <head>, and the robots tag with it. */}
+      <title>{t("title")}</title>
+      <meta name="robots" content="noindex, nofollow" />
+      <ErrorState
       eyebrow="404.md"
       code="404"
       heading={t("heading")}
@@ -28,5 +34,6 @@ export default function NotFound() {
       anotherLabel={t("another")}
       echoPath
     />
+    </>
   );
 }

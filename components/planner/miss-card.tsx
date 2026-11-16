@@ -77,8 +77,8 @@ export function MissCard({ data }: { data: MissCardData }) {
         <span
           className={
             resolved
-              ? "rounded bg-emerald-100 px-1.5 py-0.5 font-medium text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200"
-              : "rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-900 dark:bg-amber-900/40 dark:text-amber-200"
+              ? "rounded bg-success-bg px-1.5 py-0.5 font-medium text-success"
+              : "rounded bg-warning-bg px-1.5 py-0.5 font-medium text-warning"
           }
         >
           {resolved ? t("resolved") : t("open")}
@@ -101,7 +101,7 @@ export function MissCard({ data }: { data: MissCardData }) {
               key={index}
               className={[
                 "flex cursor-pointer items-start gap-3 rounded-md border p-3 text-sm",
-                isCorrect ? "border-emerald-600" : "border-border",
+                isCorrect ? "border-success" : "border-border",
               ].join(" ")}
             >
               <input
@@ -115,7 +115,7 @@ export function MissCard({ data }: { data: MissCardData }) {
                 <MarkdownText text={choice} inline />
                 {/* Status is always spelled out in words, never colour alone. */}
                 {isCorrect ? (
-                  <span className="ml-2 font-medium text-emerald-700 dark:text-emerald-400">
+                  <span className="ml-2 font-medium text-success">
                     ({t("correctAnswer")})
                   </span>
                 ) : null}
@@ -142,7 +142,7 @@ export function MissCard({ data }: { data: MissCardData }) {
       ) : null}
 
       {error ? (
-        <p role="alert" className="mt-3 text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="mt-3 text-sm text-danger">
           {error}
         </p>
       ) : null}

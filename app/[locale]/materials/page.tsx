@@ -38,7 +38,7 @@ export default async function MaterialsIndexPage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <p className="label-code">{t("eyebrow")}</p>
+      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
 

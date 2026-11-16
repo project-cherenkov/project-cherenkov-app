@@ -37,7 +37,7 @@ export async function WeekStrip({
             className={[
               "rounded-md border p-2 text-center text-xs",
               day.active
-                ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40"
+                ? "border-success bg-success-bg"
                 : "border-dashed border-border",
             ].join(" ")}
           >
@@ -163,8 +163,8 @@ export async function TopicMinutesList({
 // itself, never by colour alone. "Not enough data" is its own state and is
 // never shown as "weak": it means nothing was measured, not that it went badly.
 const STATUS_STYLE: Record<MasteryStatus, { symbol: string; box: string }> = {
-  known: { symbol: "●", box: "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40" },
-  uncertain: { symbol: "◐", box: "border-amber-600 bg-amber-50 dark:bg-amber-950/40" },
+  known: { symbol: "●", box: "border-success bg-success-bg" },
+  uncertain: { symbol: "◐", box: "border-warning bg-warning-bg" },
   not_known: { symbol: "○", box: "border-rose-600 bg-rose-50 dark:bg-rose-950/40" },
   unverified: { symbol: "–", box: "border-dashed border-border-strong" },
 };
@@ -228,7 +228,7 @@ export async function CoverageMap({
                       {topicNames[cell.topicId]}
                     </Link>
                     {cell.understood ? (
-                      <span title={t("coverage.understood")} className="shrink-0 text-emerald-700 dark:text-emerald-400">
+                      <span title={t("coverage.understood")} className="shrink-0 text-success">
                         ✓<span className="sr-only"> {t("coverage.understood")}</span>
                       </span>
                     ) : null}

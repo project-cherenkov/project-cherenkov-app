@@ -78,7 +78,7 @@ export default async function AccountPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-      <p className="label-code">{t("eyebrow")}</p>
+      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
       <dl className="mt-8 divide-y divide-border rounded-lg border border-border bg-card">

@@ -50,65 +50,53 @@ export default async function HomePage({
       />
       <section className="hero-band">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
-          <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.9fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-6 lg:items-start">
-            <div className="lg:col-start-1 lg:row-start-1 lg:pt-10">
-            <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300">{t("eyebrow")}</p>
-            {/* The tagline is English in both languages by decision (see
-                docs/project/product-identity.md), so it is marked as such. */}
-            <h1 lang="en" className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              {t("heroTitle")}
-            </h1>
-            <Credo className="mt-5" />
-            <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
+          <div className="grid gap-y-8 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-8 lg:items-start">
+            <div className="lg:col-start-1 lg:row-start-1">
+              <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300" aria-hidden="true">{t("eyebrow")}</p>
+              {/* The tagline is English in both languages by decision (see
+                  docs/project/product-identity.md), so it is marked as such. */}
+              <h1 lang="en" className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+                {t("heroTitle")}
+              </h1>
+              <Credo className="mt-5" />
+              <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroBody")}</p>
 
-            {/* One primary and one secondary action. Syllabus, Docs and About
-                are still one click away, as quiet text links. */}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/archive" className={buttonVariants({ size: "lg" })}>
-                {t("ctaArchive")}
-              </Link>
-              <Link
-                href="/docs/study-planner"
-                className={buttonVariants({ variant: "outline", size: "lg" })}
-              >
-                {t("ctaPlan")}
-              </Link>
+              {/* One primary and one secondary action. Syllabus, Docs and About
+                  are in the header menu and the footer. */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/archive" className={buttonVariants({ size: "lg" })}>
+                  {t("ctaArchive")}
+                </Link>
+                <Link
+                  href="/docs/study-planner"
+                  className={buttonVariants({ variant: "outline", size: "lg" })}
+                >
+                  {t("ctaPlan")}
+                </Link>
+              </div>
             </div>
-            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-              {[
-                { href: "/syllabus", label: t("ctaSyllabus") },
-                { href: "/docs", label: t("ctaDocs") },
-                { href: "/about", label: t("ctaAbout") },
-              ].map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="inline-flex min-h-11 items-center font-medium text-brand underline-offset-4 hover:underline"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            </div>
-            {/* ONE instance, placed by the grid. It renders two grid items:
-                the picker, under the text on the left from lg up, and the
-                visualization on the right; below lg they stack in that
-                order. (It used to be rendered twice, one copy hidden with CSS
-                at each breakpoint, which mounted every simulation twice.) */}
+            {/* ONE instance: the picker shares the top row with the hero text,
+                while its visualization stage spans the full row below. */}
             <HomeVisualizations candidates={vizCandidates} />
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6">
-        <p className="label-code">{t("recentEyebrow")}</p>
-        <h2 className="heading-section mb-4 mt-1">{t("recentHeading")}</h2>
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h2 className="heading-section">{t("recentHeading")}</h2>
+          <Link
+            href="/archive"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-brand underline-offset-4 hover:underline"
+          >
+            {t("seeAll")}
+          </Link>
+        </div>
         {recent.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("recentEmpty")}</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recent.map((editorial) => (
+            {recent.slice(0, 3).map((editorial) => (
               <EditorialCard
                 key={`${editorial.subject}-${editorial.slug}`}
                 editorial={editorial}

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 // target and the same visible border (the control border token is 4.4:1 on the
 // page, above the 3:1 WCAG 1.4.11 asks of UI boundaries).
 export const controlClasses =
-  "min-h-11 w-full rounded-md border border-border-strong bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60";
+  "min-h-11 w-full rounded-md border border-border-strong bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-danger aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-danger";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 

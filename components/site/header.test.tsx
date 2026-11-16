@@ -31,6 +31,7 @@ vi.mock("next-intl", () => ({
       signup: "Sign Up",
       myPlan: "My Plan",
       account: "Account",
+      docs: "Docs",
       toggleTheme: "Toggle theme",
       menu: "Menu",
       mainNavigation: "Main navigation",
@@ -66,6 +67,9 @@ describe("SiteHeader — session awareness", () => {
 
     expect(html).toContain("Archive");
     expect(html).toContain("Updates");
+    expect(html).toContain('href="/docs"');
+    expect(html).toContain('aria-label="Docs"');
+    expect(html.indexOf('href="/docs"')).toBeLessThan(html.indexOf('href="/en/updates"'));
     expect(html).toContain("About");
     expect(html).toContain('aria-label="GitHub"');
     expect(html).toContain('aria-label="Toggle theme"');
