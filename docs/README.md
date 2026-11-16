@@ -2,7 +2,7 @@
 
 This folder holds developer-facing notes for people and agents working on the repository. It is not the in-app documentation: that lives in `content/docs/<locale>/*.mdx` and is served at `/docs`. It is also not the root `README.md`, which covers setup and how the site works.
 
-Code wins. If a file here disagrees with `app/globals.css`, `tailwind.config.ts`, `lib/`, `messages/*.json` or any other code, the code is right and the file should be corrected.
+Code wins. If a file here disagrees with `app/globals.css`, `tailwind.config.ts`, `lib/`, `messages/` or any other code, the code is right and the file should be corrected.
 
 ## How to use it
 
@@ -44,6 +44,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `engineering/account-email-flows.md` | How verification, password reset, change password, account deletion, linking and rate limits work; rotating the Resend key. | current |
 | `engineering/security-headers.md` | The report-only Content-Security-Policy and `security.txt`. | current |
 | `engineering/seo-and-accessibility.md` | How indexing is switched on, what pages declare to search engines, accessibility decisions. | current |
+| `engineering/internationalization.md` | How the UI message files are laid out, loaded and checked; adding a string, a file or a locale. | current |
 | `reviews/audit-2026-10-31.md` | Design, accessibility, SEO and legal audit of 31 October 2026. | review |
 | `reviews/design-review-2026-10.md` | UI design review of October 2026: what changed, open findings, browser checklist. The palette moved to `design/colour.md`. | review |
 | `history/deployment-readiness.md` | The Phase 1 deployment-hardening write-up. | historical |
@@ -75,3 +76,4 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | Account email flows | `engineering/account-email-flows.md` |
 | Security headers | `engineering/security-headers.md` |
 | SEO and accessibility | `engineering/seo-and-accessibility.md` |
+| UI message files and locales | `engineering/internationalization.md` |

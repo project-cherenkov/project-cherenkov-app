@@ -20,9 +20,9 @@ export interface SignupFormProps {
 // fallback — this mirrors login-form.tsx's handling exactly, since
 // sign-up and sign-in via Google are the same underlying call.
 export function SignupForm({ googleEnabled }: SignupFormProps) {
-  const t = useTranslations("phase2.signup");
-  const tErrors = useTranslations("phase2.authErrors");
-  const tCodes = useTranslations("phase2.authCodes");
+  const t = useTranslations("auth.signup");
+  const tErrors = useTranslations("auth.errors");
+  const tCodes = useTranslations("auth.codes");
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();

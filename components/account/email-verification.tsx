@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 // (lib/admin-guard.ts isVerifiedAdmin).
 export function EmailVerification({ email, verified }: { email: string; verified: boolean }) {
   const t = useTranslations("account.verification");
-  const tCodes = useTranslations("phase2.authCodes");
-  const tErrors = useTranslations("phase2.authErrors");
+  const tCodes = useTranslations("auth.codes");
+  const tErrors = useTranslations("auth.errors");
   const locale = useLocale();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);

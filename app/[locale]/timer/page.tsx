@@ -35,7 +35,7 @@ export default async function TimerPage() {
     getCurrentUser(),
     getTranslations("timer"),
     getTranslations("syllabus.subjects"),
-    getTranslations("phase3.plan.kind"),
+    getTranslations("planner.plan.kind"),
   ]);
   const subjects = buildPickerSubjects(locale, (subject) => ts(subject));
 

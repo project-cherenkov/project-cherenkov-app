@@ -1,7 +1,7 @@
 import { getAllEditorials, getEditorial } from "@/lib/content";
 import { OG_SIZE, renderOgImage } from "@/lib/og-image";
-import en from "@/messages/en.json";
-import id from "@/messages/id.json";
+import en from "@/messages/en";
+import id from "@/messages/id";
 
 export const alt = "Cherenkov editorial";
 export const size = OG_SIZE;

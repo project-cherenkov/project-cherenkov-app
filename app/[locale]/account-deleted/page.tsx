@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "phase2.accountDeleted" });
+  const t = await getTranslations({ locale, namespace: "account.accountDeleted" });
   return pageMetadata({ locale, path: "/account-deleted", title: t("title"), description: t("title"), noindex: true });
 }
 
@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   if (!isEmailConfigured()) notFound();
-  const t = await getTranslations("phase2.accountDeleted");
+  const t = await getTranslations("account.accountDeleted");
   return (
     <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
       <h1 className="mb-3 text-2xl font-semibold text-foreground">{t("heading")}</h1>

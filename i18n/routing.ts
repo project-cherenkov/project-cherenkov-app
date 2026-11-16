@@ -11,6 +11,8 @@ export const routing = defineRouting({
   defaultLocale: "id",
 });
 
+export type Locale = (typeof routing.locales)[number];
+
 // Locale-aware wrappers — use these instead of next/navigation everywhere
 // under app/[locale], so links stay on the current locale automatically.
 export const { Link, redirect, usePathname, useRouter, getPathname } =

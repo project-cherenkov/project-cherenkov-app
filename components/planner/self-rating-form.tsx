@@ -18,8 +18,8 @@ export interface SelfRatingFormProps {
 const SCALE = Array.from({ length: SELF_RATING_MAX - SELF_RATING_MIN + 1 }, (_, i) => SELF_RATING_MIN + i);
 
 export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormProps) {
-  const t = useTranslations("phase3.ratings");
-  const tErr = useTranslations("phase3.errors");
+  const t = useTranslations("planner.ratings");
+  const tErr = useTranslations("planner.errors");
   const [ratings, setRatings] = useState<Record<string, number>>(() =>
     Object.fromEntries(topics.filter((x) => x.selfRating !== null).map((x) => [x.syllabusTopicId, x.selfRating!])),
   );

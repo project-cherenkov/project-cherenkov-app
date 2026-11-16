@@ -5,10 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import NextLink from "next/link";
 import { useSession } from "@/lib/auth-client";
-import { FileText, Github, Menu, X } from "lucide-react";
+import { Bell, FileText, Github, Menu, X } from "lucide-react";
 import { SearchPalette } from "@/components/site/search-palette";
-import { ThemeToggle } from "@/components/site/theme-toggle";
-import { UpdatesBell } from "@/components/site/updates-bell";
+import { ThemeToggle, ThemeToggleRow } from "@/components/site/theme-toggle";
+import { UpdatesBell, markUpdatesRead, useUnreadUpdates } from "@/components/site/updates-bell";
 import { BrandMark } from "@/components/site/brand-mark";
 import { NavRibbonArt } from "@/components/site/nav-ribbon-art";
 
@@ -19,6 +19,15 @@ const ARCHIVE_SECTIONS = [
   { href: "/materials", labelKey: "materials" },
   { href: "/archive", labelKey: "editorials" },
 ] as const;
+
+function drawerRow(active: boolean) {
+  return [
+    "flex min-h-12 items-center rounded-md px-3 font-semibold transition-colors",
+    active
+      ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+      : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
+  ].join(" ");
+}
 
 function isWithin(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -45,6 +54,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
   const [canEdit, setCanEdit] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const hasUnreadUpdates = useUnreadUpdates(latestUpdateDate);
 
   useEffect(() => {
     let active = true;
@@ -208,12 +218,16 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               href="/docs"
               aria-label={t("docs")}
               title={t("docs")}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="hidden h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground sm:inline-flex"
             >
               <FileText className="h-4 w-4" aria-hidden />
             </Link>
-            <UpdatesBell latestUpdateDate={latestUpdateDate} />
-            <ThemeToggle />
+            {/* Docs, Updates and the theme toggle leave the bar below 640px: with
+                them the controls need ~430px and the bar overflowed phones. They
+                are rows in the drawer instead, and the bell's unread dot moves to the Menu
+                button. */}
+            <UpdatesBell latestUpdateDate={latestUpdateDate} className="hidden sm:inline-flex" />
+            <ThemeToggle className="hidden sm:inline-flex" />
 
             <div
               role="group"
@@ -276,14 +290,23 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
               className="nav-ribbon group relative z-30 inline-flex h-[4.5rem] w-16 flex-col items-center justify-start gap-0.5 pt-5 transition-transform duration-200 ease-out focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 min-[960px]:hidden [@media(hover:hover)]:hover:translate-y-1"
             >
               <NavRibbonArt className="pointer-events-none drop-shadow-md" />
-              {mobileMenuOpen ? (
-                <X className="nav-ribbon-label relative z-10 h-4 w-4" aria-hidden />
-              ) : (
-                <Menu className="nav-ribbon-label relative z-10 h-4 w-4" aria-hidden />
-              )}
+              <span className="relative z-10">
+                {mobileMenuOpen ? (
+                  <X className="nav-ribbon-label h-4 w-4" aria-hidden />
+                ) : (
+                  <Menu className="nav-ribbon-label h-4 w-4" aria-hidden />
+                )}
+                {hasUnreadUpdates && !mobileMenuOpen ? (
+                  <span
+                    className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-danger ring-2 ring-[color:var(--ribbon-fill)] sm:hidden"
+                    aria-hidden
+                  />
+                ) : null}
+              </span>
               <span className="nav-ribbon-label relative z-10 text-center font-mono text-xs font-bold uppercase leading-none tracking-wider">
                 {t("menu")}
               </span>
+              {hasUnreadUpdates ? <span className="sr-only sm:hidden">{t("unreadUpdates")}</span> : null}
             </button>
           </div>
         </div>
@@ -318,13 +341,7 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                     : pathname === item.href
                   : false;
 
-                const rowClasses = (active: boolean) =>
-                  [
-                    "flex min-h-12 items-center rounded-md px-3 font-semibold transition-colors",
-                    active
-                      ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
-                      : "text-foreground hover:bg-slate-100 dark:hover:bg-slate-800",
-                  ].join(" ");
+                const rowClasses = drawerRow;
 
                 if (item.isExternal) {
                   return (
@@ -384,6 +401,41 @@ export function SiteHeader({ latestUpdateDate }: { latestUpdateDate?: string }) 
                   </Link>
                 );
               })}
+
+              {/* Docs, Updates and the theme toggle are bar icons from 640px up;
+                  below that they are rows here. */}
+              <Link
+                href="/docs"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-current={isWithin(pathname, "/docs") ? "page" : undefined}
+                className={`${drawerRow(isWithin(pathname, "/docs"))} gap-2 sm:hidden`}
+              >
+                <FileText className="h-4 w-4" aria-hidden />
+                {t("docs")}
+              </Link>
+              <Link
+                href="/updates"
+                onClick={() => {
+                  markUpdatesRead(session?.user?.id, latestUpdateDate);
+                  setMobileMenuOpen(false);
+                }}
+                aria-current={isWithin(pathname, "/updates") ? "page" : undefined}
+                className={`${drawerRow(isWithin(pathname, "/updates"))} gap-2 sm:hidden`}
+              >
+                <span className="relative">
+                  <Bell className="h-4 w-4" aria-hidden />
+                  {hasUnreadUpdates ? (
+                    <span
+                      className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-danger"
+                      aria-hidden
+                    />
+                  ) : null}
+                </span>
+                {t("updates")}
+                {hasUnreadUpdates ? <span className="sr-only">{t("unreadUpdates")}</span> : null}
+              </Link>
+
+              <ThemeToggleRow className="sm:hidden" />
 
               {/* The bar hides the GitHub icon below 640px, which left no way
                   to reach the repository on a phone. It is a row here instead. */}

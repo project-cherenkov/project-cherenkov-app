@@ -1,0 +1,71 @@
+{
+  "account": {
+    "eyebrow": "account.md",
+    "title": "Your account",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "roleEditorHint": "You can edit site content.",
+    "roleMemberHint": "You can use the study planner. Editing is limited to approved editors.",
+    "signInMethods": "Sign-in method",
+    "memberSince": "Member since",
+    "providerPassword": "Email and password",
+    "goToPlan": "Go to my plan",
+    "openEditor": "Open the editor",
+    "signOut": "Log out",
+    "password": {
+      "setTitle": "Set a password",
+      "setBody": "We will email a secure link to {email} so you can choose a password.",
+      "setButton": "Set a password",
+      "sending": "Sending link…",
+      "sent": "Check your email for a link to set your password.",
+      "changeTitle": "Change password",
+      "changeBody": "Enter your current password and choose a new one.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "changeButton": "Change password",
+      "saving": "Changing password…",
+      "changed": "Your password has been changed.",
+      "genericError": "We could not update your password. Please try again.",
+      "changedSignedOut": "Your password has been changed. Your other devices were signed out."
+    },
+    "roleVerifyHint": "Your email is on the editor list. Verify it to get edit access.",
+    "verification": {
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "send": "Send verification email",
+      "sending": "Sending…",
+      "sent": "Verification email sent. Check your inbox (and spam folder).",
+      "genericError": "We could not send the email. Please try again."
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "Deleting your account permanently removes it and the study data stored with it. This cannot be undone.",
+      "start": "Delete my account",
+      "passwordLabel": "Your password",
+      "confirmBody": "We will email a confirmation link to {email}. Open it while you are signed in to finish. Nothing is deleted until you do.",
+      "confirmButton": "Email me the link",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "sent": "Confirmation link sent to {email}. It works for one hour. If it does not arrive, check your spam folder.",
+      "genericError": "We could not start the deletion. Please try again."
+    },
+    "emailVerified": {
+      "title": "Email verification",
+      "successHeading": "Email verified",
+      "successBody": "Thank you. Your email address is now verified.",
+      "expiredHeading": "This link has expired",
+      "expiredBody": "Verification links work for 24 hours. Sign in and request a new one from your Account page.",
+      "invalidHeading": "This link is not valid",
+      "invalidBody": "The link may have been used already or copied incompletely. Sign in and request a new one from your Account page.",
+      "toAccount": "Go to my account",
+      "toLogin": "Log in"
+    },
+    "accountDeleted": {
+      "title": "Account deleted",
+      "heading": "Your account has been deleted",
+      "body": "Your account and the study data stored with it have been removed. Thank you for using Project Cherenkov.",
+      "home": "Back to the home page"
+    }
+  }
+}

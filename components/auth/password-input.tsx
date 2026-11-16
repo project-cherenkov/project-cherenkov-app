@@ -14,7 +14,7 @@ export function PasswordInput({
   className,
   ...props
 }: Omit<InputProps, "type">) {
-  const t = useTranslations("phase2.login");
+  const t = useTranslations("auth.login");
   const [visible, setVisible] = useState(false);
   const toggleId = useId();
 

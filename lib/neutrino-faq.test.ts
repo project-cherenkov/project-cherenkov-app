@@ -1,7 +1,7 @@
 import { createTranslator } from "next-intl";
 import { describe, expect, it } from "vitest";
-import en from "../messages/en.json";
-import id from "../messages/id.json";
+import en from "../messages/en";
+import id from "../messages/id";
 import { FAQ_BY_ID, FAQ_GROUPS, FAQ_ITEMS, FAQ_LINKS, FAQ_VALUES, searchFaq } from "./neutrino-faq";
 
 type Catalogue = typeof en;

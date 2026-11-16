@@ -17,7 +17,7 @@ export function PasswordSettings({
   resetEnabled: boolean;
 }) {
   const t = useTranslations("account.password");
-  const tErrors = useTranslations("phase2.authErrors");
+  const tErrors = useTranslations("auth.errors");
   const locale = useLocale();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

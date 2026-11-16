@@ -1,0 +1,81 @@
+{
+  "syllabus": {
+    "eyebrow": "syllabus.md",
+    "title": "Silabus",
+    "description": "Apa saja yang diujikan di tiap bidang olimpiade, dan di mana mempelajari tiap topiknya.",
+    "subjects": {
+      "informatics": "Informatika",
+      "physics": "Fisika",
+      "astronomy": "Astronomi"
+    },
+    "languages": {
+      "id": "Indonesia",
+      "en": "Inggris"
+    },
+    "source": "Sumber",
+    "accessed": "Diakses {date}",
+    "descriptions": {
+      "informatics": "Algoritma, struktur data, dan pemecahan masalah sesuai silabus olimpiade informatika.",
+      "astronomy": "Mekanika benda langit, pengamatan, astrofisika, dan langit malam sesuai silabus olimpiade astronomi.",
+      "physics": "Mekanika, gelombang, kalor, listrik, dan fisika modern sesuai silabus olimpiade fisika."
+    },
+    "open": "Buka silabus",
+    "stats": {
+      "topics": "topik",
+      "materials": "materi",
+      "editorials": "editorial"
+    },
+    "counts": {
+      "topics": "{count, plural, other {# topik}}",
+      "materials": "{count, plural, other {# materi}}",
+      "editorials": "{count, plural, other {# editorial}}",
+      "coming": "materi dan editorial: segera hadir"
+    },
+    "theory": "Teori",
+    "practical": "Praktikum",
+    "expandAll": "Buka semua",
+    "collapseAll": "Tutup semua",
+    "readMaterial": "Baca materi",
+    "comingSoon": "Segera hadir",
+    "editorialsLabel": "Editorial:",
+    "subtopicsLabel": "Subtopik",
+    "subtopicsNote": "Subtopik ini adalah pemecahan topik di atas oleh Project Cherenkov sendiri. Silabus sumber tidak mencantumkannya.",
+    "subjectDescription": "Semua topik silabus {subjectLower} {sources}, lengkap dengan sumber tiap topik dan tautan ke materi dan editorial.",
+    "provenance": {
+      "heading": "Dari mana ini berasal",
+      "intro": "Project Cherenkov menulis silabus ini sendiri dari sumber-sumber di bawah. Setiap topik diberi label silabus mana saja yang mencantumkannya.",
+      "issuedBy": "Diterbitkan oleh {issuer}",
+      "edition": "Edisi: {edition}",
+      "officialLanguage": "Bahasa resmi: {language}",
+      "unofficialGloss": "Nama dalam bahasa {language} adalah terjemahan tidak resmi buatan Project Cherenkov, jadi periksa sumbernya jika ragu.",
+      "lastCompared": "Terakhir dibandingkan {date}",
+      "notDated": "Belum ada tanggal perbandingan",
+      "openSource": "Buka sumber",
+      "nationalKind": "Silabus nasional",
+      "internationalKind": "Silabus internasional",
+      "ownWork": "Yang dibuat sendiri oleh Project Cherenkov: subtopik, terjemahan ke bahasa lainnya, dan pemasangan topik dengan sumber yang tidak menyatakannya sendiri. Penunjuk bagian seperti “IPhO §2.4.3” menyebut tempat di sumber tempat sebuah topik berasal.",
+      "summary": "Sumber: {sources}",
+      "toggle": "Cara membandingkannya"
+    },
+    "verification": {
+      "compared": "Sudah dibandingkan dengan dokumen primernya",
+      "secondary": "Hanya dikenal dari ringkasan sekunder",
+      "notCompared": "Belum dibandingkan"
+    },
+    "coverage": {
+      "label": "{covered} dari {total} topik sudah punya materi atau editorial",
+      "legend": "Setiap label menyebut silabus mana saja yang mencantumkan topiknya. “Belum terkonfirmasi” berarti kami belum menemukan topik itu di sumber tersebut; bukan berarti topiknya dikecualikan.",
+      "listedIn": "{sources}",
+      "only": "Hanya {source}",
+      "notConfirmed": "Ada di silabus {sources}; belum terkonfirmasi di panduan {primary}",
+      "reference": "{source} {ref}"
+    },
+    "filter": {
+      "label": "Tampilkan topik dari",
+      "all": "Semua sumber"
+    },
+    "subjectTitle": "Silabus olimpiade {subject} ({sources})",
+    "metaDescription": "Cakupan tiap bidang olimpiade, topik demi topik, lengkap dengan sumber tiap topik dan tautan ke materi dan editorial.",
+    "metaTitle": "Silabus olimpiade (OSN, IPhO, IOI, IOAA)"
+  }
+}

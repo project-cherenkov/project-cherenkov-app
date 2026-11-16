@@ -1,0 +1,85 @@
+{
+  "archive": {
+    "eyebrow": "archive.log",
+    "title": "Editorial",
+    "description": "Diindeks berdasarkan prinsip dan jenis kesalahan, bukan berdasarkan bab.",
+    "filters": {
+      "subject": "Bidang",
+      "principle": "Prinsip",
+      "errorType": "Jenis kesalahan",
+      "allSubjects": "Semua bidang",
+      "allPrinciples": "Semua prinsip",
+      "allErrorTypes": "Semua jenis kesalahan",
+      "clear": "Hapus filter",
+      "tag": "Tag"
+    },
+    "empty": "Tidak ada edisi yang cocok dengan filter ini.",
+    "count": "{count, plural, other {# edisi}}",
+    "metaTitle": "Editorial olimpiade",
+    "metaDescription": "Semua editorial olimpiade fisika, astronomi, dan informatika, diarsipkan berdasarkan kesalahan yang dikoreksinya dan diindeks menurut prinsip dan jenis kesalahan."
+  },
+  "editorial": {
+    "draftBadge": "Draf",
+    "draftNotice": "Hanya editor yang dapat melihat edisi ini. Pengunjung akan melihat halaman 404.",
+    "sections": {
+      "hook": "Pembuka",
+      "problem": "Soal",
+      "idea": "Ide",
+      "interactive": "Coba sendiri",
+      "proof": "Pembuktian lengkap",
+      "tags": "Tag"
+    },
+    "principleLabel": "Prinsip",
+    "mistakeLabel": "Kesalahan yang diluruskan",
+    "contentsLabel": "Di halaman ini",
+    "moreTags": "+{count} lagi",
+    "errorTypeLabel": "Jenis kesalahan",
+    "lastUpdatedLabel": "Terakhir diperbarui",
+    "byAuthor": "Ditulis oleh {author}",
+    "vizMissing": "[PLACEHOLDER: edisi ini belum punya visualisasi interaktif, padahal setiap edisi seharusnya memilikinya. Ditandai untuk ditinjau.]",
+    "vizConfigError": "Konfigurasi vizConfig edisi ini tidak sesuai dengan yang diharapkan oleh mesin {engine}. Periksa frontmatter MDX terhadap type guard mesin terkait.",
+    "vizFallbackNotice": "Tag <Interactive /> pada edisi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya.",
+    "backToArchive": "Kembali ke arsip",
+    "showSolution": "Tampilkan solusi",
+    "hideSolution": "Sembunyikan solusi",
+    "tryFirstLabel": "Coba dulu sendiri",
+    "tryFirstHint": "Sembunyikan solusi dan pembuktian lengkap sampai kamu membukanya. Nonaktif secara default; hanya disimpan di browser ini.",
+    "practice": {
+      "heading": "Latihan",
+      "note": "Soal di situs lain. Kami hanya menautkannya; soalnya tetap milik pembuatnya.",
+      "checkedOn": "tautan dicek {date}",
+      "stale": "Sudah lama dicek, jadi mungkin sudah pindah.",
+      "opensNewTab": "(terbuka di tab baru)"
+    },
+    "relatedHeading": "Lanjut membaca",
+    "filterByPrinciple": "Lihat semua editorial dengan prinsip ini",
+    "filterByErrorType": "Lihat semua editorial dengan jenis kesalahan ini",
+    "filterByTag": "Lihat semua editorial dengan tag {tag}",
+    "byAuthorLink": "Ditulis oleh <link>{author}</link>"
+  },
+  "materials": {
+    "draftBadge": "Draf",
+    "draftNotice": "Hanya editor yang dapat melihat materi ini. Pengunjung akan melihat halaman 404.",
+    "eyebrow": "materials.md",
+    "title": "Materi",
+    "description": "Silabus yang diuraikan topik demi topik. Catatan rujukan tanpa nama penulis, disusun mengikuti silabus.",
+    "coverage": "{covered} dari {total} topik tersedia",
+    "viewSyllabus": "Lihat silabus",
+    "emptyForSubject": "Belum ada materi. Materi muncul di sini seiring tiap topik silabus selesai ditulis.",
+    "backToMaterials": "Materi",
+    "inSyllabus": "Dalam silabus",
+    "relatedEditorials": "Editorial terkait",
+    "sectionNav": "Lainnya di bagian silabus ini",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "chapters": "Dalam mata lomba ini",
+    "chaptersToggle": "Bab dalam mata lomba ini",
+    "comingSoon": "segera hadir",
+    "vizFallbackNotice": "Tag <Interactive /> pada materi ini belum diletakkan di dalam teks, jadi visualisasinya ditampilkan di sini secara default. Pindahkan tag tersebut di body MDX untuk mengubah posisinya."
+  },
+  "understood": {
+    "mark": "Tandai sudah paham",
+    "marked": "Sudah paham",
+    "error": "Tidak bisa menyimpan. Coba lagi."
+  }
+}

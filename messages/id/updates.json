@@ -1,0 +1,17 @@
+{
+  "updates": {
+    "eyebrow": "updates.md",
+    "title": "Pembaruan",
+    "description": "Perubahan pada silabus, konten, dan fitur yang akan membuat Anda bertindak berbeda jika mengetahuinya.",
+    "feed": "Berlangganan lewat RSS",
+    "empty": "Belum ada pembaruan.",
+    "pinned": "Disematkan",
+    "types": {
+      "syllabus": "Silabus",
+      "content": "Konten",
+      "feature": "Fitur",
+      "fix": "Perbaikan",
+      "notice": "Pemberitahuan"
+    }
+  }
+}

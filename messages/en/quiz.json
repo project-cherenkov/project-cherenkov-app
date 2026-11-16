@@ -1,0 +1,17 @@
+{
+  "quiz": {
+    "startButton": "Take the quiz",
+    "submit": "Submit answers",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "retake": "Retake quiz",
+    "scoreLabel": "You scored {score}%",
+    "tabUnanswered": "Question {n}, not answered",
+    "tabAnswered": "Question {n}, answered",
+    "tabCorrect": "Question {n}, correct",
+    "tabIncorrect": "Question {n}, incorrect",
+    "questionCounter": "Question {current} of {total}",
+    "submitErrorUnauthenticated": "Your session has expired. Please log back in and try again.",
+    "submitErrorGeneric": "Something went wrong submitting your answers. Please try again."
+  }
+}

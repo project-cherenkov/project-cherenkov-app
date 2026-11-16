@@ -1,0 +1,17 @@
+{
+  "updates": {
+    "eyebrow": "updates.md",
+    "title": "Updates",
+    "description": "Changes to the syllabus, content and features that you would act on differently for knowing.",
+    "feed": "Subscribe with RSS",
+    "empty": "No updates yet.",
+    "pinned": "Pinned",
+    "types": {
+      "syllabus": "Syllabus",
+      "content": "Content",
+      "feature": "Feature",
+      "fix": "Fix",
+      "notice": "Notice"
+    }
+  }
+}

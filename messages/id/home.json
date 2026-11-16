@@ -1,0 +1,38 @@
+{
+  "home": {
+    "eyebrow": "readme.md",
+    "heroTitle": "From Curiosity to Visualization",
+    "heroBody": "Arsip ide olimpiade yang dibuat terlihat: setiap ide berupa bukti lengkap dengan visualisasi interaktif, diarsipkan berdasarkan kesalahan yang dikoreksinya.",
+    "ctaPlan": "Cara kerja perencana belajar",
+    "recentHeading": "Edisi terbaru",
+    "ctaArchive": "Jelajahi editorial",
+    "ctaAbout": "Baca filosofinya",
+    "seeAll": "Lihat semua editorial",
+    "recentEmpty": "Belum ada edisi yang diterbitkan.",
+    "ctaSyllabus": "Lihat silabus",
+    "ctaDocs": "Baca dokumentasi",
+    "visualizations": {
+      "eyebrow": "Catatan interaktif",
+      "physics": "Fisika",
+      "astronomy": "Astronomi",
+      "informatics": "Informatika",
+      "previous": "Visualisasi sebelumnya",
+      "next": "Visualisasi berikutnya",
+      "of": "dari",
+      "picks": {
+        "title": "Pilihanmu",
+        "tablistLabel": "Visualisasi yang kamu pilih",
+        "change": "Ubah",
+        "openEditorial": "Buka editorialnya",
+        "chooseTitle": "Pilih visualisasimu",
+        "chooseHelp": "Pilih satu sampai tiga. Yang pertama kamu pilih ditampilkan lebih dulu. Pilihanmu diingat di perangkat ini, dan di akunmu jika kamu sudah masuk.",
+        "count": "{count} dari {max} dipilih.",
+        "atLimit": "Itu batas maksimum; hapus satu untuk memilih yang lain.",
+        "needOne": "Pilih setidaknya satu.",
+        "save": "Simpan",
+        "cancel": "Batal",
+        "useDefaults": "Pakai pilihan awal"
+      }
+    }
+  }
+}

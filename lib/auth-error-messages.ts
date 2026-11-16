@@ -3,7 +3,7 @@
 // in shape depending on *where* the failure happens, so this file collapses
 // every failure mode into one small, stable set of codes. Each code maps
 // 1:1 to a translated string in messages/{id,en}.json under
-// "phase2.authErrors" — components just do
+// "auth.errors" — components just do
 // `tErrors(classifyAuthError(err))`.
 //
 // Two entry points, because a social (OAuth) sign-in can fail in two
@@ -152,7 +152,7 @@ export function classifyCallbackError(errorParam: string): AuthErrorCode {
 // Better Auth's field-level errors (wrong password, email taken, ...) arrive
 // as English sentences in `error.message`. Showing them verbatim put English
 // text on the Indonesian site. Where the error carries a stable `code`, the
-// forms translate it from "phase2.authCodes"; anything unrecognised falls back
+// forms translate it from "auth.codes"; anything unrecognised falls back
 // to Better Auth's own message, as before.
 //
 // Matching is by prefix on the upper-cased code so a renamed variant

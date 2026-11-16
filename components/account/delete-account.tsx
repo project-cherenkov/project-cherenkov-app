@@ -14,8 +14,8 @@ import { PasswordInput } from "@/components/auth/password-input";
 // both). Rendered by the Account page only when email is configured.
 export function DeleteAccount({ email, hasPassword }: { email: string; hasPassword: boolean }) {
   const t = useTranslations("account.delete");
-  const tCodes = useTranslations("phase2.authCodes");
-  const tErrors = useTranslations("phase2.authErrors");
+  const tCodes = useTranslations("auth.codes");
+  const tErrors = useTranslations("auth.errors");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");

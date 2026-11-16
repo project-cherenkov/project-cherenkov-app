@@ -13,8 +13,7 @@ export function nextTheme(current: string | undefined) {
   return current === "dark" ? "light" : "dark";
 }
 
-export function ThemeToggle() {
-  const t = useTranslations("nav");
+function useThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -22,24 +21,43 @@ export function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  function toggleTheme() {
-    setTheme(nextTheme(resolvedTheme));
-  }
+  return {
+    isDark: mounted && resolvedTheme === "dark",
+    toggle: () => setTheme(nextTheme(resolvedTheme)),
+  };
+}
+
+export function ThemeToggle({ className = "" }: { className?: string }) {
+  const t = useTranslations("nav");
+  const { isDark, toggle } = useThemeToggle();
 
   return (
     <Button
       type="button"
       variant="ghost"
       size="icon"
-      onClick={toggleTheme}
+      onClick={toggle}
       aria-label={t("toggleTheme")}
-      className="h-10 w-10 rounded-md text-muted-foreground hover:bg-card hover:text-foreground sm:h-11 sm:w-11"
+      className={`h-10 w-10 rounded-md text-muted-foreground hover:bg-card hover:text-foreground sm:h-11 sm:w-11 ${className}`}
     >
-      {mounted && resolvedTheme === "dark" ? (
-        <Sun className="h-4 w-4" aria-hidden />
-      ) : (
-        <Moon className="h-4 w-4" aria-hidden />
-      )}
+      {isDark ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />}
     </Button>
+  );
+}
+
+/** Full-width drawer row for the header's mobile menu. Leaves the drawer open so the change is visible. */
+export function ThemeToggleRow({ className = "" }: { className?: string }) {
+  const t = useTranslations("nav");
+  const { isDark, toggle } = useThemeToggle();
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className={`flex min-h-12 w-full items-center gap-2 rounded-md px-3 text-left font-semibold text-foreground transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 ${className}`}
+    >
+      {isDark ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />}
+      {t("toggleTheme")}
+    </button>
   );
 }

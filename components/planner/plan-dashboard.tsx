@@ -21,8 +21,8 @@ function formatDay(date: string, locale: string): string {
 const hoursLabel = (minutes: number) => `${Math.round((minutes / 60) * 10) / 10}`;
 
 export function PlanDashboard({ data }: { data: PlanData }) {
-  const t = useTranslations("phase3.plan");
-  const tErr = useTranslations("phase3.errors");
+  const t = useTranslations("planner.plan");
+  const tErr = useTranslations("planner.errors");
   const locale = useLocale();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -228,8 +228,8 @@ function ItemList({
   subject: string;
   showDate?: boolean;
 }) {
-  const t = useTranslations("phase3.plan");
-  const tReason = useTranslations("phase3.reason");
+  const t = useTranslations("planner.plan");
+  const tReason = useTranslations("planner.reason");
   const [pending, startTransition] = useTransition();
   const [doneOverride, setDoneOverride] = useState<Record<string, boolean>>({});
   const router = useRouter();

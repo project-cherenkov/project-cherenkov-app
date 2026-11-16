@@ -187,7 +187,7 @@ lib/scene-builder-*.ts           frontmatter write-back (write), stub-editorial 
                                   GitHub OAuth flow (oauth, oauth-client); Section VIII
 lib/db/                          Drizzle schema and lazy Neon database client
 lib/seed/                        pure logic behind the topic seed script
-messages/{id,en}.json            UI strings
+messages/{id,en}/                UI strings, one JSON file per feature area
 i18n/                            next-intl routing and request configuration
 drizzle/                         committed SQL migrations (drizzle/meta is git-ignored)
 scripts/                         seed-topics.ts, seed-quiz-questions.ts,
@@ -641,9 +641,9 @@ Search is an in-house index built at build time (`lib/search.ts`, served from `/
 
 ## X. Internationalisation
 
-Locales live in `messages/id.json` and `messages/en.json`, same keys in both, loaded via `i18n/request.ts`. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`). `id` is the default locale and still gets its own `/id` prefix instead of living at the bare root. (The live deployment is therefore reached at `/en` or `/id`, not at the bare domain.) The `/keystatic`, `/api`, and `/llms.txt` paths are the exceptions and are never locale-prefixed. Syllabus names are stored in both locales inside the syllabus data itself, not in `messages/*.json`.
+Locales live in `messages/id/` and `messages/en/`: one JSON file per feature area (e.g. `common.json`, `home.json`, `viz.json`), the same file names and keys in both. Each file holds whole top-level namespaces; `messages/<locale>/index.ts` merges them (a namespace defined in two files throws) and `messages/index.ts` loads a locale for `i18n/request.ts`. To add a file, create it in both folders and list it in both `index.ts` files; to add a locale, add a folder, an entry in `messages/index.ts` and the locale in `i18n/routing.ts`. `messages-parity.test.ts` checks that the folders mirror each other and that keys, placeholders and JSON object keys are consistent. Every route is locale-prefixed (`middleware.ts` + `i18n/routing.ts`). `id` is the default locale and still gets its own `/id` prefix instead of living at the bare root. (The live deployment is therefore reached at `/en` or `/id`, not at the bare domain.) The `/keystatic`, `/api`, and `/llms.txt` paths are the exceptions and are never locale-prefixed. Syllabus names are stored in both locales inside the syllabus data itself, not in `messages/*.json`.
 
-To add a locale: add it to `i18n/routing.ts`'s `locales` array, add a matching `messages/<locale>.json`, and add its names to the syllabus data (`LocalizedText` in `lib/syllabus/types.ts` falls back to Indonesian for any locale without one).
+To add a locale: add it to `i18n/routing.ts`'s `locales` array, add a matching `messages/<locale>/` folder (same files as `messages/en/`, plus its `index.ts`), add it to `loaders` in `messages/index.ts`, and add its names to the syllabus data (`LocalizedText` in `lib/syllabus/types.ts` falls back to Indonesian for any locale without one).
 
 ---
 

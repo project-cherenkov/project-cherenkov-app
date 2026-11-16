@@ -1,0 +1,17 @@
+{
+  "quiz": {
+    "startButton": "Kerjakan kuis",
+    "submit": "Kirim jawaban",
+    "correct": "Benar",
+    "incorrect": "Salah",
+    "retake": "Ulangi kuis",
+    "scoreLabel": "Skor kamu {score}%",
+    "tabUnanswered": "Soal {n}, belum dijawab",
+    "tabAnswered": "Soal {n}, sudah dijawab",
+    "tabCorrect": "Soal {n}, benar",
+    "tabIncorrect": "Soal {n}, salah",
+    "questionCounter": "Soal {current} dari {total}",
+    "submitErrorUnauthenticated": "Sesi Anda telah berakhir. Silakan masuk kembali dan coba lagi.",
+    "submitErrorGeneric": "Terjadi kesalahan saat mengirim jawaban Anda. Silakan coba lagi."
+  }
+}

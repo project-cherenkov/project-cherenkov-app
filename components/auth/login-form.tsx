@@ -29,9 +29,9 @@ export interface LoginFormProps {
 // each is classified into a specific, translated message rather than one
 // generic fallback.
 export function LoginForm({ googleEnabled, resetEnabled = false }: LoginFormProps) {
-  const t = useTranslations("phase2.login");
-  const tErrors = useTranslations("phase2.authErrors");
-  const tCodes = useTranslations("phase2.authCodes");
+  const t = useTranslations("auth.login");
+  const tErrors = useTranslations("auth.errors");
+  const tCodes = useTranslations("auth.codes");
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();

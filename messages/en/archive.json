@@ -1,0 +1,85 @@
+{
+  "archive": {
+    "eyebrow": "archive.log",
+    "title": "Editorials",
+    "description": "Indexed by principle and error type, not by chapter.",
+    "filters": {
+      "subject": "Subject",
+      "principle": "Principle",
+      "errorType": "Error type",
+      "allSubjects": "All subjects",
+      "allPrinciples": "All principles",
+      "allErrorTypes": "All error types",
+      "clear": "Clear filters",
+      "tag": "Tag"
+    },
+    "empty": "No editorials match these filters.",
+    "count": "{count, plural, =0 {No editorials} one {# editorial} other {# editorials}}",
+    "metaTitle": "Olympiad editorials",
+    "metaDescription": "All olympiad editorials for physics, astronomy and informatics, each filed by the mistake it corrects and indexed by principle and error type."
+  },
+  "editorial": {
+    "draftBadge": "Draft",
+    "draftNotice": "Only editors can see this editorial. Visitors get a 404.",
+    "sections": {
+      "hook": "The hook",
+      "problem": "The problem",
+      "idea": "The idea",
+      "interactive": "Try it",
+      "proof": "Full proof",
+      "tags": "Tags"
+    },
+    "principleLabel": "Principle",
+    "mistakeLabel": "The mistake this fixes",
+    "contentsLabel": "On this page",
+    "moreTags": "+{count} more",
+    "errorTypeLabel": "Error type",
+    "lastUpdatedLabel": "Last updated",
+    "byAuthor": "Written by {author}",
+    "vizMissing": "[PLACEHOLDER: this editorial has no interactive visualization configured, but every editorial is supposed to have one. Flagged for review.]",
+    "vizConfigError": "This editorial's vizConfig doesn't match what the {engine} engine expects. Check the MDX frontmatter against the engine's type guard.",
+    "vizFallbackNotice": "This editorial's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it.",
+    "backToArchive": "Back to archive",
+    "showSolution": "Show solution",
+    "hideSolution": "Hide solution",
+    "tryFirstLabel": "Try it first",
+    "tryFirstHint": "Hide worked solutions and proofs until you open them. Off by default; saved only in this browser.",
+    "practice": {
+      "heading": "Practice",
+      "note": "Problems on other sites. We link to them; the statements stay with their authors.",
+      "checkedOn": "link checked {date}",
+      "stale": "Checked a while ago, so it may have moved.",
+      "opensNewTab": "(opens in a new tab)"
+    },
+    "relatedHeading": "Keep reading",
+    "filterByPrinciple": "See all editorials on this principle",
+    "filterByErrorType": "See all editorials on this error type",
+    "filterByTag": "See all editorials tagged {tag}",
+    "byAuthorLink": "Written by <link>{author}</link>"
+  },
+  "materials": {
+    "draftBadge": "Draft",
+    "draftNotice": "Only editors can see this material. Visitors get a 404.",
+    "eyebrow": "materials.md",
+    "title": "Materials",
+    "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",
+    "coverage": "{covered} of {total} topics covered",
+    "viewSyllabus": "View syllabus",
+    "emptyForSubject": "No materials yet. They appear here as each syllabus topic gets written up.",
+    "backToMaterials": "Materials",
+    "inSyllabus": "In the syllabus",
+    "relatedEditorials": "Related editorials",
+    "sectionNav": "More in this syllabus section",
+    "previous": "Previous",
+    "next": "Next",
+    "chapters": "On this subject",
+    "chaptersToggle": "Chapters in this subject",
+    "comingSoon": "coming soon",
+    "vizFallbackNotice": "This material's <Interactive /> tag wasn't placed in the text, so its visualization is shown here by default. Move the tag in the MDX body to reposition it."
+  },
+  "understood": {
+    "mark": "Mark as understood",
+    "marked": "Understood",
+    "error": "Could not save that. Please try again."
+  }
+}

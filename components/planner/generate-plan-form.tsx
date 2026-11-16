@@ -31,7 +31,7 @@ export function GeneratePlanForm({
   const [examDate, setExamDate] = useState(defaultExamDate ?? "");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const t = useTranslations("phase2.planner");
+  const t = useTranslations("planner.chapter");
   const router = useRouter();
 
   function mapError(reason: "invalid_date" | "no_topics" | "unauthenticated") {

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import messages from "@/messages/en.json";
+import messages from "@/messages/en";
 
 let mockLocale = "en";
 
 vi.mock("next-intl", () => ({
   useLocale: () => mockLocale,
   // A small translator over the real English catalogue, so the test fails if a
-  // key the component uses is missing from messages/en.json.
+  // key the component uses is missing from messages/en/.
   useTranslations: (namespace: string) => (key: string, params?: Record<string, unknown>) => {
     const value = `${namespace}.${key}`
       .split(".")

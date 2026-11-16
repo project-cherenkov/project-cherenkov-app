@@ -2,7 +2,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import en from "../../../messages/en.json";
+import en from "../../../messages/en";
 
 // Real English messages, so the assertions read the strings a reader sees.
 vi.mock("next-intl", async (importOriginal) => {

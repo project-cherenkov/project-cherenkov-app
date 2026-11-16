@@ -1,0 +1,16 @@
+{
+  "about": {
+    "eyebrow": "about.md",
+    "title": "About",
+    "intro": "Project Cherenkov is an open-source archive of interactive olympiad editorials for informatics, physics and astronomy. Each editorial explains one idea in full: a proof or derivation, and a visualization you can manipulate. Editorials are filed by the mistake they correct, not by syllabus chapter.\n\nAround the archive sit a syllabus and short materials, for browsing by topic, and a study planner with a companion called Neutrino. The syllabus and the planner follow the Indonesian OSN today.",
+    "whyText": "Why it looks and sounds like this and documentations:",
+    "whyLink": "Inspiration and philosophy",
+    "teamHeading": "Team",
+    "teamPlaceholder": "[PLACEHOLDER: team bios TBD]",
+    "repoHeading": "Source",
+    "repoBody": "Cherenkov is built in the open. Every editorial is a git-tracked file, so the commit history is public. Contribute on GitHub.",
+    "contactHeading": "Contact",
+    "contactPlaceholder": "[PLACEHOLDER: contact inquiries TBD]",
+    "metaDescription": "Project Cherenkov is an open-source archive of interactive olympiad editorials for informatics, physics and astronomy, with an OSN syllabus and study planner."
+  }
+}

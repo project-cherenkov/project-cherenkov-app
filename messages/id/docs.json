@@ -1,0 +1,20 @@
+{
+  "docs": {
+    "eyebrow": "docs.md",
+    "title": "Dokumentasi",
+    "description": "Cara menggunakan Cherenkov, membaca editorial dan visualisasinya, serta berkontribusi pada proyek ini.",
+    "navLabel": "Bagian dokumentasi",
+    "browse": "Telusuri dokumentasi",
+    "onThisPage": "Di halaman ini",
+    "breadcrumb": "Jejak halaman",
+    "pager": "Dokumentasi lainnya",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "updated": "Terakhir diperbarui {date}",
+    "sections": {
+      "start": "Mulai di sini",
+      "reading": "Membaca dan menggunakan situs",
+      "contributing": "Berkontribusi"
+    }
+  }
+}

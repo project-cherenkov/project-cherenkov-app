@@ -13,9 +13,9 @@ import { authCodeKey, classifyAuthError } from "@/lib/auth-error-messages";
 // Step 2: the emailed link lands here as ?token=... (or ?error=INVALID_TOKEN
 // when Better Auth rejected it before redirecting).
 export function ResetPasswordForm() {
-  const t = useTranslations("phase2.reset");
-  const tCodes = useTranslations("phase2.authCodes");
-  const tErrors = useTranslations("phase2.authErrors");
+  const t = useTranslations("auth.reset");
+  const tCodes = useTranslations("auth.codes");
+  const tErrors = useTranslations("auth.errors");
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const linkRejected = searchParams.get("error") !== null;

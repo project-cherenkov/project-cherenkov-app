@@ -44,7 +44,7 @@ export const DEFAULT_PLANNER_TIMEZONE = "Asia/Jakarta";
 export const MAX_HOURS_PER_WEEK = 80;
 
 // Why a plan item is on the plan, as a stable code. plan_items.reason stores
-// one of these; the UI translates it (messages: phase3.planner.reason.*), so
+// one of these; the UI translates it (messages: planner.reason.*), so
 // the wording can change without touching stored rows.
 export const PLAN_REASONS = [
   "confirm_high", // rated high, not verified yet: check it is really known

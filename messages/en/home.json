@@ -1,0 +1,38 @@
+{
+  "home": {
+    "eyebrow": "readme.md",
+    "heroTitle": "From Curiosity to Visualization",
+    "heroBody": "An archive of olympiad ideas made visible: each one a full proof with an interactive visualization, filed by the mistake it corrects.",
+    "ctaPlan": "How the study planner works",
+    "recentHeading": "Recent editorials",
+    "ctaArchive": "Browse the editorials",
+    "ctaAbout": "Read the philosophy",
+    "seeAll": "See all editorials",
+    "recentEmpty": "No editorials published yet.",
+    "ctaSyllabus": "See the syllabus",
+    "ctaDocs": "Read the docs",
+    "visualizations": {
+      "eyebrow": "Interactive field notes",
+      "physics": "Physics",
+      "astronomy": "Astronomy",
+      "informatics": "Informatics",
+      "previous": "Previous visualization",
+      "next": "Next visualization",
+      "of": "of",
+      "picks": {
+        "title": "Your picks",
+        "tablistLabel": "Your chosen visualizations",
+        "change": "Change",
+        "openEditorial": "Open the editorial",
+        "chooseTitle": "Choose your visualizations",
+        "chooseHelp": "Choose one to three. The first one you choose is shown first. Your choice is remembered on this device, and on your account if you are signed in.",
+        "count": "{count} of {max} chosen.",
+        "atLimit": "That is the most you can choose; clear one to pick another.",
+        "needOne": "Choose at least one.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "useDefaults": "Use the defaults"
+      }
+    }
+  }
+}

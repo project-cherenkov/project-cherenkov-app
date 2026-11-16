@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
-import en from "@/messages/en.json";
-import id from "@/messages/id.json";
+import en from "@/messages/en";
+import id from "@/messages/id";
 import { OG_SIZE, renderOgImage } from "@/lib/og-image";
 
 export const alt = "Project Cherenkov: interactive olympiad editorials";

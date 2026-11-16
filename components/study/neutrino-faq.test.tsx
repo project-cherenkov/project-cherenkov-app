@@ -3,7 +3,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { createTranslator } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import en from "../../messages/en.json";
+import en from "../../messages/en";
 import { FAQ_ITEMS } from "@/lib/neutrino-faq";
 
 // The FAQ is driven through real DOM events against the real English

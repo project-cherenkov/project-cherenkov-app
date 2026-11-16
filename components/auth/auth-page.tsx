@@ -16,7 +16,7 @@ export function AuthPage({
   googleEnabled?: boolean;
   resetEnabled?: boolean;
 }) {
-  const t = useTranslations("phase2");
+  const t = useTranslations("auth");
   const router = useRouter();
   const searchParams = useSearchParams();
   const isLogin = defaultTab === "login";

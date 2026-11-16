@@ -11,7 +11,7 @@ type Data = Exclude<PlannerPageData, { state: "plan" }>;
 // Two-step onboarding: (1) what are you preparing for, (2) rate each topic.
 // Submitting step 2 saves the ratings and generates the plan.
 export function PlannerOnboarding({ data }: { data: Data }) {
-  const t = useTranslations("phase3.onboarding");
+  const t = useTranslations("planner.onboarding");
   const router = useRouter();
 
   return (

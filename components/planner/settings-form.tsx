@@ -29,7 +29,7 @@ function browserZone(): string | undefined {
 }
 
 export function SettingsForm({ initial, onSaved, submitLabel }: SettingsFormProps) {
-  const t = useTranslations("phase3.settings");
+  const t = useTranslations("planner.settings");
   const locale = useLocale() as "en" | "id";
   const [subject, setSubject] = useState<string>(initial?.subject ?? SUBJECTS[0]);
   const [stage, setStage] = useState<string>(initial?.stage ?? OSN_STAGES[0]);

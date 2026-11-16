@@ -1,7 +1,7 @@
 // Neutrino's built-in FAQ: which questions exist, how they are grouped, which
 // pages each answer points to, and how a student searches them.
 //
-// The words themselves live in messages/en.json and messages/id.json under
+// The words themselves live in messages/en/ and messages/id/ under
 // `companion.faq.items.<id>.q` and `.a`, so the FAQ is bilingual like the rest
 // of the interface. Adding a question is three steps: add an entry to FAQ_ITEMS
 // below, add its `q` and `a` to both message files, and run the tests. The

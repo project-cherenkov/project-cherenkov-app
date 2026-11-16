@@ -28,7 +28,7 @@ export default async function PlannerChapterPage({
   const { subject, chapter: topicId } = await params;
 
   const [t, locale, user] = await Promise.all([
-    getTranslations("phase2.planner"),
+    getTranslations("planner.chapter"),
     getLocale(),
     getCurrentUser(),
   ]);

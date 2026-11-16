@@ -1,0 +1,20 @@
+{
+  "docs": {
+    "eyebrow": "docs.md",
+    "title": "Documentation",
+    "description": "How to use Cherenkov, read its editorials and visualizations, and contribute to the project.",
+    "navLabel": "Documentation sections",
+    "browse": "Browse documentation",
+    "onThisPage": "On this page",
+    "breadcrumb": "Breadcrumb",
+    "pager": "More documentation",
+    "previous": "Previous",
+    "next": "Next",
+    "updated": "Last updated {date}",
+    "sections": {
+      "start": "Start here",
+      "reading": "Reading and using the site",
+      "contributing": "Contributing"
+    }
+  }
+}

@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "phase2.forgot" });
+  const t = await getTranslations({ locale, namespace: "auth.forgot" });
   return pageMetadata({ locale, path: "/forgot-password", title: t("title"), description: t("title"), noindex: true });
 }
 

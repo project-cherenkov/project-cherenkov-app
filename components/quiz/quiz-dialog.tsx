@@ -36,7 +36,7 @@ type Feedback = { questionId: string; correct: boolean }[];
 // this component isn't unit-render-tested outside a real Next.js tree, so it
 // doesn't need to avoid that context the way PlanOverview deliberately does.
 export function QuizDialog({ topicId, questions }: QuizDialogProps) {
-  const t = useTranslations("phase2.quiz");
+  const t = useTranslations("quiz");
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState("0");

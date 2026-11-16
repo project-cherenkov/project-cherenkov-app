@@ -13,7 +13,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "phase2.emailVerified" });
+  const t = await getTranslations({ locale, namespace: "account.emailVerified" });
   return pageMetadata({ locale, path: "/email-verified", title: t("title"), description: t("title"), noindex: true });
 }
 
@@ -33,7 +33,7 @@ export default async function Page({
   if (!isEmailConfigured()) notFound();
   const { error } = await searchParams;
   const problem = classifyVerificationLinkError(Array.isArray(error) ? error[0] : error);
-  const t = await getTranslations("phase2.emailVerified");
+  const t = await getTranslations("account.emailVerified");
 
   if (!problem) {
     return (

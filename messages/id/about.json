@@ -1,0 +1,16 @@
+{
+  "about": {
+    "eyebrow": "about.md",
+    "title": "Tentang",
+    "intro": "Project Cherenkov adalah arsip editorial olimpiade interaktif sumber terbuka untuk informatika, fisika, dan astronomi. Setiap editorial menjelaskan satu ide secara utuh: bukti atau penurunan rumus, beserta visualisasi yang bisa Anda manipulasi. Editorial diarsipkan berdasarkan kesalahan yang dikoreksinya, bukan berdasarkan bab silabus.\n\nDi sekitar arsip ini ada silabus dan materi singkat untuk menelusuri per topik, serta perencana belajar dengan pendamping bernama Neutrino. Saat ini silabus dan perencana mengikuti OSN Indonesia.",
+    "whyText": "Mengapa tampilan dan nadanya seperti ini:",
+    "whyLink": "Inspirasi dan filosofi (dalam bahasa Inggris)",
+    "teamHeading": "Tim",
+    "teamPlaceholder": "[PLACEHOLDER: bio tim belum ditulis]",
+    "repoHeading": "Sumber",
+    "repoBody": "Cherenkov dibangun secara terbuka. Setiap edisi adalah berkas yang dilacak git, jadi riwayat commit-nya terbuka. Berkontribusilah di GitHub.",
+    "contactHeading": "Kontak",
+    "contactPlaceholder": "[PLACEHOLDER: informasi kontak belum ditulis]",
+    "metaDescription": "Project Cherenkov adalah arsip editorial olimpiade interaktif sumber terbuka untuk informatika, fisika, dan astronomi, dengan silabus OSN dan perencana belajar."
+  }
+}

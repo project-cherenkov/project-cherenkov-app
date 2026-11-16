@@ -1,0 +1,83 @@
+{
+  "site": {
+    "name": "Project Cherenkov",
+    "tagline": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi: bukti lengkap dan visualisasi yang bisa Anda manipulasi untuk setiap ide, diarsipkan berdasarkan kesalahan yang dikoreksinya, dengan silabus OSN dan perencana belajar.",
+    "homeTitle": "Project Cherenkov: editorial olimpiade interaktif",
+    "ogDescription": "Editorial olimpiade interaktif untuk informatika, fisika, dan astronomi.",
+    "languageNames": {
+      "id": "Indonesia",
+      "en": "Inggris"
+    },
+    "close": "Tutup",
+    "translationNotice": "Halaman ini belum diterjemahkan ke bahasa {requestedLanguage}. Halaman yang ditampilkan dalam bahasa {displayedLanguage}.",
+    "homeDescription": "Editorial olimpiade interaktif untuk fisika, astronomi, dan informatika: bukti lengkap, visualisasi yang bisa dicoba, silabus OSN, dan perencana belajar."
+  },
+  "nav": {
+    "home": "Beranda",
+    "archive": "Arsip",
+    "updates": "Pembaruan",
+    "about": "Tentang",
+    "repo": "GitHub",
+    "edit": "Edit",
+    "login": "Masuk",
+    "signup": "Daftar",
+    "myPlan": "Rencana Saya",
+    "logout": "Keluar",
+    "syllabus": "Silabus",
+    "materials": "Materi",
+    "editorials": "Editorial",
+    "archiveSections": "Bagian arsip",
+    "account": "Akun",
+    "docs": "Dokumentasi",
+    "unreadUpdates": "Pembaruan yang belum dibaca",
+    "menu": "Menu",
+    "skipToContent": "Lewati ke konten utama",
+    "mainNavigation": "Navigasi utama",
+    "language": "Bahasa",
+    "toggleTheme": "Ganti tema"
+  },
+  "footer": {
+    "tagline": "From Curiosity to Visualization.",
+    "motto": "Cognitio · Humanitas · Exploratio",
+    "madeBy": "Proyek repo publik oleh tim Cherenkov.",
+    "lastUpdatedOn": "Terakhir Diperbarui Pada",
+    "license": "Lisensi",
+    "terms": "Syarat",
+    "privacy": "Privasi",
+    "contact": "Kontak",
+    "docs": "Dokumentasi",
+    "navLabel": "Informasi situs",
+    "opensInNewTab": "(terbuka di tab baru)",
+    "updates": "Pembaruan"
+  },
+  "error": {
+    "heading": "Terjadi kesalahan",
+    "body": "Terjadi kesalahan tak terduga saat menampilkan halaman ini. Anda dapat mencoba lagi, atau kembali ke arsip.",
+    "retry": "Coba lagi",
+    "another": "Tampilkan serpihan lain"
+  },
+  "notFound": {
+    "heading": "Halaman tidak ditemukan",
+    "body": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+    "cta": "Kembali ke beranda",
+    "title": "Halaman tidak ditemukan",
+    "another": "Tampilkan serpihan lain"
+  },
+  "search": {
+    "open": "Cari di situs",
+    "title": "Cari",
+    "description": "Cari edisi, materi, topik silabus, dan dokumentasi.",
+    "placeholder": "Cari edisi, materi, topik…",
+    "results": "Hasil pencarian",
+    "loading": "Memuat indeks pencarian…",
+    "error": "Pencarian sedang tidak tersedia.",
+    "noResults": "Tidak ada hasil untuk “{query}”.",
+    "resultCount": "{count, plural, other {# hasil}}",
+    "kinds": {
+      "topic": "Topik",
+      "material": "Materi",
+      "editorial": "Edisi",
+      "doc": "Dokumentasi"
+    }
+  }
+}

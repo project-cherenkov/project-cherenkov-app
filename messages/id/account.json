@@ -1,0 +1,71 @@
+{
+  "account": {
+    "eyebrow": "account.md",
+    "title": "Akun kamu",
+    "username": "Nama pengguna",
+    "email": "Email",
+    "role": "Peran",
+    "roleEditorHint": "Kamu dapat mengedit konten situs.",
+    "roleMemberHint": "Kamu dapat memakai perencana belajar. Penyuntingan dibatasi untuk editor yang disetujui.",
+    "signInMethods": "Metode masuk",
+    "memberSince": "Anggota sejak",
+    "providerPassword": "Email dan kata sandi",
+    "goToPlan": "Ke rencana saya",
+    "openEditor": "Buka editor",
+    "signOut": "Keluar",
+    "password": {
+      "setTitle": "Atur kata sandi",
+      "setBody": "Kami akan mengirim tautan aman ke {email} agar kamu dapat memilih kata sandi.",
+      "setButton": "Atur kata sandi",
+      "sending": "Mengirim tautan…",
+      "sent": "Periksa email untuk tautan mengatur kata sandi.",
+      "changeTitle": "Ganti kata sandi",
+      "changeBody": "Masukkan kata sandi saat ini dan pilih yang baru.",
+      "currentPassword": "Kata sandi saat ini",
+      "newPassword": "Kata sandi baru",
+      "changeButton": "Ganti kata sandi",
+      "saving": "Mengganti kata sandi…",
+      "changed": "Kata sandi kamu telah diganti.",
+      "genericError": "Kata sandi tidak dapat diperbarui. Silakan coba lagi.",
+      "changedSignedOut": "Kata sandi kamu sudah diganti. Perangkat kamu yang lain telah dikeluarkan dari akun."
+    },
+    "roleVerifyHint": "Email kamu ada di daftar editor. Verifikasi email untuk mendapat akses menyunting.",
+    "verification": {
+      "verified": "Terverifikasi",
+      "unverified": "Belum diverifikasi",
+      "send": "Kirim email verifikasi",
+      "sending": "Mengirim…",
+      "sent": "Email verifikasi terkirim. Periksa kotak masuk (dan folder spam) kamu.",
+      "genericError": "Email tidak dapat dikirim. Silakan coba lagi."
+    },
+    "delete": {
+      "title": "Hapus akun",
+      "body": "Menghapus akun akan menghilangkan akun beserta data belajar yang tersimpan secara permanen. Tindakan ini tidak dapat dibatalkan.",
+      "start": "Hapus akun saya",
+      "passwordLabel": "Kata sandi kamu",
+      "confirmBody": "Kami akan mengirim tautan konfirmasi ke {email}. Buka tautan itu saat kamu sedang masuk untuk menyelesaikannya. Tidak ada yang dihapus sebelum itu.",
+      "confirmButton": "Kirim tautan ke email saya",
+      "sending": "Mengirim…",
+      "cancel": "Batal",
+      "sent": "Tautan konfirmasi dikirim ke {email}. Tautan berlaku satu jam. Jika belum tiba, periksa folder spam.",
+      "genericError": "Penghapusan tidak dapat dimulai. Silakan coba lagi."
+    },
+    "emailVerified": {
+      "title": "Verifikasi email",
+      "successHeading": "Email terverifikasi",
+      "successBody": "Terima kasih. Alamat email kamu sekarang sudah terverifikasi.",
+      "expiredHeading": "Tautan ini sudah kedaluwarsa",
+      "expiredBody": "Tautan verifikasi berlaku selama 24 jam. Masuk, lalu minta tautan baru dari halaman akun kamu.",
+      "invalidHeading": "Tautan ini tidak valid",
+      "invalidBody": "Tautan mungkin sudah dipakai atau tersalin tidak lengkap. Masuk, lalu minta tautan baru dari halaman akun kamu.",
+      "toAccount": "Ke akun saya",
+      "toLogin": "Masuk"
+    },
+    "accountDeleted": {
+      "title": "Akun dihapus",
+      "heading": "Akun kamu telah dihapus",
+      "body": "Akun kamu beserta data belajar yang tersimpan telah dihapus. Terima kasih telah menggunakan Project Cherenkov.",
+      "home": "Kembali ke beranda"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import en from "../../messages/en.json";
+import en from "../../messages/en";
 
 // Drives the whole companion (mascot, panel, mode switch, resize handles)
 // through real DOM events with the real English messages.

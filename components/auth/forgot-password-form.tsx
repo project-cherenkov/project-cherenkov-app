@@ -13,8 +13,8 @@ import { classifyAuthError } from "@/lib/auth-error-messages";
 // same whether or not an account exists, so the form cannot be used to find out
 // who is registered.
 export function ForgotPasswordForm() {
-  const t = useTranslations("phase2.forgot");
-  const tErrors = useTranslations("phase2.authErrors");
+  const t = useTranslations("auth.forgot");
+  const tErrors = useTranslations("auth.errors");
   const locale = useLocale();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
