@@ -734,7 +734,9 @@ export function InPageNeutrino() {
     if (!move) return;
     event.preventDefault();
     const rect = dockRef.current?.getBoundingClientRect();
-    const next = clampPixels((rect?.left ?? basePx.left) + move[0], (rect?.top ?? basePx.top) + move[1], viewport, size);
+    const currentX = rect && (rect.width > 0 || rect.height > 0) ? rect.left : basePx.left;
+    const currentY = rect && (rect.width > 0 || rect.height > 0) ? rect.top : basePx.top;
+    const next = clampPixels(currentX + move[0], currentY + move[1], viewport, size);
     savePosition(pixelsToPosition(next.left, next.top, viewport, size));
     if (open) setOpenAnchor(next);
     resetDockMotion();
@@ -750,7 +752,9 @@ export function InPageNeutrino() {
     if (open) closePanel();
     else {
       const rect = dockRef.current?.getBoundingClientRect();
-      if (rect) setOpenAnchor({ left: rect.left, top: rect.top });
+      if (rect && (rect.width > 0 || rect.height > 0)) {
+        setOpenAnchor({ left: rect.left, top: rect.top });
+      }
       setOpen(true);
     }
   }

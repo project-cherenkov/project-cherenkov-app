@@ -27,6 +27,13 @@ import { InPageNeutrino } from "./neutrino-launcher";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
+class FakeResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+vi.stubGlobal("ResizeObserver", FakeResizeObserver);
+
 let container: HTMLDivElement;
 let root: Root;
 
