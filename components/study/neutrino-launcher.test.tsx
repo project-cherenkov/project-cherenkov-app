@@ -17,6 +17,7 @@ vi.mock("next-intl", async (importOriginal) => {
 });
 vi.mock("@/i18n/routing", () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
+  usePathname: () => "/",
 }));
 vi.mock("@/lib/auth-client", () => ({ useSession: () => ({ data: session.current }) }));
 vi.mock("@/components/study/study-timer", () => ({ StudyTimer: () => <div>timer</div> }));
