@@ -2,11 +2,11 @@
 title: "Why eccentric orbits give uneven transits"
 subject: astronomy
 status: published
-hook: "A planet crosses its star's disc faster at some points in its orbit than at others, and eccentricity sets the difference."
+hook: "Two planets take the same time to orbit a star and have the same size relative to it, yet one crosses the star's disk in less time. What could account for the difference?"
 tags: ["exoplanets", "transit-photometry", "keplers-second-law"]
 principle: "keplers-second-law-and-transit-duration"
 errorType: "assuming-constant-orbital-speed"
-vizDescription: "A transit near periapsis, where the planet moves fastest, is shorter than one near apoapsis, where it moves slowest, and a larger eccentricity widens the difference."
+vizDescription: "In this periapsis-aligned model, increasing eccentricity from 0 to 0.8 narrows the transit dip to 20% of the circular-orbit width."
 vizConfig:
   discriminant: orbital-sandbox
   value:
@@ -18,21 +18,20 @@ vizConfig:
     eccentricityRange: [0, 0.8]
     massRatioRange: [0, 0.15]
 publishedAt: "2026-08-01"
+updatedAt: "2026-11-17"
 author: "Renee"
 ---
 
 ## The problem
 
-Two planets orbit the same star. They have the same orbital period and
-the same planet-to-star size ratio. One orbit is a circle. The other is
-a stretched oval, which astronomers call an *eccentric* orbit (the more
-stretched, the higher the eccentricity). Do their transits last the same
-amount of time? A transit is the dip in starlight while the planet
-crosses the star's disc.
-
-It's tempting to say yes, because "same period, same sizes" sounds like
-it should settle everything. In fact the durations differ, and the
-reason is the planet's speed.
+Imagine comparing two planets around the same star. They have the same
+orbital period and the same planet-to-star size ratio. Both cross the
+star's disk centrally, so their transit chords are alike. One follows a
+circular orbit; the other follows an *eccentric* orbit and crosses in
+front of the star near periapsis, its closest point to the star. Would
+their transits last the same amount of time? Make a prediction before
+reading on. A transit is the dip in starlight while a planet crosses
+the star's disk.
 
 ## The idea
 
@@ -43,7 +42,7 @@ the line from the star to the planet sweeps out equal areas in equal
 times.
 
 Think of a car crossing a bridge of fixed length. The faster the car,
-the shorter the crossing. The star's disc is the bridge. If the transit
+the shorter the crossing. The star's disk is the bridge. If the transit
 happens near periapsis, the planet is moving quickly and crosses
 quickly. Near apoapsis it moves slowly, so the same crossing takes
 longer.
@@ -51,7 +50,8 @@ longer.
 The sandbox below covers the simplest case, a transit lined up with
 periapsis. A single eccentricity value sets both the shape of the orbit
 and the light curve (the graph of brightness over time) underneath it.
-Push eccentricity up and the dip gets narrower.
+Push eccentricity up and the dip gets narrower. The model isolates
+this alignment rather than covering every possible transit geometry.
 
 <Interactive />
 
@@ -59,22 +59,23 @@ Push eccentricity up and the dip gets narrower.
 
 ## Full proof
 
-**Setup.** By definition, the mean anomaly $M$ increases uniformly in
-time: $M = nt$. Here $n = 2\pi/T$ is the mean motion and $T$ is the
-orbital period. Think of $M$ as the hand of a steady clock, while the
+**Setup.** Let $e$ denote orbital eccentricity. By definition, the
+mean anomaly $M$ increases uniformly in time: $M = nt$. Here
+$n = 2\pi/T$ is the mean motion and $T$ is the orbital period. Think of $M$ as the hand of a steady clock, while the
 planet's real position and speed vary. Kepler's equation relates $M$ to
 the eccentric anomaly $E$, an angle that locates the planet on its
 orbit:
 
 $$M = E - e\sin E \implies \frac{dM}{dE} = 1 - e\cos E$$
 
-**Modelling convention.** We treat a transit as the planet crossing a
-fixed window of eccentric anomaly $[-\Delta E, \Delta E]$, centred on
-periapsis ($E = 0$). This is a simplification. A real transit is a fixed
-window of *true* anomaly, which is set by the star's actual angular size
-as seen from the planet. The two agree only to leading order for small
-$\Delta E$, and a distant star's disc puts us in that regime anyway.
-This is exactly the convention the interactive above computes.
+**Modeling convention.** We treat a transit as the planet crossing a
+fixed window of eccentric anomaly $[-\Delta E, \Delta E]$, centered on
+periapsis ($E = 0$). This is a simplification chosen to make the effect
+of orbital speed visible. A real small-star, central transit is better
+approximated by a fixed physical chord across the star's disk. Its
+angular window changes with the planet's distance from the star. The
+interactive above uses the fixed eccentric-anomaly window, not that
+fixed-chord model.
 
 **Duration.** Because $M$ is uniform in time, the time spent between
 $E=-\Delta E$ and $E=\Delta E$ is:
@@ -86,11 +87,25 @@ gives:
 
 $$\Delta t \approx \frac{2\Delta E(1-e)}{n} = \frac{\Delta E (1-e)\, T}{\pi} \qquad \blacksquare$$
 
-**Consequence.** For a transit lined up with periapsis, the duration
-shrinks linearly toward zero as $e \to 1$, because the planet is moving
-fastest exactly where the transit happens. Flip the alignment to
-apoapsis and the effect reverses: eccentricity would *lengthen* the
-transit instead.
+**Scope of the linear factor.** The factor $1-e$ belongs to this
+fixed-eccentric-anomaly convention. It is not the usual scaling for a
+real small-star, central transit. For a fixed physical chord at
+periapsis, let $D_p$ be the transit duration and $D_c$ the duration
+for a circular orbit with the same semi-major axis and chord. Their
+ratio in this approximation is
+
+$$
+\frac{D_p}{D_c} = \sqrt{\frac{1-e}{1+e}}.
+$$
+
+At $e=0.8$, this model gives $0.20$, while the fixed-chord approximation
+gives $0.33$. Both predict a shorter periapsis transit as eccentricity
+increases, but their functional forms differ. The model's linear
+factor must not be read as a general transit-duration law.
+
+**Consequence.** Near periapsis, the planet moves faster and crosses a
+given chord sooner. Near apoapsis, it moves more slowly, so the transit
+lasts longer under the corresponding fixed-chord approximation.
 
 **Where it breaks in practice.** The error this editorial is filed
 under, assuming constant orbital speed, is really two errors that
@@ -99,7 +114,8 @@ at all. Second, even granting that, assuming the *transit* necessarily
 lands at periapsis. Real transiting systems can have any argument of
 periapsis (an angle that fixes where periapsis lies relative to our line
 of sight), and duration depends on both. This sandbox fixes the
-alignment to periapsis to isolate the eccentricity effect. Don't reach
-for the formula above on a system where periapsis alignment isn't given.
+alignment to periapsis to isolate the eccentricity effect. Do not apply
+these periapsis-aligned factors when the system's argument of periapsis
+is unknown.
 
 </Solution>

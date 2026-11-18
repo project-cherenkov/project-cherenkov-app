@@ -25,6 +25,11 @@ vizConfig:
 
 ## What it does
 
+Binary search is useful when a list or candidate range is too large to
+check one item at a time. With $n$ candidates, it finds the first index
+satisfying a monotonic condition in $O(\log n)$ steps, about 20 checks
+for one million candidates.
+
 Given a sorted array $a_0 \le a_1 \le \dots \le a_{n-1}$ and a value $x$,
 binary search finds the first index $i$ with $a_i \ge x$ (or reports $n$ if
 there is none) by repeatedly discarding half of the remaining candidates.
@@ -36,7 +41,10 @@ Keep a half-open window $[lo, hi)$ and hold on to two facts:
 - every index before $lo$ has $a_i < x$;
 - every index from $hi$ onward has $a_i \ge x$.
 
-```
+In this pseudocode, `/` means integer division (rounding down); the
+indices are nonnegative.
+
+```text
 lo = 0
 hi = n
 while lo < hi:
@@ -56,6 +64,17 @@ $mid$ and $hi$ sit; $hi = n$ is one past the last cell, so it is only drawn
 once it moves inside the array.
 
 <Interactive />
+
+## Worked example
+
+Consider the array $[2,4,6,8,10,12,14,16]$ and find the first value
+that is at least 10. The initial window is $[0,8)$. Its midpoint is
+index 4, where the value is 10, so the upper boundary moves to 4. In
+$[0,4)$, the midpoint is index 2, where the value is 6, so the lower
+boundary moves to 3. The last window is $[3,4)$: index 3 contains 8,
+so the lower boundary moves to 4. The window is now empty at $[4,4)$,
+and the algorithm returns index 4. The value there is 10, and the
+previous value is 8, so it is the first value at least 10.
 
 ## Why it is fast
 

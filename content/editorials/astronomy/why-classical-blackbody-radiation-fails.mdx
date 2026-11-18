@@ -2,7 +2,7 @@
 title: "Why the Rayleigh–Jeans law predicts an ultraviolet catastrophe"
 subject: astronomy
 status: published
-hook: "The Rayleigh–Jeans formula fits long wavelengths well, then predicts unlimited radiation at short ones. Real blackbody spectra fall away instead."
+hook: "A heated metal shifts from dull red to orange to white as its temperature rises. What does a classical theory predict at still shorter wavelengths, and can that prediction be trusted?"
 tags: ["blackbody-radiation", "quantum-physics", "rayleigh-jeans-law", "plancks-law"]
 principle: quantum-suppression-of-high-frequency-radiation
 errorType: extrapolating-rayleigh-jeans-law-to-short-wavelengths
@@ -14,26 +14,43 @@ vizConfig:
     temperatureRangeK: [3000, 12000]
     temperatureStepK: 250
 publishedAt: "2026-11-08"
-updatedAt: "2026-11-08"
+updatedAt: "2026-11-17"
 author: "Renee"
 syllabusTopic: "electromagnetic-theory"
 ---
 
 ## The problem
 
-Imagine a closed box, called a cavity, whose walls are held at a fixed temperature. After a while the walls and the radiation inside settle at the same temperature, which is called thermal equilibrium. The cavity then holds electromagnetic radiation spread continuously over all wavelengths. Classical physics (physics before quantum theory) gives a formula for how much radiation appears at each wavelength. That amount is called the spectral radiance. Follow the formula toward shorter and shorter wavelengths and the spectral radiance keeps increasing. It has no upper limit as the wavelength approaches zero.
+A piece of metal heated until it glows may appear dull red, then orange,
+and nearly white as its temperature rises. Its spectrum changes as it
+gets hotter. What would classical physics predict if we followed its
+radiation formula toward ever shorter wavelengths? Would the predicted
+radiance remain finite, or keep increasing without limit?
 
-That can't be right. A body at a finite temperature should not emit an infinite amount of energy. So why does the classical formula predict it, and what does the real spectrum do instead?
+Before looking at the curves, predict what should happen at the
+short-wavelength end. A formula can describe part of a spectrum well
+and still fail when it is extended beyond the conditions where it
+works. What happens here?
 
 ## The idea
 
-The formula is the Rayleigh–Jeans law. It is an approximation, and it works when the wavelength is long compared with a characteristic thermal wavelength, a length scale set by the temperature. The mistake is to apply it at every wavelength.
+The Rayleigh–Jeans law is the classical prediction for radiation in
+thermal equilibrium. It assigns every radiation *mode*, a distinct
+wave pattern that fits inside a cavity, the same average energy: about
+$kT$, where $k$ is the Boltzmann constant and $T$ is temperature. At
+higher frequencies, more modes are available. If each mode receives
+the same average energy, classical theory predicts more and more
+radiation as the wavelength gets shorter, with no finite upper limit.
+This runaway prediction is the ultraviolet catastrophe. It is a
+failure of the classical assumption at high frequencies, not a real
+infinite energy output from a hot object.
 
-In the classical picture, the radiation in the cavity splits into *modes*, the separate wave patterns that fit inside it. Each mode receives an average energy of about $kT$, where $k$ is the Boltzmann constant and $T$ is temperature. Higher frequencies fit more modes into the cavity. Classical theory therefore predicts more and more radiation as frequency rises, and it has nothing that holds the very high frequencies back.
-
-Planck's law changes the result. It treats energy exchange as happening in discrete packets, called quanta, each with energy $h\nu$, where $h$ is the Planck constant and $\nu$ is frequency. A high-frequency quantum carries more energy, so it is less likely to be thermally excited: the heat energy available, about $kT$, is rarely enough to produce one. The spectrum therefore falls at short wavelengths instead of increasing without limit.
-
-Switch between the Rayleigh–Jeans law, Planck's law, and both curves together. Move the temperature slider and see where the two laws agree and where they separate. The horizontal axis is wavelength on a logarithmic scale from 100 nm to 100,000 nm, so move toward the left to look at short wavelengths. The vertical axis shows spectral radiance per unit wavelength, not total emitted power. The plot never reaches zero wavelength, because its left edge is 100 nm.
+Switch between the Rayleigh–Jeans law, Planck's law, and both curves
+together. Move the temperature slider to see where the laws agree and
+where they separate. The horizontal axis is wavelength on a
+logarithmic scale from 100 nm to 100,000 nm; the vertical axis is
+spectral radiance per unit wavelength. The plot stops at 100 nm, so it
+does not show the zero-wavelength limit.
 
 <Interactive />
 
@@ -41,9 +58,12 @@ Switch between the Rayleigh–Jeans law, Planck's law, and both curves together.
 
 ## Full argument
 
-The plan has four steps. Start from Planck's law. Take its long-wavelength limit to get the Rayleigh–Jeans law. Show that the Rayleigh–Jeans law gives an infinite total. Then check that Planck's law does not.
-
-A *blackbody* is an ideal object that absorbs all incident radiation and emits radiation determined only by its temperature. Let $T$ be its absolute temperature in kelvin, and let $\lambda$ be wavelength in metres. The spectral radiance per unit wavelength, $B_\lambda$, measures radiated power per unit area, per unit wavelength interval, and per unit solid angle. (A solid angle measures how wide a cone of directions is.) Its SI unit is $\mathrm{W\,m^{-3}\,sr^{-1}}$.
+To model the radiation, consider a closed cavity whose walls are held at
+a fixed temperature. After the radiation and walls reach thermal
+equilibrium, the spectrum is that of an ideal blackbody. A *blackbody*
+is an ideal object that absorbs all incident radiation and emits
+radiation determined only by its temperature. Let $T$ be its absolute
+temperature in kelvin, and let $\lambda$ be wavelength in meters. The spectral radiance per unit wavelength, $B_\lambda$, measures radiated power per unit area, per unit wavelength interval, and per unit solid angle. (A solid angle measures how wide a cone of directions is.) Its SI unit is $\mathrm{W\,m^{-3}\,sr^{-1}}$.
 
 Planck's law gives the spectrum:
 

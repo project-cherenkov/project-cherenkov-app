@@ -2,62 +2,68 @@
 title: "Binary search on the answer: why the predicate must be monotonic"
 subject: informatics
 status: published
-hook: "Binary search works on a yes/no test that changes from 'no' to 'yes' exactly once. A sorted array is just the most common way to get one."
+hook: "You have 20 yes/no questions to identify a hidden number from 1 to 1,000,000. How can so few answers be enough?"
 tags: ["binary-search", "monotonic-predicate", "searching"]
 principle: "monotonic-predicate-search"
 errorType: "assumed-sortedness-instead-of-monotonicity"
-vizDescription: "Searching the sorted list 2 to 16 for the first value that is at least 10 takes three midpoint checks, at indexes 3, 5 and 4, and ends at index 4, the value 10."
+vizDescription: "For predicate values [0, 0, 0, 0, 1, 1, 1, 1], lower-bound search checks indexes 4, 2 and 3, then returns index 4, the first true position."
 vizConfig:
   discriminant: graph-array-stepper
   value:
-    array: [2, 4, 6, 8, 10, 12, 14, 16]
+    array: [0, 0, 0, 0, 1, 1, 1, 1]
     steps:
-      - pointers: { lo: 0, hi: 7, mid: 3 }
+      - pointers: { lo: 0, mid: 4 }
+        highlight: [4]
+        note: "Window [0, 8): P(4) = 1 (true), so the first true position is at or before index 4. Set hi = 4; the upper boundary 8 is just past the array."
+      - pointers: { lo: 0, hi: 4, mid: 2 }
+        highlight: [2]
+        note: "Window [0, 4): P(2) = 0 (false), so the first true position is after index 2. Set lo = 3."
+      - pointers: { lo: 3, hi: 4, mid: 3 }
         highlight: [3]
-        note: "mid = 3 → array[3] = 8 < 10, so index 3 isn't the answer. Search the right half: lo = 4."
-      - pointers: { lo: 4, hi: 7, mid: 5 }
-        highlight: [5]
-        note: "mid = 5 → array[5] = 12 ≥ 10. Index 5 is a valid candidate, so remember it and keep searching left: hi = 4."
-      - pointers: { lo: 4, hi: 4, mid: 4 }
+        note: "Window [3, 4): P(3) = 0 (false), so set lo = 4."
+      - pointers: { lo: 4, hi: 4 }
         highlight: [4]
-        note: "mid = 4 → array[4] = 10 ≥ 10. A better candidate, so remember it and keep searching left: hi = 3."
-      - pointers: { lo: 4, hi: 3 }
-        highlight: [4]
-        note: "lo (4) has crossed hi (3), so the search is over. The best candidate found was index 4."
+        note: "The window [4, 4) is empty. Index 4 is the first true position, so the search returns 4."
 publishedAt: "2026-08-01"
+updatedAt: "2026-11-17"
 author: "Renee"
 syllabusTopic: binary-search
 ---
 
 ## The problem
 
-Most students first meet binary search as "the trick for sorted arrays."
-That is true, but sortedness is not the *reason* it works. Relying on it
-fails as soon as a problem stops handing you a sorted array. Take "find
-the smallest value of $x$ that satisfies some condition." Nothing is
-sorted there, because there is no array at all.
+A game host chooses a whole number from 1 to 1,000,000. You may ask
+only yes-or-no questions. Can you always identify the number in at most
+20 questions? There are $2^{20}=1,048,576$ possible sequences of answers,
+so the number of possible outcomes is large enough. But what questions
+would narrow the possibilities reliably?
+
+Now consider a less familiar version: find the smallest speed that
+allows a car to finish a race within a time limit. There is no sorted
+array to search. What structure would make a halving strategy possible?
 
 ## The idea
 
-Binary search needs a *predicate*: a yes/no question $P(i)$ about each
-index $i$. The predicate must be *monotonic*, which means it changes
-only once, from false to true and never back. Written out,
-$P(0), P(1), \dots, P(n-1)$ looks like $F, F, \dots, F, T, T, \dots, T$
-with exactly one flip. Binary search finds that flip.
+Binary search needs a *predicate*: a yes-or-no question $P(i)$ about
+each candidate index $i$. For $n$ candidates, the indexes run from 0
+through $n-1$. The predicate must be *monotonic*, which
+means that, as the index increases, its answers change at most once
+from false to true. The sequence might look like
+$F,F,F,F,T,T,T,T$. Binary search locates the boundary between the two
+regions.
 
-Sortedness is the most common way to get such a predicate. For "first
-index with $a_i \ge \text{target}$," the predicate
-$P(i) := a_i \ge \text{target}$ is monotonic precisely because the array
-is sorted. But many monotonic predicates have no sorted array behind
-them. Two examples are "smallest speed that finishes the race in time"
-and "smallest budget that satisfies every constraint." If one speed
-finishes the race in time, every faster speed does too, so the answers
-go no, no, no, yes, yes, yes as the speed rises. Binary search handles
-all of these the same way.
+Sorted arrays create a familiar example. For the first index where
+$a_i \ge \text{target}$, define $P(i)$ to be true exactly when
+$a_i \ge \text{target}$. Sortedness guarantees that once the condition
+becomes true, it stays true. But an array is not required. If a car can
+finish a race in time at one speed, every higher speed can do so too,
+provided the other conditions stay fixed. The same false-to-true
+pattern appears when testing candidate speeds or budgets.
 
-The array below is sorted so the predicate is easy to see. The target is
-$10$, so the predicate asks "is this number at least 10?" Watch what the
-search tracks: the place where the predicate flips.
+The displayed values use $0$ for false and $1$ for true. Step through
+the lower-bound search and watch the interval close around the first
+true position. The interval is half-open: its left boundary is included
+and its right boundary is excluded.
 
 <Interactive />
 
@@ -65,42 +71,43 @@ search tracks: the place where the predicate flips.
 
 ## Full proof
 
-**Claim.** If $P$ is monotonic over $\{0, \dots, n-1\}$, the loop
-invariant "the answer lies in $[lo, hi]$" holds at every step. (A loop
-invariant is a statement that stays true after every pass through the
-loop.) The loop also terminates with the correct answer, or with no
-answer if $P$ is never true.
+**Claim.** If $P$ is monotonic over the indexes $0$ through $n-1$, the
+half-open lower-bound search returns the first index where $P$ is true,
+or returns $n$ if $P$ is never true.
 
-**Invariant.** At the start of every iteration, no index has been ruled
-out incorrectly: the first index where $P$ is true, if one exists, lies
-in $[lo, hi]$.
+**Invariant.** At the start of every iteration, every index before $lo$
+is false, every index from $hi$ onward is true, and the boundary $b$
+(the first true index, or $n$ if none exists) lies in the closed range
+$[lo, hi]$. The search window itself is half-open, $[lo, hi)$.
 
-**Base case.** Initially $lo = 0$ and $hi = n-1$, so the invariant holds
-trivially: the first true index, if any, is within $[0, n-1]$.
+**Base case.** Initially $lo=0$ and $hi=n$. No index is before $lo$ or
+at or beyond $hi$, and the boundary $b$ must lie between 0 and $n$.
+So the invariant holds.
 
-**Inductive step.** Let $mid = \lfloor (lo+hi)/2 \rfloor$, the middle
-index rounded down.
+**Inductive step.** While $lo < hi$, choose
+$mid=lo+\lfloor(hi-lo)/2\rfloor$. This index is inside the half-open
+window.
 
-- If $P(mid)$ is true: because $P$ is monotonic, every index $\ge mid$
-  is also true. So $mid$ is a valid candidate, and the first true index
-  is either $mid$ itself or something smaller. Recording $mid$ as the
-  best answer so far and setting $hi = mid - 1$ preserves the invariant.
-- If $P(mid)$ is false: monotonicity means every index $\le mid$ is also
-  false, so the first true index (if any) must be strictly greater than
-  $mid$. Setting $lo = mid + 1$ preserves the invariant.
+- If $P(mid)$ is true, monotonicity means every index at or after
+  $mid$ is true. The first true boundary is therefore no greater than
+  $mid$. Set $hi=mid$, keeping $mid$ as a possible boundary.
+- If $P(mid)$ is false, every index at or before $mid$ is false. The
+  first true boundary must be greater than $mid$, or equal to $n$ if
+  no true index exists. Set $lo=mid+1$.
 
-**Termination.** Each iteration strictly shrinks $hi - lo$, so the loop
-ends in $O(\log n)$ steps. In words, doubling the size of the search
-range adds only about one more step. When $lo > hi$, the search window
-is empty, and the best candidate recorded along the way is exactly the
-first index where $P$ is true. $\blacksquare$
+Both updates preserve the invariant. The true case keeps $mid$ as a
+possible answer, while the false case removes it.
 
-**Where it breaks in practice.** The error this editorial is filed
-under, assuming sortedness instead of monotonicity, shows up when
-someone binary searches over a value that *looks* array-like (a range of
-possible answers). If they never check that the predicate is monotonic
-over that range, the search can fail. A predicate that is true, false,
-true is not safe to binary search, even if the "array" it is defined
-over happens to be sorted numbers.
+**Termination.** Each iteration reduces the width $hi-lo$ to at most half its previous
+value, rounded down, so the loop takes $O(\log n)$ steps. When $lo=hi$, the
+search window is empty and the invariant forces $b=lo$. Returning $lo$
+therefore gives the first true index, or $n$ when no index is true.
+$\blacksquare$
+
+**Where it breaks in practice.** If a predicate changes from false to
+true and then back to false, there is no single boundary for binary
+search to locate. The fact that candidate values are numerically
+ordered does not make a predicate over them monotonic. Check the truth
+pattern before using this search.
 
 </Solution>

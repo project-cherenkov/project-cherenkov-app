@@ -16,33 +16,34 @@ vizConfig:
     speedRange: [5, 40]
     angleRange: [5, 85]
 publishedAt: "2026-08-01"
+updatedAt: "2026-11-17"
 author: "Renee"
 ---
 
 ## The problem
 
-Launch a projectile at $30°$ and it lands some distance away. Launch it
-again at the same speed but at $60°$, and it lands in *exactly the same
-spot*. The same thing happens for any angle $\theta$: launching at
-$\theta$ and at $90° - \theta$ gives the same range, the horizontal
-distance travelled. (Here we assume flat ground and no air resistance.)
-Why?
+Throw a ball from level ground at a fixed speed. Could two different
+launch angles put it at the same landing point? Make a prediction
+before opening the slider. If they can, would the flights also reach
+the same maximum height and last the same amount of time, or would
+those parts of the motion differ? Then compare launches at $30°$ and
+$60°$ while keeping the speed at $20\,\mathrm{m/s}$. Assume flat ground,
+the same launch and landing height, and no air resistance.
 
 ## The idea
 
-Start with what changes as you tilt the launch. A shallow launch sends
-the projectile forward quickly but keeps it in the air only briefly. A
-steep launch keeps it in the air for a long time but gives it little
-forward speed. Range is forward speed times time in the air, and for
-angles that add up to $90°$ these two effects trade off exactly.
+Start with what changes as you tilt the launch. A shallow throw sends
+the ball forward quickly but keeps it in the air for a short time. A
+steep throw gives it less forward speed but keeps it in the air longer.
+Range is forward speed multiplied by time in the air. For two
+complementary launch angles (angles that add to 90 degrees), the increase
+in time balances the decrease in forward speed exactly, so the horizontal
+distances match.
 
-The maths shows why. Range depends on the launch angle only through
-$\sin(2\theta)$, and the sine function has a symmetry:
-$\sin(2\theta) = \sin(180° - 2\theta) = \sin\big(2(90° - \theta)\big)$.
-That symmetry does the work. Two angles that add up to $90°$ are called
-complementary. For the complementary pair $\theta$ and $90° - \theta$,
-the values inside the sine are $2\theta$ and $180° - 2\theta$. These are
-mirror images across $90°$, and the sine gives the same result for both.
+Equal range does not mean equal flight. The steeper throw reaches a
+higher point and stays in the air longer, even though it lands at the
+same distance. This is why the path matters when a problem asks about
+height or flight time, not only the landing point.
 
 Drag the angle slider below $45°$ and above it. The range markers line
 up for complementary pairs, but the *shape* of the flight differs. A
@@ -56,8 +57,8 @@ different paths.
 ## Full proof
 
 **Setup.** Launch speed $v_0$, launch angle $\theta$, no air resistance,
-flat ground. The horizontal position $x$ and the height $y$ at time $t$
-are:
+flat ground. Here $g$ is the magnitude of gravitational acceleration.
+The horizontal position $x$ and the height $y$ at time $t$ are:
 
 $$x(t) = v_0 \cos\theta \cdot t, \qquad y(t) = v_0 \sin\theta \cdot t - \tfrac{1}{2} g t^2$$
 
