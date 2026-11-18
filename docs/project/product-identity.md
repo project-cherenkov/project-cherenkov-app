@@ -6,7 +6,7 @@
 
 One sentence, for use wherever a definition is needed:
 
-> Project Cherenkov is an archive of olympiad ideas made visible: each one a full proof with an interactive visualization, filed by the mistake it corrects, for informatics, physics and astronomy.
+> Project Cherenkov is an open learning archive for olympiad informatics, physics and astronomy: its syllabus maps the territory, materials establish concepts, and interactive editorials explore ideas in specific situations.
 
 The broader description is in [overview](overview.md).
 
@@ -28,11 +28,23 @@ Earlier versions of the visual identity file called "Project Cherenkov" internal
 
 The motto is identical in both interface languages. The middle dot is U+00B7; keep the file UTF-8. Its abbreviation is not a public label: do not use "CHE" in the interface, metadata or copy.
 
+## Content identity
+
+Cherenkov has three complementary content layers. They serve different learning purposes and are connected by the syllabus, but they are not a mandatory sequence: a topic may have a material without an editorial, or an editorial without a corresponding material.
+
+- **Syllabus - scope.** The syllabus describes the territory: subjects, topics and subtopics, with their provenance and the syllabuses that include them. It helps readers see what is in scope and find related learning content.
+- **Materials - foundation.** A material explains the overall concept of a syllabus topic or subtopic. It is a concise reference for definitions, key results, derivations, procedures and common traps. Materials are unsigned and do not require a visualization; one is useful when an interactive treatment would genuinely help.
+- **Editorials - exploration.** An editorial investigates a particular question, case, phenomenon or problem through a focused line of reasoning. It makes the central idea explorable through an interactive visualization and supports its argument with a complete proof, derivation or other appropriate reasoning. It is not required to begin from, or correct, a student mistake.
+
+Materials and editorials are complementary, not interchangeable. A material establishes the conceptual framework; an editorial explores an idea at work in a concrete situation. An editorial should add an insight or investigation rather than merely repeat the corresponding material.
+
+Editorials are identified by a `principle`: the general idea they teach. An `errorType` may also be supplied when a specific, meaningful misconception is being addressed. It is optional; it is not a requirement that every editorial invent or name an error. The syllabus topic link is also optional for an editorial. Materials instead link directly to a syllabus topic.
+
 ## Commitments
 
-1. **Visible.** No editorial without something to manipulate.
-2. **Error-first.** Every piece names a specific mistake it corrects.
-3. **Rigorous and honest about limits.** A full proof, a stated scope, and sources.
+1. **Explorable.** Editorials make their central reasoning visible through working interactive visualizations. Materials may use visualizations when they improve understanding.
+2. **Principle-led.** Editorials are organised around the ideas they investigate. Name a specific error type when it is genuinely relevant, not as a prerequisite.
+3. **Rigorous and honest about limits.** State assumptions and scope; support claims with complete reasoning and appropriate sources; distinguish established results from approximations and limitations.
 
 ## Subject boundary
 

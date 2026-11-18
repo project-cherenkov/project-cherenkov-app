@@ -11,6 +11,7 @@ A newcomer should read [project/overview.md](project/overview.md), then [project
 | Folder | Read it when you are |
 | --- | --- |
 | `project/` | learning what the project is, who it is for and why it looks and sounds the way it does |
+| `agents/` | using or maintaining the writer and revision agent workflows |
 | `design/` | changing the interface, colour, mark, mascot or visualizations |
 | `product/` | working on the syllabus, the planner or their sources |
 | `engineering/` | configuring environment variables, authorisation, SEO or accessibility |
@@ -27,7 +28,10 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | --- | --- | --- |
 | `README.md` | This index: what the folder is, every file, conventions, source of truth by topic. | current |
 | `project/overview.md` | The broad definition of Project Cherenkov: what it is, for whom, its sections and boundaries. | current |
-| `project/product-identity.md` | Name, definition, promise and credo, commitments, subject boundary, audience, language, voice. | current |
+| `project/product-identity.md` | Name, definition, promise and credo, content identity, commitments, subject boundary, audience, language, voice. | current |
+| `agents/README.md` | Which agent instructions to use, their authority, snapshot limitations and maintenance rules. | current |
+| `agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md` | Versioned standards and workflow for creating editorials and materials. Includes dated syllabus and content-registry snapshots. | current |
+| `agents/CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.0-2026-11-17.md` | Versioned diagnosis and revision workflow for existing editorials and materials. Section 4 contains dated starting notes, not current diagnoses. | current |
 | `project/inspiration-and-philosophy.md` | The homages and the open-knowledge stance, in the owner's words. Source for the in-app `/docs/philosophy` page. | current |
 | `design/visual-identity.md` | The mark, the wordmark and the type pairing. | current |
 | `design/colour.md` | Palette, tokens, roles, proportion, contrast, and the colour role audit. | current |
@@ -53,6 +57,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 
 ## Conventions
 
+- Code, schemas and tests determine application behaviour; project docs record product decisions; agent instructions define workflows within those constraints.
 - Code wins over docs.
 - A doc says when it was written. Dated findings stay dated.
 - Historical and review files are kept, not edited. Their findings are not rewritten; a short pointer or annotation at the top is allowed.
@@ -65,7 +70,8 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 
 | Topic | The file that decides it |
 | --- | --- |
-| Name and positioning | `project/product-identity.md` |
+| Name, positioning and content identity | `project/product-identity.md` |
+| Agent writing and revision workflows | `agents/README.md` and the versioned instructions it indexes |
 | Colour | `design/colour.md` |
 | Mascot | `design/neutrino-mascot.md` |
 | Mark, wordmark and type | `design/visual-identity.md` |

@@ -20,17 +20,17 @@
 
 ## I. Short description
 
-Project Cherenkov is a growing, open-source archive of olympiad ideas made visible, for informatics, physics and astronomy. Each editorial is a full proof or derivation paired with a working interactive visualisation, and is filed by the mistake it corrects. Today the project is Indonesia-first: the study planner and its Neutrino companion follow the OSN stages. The syllabus pages combine the Indonesian OSN syllabus with the international ones (IPhO for physics, IOI for informatics, IOAA for astronomy) and label each topic with the syllabuses that list it. It is not limited to Indonesian olympiads, but no international planner is built yet. Main writing is in English; the interface is bilingual (English and Indonesian). See [`docs/project/overview.md`](docs/project/overview.md) for the broader definition.
+Project Cherenkov is a growing, open-source learning archive for olympiad informatics, physics and astronomy. Its syllabus maps the territory, materials establish the concepts behind syllabus topics, and editorials investigate particular ideas through interactive visualisations and rigorous reasoning. Today the project is Indonesia-first: the study planner and its Neutrino companion follow the OSN stages. The syllabus pages combine the Indonesian OSN syllabus with the international ones (IPhO for physics, IOI for informatics, IOAA for astronomy) and label each topic with the syllabuses that list it. It is not limited to Indonesian olympiads, but no international planner is built yet. Main writing is in English; the interface is bilingual (English and Indonesian). See [`docs/project/overview.md`](docs/project/overview.md) for the broader definition.
 
 The public site has three sections, joined by the OSN syllabus:
 
 | Section | What it is | Where it lives |
 | --- | --- | --- |
 | Syllabus | The official OSN scope for each subject, topic by topic, showing which topics already have a material and/or editorials. | `lib/syllabus/data/*.ts` (structured data, not MDX). A topic may carry optional Cherenkov-authored `subtopics` (the 5th argument of `topic(...)`, built with `subtopic(...)`); they are not in the source syllabus, share one id namespace with topics, can hold a material and editorials of their own, and are invisible to the planner, which stays at topic level. |
-| Materials | Short, unsigned, topic-by-topic breakdowns of the syllabus. No visualisation requirement. | `content/materials/<subject>/*.mdx` |
-| Editorials | The archive proper: full write-ups, each with a working visualisation. | `content/editorials/<subject>/*.mdx` |
+| Materials | Concise, unsigned explanations of a syllabus topic or subtopic: definitions, key results, derivations, procedures and common traps. Visualisations are optional. | `content/materials/<subject>/*.mdx` |
+| Editorials | Focused investigations of a question, case, phenomenon or problem, developed through an interactive visualisation and a complete argument. | `content/editorials/<subject>/*.mdx` |
 
-The editorial archive is indexed by principle (the general idea an editorial teaches) and error type (the specific mistake it corrects), and not by subject chapter. The goal is to let someone arrive because they made a specific mistake or want to understand a specific idea. The syllabus and materials sections are the place for browsing by topic.
+Materials and editorials are complementary, not a required sequence: a material establishes the overall concept of a syllabus topic, while an editorial explores a particular idea at work in a concrete situation. An editorial should add an investigation or insight rather than simply repeat a material. The editorial archive is indexed by principle (the general idea it teaches) and, where relevant, error type (a specific misconception it addresses). Error type is not required for every editorial. Browse by topic through the syllabus and materials sections.
 
 This repo contains Phase 1 (the public archive, syllabus, materials, and documentation), Phase 2 (user accounts and core topic progress), and the implemented Phase 3 adaptive study planner (OSN path). Visitors can browse, read, and interact with all public content without an account; signed-in users can configure their OSN stage, weekly hours, and topic self-ratings to generate an adaptively scheduled study plan, track daily sessions and reviews, and verify mastery through topic quizzes. See `docs/product/phase-3-planner.md` for the Phase 3 planner architecture.
 
@@ -196,7 +196,7 @@ middleware.ts                    locale routing, admin-surface gate, planner aut
 docs/                            developer notes; index in docs/README.md
 ```
 
-Developer-facing notes live in `docs/`. Start with [`docs/README.md`](docs/README.md), which indexes every file and says which one decides each topic.
+Developer-facing notes live in `docs/`. Start with [`docs/README.md`](docs/README.md), which indexes every file and says which one decides each topic. Maintained AI-agent workflows for creating and revising content live in [`docs/agents/`](docs/agents/README.md); they are subordinate to the application schemas, tests and current project decisions.
 
 ---
 
