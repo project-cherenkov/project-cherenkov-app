@@ -45,7 +45,7 @@ The animation loop uses the `requestAnimationFrame` of the window that owns the 
 - Measured contrast: lattice edges on the plate 9.1:1, nodes 11.7:1, pink ring 6.8:1, plate rim against a white page 3.96:1 and against the dark page 4.51:1 (WCAG 1.4.11 needs 3:1 to identify the control). The mascot's focus ring is two-tone (white outline plus a navy halo) so it shows on both themes.
 - Nothing flashes. The fastest effect is a node shimmer under 1 Hz at 15% amplitude, well inside WCAG 2.3.1.
 - `prefers-reduced-motion`: JS draws one still frame and CSS animations are off; "thinking" is still shown by static trails.
-- Mascot button: name, `aria-expanded`, `aria-haspopup="dialog"`, `aria-controls`, a screen-reader description of drag and arrow keys. The panel is a non-modal `role="dialog"`; Escape closes it and returns focus to the mascot. Targets are at least 44px (the small hide button has a 44px hit area).
+- Mascot button: name, `aria-expanded`, `aria-haspopup="dialog"`, `aria-controls`, a screen-reader description of drag and arrow keys. The panel is a non-modal `role="dialog"`; Escape closes it and returns focus to the mascot. Targets are at least 44px. The one exception is the small hide button for mouse and keyboard users: it is 24px, sits on the corner of the mascot, and is only clickable while shown (hover or keyboard focus), because an invisible, enlarged target over the mascot used to swallow taps meant for the mascot itself. It is not shown at all on touch-only devices (`hover: none`); there, Settings > Hide until reload is the 44px way to hide the mascot.
 - Dragging has a keyboard alternative (arrows) and a Reset position button, as required for any drag-only interaction.
 
 ## Planned moods

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
 import { companionSettings, companionUsage } from "@/lib/db/schema";
 import { COMPANION_DAILY_LIMIT, COMPANION_MAX_HISTORY, COMPANION_MAX_MESSAGE_CHARS } from "@/lib/companion-settings";
+import { classifyProviderFailure, normaliseConversation, type ChatMessage } from "@/lib/companion-chat";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,8 +14,6 @@ const MAX_MESSAGES = COMPANION_MAX_HISTORY;
 const MAX_MESSAGE_LENGTH = COMPANION_MAX_MESSAGE_CHARS;
 const MAX_PERSONAL_KEY_LENGTH = 256;
 const MODEL = "gemini-3.5-flash-lite";
-
-type ChatMessage = { role: "user" | "model"; text: string };
 
 function parseMessages(value: unknown): ChatMessage[] | null {
   if (!Array.isArray(value) || value.length < 1 || value.length > MAX_MESSAGES) return null;
@@ -31,12 +30,19 @@ function parseMessages(value: unknown): ChatMessage[] | null {
   return messages;
 }
 
-function apiErrorStatus(value: unknown): string {
-  if (typeof value !== "object" || value === null) return "";
-  const err = (value as { error?: unknown }).error;
-  if (typeof err !== "object" || err === null) return "";
-  const status = (err as { status?: unknown }).status;
-  return typeof status === "string" ? status.toUpperCase() : "";
+// Gives back the request that was counted when the provider did not answer, so
+// a failure on the provider's side does not use up one of the student's few
+// daily requests. Best effort: if this write fails the request simply stays
+// counted, which is how every failure behaved before.
+async function refundRequest(userId: string, usageDay: string) {
+  try {
+    await db
+      .update(companionUsage)
+      .set({ requestCount: sql`greatest(${companionUsage.requestCount} - 1, 0)` })
+      .where(and(eq(companionUsage.userId, userId), eq(companionUsage.usageDay, usageDay)));
+  } catch {
+    // Nothing more to do.
+  }
 }
 
 export async function POST(request: Request) {
@@ -110,6 +116,12 @@ export async function POST(request: Request) {
   }
 
   const usingPersonalKey = typeof personalKey === "string" && personalKey.trim().length > 0;
+  // Every failure from here on is the provider's (or the network's), not the
+  // student's, so it gives the counted request back.
+  const fail = async (error: string, status: number) => {
+    await refundRequest(user.id, usageDay);
+    return NextResponse.json({ error }, { status });
+  };
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 20_000);
   try {
@@ -126,7 +138,7 @@ export async function POST(request: Request) {
               },
             ],
           },
-          contents: messages.map(({ role, text }) => ({ role, parts: [{ text }] })),
+          contents: normaliseConversation(messages).map(({ role, text }) => ({ role, parts: [{ text }] })),
           generationConfig: { maxOutputTokens: 256, temperature: 0.4 },
         }),
         signal: controller.signal,
@@ -142,35 +154,8 @@ export async function POST(request: Request) {
     }
 
     if (!response.ok) {
-      if (response.status === 429) {
-        return NextResponse.json(
-          { error: usingPersonalKey ? "personal_quota" : "provider_quota" },
-          { status: 429 },
-        );
-      }
-      if (response.status === 401 || response.status === 403) {
-        return NextResponse.json(
-          { error: usingPersonalKey ? "personal_key" : "configuration" },
-          { status: 503 },
-        );
-      }
-      if (response.status === 503 || response.status >= 500) {
-        return NextResponse.json(
-          { error: usingPersonalKey ? "personal_unavailable" : "provider_unavailable" },
-          { status: 503 },
-        );
-      }
-      const status = apiErrorStatus(providerBody);
-      if (status === "RESOURCE_EXHAUSTED" || status === "UNAVAILABLE") {
-        return NextResponse.json(
-          { error: usingPersonalKey ? "personal_quota" : "provider_quota" },
-          { status: 429 },
-        );
-      }
-      return NextResponse.json(
-        { error: usingPersonalKey ? "personal_unavailable" : "provider_unavailable" },
-        { status: 503 },
-      );
+      const failure = classifyProviderFailure(response.status, providerBody, usingPersonalKey);
+      return fail(failure.error, failure.status);
     }
 
     const candidates = (providerBody as { candidates?: unknown } | null)?.candidates;
@@ -188,13 +173,10 @@ export async function POST(request: Request) {
           .join("")
           .trim()
       : "";
-    if (!reply) return NextResponse.json({ error: "provider_unavailable" }, { status: 503 });
+    if (!reply) return fail("provider_unavailable", 503);
     return NextResponse.json({ reply });
   } catch {
-    return NextResponse.json(
-      { error: usingPersonalKey ? "personal_unavailable" : "provider_unavailable" },
-      { status: 503 },
-    );
+    return fail(usingPersonalKey ? "personal_unavailable" : "provider_unavailable", 503);
   } finally {
     clearTimeout(timeout);
   }

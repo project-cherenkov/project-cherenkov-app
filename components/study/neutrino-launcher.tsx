@@ -46,6 +46,9 @@ const POSITION_KEY = "neutrino-position-v1";
 const HIDDEN_KEY = "neutrino-hidden-v1";
 const INTRO_KEY = "neutrino-intro-dismissed-v1";
 const INTRO_VISIBLE_MS = 6000;
+// How much horizontal room the intro bubble needs beside the mascot (its width
+// plus the gap and a margin from the screen edge).
+const INTRO_ROOM_PX = 230;
 const SLOW_KEY = "neutrino-3d-slow-v1";
 const PANEL_SIZE_KEY = "neutrino-panel-size-v1";
 
@@ -250,7 +253,12 @@ function CompanionPanel({
             onHideUntilReload={onHideUntilReload}
           />
         </div>
-      ) : (
+      ) : null}
+      {/* The Ask tab stays mounted while Timer or Settings is showing (the
+          inactive tab is display:none, and "contents" keeps its children in the
+          panel's flex column). Unmounting it on every switch threw away the
+          whole FAQ conversation, search and group filter. */}
+      <div className={tab === "ask" ? "contents" : "hidden"}>
         <>
           {aiEnabled ? (
             <div className="shrink-0 border-b border-border p-2">
@@ -364,7 +372,7 @@ function CompanionPanel({
             </>
           )}
         </>
-      )}
+      </div>
       {aiNoticeOpen ? (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/90 p-4" role="dialog" aria-modal="true" aria-labelledby="neutrino-ai-notice-title">
           <div className="w-full max-w-md space-y-4 rounded-xl border border-border bg-background p-5 shadow-xl">
@@ -402,6 +410,9 @@ export function InPageNeutrino() {
   const [open, setOpen] = useState(false);
   const [resetMotion, setResetMotion] = useState(false);
   const [introVisible, setIntroVisible] = useState(false);
+  // Which side of the mascot the intro bubble sits on: "left" puts the bubble to
+  // the mascot's left (the natural choice for the default bottom-right corner).
+  const [introSide, setIntroSide] = useState<"left" | "right">("left");
   const [openAnchor, setOpenAnchor] = useState<{ left: number; top: number } | null>(null);
   const [driftPaused, setDriftPaused] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -432,6 +443,26 @@ export function InPageNeutrino() {
     const timer = window.setTimeout(() => setIntroVisible(false), INTRO_VISIBLE_MS);
     return () => window.clearTimeout(timer);
   }, [introVisible]);
+
+  // The mascot roams, so the side with room for the bubble changes. Look at where
+  // it is on screen (not at its resting spot) and only switch sides once the
+  // current side runs out of room, so the bubble does not flip back and forth.
+  useEffect(() => {
+    if (!introVisible || open) return undefined;
+    const place = () => {
+      const rect = dockRef.current?.getBoundingClientRect();
+      if (!rect || (rect.width === 0 && rect.height === 0)) return;
+      const roomLeft = rect.left;
+      const roomRight = window.innerWidth - rect.right;
+      setIntroSide((current) => {
+        if ((current === "left" ? roomLeft : roomRight) >= INTRO_ROOM_PX) return current;
+        return roomLeft >= roomRight ? "left" : "right";
+      });
+    };
+    place();
+    const interval = window.setInterval(place, 200);
+    return () => window.clearInterval(interval);
+  }, [introVisible, open]);
   const panelRef = useRef<HTMLElement>(null);
   const dragRef = useRef<{ id: number; startX: number; startY: number; left: number; top: number; moved: boolean; last: { left: number; top: number } } | null>(null);
   const resizeRef = useRef<{ id: number; startX: number; startY: number; start: PanelFrame; edges: PanelEdge[]; last: PanelFrame } | null>(null);
@@ -635,7 +666,10 @@ export function InPageNeutrino() {
     if (!resize || resize.id !== event.pointerId) return;
     resizeRef.current = null;
     setLiveFrame(null);
-    if (commit) savePanelSize({ width: resize.last.width, height: resize.last.height });
+    // A click on a handle (or the first half of a double-click) must not freeze
+    // the current, possibly screen-clamped, size as the student's chosen size.
+    const changed = resize.last.width !== resize.start.width || resize.last.height !== resize.start.height;
+    if (commit && changed) savePanelSize({ width: resize.last.width, height: resize.last.height });
   }
 
   function onResizeKey(event: KeyboardEvent<HTMLElement>, edge: PanelEdge, frame: PanelFrame) {
@@ -684,7 +718,10 @@ export function InPageNeutrino() {
     event.currentTarget.setPointerCapture(event.pointerId);
     const rect = event.currentTarget.getBoundingClientRect();
     const visualPosition = { left: rect.left, top: rect.top };
-    setDragPx(visualPosition);
+    // dragPx stays null until the pointer has travelled past the threshold (see
+    // onPointerMove). Setting it here, as this used to, made every plain click
+    // swap the dock from its on-screen spot to its resting spot (basePx) on
+    // release, so a mascot that had wandered away jumped back to the corner.
     dragRef.current = { id: event.pointerId, startX: event.clientX, startY: event.clientY, ...visualPosition, moved: false, last: visualPosition };
   }
 
@@ -706,7 +743,6 @@ export function InPageNeutrino() {
     if (!drag || drag.id !== event.pointerId) return;
     dragRef.current = null;
     if (!drag.moved) {
-      setDragPx(null);
       pauseDriftForCooldown();
       return;
     }
@@ -909,7 +945,7 @@ export function InPageNeutrino() {
           style={{ left: px.left, top: px.top, width: size, height: size }}
         >
           {introVisible && !open ? (
-            <div className={`absolute top-1/2 z-10 -translate-y-1/2 ${position.x > 0.5 ? "right-full mr-3" : "left-full ml-3"}`}>
+            <div className={`absolute top-1/2 z-10 -translate-y-1/2 ${introSide === "left" ? "right-full mr-3" : "left-full ml-3"}`}>
               <button type="button" onClick={onClick} className="whitespace-nowrap rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground shadow-lg">
                 {t("introPrompt")}
               </button>
@@ -955,7 +991,7 @@ export function InPageNeutrino() {
             onClick={hideUntilReload}
             aria-label={t("hideNow")}
             title={t("hideNow")}
-            className="neutrino-focus absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground opacity-0 shadow transition-opacity before:absolute before:-inset-2.5 before:content-[''] focus-visible:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
+            className="neutrino-focus pointer-events-none absolute -right-3 -top-3 flex [@media(hover:none)]:hidden h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground opacity-0 shadow transition-opacity before:absolute before:-right-2.5 before:-top-2.5 before:bottom-0 before:left-0 before:content-[''] focus-visible:pointer-events-auto focus-visible:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100"
           >
             <X className="h-3.5 w-3.5" aria-hidden />
           </button>

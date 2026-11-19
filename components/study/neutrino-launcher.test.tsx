@@ -214,3 +214,117 @@ describe("resizing the panel", () => {
     expect(window.localStorage.getItem("neutrino-panel-size-v1")).toBeNull();
   });
 });
+
+describe("the mascot dock", () => {
+  const dockWrapper = () => document.querySelector<HTMLElement>(".neutrino-dock")!;
+  const dockButton = () => document.querySelector<HTMLButtonElement>('button[aria-haspopup="dialog"]')!;
+  // jsdom has no layout, so say where the mascot is on screen: somewhere away
+  // from its resting corner, as it is after it has wandered off.
+  function placeAt(button: HTMLElement, left: number, top: number) {
+    button.getBoundingClientRect = () => ({ left, top, right: left + 76, bottom: top + 76, width: 76, height: 76, x: left, y: top, toJSON() {} }) as DOMRect;
+  }
+
+  it("does not enter drag mode, or move, on a plain press and release", async () => {
+    await act(async () => root.render(<InPageNeutrino />));
+    const restingLeft = dockWrapper().style.left;
+    placeAt(dockButton(), 300, 200);
+    pointer(dockButton(), "pointerdown", 310, 210);
+    // Entering drag mode here is what used to swap the dock from where it was
+    // on screen to its resting corner when the pointer was released.
+    expect(dockWrapper().dataset.dragging).toBe("false");
+    expect(dockWrapper().style.left).toBe(restingLeft);
+    pointer(dockButton(), "pointerup", 310, 210);
+    expect(dockWrapper().dataset.dragging).toBe("false");
+    expect(dockWrapper().style.left).toBe(restingLeft);
+    expect(window.localStorage.getItem("neutrino-position-v1")).toBeNull();
+  });
+
+  it("starts dragging only after the pointer has travelled, from where the mascot was on screen", async () => {
+    await act(async () => root.render(<InPageNeutrino />));
+    placeAt(dockButton(), 300, 200);
+    pointer(dockButton(), "pointerdown", 310, 210);
+    pointer(dockButton(), "pointermove", 313, 210); // under the 6px threshold
+    expect(dockWrapper().dataset.dragging).toBe("false");
+    pointer(dockButton(), "pointermove", 410, 260);
+    expect(dockWrapper().dataset.dragging).toBe("true");
+    expect(dockWrapper().style.left).toBe("400px");
+    expect(dockWrapper().style.top).toBe("250px");
+    pointer(dockButton(), "pointerup", 410, 260);
+    expect(dockWrapper().dataset.dragging).toBe("false");
+    expect(window.localStorage.getItem("neutrino-position-v1")).not.toBeNull();
+    expect(panel()).toBeNull(); // the click that follows a drag is ignored
+  });
+
+  it("gives the hide button no click target over the mascot until it is shown", async () => {
+    await act(async () => root.render(<InPageNeutrino />));
+    const hide = document.querySelector<HTMLButtonElement>(`button[aria-label="${en.companion.hideNow}"]`)!;
+    expect(hide).toBeTruthy();
+    const classes = hide.className.split(/\s+/);
+    // Invisible means unclickable: a tap on the upper right of the mascot used to hit this.
+    expect(classes).toContain("pointer-events-none");
+    for (const shown of ["group-hover", "group-focus-within", "focus-visible"]) {
+      expect(classes).toContain(`${shown}:pointer-events-auto`);
+      expect(classes).toContain(`${shown}:opacity-100`);
+    }
+    // Sits on the corner of the mascot, and its enlarged target grows outwards only.
+    expect(classes).toContain("-right-3");
+    expect(classes).toContain("-top-3");
+    expect(classes).not.toContain("before:-inset-2.5");
+    // Touch-only devices get no hide button; Settings has the 44px one.
+    expect(classes).toContain("[@media(hover:none)]:hidden");
+  });
+});
+
+describe("resize handles", () => {
+  it("do not store a panel size when they are only clicked", async () => {
+    await openPanel();
+    const handle = separator("Panel width")!;
+    pointer(handle, "pointerdown", 700, 300);
+    pointer(handle, "pointerup", 700, 300);
+    expect(window.localStorage.getItem("neutrino-panel-size-v1")).toBeNull();
+  });
+});
+
+describe("switching tabs", () => {
+  it("keeps the FAQ conversation when going to Settings and back", async () => {
+    await openPanel();
+    act(() => byText(en.companion.faq.items["what-is"].q)!.click());
+    const answer = en.companion.faq.items["what-is"].a.slice(0, 40);
+    expect(panel()!.textContent).toContain(answer);
+    act(() => byText("Settings")!.click());
+    act(() => byText("Ask")!.click());
+    expect(panel()!.textContent).toContain(answer);
+  });
+});
+
+describe("the intro bubble", () => {
+  const realRect = Element.prototype.getBoundingClientRect;
+  // Where the mascot is on screen, e.g. after it has wandered away from its
+  // resting corner (jsdom has no layout, so say it).
+  function mascotAt(left: number) {
+    Element.prototype.getBoundingClientRect = function (this: Element) {
+      if (this.matches('button[aria-haspopup="dialog"]')) {
+        return { left, right: left + 76, top: 300, bottom: 376, width: 76, height: 76, x: left, y: 300, toJSON() {} } as DOMRect;
+      }
+      return realRect.call(this);
+    };
+  }
+  afterEach(() => { Element.prototype.getBoundingClientRect = realRect; });
+  const bubbleBox = () => byText(en.companion.introPrompt)!.parentElement!;
+
+  it("sits to the mascot's left when there is room on that side", async () => {
+    mascotAt(900);
+    await act(async () => root.render(<InPageNeutrino />));
+    expect(bubbleBox().className).toContain("right-full");
+    expect(bubbleBox().className).not.toContain("left-full");
+  });
+
+  it("moves to the mascot's right when it has wandered to the left edge", async () => {
+    // Its resting spot is still the bottom-right corner; only where it is on
+    // screen has changed, and the bubble used to follow the resting spot.
+    mascotAt(10);
+    await act(async () => root.render(<InPageNeutrino />));
+    expect(bubbleBox().className).toContain("left-full");
+    expect(bubbleBox().className).not.toContain("right-full");
+  });
+});
