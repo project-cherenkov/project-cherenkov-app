@@ -1,5 +1,5 @@
 import type { Subject } from "../subjects";
-import { getPlannerSyllabi, getPlannerTopicLocation } from "../syllabus";
+import { getPlannerSyllabi, getPlannerTopicIds } from "../syllabus";
 import { QUESTION_DIFFICULTIES, type QuestionDifficulty } from "../planner-vocab";
 import { astronomyQuestions } from "./astronomy";
 import { informaticsQuestions } from "./informatics";
@@ -32,8 +32,8 @@ export function validateQuizBank(bank: BankQuestion[]): string[] {
       problems.push(`${where}: key does not match its subject/topic/difficulty (expected prefix "${expectedKey}")`);
     }
 
-    if (!getPlannerTopicLocation(q.subject, q.topicId)) {
-      problems.push(`${where}: no syllabus topic "${q.topicId}" in ${q.subject}`);
+    if (!getPlannerTopicIds(q.subject).includes(q.topicId)) {
+      problems.push(`${where}: no planner topic "${q.topicId}" in ${q.subject}`);
     }
     if (!(QUESTION_DIFFICULTIES as readonly string[]).includes(q.difficulty)) {
       problems.push(`${where}: missing or unknown difficulty`);

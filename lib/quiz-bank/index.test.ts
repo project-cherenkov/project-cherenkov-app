@@ -23,7 +23,8 @@ describe("validateQuizBank", () => {
 
   it("flags each kind of defect", () => {
     const cases: [string, Partial<BankQuestion>][] = [
-      ["no syllabus topic", { topicId: "not-a-topic", key: "physics.not-a-topic.basic.1" }],
+      ["no planner topic", { topicId: "not-a-topic", key: "physics.not-a-topic.basic.1" }],
+      ["no planner topic", { subject: "astronomy", topicId: "sidereal-synodic-periods", key: "astronomy.sidereal-synodic-periods.basic.1" }],
       ["unknown difficulty", { difficulty: undefined as unknown as BankQuestion["difficulty"] }],
       ["correctChoiceIndex", { correctChoiceIndex: 2 }],
       ["correctChoiceIndex", { correctChoiceIndex: -1 }],

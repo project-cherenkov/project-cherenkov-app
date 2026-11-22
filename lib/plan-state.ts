@@ -20,7 +20,7 @@ import type { PlannerSettings } from "./planner-settings";
 import type { QuestionDifficulty } from "./planner-vocab";
 import type { SchedulerTopic } from "./plan-scheduler";
 import type { Subject } from "./subjects";
-import { getTopicLocation } from "./syllabus";
+import { getPlannerTopicIds, getPlannerTopicLocation } from "./syllabus";
 
 // A planner `topics` row that is keyed to the syllabus.
 export interface PlanTopicRow {
@@ -38,8 +38,8 @@ export interface AnswerRow {
 
 export interface PlanReadDeps {
   getSettings: (userId: string) => Promise<PlannerSettings | null>;
-  // Only rows that have a syllabus_topic_id (legacy editorial-derived rows are
-  // not planner topics).
+  // Only rows for current primary-source planner topics. Implementations and
+  // callers must exclude legacy and secondary-source syllabus ids.
   getSubjectTopics: (subject: Subject) => Promise<PlanTopicRow[]>;
   getSelfRatings: (userId: string, topicIds: string[]) => Promise<Map<string, number>>;
   // Answers to questions whose difficulty is in `difficulties`.
@@ -67,6 +67,8 @@ export interface TopicState {
 
 export interface PlanningState {
   settings: PlannerSettings;
+  // True only when every current primary-source planner topic has a DB row.
+  topicCoverageComplete: boolean;
   today: string;
   window: StageWindow | null;
   masteryTarget: number;
@@ -89,11 +91,30 @@ export async function loadPlanningState(
   const masteryTarget = STAGES[settings.stage].masteryTarget;
   const difficulties = difficultiesForStage(settings.stage);
 
-  const rows = [...(await deps.getSubjectTopics(settings.subject))].sort(
-    (a, b) => a.order - b.order || a.id.localeCompare(b.id),
-  );
+  // The database may still contain rows from an older syllabus revision or
+  // rows for secondary sources. The planner only accepts topics in the
+  // current primary-source syllabus; in particular, do not expose legacy ids
+  // to the rating form because validateSelfRatings() will reject them.
+  const expectedTopicIds = new Set(getPlannerTopicIds(settings.subject));
+  const rows = [...(await deps.getSubjectTopics(settings.subject))]
+    .filter((row) => expectedTopicIds.has(row.syllabusTopicId))
+    .sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+
+  const seededTopicIds = new Set(rows.map((row) => row.syllabusTopicId));
+  const topicCoverageComplete =
+    expectedTopicIds.size > 0 &&
+    [...expectedTopicIds].every((topicId) => seededTopicIds.has(topicId));
+
   if (rows.length === 0) {
-    return { settings, today, window, masteryTarget, topics: [], calibrationOffset: 0 };
+    return {
+      settings,
+      today,
+      window,
+      masteryTarget,
+      topics: [],
+      calibrationOffset: 0,
+      topicCoverageComplete,
+    };
   }
   const ids = rows.map((r) => r.id);
 
@@ -111,7 +132,7 @@ export async function loadPlanningState(
   }
 
   const partial = rows.map((row) => {
-    const located = getTopicLocation(settings.subject, row.syllabusTopicId);
+    const located = getPlannerTopicLocation(settings.subject, row.syllabusTopicId);
     return {
       row,
       sectionId: row.sectionId ?? located?.section.id ?? "unknown",
@@ -134,6 +155,7 @@ export async function loadPlanningState(
     today,
     window,
     masteryTarget,
+    topicCoverageComplete,
     calibrationOffset: estimated.offset,
     topics: partial.map((p) => ({ ...p, estimate: estimateByKey.get(p.row.id)! })),
   };

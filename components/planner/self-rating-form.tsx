@@ -45,13 +45,41 @@ export function SelfRatingForm({ topics, onDone, submitLabel }: SelfRatingFormPr
       // prior) rather than being saved as a made-up middle rating.
       const payload = Object.entries(ratings).map(([syllabusTopicId, rating]) => ({ syllabusTopicId, rating }));
       if (payload.length > 0) {
-        const saved = await saveTopicSelfRatings(payload);
+        let saved: Awaited<ReturnType<typeof saveTopicSelfRatings>>;
+        try {
+          saved = await saveTopicSelfRatings(payload);
+        } catch {
+          setError(tErr("save_failed"));
+          return;
+        }
         if (!saved.ok) {
-          setError(saved.reason === "unauthenticated" ? tErr("unauthenticated") : tErr("ratingsFailed"));
+          switch (saved.reason) {
+            case "unauthenticated":
+              setError(tErr("unauthenticated"));
+              break;
+            case "invalid":
+              setError(tErr("invalidRatings", { details: saved.message ?? "Unknown validation error." }));
+              break;
+            case "no_settings":
+              setError(tErr("no_settings"));
+              break;
+            case "topics_not_seeded":
+              setError(tErr("topics_not_seeded"));
+              break;
+            case "save_failed":
+              setError(tErr("save_failed"));
+              break;
+          }
           return;
         }
       }
-      const generated = await generateStudyPlan();
+      let generated: Awaited<ReturnType<typeof generateStudyPlan>>;
+      try {
+        generated = await generateStudyPlan();
+      } catch {
+        setError(tErr("generate_failed"));
+        return;
+      }
       if (!generated.ok) {
         setError(tErr(generated.reason));
         return;

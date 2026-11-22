@@ -19,7 +19,7 @@ import {
   SELF_RATING_MIN,
 } from "./planner-vocab";
 import { isKnownSubject, type Subject } from "./subjects";
-import { getPlannerTopicCount, getPlannerTopicLocation } from "./syllabus";
+import { getPlannerTopicCount, getPlannerTopicIds } from "./syllabus";
 
 // ---------------------------------------------------------------------------
 // Settings
@@ -153,6 +153,7 @@ export function validateSelfRatings(
     return { ok: false, error: "More ratings than topics in this subject." };
   }
 
+  const allowedTopicIds = new Set(getPlannerTopicIds(subject));
   const seen = new Set<string>();
   const value: SelfRatingInput[] = [];
   for (const entry of input) {
@@ -161,8 +162,8 @@ export function validateSelfRatings(
       unknown
     >;
     const id = item.syllabusTopicId;
-    if (typeof id !== "string" || !getPlannerTopicLocation(subject, id)) {
-      return { ok: false, error: `Unknown topic: ${String(id)}` };
+    if (typeof id !== "string" || !allowedTopicIds.has(id)) {
+      return { ok: false, error: `Unknown planner topic: ${String(id).slice(0, 80)}` };
     }
     if (seen.has(id)) return { ok: false, error: `Topic rated twice: ${id}` };
     seen.add(id);
@@ -216,10 +217,15 @@ export async function saveSelfRatingsCore(
   const validated = validateSelfRatings(input, settings.subject);
   if (!validated.ok) return { ok: false, reason: "invalid", message: validated.error };
 
-  const ids = await deps.getTopicRowIds(
-    settings.subject,
-    validated.value.map((r) => r.syllabusTopicId),
-  );
+  // Require a complete planner topic catalogue before accepting ratings.
+  // Otherwise a partially seeded subject can save some ratings successfully
+  // and fail only later when plan generation discovers the missing topics.
+  const plannerTopicIds = getPlannerTopicIds(settings.subject);
+  const ids = await deps.getTopicRowIds(settings.subject, plannerTopicIds);
+  if (plannerTopicIds.some((topicId) => !ids.has(topicId))) {
+    return { ok: false, reason: "topics_not_seeded" };
+  }
+
   const rows: RatingRow[] = [];
   for (const r of validated.value) {
     const topicId = ids.get(r.syllabusTopicId);

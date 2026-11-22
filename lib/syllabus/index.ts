@@ -230,8 +230,14 @@ export function getPlannerTopicLocation(
   return isPlannerTopic(syllabus, located.topic) ? located : undefined;
 }
 
+export function getPlannerTopicIds(subject: string): string[] {
+  return (
+    getPlannerSyllabus(subject)?.sections.flatMap((section) =>
+      section.topics.map((topic) => topic.id),
+    ) ?? []
+  );
+}
+
 export function getPlannerTopicCount(subject: Subject): number {
-  return getPlannerSyllabi()
-    .find((entry) => entry.subject === subject)!
-    .sections.reduce((total, entry) => total + entry.topics.length, 0);
+  return getPlannerTopicIds(subject).length;
 }

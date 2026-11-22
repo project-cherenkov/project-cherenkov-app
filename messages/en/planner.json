@@ -42,11 +42,14 @@
     "errors": {
       "unauthenticated": "Your session has expired. Please log back in and try again.",
       "ratingsFailed": "Your ratings could not be saved. Please try again.",
+      "invalidRatings": "The submitted ratings contain an invalid topic or value. Details: {details}",
+      "save_failed": "The ratings could not be saved because of a server or database error. Please try again later.",
+      "generate_failed": "The study plan could not be generated because of a connection or server error. Your submitted ratings may already have been saved.",
       "no_settings": "Choose your subject, stage and weekly hours first.",
       "no_exam_date": "No dates are published for that stage and year yet.",
       "exam_passed": "That stage has already taken place. Choose another stage or year.",
       "no_days": "The exam starts today or tomorrow, so there is no time left to plan.",
-      "topics_not_seeded": "The topics for this subject have not been loaded into the database yet. Ask an admin to run the seed."
+      "topics_not_seeded": "Some current planner topics are missing from the database for this subject. Ask an admin to run the seed."
     },
     "onboarding": {
       "title": "Build your OSN study plan",
@@ -57,7 +60,7 @@
       "saveSettings": "Save",
       "step2": "Step 2: How well do you know each topic?",
       "step2Body": "The plan is mostly revision, so it skips what you already know. Be honest: quizzes will check your ratings.",
-      "topicsMissing": "No topics are loaded for this subject yet. Ask an admin to run the seed.",
+      "topicsMissing": "Some planner topics are missing from the database for this subject. Ask an admin to run the seed before submitting ratings.",
       "generate": "Generate my plan"
     },
     "plan": {

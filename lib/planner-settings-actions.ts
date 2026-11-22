@@ -30,7 +30,7 @@ export type SavePlannerSettingsResult =
 
 export type SaveTopicRatingsResult =
   | SaveRatingsResult
-  | { ok: false; reason: "unauthenticated" };
+  | { ok: false; reason: "unauthenticated" | "save_failed" };
 
 async function getSettings(userId: string): Promise<PlannerSettings | null> {
   const [row] = await db
@@ -123,7 +123,23 @@ export async function savePlannerSettings(
 export async function saveTopicSelfRatings(
   input: unknown,
 ): Promise<SaveTopicRatingsResult> {
-  const user = await getCurrentUser();
-  if (!user) return { ok: false, reason: "unauthenticated" };
-  return saveSelfRatingsCore(ratingDeps, user.id, input);
+  try {
+    const user = await getCurrentUser();
+    if (!user) return { ok: false, reason: "unauthenticated" };
+    return await saveSelfRatingsCore(ratingDeps, user.id, input);
+  } catch (error) {
+    // Keep the client response safe and actionable. Log only non-sensitive
+    // exception metadata: database error objects can include SQL details or
+    // values, so do not serialize the raw error or submitted ratings.
+    const code =
+      typeof error === "object" && error !== null && "code" in error &&
+      typeof error.code === "string" && /^[A-Z0-9_]{1,24}$/.test(error.code)
+        ? error.code
+        : undefined;
+    console.error("saveTopicSelfRatings failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+      ...(code ? { code } : {}),
+    });
+    return { ok: false, reason: "save_failed" };
+  }
 }

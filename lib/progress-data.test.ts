@@ -45,6 +45,27 @@ describe("loadSubjectMastery", () => {
     expect(result.estimates.get("kinematics")).toMatchObject({ status: "unverified", answerCount: 0 });
   });
 
+  it("ignores obsolete and non-planner syllabus rows", async () => {
+    const getSelfRatings = vi.fn().mockResolvedValue(new Map());
+    const getAnswers = vi.fn().mockResolvedValue([]);
+    await loadSubjectMastery(
+      deps({
+        getSubjectTopics: vi.fn().mockResolvedValue([
+          { id: "row-1", syllabusTopicId: "vectors", sectionId: "s", order: 1 },
+          { id: "row-2", syllabusTopicId: "kinematics", sectionId: "s", order: 2 },
+          { id: "row-3", syllabusTopicId: "relativity", sectionId: "s", order: 3 },
+          { id: "row-4", syllabusTopicId: "obsolete-topic-id", sectionId: "s", order: 4 },
+        ]),
+        getSelfRatings,
+        getAnswers,
+      }),
+      "u1", "physics", "osn_k", NOW,
+    );
+
+    expect(getSelfRatings).toHaveBeenCalledWith("u1", ["row-1", "row-2"]);
+    expect(getAnswers).toHaveBeenCalledWith("u1", ["row-1", "row-2"], ["basic", "intermediate"]);
+  });
+
   it("only counts answers at the difficulties the stage draws from", async () => {
     const getAnswers = vi.fn().mockResolvedValue([]);
     await loadSubjectMastery(deps({ getAnswers }), "u1", "physics", "osn_k", NOW);

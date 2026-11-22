@@ -42,11 +42,14 @@
     "errors": {
       "unauthenticated": "Sesi kamu telah berakhir. Silakan masuk kembali dan coba lagi.",
       "ratingsFailed": "Penilaianmu tidak dapat disimpan. Silakan coba lagi.",
+      "invalidRatings": "Penilaian yang dikirim memuat topik atau nilai yang tidak valid. Detail: {details}",
+      "save_failed": "Penilaian tidak dapat disimpan karena terjadi kesalahan server atau database. Coba lagi nanti.",
+      "generate_failed": "Rencana belajar tidak dapat dibuat karena terjadi kesalahan koneksi atau server. Penilaian yang dikirim mungkin sudah tersimpan.",
       "no_settings": "Pilih bidang, tingkat, dan jam per minggu terlebih dahulu.",
       "no_exam_date": "Belum ada tanggal yang diumumkan untuk tingkat dan tahun itu.",
       "exam_passed": "Tingkat itu sudah berlalu. Pilih tingkat atau tahun lain.",
       "no_days": "Ujian dimulai hari ini atau besok, jadi tidak ada waktu tersisa untuk direncanakan.",
-      "topics_not_seeded": "Topik untuk bidang ini belum dimuat ke database. Minta admin menjalankan seed."
+      "topics_not_seeded": "Sebagian topik rencana belajar untuk bidang ini belum tersedia di database. Minta admin menjalankan seed."
     },
     "onboarding": {
       "title": "Susun rencana belajar OSN",
@@ -57,7 +60,7 @@
       "saveSettings": "Simpan",
       "step2": "Langkah 2: Seberapa kamu menguasai tiap topik?",
       "step2Body": "Rencana ini kebanyakan revisi, jadi yang sudah kamu kuasai dilewati. Jujurlah: kuis akan memeriksa penilaianmu.",
-      "topicsMissing": "Belum ada topik untuk bidang ini. Minta admin menjalankan seed.",
+      "topicsMissing": "Sebagian topik rencana belajar belum tersedia di database untuk bidang ini. Minta admin menjalankan seed sebelum mengirim penilaian.",
       "generate": "Buat rencanaku"
     },
     "plan": {

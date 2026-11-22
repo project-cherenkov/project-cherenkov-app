@@ -1,5 +1,7 @@
 # Project Cherenkov
 
+> Last reviewed: 2026-11-22
+
 ## Table of contents
 
 1. [Short description](#i-short-description)
@@ -53,7 +55,7 @@ These documents live in their own files and not inside the README. The site foot
 | --- | --- | --- |
 | Framework | [Next.js](https://nextjs.org/) 15 (App Router) + React 19 + TypeScript | Server-rendered pages for content that should be crawlable and fast on a first load, with the App Router's per-route code splitting keeping each editorial's (potentially heavy) visualisation out of every other page's bundle. `middleware.ts` opts in to the Node.js middleware runtime (stable since Next 15.5) because it checks Better Auth sessions. See [Section IX](#ix-accounts-and-study-planner). |
 | Styling | [Tailwind CSS](https://tailwindcss.com/) 3 + hand-rolled shadcn/ui-style primitives (`components/ui/`, built on Radix) + [next-themes](https://github.com/pacocoursey/next-themes) | Utility-first styling with design tokens (`tailwind.config.ts`) as the single source of truth for colour and spacing, so hex values are not scattered through components. Light/dark theme follows the system by default, with a manual toggle. |
-| Content pipeline | MDX compiled with [Velite](https://velite.js.org) | Three collections (`editorials`, `materials` and `docs`), each with a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualisation-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts` and `lib/docs.ts` query Velite's generated `#content` collections; page routes never import `#content` directly. |
+| Content pipeline | MDX compiled with [Velite](https://velite.js.org) | Six collections (`editorials`, `materials`, their translations, `updates` and `docs`), each with a typed, Zod-validated frontmatter schema (`velite.config.ts`) checked at build time. Visualisation-specific `vizConfig` shapes are additionally checked by runtime type guards because their frontmatter field is intentionally generic. `lib/content.ts`, `lib/updates.ts` and `lib/docs.ts` query Velite's generated `#content` collections; page routes never import `#content` directly. |
 | Math typesetting | [KaTeX](https://katex.org/) via `remark-math`/`rehype-katex` | Compiled to static HTML at build time, so a reader's browser never runs math-rendering JS or reflows the page after load. |
 | Visualisations | [D3](https://d3js.org/) (scales only) + Canvas 2D / `requestAnimationFrame` | Seven engines (`components/viz/`), dispatched by `vizConfig.discriminant` in an editorial's frontmatter (see [Section V](#v-content-model-writing-an-editorial)): five purpose-built (a graph/array stepper, a trajectory sandbox, an orbital sandbox, a blackbody spectrum comparison, a relative period sandbox) plus two authored visually: `composed-scene` (template-driven) and `programmable-scene` (a sandboxed, block-authored program). See [Section VIII](#viii-composed-and-programmable-scenes-the-scene-builder). D3 is used narrowly for its scale maths, not as a full charting layer, since each engine's rendering is bespoke. |
 | Block editor | [Blockly](https://developers.google.com/blockly) | Authoring-only dependency of the scene builder's `programmable-scene` mode. It is kept out of every reader-facing page's JavaScript; `pnpm build` ends with a script that fails the build if it leaks (see [Section IV](#iv-getting-started)). |
@@ -68,7 +70,7 @@ These documents live in their own files and not inside the README. The site foot
 
 Hosting: [Vercel](https://vercel.com). The live deployment is available at [www.projectcherenkov.dev/en](https://www.projectcherenkov.dev/en). The repo is public at [github.com/project-cherenkov/project-cherenkov-app](https://github.com/project-cherenkov/project-cherenkov-app). Framework detection is automatic for Next.js, so no `vercel.json` is needed. See [Section XI](#xi-deploying) for deployment details.
 
-`next.config.mjs` also applies baseline security headers to every route (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`). There is no Content-Security-Policy yet; a real one has to be worked out against Keystatic's admin UI and Vercel Blob's image host (see `docs/history/deployment-readiness.md`).
+`next.config.mjs` also applies baseline security headers to every route (`X-Content-Type-Options`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`) and sends a `Content-Security-Policy-Report-Only` header. The policy is deliberately non-enforcing while the Keystatic admin UI, Vercel Blob image host, KaTeX and Blockly surfaces are exercised; see `docs/engineering/security-headers.md`.
 
 Phase 3 adaptive scheduling is implemented (`docs/product/phase-3-planner.md`). The earlier design sketch is preserved in `docs/history/phase-3-architecture.md`.
 
@@ -85,7 +87,10 @@ app/[locale]/                    routes (everything is locale-prefixed)
   archive/[subject]/[slug]/      one editorial's page (+ opengraph-image.tsx)
   about/                         philosophy, team (from content/team), repo link
   docs/                          documentation: docs/ (index), docs/[slug] (one page); Section VI-b
+  updates/                       dated project updates; the feed is at /updates/feed.xml
   account/                       account profile, role (Inchoatus / Primus Inter Pares), sign out
+  privacy/ terms/                localized legal pages
+  email-verified/ account-deleted/ post-authentication status pages
   [...rest]/                     catch-all that renders the localized 404 (real routes win)
   layout.tsx                     the ROOT layout: <html lang={locale}>, theme, header/footer, skip link
   opengraph-image.tsx            the site-wide social card (one per locale, built statically)
@@ -117,6 +122,9 @@ app/api/scene-builder/           POST: save a scene into an existing editorial
   github-oauth/{start,callback}/ the scene builder's own GitHub OAuth flow
                                   (all gated in production, Section VIII)
 app/api/search-index/[locale]/   build-time search index for the localized archive
+app/api/calendar/                authenticated planner calendar feed and download routes
+app/api/companion/               Neutrino settings, chat and saved-chat routes
+app/api/home/viz-picks/          authenticated home-visualisation preferences
 app/robots.ts, app/sitemap.ts    generated from the same content queries every page uses; the
                                   sitemap carries hreflang alternates for every URL
 app/llms.txt/route.ts            /llms.txt: Markdown map of the site for LLM tools
@@ -134,7 +142,7 @@ components/
                                   syllabus controls, team-photo uploader, skip link
   site/scene-builder/            the scene builder UI: palette, inspector, timeline,
                                   Blockly block editor, new-visualisation form
-  viz/                           the five visualisation engines, the engine dispatcher
+  viz/                           the five purpose-built visualisation engines, the engine dispatcher
                                   (viz-engine.tsx) and shared playback controls
   viz/composed-scene/            composed-scene engine: element templates + renderer
   viz/programmable-scene/        programmable-scene engine: types, interpreter, component
@@ -189,7 +197,7 @@ lib/db/                          Drizzle schema and lazy Neon database client
 lib/seed/                        pure logic behind the topic seed script
 messages/{id,en}/                UI strings, one JSON file per feature area
 i18n/                            next-intl routing and request configuration
-drizzle/                         committed SQL migrations (drizzle/meta is git-ignored)
+drizzle/                         committed SQL migrations and Drizzle migration metadata
 scripts/                         seed-topics.ts, seed-quiz-questions.ts,
                                   simulate-planner.ts, check-blockly-bundle-isolation.ts
 middleware.ts                    locale routing, admin-surface gate, planner auth gate
@@ -197,6 +205,18 @@ docs/                            developer notes; index in docs/README.md
 ```
 
 Developer-facing notes live in `docs/`. Start with [`docs/README.md`](docs/README.md), which indexes every file and says which one decides each topic. Maintained AI-agent workflows for creating and revising content live in [`docs/agents/`](docs/agents/README.md); they are subordinate to the application schemas, tests and current project decisions.
+
+### Worktree and generated files
+
+The Git worktree contains the application source, tracked MDX and JSON content, database migrations, tests and developer documentation. Several directories are intentionally local or generated and are not part of a clone's committed source:
+
+- `node_modules/` contains pnpm-installed dependencies.
+- `.velite/` contains generated, typed content data used by the app and typechecker.
+- `.next/`, `out/` and `build/` contain Next.js or production build output.
+- `.env` and `.env*.local` contain local secrets and deployment configuration.
+- `drizzle/meta/` contains tracked Drizzle migration metadata alongside the tracked SQL migrations.
+
+Run `pnpm generate` to recreate `.velite/` after a fresh checkout. Do not commit generated output, local environment files or dependency directories.
 
 ---
 
@@ -268,7 +288,7 @@ The public site needs none of the variables below. Accounts, planner pages, quiz
 | `ADMIN_EMAILS` | Required for CMS editing / scene builder, and assigns the admin role | Comma-separated email allow-list for content editors. Required for team-photo uploads, saving/creating scenes in the scene builder (in local mode too), and grants the Primus Inter Pares role on `/account`. Non-admin users receive the Inchoatus role. | Add a list such as `editor@example.com, second-editor@example.com` to `.env.local` or Vercel's environment variables. |
 | `BLOB_READ_WRITE_TOKEN` | Required for team-photo uploads | Powers the upload after authorisation succeeds. Without it, the route returns a clear error instead of failing inside Vercel Blob's own API. | Create a Vercel Blob store in the project, link it, and let Vercel create the variable automatically. |
 | `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used by `app/sitemap.ts`, `app/robots.ts`, and Open Graph metadata. Falls back to `http://localhost:3000` if unset. Set it to `https://www.projectcherenkov.dev` in Vercel. | Use the deployed origin. |
-| `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | The switch that lets search engines index the site. Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login, signup and planner pages stay `noindex` regardless, as do editorials still carrying a placeholder author. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/engineering/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/engineering/seo-and-accessibility.md` is done. |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | Optional | The switch that lets search engines index the site. Unset (the default) = every page is `noindex, nofollow`. Set to `1` to make public pages indexable; account, login and planner pages stay `noindex` regardless, as do draft, fixture and placeholder-author content. Also controls whether `/llms.txt` lists the site. See [FAQ E](#e-is-the-site-ready-to-be-indexed) and `docs/engineering/seo-and-accessibility.md`. | Set to `1` in Vercel once the launch checklist in `docs/engineering/seo-and-accessibility.md` is done. |
 | `DATABASE_URL` | Required for accounts/planner | Neon/Postgres connection string used by Drizzle and Better Auth. Not needed for the public site or CI's unit tests. | Create a Neon project and copy the connection string from Neon → Connection Details. |
 | `BETTER_AUTH_SECRET` | Required for accounts/planner | Secret used by Better Auth for sessions. | Run `openssl rand -base64 32` and paste the result. |
 | `BETTER_AUTH_URL` | Recommended for accounts/planner | Canonical application URL used by Better Auth; use the deployed origin in production. | Set to your deployed origin. |
@@ -298,6 +318,10 @@ Add a `.mdx` file under `content/editorials/<subject>/`. Frontmatter is validate
 | `status` | `published` (default) or `draft` | Published is visible to everyone. Draft is visible to editors only (signed in, email in `ADMIN_EMAILS`): it appears in the archive list with a "Draft" badge and opens by direct URL, and is left out of every public list, search, the sitemap and `llms.txt`. Visitors get a 404. |
 | `author` | string | n/a |
 | `syllabusTopic` | string, optional | A topic `id` from the syllabus for the same subject, linking the editorial into the syllabus pages. See [Section VI](#vi-syllabus-and-materials). |
+| `language` | `"en"` \| `"id"` | Language of the original file; defaults to English. A sibling `<slug>.id.mdx` or `<slug>.en.mdx` contains translated reader-facing text. |
+| `vizDescription` | string, optional, ≤400 chars | Text equivalent of the canvas visualisation for crawlers, AI tools and screen readers. |
+| `practiceLinks` | array, optional | HTTPS practice links with a title and `checkedOn` date. |
+| `updatedAt` | ISO date, optional | Date of the latest editorial revision. |
 | body | MDX | Everything after the frontmatter. |
 | `slug` | *(derived, not frontmatter)* | Taken from the filename and not the title, so retitling a published piece never changes its URL. |
 
@@ -313,7 +337,7 @@ Real, complete examples to copy from:
 - `content/editorials/astronomy/why-classical-blackbody-radiation-fails.mdx` (`blackbody-spectrum-comparison`)
 - `content/editorials/astronomy/why-a-sidereal-day-is-shorter.mdx` and `content/materials/astronomy/sidereal-synodic-periods.mdx` (`relative-period-sandbox`)
 
-There is also `content/editorials/informatics/programmable-scene-fixture.mdx` (`programmable-scene`). It is an implementation fixture, not a real editorial: a one-circle program that exists to prove the engine round-trips end to end. It has a placeholder author and currently appears in the archive like any other editorial. No editorial uses `composed-scene` yet.
+There is also `content/editorials/informatics/programmable-scene-fixture.mdx` (`programmable-scene`). It is an implementation fixture, not a real editorial: a one-circle program that exists to prove the engine round-trips end to end. It is a draft with a placeholder author and is excluded from public archive surfaces. No editorial uses `composed-scene` yet.
 
 ### `vizConfig` by engine
 
@@ -440,12 +464,12 @@ Until a GitHub OAuth App is set up for real, editing content in production means
 
 ## VIII. Composed and programmable scenes (the scene builder)
 
-The three hand-written engines in [Section V](#v-content-model-writing-an-editorial) each serve one kind of visualisation. Two further engines cover whatever those don't, and are authored visually at `/keystatic/scene-builder` instead of by hand:
+The five hand-written engines in [Section V](#v-content-model-writing-an-editorial) each serve one kind of visualisation. Two further engines cover whatever those don't, and are authored visually at `/keystatic/scene-builder` instead of by hand:
 
 - `composed-scene`: assemble a scene from a fixed library of reusable element templates; the engine (`components/viz/composed-scene/`) interprets that data at render time on a Canvas 2D surface.
 - `programmable-scene`: assemble a small program from Blockly blocks; a sandboxed interpreter (`components/viz/programmable-scene/`) runs it every frame and draws the elements it emits, using the same templates and renderer as `composed-scene`.
 
-Both are dynamically imported in `components/viz/viz-engine.tsx` (with `ssr: false`), the same code-splitting treatment as the other three engines.
+Both are dynamically imported in `components/viz/viz-engine.tsx` (with `ssr: false`), the same code-splitting treatment as the other five engines.
 
 ### Composed scenes
 
@@ -623,12 +647,14 @@ The scheduling pipeline is pure and deterministic except for database I/O (`plan
 
 ### Database schema
 
-Defined in TypeScript via Drizzle ORM (`lib/db/schema.ts`) and committed under `drizzle/` (`0000_wonderful_meteorite.sql`):
+Defined in TypeScript via Drizzle ORM (`lib/db/schema.ts`) and committed under `drizzle/`:
 
-- Auth: `user`, `session`, `account`, `verification` (Better Auth core).
+- Auth and abuse prevention: `user`, `session`, `account`, `verification` (Better Auth core), plus `rate_limit`.
 - Curriculum: `topics` (linked to syllabus topics and editorial slugs), `quiz_questions`, `quiz_attempts`, `quiz_question_responses`.
 - Planner: `study_plans`, `plan_items`, `user_planner_settings`, `topic_self_ratings`.
-- Study tools (migration `0001`): `study_sessions` (timer and manual sessions), `understood_marks`, `question_retries` (practice retries of missed questions; deliberately separate from `quiz_attempts` so they never feed mastery or plan status), plus a nullable `quiz_question_responses.selected_choice_index`.
+- Study tools: `study_sessions` (timer and manual sessions), `understood_marks`, `question_retries` (practice retries of missed questions; deliberately separate from `quiz_attempts` so they never feed mastery or plan status), plus a nullable `quiz_question_responses.selected_choice_index`.
+- Neutrino and home personalisation: `companion_settings`, `companion_usage`, `companion_chats`, `companion_chat_messages`, and `home_viz_picks`.
+- Calendar: `calendar_feeds` for authenticated planner subscriptions and downloads.
 
 #### 5. Study tools: progress, missed questions, timer
 
@@ -662,7 +688,7 @@ The repository is intended to deploy on Vercel and can be deployed with zero req
 
 Before a fully polished public launch, read `docs/history/deployment-readiness.md` (keeping in mind it is a historical Phase 1 document) and resolve:
 
-- The site is `noindex, nofollow` on every page (`app/[locale]/layout.tsx`) until the launch decisions are settled (for example, every editorial still has a placeholder author). See [Section XIII](#xiii-current-status-and-open-questions) for what is left.
+- The site is `noindex, nofollow` on every page (`app/[locale]/layout.tsx`) until the launch decisions are settled. The five real editorials currently have named authors; the programmable-scene fixture is a draft and remains excluded. See [Section XIII](#xiii-current-status-and-open-questions) for what is left.
 - Whether/when to set up a real GitHub OAuth App (plus `KEYSTATIC_SECRET`) so `/keystatic` and the scene builder become reachable in production ([Section VII](#vii-editing-content-in-the-browser-keystatic)).
 
 The repository and deployment status are external to the codebase. What remains in the tracked project is content polish and the production CMS gate.
@@ -691,7 +717,7 @@ The taxonomy isn't finalised yet, and there isn't enough real content to know wh
 
 ### E. "Is the site ready to be indexed?"
 
-The code is ready; the switch is still off. Every page ships `noindex, nofollow` until the environment variable `NEXT_PUBLIC_ALLOW_INDEXING` is set to `1` (it replaces the old hard-coded `robots: { index: false, follow: false }` in `app/[locale]/layout.tsx`, so going live no longer needs a code change). Even with it on, account/login/signup/planner pages stay `noindex`, and so does any editorial whose author is still the `PLACEHOLDER …` value or that is tagged `fixture`. Those are also left out of the sitemap and `/llms.txt`. At the time of writing every editorial still has the placeholder author, so the archive itself would remain `noindex` after flipping the switch until real author names are entered. `docs/engineering/seo-and-accessibility.md` has the full pre-launch checklist.
+The code is ready; the switch is still off. Every page ships `noindex, nofollow` until the environment variable `NEXT_PUBLIC_ALLOW_INDEXING` is set to `1` (it replaces the old hard-coded `robots: { index: false, follow: false }` in `app/[locale]/layout.tsx`, so going live no longer needs a code change). Even with it on, account/login/signup/planner pages stay `noindex`, and draft, fixture or placeholder-author content is excluded from the sitemap and `/llms.txt`. The five real editorials currently have named authors, so they can become indexable once the launch switch and remaining checklist decisions are complete. `docs/engineering/seo-and-accessibility.md` has the full pre-launch checklist.
 
 ### F. "Why do I see 'GitHub authorization required...' in the scene builder even though I'm already logged into `/keystatic`?"
 
@@ -702,10 +728,10 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 ## XIII. Current status and open questions
 
 - The repository and deployment URLs recorded here are external project metadata; verify their visibility and availability independently of the tracked code. The default locale is served under a locale prefix, not at the bare site root.
-- Built: the editorial archive with five visualisation engines; the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and an admin-only multiple-choice question editor at `/keystatic/quiz-bank` with review, archive, coverage, and database-backed authoring.
-- Not built: a Content-Security-Policy (CSP). The checked-in quiz bank is now bootstrap data only; seeding inserts missing questions and does not overwrite admin edits. Only reviewed, non-archived questions are served to students.
+- Built: the editorial archive with seven visualisation engines (five purpose-built engines plus composed and programmable scenes); the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and an admin-only multiple-choice question editor at `/keystatic/quiz-bank` with review, archive, coverage, and database-backed authoring.
+- Security status: a `Content-Security-Policy-Report-Only` header is shipped, but it does not block requests yet. The checked-in quiz bank is bootstrap data only; seeding inserts missing questions and does not overwrite admin edits. Only reviewed, non-archived questions are served to students.
 - Planner and calibration placeholders: `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
-- Content is thin. There are three real editorials plus one implementation fixture, and one material (`binary-search`) in total. Of the syllabus, only informatics has a material; physics and astronomy have none yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.
+- Content is thin. There are five real editorials plus one implementation fixture, and two materials (`binary-search` and `sidereal-synodic-periods`). Of the syllabus, informatics and astronomy have materials; physics does not yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.
 - About page. `content/team/index.json` has four entries and all four render on the page. The entry named "placeholder" ("the holder of place") is intentional: a small joke and a sign that people made this. Do not remove it or treat it as content to resolve; it has no contact line on purpose. The project contact email is set, so the `[PLACEHOLDER: contact inquiries TBD]` fallback in `messages/*.json` no longer shows. The About page says what the project is; the reasoning behind its look and tone is at `/docs/philosophy`, which is awaiting the owner's review before it merges to `main`. The site stays `noindex`/`nofollow` unless indexing is enabled through the documented environment switch.
 - Physics syllabus source. `lib/syllabus/data/physics.ts` records the source label, `OSN 2026` edition, and URL. Its comment states that the lists have not yet been compared with the 2026 PDF because the PDF host blocks automated access, so `accessed` remains unset.
 - Keystatic and the scene builder stay gated behind GitHub OAuth in deployed builds, and remain unavailable unless `KEYSTATIC_GITHUB_CLIENT_ID` and `KEYSTATIC_SECRET` are configured.

@@ -18,6 +18,7 @@ import type { PlannerSettings } from "@/lib/planner-settings";
 import type { PlanItemDoneDeps, PlanServiceDeps } from "@/lib/plan-service";
 import type { PlanViewDeps } from "@/lib/plan-view";
 import type { PlanReadDeps } from "@/lib/plan-state";
+import { getPlannerTopicIds } from "@/lib/syllabus";
 
 // `db` and a transaction handle expose the same query builders.
 type Executor = Pick<Database, "select" | "selectDistinct" | "insert" | "update" | "delete">;
@@ -43,6 +44,8 @@ export function makePlanReadDeps(exec: Executor): PlanReadDeps {
     },
 
     async getSubjectTopics(subject) {
+      const plannerTopicIds = getPlannerTopicIds(subject);
+      if (plannerTopicIds.length === 0) return [];
       const rows = await exec
         .select({
           id: topics.id,
@@ -51,7 +54,12 @@ export function makePlanReadDeps(exec: Executor): PlanReadDeps {
           order: topics.order,
         })
         .from(topics)
-        .where(and(eq(topics.subject, subject), isNotNull(topics.syllabusTopicId)));
+        .where(
+          and(
+            eq(topics.subject, subject),
+            inArray(topics.syllabusTopicId, plannerTopicIds),
+          ),
+        );
       return rows.flatMap((r) =>
         r.syllabusTopicId
           ? [{ id: r.id, syllabusTopicId: r.syllabusTopicId, sectionId: r.sectionId, order: r.order }]

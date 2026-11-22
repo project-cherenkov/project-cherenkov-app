@@ -13,7 +13,7 @@ import {
   type PlanReason,
   type PlanSummary,
 } from "./planner-vocab";
-import { getTopicLocation, localize } from "./syllabus";
+import { getPlannerTopicLocation, localize } from "./syllabus";
 
 export interface StoredPlan {
   id: string;
@@ -87,7 +87,7 @@ export type PlannerPageData =
       stageDates: StageDates | null;
       topics: TopicView[];
       ratedCount: number;
-      topicsMissing: boolean; // `pnpm db:seed` has not been run for this subject
+      topicsMissing: boolean; // at least one current planner topic has no database row
     }
   | {
       state: "plan";
@@ -110,7 +110,7 @@ export type PlannerPageData =
 
 function toTopicViews(state: PlanningState, locale: string): TopicView[] {
   return state.topics.map((t): TopicView => {
-    const located = getTopicLocation(state.settings.subject, t.row.syllabusTopicId);
+    const located = getPlannerTopicLocation(state.settings.subject, t.row.syllabusTopicId);
     return {
       topicId: t.row.id,
       syllabusTopicId: t.row.syllabusTopicId,
@@ -151,10 +151,15 @@ export async function buildPlannerPageData(
   const ratedCount = topics.filter((t) => t.selfRating !== null).length;
   const plan = await deps.getPlan(userId);
 
-  // No plan yet; or a plan from before the adaptive scheduler (no summary);
-  // or one built for another subject. All three need the same next step:
-  // rate the topics of the current subject, then generate.
-  if (!plan || !plan.summary || plan.summary.subject !== settings.subject) {
+  // Incomplete topic data, no plan yet, a pre-adaptive-scheduler plan (no
+  // summary), or a plan built for another subject all need onboarding again.
+  // Never present or generate a plan from a partial current syllabus.
+  if (
+    !state.topicCoverageComplete ||
+    !plan ||
+    !plan.summary ||
+    plan.summary.subject !== settings.subject
+  ) {
     return {
       state: "needs_plan",
       settings,
@@ -162,7 +167,7 @@ export async function buildPlannerPageData(
       stageDates,
       topics,
       ratedCount,
-      topicsMissing: topics.length === 0,
+      topicsMissing: !state.topicCoverageComplete,
     };
   }
 

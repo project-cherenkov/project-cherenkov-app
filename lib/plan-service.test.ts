@@ -19,17 +19,20 @@ function makeFake(opts: {
   withQuestions?: boolean;
   answers?: { topicId: string; correct: boolean; answeredAt: Date }[];
   ratings?: Record<string, number>;
+  omitSyllabusTopicId?: string;
 } = {}) {
   const physics = getAllSyllabi().find((s) => s.subject === "physics")!;
   const syllabusTopics = physics.sections.filter((s) => s.part === "theory").flatMap((s) =>
     s.topics.map((t) => ({ sectionId: s.id, id: t.id })),
   );
-  const rows = syllabusTopics.map((t, i) => ({
-    id: `uuid-${i}`,
-    syllabusTopicId: t.id,
-    sectionId: t.sectionId,
-    order: i,
-  }));
+  const rows = syllabusTopics
+    .filter((t) => t.id !== opts.omitSyllabusTopicId)
+    .map((t, i) => ({
+      id: `uuid-${i}`,
+      syllabusTopicId: t.id,
+      sectionId: t.sectionId,
+      order: i,
+    }));
   const log = { inserted: [] as NewPlanItem[], deletedOpen: 0, outOfScope: 0, summary: null as PlanSummary | null, targetExamDate: "" };
   const settings: PlannerSettings | null =
     opts.settings === undefined
@@ -118,6 +121,39 @@ describe("generateStudyPlanCore", () => {
     expect(result.ok && result.feasible).toBe(false);
     expect(log.summary?.shortfallMinutes).toBeGreaterThan(0);
     expect(log.summary?.droppedTopicIds.length).toBeGreaterThan(0);
+  });
+
+  it("does not let completed items from obsolete topic rows consume the current day's budget", async () => {
+    const current = makeFake();
+    const withLegacyCompletion = makeFake({
+      existingPlan: true,
+      completed: [{
+        topicId: "legacy-topic-row",
+        kind: "study",
+        scheduledFor: "2026-10-04",
+        minutes: 60,
+        completedAt: new Date("2026-10-04T00:00:00Z"),
+      }],
+    });
+
+    await generateStudyPlanCore(current.deps, "u", NOW);
+    await generateStudyPlanCore(withLegacyCompletion.deps, "u", NOW);
+
+    // The legacy row is still present in the stored plan, but is not passed
+    // into the scheduler because its topic is no longer in the current syllabus.
+    expect(withLegacyCompletion.log.inserted).toEqual(current.log.inserted);
+  });
+
+  it("refuses to generate a partial plan when one current planner topic is missing", async () => {
+    const { deps, log } = makeFake({ omitSyllabusTopicId: "vectors" });
+
+    expect(await generateStudyPlanCore(deps, "u", NOW)).toEqual({
+      ok: false,
+      reason: "topics_not_seeded",
+    });
+    expect(log.outOfScope).toBe(0);
+    expect(log.inserted).toHaveLength(0);
+    expect(log.summary).toBeNull();
   });
 
   it("refuses to plan when the exam has started or passed", async () => {

@@ -8,7 +8,9 @@
 //   * completed items are frozen: kept as they are, never rescheduled;
 //   * "today" is the student's calendar day, not the server's;
 //   * an infeasible plan is reported, never silently squeezed;
-//   * switching subject (or leftover Phase 2 rows) replaces the old items.
+//   * switching subject or removing leftover Phase 2 rows replaces the old
+//     items; completed items for obsolete same-subject topics remain stored
+//     but are excluded from the current scheduler.
 import { todayInTimeZone } from "./osn-stages";
 import { scheduleStudyPlan, type FrozenItem } from "./plan-scheduler";
 import {
@@ -45,8 +47,8 @@ export interface PlanWriteDeps {
     userId: string,
     row: { targetExamDate: string; summary: PlanSummary },
   ) => Promise<string>;
-  // Deletes items (completed or not) whose topic belongs to another subject or
-  // has no syllabus key — i.e. Phase 2 leftovers and a previous subject's plan.
+  // Deletes items (completed or not) whose topic belongs to another subject
+  // or has no syllabus key — previous subjects and Phase 2 leftovers.
   deleteOutOfScopeItems: (planId: string, subject: Subject) => Promise<void>;
   getCompletedItems: (planId: string) => Promise<CompletedItemRow[]>;
   deleteOpenItems: (planId: string) => Promise<void>;
@@ -72,7 +74,7 @@ export type GenerateStudyPlanResult =
         | "no_exam_date" // no published dates for the chosen stage and year
         | "exam_passed" // that stage has already finished
         | "no_days" // the exam starts today or sooner: nothing left to plan
-        | "topics_not_seeded"; // `pnpm db:seed` has not been run for this subject
+        | "topics_not_seeded"; // one or more current planner topics have no database row
     };
 
 export async function generateStudyPlanCore(
@@ -91,14 +93,18 @@ export async function generateStudyPlanCore(
   const { settings, window, today } = state;
   if (!window) return { ok: false, reason: "no_exam_date" };
   if (window.end < today) return { ok: false, reason: "exam_passed" };
-  if (state.topics.length === 0) return { ok: false, reason: "topics_not_seeded" };
+  if (!state.topicCoverageComplete) return { ok: false, reason: "topics_not_seeded" };
 
   // Clear out other subjects' / Phase 2 items first so they cannot count as
   // completed history for this plan.
   const existing = await deps.getExistingPlan(userId);
   if (existing) await deps.deleteOutOfScopeItems(existing.id, settings.subject);
   const completed = existing ? await deps.getCompletedItems(existing.id) : [];
-  const frozen: FrozenItem[] = completed.map((c) => ({
+  // Preserve historical plan-item rows for obsolete topics in the database,
+  // but do not let them consume today's study budget or affect current-topic
+  // scheduling. The planner only freezes completions for rows still in scope.
+  const currentTopicIds = new Set(state.topics.map((topic) => topic.row.id));
+  const frozen: FrozenItem[] = completed.filter((c) => currentTopicIds.has(c.topicId)).map((c) => ({
     topicKey: c.topicId,
     kind: c.kind,
     scheduledFor: c.scheduledFor,

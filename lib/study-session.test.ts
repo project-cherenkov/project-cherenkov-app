@@ -68,6 +68,11 @@ describe("validateSession", () => {
       ok: false,
       reason: "invalid_topic",
     });
+    // The timer selector exposes primary planner topics, not subtopics.
+    expect(validateSession(base({ subject: "astronomy", syllabusTopicId: "sidereal-synodic-periods" }), NOW)).toEqual({
+      ok: false,
+      reason: "invalid_topic",
+    });
     // a topic without a subject is meaningless
     expect(validateSession(base({ syllabusTopicId: "binary-search" }), NOW)).toEqual({
       ok: false,

@@ -7,6 +7,7 @@ import { STAGES, difficultiesForStage } from "./osn-stages";
 import type { PlanReadDeps } from "./plan-state";
 import type { OsnStage } from "./planner-vocab";
 import type { Subject } from "./subjects";
+import { getPlannerTopicIds } from "./syllabus";
 
 export interface SubjectMastery {
   // Keyed by SYLLABUS topic id.
@@ -25,7 +26,10 @@ export async function loadSubjectMastery(
   now: Date,
 ): Promise<SubjectMastery> {
   const difficulties = difficultiesForStage(stage);
-  const rows = await deps.getSubjectTopics(subject);
+  const plannerTopicIds = new Set(getPlannerTopicIds(subject));
+  const rows = (await deps.getSubjectTopics(subject)).filter((row) =>
+    plannerTopicIds.has(row.syllabusTopicId),
+  );
   if (rows.length === 0) return { estimates: new Map(), stage };
   const ids = rows.map((r) => r.id);
 

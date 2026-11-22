@@ -8,7 +8,7 @@ import {
   type SelfRatingDeps,
   type SettingsDeps,
 } from "./planner-settings";
-import { getTopicCount } from "./syllabus";
+import { getPlannerTopicIds, getTopicCount } from "./syllabus";
 
 const TODAY = "2026-10-04";
 const GOOD = { subject: "physics", stage: "osn_k", examYear: 2027, hoursPerWeek: 6 };
@@ -110,6 +110,7 @@ describe("validateSelfRatings", () => {
     ["empty", []],
     ["unknown topic", [{ syllabusTopicId: "nope", rating: 3 }]],
     ["topic of another subject", [{ syllabusTopicId: "binary-search", rating: 3 }]],
+    ["subtopic instead of planner topic", [{ syllabusTopicId: "sidereal-synodic-periods", rating: 3 }]],
     ["rating 0", [{ syllabusTopicId: "vectors", rating: 0 }]],
     ["rating 6", [{ syllabusTopicId: "vectors", rating: 6 }]],
     ["fractional rating", [{ syllabusTopicId: "vectors", rating: 2.5 }]],
@@ -126,7 +127,20 @@ describe("validateSelfRatings", () => {
   });
 });
 
-function makeRatingDeps(settings: PlannerSettings | null, seeded: Record<string, string>) {
+function makeRatingDeps(
+  settings: PlannerSettings | null,
+  overrides: Record<string, string>,
+  missingIds: string[] = [],
+) {
+  const seeded: Record<string, string> = settings
+    ? Object.fromEntries(
+        getPlannerTopicIds(settings.subject)
+          .filter((id) => !missingIds.includes(id))
+          .map((id) => [id, `uuid-${id}`]),
+      )
+    : {};
+  Object.assign(seeded, overrides);
+
   const saved: { userId: string; rows: { topicId: string; rating: number }[] }[] = [];
   const deps: SelfRatingDeps = {
     getSettings: async () => settings,
@@ -161,9 +175,29 @@ describe("saveSelfRatingsCore", () => {
     expect(saved).toHaveLength(0);
   });
 
-  it("saves nothing, rather than a subset, when a topic has no row yet", async () => {
-    const { deps, saved } = makeRatingDeps(PHYSICS_SETTINGS, { vectors: "uuid-v" });
-    const r = await saveSelfRatingsCore(deps, "u1", [{ syllabusTopicId: "vectors", rating: 2 }, { syllabusTopicId: "kinematics", rating: 4 }]);
+  it("rejects rating writes when any current planner topic row is missing", async () => {
+    const { deps, saved } = makeRatingDeps(
+      PHYSICS_SETTINGS,
+      { vectors: "uuid-v" },
+      ["oscillations"],
+    );
+    // Even though the submitted topic has a row, the subject's topic catalogue
+    // is incomplete and would produce a partial plan.
+    const r = await saveSelfRatingsCore(deps, "u1", [{ syllabusTopicId: "vectors", rating: 2 }]);
+    expect(r).toEqual({ ok: false, reason: "topics_not_seeded" });
+    expect(saved).toHaveLength(0);
+  });
+
+  it("blocks Astronomy ratings until the missing current syllabus topics are seeded", async () => {
+    const astronomySettings: PlannerSettings = { ...PHYSICS_SETTINGS, subject: "astronomy" };
+    const { deps, saved } = makeRatingDeps(
+      astronomySettings,
+      { "celestial-mechanics": "uuid-celestial-mechanics" },
+      ["nuclear-physics"],
+    );
+    const r = await saveSelfRatingsCore(deps, "u1", [
+      { syllabusTopicId: "celestial-mechanics", rating: 3 },
+    ]);
     expect(r).toEqual({ ok: false, reason: "topics_not_seeded" });
     expect(saved).toHaveLength(0);
   });

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildPlannerPageData, buildTodayList, groupItemsByWeek, type ItemView, type PlanViewDeps } from "./plan-view";
 import type { PlannerSettings } from "./planner-settings";
 import type { PlanSummary } from "./planner-vocab";
+import { getPlannerSyllabus } from "./syllabus";
 
 const NOW = new Date("2026-10-04T05:00:00Z");
 const settings: PlannerSettings = { subject: "physics", stage: "osn_k", examYear: 2027, hoursPerWeek: 6, timezone: "Asia/Jakarta" };
@@ -14,7 +15,19 @@ const summary: PlanSummary = {
 function deps(over: Partial<PlanViewDeps> = {}): PlanViewDeps {
   return {
     getSettings: async () => settings,
-    getSubjectTopics: async () => [{ id: "t1", syllabusTopicId: "kinematics", sectionId: null, order: 0 }],
+    getSubjectTopics: async () => {
+      const ids = getPlannerSyllabus("physics")!.sections.flatMap((section) =>
+        section.topics.map((topic) => topic.id),
+      );
+      return ["kinematics", ...ids.filter((id) => id !== "kinematics")].map(
+        (syllabusTopicId, order) => ({
+          id: `t${order + 1}`,
+          syllabusTopicId,
+          sectionId: null,
+          order,
+        }),
+      );
+    },
     getSelfRatings: async () => new Map(),
     getAnswers: async () => [],
     getTopicsWithQuestions: async () => new Set(),
@@ -38,6 +51,27 @@ describe("buildPlannerPageData", () => {
   it("asks for ratings when there is no plan", async () => {
     const d = await buildPlannerPageData(deps(), "u", NOW, "en");
     expect(d.state).toBe("needs_plan");
+  });
+
+  it("hides obsolete and non-planner rows and warns when topic coverage is partial", async () => {
+    const d = await buildPlannerPageData(
+      deps({
+        getSubjectTopics: async () => [
+          { id: "current", syllabusTopicId: "kinematics", sectionId: null, order: 0 },
+          { id: "secondary", syllabusTopicId: "relativity", sectionId: null, order: 1 },
+          { id: "obsolete", syllabusTopicId: "obsolete-topic-id", sectionId: null, order: 2 },
+        ],
+      }),
+      "u",
+      NOW,
+      "en",
+    );
+
+    expect(d.state).toBe("needs_plan");
+    if (d.state === "needs_plan") {
+      expect(d.topics.map((topic) => topic.syllabusTopicId)).toEqual(["kinematics"]);
+      expect(d.topicsMissing).toBe(true);
+    }
   });
 
   it("treats a Phase 2 plan (no summary) as needing a new plan", async () => {
