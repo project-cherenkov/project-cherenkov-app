@@ -21,7 +21,7 @@ import { Slider } from "@/components/ui/slider";
 type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset" | "resetAllDone";
 
 const optionLabel =
-  "flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-strong bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
+  "nt-opt flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-strong bg-background px-3 py-2 text-center text-sm font-medium text-foreground " +
   "peer-checked:border-foreground peer-checked:bg-muted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring hover:bg-muted/60";
 
 function RadioGroup<T extends string>({

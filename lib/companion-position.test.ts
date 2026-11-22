@@ -2,10 +2,15 @@ import { describe, expect, it } from "vitest";
 import {
   DOCK_MARGIN,
   MIN_PANEL_SIZE,
+  PANEL_CHROME_TIGHT,
+  PANEL_CONTENT_FLOOR,
   PANEL_MARGIN,
+  PANEL_SHELL_BORDER,
+  SHEET_MAX_HEIGHT,
   clampPixels,
   keyboardResize,
   parseStoredPanelSize,
+  panelChromeBudget,
   parseStoredPosition,
   pixelsToPosition,
   placePanel,
@@ -131,11 +136,39 @@ describe("placePanel with a chosen size", () => {
     expect(topLeft.top).toBe(16 + size + 12);
   });
 
-  it("stays inside the viewport on a short landscape screen", () => {
-    const short = { width: 900, height: 380 };
-    const placement = floating({ left: 400, top: 150, size }, short);
-    expect(placement.top).toBeGreaterThanOrEqual(PANEL_MARGIN);
-    expect(placement.top + placement.height).toBeLessThanOrEqual(short.height - PANEL_MARGIN);
+  it("uses the sheet on a short landscape screen, where a floating panel cannot fit", () => {
+    expect(placePanel({ left: 400, top: 150, size }, { width: 900, height: 380 })).toEqual({ mode: "sheet" });
+  });
+
+  it("stays inside the viewport at the shortest height that still floats", () => {
+    const short = { width: 900, height: SHEET_MAX_HEIGHT };
+    for (const top of [16, 150, short.height - size - 16]) {
+      const placement = floating({ left: 400, top, size }, short);
+      expect(placement.top).toBeGreaterThanOrEqual(PANEL_MARGIN);
+      expect(placement.top + placement.height).toBeLessThanOrEqual(short.height - PANEL_MARGIN);
+    }
+  });
+});
+
+describe("panel height budget", () => {
+  it("sums the compact chrome", () => {
+    expect(panelChromeBudget({ a: 10, b: 20 })).toBe(30);
+    expect(panelChromeBudget()).toBe(PANEL_CHROME_TIGHT.header + PANEL_CHROME_TIGHT.tabs + PANEL_CHROME_TIGHT.bars + PANEL_CHROME_TIGHT.composer);
+  });
+
+  it("leaves the content floor above the chrome at the minimum height", () => {
+    expect(MIN_PANEL_SIZE.height).toBeGreaterThanOrEqual(panelChromeBudget() + PANEL_CONTENT_FLOOR + PANEL_SHELL_BORDER);
+    expect(MIN_PANEL_SIZE.height % 4).toBe(0);
+    // The old minimum (320) could not hold the composer at all.
+    expect(MIN_PANEL_SIZE.height).toBeGreaterThan(320);
+  });
+
+  it("always floats inside the viewport at the minimum", () => {
+    expect(MIN_PANEL_SIZE.height + PANEL_MARGIN * 2).toBeLessThanOrEqual(SHEET_MAX_HEIGHT);
+  });
+
+  it("heals a size stored by an older version", () => {
+    expect(parseStoredPanelSize('{"width":300,"height":320}')).toEqual({ width: 300, height: MIN_PANEL_SIZE.height });
   });
 });
 

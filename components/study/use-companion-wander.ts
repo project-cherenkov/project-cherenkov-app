@@ -23,6 +23,21 @@ const EASINGS = [
 
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
+/**
+ * Cancels EVERY animation on the element, not just the latest leg. Each leg is a
+ * fill:"forwards" animation, and an earlier finished leg stays attached (and
+ * keeps painting its end transform) until the browser decides it has been
+ * replaced. Cancelling only the newest leg therefore used to reveal the older
+ * leg's offset, which displaced the dock by up to a screen while it was being
+ * dragged: it was "invisible" for as long as it was held.
+ */
+export function cancelAllAnimations(el: Element | null | undefined): number {
+  if (!el || typeof el.getAnimations !== "function") return 0;
+  const running = el.getAnimations();
+  running.forEach((animation) => animation.cancel());
+  return running.length;
+}
+
 function pickTarget(from: Point, b: WanderBounds): (Point & { distance: number }) | null {
   const spanX = Math.max(0, b.maxX - b.minX);
   const spanY = Math.max(0, b.maxY - b.minY);
@@ -120,6 +135,11 @@ export function useCompanionWander({
 
     function leg(): void {
       if (cancelled) return;
+      // A press is in progress: do not start a leg under the pointer.
+      if (node.dataset.dragging === "true") {
+        timer = window.setTimeout(leg, 500);
+        return;
+      }
       const b = boundsRef.current;
       const target = pickTarget(at, b);
       if (!target || target.distance < 1) {
@@ -131,12 +151,16 @@ export function useCompanionWander({
       const duration = Math.max(1600, (target.distance / pxPerSecond) * 1000);
       const from = at;
       const to = { x: target.x, y: target.y };
+      const previous = animationRef.current;
       const animation = node.animate(curvedFrames(from, to, b), {
         duration,
         easing: EASINGS[Math.floor(Math.random() * EASINGS.length)] ?? "ease-in-out",
         fill: "forwards",
       });
       animationRef.current = animation;
+      // The new leg starts exactly where the old one ended, so dropping the old
+      // one in the same task is seamless, and only one animation ever exists.
+      previous?.cancel();
       if (pausedRef.current) animation.pause();
       animation.onfinish = () => {
         if (cancelled || animationRef.current !== animation) return;
@@ -154,6 +178,7 @@ export function useCompanionWander({
       if (timer) window.clearTimeout(timer);
       animationRef.current?.cancel();
       animationRef.current = null;
+      cancelAllAnimations(node);
     };
     // bounds are read through a ref; these values change only when the dock's
     // resting spot or the viewport changes, which should restart from zero.

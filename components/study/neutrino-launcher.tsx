@@ -3,12 +3,12 @@
 import { lazy, Suspense, useEffect, useId, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
-import { BookOpen, Bot, CircleHelp, ExternalLink, GripHorizontal, MessageCircleQuestion, Settings2, X } from "lucide-react";
 import { Link, usePathname } from "@/i18n/routing";
 import { useSession } from "@/lib/auth-client";
 import { StudyTimer } from "@/components/study/study-timer";
 import { ManifoldMascot, type MascotMood } from "@/components/study/manifold-mascot";
 import { CompanionTrail } from "@/components/study/companion-trail";
+import { NtIcon, NtStyleProvider } from "@/components/study/nt-icon";
 import { NeutrinoGlyph, type GlyphKind } from "@/components/study/neutrino-glyph";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { NeutrinoFaq } from "@/components/study/neutrino-faq";
@@ -17,7 +17,7 @@ import { ChatMeter } from "@/components/study/chat-meter";
 import { useChatList } from "@/components/study/use-chat-list";
 import { useOwnKey } from "@/components/study/use-own-key";
 import { useCompanionPrefs } from "@/components/study/use-companion-prefs";
-import { useCompanionWander } from "@/components/study/use-companion-wander";
+import { cancelAllAnimations, useCompanionWander } from "@/components/study/use-companion-wander";
 import {
   COMPANION_DAILY_LIMIT,
   COMPANION_MAX_CHATS,
@@ -34,6 +34,7 @@ import { pageRefFromPath } from "@/lib/companion-prompt";
 import {
   DEFAULT_DOCK_POSITION,
   DOCK_MARGIN,
+  MIN_PANEL_SIZE,
   clampPixels,
   keyboardResize,
   parseStoredPanelSize,
@@ -308,55 +309,61 @@ function CompanionPanel({
     void send({ retry: true, key });
   }
 
+  const statusText = tab !== "ask" ? t("subtitle") : pixel ? (mode === "ai" && aiEnabled ? t("statusAi") : t("statusFaq")) : mode === "ai" && aiEnabled ? t("subtitleAi") : t("subtitleFaq");
   const canTryPersonalKey = !ownKey && (error === "provider_quota" || error === "provider_unavailable" || error === "configuration" || error === "cherenkov_limit");
 
   return (
-    <div data-style={chatStyle} className={`nt-panel ${pixel ? "nt-pixel" : ""} flex ${embedded ? "h-full" : "h-screen"} flex-col bg-background text-foreground`}>
-      <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
+    // The outer box is the size container the compact tiers in globals.css
+    // query. It never scrolls itself, so the AI notice can overlay it; the inner
+    // .nt-panel scrolls as a last resort when even the tight tier cannot fit.
+    <NtStyleProvider value={chatStyle}>
+    <div className={`nt-container relative ${embedded ? "h-full" : "h-screen"}`}>
+    <div data-style={chatStyle} className={`nt-panel ${pixel ? "nt-pixel" : ""} flex h-full flex-col overflow-y-auto bg-background text-foreground`}>
+      <header className="nt-header flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
+          <span className="nt-avatar nt-frame flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
             <ManifoldMascot size={36} mood={mascot} lite />
           </span>
-          <div className="min-w-0">
+          <div className="nt-title min-w-0">
             <p className="nt-font truncate text-sm font-semibold">{name}</p>
-            <p role={pixel ? "status" : undefined} className="nt-font text-xs text-muted-foreground">
-              {tab !== "ask" ? t("subtitle") : pixel ? (mode === "ai" && aiEnabled ? t("statusAi") : t("statusFaq")) : mode === "ai" && aiEnabled ? t("subtitleAi") : t("subtitleFaq")}
+            <p role={pixel ? "status" : undefined} title={statusText} className="nt-font nt-status text-xs text-muted-foreground">
+              {statusText}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-1">
           {openFloating ? (
             <button type="button" onClick={openFloating} className="inline-flex h-11 items-center gap-1 rounded-md px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground" aria-label={t("openFloating")} title={t("openFloating")}>
-              <ExternalLink className="h-4 w-4" aria-hidden />
+              <NtIcon name="external" className="h-4 w-4" />
               <span className="hidden min-[360px]:inline">{t("floatingShort")}</span>
             </button>
           ) : null}
           <button type="button" onClick={close} className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground hover:bg-muted" aria-label={t("close")}>
-            <X className="h-4 w-4" aria-hidden />
+            <NtIcon name="close" className="h-4 w-4" />
           </button>
         </div>
       </header>
 
-      {floatingUnsupported ? <p role="status" className="shrink-0 border-b border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground">{t("unsupported")}</p> : null}
+      {floatingUnsupported ? <p role="status" className="nt-frame shrink-0 border-b border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground">{t("unsupported")}</p> : null}
 
-      <nav aria-label={t("tools")} className="grid shrink-0 grid-cols-3 gap-1 border-b border-border p-2">
+      <nav aria-label={t("tools")} className="nt-tabs grid shrink-0 grid-cols-3 gap-1 border-b border-border p-2">
         <button type="button" onClick={() => setTab("ask")} aria-pressed={tab === "ask"} className={tabClass(tab === "ask")}>
-          <MessageCircleQuestion className="h-4 w-4" aria-hidden /> {t("askTab")}
+          <NtIcon name="ask" className="h-4 w-4" /> {t("askTab")}
         </button>
         <button type="button" onClick={() => setTab("timer")} aria-pressed={tab === "timer"} className={tabClass(tab === "timer")}>
-          <BookOpen className="h-4 w-4" aria-hidden /> {t("timerTab")}
+          <NtIcon name="book" className="h-4 w-4" /> {t("timerTab")}
         </button>
         <button type="button" onClick={() => setTab("settings")} aria-pressed={tab === "settings"} className={tabClass(tab === "settings")}>
-          <Settings2 className="h-4 w-4" aria-hidden /> {t("settingsTab")}
+          <NtIcon name="settings" className="h-4 w-4" /> {t("settingsTab")}
         </button>
       </nav>
 
       {tab === "timer" ? (
-        <div className="min-h-0 flex-1 overflow-y-auto p-4 [&_.text-7xl]:text-5xl [&_.space-y-6]:space-y-3">
+        <div className="min-h-40 flex-1 overflow-y-auto p-4 [&_.text-7xl]:text-5xl [&_.space-y-6]:space-y-3">
           <StudyTimer signedIn={signedIn} subjects={[]} planItems={[]} showFocusView={false} />
         </div>
       ) : tab === "settings" ? (
-        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+        <div className="min-h-40 flex-1 overflow-y-auto p-4">
           <CompanionPreferences
             signedIn={signedIn}
             variant="compact"
@@ -374,15 +381,32 @@ function CompanionPanel({
       <div className={tab === "ask" ? "contents" : "hidden"}>
         <>
           {aiEnabled ? (
-            <div className="shrink-0 border-b border-border p-2">
-              <div role="group" aria-label={t("modeGroup")} className="grid grid-cols-2 gap-1 rounded-lg bg-muted/60 p-1">
-                <button type="button" onClick={() => setMode("faq")} aria-pressed={mode === "faq"} className={modeClass(mode === "faq")}>
-                  <CircleHelp className="h-4 w-4" aria-hidden /> {t("faqMode")}
-                </button>
-                <button type="button" onClick={onRequestAi} aria-pressed={mode === "ai"} className={modeClass(mode === "ai")}>
-                  <Bot className="h-4 w-4" aria-hidden /> {t("aiMode")}
-                </button>
+            <div className="nt-bars shrink-0">
+              <div className="nt-modebar border-b border-border p-2">
+                <div role="group" aria-label={t("modeGroup")} className="nt-frame grid grid-cols-2 gap-1 rounded-lg bg-muted/60 p-1">
+                  <button type="button" onClick={() => setMode("faq")} aria-pressed={mode === "faq"} className={modeClass(mode === "faq")}>
+                    <NtIcon name="help" className="h-4 w-4" /> {t("faqMode")}
+                  </button>
+                  <button type="button" onClick={onRequestAi} aria-pressed={mode === "ai"} className={modeClass(mode === "ai")}>
+                    <NtIcon name="bot" className="h-4 w-4" /> {t("aiMode")}
+                  </button>
+                </div>
               </div>
+              {mode === "ai" && signedIn ? (
+                <div className="nt-chatbar flex flex-wrap items-center gap-2 border-b border-border px-3 py-2">
+                  <button type="button" onClick={() => setChatListOpen((open) => !open)} aria-pressed={chatListOpen} className="nt-btn inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted">
+                    {t("chatsButton")}{listUsage ? ` (${listUsage.chats}/${COMPANION_MAX_CHATS})` : ""}
+                  </button>
+                  <button type="button" onClick={newChat} disabled={messages.length === 0 && chatId === null} className="nt-btn inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted disabled:opacity-50">
+                    {t("newChat")}
+                  </button>
+                  {chatId ? (
+                    <div className="nt-meter min-w-[8rem] flex-1">
+                      <ChatMeter label={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} value={savedCount} max={COMPANION_MAX_CHAT_MESSAGES} valueText={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} style={chatStyle} />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           ) : null}
 
@@ -393,8 +417,8 @@ function CompanionPanel({
               onSwitchToAi={aiEnabled ? onRequestAi : undefined}
               banner={
                 !faqBannerDismissed ? (
-                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-border bg-muted/40 p-2.5 pr-8 text-xs text-muted-foreground">
-                    <CircleHelp className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  <div role="status" className="nt-banner nt-frame relative flex items-start gap-2 rounded-md border border-border bg-muted/40 p-2.5 pr-8 text-xs text-muted-foreground">
+                    <NtIcon name="help" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                     <span className="flex-1">
                       {t("faqBanner")}
                       {!aiEnabled ? (
@@ -412,7 +436,7 @@ function CompanionPanel({
                         title={t("dismissFaqBanner")}
                         className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
                       >
-                        <X className="h-3.5 w-3.5" aria-hidden />
+                        <NtIcon name="close" className="h-3.5 w-3.5" />
                       </button>
                     ) : null}
                   </div>
@@ -421,28 +445,13 @@ function CompanionPanel({
             />
           ) : (
             <>
-              {signedIn ? (
-                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-3 py-2">
-                  <button type="button" onClick={() => setChatListOpen((open) => !open)} aria-pressed={chatListOpen} className="inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted">
-                    {t("chatsButton")}{listUsage ? ` (${listUsage.chats}/${COMPANION_MAX_CHATS})` : ""}
-                  </button>
-                  <button type="button" onClick={newChat} disabled={messages.length === 0 && chatId === null} className="inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted disabled:opacity-50">
-                    {t("newChat")}
-                  </button>
-                  {chatId ? (
-                    <div className="min-w-[8rem] flex-1">
-                      <ChatMeter label={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} value={savedCount} max={COMPANION_MAX_CHAT_MESSAGES} valueText={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} style={chatStyle} />
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
               {chatListOpen && signedIn ? (
                 <NeutrinoChatList state={chatList.state} activeId={chatId} onOpen={(id) => void openChat(id)} onDelete={(id) => void deleteChat(id)} onNew={newChat} />
               ) : (
-              <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
+              <div ref={scrollRef} className="min-h-40 flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
                 {!aiBannerDismissed ? (
-                  <div role="status" className="relative flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-2.5 pr-8 text-xs text-foreground">
-                    <Bot className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  <div role="status" className="nt-banner nt-frame relative flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-2.5 pr-8 text-xs text-foreground">
+                    <NtIcon name="bot" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                     <span className="flex-1">{t("aiBanner")}</span>
                     {onDismissAiBanner ? (
                       <button
@@ -452,20 +461,20 @@ function CompanionPanel({
                         title={t("dismissAiBanner")}
                         className="absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-warning-border/40 hover:text-foreground"
                       >
-                        <X className="h-3.5 w-3.5" aria-hidden />
+                        <NtIcon name="close" className="h-3.5 w-3.5" />
                       </button>
                     ) : null}
                   </div>
                 ) : null}
 
                 {!signedIn ? (
-                  <div className="rounded-lg border border-border bg-card p-4 text-sm">
+                  <div className="nt-frame rounded-lg border border-border bg-card p-4 text-sm">
                     <p className="font-medium">{t("signInTitle")}</p>
                     <p className="mt-1 text-muted-foreground">{t("signInBody")}</p>
                     <Link className="mt-3 inline-flex min-h-10 items-center underline underline-offset-4" href="/login">{t("signIn")}</Link>
                   </div>
                 ) : messages.length === 0 ? (
-                  <p className="rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("welcome")}</p>
+                  <p className="nt-frame rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("welcome")}</p>
                 ) : null}
                 {messages.map((message, index) => (
                   <div key={`${index}-${message.role}`}>
@@ -477,18 +486,24 @@ function CompanionPanel({
                       </div>
                     ) : null}
                   <div className={message.role === "user" ? "nt-bubble ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink" : "nt-bubble mr-5 rounded-lg border border-border bg-card p-3 text-sm"}>
-                    <ChatText text={message.text} />
+                    <div data-nt-exempt><ChatText text={message.text} /></div>
                   </div>
                   </div>
                 ))}
                 {truncated && !busy ? (
-                  <div role="status" className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm">
+                  <div role="status" className="nt-frame flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm">
                     <span>{t("truncated")}</span>
                     <button type="button" onClick={() => void send({ text: t("continue") })} disabled={composerBlocked} className="min-h-11 rounded-md border border-border-strong px-3 font-medium hover:bg-muted disabled:opacity-50">{t("continue")}</button>
                   </div>
                 ) : null}
                 {busy ? <p className="text-sm text-muted-foreground">{t("thinking")}</p> : null}
-                {error ? <div role="alert" className="rounded-lg border border-danger-border bg-danger-bg p-3 text-sm text-foreground">{t(`errors.${error}`, limitValues)}</div> : null}
+                {error ? <div role="alert" className="nt-frame rounded-lg border border-danger-border bg-danger-bg p-3 text-sm text-foreground">{t(`errors.${error}`, limitValues)}</div> : null}
+                {/* The composer footer is hidden in the tightest tier; this copy
+                    (shown only there) keeps the daily limit and the Help link reachable. */}
+                <div className="nt-foot-inline items-center justify-between text-xs text-muted-foreground">
+                  <span>{ownKey ? t("usingOwnKey") : t("dailyLimit", { limit: COMPANION_DAILY_LIMIT })}</span>
+                  <Link href="/docs/neutrino" className="underline underline-offset-2">{t("help")}</Link>
+                </div>
               </div>
               )}
 
@@ -506,7 +521,7 @@ function CompanionPanel({
               ) : null}
 
               {composerBlocked ? (
-                <div role="status" className="shrink-0 space-y-2 border-t border-border bg-warning-bg p-3 text-sm">
+                <div role="status" className="nt-frame shrink-0 space-y-2 border-t border-border bg-warning-bg p-3 text-sm">
                   <p>{chatFull && chatsAtMax ? t("chatFullAndLimitNotice", limitValues) : chatFull ? t("chatFullNotice", limitValues) : t("chatLimitNotice", limitValues)}</p>
                   {!chatFull || chatsAtMax ? (
                     <button type="button" onClick={() => setChatListOpen(true)} className="min-h-11 rounded-md border border-border-strong px-3 font-medium hover:bg-background">{t("openChatList")}</button>
@@ -514,13 +529,13 @@ function CompanionPanel({
                 </div>
               ) : null}
 
-              <form className="shrink-0 border-t border-border p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
+              <form className="nt-composer sticky bottom-0 z-[1] shrink-0 border-t border-border bg-background p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
                 <label htmlFor="neutrino-message" className="sr-only">{t("messageLabel")}</label>
                 <div className="flex items-end gap-2">
                   <textarea id="neutrino-message" rows={2} maxLength={COMPANION_MAX_MESSAGE_CHARS} value={draft} disabled={!signedIn || busy || composerBlocked} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border-strong bg-background px-3 py-2 text-sm" />
                   <button type="submit" disabled={!signedIn || busy || composerBlocked || !draft.trim()} className="h-11 rounded-md bg-cherenkov-blue-800 px-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{t("send")}</button>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+                <div className="nt-composer-foot mt-2 flex items-center justify-between text-xs text-muted-foreground">
                   <span>{ownKey ? t("usingOwnKey") : t("dailyLimit", { limit: COMPANION_DAILY_LIMIT })}</span>
                   <Link href="/docs/neutrino" className="underline underline-offset-2">{t("help")}</Link>
                 </div>
@@ -529,9 +544,10 @@ function CompanionPanel({
           )}
         </>
       </div>
+    </div>
       {aiNoticeOpen ? (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/90 p-4" role="dialog" aria-modal="true" aria-labelledby="neutrino-ai-notice-title">
-          <div className="w-full max-w-md space-y-4 rounded-xl border border-border bg-background p-5 shadow-xl">
+        <div className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto bg-background/90 p-4" role="dialog" aria-modal="true" aria-labelledby="neutrino-ai-notice-title">
+          <div className="nt-frame nt-dialog w-full max-w-md space-y-4 rounded-xl border border-border bg-background p-5 shadow-xl">
             <div>
               <h2 id="neutrino-ai-notice-title" className="text-base font-semibold">{t("aiNoticeTitle")}</h2>
               <p className="mt-2 text-sm text-muted-foreground">{t("aiNoticeBody")}</p>
@@ -548,6 +564,7 @@ function CompanionPanel({
         </div>
       ) : null}
     </div>
+    </NtStyleProvider>
   );
 }
 
@@ -630,6 +647,11 @@ export function InPageNeutrino() {
   const driftTimer = useRef<number | null>(null);
 
   const size = COMPANION_SIZE_PX[prefs.size];
+  const positionRef = useRef(position);
+  positionRef.current = position;
+  const sizeRef = useRef(size);
+  sizeRef.current = size;
+  const sheetOpenRef = useRef(false);
   const mood: MascotMood = busy ? "thinking" : open ? "curious" : pageMood;
   const showDock = mounted && prefs.enabled;
   const aiEnabled = prefs.aiEnabled;
@@ -870,6 +892,12 @@ export function InPageNeutrino() {
     resetKey: [Math.round(basePx.left), Math.round(basePx.top), viewport.width, viewport.height, size].join("|"),
   });
 
+  // The viewport at the moment of the gesture. The `viewport` state can be stale
+  // (a mobile URL bar or a zoom change does not always fire resize in time).
+  function liveViewport(): Viewport {
+    return { width: window.innerWidth, height: window.innerHeight };
+  }
+
   function onPointerDown(event: PointerEvent<HTMLButtonElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
     pauseDriftForCooldown();
@@ -890,30 +918,100 @@ export function InPageNeutrino() {
     const dy = event.clientY - drag.startY;
     // A small threshold keeps an ordinary click from nudging the mascot.
     if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+    if (!drag.moved) {
+      // The drag begins: drop every wander animation synchronously, in this very
+      // event, so no leftover offset can sit under the left/top set below.
+      cancelAllAnimations(wanderRef.current);
+    }
     drag.moved = true;
     pauseDriftForCooldown();
-    drag.last = clampPixels(drag.left + dx, drag.top + dy, viewport, size);
+    drag.last = clampPixels(drag.left + dx, drag.top + dy, liveViewport(), size);
     setDragPx(drag.last);
   }
 
-  function endDrag(event: PointerEvent<HTMLButtonElement>, commit: boolean) {
+  // Ends whatever drag is open. The last valid drag position is always kept, and
+  // dragRef, dragPx and the drift cooldown are always cleared, whatever ended the
+  // gesture: a release, a cancel, a lost capture, a blur or a hidden tab. A drag
+  // left open would block the drift cooldown for the rest of the page view.
+  function finishDrag() {
     const drag = dragRef.current;
-    if (!drag || drag.id !== event.pointerId) return;
+    if (!drag) return;
     dragRef.current = null;
-    if (!drag.moved) {
-      pauseDriftForCooldown();
-      return;
-    }
     pauseDriftForCooldown();
+    if (!drag.moved) return;
     // The browser still fires a click after a drag; ignore it.
     suppressClickUntil.current = performance.now() + 300;
-    if (commit) {
-      savePosition(pixelsToPosition(drag.last.left, drag.last.top, viewport, size));
-      if (open) setOpenAnchor({ left: drag.last.left, top: drag.last.top });
-      resetDockMotion();
-    }
+    const view = liveViewport();
+    const last = clampPixels(drag.last.left, drag.last.top, view, size);
+    savePosition(pixelsToPosition(last.left, last.top, view, size));
+    if (open) setOpenAnchor({ left: last.left, top: last.top });
+    resetDockMotion();
     setDragPx(null);
   }
+  const finishDragRef = useRef(finishDrag);
+  finishDragRef.current = finishDrag;
+
+  function endDrag(event: PointerEvent<HTMLButtonElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    finishDrag();
+  }
+
+  useEffect(() => {
+    const finish = () => finishDragRef.current();
+    const onVisibility = () => { if (document.visibilityState === "hidden") finish(); };
+    window.addEventListener("blur", finish);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("blur", finish);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
+  // Visibility watchdog. The dock must be where the state says it is. If a stray
+  // animation or transform has put it elsewhere (or collapsed it), cancel the
+  // animations and force the transform off. It only runs where the Web
+  // Animations API exists, and never while a wander leg legitimately offsets
+  // the dock.
+  function verifyDock(intended: { left: number; top: number }) {
+    const el = wanderRef.current;
+    if (!el || typeof el.getAnimations !== "function" || sheetOpenRef.current) return;
+    if (getComputedStyle(el).display === "none") return;
+    const rect = el.getBoundingClientRect();
+    const off = Math.abs(rect.left - intended.left) > 4 || Math.abs(rect.top - intended.top) > 4;
+    const collapsed = rect.width === 0 || rect.height === 0;
+    if (!off && !collapsed) return;
+    const cancelled = cancelAllAnimations(el);
+    el.style.transform = "none";
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[neutrino] dock watchdog: rect disagreed with the intended position", { rect: rect.toJSON?.() ?? rect, intended, cancelled });
+    }
+  }
+  const verifyDockRef = useRef(verifyDock);
+  verifyDockRef.current = verifyDock;
+
+  // During a drag: after every committed move, the dock must be under the pointer.
+  useEffect(() => {
+    if (dragPx) verifyDockRef.current(dragPx);
+    else wanderRef.current?.style.removeProperty("transform");
+  }, [dragPx]);
+
+  // After a resize or a tab coming back to the front, a dock that is not
+  // wandering must sit at its resting spot.
+  useEffect(() => {
+    const check = () => {
+      const el = wanderRef.current;
+      if (!el || dragRef.current || typeof el.getAnimations !== "function") return;
+      if (el.getAnimations().length === 0) verifyDockRef.current(positionToPixels(positionRef.current, liveViewport(), sizeRef.current));
+    };
+    const onVisibility = () => { if (document.visibilityState === "visible") check(); };
+    window.addEventListener("resize", check);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("resize", check);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     pauseDriftForCooldown();
@@ -930,8 +1028,9 @@ export function InPageNeutrino() {
     const rect = dockRef.current?.getBoundingClientRect();
     const currentX = rect && (rect.width > 0 || rect.height > 0) ? rect.left : basePx.left;
     const currentY = rect && (rect.width > 0 || rect.height > 0) ? rect.top : basePx.top;
-    const next = clampPixels(currentX + move[0], currentY + move[1], viewport, size);
-    savePosition(pixelsToPosition(next.left, next.top, viewport, size));
+    const view = liveViewport();
+    const next = clampPixels(currentX + move[0], currentY + move[1], view, size);
+    savePosition(pixelsToPosition(next.left, next.top, view, size));
     if (open) setOpenAnchor(next);
     resetDockMotion();
   }
@@ -979,6 +1078,7 @@ export function InPageNeutrino() {
   const panelAnchor = dragPx ?? openAnchor ?? px;
   const placement = open ? placePanel({ ...panelAnchor, size }, viewport, panelSize ?? {}) : null;
   const sheetOpen = placement?.mode === "sheet";
+  sheetOpenRef.current = sheetOpen;
   const frame: PanelFrame | null = placement?.mode === "floating" ? (liveFrame ?? placement) : null;
 
   // Pixel punctuation beside the mascot (pixel style only). Decorative: the
@@ -1055,6 +1155,7 @@ export function InPageNeutrino() {
               freeHorizontal={placement.freeHorizontal}
               freeVertical={placement.freeVertical}
               viewport={viewport}
+              pixel={prefs.style === "pixel"}
               labels={{ width: t("resize.width"), height: t("resize.height"), corner: t("resize.corner"), hint: t("resize.hint") }}
               onDown={onResizeDown}
               onMove={onResizeMove}
@@ -1099,7 +1200,6 @@ export function InPageNeutrino() {
 
       {showDock && !hiddenForNow ? (
         <CompanionTrail
-          pixel={prefs.style === "pixel"}
           targetRef={dockRef}
           enabled={prefs.ambientMotion}
           active={!open && !pipWindow && (!driftPaused || Boolean(dragPx))}
@@ -1122,16 +1222,16 @@ export function InPageNeutrino() {
         >
           {introVisible && !open ? (
             <div className={`absolute top-1/2 z-10 -translate-y-1/2 ${introSide === "left" ? "right-full mr-3" : "left-full ml-3"}`}>
-              <button type="button" onClick={onClick} className="whitespace-nowrap rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground shadow-lg">
+              <button type="button" onClick={onClick} className={`${prefs.style === "pixel" ? "nt-dock-pixel " : ""}whitespace-nowrap rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground shadow-lg`}>
                 {t("introPrompt")}
               </button>
               <button
                 type="button"
                 onClick={() => { setIntroVisible(false); try { window.localStorage.setItem(INTRO_KEY, "1"); } catch { /* Dismissed for this visit. */ } }}
                 aria-label={t("dismissIntro")}
-                className="neutrino-focus absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground shadow"
+                className={`${prefs.style === "pixel" ? "nt-dock-pixel " : ""}neutrino-focus absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground shadow`}
               >
-                <X className="h-3 w-3" aria-hidden />
+                <NtIcon name="close" className="h-3 w-3" />
               </button>
             </div>
           ) : null}
@@ -1147,11 +1247,12 @@ export function InPageNeutrino() {
             onKeyDown={onKeyDown}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
-            onPointerUp={(event) => endDrag(event, true)}
-            onPointerCancel={(event) => endDrag(event, false)}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onLostPointerCapture={endDrag}
             onFocus={pauseDriftForCooldown}
             onBlur={pauseDriftForCooldown}
-            className="neutrino-plate neutrino-focus block h-full w-full cursor-grab rounded-full shadow-xl active:cursor-grabbing"
+            className="neutrino-plate neutrino-focus block h-full w-full cursor-grab touch-none rounded-full shadow-xl active:cursor-grabbing"
           >
             <ManifoldMascot
               size={size}
@@ -1168,9 +1269,9 @@ export function InPageNeutrino() {
             onClick={hideUntilReload}
             aria-label={t("hideNow")}
             title={t("hideNow")}
-            className="neutrino-focus pointer-events-none absolute -right-3 -top-3 flex [@media(hover:none)]:hidden h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground opacity-0 shadow transition-opacity before:absolute before:-right-2.5 before:-top-2.5 before:bottom-0 before:left-0 before:content-[''] focus-visible:pointer-events-auto focus-visible:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100"
+            className={`${prefs.style === "pixel" ? "nt-dock-pixel " : ""}neutrino-focus pointer-events-none absolute -right-3 -top-3 flex [@media(hover:none)]:hidden h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground opacity-0 shadow transition-opacity before:absolute before:-right-2.5 before:-top-2.5 before:bottom-0 before:left-0 before:content-[''] focus-visible:pointer-events-auto focus-visible:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100`}
           >
-            <X className="h-3.5 w-3.5" aria-hidden />
+            <NtIcon name="close" className="h-3.5 w-3.5" />
           </button>
         </div>
       ) : null}
@@ -1216,6 +1317,7 @@ function ResizeHandles({
   freeHorizontal,
   freeVertical,
   viewport,
+  pixel,
   labels,
   onDown,
   onMove,
@@ -1227,6 +1329,7 @@ function ResizeHandles({
   freeHorizontal: "left" | "right";
   freeVertical: "top" | "bottom";
   viewport: Viewport;
+  pixel: boolean;
   labels: { width: string; height: string; corner: string; hint: string };
   onDown: (event: PointerEvent<HTMLElement>, edges: PanelEdge[], frame: PanelFrame) => void;
   onMove: (event: PointerEvent<HTMLElement>) => void;
@@ -1255,8 +1358,8 @@ function ResizeHandles({
         tabIndex={0}
         aria-orientation="vertical"
         aria-label={labels.width}
-        aria-valuemin={300}
-        aria-valuemax={Math.max(300, viewport.width - 32)}
+        aria-valuemin={MIN_PANEL_SIZE.width}
+        aria-valuemax={Math.max(MIN_PANEL_SIZE.width, viewport.width - 32)}
         aria-valuenow={Math.round(frame.width)}
         onKeyDown={(event) => onKey(event, freeHorizontal, frame)}
         {...bind([freeHorizontal])}
@@ -1267,8 +1370,8 @@ function ResizeHandles({
         tabIndex={0}
         aria-orientation="horizontal"
         aria-label={labels.height}
-        aria-valuemin={320}
-        aria-valuemax={Math.max(320, viewport.height - 32)}
+        aria-valuemin={MIN_PANEL_SIZE.height}
+        aria-valuemax={Math.max(MIN_PANEL_SIZE.height, viewport.height - 32)}
         aria-valuenow={Math.round(frame.height)}
         onKeyDown={(event) => onKey(event, freeVertical, frame)}
         {...bind([freeVertical])}
@@ -1279,7 +1382,7 @@ function ResizeHandles({
         {...bind([freeHorizontal, freeVertical])}
         className={`${shared} ${side} ${end} flex h-6 w-6 items-center justify-center text-muted-foreground ${cornerCursor}`}
       >
-        <GripHorizontal className={`h-4 w-4 ${backslash ? "rotate-45" : "-rotate-45"}`} aria-hidden />
+        <span className={pixel ? "" : `inline-flex ${backslash ? "rotate-45" : "-rotate-45"}`}><NtIcon name="grip" style={pixel ? "pixel" : "smooth"} className="h-4 w-4" /></span>
       </div>
     </>
   );

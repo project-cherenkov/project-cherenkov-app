@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Bot, Search, X } from "lucide-react";
+import { NtIcon } from "@/components/study/nt-icon";
 import { Link } from "@/i18n/routing";
 import {
   FAQ_BY_ID,
@@ -105,7 +105,7 @@ export function NeutrinoFaq({
       <div className="space-y-2">
         <label htmlFor={searchId} className="sr-only">{t("faq.searchLabel")}</label>
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+          <span className="nt-search-icon pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"><NtIcon name="search" className="h-4 w-4" /></span>
           <input
             id={searchId}
             type="search"
@@ -115,7 +115,7 @@ export function NeutrinoFaq({
             autoComplete="off"
             spellCheck={false}
             maxLength={80}
-            className="h-11 w-full rounded-md border border-border-strong bg-background pl-9 pr-11 text-sm"
+            className="nt-search h-11 w-full rounded-md border border-border-strong bg-background pl-9 pr-11 text-sm"
           />
           {query ? (
             <button
@@ -124,7 +124,7 @@ export function NeutrinoFaq({
               aria-label={t("faq.clearSearch")}
               className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
             >
-              <X className="h-4 w-4" aria-hidden />
+              <NtIcon name="close" className="h-4 w-4" />
             </button>
           ) : null}
         </div>
@@ -147,11 +147,11 @@ export function NeutrinoFaq({
       <p role="status" className="text-xs text-muted-foreground">{t("faq.count", { count: visible.length })}</p>
 
       {visible.length === 0 ? (
-        <div className="rounded-lg border border-border bg-card p-3 text-sm">
+        <div className="nt-frame rounded-lg border border-border bg-card p-3 text-sm">
           <p className="text-muted-foreground">{t("faq.noResults", { query: query.trim() })}</p>
           {onSwitchToAi ? (
             <button type="button" onClick={onSwitchToAi} className={`${pillButton} mt-3 gap-2`}>
-              <Bot className="h-4 w-4" aria-hidden /> {t("faq.tryAi")}
+              <NtIcon name="bot" className="h-4 w-4" /> {t("faq.tryAi")}
             </button>
           ) : null}
         </div>
@@ -159,7 +159,7 @@ export function NeutrinoFaq({
         <ul className="space-y-2">
           {visible.map((entry) => (
             <li key={entry.id}>
-              <button type="button" onClick={() => pick(entry.id)} className={questionButton}>{entry.question}</button>
+              <button type="button" data-nt-exempt onClick={() => pick(entry.id)} className={questionButton}>{entry.question}</button>
             </li>
           ))}
         </ul>
@@ -171,7 +171,7 @@ export function NeutrinoFaq({
               <ul className="space-y-2">
                 {visible.filter((entry) => entry.group === id).map((entry) => (
                   <li key={entry.id}>
-                    <button type="button" onClick={() => pick(entry.id)} className={questionButton}>{entry.question}</button>
+                    <button type="button" data-nt-exempt onClick={() => pick(entry.id)} className={questionButton}>{entry.question}</button>
                   </li>
                 ))}
               </ul>
@@ -183,9 +183,9 @@ export function NeutrinoFaq({
   );
 
   return (
-    <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto p-3">
+    <div ref={scrollRef} className="min-h-40 flex-1 space-y-4 overflow-y-auto p-3">
       {banner}
-      <p className="rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("faq.hello", { name })}</p>
+      <p className="nt-frame rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("faq.hello", { name })}</p>
 
       {history.length > 0 ? (
         <div className="space-y-4" aria-live="polite">
@@ -195,9 +195,9 @@ export function NeutrinoFaq({
             if (!entry || !item) return null;
             return (
               <div key={id} ref={index === history.length - 1 ? latestRef : undefined} className="space-y-2">
-                <p className="ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{entry.question}</p>
-                <div className="mr-5 rounded-lg border border-border bg-card p-3 text-sm">
-                  <p className="whitespace-pre-wrap">{entry.answer}</p>
+                <p data-nt-exempt className="nt-bubble ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{entry.question}</p>
+                <div className="nt-bubble mr-5 rounded-lg border border-border bg-card p-3 text-sm">
+                  <p data-nt-exempt className="whitespace-pre-wrap">{entry.answer}</p>
                   {item.links?.length ? (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {item.links.map((key) => (
@@ -218,7 +218,7 @@ export function NeutrinoFaq({
               <ul className="space-y-2">
                 {followUps.map((id) => (
                   <li key={id}>
-                    <button type="button" onClick={() => pick(id)} className={questionButton}>{byId.get(id)?.question}</button>
+                    <button type="button" data-nt-exempt onClick={() => pick(id)} className={questionButton}>{byId.get(id)?.question}</button>
                   </li>
                 ))}
               </ul>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Plus, Trash2 } from "lucide-react";
+import { NtIcon } from "@/components/study/nt-icon";
 import type { ChatListState } from "@/components/study/use-chat-list";
 
 /**
@@ -28,11 +28,11 @@ export function NeutrinoChatList({
   const format = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
 
   return (
-    <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-3">
+    <div className="min-h-40 flex-1 space-y-2 overflow-y-auto p-3">
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold">{t("chatsTitle")}</h3>
         <button type="button" onClick={onNew} className="inline-flex min-h-11 items-center gap-1 rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted">
-          <Plus className="h-4 w-4" aria-hidden /> {t("newChat")}
+          <NtIcon name="plus" className="h-4 w-4" /> {t("newChat")}
         </button>
       </div>
       {state.status === "error" ? <p role="alert" className="text-sm">{t("chatListError")}</p> : null}
@@ -40,7 +40,7 @@ export function NeutrinoChatList({
       {state.status === "ready" ? (
         <ul className="space-y-1">
           {state.chats.map((chat) => (
-            <li key={chat.id} className="rounded-md border border-border">
+            <li key={chat.id} className="nt-frame rounded-md border border-border">
               {confirmId === chat.id ? (
                 <div className="flex flex-wrap items-center gap-2 p-2" role="group" aria-label={t("deleteChat", { title: chat.title })}>
                   <span className="text-sm">{t("deleteChatConfirm")}</span>
@@ -60,7 +60,7 @@ export function NeutrinoChatList({
                     <span className="block text-xs text-muted-foreground">{format.format(new Date(chat.updatedAt))}</span>
                   </button>
                   <button type="button" onClick={() => setConfirmId(chat.id)} aria-label={t("deleteChat", { title: chat.title })} className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-muted-foreground hover:bg-muted">
-                    <Trash2 className="h-4 w-4" aria-hidden />
+                    <NtIcon name="trash" className="h-4 w-4" />
                   </button>
                 </div>
               )}

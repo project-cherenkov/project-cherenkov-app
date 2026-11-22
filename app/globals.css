@@ -305,6 +305,16 @@
   --mf-edge: #8fd3f2;
   --mf-node: #c4eaf9;
   --mf-accent: #e29ab6;
+  /* The trail's star fill and glow (they used to be referenced but never
+     defined, which drew every particle black). A mid blue and a pale blue read
+     on both the light and the dark page. */
+  --mf-ring-hi: #6cc6ee;
+  --mf-ring: #b4e3f8;
+  /* Pixel-cell colours: pale blue, pink, ink. The blue and the ink follow the
+     theme, so a cell is visible on the pale light page and on the dark one. */
+  --mf-trail-a: hsl(var(--ring));
+  --mf-trail-b: var(--mf-accent);
+  --mf-trail-c: hsl(var(--foreground));
 }
 
 .mf-root {
@@ -420,10 +430,35 @@
 .companion-cosmos-trail { position: fixed; inset: 0; z-index: 49; width: 100vw; height: 100vh; overflow: visible; pointer-events: none; }
 .companion-cosmos-star { fill: var(--mf-ring-hi); filter: drop-shadow(0 0 3px var(--mf-ring)); }
 .companion-cosmos-lattice { fill: none; stroke: var(--mf-edge); stroke-width: 0.8; filter: drop-shadow(0 0 2px var(--mf-accent)); }
+/* Each particle fades by CSS over its own lifetime (inline animation-duration),
+   so the fade does not depend on React re-rendering. Reduced motion sets a
+   static inline opacity instead and no animation runs. */
+.companion-cosmos-star,
+.companion-cosmos-lattice { animation: mf-trail-fade linear 1 forwards; }
+@keyframes mf-trail-fade {
+  from { opacity: 0.58; }
+  to { opacity: 0; }
+}
+/* Pixel cells: three hard steps, no easing, no blur and no filter. */
+.companion-cosmos-pixel { fill: var(--mf-trail-a); animation: mf-trail-pixel step-end 1 forwards; }
+.companion-cosmos-pixel[data-tone="1"] { fill: var(--mf-trail-b); }
+.companion-cosmos-pixel[data-tone="2"] { fill: var(--mf-trail-c); }
+@media (prefers-reduced-motion: reduce) {
+  .companion-cosmos-trail * { animation: none !important; }
+}
+@keyframes mf-trail-pixel {
+  0% { opacity: 0.7; }
+  33.3% { opacity: 0.4; }
+  66.6% { opacity: 0.15; }
+  100% { opacity: 0; }
+}
 .neutrino-dock[data-dragging="true"] {
   cursor: grabbing;
   animation: none;
-  transform: none;
+  /* !important: an author !important declaration beats a running (or
+     fill:forwards) Web Animation, which a plain "transform: none" does not. A
+     leftover wander offset must never displace the dock while it is held. */
+  transform: none !important;
 }
 .neutrino-dock[data-dragging="true"] .neutrino-plate {
   transform: scale(1.06);
@@ -755,4 +790,170 @@ html[data-nav-open="true"] .neutrino-dock {
 @media (prefers-reduced-motion: reduce) {
   .nt-unfold { animation: none; }
   .nt-dot { animation: none; opacity: 1; }
+}
+
+/* ---------------------------------------------------------------------------
+   Neutrino panel: compact tiers (container queries, so they follow the panel's
+   own height, not the window's; the same CSS applies in the floating panel, the
+   bottom sheet and the Picture-in-Picture window).
+
+   Roomy   (>= 560px): the original layout.
+   Snug    (440-559px): single-line header, tighter composer.
+   Tight   (< 440px): 36px controls (WCAG 2.2 2.5.8 asks for 24px), the FAQ/AI
+                      switch and the chats row share one row, the composer
+                      footer moves into the scrolling list, banners shrink.
+   The heights in lib/companion-position.ts (PANEL_CHROME_TIGHT) are the budget
+   for the tight tier; if the chrome still cannot fit, .nt-panel scrolls instead
+   of clipping the composer, and the content region never drops below 10rem.
+   =========================================================================== */
+.nt-container { container-type: size; container-name: ntp; }
+.nt-foot-inline { display: none; }
+
+@container ntp (max-height: 559px) {
+  .nt-header { padding-block: 0.375rem; }
+  .nt-composer { padding: 0.5rem 0.75rem; }
+  .nt-composer textarea { height: auto; min-height: 2.5rem; max-height: 5.5rem; field-sizing: content; }
+}
+
+@container ntp (max-height: 439px) {
+  .nt-header { padding-block: 0.125rem; }
+  /* One line: name and status side by side. The full status is in its title. */
+  .nt-title { display: flex; align-items: baseline; gap: 0.5rem; }
+  .nt-title > p:first-child { flex: none; }
+  .nt-status { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nt-header button { height: 2.25rem; min-height: 2.25rem; }
+  .nt-tabs { padding: 0.25rem 0.5rem; }
+  .nt-tabs > button { min-height: 2.25rem; }
+  .nt-bars { display: flex; flex-wrap: wrap; align-items: center; border-bottom: 1px solid hsl(var(--border)); }
+  .nt-modebar { flex: 0 0 auto; padding: 0.25rem 0.5rem; border-bottom-width: 0; }
+  .nt-modebar button { min-height: 2.25rem; }
+  .nt-modebar button svg { display: none; }
+  .nt-chatbar { flex: 1 1 8rem; min-width: 0; flex-wrap: nowrap; padding: 0.25rem 0.5rem; border-bottom-width: 0; }
+  .nt-chatbar .nt-btn { min-height: 2.25rem; padding-inline: 0.5rem; font-size: 0.75rem; white-space: nowrap; }
+  .nt-chatbar .nt-meter { display: none; }
+  .nt-banner { padding: 0.25rem 1.75rem 0.25rem 0.5rem; }
+  .nt-banner > svg { display: none; }
+  .nt-composer { padding: 0.5rem; }
+  .nt-composer-foot { display: none; }
+  .nt-foot-inline { display: flex; }
+}
+
+@container ntp (max-width: 339px) {
+  .nt-tabs svg { display: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Neutrino pixel skin, whole panel. Style by element type inside `.nt-pixel`
+   (so nothing is left smooth by omission), and opt things out. Specificity is
+   one class plus one element, which beats Tailwind's single-class utilities
+   (rounded-*, border, transition-*) without !important.
+
+   Primitives, all driven by --px / --nt-line / --nt-shadow / --nt-accent:
+     .nt-frame  notched 2px outline (cards, banners, notices)
+     inputs     the same frame plus a heavier top/left edge (inset)
+     :active    pressed: moves one unit and flattens
+     :checked / aria-pressed: inverted fill (--nt-accent)
+     :disabled  a 2px dither instead of opacity, text stays legible
+   Text exempt from the pixel face (FAQ questions and answers, AI chat messages)
+   is marked data-nt-exempt: it keeps the body face, only its frame is pixel.
+   =========================================================================== */
+.nt-pixel {
+  --nt-shadow: hsl(var(--foreground) / 0.35);
+  --nt-accent: hsl(var(--foreground));
+  --nt-on: hsl(var(--background));
+  --nt-edge:
+    0 calc(var(--px) * -1) 0 0 var(--nt-line),
+    0 var(--px) 0 0 var(--nt-line),
+    calc(var(--px) * -1) 0 0 0 var(--nt-line),
+    var(--px) 0 0 0 var(--nt-line);
+}
+.nt-pixel *, .nt-pixel *::before, .nt-pixel *::after { transition: none !important; }
+.nt-pixel [class*="rounded"] { border-radius: 0; }
+.nt-pixel .nt-font { font-size: 0.875rem; } /* the pixel face is for 14px and up */
+.nt-pixel :is(h2, h3, legend) {
+  font-family: var(--font-pixel), var(--font-heading), ui-monospace, monospace;
+  letter-spacing: 0;
+}
+
+.nt-pixel :is(button, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea):not(.underline):not(.absolute),
+.nt-pixel .nt-frame,
+.nt-pixel .nt-opt {
+  border: 0;
+  margin: var(--px);
+  max-width: calc(100% - var(--px) * 2);
+  box-shadow: var(--nt-edge);
+}
+.nt-pixel .nt-frame { box-shadow: var(--nt-edge), calc(var(--px) * 2) calc(var(--px) * 2) 0 0 var(--nt-shadow); }
+.nt-pixel .nt-frame.nt-bubble { box-shadow: var(--nt-edge); }
+.nt-pixel .nt-avatar { margin: var(--px); box-shadow: var(--nt-edge); }
+.nt-pixel button.absolute { border-width: 0; }
+.nt-pixel :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+  box-shadow: var(--nt-edge), inset var(--px) var(--px) 0 0 var(--nt-shadow);
+}
+.nt-pixel :is(button, summary, select, label):active:not(:disabled) { transform: translate(var(--px), var(--px)); }
+.nt-pixel :is(button, input, select, textarea):disabled {
+  opacity: 1 !important;
+  background-image: conic-gradient(var(--nt-shadow) 25%, transparent 0 50%, var(--nt-shadow) 0 75%, transparent 0);
+  background-size: calc(var(--px) * 2) calc(var(--px) * 2);
+  color: hsl(var(--muted-foreground));
+}
+/* Inline text links styled as buttons stay inline. */
+.nt-pixel button.underline { margin: 0; box-shadow: none; }
+/* Focus: the 2px ring with an offset, on every control. */
+.nt-pixel :is(button, input, select, textarea, a, summary, [tabindex]):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+
+/* Segmented radio options in Settings: inverted when chosen. */
+.nt-pixel .peer:checked ~ .nt-opt { background: var(--nt-accent); color: var(--nt-on); }
+.nt-pixel .peer:focus-visible ~ .nt-opt { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+
+/* Checkbox, switch and radio: CSS-drawn squares on the 2px grid. The real
+   input stays, so semantics and keyboard behaviour are untouched. */
+.nt-pixel input:is([type="checkbox"], [type="radio"]):not(.sr-only) {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: var(--px);
+  border: 0;
+  background: transparent;
+  box-shadow: var(--nt-edge);
+}
+.nt-pixel input[type="checkbox"]:checked { background: var(--nt-accent); box-shadow: var(--nt-edge), inset 0 0 0 4px var(--nt-on); }
+.nt-pixel input[type="radio"]:checked { background: var(--nt-accent); box-shadow: var(--nt-edge), inset 0 0 0 6px var(--nt-on); }
+
+/* Slider: square stepped track, square thumb. */
+.nt-pixel .nt-slider-track { height: 0.5rem; background: hsl(var(--muted)); box-shadow: var(--nt-edge); margin: var(--px); width: calc(100% - var(--px) * 2); }
+.nt-pixel .nt-slider-range { background: var(--nt-accent); }
+.nt-pixel .nt-slider-thumb { width: 1rem; height: 1.25rem; border: 0; background: var(--nt-accent); box-shadow: var(--nt-edge), inset 0 0 0 var(--px) var(--nt-on); }
+.nt-pixel .nt-slider-thumb:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+
+/* Pixel icons: crisp at their native 24px grid. */
+.nt-pixel .nt-icon { width: 24px; height: 24px; image-rendering: pixelated; }
+.nt-pixel .nt-search-icon { left: 0.75rem; }
+
+/* The AI-notice dialog card and the dock extras. */
+.nt-pixel .nt-dialog { box-shadow: var(--nt-edge), calc(var(--px) * 3) calc(var(--px) * 3) 0 0 var(--nt-shadow); }
+.nt-dock-pixel {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow:
+    0 -2px 0 0 hsl(var(--foreground)), 0 2px 0 0 hsl(var(--foreground)),
+    -2px 0 0 0 hsl(var(--foreground)), 2px 0 0 0 hsl(var(--foreground)),
+    4px 4px 0 0 hsl(var(--foreground) / 0.35) !important;
+}
+.nt-dock-pixel .nt-icon { width: 24px; height: 24px; }
+
+/* Scrollbars: square, no arrow buttons. WebKit/Blink use the pseudo-elements;
+   where they are not supported (Firefox) the standard properties apply. In
+   Chrome 121+ the standard properties would override the pseudo-elements, so
+   they are only set where the pseudo-elements do not exist. */
+.nt-pixel * { scrollbar-gutter: auto; }
+.nt-pixel *::-webkit-scrollbar { width: 12px; height: 12px; background: hsl(var(--muted)); }
+.nt-pixel *::-webkit-scrollbar-track { background: hsl(var(--muted)); box-shadow: inset 0 0 0 var(--px) var(--nt-line); }
+.nt-pixel *::-webkit-scrollbar-thumb { background: var(--nt-line); border: var(--px) solid hsl(var(--muted)); }
+.nt-pixel *::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+.nt-pixel *::-webkit-scrollbar-corner { background: hsl(var(--muted)); }
+@supports not selector(::-webkit-scrollbar) {
+  .nt-pixel * { scrollbar-width: thin; scrollbar-color: hsl(var(--foreground)) hsl(var(--muted)); }
 }

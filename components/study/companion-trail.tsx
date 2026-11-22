@@ -1,24 +1,81 @@
 "use client";
 
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
+import { PIXEL_UNIT, snapToPixel } from "@/lib/pixel-grid";
 
-type Particle = { id: number; x: number; y: number; time: number; kind: "star" | "lattice"; size: number; turn: number };
+export type TrailKind = "star" | "lattice" | "pixel";
+export type Particle = {
+  id: number;
+  x: number;
+  y: number;
+  time: number;
+  kind: TrailKind;
+  size: number;
+  turn: number;
+  /** Lifetime in ms. Pixels vary a little so a burst does not vanish at once. */
+  life: number;
+  /** Pixel cells only: edge length in CSS px (a multiple of PIXEL_UNIT) and colour index. */
+  cell: number;
+  tone: number;
+};
+
 const LIFETIME = 1500;
-const PIXEL_UNIT = 2;
+const SHAPE_CAP = 22;
+const PIXEL_CAP = 24;
+const TICK_MS = 110;
+const PIXEL_JITTER = 6;
+export const MAX_PIXEL_CELL = 6;
+
+// A tiny deterministic hash, so a particle's look depends only on its id.
+function hash(id: number, salt: number) {
+  let h = (id * 2654435761 + salt * 40503) >>> 0;
+  h ^= h >>> 15;
+  h = Math.imul(h, 2246822519) >>> 0;
+  h ^= h >>> 13;
+  return (h >>> 0) / 4294967296;
+}
+
+/**
+ * The pixel cells for one tick: one or two squares on the 2px grid, sprayed a
+ * little sideways of the direction of travel. Mostly 2px and 4px, 6px about one
+ * time in eight, never larger.
+ */
+export function pixelCells(startId: number, x: number, y: number, dx: number, dy: number, now: number): Particle[] {
+  const count = hash(startId, 1) < 0.5 ? 1 : 2;
+  const length = Math.hypot(dx, dy) || 1;
+  const nx = -dy / length;
+  const ny = dx / length;
+  return Array.from({ length: count }, (_, index) => {
+    const id = startId + index;
+    const roll = hash(id, 2);
+    const cell = roll < 0.125 ? 3 * PIXEL_UNIT : roll < 0.6 ? PIXEL_UNIT : 2 * PIXEL_UNIT;
+    const offset = (hash(id, 3) * 2 - 1) * PIXEL_JITTER;
+    return {
+      id,
+      x: x + nx * offset,
+      y: y + ny * offset,
+      time: now,
+      kind: "pixel" as const,
+      size: cell,
+      turn: 0,
+      life: 900 + Math.round(hash(id, 4) * 300),
+      cell,
+      tone: Math.floor(hash(id, 5) * 3),
+    };
+  });
+}
 
 // Samples the visible mascot position, so the same cosmic trail follows both
-// the ambient screen-wide drift and direct pointer dragging.
+// the ambient screen-wide drift and direct pointer dragging. Stars, polygons
+// and pixel cells are always all drawn, in either style.
 export function CompanionTrail({
   targetRef,
   enabled,
   active,
-  pixel = false,
 }: {
   targetRef: RefObject<HTMLButtonElement | null>;
   enabled: boolean;
   active: boolean;
-  /** Square cells instead of stars and lattice fragments. */
-  pixel?: boolean;
 }) {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -41,6 +98,8 @@ export function CompanionTrail({
     }
     if (!active) previous.current = null;
 
+    // The interval only spawns and prunes. Fading is done by CSS, so it keeps
+    // going between ticks (and when the mascot has stopped).
     const timer = window.setInterval(() => {
       const rect = active ? targetRef.current?.getBoundingClientRect() : null;
       const point = rect ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 } : null;
@@ -48,42 +107,56 @@ export function CompanionTrail({
       previous.current = point;
       const now = performance.now();
       setParticles((current) => {
-        const live = current.filter((particle) => now - particle.time < LIFETIME);
+        const live = current.filter((particle) => now - particle.time < particle.life);
+        const added: Particle[] = [];
         if (point && last && Math.hypot(point.x - last.x, point.y - last.y) >= 3) {
-          const id = nextId.current++;
-          live.push({ id, x: last.x, y: last.y, time: now, kind: id % 3 === 0 ? "lattice" : "star", size: 3 + (id % 4) * 0.8, turn: (id * 47) % 360 });
+          const id = nextId.current;
+          nextId.current += 3;
+          added.push({ id, x: last.x, y: last.y, time: now, kind: id % 9 === 0 ? "lattice" : "star", size: 3 + ((id / 3) % 4) * 0.8, turn: (id * 47) % 360, life: LIFETIME, cell: 0, tone: 0 });
+          added.push(...pixelCells(id + 1, last.x, last.y, point.x - last.x, point.y - last.y, now));
         }
-        if (live.length === current.length) return current;
-        return live.slice(-22);
+        if (added.length === 0 && live.length === current.length) return current;
+        const all = [...live, ...added];
+        // Pixels have their own pool, so they can never starve the shapes.
+        const shapes = all.filter((particle) => particle.kind !== "pixel").slice(-SHAPE_CAP);
+        const pixels = all.filter((particle) => particle.kind === "pixel").slice(-PIXEL_CAP);
+        return [...pixels, ...shapes];
       });
-    }, 110);
+    }, TICK_MS);
     return () => window.clearInterval(timer);
   }, [active, enabled, targetRef]);
 
+  const pixels = particles.filter((particle) => particle.kind === "pixel");
+  const lattices = particles.filter((particle) => particle.kind === "lattice");
+  const stars = particles.filter((particle) => particle.kind === "star");
+  const fade = (life: number, extra?: CSSProperties): CSSProperties | undefined =>
+    reducedMotion ? { opacity: 0.55, ...extra } : { animationDuration: `${life}ms`, ...extra };
+
+  // Draw order: pixels behind, then polygons, then stars.
   return (
-    <svg aria-hidden="true" className="companion-cosmos-trail">
-      {particles.map((particle) => {
-        const age = performance.now() - particle.time;
-        if (pixel) {
-          // Square cells on a 2px grid that fade in three steps over the same
-          // lifetime. Sizes are multiples of the base unit.
-          const step = Math.min(2, Math.floor((age / LIFETIME) * 3));
-          const opacity = reducedMotion ? 0.55 : [0.6, 0.35, 0.15][step]!;
-          const cell = (1 + (particle.id % 3)) * PIXEL_UNIT * 2;
-          const x = Math.round(particle.x / PIXEL_UNIT) * PIXEL_UNIT - cell / 2;
-          const y = Math.round(particle.y / PIXEL_UNIT) * PIXEL_UNIT - cell / 2;
-          return <rect key={particle.id} x={x} y={y} width={cell} height={cell} opacity={opacity} shapeRendering="crispEdges" className="companion-cosmos-star" style={{ filter: "none" }} />;
-        }
-        const opacity = reducedMotion ? 0.55 : Math.max(0, 0.58 * (1 - age / LIFETIME));
-        return particle.kind === "star" ? (
-          <path key={particle.id} d="M0 -4L1.1 -1.1L4 0L1.1 1.1L0 4L-1.1 1.1L-4 0L-1.1 -1.1Z" transform={`translate(${particle.x} ${particle.y}) rotate(${particle.turn}) scale(${particle.size / 4})`} opacity={opacity} className="companion-cosmos-star" />
-        ) : (
-          <g key={particle.id} transform={`translate(${particle.x} ${particle.y}) rotate(${particle.turn}) scale(${particle.size / 5})`} opacity={opacity} className="companion-cosmos-lattice">
-            <path d="M-5 -3L4 -4L2 5ZM-5 -3L2 5M4 -4L2 5" />
-            <circle cx="-5" cy="-3" r="0.8" /><circle cx="4" cy="-4" r="0.8" /><circle cx="2" cy="5" r="0.8" />
-          </g>
-        );
-      })}
+    <svg aria-hidden="true" className="companion-cosmos-trail" data-reduced={reducedMotion ? "true" : "false"}>
+      {pixels.map((particle) => (
+        <rect
+          key={particle.id}
+          x={snapToPixel(particle.x - particle.cell / 2)}
+          y={snapToPixel(particle.y - particle.cell / 2)}
+          width={particle.cell}
+          height={particle.cell}
+          shapeRendering="crispEdges"
+          className="companion-cosmos-pixel"
+          data-tone={particle.tone}
+          style={fade(particle.life)}
+        />
+      ))}
+      {lattices.map((particle) => (
+        <g key={particle.id} transform={`translate(${particle.x} ${particle.y}) rotate(${particle.turn}) scale(${particle.size / 5})`} className="companion-cosmos-lattice" style={fade(particle.life)}>
+          <path d="M-5 -3L4 -4L2 5ZM-5 -3L2 5M4 -4L2 5" />
+          <circle cx="-5" cy="-3" r="0.8" /><circle cx="4" cy="-4" r="0.8" /><circle cx="2" cy="5" r="0.8" />
+        </g>
+      ))}
+      {stars.map((particle) => (
+        <path key={particle.id} d="M0 -4L1.1 -1.1L4 0L1.1 1.1L0 4L-1.1 1.1L-4 0L-1.1 -1.1Z" transform={`translate(${particle.x} ${particle.y}) rotate(${particle.turn}) scale(${particle.size / 4})`} className="companion-cosmos-star" style={fade(particle.life)} />
+      ))}
     </svg>
   );
 }

@@ -89,6 +89,35 @@ describe("style", () => {
     expect(panel()!.textContent).toContain("FAQ · pre-written answers");
     expect(document.querySelector("[data-glyph]")).toBeNull();
   });
+
+  it("pixel: every panel icon is a pixel icon, none is lucide, and the skin is scoped to the panel", async () => {
+    await openPanel();
+    const p = panel()!;
+    expect(p.querySelectorAll('svg[data-nt-icon="pixel"]').length).toBeGreaterThan(3);
+    expect(p.querySelectorAll("svg.lucide").length).toBe(0);
+    for (const svg of p.querySelectorAll('svg[data-nt-icon="pixel"]')) {
+      expect(svg.getAttribute("width")).toBe("24");
+      expect(svg.getAttribute("aria-hidden")).toBe("true");
+    }
+    expect(p.querySelector(".nt-frame")!.closest(".nt-pixel")).not.toBeNull();
+  });
+
+  it("smooth: the original lucide icons, no pixel icons, and nothing under a .nt-pixel scope", async () => {
+    window.localStorage.setItem("neutrino-prefs-v1", JSON.stringify({ style: "smooth" }));
+    await openPanel();
+    const p = panel()!;
+    expect(p.querySelectorAll("svg.lucide").length).toBeGreaterThan(3);
+    expect(p.querySelectorAll('svg[data-nt-icon="pixel"]').length).toBe(0);
+    expect(p.querySelectorAll(".nt-pixel").length).toBe(0);
+    expect(p.closest(".nt-pixel")).toBeNull();
+  });
+
+  it("marks FAQ and chat text as exempt from the pixel face", async () => {
+    await openPanel();
+    const exempt = panel()!.querySelectorAll("[data-nt-exempt]");
+    expect(exempt.length).toBeGreaterThan(0);
+    for (const el of exempt) expect(el.className).not.toContain("nt-font");
+  });
 });
 
 describe("answer mode", () => {
@@ -274,6 +303,64 @@ describe("the mascot dock", () => {
     expect(dockWrapper().dataset.dragging).toBe("false");
     expect(window.localStorage.getItem("neutrino-position-v1")).not.toBeNull();
     expect(panel()).toBeNull(); // the click that follows a drag is ignored
+  });
+
+  async function startDrag() {
+    await act(async () => root.render(<InPageNeutrino />));
+    placeAt(dockButton(), 300, 200);
+    pointer(dockButton(), "pointerdown", 310, 210);
+    pointer(dockButton(), "pointermove", 410, 260);
+    expect(dockWrapper().dataset.dragging).toBe("true");
+  }
+
+  it("cancels every wander animation the moment a drag begins", async () => {
+    await act(async () => root.render(<InPageNeutrino />));
+    const cancel = vi.fn();
+    // Two legs still attached: the newest and an older fill:forwards one.
+    dockWrapper().getAnimations = (() => [{ cancel }, { cancel }]) as never;
+    placeAt(dockButton(), 300, 200);
+    pointer(dockButton(), "pointerdown", 310, 210);
+    expect(cancel).not.toHaveBeenCalled(); // a plain press leaves the wander alone
+    pointer(dockButton(), "pointermove", 410, 260);
+    expect(cancel.mock.calls.length).toBeGreaterThanOrEqual(2); // by the move itself, then again by the hook
+  });
+
+  for (const how of ["pointercancel", "lostpointercapture"]) {
+    it(`keeps the last position and clears the drag when it ends with ${how}`, async () => {
+      await startDrag();
+      pointer(dockButton(), how, 410, 260);
+      expect(dockWrapper().dataset.dragging).toBe("false");
+      expect(JSON.parse(window.localStorage.getItem("neutrino-position-v1")!)).toBeTruthy();
+      expect(dockWrapper().style.left).not.toBe("");
+    });
+  }
+
+  it("ends an open drag when the window loses focus", async () => {
+    await startDrag();
+    act(() => { window.dispatchEvent(new Event("blur")); });
+    expect(dockWrapper().dataset.dragging).toBe("false");
+    expect(window.localStorage.getItem("neutrino-position-v1")).not.toBeNull();
+  });
+
+  it("ends an open drag when the tab is hidden", async () => {
+    await startDrag();
+    Object.defineProperty(document, "visibilityState", { value: "hidden", configurable: true });
+    act(() => { document.dispatchEvent(new Event("visibilitychange")); });
+    Object.defineProperty(document, "visibilityState", { value: "visible", configurable: true });
+    expect(dockWrapper().dataset.dragging).toBe("false");
+  });
+
+  it("lets a new drag start after one was ended by a blur", async () => {
+    await startDrag();
+    act(() => { window.dispatchEvent(new Event("blur")); });
+    pointer(dockButton(), "pointerdown", 410, 260);
+    pointer(dockButton(), "pointermove", 480, 300);
+    expect(dockWrapper().dataset.dragging).toBe("true");
+  });
+
+  it("makes the dock ignore touch gestures on the button itself", async () => {
+    await act(async () => root.render(<InPageNeutrino />));
+    expect(dockButton().className.split(/\s+/)).toContain("touch-none");
   });
 
   it("gives the hide button no click target over the mascot until it is shown", async () => {

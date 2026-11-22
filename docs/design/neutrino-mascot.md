@@ -34,10 +34,11 @@ All surfaces stay in sync through one window event (`neutrino-prefs-changed`) wi
 
 ## Pixel style
 Applies only to Neutrino and only when `style` is `pixel`; `smooth` adds none of it, so it renders as before (a test asserts that). The panel root carries `nt-pixel`; CSS lives at the end of `app/globals.css` under `.nt-pixel` and uses one base unit (`--px: 2px`) and existing colour tokens only. Corners are notched with edge-only box-shadows (not clip-path), so focus rings and text are never clipped.
+- **Whole panel:** in pixel style every control inside `.nt-pixel` is skinned by element type (buttons, inputs, selects, textareas, checkboxes, radios, the slider, cards, banners, notices, the AI-notice dialog, scrollbars, header avatar as a notched square), with primitives driven by `--px`, `--nt-line`, `--nt-shadow` and `--nt-accent`. Icons are `pixelarticons` (24px, never scaled) through `NtIcon`; the smooth style keeps lucide. The text of FAQ questions and answers and of AI chat messages is exempt from the pixel face (`data-nt-exempt`, body face); their frames stay pixel. Dock extras (intro bubble, hide ×) use `.nt-dock-pixel`.
 - **Header:** the name and a `role="status"` readout (`mode: FAQ · sends nothing` / `mode: AI · text leaves your device`). The amber AI notice stays.
 - **Tabs and mode buttons:** stepped frames, active one inverted. **Bubbles:** notched frames; the text stays in the body face.
 - **Open:** a three-step unfold of about 180 ms (`steps(3)`); none under reduced motion.
-- **Trace:** `CompanionTrail` draws square cells on a 2px grid that fade in three steps over the 1,500 ms lifetime.
+- **Trace:** not restyled by the style setting. In both styles `CompanionTrail` always draws three particle types: stars, polygons (lattice fragments) and pixel cells (2px grid, 2/4px mostly and 6px rarely, 1-2 per tick with a small sideways spray, three stepped fades over 0.9-1.2 s, no filter). Pixels have their own pool (24) so they never starve the shapes. Fades are CSS-driven; static under reduced motion. The trail colours come from `--mf-ring-hi`, `--mf-ring` and `--mf-trail-a/b/c` (the first two were previously undefined, which drew every particle black).
 - **Glyphs** (`neutrino-glyph.tsx`, drawn from SVG rectangles, `aria-hidden`), on the corner opposite the hide button: `?` while the AI chat is open and idle, three animated dots while a request is pending, `!` on an error or limit. Static under reduced motion. No new mood was added.
 - **Font:** the pixel face for chrome and labels only (`.nt-font`); see `visual-identity.md`.
 - Not built: a pixel mascot renderer, a "flash" mood, and the optional timer cell ring.
@@ -91,3 +92,11 @@ Constraints for when it is built: the flash must be a single soft brightening, n
 
 ## Files
 `lib/companion-settings.ts` (types, validation) · `lib/companion-position.ts` (drag, panel placement and resize geometry) · `lib/neutrino-faq.ts` (FAQ structure, search) · `components/study/neutrino-faq.tsx` · `lib/manifold-geometry.ts` (3D maths, motion, frame monitor) · `components/study/manifold-mascot.tsx` · `components/study/neutrino-launcher.tsx` · `components/study/companion-preferences.tsx` · `components/study/neutrino-markdown.tsx` · `components/study/neutrino-chat-list.tsx` · `components/study/neutrino-glyph.tsx` · `components/study/companion-data.tsx` · `lib/companion-prompt.ts` · `lib/companion-chat-history.ts` · `components/study/use-companion-prefs.ts` · `app/api/companion/settings/route.ts` · mascot CSS at the end of `app/globals.css`.
+
+## Panel size and compact tiers
+- The minimum panel height is derived, not chosen: `minPanelHeight()` in `lib/companion-position.ts` = the tight-tier chrome (`PANEL_CHROME_TIGHT`) + a 160px content floor + the shell frame. Stored sizes below it are healed on read. Short windows (height < 520) use the bottom sheet like narrow ones.
+- `.nt-container` is a size container; tiers by panel height: roomy (>= 560, the original layout), snug (440-559: tighter header and composer), tight (< 440: 36px controls, FAQ/AI switch and chats row on one row, composer footer moved into the scrolling list, banners shrink, status on one line with the full text in its title). 36px passes WCAG 2.2 target size (2.5.8); it is the one exception to the 44px rule and applies only in the tight tier.
+- If the chrome still cannot fit, the whole panel scrolls (the composer is sticky); nothing is clipped silently.
+
+## Dragging
+Every wander leg is a fill:forwards Web Animation. All of them are cancelled (`cancelAllAnimations`) when a drag starts and when the hook stops, the drag CSS uses `transform: none !important`, a drag always ends (release, cancel, lost capture, window blur, tab hidden) keeping the last position, and a dev-warning watchdog compares the dock's rect with its intended position.

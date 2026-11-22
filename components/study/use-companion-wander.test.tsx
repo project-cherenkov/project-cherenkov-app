@@ -30,9 +30,9 @@ class FakeAnimation {
 }
 
 const bounds = { minX: -300, maxX: 300, minY: -200, maxY: 200 };
-function Harness({ paused }: { paused: boolean }) {
+function Harness({ paused, disabled = false }: { paused: boolean; disabled?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
-  useCompanionWander({ ref, enabled: true, paused, speed: 100, bounds, resetKey: "a" });
+  useCompanionWander({ ref, enabled: !disabled, paused, speed: 100, bounds, resetKey: "a" });
   return <div ref={ref} />;
 }
 
@@ -93,6 +93,33 @@ describe("useCompanionWander", () => {
     expect(leg!.touchedWhileFinished).toBe(0);
     expect(leg!.pause).not.toHaveBeenCalled();
     expect(leg!.play).not.toHaveBeenCalled();
+  });
+
+  it("drops the previous leg as soon as the next one starts, so only one exists", () => {
+    render(false);
+    advance(2500);
+    const [first] = legs;
+    act(() => first!.finish());
+    advance(10_000);
+    expect(legs.length).toBeGreaterThanOrEqual(2);
+    expect(first!.cancel).toHaveBeenCalled();
+  });
+
+  it("cancels every animation on the element when it is switched off", () => {
+    const cancelled: number[] = [];
+    HTMLElement.prototype.getAnimations = (() => [0, 1, 2].map((n) => ({ cancel: () => cancelled.push(n) }))) as never;
+    render(false);
+    advance(2500);
+    act(() => root.render(<Harness paused={false} disabled />));
+    expect(cancelled).toEqual([0, 1, 2]);
+    delete (HTMLElement.prototype as { getAnimations?: unknown }).getAnimations;
+  });
+
+  it("does not start a leg under a pressed dock", () => {
+    render(false);
+    container.firstElementChild!.setAttribute("data-dragging", "true");
+    advance(2500);
+    expect(legs).toHaveLength(0);
   });
 
   it("never runs two chains of legs, even if a leg reports finishing twice", () => {

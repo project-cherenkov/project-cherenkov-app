@@ -67,8 +67,35 @@ export type PanelSize = { width: number; height: number };
 export type PanelFrame = PanelSize & { left: number; top: number };
 export type PanelEdge = "left" | "right" | "top" | "bottom";
 
+// What the panel must hold at its smallest. The minimum height is derived from
+// the compact ("tight") layout in globals.css (@container ntp tiers), not a
+// magic number: if you change a row there, change it here, and the budget test
+// tells you what the minimum becomes. All values are CSS px.
+export const PANEL_CHROME_TIGHT = {
+  header: 48,
+  tabs: 48,
+  // FAQ/AI switch and the chats row share one row in the tight tier.
+  bars: 48,
+  // Textarea, padding and Send; the daily-limit footer is hidden in this tier.
+  composer: 64,
+} as const;
+/** The scrolling region (chat bubbles, FAQ rows) is never shorter than this. */
+export const PANEL_CONTENT_FLOOR = 160;
+/** The shell's own 2px frame, top and bottom. */
+export const PANEL_SHELL_BORDER = 4;
+
+/** Total height of the fixed chrome in the tight tier. */
+export function panelChromeBudget(chrome: Record<string, number> = PANEL_CHROME_TIGHT): number {
+  return Object.values(chrome).reduce((sum, part) => sum + part, 0);
+}
+
+/** The smallest panel height that still shows the chrome plus the content floor, in steps of 4px. */
+export function minPanelHeight(): number {
+  return Math.ceil((panelChromeBudget() + PANEL_CONTENT_FLOOR + PANEL_SHELL_BORDER) / 4) * 4;
+}
+
 export const DEFAULT_PANEL_SIZE: PanelSize = { width: 384, height: 640 };
-export const MIN_PANEL_SIZE: PanelSize = { width: 300, height: 320 };
+export const MIN_PANEL_SIZE: PanelSize = { width: 300, height: minPanelHeight() };
 export const PANEL_MARGIN = 16;
 export const PANEL_GAP = 12;
 // Keyboard resizing: one arrow press, and one arrow press with Shift held.
@@ -85,16 +112,19 @@ export type PanelPlacement =
       freeVertical: "top" | "bottom";
     } & PanelFrame);
 
-// Phones get a bottom sheet; everything else gets a panel anchored beside the
+// Phones (narrow or short windows) get a bottom sheet; everything else gets a panel anchored beside the
 // mascot, on the side (above or below) that has more room.
 export const SHEET_BREAKPOINT = 640;
+// A short window (a phone held sideways) cannot hold a floating panel plus its
+// margins and the mascot, so it gets the sheet too.
+export const SHEET_MAX_HEIGHT = 520;
 
 export function placePanel(
   anchor: { left: number; top: number; size: number },
   viewport: Viewport,
   requested: Partial<PanelSize> = {},
 ): PanelPlacement {
-  if (viewport.width < SHEET_BREAKPOINT) return { mode: "sheet" };
+  if (viewport.width < SHEET_BREAKPOINT || viewport.height < SHEET_MAX_HEIGHT) return { mode: "sheet" };
 
   const width = clamp(requested.width ?? DEFAULT_PANEL_SIZE.width, MIN_PANEL_SIZE.width, viewport.width - PANEL_MARGIN * 2);
   const wanted = clamp(requested.height ?? DEFAULT_PANEL_SIZE.height, MIN_PANEL_SIZE.height, viewport.height - PANEL_MARGIN * 2);
