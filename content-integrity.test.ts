@@ -90,6 +90,26 @@ describe("materials ↔ visualization integrity", () => {
   }
 });
 
+// The two sidereal-period pages share one engine but pose different questions,
+// so each is locked to its own mode.
+describe("sidereal-period pages are mode-locked", () => {
+  const cfg = (kind: "materials" | "editorials", slug: string) => {
+    const entry = readAll(kind).find((x) => x.slug === slug);
+    const viz = entry?.data.vizConfig as { value?: Record<string, unknown> } | undefined;
+    return viz?.value;
+  };
+  it("the material opens in planetary-orbits with no mode switch", () => {
+    const v = cfg("materials", "sidereal-synodic-periods");
+    expect(v?.mode).toBe("planetary-orbits");
+    expect(v?.allowModeSwitch).toBe(false);
+  });
+  it("the editorial opens in earth-day with no mode switch", () => {
+    const v = cfg("editorials", "why-a-sidereal-day-is-shorter");
+    expect(v?.mode).toBe("earth-day");
+    expect(v?.allowModeSwitch).toBe(false);
+  });
+});
+
 // An editorial's visualization must use a known engine, and the engines whose
 // configs are hand-written in frontmatter must pass their own type guard: an
 // invalid one would only show as a config error on the reader's screen.

@@ -10,7 +10,8 @@
 //
 // Every field is optional: the physics, the slider ranges and the drawing are
 // fixed by the engine, and the config only chooses which mode the page opens
-// in and where each period slider starts. The type guard below is the only
+// in, whether the reader may switch away from it, and where each period slider
+// starts. The type guard below is the only
 // validation, because `vizConfig.value` is an open record in velite.config.ts
 // and a bad config would otherwise fail on the reader's screen.
 export type RelativePeriodMode = "earth-day" | "planetary-orbits";
@@ -22,6 +23,11 @@ export const RELATIVE_PERIOD_MODES: readonly RelativePeriodMode[] = [
 
 export interface RelativePeriodSandboxConfig {
   mode?: RelativePeriodMode; // initial mode, default "earth-day"
+  // Default true. When false the page is locked to `mode`: the mode selector is
+  // not rendered, so a page can pose only the question it is about (the
+  // material teaches the two-orbit model, the editorial investigates Earth's
+  // day). Omitting it keeps the original behaviour.
+  allowModeSwitch?: boolean;
   siderealRotationDays?: number; // earth-day: sidereal rotation period τ*
   earthOrbitPeriodDays?: number; // earth-day: Earth's sidereal orbital period P
   periodADays?: number; // planetary-orbits: sidereal period of body A
@@ -63,6 +69,10 @@ export function modeOf(config: RelativePeriodSandboxConfig): RelativePeriodMode 
   return config.mode ?? DEFAULT_MODE;
 }
 
+export function allowModeSwitchOf(config: RelativePeriodSandboxConfig): boolean {
+  return config.allowModeSwitch ?? true;
+}
+
 export interface InitialPeriods {
   siderealRotationDays: number;
   earthOrbitPeriodDays: number;
@@ -70,8 +80,8 @@ export interface InitialPeriods {
   periodBDays: number;
 }
 
-// The starting value of every slider, whichever mode is showing, because the
-// reader can switch modes and each mode's sliders keep their own values.
+// The starting value of every slider, whichever mode is showing, because a page
+// that allows mode switching needs each mode's sliders to keep their own values.
 export function initialPeriodsOf(config: RelativePeriodSandboxConfig): InitialPeriods {
   return {
     siderealRotationDays: config.siderealRotationDays ?? DEFAULT_SIDEREAL_ROTATION_DAYS,
@@ -90,6 +100,7 @@ export function isRelativePeriodSandboxConfig(
   if (c.mode !== undefined && !RELATIVE_PERIOD_MODES.includes(c.mode as RelativePeriodMode)) {
     return false;
   }
+  if (c.allowModeSwitch !== undefined && typeof c.allowModeSwitch !== "boolean") return false;
   if (c.siderealRotationDays !== undefined && !inRange(c.siderealRotationDays, SIDEREAL_ROTATION_RANGE)) {
     return false;
   }

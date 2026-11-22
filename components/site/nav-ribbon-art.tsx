@@ -1,6 +1,6 @@
 // The hanging nav ribbon, drawn as SVG instead of public/navbar-banner-extended.png.
 //
-// Traced from that image at its native 285x300: a pennant with straight sides
+// Traced from that image at its native 285x300: a ribbon with straight sides
 // and a V-shaped foot, an edge, a thin inset line set ~13px inside it (open at
 // the top), and a four-point sparkle by the tip. A pixel diff of the original
 // shape against the PNG at 285x300 differs by about 0.24%.
@@ -18,7 +18,7 @@
 // about a third of its size, so a width in viewBox units would shrink with it
 // and could not be chosen in screen pixels. The widths are in pixels.
 //
-// The focus ring is drawn on the pennant's own outline (the parent link must
+// The focus ring is drawn on the ribbon's own outline (the parent link must
 // carry the `group` class), so it follows the shape instead of the link box.
 export function NavRibbonArt({ className }: { className?: string }) {
   return (

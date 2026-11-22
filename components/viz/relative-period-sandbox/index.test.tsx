@@ -94,6 +94,35 @@ describe("RelativePeriodSandbox", () => {
     expect(text()).toContain("Sidereal rotation period");
   });
 
+  it("allowModeSwitch: false renders no mode selector and stays in the configured mode", () => {
+    mount({ mode: "planetary-orbits", allowModeSwitch: false });
+    expect(container.querySelector("select")).toBeNull();
+    expect(text()).not.toContain("Mode");
+    expect(text()).toContain("Period of planet B");
+    expect(text()).not.toContain("Sidereal rotation period");
+    expect(text()).not.toContain("Jump to sidereal return");
+    act(() => root.unmount());
+    root = createRoot(container);
+    mount({ mode: "earth-day", allowModeSwitch: false });
+    expect(container.querySelector("select")).toBeNull();
+    expect(text()).toContain("Sidereal rotation period");
+    expect(text()).toContain("Jump to sidereal return");
+    expect(text()).not.toContain("Period of planet B");
+    expect(text()).not.toContain("Synodic period");
+  });
+
+  it("an explicit allowModeSwitch: true keeps the selector", () => {
+    mount({ allowModeSwitch: true });
+    expect(select()).toBeTruthy();
+  });
+
+  it("a locked wide layout puts the controls in the top row beside the canvas", () => {
+    width = 1000;
+    mount({ mode: "earth-day", allowModeSwitch: false });
+    expect(container.innerHTML).not.toContain("row-span-2");
+    expect(container.innerHTML).not.toContain("row-start-2");
+  });
+
   it("step and reset move the cycle position by whole hundredths", () => {
     mount();
     click(button("Step forward"));

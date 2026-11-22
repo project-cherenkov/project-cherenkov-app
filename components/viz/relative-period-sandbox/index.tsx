@@ -30,6 +30,7 @@ import {
   PERIOD_B_RANGE,
   RELATIVE_PERIOD_MODES,
   SIDEREAL_ROTATION_RANGE,
+  allowModeSwitchOf,
   initialPeriodsOf,
   modeOf,
 } from "./types";
@@ -68,6 +69,8 @@ export function RelativePeriodSandbox({ config }: { config: RelativePeriodSandbo
   const rafRef = useRef<number | undefined>(undefined);
 
   const wide = rootWidth >= WIDE_MIN_WIDTH;
+  // A locked page shows no selector at all; the controls take the top row.
+  const showModeSelect = allowModeSwitchOf(config);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -167,6 +170,7 @@ export function RelativePeriodSandbox({ config }: { config: RelativePeriodSandbo
   // ---- Interaction
 
   function changeMode(next: RelativePeriodMode) {
+    if (!showModeSelect) return;
     setMode(next);
     setU(0);
     setIsPlaying(false);
@@ -239,24 +243,26 @@ export function RelativePeriodSandbox({ config }: { config: RelativePeriodSandbo
   return (
     <div ref={rootRef} className="flex flex-col gap-4" role="group" aria-label={t("relativePeriodTitle")}>
       <div className={`grid items-start gap-4 ${columns}`}>
-        <div className={`flex flex-col gap-1 ${wide ? "col-start-2 row-start-1" : ""}`}>
-          <label htmlFor={`${ids}-mode`} className="label-mono">
-            {t("relativePeriodMode")}
-          </label>
-          <Select id={`${ids}-mode`} value={mode} onChange={(e) => changeMode(e.target.value as RelativePeriodMode)}>
-            {RELATIVE_PERIOD_MODES.map((m) => (
-              <option key={m} value={m}>
-                {m === "earth-day" ? t("relativePeriodModeEarthDay") : t("relativePeriodModePlanetary")}
-              </option>
-            ))}
-          </Select>
-        </div>
+        {showModeSelect && (
+          <div className={`flex flex-col gap-1 ${wide ? "col-start-2 row-start-1" : ""}`}>
+            <label htmlFor={`${ids}-mode`} className="label-mono">
+              {t("relativePeriodMode")}
+            </label>
+            <Select id={`${ids}-mode`} value={mode} onChange={(e) => changeMode(e.target.value as RelativePeriodMode)}>
+              {RELATIVE_PERIOD_MODES.map((m) => (
+                <option key={m} value={m}>
+                  {m === "earth-day" ? t("relativePeriodModeEarthDay") : t("relativePeriodModePlanetary")}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
 
-        <div ref={canvasBoxRef} className={`min-w-0 ${wide ? "col-start-1 row-span-2 row-start-1" : ""}`}>
+        <div ref={canvasBoxRef} className={`min-w-0 ${wide ? `col-start-1 row-start-1 ${showModeSelect ? "row-span-2" : ""}` : ""}`}>
           <canvas ref={canvasRef} className="w-full rounded-md" role="img" aria-label={altText} />
         </div>
 
-        <div className={`flex min-w-0 flex-col gap-4 ${wide ? "col-start-2 row-start-2" : ""}`}>
+        <div className={`flex min-w-0 flex-col gap-4 ${wide ? `col-start-2 ${showModeSelect ? "row-start-2" : "row-start-1"}` : ""}`}>
           {mode === "earth-day" ? (
             <>
               <PeriodSlider

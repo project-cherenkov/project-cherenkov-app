@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  allowModeSwitchOf,
   DEFAULT_EARTH_ORBIT_PERIOD_DAYS,
   DEFAULT_PERIOD_A_DAYS,
   DEFAULT_PERIOD_B_DAYS,
@@ -36,6 +37,14 @@ describe("isRelativePeriodSandboxConfig", () => {
         earthOrbitPeriodDays: 365.2564,
       }),
     ).toBe(true);
+  });
+
+  it("accepts a boolean allowModeSwitch and rejects anything else", () => {
+    expect(isRelativePeriodSandboxConfig({ allowModeSwitch: true })).toBe(true);
+    expect(isRelativePeriodSandboxConfig({ mode: "earth-day", allowModeSwitch: false })).toBe(true);
+    for (const bad of ["false", 0, 1, null]) {
+      expect(isRelativePeriodSandboxConfig({ allowModeSwitch: bad })).toBe(false);
+    }
   });
 
   it.each([null, undefined, "earth-day", 3, true, []])("rejects a non-object: %j", (value) => {
@@ -78,6 +87,13 @@ describe("config accessors", () => {
   it("defaults to the Earth's-day mode", () => {
     expect(modeOf({})).toBe("earth-day");
     expect(modeOf({ mode: "planetary-orbits" })).toBe("planetary-orbits");
+  });
+
+  it("allows mode switching unless the config turns it off", () => {
+    expect(allowModeSwitchOf({})).toBe(true);
+    expect(allowModeSwitchOf({ mode: "planetary-orbits" })).toBe(true);
+    expect(allowModeSwitchOf({ allowModeSwitch: true })).toBe(true);
+    expect(allowModeSwitchOf({ allowModeSwitch: false })).toBe(false);
   });
 
   it("falls back to the Earth and Earth–Jupiter defaults", () => {

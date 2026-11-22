@@ -18,9 +18,9 @@ Cherenkov radiation is the pale blue glow produced when a charged particle trave
 
 ## The tagline and the motto
 
-Our tagline, "From Curiosity to Visualization", is the promise to the reader, in plain language. Its two key words are not arbitrary: the C of Curiosity and the V of Visualization are the first and last letters of Cherenkov.
+Our tagline, "From Curiosity to Vision", is the promise to the reader, in plain language. Vision is the intellectual outcome we want to support: seeing how an idea works, not only being told that it does. Its two key words are not arbitrary: the C of Curiosity and the V of Vision are the first and last letters of Cherenkov. The wordplay only works in English, so the tagline stays in English in both interface languages.
 
-Our motto, "Cognitio · Humanitas · Exploratio", is the credo, in Latin: it says what we believe and what we are made of. Cognitio is inquiry, the curiosity end. Humanitas is the learner in the middle, the reason any of it matters. Exploratio is the visualization end, where exploration becomes visible. The motto stays in Latin in both interface languages.
+Our motto, "Cognitio · Humanitas · Exploratio", is the credo, in Latin: it says what we believe and what we are made of. Cognitio is inquiry, the curiosity end. Humanitas is the learner in the middle, the reason any of it matters. Exploratio is the exploratory process: examining, testing and developing an understanding of ideas. Visualization is one of its defining instruments, not its final goal. The motto stays in Latin in both interface languages.
 
 ## The colours
 

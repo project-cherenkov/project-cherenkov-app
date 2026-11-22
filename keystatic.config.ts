@@ -237,12 +237,17 @@ function vizConfigConditional(
         // starting value (days). Values must lie inside the slider range.
         mode: fields.select({
           label: "Opening mode",
-          description: "Defaults to Earth's day in the engine if left unset. The reader can switch modes.",
+          description: "Defaults to Earth's day in the engine if left unset.",
           options: [
             { label: "Earth's day", value: "earth-day" },
             { label: "Planetary orbits", value: "planetary-orbits" },
           ],
           defaultValue: "earth-day",
+        }),
+        allowModeSwitch: fields.checkbox({
+          label: "Let the reader switch modes",
+          description: "On by default. Turn off to lock the page to its opening mode and hide the mode selector.",
+          defaultValue: true,
         }),
         siderealRotationDays: fields.number({
           label: "Sidereal rotation period (d)",
