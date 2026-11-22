@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
+import { lazy, Suspense, useEffect, useId, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { BookOpen, Bot, CircleHelp, ExternalLink, GripHorizontal, MessageCircleQuestion, Settings2, X } from "lucide-react";
@@ -11,9 +11,25 @@ import { ManifoldMascot, type MascotMood } from "@/components/study/manifold-mas
 import { CompanionTrail } from "@/components/study/companion-trail";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { NeutrinoFaq } from "@/components/study/neutrino-faq";
+import { NeutrinoChatList } from "@/components/study/neutrino-chat-list";
+import { ChatMeter } from "@/components/study/chat-meter";
+import { useChatList } from "@/components/study/use-chat-list";
+import { useOwnKey } from "@/components/study/use-own-key";
 import { useCompanionPrefs } from "@/components/study/use-companion-prefs";
 import { useCompanionWander } from "@/components/study/use-companion-wander";
-import { COMPANION_SIZE_PX, DEFAULT_COMPANION_PREFS, DEFAULT_DRIFT_SPEED } from "@/lib/companion-settings";
+import {
+  COMPANION_DAILY_LIMIT,
+  COMPANION_MAX_CHATS,
+  COMPANION_MAX_CHAT_MESSAGES,
+  COMPANION_MAX_HISTORY,
+  COMPANION_MAX_MESSAGE_CHARS,
+  COMPANION_PERSONAL_DAILY_LIMIT,
+  COMPANION_SIZE_PX,
+  DEFAULT_COMPANION_PREFS,
+  DEFAULT_DRIFT_SPEED,
+  type CompanionStyle,
+} from "@/lib/companion-settings";
+import { pageRefFromPath } from "@/lib/companion-prompt";
 import {
   DEFAULT_DOCK_POSITION,
   DOCK_MARGIN,
@@ -40,7 +56,19 @@ type CompanionWindow = Window & {
 
 type Message = { role: "user" | "model"; text: string };
 type AnswerMode = "faq" | "ai";
-type ChatError = "ai_disabled" | "acknowledgement_required" | "cherenkov_limit" | "provider_quota" | "provider_unavailable" | "configuration" | "personal_key" | "personal_quota" | "personal_unavailable" | "unauthenticated" | "unavailable" | "unknown";
+type ChatError = "chat_limit" | "chat_full" | "chat_conflict" | "chat_not_found" | "personal_limit" | "ai_disabled" | "acknowledgement_required" | "cherenkov_limit" | "provider_quota" | "provider_unavailable" | "configuration" | "personal_key" | "personal_quota" | "personal_unavailable" | "unauthenticated" | "unavailable" | "unknown";
+
+// Markdown and KaTeX load only when a chat message is shown, so neither the
+// renderer nor katex.css is part of the page's own bundle.
+const NeutrinoMarkdown = lazy(() => import("@/components/study/neutrino-markdown"));
+
+function ChatText({ text }: { text: string }) {
+  return (
+    <Suspense fallback={<p className="whitespace-pre-wrap">{text}</p>}>
+      <NeutrinoMarkdown text={text} />
+    </Suspense>
+  );
+}
 
 const POSITION_KEY = "neutrino-position-v1";
 const HIDDEN_KEY = "neutrino-hidden-v1";
@@ -97,6 +125,9 @@ function CompanionPanel({
   embedded = false,
   messages,
   setMessages,
+  chatId,
+  setChatId,
+  chatStyle,
   busy,
   setBusy,
   mascot,
@@ -126,6 +157,9 @@ function CompanionPanel({
   embedded?: boolean;
   messages: Message[];
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  chatId: string | null;
+  setChatId: Dispatch<SetStateAction<string | null>>;
+  chatStyle: CompanionStyle;
   busy: boolean;
   setBusy: Dispatch<SetStateAction<boolean>>;
   mascot: MascotMood;
@@ -140,64 +174,132 @@ function CompanionPanel({
   const [tab, setTab] = useState<"ask" | "timer" | "settings">("ask");
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<ChatError | null>(null);
-  const [personalKey, setPersonalKey] = useState("");
+  const [keyDraft, setKeyDraft] = useState("");
   const [keyConsent, setKeyConsent] = useState(false);
   const [noticeChecked, setNoticeChecked] = useState(false);
+  const [truncated, setTruncated] = useState(false);
+  const [chatListOpen, setChatListOpen] = useState(false);
+  // How many messages the open chat holds on the server (the thread on screen
+  // can hold unsaved turns from a failed request).
+  const [savedCount, setSavedCount] = useState(0);
+  const { key: ownKey, setKey: setOwnKey, clear: clearOwnKey } = useOwnKey();
+  const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const chatList = useChatList(signedIn && aiEnabled && mode === "ai");
+  const listUsage = chatList.state.status === "ready" ? chatList.state.usage : null;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  async function send(usePersonalKey = false) {
+  const chatsAtMax = (listUsage?.chats ?? 0) >= COMPANION_MAX_CHATS;
+  const chatFull = chatId !== null && savedCount + 2 > COMPANION_MAX_CHAT_MESSAGES;
+  const newChatBlocked = chatId === null && chatsAtMax;
+  const composerBlocked = chatFull || newChatBlocked;
+  const limitValues = { max: COMPANION_MAX_CHAT_MESSAGES, maxChats: COMPANION_MAX_CHATS, maxMessages: COMPANION_MAX_CHAT_MESSAGES, limit: COMPANION_DAILY_LIMIT, personalLimit: COMPANION_PERSONAL_DAILY_LIMIT };
+
+  function newChat() {
+    setMessages([]);
+    setChatId(null);
+    setSavedCount(0);
+    setTruncated(false);
+    setError(null);
+    setChatListOpen(false);
+  }
+
+  async function openChat(id: string) {
+    setError(null);
+    try {
+      const response = await fetch(`/api/companion/chats/${id}`, { cache: "no-store" });
+      const data: { messages?: unknown } = await response.json().catch(() => ({}));
+      if (!response.ok || !Array.isArray(data.messages)) throw new Error("open failed");
+      const loaded = data.messages.filter(
+        (m): m is Message => typeof m === "object" && m !== null && ((m as Message).role === "user" || (m as Message).role === "model") && typeof (m as Message).text === "string",
+      );
+      setMessages(loaded);
+      setChatId(id);
+      setSavedCount(loaded.length);
+      setTruncated(false);
+      setChatListOpen(false);
+    } catch {
+      setError("chat_not_found");
+    }
+  }
+
+  async function deleteChat(id: string) {
+    try {
+      await fetch(`/api/companion/chats/${id}`, { method: "DELETE" });
+    } finally {
+      if (id === chatId) newChat();
+      await chatList.refresh();
+    }
+  }
+
+  async function send(options: { retry?: boolean; text?: string; key?: string } = {}) {
+    const retry = options.retry === true;
     const latest = messages[messages.length - 1];
-    const text = usePersonalKey ? (latest?.role === "user" ? latest.text : "") : draft.trim();
-    if (!text || busy || !signedIn || !aiEnabled) return;
-    const userMessage: Message = { role: "user", text };
-    const next: Message[] = usePersonalKey
-      ? messages.slice(-6)
-      : [...messages, userMessage].slice(-6);
-    if (!usePersonalKey) {
-      setMessages(next);
+    const text = retry ? (latest?.role === "user" ? latest.text : "") : (options.text ?? draft).trim();
+    if (!text || busy || !signedIn || !aiEnabled || composerBlocked) return;
+    const all: Message[] = retry ? messages : [...messages, { role: "user", text }];
+    if (!retry) {
+      setMessages(all);
       setDraft("");
     }
     setBusy(true);
     setError(null);
-    const key = usePersonalKey ? personalKey : "";
+    setTruncated(false);
+    const key = options.key ?? ownKey;
+    const page = pageRefFromPath(pathname);
     try {
       const response = await fetch("/api/companion/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
         cache: "no-store",
         body: JSON.stringify({
-          messages: next,
-          ...(key ? { personalKey: key, personalKeyConsent: keyConsent } : {}),
+          messages: all.slice(-COMPANION_MAX_HISTORY),
+          ...(chatId ? { chatId } : {}),
+          ...(page ? { page } : {}),
+          ...(key ? { personalKey: key, personalKeyConsent: true } : {}),
         }),
       });
-      const data: { reply?: unknown; error?: unknown } = await response.json().catch(() => ({}));
+      const data: { reply?: unknown; error?: unknown; chatId?: unknown; truncated?: unknown } = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setError(isChatError(data.error) ? data.error : "unknown");
+        const code = isChatError(data.error) ? data.error : "unknown";
+        setError(code);
+        // A rejected personal key is cleared, so it is not sent again.
+        if (code === "personal_key") clearOwnKey();
+        if (code === "chat_full") setSavedCount(COMPANION_MAX_CHAT_MESSAGES);
+        if (code === "chat_limit") void chatList.refresh();
+        if (code === "chat_conflict" && chatId) void openChat(chatId);
+        if (code === "chat_not_found") { setChatId(null); setSavedCount(0); }
         return;
       }
       if (typeof data.reply !== "string") {
         setError("unknown");
         return;
       }
-      const modelMessage: Message = { role: "model", text: data.reply };
-      const updated = [...next, modelMessage].slice(-6);
-      setMessages(updated);
+      setMessages([...all, { role: "model", text: data.reply }]);
+      setSavedCount((count) => (chatId ? count : 0) + 2);
+      if (typeof data.chatId === "string") setChatId(data.chatId);
+      setTruncated(data.truncated === true);
+      void chatList.refresh();
     } catch {
       setError("unavailable");
     } finally {
       setBusy(false);
-      if (usePersonalKey) {
-        setPersonalKey("");
-        setKeyConsent(false);
-      }
     }
   }
 
-  const canTryPersonalKey = error === "provider_quota" || error === "provider_unavailable" || error === "configuration";
+  function saveKeyAndRetry() {
+    if (!keyConsent || !keyDraft.trim()) return;
+    const key = keyDraft.trim();
+    setOwnKey(key);
+    setKeyDraft("");
+    setKeyConsent(false);
+    void send({ retry: true, key });
+  }
+
+  const canTryPersonalKey = !ownKey && (error === "provider_quota" || error === "provider_unavailable" || error === "configuration" || error === "cherenkov_limit");
 
   return (
     <div className={`flex ${embedded ? "h-full" : "h-screen"} flex-col bg-background text-foreground`}>
@@ -308,6 +410,24 @@ function CompanionPanel({
             />
           ) : (
             <>
+              {signedIn ? (
+                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-3 py-2">
+                  <button type="button" onClick={() => setChatListOpen((open) => !open)} aria-pressed={chatListOpen} className="inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted">
+                    {t("chatsButton")}{listUsage ? ` (${listUsage.chats}/${COMPANION_MAX_CHATS})` : ""}
+                  </button>
+                  <button type="button" onClick={newChat} disabled={messages.length === 0 && chatId === null} className="inline-flex min-h-11 items-center rounded-md border border-border-strong px-3 text-sm font-medium hover:bg-muted disabled:opacity-50">
+                    {t("newChat")}
+                  </button>
+                  {chatId ? (
+                    <div className="min-w-[8rem] flex-1">
+                      <ChatMeter label={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} value={savedCount} max={COMPANION_MAX_CHAT_MESSAGES} valueText={t("messagesMeter", { count: savedCount, max: COMPANION_MAX_CHAT_MESSAGES })} style={chatStyle} />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+              {chatListOpen && signedIn ? (
+                <NeutrinoChatList state={chatList.state} activeId={chatId} onOpen={(id) => void openChat(id)} onDelete={(id) => void deleteChat(id)} onNew={newChat} />
+              ) : (
               <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3" aria-live="polite">
                 {!aiBannerDismissed ? (
                   <div role="status" className="relative flex items-start gap-2 rounded-md border border-warning-border bg-warning-bg p-2.5 pr-8 text-xs text-foreground">
@@ -337,35 +457,60 @@ function CompanionPanel({
                   <p className="rounded-lg bg-muted/60 p-3 text-sm text-muted-foreground">{t("welcome")}</p>
                 ) : null}
                 {messages.map((message, index) => (
-                  <div key={`${index}-${message.role}`} className={message.role === "user" ? "ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink" : "mr-5 rounded-lg border border-border bg-card p-3 text-sm"}>
-                    <p className="whitespace-pre-wrap">{message.text}</p>
+                  <div key={`${index}-${message.role}`}>
+                    {messages.length > COMPANION_MAX_HISTORY && index === messages.length - COMPANION_MAX_HISTORY ? (
+                      <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                        <span aria-hidden="true" className="h-px flex-1 bg-border" />
+                        <span>{t("contextDivider")}</span>
+                        <span aria-hidden="true" className="h-px flex-1 bg-border" />
+                      </div>
+                    ) : null}
+                  <div className={message.role === "user" ? "ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink" : "mr-5 rounded-lg border border-border bg-card p-3 text-sm"}>
+                    <ChatText text={message.text} />
+                  </div>
                   </div>
                 ))}
+                {truncated && !busy ? (
+                  <div role="status" className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm">
+                    <span>{t("truncated")}</span>
+                    <button type="button" onClick={() => void send({ text: t("continue") })} disabled={composerBlocked} className="min-h-11 rounded-md border border-border-strong px-3 font-medium hover:bg-muted disabled:opacity-50">{t("continue")}</button>
+                  </div>
+                ) : null}
                 {busy ? <p className="text-sm text-muted-foreground">{t("thinking")}</p> : null}
-                {error ? <div role="alert" className="rounded-lg border border-danger-border bg-danger-bg p-3 text-sm text-foreground">{t(`errors.${error}`)}</div> : null}
+                {error ? <div role="alert" className="rounded-lg border border-danger-border bg-danger-bg p-3 text-sm text-foreground">{t(`errors.${error}`, limitValues)}</div> : null}
               </div>
+              )}
 
-              {canTryPersonalKey ? (
-                <form className="shrink-0 space-y-2 border-t border-border bg-muted/30 p-3" onSubmit={(event) => { event.preventDefault(); void send(true); }}>
+              {canTryPersonalKey && !chatListOpen ? (
+                <form className="shrink-0 space-y-2 border-t border-border bg-muted/30 p-3" onSubmit={(event) => { event.preventDefault(); saveKeyAndRetry(); }}>
                   <p className="text-sm font-medium">{t("personalKeyTitle")}</p>
-                  <p className="text-xs text-muted-foreground">{t("personalKeyNotice")}</p>
+                  <p className="text-xs text-muted-foreground">{t("ownKeyHelp", limitValues)}</p>
                   <label className="flex items-start gap-2 text-xs">
                     <input type="checkbox" checked={keyConsent} onChange={(event) => setKeyConsent(event.target.checked)} className="mt-0.5" />
-                    <span>{t("personalKeyConsent")}</span>
+                    <span>{t("ownKeyConsent")}</span>
                   </label>
-                  <input type="password" autoComplete="off" spellCheck={false} maxLength={256} value={personalKey} onChange={(event) => setPersonalKey(event.target.value)} placeholder={t("personalKeyPlaceholder")} className="h-10 w-full rounded-md border border-border-strong bg-background px-3 text-sm" />
-                  <button type="submit" disabled={!keyConsent || !personalKey.trim() || busy} className="h-10 w-full rounded-md bg-foreground px-3 text-sm font-medium text-background disabled:opacity-50">{t("personalKeyRetry")}</button>
+                  <input type="password" aria-label={t("ownKeyPlaceholder")} autoComplete="off" spellCheck={false} maxLength={256} value={keyDraft} onChange={(event) => setKeyDraft(event.target.value)} placeholder={t("ownKeyPlaceholder")} className="h-10 w-full rounded-md border border-border-strong bg-background px-3 text-sm" />
+                  <button type="submit" disabled={!keyConsent || !keyDraft.trim() || busy} className="h-10 w-full rounded-md bg-foreground px-3 text-sm font-medium text-background disabled:opacity-50">{t("personalKeyUse")}</button>
                 </form>
+              ) : null}
+
+              {composerBlocked ? (
+                <div role="status" className="shrink-0 space-y-2 border-t border-border bg-warning-bg p-3 text-sm">
+                  <p>{chatFull && chatsAtMax ? t("chatFullAndLimitNotice", limitValues) : chatFull ? t("chatFullNotice", limitValues) : t("chatLimitNotice", limitValues)}</p>
+                  {!chatFull || chatsAtMax ? (
+                    <button type="button" onClick={() => setChatListOpen(true)} className="min-h-11 rounded-md border border-border-strong px-3 font-medium hover:bg-background">{t("openChatList")}</button>
+                  ) : null}
+                </div>
               ) : null}
 
               <form className="shrink-0 border-t border-border p-3" onSubmit={(event) => { event.preventDefault(); void send(); }}>
                 <label htmlFor="neutrino-message" className="sr-only">{t("messageLabel")}</label>
                 <div className="flex items-end gap-2">
-                  <textarea id="neutrino-message" rows={2} maxLength={1200} value={draft} disabled={!signedIn || busy} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border-strong bg-background px-3 py-2 text-sm" />
-                  <button type="submit" disabled={!signedIn || busy || !draft.trim()} className="h-11 rounded-md bg-cherenkov-blue-800 px-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{t("send")}</button>
+                  <textarea id="neutrino-message" rows={2} maxLength={COMPANION_MAX_MESSAGE_CHARS} value={draft} disabled={!signedIn || busy || composerBlocked} onChange={(event) => setDraft(event.target.value)} placeholder={t("messagePlaceholder")} className="min-h-12 flex-1 resize-none rounded-md border border-border-strong bg-background px-3 py-2 text-sm" />
+                  <button type="submit" disabled={!signedIn || busy || composerBlocked || !draft.trim()} className="h-11 rounded-md bg-cherenkov-blue-800 px-3 text-sm font-semibold text-white disabled:opacity-50 dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink">{t("send")}</button>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{t("dailyLimit")}</span>
+                  <span>{ownKey ? t("usingOwnKey") : t("dailyLimit", { limit: COMPANION_DAILY_LIMIT })}</span>
                   <Link href="/docs/neutrino" className="underline underline-offset-2">{t("help")}</Link>
                 </div>
               </form>
@@ -416,6 +561,7 @@ export function InPageNeutrino() {
   const [openAnchor, setOpenAnchor] = useState<{ left: number; top: number } | null>(null);
   const [driftPaused, setDriftPaused] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [chatId, setChatId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [pipWindow, setPipWindow] = useState<Window | null>(null);
   const [pipRoot, setPipRoot] = useState<HTMLDivElement | null>(null);
@@ -866,6 +1012,9 @@ export function InPageNeutrino() {
               embedded
               messages={messages}
               setMessages={setMessages}
+              chatId={chatId}
+              setChatId={setChatId}
+              chatStyle={prefs.style}
               busy={busy}
               setBusy={setBusy}
               mascot={mood}
@@ -914,6 +1063,9 @@ export function InPageNeutrino() {
               close={() => pipWindow.close()}
               messages={messages}
               setMessages={setMessages}
+              chatId={chatId}
+              setChatId={setChatId}
+              chatStyle={prefs.style}
               busy={busy}
               setBusy={setBusy}
               mascot={mood}
@@ -1014,7 +1166,7 @@ export function InPageNeutrino() {
 }
 
 function isChatError(value: unknown): value is ChatError {
-  return ["ai_disabled", "cherenkov_limit", "provider_quota", "provider_unavailable", "configuration", "personal_key", "personal_quota", "personal_unavailable", "unauthenticated", "unavailable"].includes(String(value));
+  return ["chat_limit", "chat_full", "chat_conflict", "chat_not_found", "personal_limit", "acknowledgement_required", "ai_disabled", "cherenkov_limit", "provider_quota", "provider_unavailable", "configuration", "personal_key", "personal_quota", "personal_unavailable", "unauthenticated", "unavailable"].includes(String(value));
 }
 
 function tabClass(active: boolean) {

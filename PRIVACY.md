@@ -32,7 +32,7 @@ These providers may process data outside Indonesia, including in the United Stat
 
 ## 7. How long we keep it
 
-Account and study data are kept until you delete your account or ask us to delete it. Server logs are kept by the hosting provider for its standard period. Chat messages are not stored by us beyond the conversation in your browser; Google's retention is set by Google. Resend's handling and retention of account email data are governed by Resend's privacy policy and service terms.
+Account and study data are kept until you delete your account or ask us to delete it. Server logs are kept by the hosting provider for its standard period. Neutrino chats (your messages and the replies) are stored in your account, up to 15 chats of 30 messages each, until you delete them one by one or all at once under Data in Settings, or delete your account; Google's retention is set by Google. A personal Gemini key is never stored by us: it is kept only in your browser tab's session storage. Resend's handling and retention of account email data are governed by Resend's privacy policy and service terms.
 
 ## 8. Your rights
 

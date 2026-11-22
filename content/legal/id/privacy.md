@@ -32,7 +32,7 @@ Penyedia tersebut dapat memproses data di luar Indonesia, termasuk di Amerika Se
 
 ## 7. Berapa lama data disimpan
 
-Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Pesan obrolan tidak kami simpan di luar percakapan di peramban Anda; masa simpan di Google ditentukan oleh Google. Penanganan dan penyimpanan data email akun oleh Resend diatur oleh kebijakan privasi dan ketentuan layanannya.
+Data akun dan belajar disimpan sampai Anda menghapus akun atau meminta kami menghapusnya. Log server disimpan penyedia hosting selama masa standarnya. Obrolan Neutrino (pesan Anda dan balasannya) kami simpan di akun Anda, hingga 15 obrolan berisi 30 pesan, sampai Anda menghapusnya satu per satu atau sekaligus di bagian Data pada Pengaturan, atau menghapus akun; masa simpan di Google ditentukan oleh Google. Key Gemini pribadi tidak pernah kami simpan: key hanya ada di session storage tab peramban Anda. Penanganan dan penyimpanan data email akun oleh Resend diatur oleh kebijakan privasi dan ketentuan layanannya.
 
 ## 8. Hak Anda
 

@@ -15,6 +15,7 @@ import { DeleteAccount } from "@/components/account/delete-account";
 import { EmailVerification } from "@/components/account/email-verification";
 import { PasswordSettings } from "@/components/account/password-settings";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
+import { CompanionData } from "@/components/study/companion-data";
 import { DEFAULT_COMPANION_PREFS, normalizeCompanionPrefs } from "@/lib/companion-settings";
 import { db } from "@/lib/db";
 import { companionSettings } from "@/lib/db/schema";
@@ -31,8 +32,9 @@ export async function generateMetadata({
 }
 
 export default async function AccountPage() {
-  const [t, locale, current] = await Promise.all([
+  const [t, tc, locale, current] = await Promise.all([
     getTranslations("account"),
+    getTranslations("companion"),
     getLocale(),
     getCurrentUser(),
   ]);
@@ -58,6 +60,7 @@ export default async function AccountPage() {
         updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
+        style: companionSettings.style,
       })
       .from(companionSettings)
       .where(eq(companionSettings.userId, current.id))
@@ -81,33 +84,33 @@ export default async function AccountPage() {
       <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
       <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
-      <dl className="mt-8 divide-y divide-border rounded-lg border border-border bg-card">
-        <Row label={t("username")} value={details.name} />
-        <Row
-          label={t("email")}
-          value={
-            <span>
-              {details.email}
-              {emailEnabled ? <EmailVerification email={details.email} verified={details.emailVerified} /> : null}
-            </span>
-          }
-        />
-        <Row
-          label={t("role")}
-          value={
-            <span>
-              <span className="font-mono font-semibold">{ROLE_LABELS[details.role]}</span>
-              <span className="mt-1 block text-sm text-foreground/75">
-                {t(details.hasEditAccess ? "roleEditorHint" : needsVerifyForEdit ? "roleVerifyHint" : "roleMemberHint")}
+      <section className="mt-8" aria-labelledby="settings-account">
+        <h2 id="settings-account" className="heading-section">{tc("sectionAccount")}</h2>
+        <dl className="mt-4 divide-y divide-border rounded-lg border border-border bg-card">
+          <Row label={t("username")} value={details.name} />
+          <Row
+            label={t("email")}
+            value={
+              <span>
+                {details.email}
+                {emailEnabled ? <EmailVerification email={details.email} verified={details.emailVerified} /> : null}
               </span>
-            </span>
-          }
-        />
-        <Row label={t("signInMethods")} value={details.providers.map(providerLabel).join(", ") || "—"} />
-        <Row label={t("memberSince")} value={joined} />
-      </dl>
-
-      <CompanionPreferences signedIn initial={companionPrefs} />
+            }
+          />
+          <Row
+            label={t("role")}
+            value={
+              <span>
+                <span className="font-mono font-semibold">{ROLE_LABELS[details.role]}</span>
+                <span className="mt-1 block text-sm text-foreground/75">
+                  {t(details.hasEditAccess ? "roleEditorHint" : needsVerifyForEdit ? "roleVerifyHint" : "roleMemberHint")}
+                </span>
+              </span>
+            }
+          />
+          <Row label={t("signInMethods")} value={details.providers.map(providerLabel).join(", ") || "—"} />
+          <Row label={t("memberSince")} value={joined} />
+        </dl>
 
       <PasswordSettings
         email={details.email}
@@ -136,6 +139,17 @@ export default async function AccountPage() {
         ) : null}
         <SignOutButton />
       </div>
+      </section>
+
+      <section className="mt-12" aria-labelledby="settings-neutrino">
+        <h2 id="settings-neutrino" className="heading-section">{tc("sectionNeutrino")}</h2>
+        <CompanionPreferences signedIn initial={companionPrefs} />
+      </section>
+
+      <section className="mt-12" aria-labelledby="settings-data">
+        <h2 id="settings-data" className="heading-section mb-4">{tc("sectionData")}</h2>
+        <CompanionData signedIn />
+      </section>
     </div>
   );
 }

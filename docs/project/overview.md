@@ -4,7 +4,7 @@
 
 ## What it is
 
-Project Cherenkov is a growing learning archive for olympiad informatics, physics and astronomy. Its syllabus maps the territory, materials establish the concepts behind syllabus topics, and editorials explore particular ideas in concrete situations through interactive visualizations and rigorous reasoning. Around these content sections sit an Indonesian OSN study planner and its study companion, Neutrino.
+Project Cherenkov is a growing learning archive for olympiad informatics, physics and astronomy. Its syllabus maps the territory, materials establish the essential concepts behind syllabus topics, and editorials independently investigate particular questions through interactive visualizations and rigorous reasoning. Around these content sections sit an Indonesian OSN study planner and its study companion, Neutrino.
 
 It is open source. Content is git-tracked MDX, the repository is public, and the site is hosted on Vercel.
 
@@ -17,18 +17,18 @@ Today the project is Indonesia-first: the syllabus is the OSN syllabus, the plan
 | Section | What it is | Where it lives |
 | --- | --- | --- |
 | Syllabus | The scope map: subjects, topics and subtopics, with source provenance and links to available learning content. | `lib/syllabus/data/*.ts` |
-| Materials | Conceptual foundations for a syllabus topic or subtopic: definitions, key results, derivations, procedures and common traps. Visualizations are optional. | `content/materials/<subject>/*.mdx` |
-| Editorials | Focused explorations of a question, case, phenomenon or problem. Each uses an interactive visualization to make its central reasoning explorable and develops the argument through a proof, derivation or other appropriate reasoning. | `content/editorials/<subject>/*.mdx` |
+| Materials | Self-contained explanations of a topic or subtopic's essential concepts: definitions, relationships, key results, derivations, procedures and common traps. Every published material has a meaningful interactive visualization. | `content/materials/<subject>/*.mdx` |
+| Editorials | Independent investigations of a question, case, phenomenon or problem. Each uses an interactive visualization to let readers examine its central reasoning and develops the argument through a proof, derivation or other appropriate reasoning. | `content/editorials/<subject>/*.mdx` |
 
 ## How materials and editorials relate
 
-Materials and editorials are complementary, not dependent on one another. A material explains the overall concept of a syllabus topic or subtopic; an editorial investigates a particular idea in a concrete situation. An editorial should add an insight or investigation rather than merely repeat a material. A topic can have either, both or neither.
+Materials and editorials are complementary, not dependent on one another or a mandatory sequence. A material establishes the essential conceptual framework for a syllabus topic or subtopic; an editorial begins with a particular question or situation and investigates it. An editorial should be independently understandable, may link to a related material for broader foundations, and should add an investigation rather than repeat the material. A topic can have either, both or neither. Both formats require meaningful interactive visualizations before publication, but the visualization serves a different purpose in each: conceptual clarification in a material, focused exploration in an editorial.
 
 Editorials are organised by `principle`, the general idea they teach. An `errorType` is optional and should be used when a specific misconception is genuinely relevant. Editorials may link to a syllabus topic through the optional `syllabusTopic` field; materials link directly to a topic.
 
 ## The editorial format
 
-The current editorial convention is a concrete problem or question, the idea used to investigate it, an interactive visualization, and a complete proof, derivation or other appropriate argument, with further reading where available. This is a writing convention, not a substitute for the frontmatter schema. The authoring workflow and format standards are in [the Writer Agent Instructions](../agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md) and [the in-app writing guide](../../content/docs/en/writing-editorials.mdx).
+The editorial explanation establishes the question, idea and reasoning before the visualization is designed. The interaction then lets readers inspect or test a relationship central to the argument; it does not supply missing reasoning. Materials follow the same explanation-first principle, with a smaller visualization that clarifies the topic's conceptual structure. The authoring workflow and format standards are in [the Writer Agent Instructions](../agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) and [the in-app writing guide](../../content/docs/en/writing-editorials.mdx).
 
 ## The planner and Neutrino
 

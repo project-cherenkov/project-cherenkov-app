@@ -30,8 +30,10 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `project/overview.md` | The broad definition of Project Cherenkov: what it is, for whom, its sections and boundaries. | current |
 | `project/product-identity.md` | Name, definition, promise and credo, content identity, commitments, subject boundary, audience, language, voice. | current |
 | `agents/README.md` | Which agent instructions to use, their authority, snapshot limitations and maintenance rules. | current |
-| `agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md` | Versioned standards and workflow for creating editorials and materials. Includes dated syllabus and content-registry snapshots. | current |
-| `agents/CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.0-2026-11-17.md` | Versioned diagnosis and revision workflow for existing editorials and materials. Section 4 contains dated starting notes, not current diagnoses. | current |
+| `agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md` | Current standards and workflow for creating editorials and materials. Includes dated syllabus and content-registry snapshots. | current |
+| `agents/CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md` | Previous version of the writing standard. | historical |
+| `agents/CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.1-2026-11-21.md` | Current diagnosis and revision workflow for existing editorials and materials. Section 4 contains dated starting notes, not current diagnoses. | current |
+| `agents/CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.0-2026-11-17.md` | Previous version of the revision standard. | historical |
 | `project/inspiration-and-philosophy.md` | The homages and the open-knowledge stance, in the owner's words. Source for the in-app `/docs/philosophy` page. | current |
 | `design/visual-identity.md` | The mark, the wordmark and the type pairing. | current |
 | `design/colour.md` | Palette, tokens, roles, proportion, contrast, and the colour role audit. | current |

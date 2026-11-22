@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  COMPANION_MAX_CHATS,
+  COMPANION_MAX_CHAT_MESSAGES,
+  COMPANION_MAX_OUTPUT_TOKENS,
+  COMPANION_PERSONAL_DAILY_LIMIT,
   COMPANION_SIZES,
+  COMPANION_STYLES,
   COMPANION_SIZE_PX,
   DEFAULT_COMPANION_PREFS,
   normalizeCompanionPrefs,
@@ -71,5 +76,29 @@ describe("the AI switch", () => {
 describe("sizes", () => {
   it("keeps every size at or above a 44px touch target", () => {
     for (const size of COMPANION_SIZES) expect(COMPANION_SIZE_PX[size]).toBeGreaterThanOrEqual(44);
+  });
+});
+
+describe("style setting", () => {
+  it("defaults to pixel for everyone, including a missing or invalid value", () => {
+    expect(DEFAULT_COMPANION_PREFS.style).toBe("pixel");
+    expect(normalizeCompanionPrefs(undefined).style).toBe("pixel");
+    expect(normalizeCompanionPrefs({ style: "neon" }).style).toBe("pixel");
+    expect(normalizeCompanionPrefs({ style: "smooth" }).style).toBe("smooth");
+  });
+
+  it("accepts only the listed styles in a patch", () => {
+    for (const style of COMPANION_STYLES) expect(parseCompanionPatch({ style })).toEqual({ style });
+    expect(parseCompanionPatch({ style: "retro" })).toBeNull();
+    expect(parseCompanionPatch({ style: 1 })).toBeNull();
+  });
+});
+
+describe("chat limits", () => {
+  it("keeps the decided numbers in one place", () => {
+    expect(COMPANION_MAX_CHATS).toBe(15);
+    expect(COMPANION_MAX_CHAT_MESSAGES).toBe(30);
+    expect(COMPANION_MAX_OUTPUT_TOKENS).toBe(1500);
+    expect(COMPANION_PERSONAL_DAILY_LIMIT).toBe(200);
   });
 });

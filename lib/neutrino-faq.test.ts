@@ -54,7 +54,7 @@ describe.each(catalogues)("FAQ text (%s)", (_locale, catalogue) => {
   });
 
   it("only uses placeholders the FAQ supplies", () => {
-    const allowed = new Set(["limit", "chars", "history"]);
+    const allowed = new Set(["limit", "chars", "history", "personalLimit", "maxChats", "maxMessages"]);
     for (const [key, { q, a }] of Object.entries(items)) {
       for (const match of `${q} ${a}`.matchAll(/\{(\w+)\}/g)) expect(allowed.has(match[1] ?? ""), `${key}: {${match[1]}}`).toBe(true);
     }

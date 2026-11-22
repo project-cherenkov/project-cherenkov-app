@@ -499,6 +499,9 @@ export const companionSettings = pgTable(
     updatesEnabled: boolean("updates_enabled").notNull().default(true),
     size: text("size").notNull().default("medium"),
     rotation: text("rotation").notNull().default("auto"),
+    // "pixel" (default) or "smooth" (the original look). Keep the CHECK in
+    // sync with COMPANION_STYLES.
+    style: text("style").notNull().default("pixel"),
     aiBannerDismissed: boolean("ai_banner_dismissed").notNull().default(false),
     faqBannerDismissed: boolean("faq_banner_dismissed").notNull().default(false),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -506,6 +509,7 @@ export const companionSettings = pgTable(
   (table) => [
     check("companion_settings_size_check", sql`${table.size} IN ('small', 'medium', 'large')`),
     check("companion_settings_rotation_check", sql`${table.rotation} IN ('auto', '3d', 'flat')`),
+    check("companion_settings_style_check", sql`${table.style} IN ('pixel', 'smooth')`),
   ],
 );
 
@@ -533,8 +537,10 @@ export const homeVizPicks = pgTable(
 );
 
 // Atomic, database-backed daily chatbot budget. The composite key makes the
-// upsert safe across serverless instances; personal Gemini keys use this same
-// counter and cannot bypass Cherenkov's own limit.
+// upsert safe across serverless instances. `request_count` is Cherenkov's own
+// key (limit COMPANION_DAILY_LIMIT). Requests made with a student's personal
+// Gemini key use `personal_request_count` instead (limit
+// COMPANION_PERSONAL_DAILY_LIMIT), so they never use up the shared allowance.
 export const companionUsage = pgTable(
   "companion_usage",
   {
@@ -543,10 +549,53 @@ export const companionUsage = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     usageDay: date("usage_day", { mode: "string" }).notNull(),
     requestCount: integer("request_count").notNull().default(0),
+    personalRequestCount: integer("personal_request_count").notNull().default(0),
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.usageDay] }),
     check("companion_usage_count_check", sql`${table.requestCount} >= 0`),
+    check("companion_usage_personal_count_check", sql`${table.personalRequestCount} >= 0`),
+  ],
+);
+
+// Saved Neutrino chats. A chat exists only once it has a successful reply, so
+// an empty chat never uses one of the COMPANION_MAX_CHATS slots. Every query
+// must be filtered by the authenticated user's id. Both tables cascade from
+// the user, so deleting an account deletes its chats.
+export const companionChats = pgTable(
+  "companion_chats",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("companion_chats_user_updated_idx").on(table.userId, table.updatedAt),
+    check("companion_chats_title_check", sql`char_length(${table.title}) between 1 and 80`),
+  ],
+);
+
+export const companionChatMessages = pgTable(
+  "companion_chat_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    chatId: uuid("chat_id")
+      .notNull()
+      .references(() => companionChats.id, { onDelete: "cascade" }),
+    position: integer("position").notNull(),
+    role: text("role").notNull(),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("companion_chat_messages_chat_position_idx").on(table.chatId, table.position),
+    check("companion_chat_messages_position_check", sql`${table.position} >= 0`),
+    check("companion_chat_messages_role_check", sql`${table.role} IN ('user', 'model')`),
+    check("companion_chat_messages_body_check", sql`char_length(${table.body}) between 1 and 20000`),
   ],
 );
 

@@ -19,13 +19,9 @@
     "messageLabel": "Pesan untuk Neutrino",
     "messagePlaceholder": "Tanyakan sesuatu tentang pelajaran…",
     "send": "Kirim",
-    "dailyLimit": "Maksimal 10 permintaan obrolan per akun setiap hari.",
+    "dailyLimit": "Maksimal {limit} permintaan obrolan per akun setiap hari. Permintaan dengan key milikmu tidak dihitung.",
     "help": "Batas dan privasi",
     "personalKeyTitle": "Coba gunakan Gemini API key milikmu?",
-    "personalKeyNotice": "Key dikirim ke server Cherenkov dan Google hanya untuk permintaan ini. Key tidak disimpan. Batas harian akun Cherenkov tetap berlaku.",
-    "personalKeyConsent": "Saya paham dan ingin mengirim key ini untuk satu permintaan.",
-    "personalKeyPlaceholder": "Tempel Gemini API key",
-    "personalKeyRetry": "Coba sekali dengan key saya",
     "settingsTitle": "Pendamping belajar",
     "settingsDescription": "Beri nama pendampingmu, pilih ukuran dan cara berputarnya, matikan obrolan AI, atau matikan seluruhnya. Maskot dapat digeser ke mana saja di halaman, dan ukuran panelnya dapat diubah.",
     "nameLabel": "Nama pendamping",
@@ -78,18 +74,23 @@
     "showAgain": "Tampilkan pendamping belajar lagi",
     "dragHelp": "Geser untuk memindahkannya ke mana saja di halaman, atau gunakan tombol panah (tahan Shift untuk langkah lebih besar). Tekan Enter untuk membuka atau menutup pendamping.",
     "errors": {
-      "cherenkov_limit": "Kamu telah menggunakan 10 permintaan obrolan hari ini. Coba lagi besok; key pribadi tidak menambah batas ini.",
+      "cherenkov_limit": "Kamu sudah memakai {limit} permintaan obrolan hari ini. Kembali besok, atau pakai Gemini key milikmu di Pengaturan.",
       "provider_quota": "Kuota proyek atau model Gemini milik Cherenkov sedang habis. Respons 429 dapat berarti batas laju proyek atau kuota harian, dan tidak otomatis berarti seluruh layanan Gemini sedang mati.",
       "provider_unavailable": "Gemini sedang tidak tersedia. Silakan coba lagi nanti.",
       "configuration": "Obrolan belajar belum dikonfigurasi saat ini. Beri tahu tim Cherenkov.",
-      "personal_key": "Google tidak dapat menggunakan key itu. Pastikan key Gemini valid dan akses API sudah aktif.",
+      "personal_key": "Google tidak dapat memakai key itu, jadi key dihapus dari tab ini. Periksa bahwa key itu Gemini API key yang valid dengan akses API aktif.",
       "personal_quota": "Kuota proyek atau model Gemini untuk key itu telah habis. Periksa batas di Google AI Studio atau coba lagi nanti.",
       "personal_unavailable": "Gemini sementara tidak tersedia untuk key itu. Silakan coba lagi nanti.",
       "unauthenticated": "Sesi masukmu telah berakhir. Masuk kembali untuk melanjutkan obrolan.",
       "unavailable": "Layanan obrolan tidak dapat dijangkau. Silakan coba lagi.",
       "unknown": "Pertanyaanmu belum dapat dijawab saat ini. Silakan coba lagi.",
       "ai_disabled": "Obrolan AI sedang dimatikan di pengaturanmu. Nyalakan di Pengaturan untuk memakainya.",
-      "acknowledgement_required": "Tinjau dan setujui pemberitahuan obrolan AI sebelum melanjutkan."
+      "acknowledgement_required": "Tinjau dan setujui pemberitahuan obrolan AI sebelum melanjutkan.",
+      "personal_limit": "Kamu mencapai batas {personalLimit} permintaan per hari dengan key milikmu. Coba lagi besok.",
+      "chat_limit": "Kamu punya {maxChats} obrolan tersimpan, batas maksimum. Hapus satu untuk memulai obrolan baru.",
+      "chat_full": "Obrolan ini penuh ({maxMessages} pesan). Mulai obrolan baru.",
+      "chat_conflict": "Obrolan ini berubah di tab lain dan sudah dimuat ulang. Kirim pesanmu sekali lagi.",
+      "chat_not_found": "Obrolan itu sudah tidak ada."
     },
     "askTab": "Tanya",
     "modeGroup": "Mode jawaban",
@@ -276,15 +277,15 @@
         },
         "ai-limits": {
           "q": "Berapa banyak pesan AI yang bisa kukirim?",
-          "a": "Maksimal {limit} permintaan per akun per hari, dihitung per hari UTC, jadi hitungan kembali ke nol pada tengah malam UTC (pukul 07.00 di Jakarta). Permintaan yang gagal dan percobaan ulang masing-masing dihitung. Satu pesan bisa sampai {chars} karakter, hanya {history} pesan terakhirmu yang ikut dikirim, dan balasan dibuat singkat. Kuota Google sendiri berlaku terpisah, jadi AI bisa tidak tersedia meski permintaanmu masih tersisa."
+          "a": "Maksimal {limit} permintaan per akun per hari, dihitung per hari UTC, jadi hitungan kembali ke nol pada tengah malam UTC (pukul 07.00 di Jakarta). Permintaan yang gagal di sisi penyedia dikembalikan. Permintaan dengan Gemini key milikmu tidak dihitung di sini, tetapi dibatasi {personalLimit} per hari. Satu pesan bisa sampai {chars} karakter, hanya {history} pesan terakhirmu yang ikut dikirim, dan balasan dibuat singkat secara bawaan. Kuota Google sendiri berlaku terpisah, jadi AI bisa tidak tersedia meski permintaanmu masih tersisa."
         },
         "ai-privacy": {
           "q": "Apa yang terjadi pada apa yang kuketik di obrolan AI?",
-          "a": "Pesanmu dikirim dari browser ke server Cherenkov lalu ke layanan Gemini milik Google, yang memprosesnya menurut ketentuan Google sendiri dan boleh menyimpannya untuk waktu terbatas. Cherenkov tidak menyimpannya di luar percakapan yang terbuka di browsermu. Jangan mengetik kata sandi atau informasi pribadi. Kalau usiamu di bawah 18 tahun, pakai obrolan AI hanya dengan sepengetahuan dan izin orang tua atau wali. FAQ tidak pernah mengirim apa pun ke AI."
+          "a": "Pesanmu dikirim dari browser ke server Cherenkov lalu ke layanan Gemini milik Google, yang memprosesnya menurut ketentuan Google sendiri dan boleh menyimpannya untuk waktu terbatas. Cherenkov menyimpan obrolanmu di akunmu (hingga {maxChats} obrolan berisi {maxMessages} pesan) sampai kamu menghapusnya. Jangan mengetik kata sandi atau informasi pribadi. Kalau usiamu di bawah 18 tahun, pakai obrolan AI hanya dengan sepengetahuan dan izin orang tua atau wali. FAQ tidak pernah mengirim apa pun ke AI."
         },
         "ai-key": {
           "q": "Apa itu opsi “pakai Gemini key milikku”?",
-          "a": "Setelah terjadi galat kuota, ketersediaan, atau konfigurasi server, Neutrino bisa menawarkan untuk mencoba sekali lagi dengan Gemini API key milikmu sendiri. Opsi ini sepenuhnya sukarela. Key dikirim ke server Cherenkov dan Google hanya untuk satu permintaan itu, tidak disimpan, dan kolomnya dikosongkan sesudahnya. Key tidak menambah batas harian, dan kamu hanya boleh memasukkan key yang kamu kendalikan."
+          "a": "Di Pengaturan kamu bisa memilih memakai Gemini API key milikmu sendiri. Opsi ini sepenuhnya sukarela. Permintaan dengan key itu tidak memakai {limit} permintaan hariannya, tetapi dibatasi {personalLimit} per hari. Key dikirim lewat server Cherenkov ke Google pada setiap permintaan. Key hanya disimpan di tab browser ini dan terlupakan saat tab ditutup; key tidak pernah disimpan di akunmu, basis data, atau log kami. Masukkan hanya key yang kamu kendalikan."
         },
         "ai-off": {
           "q": "Bisakah aku mematikan AI tetapi tetap memakai Neutrino?",
@@ -312,11 +313,11 @@
         },
         "data-stored": {
           "q": "Data apa yang disimpan Cherenkov tentang aku?",
-          "a": "Tanpa akun, tidak ada selain log server biasa yang disimpan penyedia hosting. Timer, “Coba dulu sendiri”, pencarian, serta posisi dan ukuran panel Neutrino semuanya tetap di browsermu.\n\nDengan akun, disimpan alamat emailmu, data masukmu (kata sandi disimpan dalam bentuk hash; untuk masuk dengan Google, nama dan email Googlemu) dan data belajar yang kamu buat: jawaban kuis dan percobaan ulang, sesi belajar, halaman yang kamu tandai sudah dipahami, serta pengaturan dan penilaian perencanamu. Hanya cookie yang diperlukan untuk masuk, bahasa, dan tema yang dipasang, tanpa cookie iklan atau pelacakan."
+          "a": "Tanpa akun, tidak ada selain log server biasa yang disimpan penyedia hosting. Timer, “Coba dulu sendiri”, pencarian, serta posisi dan ukuran panel Neutrino semuanya tetap di browsermu.\n\nDengan akun, disimpan alamat emailmu, data masukmu (kata sandi disimpan dalam bentuk hash; untuk masuk dengan Google, nama dan email Googlemu) dan data belajar yang kamu buat: jawaban kuis dan percobaan ulang, sesi belajar, halaman yang kamu tandai sudah dipahami, serta pengaturan dan penilaian perencanamu. Obrolan Neutrinomu juga disimpan, sampai kamu menghapusnya. Hanya cookie yang diperlukan untuk masuk, bahasa, dan tema yang dipasang, tanpa cookie iklan atau pelacakan."
         },
         "data-delete": {
           "q": "Bisakah aku menghapus datakku?",
-          "a": "Kamu bisa menghapus sesi belajar satu per satu di halaman Progres. Untuk menghapus akunmu, atau meminta akses atau koreksi atas datamu, kirim email ke proyek; alamatnya ada di halaman Privasi dan di footer. Pesan obrolan tidak disimpan Cherenkov di luar percakapan yang terbuka di browsermu."
+          "a": "Kamu bisa menghapus sesi belajar satu per satu di halaman Progres, satu obrolan dari daftar obrolan di Neutrino, atau semua obrolanmu di bagian Data pada Pengaturan. Untuk menghapus akunmu, atau meminta akses atau koreksi atas datamu, kirim email ke proyek; alamatnya ada di halaman Privasi dan di footer."
         },
         "roles": {
           "q": "Apa itu “Inchoatus” dan “Primus Inter Pares”?",
@@ -351,6 +352,61 @@
       "width": "Lebar panel",
       "height": "Tinggi panel",
       "corner": "Ubah ukuran panel"
-    }
+    },
+    "truncated": "Jawaban ini terpotong karena mencapai batas panjang.",
+    "continue": "Lanjutkan",
+    "usingOwnKey": "Memakai Gemini key milikmu untuk sesi ini.",
+    "ownKeyTitle": "Pakai Gemini key milikku",
+    "ownKeyHelp": "Permintaan dengan key milikmu tidak dihitung dalam {limit} permintaan harian, tetapi dibatasi {personalLimit} per hari. Key dikirim lewat server Cherenkov ke Google pada setiap permintaan. Key hanya disimpan di tab browser ini (terhapus saat tab ditutup), tidak di akunmu, basis data, atau log kami.",
+    "ownKeyConsent": "Saya paham key saya dikirim ke server Cherenkov dan Google pada setiap permintaan obrolan.",
+    "ownKeyPlaceholder": "Gemini API key",
+    "ownKeySave": "Pakai key ini",
+    "ownKeyRemove": "Hapus key",
+    "ownKeyRemoved": "Key dihapus.",
+    "ownKeyInvalid": "Key itu dihapus karena Google tidak dapat memakainya.",
+    "personalKeyUse": "Pakai key saya",
+    "chatsButton": "Obrolan",
+    "chatsTitle": "Obrolan tersimpan",
+    "newChat": "Obrolan baru",
+    "noChats": "Belum ada obrolan tersimpan. Obrolan disimpan setelah balasan pertama Neutrino.",
+    "openChat": "Buka obrolan: {title}",
+    "deleteChat": "Hapus obrolan: {title}",
+    "deleteChatConfirm": "Hapus obrolan ini secara permanen?",
+    "deleteConfirmYes": "Hapus",
+    "chatDeleted": "Obrolan dihapus.",
+    "chatLoadError": "Obrolan itu tidak dapat dibuka. Coba lagi.",
+    "chatListError": "Obrolanmu tidak dapat dimuat. Coba lagi.",
+    "chatsMeter": "{count} dari {max} obrolan",
+    "messagesMeter": "{count} dari {max} pesan",
+    "contextDivider": "Neutrino hanya melihat pesan di bawah garis ini",
+    "chatLimitNotice": "Kamu punya {max} obrolan tersimpan, batas maksimum. Hapus satu untuk memulai obrolan baru.",
+    "chatFullNotice": "Obrolan ini penuh ({max} pesan). Mulai obrolan baru.",
+    "chatFullAndLimitNotice": "Obrolan ini penuh ({max} pesan), dan kamu punya {maxChats} obrolan tersimpan, batas maksimum. Hapus satu obrolan dulu, lalu mulai yang baru.",
+    "openChatList": "Buka daftar obrolan",
+    "sectionAccount": "Akun",
+    "sectionNeutrino": "Neutrino",
+    "sectionData": "Data",
+    "styleLabel": "Gaya",
+    "styles": {
+      "pixel": {
+        "label": "Piksel",
+        "help": "Tampilan bawaan Neutrino."
+      },
+      "smooth": {
+        "label": "Halus",
+        "help": "Tampilan awal Neutrino yang lebih lembut."
+      }
+    },
+    "dataTitle": "Data obrolan",
+    "dataDescription": "Obrolanmu dengan Neutrino disimpan di akunmu sampai kamu menghapusnya atau menghapus akun.",
+    "dataChats": "Obrolan tersimpan",
+    "dataMessages": "Pesan",
+    "dataSize": "Perkiraan ukuran",
+    "dataSizeValue": "{kb} KB",
+    "deleteAllChats": "Hapus semua obrolan",
+    "deleteAllConfirm": "Hapus semua {count} obrolan tersimpan secara permanen?",
+    "deleteAllDone": "Semua obrolan dihapus.",
+    "dataError": "Data obrolan tidak dapat dimuat atau diubah. Coba lagi.",
+    "dataSignIn": "Masuk untuk melihat dan mengelola obrolan tersimpan."
   }
 }

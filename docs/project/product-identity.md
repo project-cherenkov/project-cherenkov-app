@@ -6,7 +6,7 @@
 
 One sentence, for use wherever a definition is needed:
 
-> Project Cherenkov is an open learning archive for olympiad informatics, physics and astronomy: its syllabus maps the territory, materials establish concepts, and interactive editorials explore ideas in specific situations.
+> Project Cherenkov is an open learning archive for olympiad informatics, physics and astronomy: its syllabus maps the territory, interactive materials establish concepts, and interactive editorials investigate ideas through specific questions and situations.
 
 The broader description is in [overview](overview.md).
 
@@ -18,13 +18,13 @@ Earlier versions of the visual identity file called "Project Cherenkov" internal
 
 ## Promise and credo
 
-**Tagline (the promise): "From Curiosity to Visualization".** Plain language, outward-facing: it says what the project does for the reader. It is not translated, because the C...V origin only works in English: C(uriosity) and V(isualization) are the first and last letters of Cherenkov. "Curiosity" does not come from the Latin motto.
+**Tagline (the promise): "From Curiosity to Vision".** Outward-facing: it describes the intellectual outcome Cherenkov wants to support, not a particular interface feature. The C...V structure still echoes the first and last letters of Cherenkov: C(uriosity) and V(ision). "Curiosity" does not come from the Latin motto.
 
 **Motto (the credo): "Cognitio · Humanitas · Exploratio".** Latin, inward-facing: it says what the project believes and is made of.
 
 - Cognitio is inquiry, the curiosity end.
 - Humanitas is the learner in the middle, and the reason any of it matters.
-- Exploratio is the visualization end, where exploration becomes visible.
+- Exploratio is the exploratory process: examining, testing and developing an understanding of ideas. Visualization is one of its defining instruments, not its final goal.
 
 The motto is identical in both interface languages. The middle dot is U+00B7; keep the file UTF-8. Its abbreviation is not a public label: do not use "CHE" in the interface, metadata or copy.
 
@@ -33,8 +33,8 @@ The motto is identical in both interface languages. The middle dot is U+00B7; ke
 Cherenkov has three complementary content layers. They serve different learning purposes and are connected by the syllabus, but they are not a mandatory sequence: a topic may have a material without an editorial, or an editorial without a corresponding material.
 
 - **Syllabus - scope.** The syllabus describes the territory: subjects, topics and subtopics, with their provenance and the syllabuses that include them. It helps readers see what is in scope and find related learning content.
-- **Materials - foundation.** A material explains the overall concept of a syllabus topic or subtopic. It is a concise reference for definitions, key results, derivations, procedures and common traps. Materials are unsigned and do not require a visualization; one is useful when an interactive treatment would genuinely help.
-- **Editorials - exploration.** An editorial investigates a particular question, case, phenomenon or problem through a focused line of reasoning. It makes the central idea explorable through an interactive visualization and supports its argument with a complete proof, derivation or other appropriate reasoning. It is not required to begin from, or correct, a student mistake.
+- **Materials - foundation.** A material is an unsigned, self-contained explanation of the essential concepts within a syllabus topic or subtopic. It covers the relevant definitions, relationships, key results, derivations, procedures and common traps. It should be complete enough to establish the topic's conceptual foundations, but need not become an exhaustive textbook chapter. Every published material includes a meaningful interactive visualization that clarifies the concept.
+- **Editorials - exploration.** An editorial independently investigates a particular question, case, phenomenon or problem through a focused line of reasoning. It makes the central idea explorable through an interactive visualization and supports its argument with a complete proof, derivation or other appropriate reasoning. It may link to a related material for broader foundations, but does not require the reader to study that material first. It is not required to begin from, or correct, a student mistake.
 
 Materials and editorials are complementary, not interchangeable. A material establishes the conceptual framework; an editorial explores an idea at work in a concrete situation. An editorial should add an insight or investigation rather than merely repeat the corresponding material.
 
@@ -42,7 +42,7 @@ Editorials are identified by a `principle`: the general idea they teach. An `err
 
 ## Commitments
 
-1. **Explorable.** Editorials make their central reasoning visible through working interactive visualizations. Materials may use visualizations when they improve understanding.
+1. **Visual understanding.** Every published material and editorial includes a working, meaningful interactive visualization. In a material, it clarifies a concept or relationship; in an editorial, it supports a focused investigation. The explanation leads and remains complete in its own right. Visual novelty, animation and complexity never compensate for weak reasoning.
 2. **Principle-led.** Editorials are organised around the ideas they investigate. Name a specific error type when it is genuinely relevant, not as a prerequisite.
 3. **Rigorous and honest about limits.** State assumptions and scope; support claims with complete reasoning and appropriate sources; distinguish established results from approximations and limitations.
 

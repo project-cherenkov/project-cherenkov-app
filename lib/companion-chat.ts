@@ -69,3 +69,12 @@ export function classifyProviderFailure(httpStatus: number, body: unknown, using
   if (status === "RESOURCE_EXHAUSTED" || status === "UNAVAILABLE") return quota;
   return unavailable;
 }
+
+/**
+ * Reads how a provider reply ended. Gemini reports `MAX_TOKENS` when the reply
+ * was cut off by the output ceiling.
+ */
+export function wasTruncated(candidate: unknown): boolean {
+  if (typeof candidate !== "object" || candidate === null) return false;
+  return (candidate as { finishReason?: unknown }).finishReason === "MAX_TOKENS";
+}

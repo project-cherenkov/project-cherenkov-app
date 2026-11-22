@@ -8,9 +8,9 @@ These documents describe responsibilities and workflows. They do not replace the
 
 | Task | Instructions |
 | --- | --- |
-| Create a new editorial | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md) |
-| Create a new material | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md) |
-| Revise an existing editorial or material | [Revision Agent Instructions](CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.0-2026-11-17.md), together with the [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.0-2026-11-17.md) |
+| Create a new editorial | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
+| Create a new material | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
+| Revise an existing editorial or material | [Revision Agent Instructions](CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.1-2026-11-21.md), together with the [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
 
 The Revision Agent Instructions are a companion to the Writer Agent Instructions: the writer document defines the quality and file-format standards; the revision document adds diagnosis, scope and change-control procedures.
 
@@ -27,11 +27,17 @@ An agent must report a conflict rather than silently choosing whichever instruct
 
 ## Snapshot limitations
 
-Both instruction files are versioned snapshots dated 2026-11-17.
+The current instruction files are versioned snapshots dated 2026-11-21. Earlier versions are retained as historical snapshots.
 
 - The Writer Agent Instructions include syllabus and content-registry snapshots. Treat them as orientation, not live registries. Verify topic IDs, existing content, frontmatter rules and visualization capabilities against the current repository before authoring whenever repository access is available.
 - The Revision Agent Instructions include starting notes about specific pieces in Section 4. Those notes describe the state at the time of writing; they are not diagnoses of the current files. Always inspect the current target and make a fresh diagnosis. The rest of the revision methodology remains the reusable workflow unless superseded by a newer version.
 - The version and date in each filename are intentional. Do not silently overwrite a versioned standard. When a standard changes materially, create a new version, update this index and record what changed.
+
+## Version history
+
+- **Writer v2.1 (2026-11-21):** makes visualization mandatory for published materials and editorials; establishes explanation-first authoring and separates conceptual visualization in materials from investigative visualization in editorials.
+- **Revision v1.1 (2026-11-21):** adds explicit review criteria against decorative or spectacle-led visualization and checks that explanations stand independently.
+- **Writer v2.0 and Revision v1.0 (2026-11-17):** retained as historical snapshots.
 
 ## Maintenance
 

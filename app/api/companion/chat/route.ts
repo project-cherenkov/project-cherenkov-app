@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
-import { and, eq, sql } from "drizzle-orm";
+import { and, count, eq, sql } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
-import { companionSettings, companionUsage } from "@/lib/db/schema";
-import { COMPANION_DAILY_LIMIT, COMPANION_MAX_HISTORY, COMPANION_MAX_MESSAGE_CHARS } from "@/lib/companion-settings";
-import { classifyProviderFailure, normaliseConversation, type ChatMessage } from "@/lib/companion-chat";
+import { companionChatMessages, companionChats, companionSettings, companionUsage } from "@/lib/db/schema";
+import {
+  COMPANION_DAILY_LIMIT,
+  COMPANION_MAX_HISTORY,
+  COMPANION_MAX_MESSAGE_CHARS,
+  COMPANION_MAX_OUTPUT_TOKENS,
+  COMPANION_PERSONAL_DAILY_LIMIT,
+} from "@/lib/companion-settings";
+import { classifyProviderFailure, normaliseConversation, wasTruncated, type ChatMessage } from "@/lib/companion-chat";
+import { chatTitleFromMessage, checkChatLimits, isChatId } from "@/lib/companion-chat-history";
+import { buildSystemPrompt, parsePageContextRef } from "@/lib/companion-prompt";
+import { listContentIndex, resolvePageContext } from "@/lib/companion-page-context";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -32,17 +41,78 @@ function parseMessages(value: unknown): ChatMessage[] | null {
 
 // Gives back the request that was counted when the provider did not answer, so
 // a failure on the provider's side does not use up one of the student's few
-// daily requests. Best effort: if this write fails the request simply stays
-// counted, which is how every failure behaved before.
-async function refundRequest(userId: string, usageDay: string) {
+// daily requests. It decrements whichever counter was incremented. Best effort:
+// if this write fails the request simply stays counted.
+async function refundRequest(userId: string, usageDay: string, personal: boolean) {
   try {
     await db
       .update(companionUsage)
-      .set({ requestCount: sql`greatest(${companionUsage.requestCount} - 1, 0)` })
+      .set(
+        personal
+          ? { personalRequestCount: sql`greatest(${companionUsage.personalRequestCount} - 1, 0)` }
+          : { requestCount: sql`greatest(${companionUsage.requestCount} - 1, 0)` },
+      )
       .where(and(eq(companionUsage.userId, userId), eq(companionUsage.usageDay, usageDay)));
   } catch {
     // Nothing more to do.
   }
+}
+
+class ChatConflict extends Error {
+  constructor(readonly code: "chat_limit" | "chat_conflict") {
+    super(code);
+  }
+}
+
+// Saves the student's message and Neutrino's reply together, or neither. A new
+// conversation creates its chat here, so a failed request never leaves an empty
+// chat that uses up one of the saved-chat slots. The limits are checked again
+// inside the transaction because two tabs can race.
+async function saveExchange(options: {
+  userId: string;
+  chatId: string | null;
+  userText: string;
+  reply: string;
+}): Promise<string> {
+  return db.transaction(async (tx) => {
+    let chatId = options.chatId;
+    let position = 0;
+    if (chatId === null) {
+      const [{ total } = { total: 0 }] = await tx
+        .select({ total: count() })
+        .from(companionChats)
+        .where(eq(companionChats.userId, options.userId));
+      if (checkChatLimits({ chatId: null, chatCount: total, messageCount: 0 })) throw new ChatConflict("chat_limit");
+      const [created] = await tx
+        .insert(companionChats)
+        .values({ userId: options.userId, title: chatTitleFromMessage(options.userText) })
+        .returning({ id: companionChats.id });
+      chatId = created!.id;
+    } else {
+      const [owned] = await tx
+        .select({ id: companionChats.id })
+        .from(companionChats)
+        .where(and(eq(companionChats.id, chatId), eq(companionChats.userId, options.userId)))
+        .limit(1);
+      if (!owned) throw new ChatConflict("chat_conflict");
+      const [{ total } = { total: 0 }] = await tx
+        .select({ total: count() })
+        .from(companionChatMessages)
+        .where(eq(companionChatMessages.chatId, chatId));
+      position = total;
+    }
+    try {
+      await tx.insert(companionChatMessages).values([
+        { chatId, position, role: "user", body: options.userText },
+        { chatId, position: position + 1, role: "model", body: options.reply },
+      ]);
+    } catch {
+      // The unique (chat, position) index: another tab wrote to this chat first.
+      throw new ChatConflict("chat_conflict");
+    }
+    await tx.update(companionChats).set({ updatedAt: new Date() }).where(eq(companionChats.id, chatId));
+    return chatId;
+  });
 }
 
 export async function POST(request: Request) {
@@ -63,8 +133,12 @@ export async function POST(request: Request) {
   const record = body as Record<string, unknown>;
   const messages = parseMessages(record.messages);
   const personalKey = record.personalKey;
+  const chatId = record.chatId === undefined || record.chatId === null ? null : record.chatId;
+  const pageRef = record.page === undefined ? null : parsePageContextRef(record.page);
   if (
     !messages ||
+    (chatId !== null && !isChatId(chatId)) ||
+    (record.page !== undefined && !pageRef) ||
     (personalKey !== undefined &&
       (typeof personalKey !== "string" || personalKey.length > MAX_PERSONAL_KEY_LENGTH || record.personalKeyConsent !== true))
   ) {
@@ -92,36 +166,79 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
 
-  const key = typeof personalKey === "string" && personalKey.trim()
-    ? personalKey.trim()
-    : process.env.GEMINI_API_KEY;
+  const usingPersonalKey = typeof personalKey === "string" && personalKey.trim().length > 0;
+  const key = usingPersonalKey ? (personalKey as string).trim() : process.env.GEMINI_API_KEY;
   if (!key) return NextResponse.json({ error: "configuration" }, { status: 503 });
 
-  // An atomic upsert enforces a UTC daily user limit across serverless
-  // instances. It applies equally when the user supplies a request-only key.
-  const usageDay = new Date().toISOString().slice(0, 10);
+  // Saved-chat limits come before the daily counter, so a refused request never
+  // uses up a request. Every query is filtered by the signed-in user's id; a
+  // chat that is not theirs is reported as not found, not as forbidden.
   try {
-    const [usage] = await db
-      .insert(companionUsage)
-      .values({ userId: user.id, usageDay, requestCount: 1 })
-      .onConflictDoUpdate({
-        target: [companionUsage.userId, companionUsage.usageDay],
-        set: { requestCount: sql`${companionUsage.requestCount} + 1` },
-        setWhere: sql`${companionUsage.requestCount} < ${DAILY_LIMIT}`,
-      })
-      .returning({ requestCount: companionUsage.requestCount });
-    if (!usage) return NextResponse.json({ error: "cherenkov_limit" }, { status: 429 });
+    if (chatId === null) {
+      const [{ total } = { total: 0 }] = await db
+        .select({ total: count() })
+        .from(companionChats)
+        .where(eq(companionChats.userId, user.id));
+      const refusal = checkChatLimits({ chatId: null, chatCount: total, messageCount: 0 });
+      if (refusal) return NextResponse.json({ error: refusal }, { status: 409 });
+    } else {
+      const [owned] = await db
+        .select({ id: companionChats.id })
+        .from(companionChats)
+        .where(and(eq(companionChats.id, chatId as string), eq(companionChats.userId, user.id)))
+        .limit(1);
+      if (!owned) return NextResponse.json({ error: "chat_not_found" }, { status: 404 });
+      const [{ total } = { total: 0 }] = await db
+        .select({ total: count() })
+        .from(companionChatMessages)
+        .where(eq(companionChatMessages.chatId, chatId as string));
+      const refusal = checkChatLimits({ chatId: chatId as string, chatCount: 0, messageCount: total });
+      if (refusal) return NextResponse.json({ error: refusal }, { status: 409 });
+    }
   } catch {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
 
-  const usingPersonalKey = typeof personalKey === "string" && personalKey.trim().length > 0;
+  // An atomic upsert enforces a UTC daily user limit across serverless
+  // instances. A request with the student's own key is counted separately
+  // (against a much larger ceiling), so it never uses up the shared allowance.
+  const usageDay = new Date().toISOString().slice(0, 10);
+  try {
+    const [usage] = usingPersonalKey
+      ? await db
+          .insert(companionUsage)
+          .values({ userId: user.id, usageDay, requestCount: 0, personalRequestCount: 1 })
+          .onConflictDoUpdate({
+            target: [companionUsage.userId, companionUsage.usageDay],
+            set: { personalRequestCount: sql`${companionUsage.personalRequestCount} + 1` },
+            setWhere: sql`${companionUsage.personalRequestCount} < ${COMPANION_PERSONAL_DAILY_LIMIT}`,
+          })
+          .returning({ requestCount: companionUsage.personalRequestCount })
+      : await db
+          .insert(companionUsage)
+          .values({ userId: user.id, usageDay, requestCount: 1 })
+          .onConflictDoUpdate({
+            target: [companionUsage.userId, companionUsage.usageDay],
+            set: { requestCount: sql`${companionUsage.requestCount} + 1` },
+            setWhere: sql`${companionUsage.requestCount} < ${DAILY_LIMIT}`,
+          })
+          .returning({ requestCount: companionUsage.requestCount });
+    if (!usage) {
+      return NextResponse.json({ error: usingPersonalKey ? "personal_limit" : "cherenkov_limit" }, { status: 429 });
+    }
+  } catch {
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
+  }
+
   // Every failure from here on is the provider's (or the network's), not the
   // student's, so it gives the counted request back.
   const fail = async (error: string, status: number) => {
-    await refundRequest(user.id, usageDay);
+    await refundRequest(user.id, usageDay, usingPersonalKey);
     return NextResponse.json({ error }, { status });
   };
+  // Page context is resolved here, from published content, never taken from the
+  // browser. Chat contents are never logged.
+  const systemPrompt = buildSystemPrompt({ page: resolvePageContext(pageRef), index: listContentIndex() });
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 20_000);
   try {
@@ -131,15 +248,9 @@ export async function POST(request: Request) {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
-          systemInstruction: {
-            parts: [
-              {
-                text: "You are Neutrino, a concise study companion for Project Cherenkov, an Indonesian olympiad learning site for informatics, physics, and astronomy. Help the student understand concepts and reason through problems. Prefer hints, explanations, examples, and checking their work over giving unexplained answers. Reply in the student's language. Stay focused on learning. If unsure, say so. Keep replies brief and do not claim to know Cherenkov content that was not provided.",
-              },
-            ],
-          },
+          systemInstruction: { parts: [{ text: systemPrompt }] },
           contents: normaliseConversation(messages).map(({ role, text }) => ({ role, parts: [{ text }] })),
-          generationConfig: { maxOutputTokens: 256, temperature: 0.4 },
+          generationConfig: { maxOutputTokens: COMPANION_MAX_OUTPUT_TOKENS, temperature: 0.4 },
         }),
         signal: controller.signal,
         cache: "no-store",
@@ -174,7 +285,18 @@ export async function POST(request: Request) {
           .trim()
       : "";
     if (!reply) return fail("provider_unavailable", 503);
-    return NextResponse.json({ reply });
+    const truncated = wasTruncated(candidate);
+
+    // Save the exchange. A failure to save is a failure of the request: the
+    // student would otherwise see a reply that is missing from their history.
+    const lastUser = [...messages].reverse().find((message) => message.role === "user")!;
+    try {
+      const savedChatId = await saveExchange({ userId: user.id, chatId, userText: lastUser.text, reply });
+      return NextResponse.json({ chatId: savedChatId, reply, truncated });
+    } catch (error) {
+      if (error instanceof ChatConflict) return fail(error.code, 409);
+      return fail("unavailable", 503);
+    }
   } catch {
     return fail(usingPersonalKey ? "personal_unavailable" : "provider_unavailable", 503);
   } finally {

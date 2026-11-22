@@ -21,11 +21,12 @@ function readLocal(): Partial<CompanionPrefs> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    const { size, rotation, aiEnabled, aiAcknowledged, aiBannerDismissed, faqBannerDismissed, ambientMotion, driftSpeed } = normalizeCompanionPrefs(JSON.parse(raw));
+    const { size, rotation, style, aiEnabled, aiAcknowledged, aiBannerDismissed, faqBannerDismissed, ambientMotion, driftSpeed } = normalizeCompanionPrefs(JSON.parse(raw));
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     return {
       ...("size" in parsed ? { size } : {}),
       ...("rotation" in parsed ? { rotation } : {}),
+      ...("style" in parsed ? { style } : {}),
       ...("aiEnabled" in parsed ? { aiEnabled } : {}),
       ...("aiAcknowledged" in parsed ? { aiAcknowledged } : {}),
       ...("aiBannerDismissed" in parsed ? { aiBannerDismissed } : {}),
@@ -43,6 +44,7 @@ function writeLocal(prefs: CompanionPrefs) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
       size: prefs.size,
       rotation: prefs.rotation,
+      style: prefs.style,
       aiEnabled: prefs.aiEnabled,
       aiAcknowledged: prefs.aiAcknowledged,
       aiBannerDismissed: prefs.aiBannerDismissed,
@@ -134,6 +136,7 @@ export function useCompanionPrefs(signedIn: boolean, initial?: CompanionPrefs) {
         : {
             ...(patch.size ? { size: patch.size } : {}),
             ...(patch.rotation ? { rotation: patch.rotation } : {}),
+            ...(patch.style ? { style: patch.style } : {}),
             ...(typeof patch.aiEnabled === "boolean" ? { aiEnabled: patch.aiEnabled } : {}),
             ...(typeof patch.aiAcknowledged === "boolean" ? { aiAcknowledged: patch.aiAcknowledged } : {}),
             ...(typeof patch.aiBannerDismissed === "boolean" ? { aiBannerDismissed: patch.aiBannerDismissed } : {}),

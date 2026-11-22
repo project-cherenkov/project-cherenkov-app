@@ -20,6 +20,7 @@ export async function GET() {
         updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
+        style: companionSettings.style,
         aiBannerDismissed: companionSettings.aiBannerDismissed,
         faqBannerDismissed: companionSettings.faqBannerDismissed,
       })
@@ -64,6 +65,7 @@ export async function PATCH(request: Request) {
         updatesEnabled: companionSettings.updatesEnabled,
         size: companionSettings.size,
         rotation: companionSettings.rotation,
+        style: companionSettings.style,
         aiBannerDismissed: companionSettings.aiBannerDismissed,
         faqBannerDismissed: companionSettings.faqBannerDismissed,
       });

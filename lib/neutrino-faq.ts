@@ -12,7 +12,14 @@
 // typed into the answers. They are passed in as values from
 // lib/companion-settings.ts, so an answer cannot disagree with the real limit.
 
-import { COMPANION_DAILY_LIMIT, COMPANION_MAX_HISTORY, COMPANION_MAX_MESSAGE_CHARS } from "@/lib/companion-settings";
+import {
+  COMPANION_DAILY_LIMIT,
+  COMPANION_MAX_CHATS,
+  COMPANION_MAX_CHAT_MESSAGES,
+  COMPANION_MAX_HISTORY,
+  COMPANION_MAX_MESSAGE_CHARS,
+  COMPANION_PERSONAL_DAILY_LIMIT,
+} from "@/lib/companion-settings";
 
 export const FAQ_GROUPS = ["start", "reading", "planner", "timer", "neutrino", "account", "help"] as const;
 export type FaqGroup = (typeof FAQ_GROUPS)[number];
@@ -120,6 +127,9 @@ export const FAQ_VALUES = {
   limit: COMPANION_DAILY_LIMIT,
   chars: COMPANION_MAX_MESSAGE_CHARS,
   history: COMPANION_MAX_HISTORY,
+  personalLimit: COMPANION_PERSONAL_DAILY_LIMIT,
+  maxChats: COMPANION_MAX_CHATS,
+  maxMessages: COMPANION_MAX_CHAT_MESSAGES,
 } as const;
 
 export interface FaqText {

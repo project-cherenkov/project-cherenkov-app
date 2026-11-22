@@ -19,13 +19,9 @@
     "messageLabel": "Message Neutrino",
     "messagePlaceholder": "Ask a study question…",
     "send": "Send",
-    "dailyLimit": "Up to 10 chat requests per account each day.",
+    "dailyLimit": "Up to {limit} chat requests per account each day. Requests with your own key do not count.",
     "help": "Limits and privacy",
     "personalKeyTitle": "Try your own Gemini API key?",
-    "personalKeyNotice": "Your key is sent to Cherenkov’s server and Google for this request only. It is not saved. Cherenkov’s daily account limit still applies.",
-    "personalKeyConsent": "I understand and want to send this key for one request.",
-    "personalKeyPlaceholder": "Paste Gemini API key",
-    "personalKeyRetry": "Retry once with my key",
     "settingsTitle": "Study companion",
     "settingsDescription": "Name your companion, choose its size and how it turns, turn off the AI chat, or turn it off completely. The mascot can be dragged anywhere on the page, and its panel can be resized.",
     "nameLabel": "Companion name",
@@ -78,18 +74,23 @@
     "showAgain": "Show the study companion again",
     "dragHelp": "Drag to move it anywhere on the page, or use the arrow keys (hold Shift for bigger steps). Press Enter to open or close the companion.",
     "errors": {
-      "cherenkov_limit": "You’ve used today’s 10 chat requests. Come back tomorrow; a personal key cannot extend this limit.",
+      "cherenkov_limit": "You’ve used today’s {limit} chat requests. Come back tomorrow, or use your own Gemini key under Settings.",
       "provider_quota": "Cherenkov’s Gemini project or model quota is currently exhausted. A 429 can reflect a project rate or daily quota, and does not by itself mean a Gemini-wide outage.",
       "provider_unavailable": "Gemini is temporarily unavailable. Please try again later.",
       "configuration": "Study chat is not configured right now. Please let the Cherenkov team know.",
-      "personal_key": "Google could not use that key. Check that it is a valid Gemini API key with API access enabled.",
+      "personal_key": "Google could not use that key, so it was removed from this tab. Check that it is a valid Gemini API key with API access enabled.",
       "personal_quota": "That key’s Gemini project or model quota is exhausted. Check its limits in Google AI Studio or try again later.",
       "personal_unavailable": "Gemini is temporarily unavailable for that key. Please try again later.",
       "unauthenticated": "Your sign-in has expired. Sign in again to continue chatting.",
       "unavailable": "Could not reach the chat service. Please try again.",
       "unknown": "Your question could not be answered right now. Please try again.",
       "ai_disabled": "AI chat is turned off in your settings. Switch it on under Settings to use it.",
-      "acknowledgement_required": "Please review and accept the AI chat notice before continuing."
+      "acknowledgement_required": "Please review and accept the AI chat notice before continuing.",
+      "personal_limit": "You’ve reached the {personalLimit} requests a day allowed with your own key. Try again tomorrow.",
+      "chat_limit": "You have {maxChats} saved chats, the maximum. Delete one to start a new chat.",
+      "chat_full": "This chat is full ({maxMessages} messages). Start a new chat.",
+      "chat_conflict": "This chat changed in another tab. It has been reloaded; please send your message again.",
+      "chat_not_found": "That chat no longer exists."
     },
     "askTab": "Ask",
     "modeGroup": "Answer mode",
@@ -276,15 +277,15 @@
         },
         "ai-limits": {
           "q": "How many AI messages can I send?",
-          "a": "Up to {limit} requests per account per day, counted by UTC day, so the count resets at midnight UTC (07:00 in Jakarta). A failed request and a retry each count. A message can be up to {chars} characters, only your latest {history} messages are sent along, and replies are kept short. Google’s own quotas apply separately, so the AI can be unavailable even when you have requests left."
+          "a": "Up to {limit} requests per account per day, counted by UTC day, so the count resets at midnight UTC (07:00 in Jakarta). A request that fails on the provider’s side is given back. Requests made with your own Gemini key do not count towards this, but are capped at {personalLimit} a day. A message can be up to {chars} characters, only your latest {history} messages are sent along, and replies are kept brief by default. Google’s own quotas apply separately, so the AI can be unavailable even when you have requests left."
         },
         "ai-privacy": {
           "q": "What happens to what I type in AI chat?",
-          "a": "Your messages go from your browser to Cherenkov’s server and on to Google’s Gemini service, which handles them under Google’s own terms and may keep them for a limited time. Cherenkov does not store them beyond the conversation open in your browser. Do not type passwords or personal information. If you are under 18, use AI chat only with a parent’s or guardian’s knowledge and permission. The FAQ never sends anything to an AI."
+          "a": "Your messages go from your browser to Cherenkov’s server and on to Google’s Gemini service, which handles them under Google’s own terms and may keep them for a limited time. Cherenkov saves your chats to your account (up to {maxChats} chats of {maxMessages} messages) until you delete them. Do not type passwords or personal information. If you are under 18, use AI chat only with a parent’s or guardian’s knowledge and permission. The FAQ never sends anything to an AI."
         },
         "ai-key": {
           "q": "What is the “use my own Gemini key” option?",
-          "a": "After a quota, availability or server-configuration error, Neutrino may offer to retry once with your own Gemini API key. It is entirely optional. The key is sent to Cherenkov’s server and to Google for that one request, is not saved, and the field is cleared afterwards. It does not raise the daily limit, and you should only enter a key you control."
+          "a": "Under Settings you can choose to use your own Gemini API key. It is entirely optional. Requests made with it do not use up your {limit} daily requests, but are capped at {personalLimit} a day. The key goes through Cherenkov’s server to Google with each request. It is kept only in this browser tab and is forgotten when the tab closes; it is never saved to your account, our database or our logs. Only enter a key you control."
         },
         "ai-off": {
           "q": "Can I turn off the AI but keep Neutrino?",
@@ -312,11 +313,11 @@
         },
         "data-stored": {
           "q": "What data does Cherenkov keep about me?",
-          "a": "Without an account, nothing beyond the ordinary server logs kept by the hosting provider. The timer, “Try it first”, search, and Neutrino’s position and panel size all stay in your browser.\n\nWith an account it stores your email address, your sign-in details (passwords are stored hashed; with Google sign-in, your Google name and email) and the study data you create: quiz answers and retries, study sessions, pages you marked as understood, and your planner settings and ratings. It sets only the cookies needed for sign-in, language and theme, with no advertising or tracking cookies."
+          "a": "Without an account, nothing beyond the ordinary server logs kept by the hosting provider. The timer, “Try it first”, search, and Neutrino’s position and panel size all stay in your browser.\n\nWith an account it stores your email address, your sign-in details (passwords are stored hashed; with Google sign-in, your Google name and email) and the study data you create: quiz answers and retries, study sessions, pages you marked as understood, and your planner settings and ratings. Your Neutrino chats are saved too, until you delete them. It sets only the cookies needed for sign-in, language and theme, with no advertising or tracking cookies."
         },
         "data-delete": {
           "q": "Can I delete my data?",
-          "a": "You can delete individual study sessions on the Progress page. To delete your account, or to ask for access to or correction of your data, email the project; the address is on the Privacy page and in the footer. Chat messages are not kept by Cherenkov beyond the conversation open in your browser."
+          "a": "You can delete individual study sessions on the Progress page, a single chat from the chat list in Neutrino, or all your chats under Data in Settings. To delete your account, or to ask for access to or correction of your data, email the project; the address is on the Privacy page and in the footer."
         },
         "roles": {
           "q": "What are “Inchoatus” and “Primus Inter Pares”?",
@@ -351,6 +352,61 @@
       "width": "Panel width",
       "height": "Panel height",
       "corner": "Resize panel"
-    }
+    },
+    "truncated": "This reply was cut off because it hit the length limit.",
+    "continue": "Continue",
+    "usingOwnKey": "Using your own Gemini key for this session.",
+    "ownKeyTitle": "Use my own Gemini key",
+    "ownKeyHelp": "Requests with your own key do not count towards the {limit} daily requests, but are capped at {personalLimit} a day. The key goes through Cherenkov’s server to Google with each request. It is kept only in this browser tab (cleared when you close it), never in your account, our database or our logs.",
+    "ownKeyConsent": "I understand my key is sent to Cherenkov’s server and Google with each chat request.",
+    "ownKeyPlaceholder": "Gemini API key",
+    "ownKeySave": "Use this key",
+    "ownKeyRemove": "Remove key",
+    "ownKeyRemoved": "Key removed.",
+    "ownKeyInvalid": "That key was removed because Google could not use it.",
+    "personalKeyUse": "Use my key",
+    "chatsButton": "Chats",
+    "chatsTitle": "Saved chats",
+    "newChat": "New chat",
+    "noChats": "No saved chats yet. A chat is saved after Neutrino’s first reply.",
+    "openChat": "Open chat: {title}",
+    "deleteChat": "Delete chat: {title}",
+    "deleteChatConfirm": "Delete this chat for good?",
+    "deleteConfirmYes": "Delete",
+    "chatDeleted": "Chat deleted.",
+    "chatLoadError": "Could not open that chat. Please try again.",
+    "chatListError": "Could not load your chats. Please try again.",
+    "chatsMeter": "{count} of {max} chats",
+    "messagesMeter": "{count} of {max} messages",
+    "contextDivider": "Neutrino only sees the messages below this line",
+    "chatLimitNotice": "You have {max} saved chats, the maximum. Delete one to start a new chat.",
+    "chatFullNotice": "This chat is full ({max} messages). Start a new chat.",
+    "chatFullAndLimitNotice": "This chat is full ({max} messages), and you have {maxChats} saved chats, the maximum. Delete a chat first, then start a new one.",
+    "openChatList": "Open chat list",
+    "sectionAccount": "Account",
+    "sectionNeutrino": "Neutrino",
+    "sectionData": "Data",
+    "styleLabel": "Style",
+    "styles": {
+      "pixel": {
+        "label": "Pixel",
+        "help": "The default look for Neutrino."
+      },
+      "smooth": {
+        "label": "Smooth",
+        "help": "Neutrino’s original, softer look."
+      }
+    },
+    "dataTitle": "Chat data",
+    "dataDescription": "Chats you have with Neutrino are saved to your account until you delete them or delete your account.",
+    "dataChats": "Saved chats",
+    "dataMessages": "Messages",
+    "dataSize": "Approximate size",
+    "dataSizeValue": "{kb} KB",
+    "deleteAllChats": "Delete all chats",
+    "deleteAllConfirm": "Delete all {count} saved chats for good?",
+    "deleteAllDone": "All chats deleted.",
+    "dataError": "Could not load or change your chat data. Please try again.",
+    "dataSignIn": "Sign in to see and manage saved chats."
   }
 }

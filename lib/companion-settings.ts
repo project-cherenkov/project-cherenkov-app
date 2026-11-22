@@ -10,7 +10,21 @@ export const COMPANION_NAME_MAX = 32;
 export const COMPANION_DAILY_LIMIT = 10;
 export const COMPANION_MAX_MESSAGE_CHARS = 1200;
 export const COMPANION_MAX_HISTORY = 6;
+// A ceiling on a reply, not a target: the prompt still asks for brief answers.
+export const COMPANION_MAX_OUTPUT_TOKENS = 1500;
+// Requests made with a student's own Gemini key do not count towards the daily
+// limit above. They have their own, much larger ceiling that protects the
+// server, not the student's wallet.
+export const COMPANION_PERSONAL_DAILY_LIMIT = 200;
+// Saved chat history.
+export const COMPANION_MAX_CHATS = 15;
+export const COMPANION_MAX_CHAT_MESSAGES = 30;
+export const COMPANION_CHAT_TITLE_MAX = 40;
 export const DEFAULT_COMPANION_NAME = "Neutrino";
+
+// "smooth" is the look Neutrino has always had. "pixel" is the default.
+export const COMPANION_STYLES = ["pixel", "smooth"] as const;
+export type CompanionStyle = (typeof COMPANION_STYLES)[number];
 
 export const COMPANION_SIZES = ["small", "medium", "large"] as const;
 export type CompanionSize = (typeof COMPANION_SIZES)[number];
@@ -41,6 +55,7 @@ export type CompanionPrefs = {
   updatesEnabled: boolean;
   size: CompanionSize;
   rotation: CompanionRotation;
+  style: CompanionStyle;
   ambientMotion: boolean;
   driftSpeed: number;
   aiBannerDismissed: boolean;
@@ -55,6 +70,7 @@ export const DEFAULT_COMPANION_PREFS: CompanionPrefs = {
   updatesEnabled: true,
   size: "medium",
   rotation: "auto",
+  style: "pixel",
   ambientMotion: true,
   driftSpeed: DEFAULT_DRIFT_SPEED,
   aiBannerDismissed: false,
@@ -69,6 +85,10 @@ export function isCompanionSize(value: unknown): value is CompanionSize {
 
 export function isCompanionRotation(value: unknown): value is CompanionRotation {
   return typeof value === "string" && (COMPANION_ROTATIONS as readonly string[]).includes(value);
+}
+
+export function isCompanionStyle(value: unknown): value is CompanionStyle {
+  return typeof value === "string" && (COMPANION_STYLES as readonly string[]).includes(value);
 }
 
 export function normalizeCompanionName(value: unknown): string | null {
@@ -118,6 +138,10 @@ export function parseCompanionPatch(body: unknown): CompanionPatch | null {
     if (!isCompanionRotation(input.rotation)) return null;
     patch.rotation = input.rotation;
   }
+  if ("style" in input) {
+    if (!isCompanionStyle(input.style)) return null;
+    patch.style = input.style;
+  }
   if ("aiBannerDismissed" in input) {
     if (typeof input.aiBannerDismissed !== "boolean") return null;
     patch.aiBannerDismissed = input.aiBannerDismissed;
@@ -143,6 +167,7 @@ export function normalizeCompanionPrefs(raw: unknown): CompanionPrefs {
     updatesEnabled: typeof input.updatesEnabled === "boolean" ? input.updatesEnabled : DEFAULT_COMPANION_PREFS.updatesEnabled,
     size: isCompanionSize(input.size) ? input.size : DEFAULT_COMPANION_PREFS.size,
     rotation: isCompanionRotation(input.rotation) ? input.rotation : DEFAULT_COMPANION_PREFS.rotation,
+    style: isCompanionStyle(input.style) ? input.style : DEFAULT_COMPANION_PREFS.style,
     ambientMotion: typeof input.ambientMotion === "boolean" ? input.ambientMotion : DEFAULT_COMPANION_PREFS.ambientMotion,
     driftSpeed: speed,
     aiBannerDismissed: typeof input.aiBannerDismissed === "boolean" ? input.aiBannerDismissed : DEFAULT_COMPANION_PREFS.aiBannerDismissed,

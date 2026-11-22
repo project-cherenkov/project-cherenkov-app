@@ -6,6 +6,7 @@ import {
   COMPANION_NAME_MAX,
   COMPANION_ROTATIONS,
   COMPANION_SIZES,
+  COMPANION_STYLES,
   DEFAULT_COMPANION_PREFS,
   DEFAULT_DRIFT_SPEED,
   MOTION_SPEED_MAX,
@@ -14,6 +15,7 @@ import {
   type CompanionPrefs,
 } from "@/lib/companion-settings";
 import { useCompanionPrefs, type PrefsSaveResult } from "@/components/study/use-companion-prefs";
+import { OwnKeySettings } from "@/components/study/own-key-settings";
 import { Slider } from "@/components/ui/slider";
 
 type Status = "idle" | "saving" | PrefsSaveResult | "nameSaved" | "nameError" | "positionReset" | "panelSizeReset" | "resetAllDone";
@@ -203,6 +205,16 @@ export function CompanionPreferences({
         </span>
       </label>
 
+      {signedIn && prefs.aiEnabled ? <OwnKeySettings /> : null}
+
+      <RadioGroup
+        legend={t("styleLabel")}
+        name={`${fieldId}-style`}
+        value={prefs.style}
+        onChange={(style) => void apply({ style })}
+        options={COMPANION_STYLES.map((style) => ({ value: style, label: t(`styles.${style}.label`), help: t(`styles.${style}.help`) }))}
+      />
+
       <RadioGroup
         legend={t("sizeLabel")}
         name={`${fieldId}-size`}
@@ -315,7 +327,7 @@ export function CompanionPreferences({
   if (variant === "compact") return body;
   return (
     <section className="mt-8 rounded-lg border border-border bg-card p-4">
-      <h2 className="font-semibold text-foreground">{t("settingsTitle")}</h2>
+      <h3 className="font-semibold text-foreground">{t("settingsTitle")}</h3>
       <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("settingsDescription")}</p>
       {body}
     </section>
