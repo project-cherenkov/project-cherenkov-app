@@ -275,6 +275,16 @@ Use any other port value you prefer. If the port is still busy, the app will con
 | `pnpm db:seed` | Generates Velite output, then seeds one topic per syllabus topic (`scripts/seed-topics.ts`) and the quiz bank (`scripts/seed-quiz-questions.ts`, add `--prune-legacy` to delete pre-bank questions that have no key); safe to re-run; requires `DATABASE_URL`. |
 | `pnpm start` | Serves an already-built app (`next start`). |
 
+If the planner says that topics are missing from the database, run the full seed after applying migrations:
+
+```powershell
+$env:DATABASE_URL = "<your Neon connection string>"
+pnpm db:migrate
+pnpm db:seed
+```
+
+`pnpm db:seed` is additive and idempotent: it restores missing syllabus topic rows and inserts missing quiz-bank questions without overwriting keyed quiz edits. Do not add `--prune-legacy` unless you intentionally want to delete older quiz rows that have no stable bank key. The seed scripts read `DATABASE_URL` from the process environment; setting it in a `.env` file alone does not make it available to direct `tsx` scripts.
+
 ### Environment variables
 
 The public site needs none of the variables below. Accounts, planner pages, quizzes and auth API routes require a configured database and Better Auth secret. The database and auth clients are lazy, so the archive can still build and run with zero configuration. `.env.example` has the current defaults; [`docs/engineering/cherenkov-env-vars-guide.md`](docs/engineering/cherenkov-env-vars-guide.md) has the full walkthrough for each variable. The short, deployment-oriented summary:
