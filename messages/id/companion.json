@@ -97,7 +97,7 @@
     "faqMode": "FAQ",
     "aiMode": "Obrolan AI",
     "aiNoticeTitle": "Sebelum menggunakan obrolan AI",
-    "aiNoticeBody": "Ketentuan Gemini API Google mewajibkan pengguna API berusia minimal 18 tahun dan membatasi penggunaan pada layanan yang ditujukan untuk, atau kemungkinan diakses oleh, orang berusia di bawah 18 tahun. Pesan dan konteks percakapan yang diperlukan dikirim ke Google Gemini untuk membuat balasan. Jangan masukkan kata sandi, data pribadi, atau data sensitif. Balasan AI dapat keliru; periksa informasi penting menggunakan sumber tepercaya.",
+    "aiNoticeBody": "Ketentuan Gemini API Google mewajibkan pengguna API berusia minimal 18 tahun dan membatasi penggunaan pada layanan yang ditujukan untuk, atau kemungkinan diakses oleh, orang berusia di bawah 18 tahun. Pesan dan konteks percakapan yang diperlukan dikirim ke Google Gemini untuk membuat balasan. Jangan masukkan kata sandi, data pribadi, atau data sensitif. Balasan AI dapat keliru; periksa informasi penting menggunakan sumber tepercaya. Obrolanmu disimpan di akunmu sampai kamu menghapusnya.",
     "aiNoticeConsent": "Saya mengonfirmasi bahwa saya berusia minimal 18 tahun, memahami persyaratan ini, dan akan menggunakan Neutrino hanya untuk dukungan pendidikan.",
     "aiNoticeContinue": "Konfirmasi dan lanjutkan",
     "cancel": "Batal",
@@ -293,7 +293,7 @@
         },
         "neutrino-settings": {
           "q": "Apa saja yang bisa kuubah di pengaturan Neutrino?",
-          "a": "Buka tab Pengaturan, atau pergi ke halaman Akun; keduanya mengubah pengaturan yang sama. Kamu bisa memilih ukuran maskot (kecil, sedang, atau besar) dan cara berputarnya (Otomatis, 3D, atau Sederhana), serta menyalakan atau mematikan obrolan AI, yang disimpan di perangkat ini kalau kamu belum masuk. Kalau sudah masuk, kamu juga bisa mengganti nama (1 sampai 32 karakter) dan mematikan seluruh pendamping. Kalau sistemmu meminta gerakan dikurangi, maskot tetap diam."
+          "a": "Buka tab Pengaturan, atau pergi ke halaman Akun; keduanya mengubah pengaturan yang sama. Kamu bisa memilih gaya (Piksel atau Halus), ukuran maskot (kecil, sedang, atau besar) dan cara berputarnya (Otomatis, 3D, atau Sederhana), serta menyalakan atau mematikan obrolan AI, yang disimpan di perangkat ini kalau kamu belum masuk. Kalau sudah masuk, kamu juga bisa mengganti nama (1 sampai 32 karakter) dan mematikan seluruh pendamping. Kalau sistemmu meminta gerakan dikurangi, maskot tetap diam."
         },
         "neutrino-move": {
           "q": "Bagaimana cara menggeser atau menyembunyikan Neutrino?",
@@ -407,6 +407,8 @@
     "deleteAllConfirm": "Hapus semua {count} obrolan tersimpan secara permanen?",
     "deleteAllDone": "Semua obrolan dihapus.",
     "dataError": "Data obrolan tidak dapat dimuat atau diubah. Coba lagi.",
-    "dataSignIn": "Masuk untuk melihat dan mengelola obrolan tersimpan."
+    "dataSignIn": "Masuk untuk melihat dan mengelola obrolan tersimpan.",
+    "statusFaq": "mode: FAQ · tidak mengirim apa pun",
+    "statusAi": "mode: AI · teks keluar dari perangkatmu"
   }
 }

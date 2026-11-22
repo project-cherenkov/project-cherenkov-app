@@ -79,7 +79,7 @@ export default async function SubjectSyllabusPage({
         ← {t("title")}
       </Link>
 
-      <h1 className="mt-4 text-3xl font-bold text-foreground">{t(`subjects.${syllabus.subject}`)}</h1>
+      <h1 className="font-pixel mt-4 text-3xl font-bold text-foreground">{t(`subjects.${syllabus.subject}`)}</h1>
       <Provenance syllabus={syllabus} locale={locale} />
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">

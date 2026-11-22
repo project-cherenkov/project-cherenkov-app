@@ -9,6 +9,7 @@ import { useSession } from "@/lib/auth-client";
 import { StudyTimer } from "@/components/study/study-timer";
 import { ManifoldMascot, type MascotMood } from "@/components/study/manifold-mascot";
 import { CompanionTrail } from "@/components/study/companion-trail";
+import { NeutrinoGlyph, type GlyphKind } from "@/components/study/neutrino-glyph";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
 import { NeutrinoFaq } from "@/components/study/neutrino-faq";
 import { NeutrinoChatList } from "@/components/study/neutrino-chat-list";
@@ -128,6 +129,7 @@ function CompanionPanel({
   chatId,
   setChatId,
   chatStyle,
+  onActivity,
   busy,
   setBusy,
   mascot,
@@ -160,6 +162,8 @@ function CompanionPanel({
   chatId: string | null;
   setChatId: Dispatch<SetStateAction<string | null>>;
   chatStyle: CompanionStyle;
+  /** Tells the mascot what the panel is doing, so it can show a glyph. */
+  onActivity?: (activity: { tab: "ask" | "timer" | "settings"; error: boolean }) => void;
   busy: boolean;
   setBusy: Dispatch<SetStateAction<boolean>>;
   mascot: MascotMood;
@@ -172,6 +176,7 @@ function CompanionPanel({
 }) {
   const t = useTranslations("companion");
   const [tab, setTab] = useState<"ask" | "timer" | "settings">("ask");
+  const pixel = chatStyle === "pixel";
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<ChatError | null>(null);
   const [keyDraft, setKeyDraft] = useState("");
@@ -187,6 +192,10 @@ function CompanionPanel({
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatList = useChatList(signedIn && aiEnabled && mode === "ai");
   const listUsage = chatList.state.status === "ready" ? chatList.state.usage : null;
+  const hasError = error !== null;
+  useEffect(() => {
+    onActivity?.({ tab, error: hasError });
+  }, [tab, hasError, onActivity]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -302,15 +311,17 @@ function CompanionPanel({
   const canTryPersonalKey = !ownKey && (error === "provider_quota" || error === "provider_unavailable" || error === "configuration" || error === "cherenkov_limit");
 
   return (
-    <div className={`flex ${embedded ? "h-full" : "h-screen"} flex-col bg-background text-foreground`}>
+    <div data-style={chatStyle} className={`nt-panel ${pixel ? "nt-pixel" : ""} flex ${embedded ? "h-full" : "h-screen"} flex-col bg-background text-foreground`}>
       <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
         <div className="flex min-w-0 items-center gap-2">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
             <ManifoldMascot size={36} mood={mascot} lite />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">{name}</p>
-            <p className="text-xs text-muted-foreground">{tab !== "ask" ? t("subtitle") : mode === "ai" && aiEnabled ? t("subtitleAi") : t("subtitleFaq")}</p>
+            <p className="nt-font truncate text-sm font-semibold">{name}</p>
+            <p role={pixel ? "status" : undefined} className="nt-font text-xs text-muted-foreground">
+              {tab !== "ask" ? t("subtitle") : pixel ? (mode === "ai" && aiEnabled ? t("statusAi") : t("statusFaq")) : mode === "ai" && aiEnabled ? t("subtitleAi") : t("subtitleFaq")}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -465,7 +476,7 @@ function CompanionPanel({
                         <span aria-hidden="true" className="h-px flex-1 bg-border" />
                       </div>
                     ) : null}
-                  <div className={message.role === "user" ? "ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink" : "mr-5 rounded-lg border border-border bg-card p-3 text-sm"}>
+                  <div className={message.role === "user" ? "nt-bubble ml-8 rounded-lg bg-cherenkov-blue-800 p-3 text-sm text-white dark:bg-cherenkov-blue-pastel dark:text-cherenkov-ink" : "nt-bubble mr-5 rounded-lg border border-border bg-card p-3 text-sm"}>
                     <ChatText text={message.text} />
                   </div>
                   </div>
@@ -562,6 +573,7 @@ export function InPageNeutrino() {
   const [driftPaused, setDriftPaused] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatId, setChatId] = useState<string | null>(null);
+  const [activity, setActivity] = useState<{ tab: "ask" | "timer" | "settings"; error: boolean }>({ tab: "ask", error: false });
   const [busy, setBusy] = useState(false);
   const [pipWindow, setPipWindow] = useState<Window | null>(null);
   const [pipRoot, setPipRoot] = useState<HTMLDivElement | null>(null);
@@ -969,6 +981,15 @@ export function InPageNeutrino() {
   const sheetOpen = placement?.mode === "sheet";
   const frame: PanelFrame | null = placement?.mode === "floating" ? (liveFrame ?? placement) : null;
 
+  // Pixel punctuation beside the mascot (pixel style only). Decorative: the
+  // panel's status text stays authoritative.
+  const glyph: GlyphKind | null =
+    prefs.style !== "pixel" || !open ? null
+    : busy ? "dots"
+    : activity.error ? "alert"
+    : activity.tab === "ask" && mode === "ai" && aiEnabled && signedIn ? "question"
+    : null;
+
   return (
     <>
       {showDock && !hiddenForNow && placement ? (
@@ -991,7 +1012,7 @@ export function InPageNeutrino() {
           }
           style={frame ? { left: frame.left, top: frame.top, width: frame.width, height: frame.height } : undefined}
         >
-          <div className="h-full overflow-hidden rounded-xl border border-border bg-background shadow-2xl">
+          <div className={`${prefs.style === "pixel" ? "nt-shell nt-unfold " : ""}h-full overflow-hidden rounded-xl border border-border bg-background shadow-2xl`}>
             <CompanionPanel
               name={prefs.name}
               signedIn={signedIn}
@@ -1015,6 +1036,7 @@ export function InPageNeutrino() {
               chatId={chatId}
               setChatId={setChatId}
               chatStyle={prefs.style}
+              onActivity={setActivity}
               busy={busy}
               setBusy={setBusy}
               mascot={mood}
@@ -1066,6 +1088,7 @@ export function InPageNeutrino() {
               chatId={chatId}
               setChatId={setChatId}
               chatStyle={prefs.style}
+              onActivity={setActivity}
               busy={busy}
               setBusy={setBusy}
               mascot={mood}
@@ -1076,6 +1099,7 @@ export function InPageNeutrino() {
 
       {showDock && !hiddenForNow ? (
         <CompanionTrail
+          pixel={prefs.style === "pixel"}
           targetRef={dockRef}
           enabled={prefs.ambientMotion}
           active={!open && !pipWindow && (!driftPaused || Boolean(dragPx))}
@@ -1137,6 +1161,7 @@ export function InPageNeutrino() {
               onSlow={markSlow}
             />
           </button>
+          {glyph ? <NeutrinoGlyph kind={glyph} /> : null}
           <span id={helpId} className="sr-only">{t("dragHelp")}</span>
           <button
             type="button"
@@ -1170,12 +1195,12 @@ function isChatError(value: unknown): value is ChatError {
 }
 
 function tabClass(active: boolean) {
-  return ["inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-1 text-xs font-medium sm:text-sm", active ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted/60"].join(" ");
+  return ["nt-tab nt-font inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-1 text-xs font-medium sm:text-sm", active ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted/60"].join(" ");
 }
 
 function modeClass(active: boolean) {
   return [
-    "inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-2 text-sm font-medium",
+    "nt-tab nt-font inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-2 text-sm font-medium",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     active ? "bg-background text-foreground shadow-sm ring-1 ring-border" : "text-muted-foreground hover:bg-background/60",
   ].join(" ");

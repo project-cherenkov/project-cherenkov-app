@@ -139,6 +139,14 @@
     @apply font-mono text-xs text-muted-foreground;
   }
 
+  /* The eyebrow above a page title, in the pixel face. Larger than
+     .label-code (12px) because the pixel face stays legible from 14px up.
+     .label-code itself is unchanged: it still serves chips, breadcrumbs and
+     counts. Colour comes from the same token, so contrast is unchanged. */
+  .label-pixel {
+    @apply font-pixel text-sm text-muted-foreground;
+  }
+
   /* A real section heading. The mono-caps .label-code is 12px, SMALLER than the
      card titles under it, so using it as an <h2> made the heading the weakest
      text in its section. Keep .label-code for the eyebrow above a heading
@@ -682,4 +690,69 @@
    open it steps aside (the header sets data-nav-open on <html>). */
 html[data-nav-open="true"] .neutrino-dock {
   visibility: hidden;
+}
+
+/* ===========================================================================
+   Neutrino pixel style (WP4). Scoped to `.nt-pixel`, which only the panel sets
+   when the `style` preference is "pixel". The "smooth" style adds none of it,
+   so smooth renders exactly as before. One base unit, --px: 2px. Colours are
+   the existing tokens only (ink, ring, muted); no new hex values. Corners are
+   notched with edge-only box-shadows rather than clip-path, so focus rings and
+   text are never clipped, and the shapes stay crisp at fractional pixel ratios.
+   =========================================================================== */
+.nt-pixel {
+  --px: 2px;
+  --nt-line: hsl(var(--foreground));
+}
+.nt-pixel .nt-font {
+  font-family: var(--font-pixel), var(--font-heading), ui-monospace, monospace;
+  letter-spacing: 0;
+}
+.nt-pixel .nt-tab,
+.nt-pixel .nt-bubble {
+  border: 0;
+  border-radius: 0;
+  margin: var(--px);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--nt-line),
+    0 var(--px) 0 0 var(--nt-line),
+    calc(var(--px) * -1) 0 0 0 var(--nt-line),
+    var(--px) 0 0 0 var(--nt-line);
+}
+.nt-pixel .nt-bubble { margin: var(--px) calc(var(--px) * 3) calc(var(--px) * 2) var(--px); }
+/* Active tab and mode button: inverted. */
+.nt-pixel .nt-tab[aria-pressed="true"] {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  box-shadow: none;
+}
+.nt-pixel .nt-tab:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+/* The panel shell: square, a heavier edge and a hard offset shadow. */
+.nt-shell {
+  border-radius: 0;
+  border-width: 2px;
+  border-color: hsl(var(--foreground));
+  box-shadow: 4px 4px 0 0 hsl(var(--foreground) / 0.35);
+}
+/* Opens in three steps (about 180 ms). The clip is gone once it ends, so it
+   never clips a focus ring afterwards. */
+@keyframes nt-unfold {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.nt-unfold { animation: nt-unfold 180ms steps(3, end) 1 both; }
+/* The pixel punctuation glyph: a notched chip with a hard shadow. */
+.nt-glyph {
+  box-shadow:
+    0 -2px 0 0 hsl(var(--foreground)), 0 2px 0 0 hsl(var(--foreground)),
+    -2px 0 0 0 hsl(var(--foreground)), 2px 0 0 0 hsl(var(--foreground)),
+    4px 4px 0 0 hsl(var(--foreground) / 0.35);
+}
+@keyframes nt-dot { 0%, 100% { opacity: 0.2; } 33% { opacity: 1; } }
+.nt-dot { animation: nt-dot 900ms steps(1, end) infinite; }
+.nt-dot-2 { animation-delay: 300ms; }
+.nt-dot-3 { animation-delay: 600ms; }
+@media (prefers-reduced-motion: reduce) {
+  .nt-unfold { animation: none; }
+  .nt-dot { animation: none; opacity: 1; }
 }

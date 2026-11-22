@@ -127,8 +127,7 @@ export default async function ProgressPage({
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 sm:px-6">
       <header>
-        <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
-        <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
+        <h1 className="font-pixel text-3xl font-bold text-foreground">{t("title")}</h1>
         <p className="mt-2 text-foreground/75">{t("intro")}</p>
         <p className="mt-1 text-sm text-muted-foreground">{t("privacyNote")}</p>
       </header>

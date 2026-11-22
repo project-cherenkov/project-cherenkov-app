@@ -171,7 +171,7 @@ export default async function MaterialPage({
           )}
         </div>
 
-        <h1 className="mt-3 text-3xl font-bold text-foreground">{text.title}</h1>
+        <h1 className="font-pixel mt-3 text-3xl font-bold text-foreground">{text.title}</h1>
         <p className="mt-2 text-lg text-foreground/75">{text.summary}</p>
         {!draft && (
           <UnderstoodButton kind="material" subject={material.subject} slug={material.slug} />

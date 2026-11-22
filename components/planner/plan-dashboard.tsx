@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { CalendarExport } from "@/components/planner/calendar-export";
 import { Link, useRouter } from "@/i18n/routing";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { generateStudyPlan, setPlanItemDone } from "@/lib/planner-actions";
@@ -23,6 +24,7 @@ const hoursLabel = (minutes: number) => `${Math.round((minutes / 60) * 10) / 10}
 export function PlanDashboard({ data }: { data: PlanData }) {
   const t = useTranslations("planner.plan");
   const tErr = useTranslations("planner.errors");
+  const tCal = useTranslations("account.calendar");
   const locale = useLocale();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -46,8 +48,7 @@ export function PlanDashboard({ data }: { data: PlanData }) {
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-10 sm:px-6">
       <header>
-        <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
-        <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
+        <h1 className="font-pixel text-3xl font-bold text-foreground">{t("title")}</h1>
         <p className="mt-2 text-foreground/75">
           {stage.label[locale as "en" | "id"]} · {data.settings.subject} ·{" "}
           {t("daysLeft", { days: data.daysLeft })} · {t("hoursPerWeek", { hours: data.settings.hoursPerWeek })}
@@ -62,6 +63,13 @@ export function PlanDashboard({ data }: { data: PlanData }) {
           </p>
         ) : null}
       </header>
+
+      <details className="rounded-lg border border-border">
+        <summary className="min-h-11 cursor-pointer px-4 py-3 text-sm font-medium">{tCal("addToCalendar")}</summary>
+        <div className="p-4 pt-0">
+          <CalendarExport variant="plan" />
+        </div>
+      </details>
 
       {!summary.feasible ? (
         <div role="status" className="rounded-lg border border-warning-border bg-warning-bg p-4 text-sm text-foreground">

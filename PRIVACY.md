@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last updated: 14 November 2026. This policy describes what Project Cherenkov ("we") does with personal data. It was drafted by the project team, is not legal advice, and should be reviewed by a qualified lawyer before launch. An Indonesian version is published on the site at `/id/privacy`; if the two differ, please tell us.
+Last updated: 22 November 2026. This policy describes what Project Cherenkov ("we") does with personal data. It was drafted by the project team, is not legal advice, and should be reviewed by a qualified lawyer before launch. An Indonesian version is published on the site at `/id/privacy`; if the two differ, please tell us.
 
 ## 1. Who is responsible
 
@@ -16,7 +16,11 @@ We use your account email address to send you emails about your account: a messa
 
 ## 3. The Neutrino chat companion (third-party AI)
 
-If you use the Neutrino chat, the messages you type, and the context needed to answer them, are sent to Google's Gemini API to generate a reply. Google processes this data under its own terms and privacy policy and may retain it for a limited period. Do not enter personal information, passwords, or anything you would not want a third-party service to see. If you provide your own Google API key, requests are made with that key under your own agreement with Google. We do not use chat messages for advertising.
+If you use the Neutrino chat, the messages you type, and the context needed to answer them, are sent to Google's Gemini API to generate a reply. Google processes this data under its own terms and privacy policy and may retain it for a limited period. Do not enter personal information, passwords, or anything you would not want a third-party service to see. Google still processes your messages as described above. Your chats are also saved in your account so you can come back to them: up to 15 chats of 30 messages each, kept until you delete them one by one or all at once (Settings, Data), or delete your account. If you provide your own Google API key, requests are made with that key under your own agreement with Google; we use it for the request and do not store it (it is kept only in your browser tab's session storage), and those chats are saved like any other. We do not use chat messages for advertising.
+
+### Calendar link (planner)
+
+If you turn on the planner's calendar feed, we generate a secret link. We store only a hash of it, never the link itself, and show it to you once. Anyone who has the link can read the titles in your plan (the kind of session and topic, and your exam date) without signing in, so keep it private; you can regenerate it, which stops the old link, or turn it off at any time. Our hosting provider's access logs may record the link because it is part of the web address, and we do not log it ourselves. The one-time calendar file contains the same titles and is generated only when you ask for it.
 
 ## 4. Why we use it (legal basis)
 

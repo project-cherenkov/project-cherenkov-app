@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 
 type Particle = { id: number; x: number; y: number; time: number; kind: "star" | "lattice"; size: number; turn: number };
 const LIFETIME = 1500;
+const PIXEL_UNIT = 2;
 
 // Samples the visible mascot position, so the same cosmic trail follows both
 // the ambient screen-wide drift and direct pointer dragging.
@@ -11,10 +12,13 @@ export function CompanionTrail({
   targetRef,
   enabled,
   active,
+  pixel = false,
 }: {
   targetRef: RefObject<HTMLButtonElement | null>;
   enabled: boolean;
   active: boolean;
+  /** Square cells instead of stars and lattice fragments. */
+  pixel?: boolean;
 }) {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -60,6 +64,16 @@ export function CompanionTrail({
     <svg aria-hidden="true" className="companion-cosmos-trail">
       {particles.map((particle) => {
         const age = performance.now() - particle.time;
+        if (pixel) {
+          // Square cells on a 2px grid that fade in three steps over the same
+          // lifetime. Sizes are multiples of the base unit.
+          const step = Math.min(2, Math.floor((age / LIFETIME) * 3));
+          const opacity = reducedMotion ? 0.55 : [0.6, 0.35, 0.15][step]!;
+          const cell = (1 + (particle.id % 3)) * PIXEL_UNIT * 2;
+          const x = Math.round(particle.x / PIXEL_UNIT) * PIXEL_UNIT - cell / 2;
+          const y = Math.round(particle.y / PIXEL_UNIT) * PIXEL_UNIT - cell / 2;
+          return <rect key={particle.id} x={x} y={y} width={cell} height={cell} opacity={opacity} shapeRendering="crispEdges" className="companion-cosmos-star" style={{ filter: "none" }} />;
+        }
         const opacity = reducedMotion ? 0.55 : Math.max(0, 0.58 * (1 - age / LIFETIME));
         return particle.kind === "star" ? (
           <path key={particle.id} d="M0 -4L1.1 -1.1L4 0L1.1 1.1L0 4L-1.1 1.1L-4 0L-1.1 -1.1Z" transform={`translate(${particle.x} ${particle.y}) rotate(${particle.turn}) scale(${particle.size / 4})`} opacity={opacity} className="companion-cosmos-star" />

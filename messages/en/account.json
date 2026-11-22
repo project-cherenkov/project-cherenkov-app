@@ -1,6 +1,5 @@
 {
   "account": {
-    "eyebrow": "account.md",
     "title": "Your account",
     "username": "Username",
     "email": "Email",
@@ -66,6 +65,38 @@
       "heading": "Your account has been deleted",
       "body": "Your account and the study data stored with it have been removed. Thank you for using Project Cherenkov.",
       "home": "Back to the home page"
+    },
+    "calendar": {
+      "title": "Calendar",
+      "langLegend": "Language of calendar entries",
+      "langHelp": "Entries are titled in this language and carry the other language in their description. They contain only the kind of session and the topic.",
+      "lang": {
+        "en": "English",
+        "id": "Bahasa Indonesia"
+      },
+      "fileTitle": "One-time file",
+      "fileHelp": "Download an .ics file and import it into your calendar. It is a snapshot: it does not update, and importing it again may duplicate events.",
+      "fileButton": "Download .ics",
+      "feedTitle": "Subscription link",
+      "feedHelp": "A private link your calendar app subscribes to, so your plan stays up to date.",
+      "feedDelay": "Your calendar app decides how often it refreshes, and this can take hours.",
+      "feedSecret": "The link is secret: anyone who has it can read the titles in your plan. Regenerate it if you shared it.",
+      "create": "Create link",
+      "regenerate": "Regenerate link",
+      "regenerateHelp": "Regenerating makes a new link and stops the old one from working.",
+      "turnOff": "Turn off",
+      "turnOffConfirm": "Turn off the link? Calendars using it stop updating.",
+      "turnOffYes": "Turn off",
+      "cancel": "Cancel",
+      "feedActive": "A link is active. For your security it cannot be shown again; regenerate it to get a new one.",
+      "linkOnce": "Copy your link now. It is shown only once.",
+      "linkHttps": "Link (https)",
+      "linkWebcal": "Link (webcal, opens in most calendar apps)",
+      "copy": "Copy",
+      "copied": "Copied.",
+      "copyFailed": "Could not copy. Select the link and copy it by hand.",
+      "error": "Something went wrong. Please try again.",
+      "addToCalendar": "Add to calendar"
     }
   }
 }

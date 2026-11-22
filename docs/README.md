@@ -37,6 +37,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `project/inspiration-and-philosophy.md` | The homages and the open-knowledge stance, in the owner's words. Source for the in-app `/docs/philosophy` page. | current |
 | `design/visual-identity.md` | The mark, the wordmark and the type pairing. | current |
 | `design/colour.md` | Palette, tokens, roles, proportion, contrast, and the colour role audit. | current |
+| `design/eyebrows.md` | The file-name eyebrows above page titles: the rule and the registry. | current |
 | `design/neutrino-mascot.md` | How the Neutrino mascot works now, and the moods planned next. | current |
 | `design/visualization-interactions.md` | Review of the visualization engines against Brilliant, with prioritised recommendations. | review |
 | `design/home-visualization-picker.md` | The home hero's "Your picks": behaviour, storage, accessibility, and measured engine heights. | current |

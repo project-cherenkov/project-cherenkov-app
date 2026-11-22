@@ -1,6 +1,6 @@
 {
   "archive": {
-    "eyebrow": "archive.log",
+    "eyebrow": "editorials.log",
     "title": "Editorials",
     "description": "Indexed by principle and error type, not by chapter.",
     "filters": {
@@ -60,7 +60,7 @@
   "materials": {
     "draftBadge": "Draft",
     "draftNotice": "Only editors can see this material. Visitors get a 404.",
-    "eyebrow": "materials.md",
+    "eyebrow": "reference.md",
     "title": "Materials",
     "description": "The syllabus, broken down topic by topic. Unsigned reference notes, organised the way the syllabus is.",
     "coverage": "{covered} of {total} topics covered",

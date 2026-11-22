@@ -35,8 +35,8 @@ export default async function DocsIndexPage({
   return (
     <div>
       <JsonLd data={breadcrumbJsonLd(locale, [{ name: t("title") }])} />
-      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
-      <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
+      <p className="label-pixel" aria-hidden="true">{t("eyebrow")}</p>
+      <h1 className="font-pixel mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
       <p className="mt-2 max-w-2xl text-foreground/75">{t("description")}</p>
 
       <div className="mt-8 space-y-10">

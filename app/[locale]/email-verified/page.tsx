@@ -38,7 +38,7 @@ export default async function Page({
   if (!problem) {
     return (
       <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
-        <h1 className="mb-3 text-2xl font-semibold text-foreground">{t("successHeading")}</h1>
+        <h1 className="font-pixel mb-3 text-2xl font-semibold text-foreground">{t("successHeading")}</h1>
         <p role="status" className="text-sm text-foreground/75">
           {t("successBody")}
         </p>
@@ -51,7 +51,7 @@ export default async function Page({
 
   return (
     <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
-      <h1 className="mb-3 text-2xl font-semibold text-foreground">
+      <h1 className="font-pixel mb-3 text-2xl font-semibold text-foreground">
         {t(problem === "expired" ? "expiredHeading" : "invalidHeading")}
       </h1>
       <p role="alert" className="text-sm text-danger">

@@ -1,6 +1,6 @@
 # Ketentuan Penggunaan
 
-Terakhir diperbarui: 31 Oktober 2026. Ketentuan ini berlaku untuk Project Cherenkov, proyek edukasi yang dijalankan siswa/mahasiswa. Dokumen ini bukan nasihat hukum dan perlu ditinjau oleh ahli hukum sebelum peluncuran.
+Terakhir diperbarui: 22 November 2026. Ketentuan ini berlaku untuk Project Cherenkov, proyek edukasi yang dijalankan siswa/mahasiswa. Dokumen ini bukan nasihat hukum dan perlu ditinjau oleh ahli hukum sebelum peluncuran.
 
 ## 1. Ruang lingkup
 
@@ -22,7 +22,7 @@ Kode sumber dirilis di bawah lisensi pada berkas LICENSE. Kecuali halaman menyat
 
 ## 5. Fitur AI
 
-Obrolan Neutrino memakai model AI pihak ketiga sehingga jawabannya bisa keliru. Periksa hal penting pada editorial dan guru Anda. Jangan mengandalkannya untuk keputusan ujian. Lihat Kebijakan Privasi tentang penanganan data obrolan.
+Obrolan Neutrino memakai model AI pihak ketiga sehingga jawabannya bisa keliru. Periksa hal penting pada editorial dan guru Anda. Jangan mengandalkannya untuk keputusan ujian. Obrolan Anda disimpan di akun sampai Anda menghapusnya, dan Anda bertanggung jawab menjaga kerahasiaan tautan kalender yang Anda buat. Lihat Kebijakan Privasi tentang penanganan data obrolan dan kalender.
 
 ## 6. Ketepatan
 

@@ -97,7 +97,7 @@
     "faqMode": "FAQ",
     "aiMode": "AI chat",
     "aiNoticeTitle": "Before using AI chat",
-    "aiNoticeBody": "Google's Gemini API Terms require API users to be at least 18 years old and restrict use in services directed toward, or likely to be accessed by, people under 18. Your messages and relevant conversation context are sent to Google Gemini to generate replies. Do not enter passwords, personal information, or sensitive data. AI responses may be incorrect; verify important information using reliable sources.",
+    "aiNoticeBody": "Google's Gemini API Terms require API users to be at least 18 years old and restrict use in services directed toward, or likely to be accessed by, people under 18. Your messages and relevant conversation context are sent to Google Gemini to generate replies. Do not enter passwords, personal information, or sensitive data. AI responses may be incorrect; verify important information using reliable sources. Your chats are saved in your account until you delete them.",
     "aiNoticeConsent": "I confirm that I am at least 18 years old, understand these requirements, and will use Neutrino only for educational support.",
     "aiNoticeContinue": "Confirm and continue",
     "cancel": "Cancel",
@@ -293,7 +293,7 @@
         },
         "neutrino-settings": {
           "q": "What can I change in Neutrino’s settings?",
-          "a": "Open the Settings tab, or go to your Account page; both change the same settings. You can choose the mascot’s size (small, medium or large) and how it turns (Automatic, 3D or Simple), and switch AI chat on or off, which is saved on this device when you are signed out. When you are signed in you can also rename it (1 to 32 characters) and turn the whole companion off. If your system asks for reduced motion, the mascot stays still."
+          "a": "Open the Settings tab, or go to your Account page; both change the same settings. You can choose the style (Pixel or Smooth), the mascot’s size (small, medium or large) and how it turns (Automatic, 3D or Simple), and switch AI chat on or off, which is saved on this device when you are signed out. When you are signed in you can also rename it (1 to 32 characters) and turn the whole companion off. If your system asks for reduced motion, the mascot stays still."
         },
         "neutrino-move": {
           "q": "How do I move or hide Neutrino?",
@@ -407,6 +407,8 @@
     "deleteAllConfirm": "Delete all {count} saved chats for good?",
     "deleteAllDone": "All chats deleted.",
     "dataError": "Could not load or change your chat data. Please try again.",
-    "dataSignIn": "Sign in to see and manage saved chats."
+    "dataSignIn": "Sign in to see and manage saved chats.",
+    "statusFaq": "mode: FAQ · sends nothing",
+    "statusAi": "mode: AI · text leaves your device"
   }
 }

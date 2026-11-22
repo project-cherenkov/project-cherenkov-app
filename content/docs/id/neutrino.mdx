@@ -3,7 +3,7 @@ title: "Pendamping belajar Neutrino"
 description: "Buka pendamping belajar, cari jawaban di FAQ-nya, gunakan timer, dan ngobrol dengan AI opsional tentang informatika, fisika, atau astronomi."
 section: reading
 order: 35
-updatedAt: "2026-11-02"
+updatedAt: "2026-11-22"
 ---
 
 Neutrino dapat digunakan dengan dua cara: klik maskotnya yang bercahaya (di kanan bawah secara bawaan) untuk membuka pendamping langsung di halaman, lalu pilih **Apungkan** di dalam pendamping untuk membuka jendela terpisah di atas jendela lain. Jendela mengambang menggunakan Document Picture-in-Picture dari Chrome, jadi gunakan Chrome desktop versi terbaru dan biarkan tab Cherenkov tetap terbuka. Pendamping di halaman tetap bisa digunakan tanpa dukungan Picture-in-Picture.
@@ -27,13 +27,15 @@ Jika obrolan AI dimatikan di Pengaturan, tab Tanya hanya menampilkan FAQ.
 
 ## Pengaturan
 
-Buka pendamping lalu pilih **Pengaturan**, atau buka **Akun → Pendamping belajar**. Kedua tempat itu mengubah pengaturan yang sama.
+Buka pendamping lalu pilih **Pengaturan**, atau buka **Akun → Neutrino**. Pengaturan dikelompokkan dalam tiga bagian: **Akun** (data masuk dan, di Kalender, ekspor rencanamu), **Neutrino**, dan **Data**. Kedua tempat itu mengubah pengaturan Neutrino yang sama.
 
 | Pengaturan | Fungsinya | Tersimpan di |
 | --- | --- | --- |
 | Nama | Nama yang ditampilkan pada pendamping. | Akunmu (jika sudah masuk) |
 | Tampilkan pendamping | Matikan maskot di semua halaman. Nyalakan lagi di sini atau di Akun. | Akunmu (jika sudah masuk) |
 | Gunakan obrolan AI | Matikan hanya AI-nya. Tombol Obrolan AI hilang, server menolak permintaan obrolan untuk akunmu, dan maskot, FAQ, serta timer tetap berjalan. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
+| Gaya | **Piksel** (bawaan) memberi panel, tab, baris status, bingkai pesan, meter, dan partikel jejak tampilan piksel seperti layar detektor kecil. **Halus** adalah tampilan awal Neutrino yang lebih lembut. Maskotnya sendiri tidak berubah. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
+| Pakai Gemini key milikku | Lihat di bawah. | Hanya tab browser ini |
 | Ukuran | Kecil, sedang, atau besar. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
 | Gaya putaran | **Otomatis** memakai putaran 3D yang halus dan beralih ke putaran sederhana jika perangkatmu kesulitan. **3D** selalu memakai putaran 3D. **Sederhana** memakai putaran datar yang lebih hemat daya. | Akunmu jika sudah masuk, jika tidak di perangkat ini |
 
@@ -55,9 +57,17 @@ Pendamping ini menyertakan timer belajar Cherenkov. Timer menggunakan status yan
 
 Obrolan belajar adalah mode AI pada tab Tanya. Fitur ini hanya tersedia saat kamu sudah masuk dan belum mematikannya. Neutrino menggunakan Gemini API dari Google untuk menjawab pertanyaan singkat tentang belajar. Fitur ini cocok untuk penjelasan, contoh, memeriksa penalaran, dan petunjuk. Jangan kirim kata sandi, informasi pribadi, atau hal yang tidak ingin kamu bagikan dengan layanan AI.
 
-Cherenkov membatasi **10 permintaan obrolan per akun per hari UTC**. Permintaan ke penyedia yang gagal dan percobaan ulang tetap dihitung sebagai permintaan. Permintaan yang gagal di sisi penyedia dikembalikan. Permintaan dengan Gemini key milikmu (Pengaturan, lalu Neutrino) tidak dihitung, tetapi dibatasi **200 per hari UTC**. Pesan dibatasi hingga 1.200 karakter, hanya enam pesan percakapan terbaru yang dikirim, dan jawaban dibatasi hingga 1.500 token keluaran; jawaban yang mencapai batas menampilkan tombol Lanjutkan. Obrolan disimpan di akunmu (hingga 15 obrolan berisi 30 pesan) sampai kamu menghapusnya, satu per satu atau di bagian Data pada Pengaturan. Batas ini membantu menjaga penggunaan fitur tetap sesuai dengan kuota API bersama yang kecil; Google juga memiliki batas kuota model dan proyeknya sendiri.
+Cherenkov membatasi **10 permintaan obrolan per akun per hari UTC**. Permintaan yang gagal di sisi penyedia dikembalikan. Permintaan dengan Gemini key milikmu (Pengaturan, lalu Neutrino) tidak dihitung, tetapi dibatasi **200 per hari UTC**. Pesan dibatasi hingga 1.200 karakter, hanya enam pesan percakapan terbaru yang dikirim, dan jawaban dibatasi hingga 1.500 token keluaran; jawaban yang mencapai batas menampilkan tombol Lanjutkan. Obrolan disimpan di akunmu (hingga 15 obrolan berisi 30 pesan) sampai kamu menghapusnya, satu per satu atau di bagian Data pada Pengaturan. Batas ini membantu menjaga penggunaan fitur tetap sesuai dengan kuota API bersama yang kecil; Google juga memiliki batas kuota model dan proyeknya sendiri.
 
 Google menerapkan batas Gemini API berdasarkan proyek dan model. Respons `429` dapat berarti batas laju per menit atau kuota harian/proyek, dan kapasitas sebenarnya dapat berubah. Kode itu sendiri tidak menunjukkan bahwa Gemini sedang mati. Respons `503` menunjukkan layanan sementara tidak tersedia. Batas terbaru bergantung pada tingkat proyek Google dan model yang dipilih; baca [batas laju Gemini API](https://ai.google.dev/gemini-api/docs/rate-limits) dan [panduan error API](https://ai.google.dev/gemini-api/docs/api-errors) dari Google.
+
+## Menulis di obrolan: Markdown dan matematika
+
+Balasan, dan pesanmu sendiri, ditampilkan sebagai Markdown: daftar, **tebal**, `kode sebaris`, dan blok kode berpagar berfungsi. Matematika memakai tanda dolar, `$x^2$` sebaris dan `$$…$$` untuk rumus terpisah; bentuk `\( … \)` dan `\[ … \]` juga berfungsi. Tanda dolar yang jelas berupa harga, seperti pada "$5 dan $6", tetap menjadi teks. Demi keamanan, beberapa hal sengaja tidak ditampilkan: gambar tidak pernah dimuat (kamu melihat teks alternatifnya), HTML mentah ditampilkan sebagai teks biasa, dan tabel tidak diformat. Tautan dibatasi: hanya alamat berawalan `https://` dan tautan ke halaman Cherenkov sendiri yang bisa diklik; selainnya tampil sebagai teks biasa. Judul ditampilkan sebagai baris tebal, bukan judul halaman.
+
+## Obrolan tersimpan
+
+Obrolan disimpan di akunmu setelah balasan pertama Neutrino, jadi obrolan yang kamu tinggalkan sebelum itu tidak memakai slot. Kamu bisa menyimpan **15 obrolan**, masing-masing hingga **30 pesan**. Buka obrolan dari **Obrolan** di mode AI, mulai yang lain dengan **Obrolan baru**, dan hapus satu setelah konfirmasi. Saat membuka obrolan lama, Neutrino tetap hanya melihat enam pesan terakhir, dan sebuah garis di percakapan menandai di mana pandangannya dimulai. Pada 15 obrolan kamu harus menghapus satu untuk memulai yang baru, dan obrolan yang penuh meminta kamu memulai yang baru; keduanya tidak memakai permintaan harian. Di bagian **Data** pada Pengaturan kamu bisa melihat jumlah obrolan dan pesan tersimpan serta perkiraan ukurannya, dan menghapus semuanya sekaligus. Menghapus akunmu menghapus obrolanmu.
 
 ## Error dan tindakan
 

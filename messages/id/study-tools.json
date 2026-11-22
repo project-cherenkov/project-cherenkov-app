@@ -8,7 +8,6 @@
     "help": "Bantuan"
   },
   "progress": {
-    "eyebrow": "progress.md",
     "title": "Progresmu",
     "intro": "Apa yang benar-benar sudah kamu lakukan: waktu belajar, hasil kuis, dan topik yang kamu tandai sudah paham.",
     "privacyNote": "Hanya kamu yang bisa melihat halaman ini.",
@@ -61,7 +60,6 @@
     }
   },
   "review": {
-    "eyebrow": "review.md",
     "title": "Soal yang salah",
     "intro": "Semua soal kuis yang kamu jawab salah, supaya bisa dicoba lagi.",
     "practiceNote": "Mencoba ulang hanyalah latihan: bisa menyelesaikan satu soal yang salah, tetapi tidak mengubah rencana atau estimasi penguasaanmu.",
@@ -103,7 +101,6 @@
     }
   },
   "timer": {
-    "eyebrow": "timer.md",
     "title": "Timer belajar",
     "intro": "Belajar dalam blok fokus dengan istirahat singkat. Hanya waktu fokus yang dihitung sebagai waktu belajar.",
     "presetsLabel": "Panjang blok",

@@ -22,6 +22,10 @@ Our tagline, "From Curiosity to Vision", is the promise to the reader, in plain 
 
 Our motto, "Cognitio · Humanitas · Exploratio", is the credo, in Latin: it says what we believe and what we are made of. Cognitio is inquiry, the curiosity end. Humanitas is the learner in the middle, the reason any of it matters. Exploratio is the exploratory process: examining, testing and developing an understanding of ideas. Visualization is one of its defining instruments, not its final goal. The motto stays in Latin in both interface languages.
 
+## The file names above headings
+
+Many pages carry a small file name above their title: `readme.md` on the home page, `editorials.log` above the editorials, `docs.zip` above the documentation. They are a nod to how developers label things, and each one is chosen for what the file type actually means: a `.log` is a dated record that grows over time, a `.zip` bundles several files, a `.md` is a written document. They are labels, not links, and screen readers skip them.
+
 ## The colours
 
 Blue and white are literal to the phenomenon we are named after: the pale blue-white glow of Cherenkov radiation. Pink is our secondary trait: approachable and a little playful, so the project reads as inviting rather than intimidating. It softens the rigour without diluting it.

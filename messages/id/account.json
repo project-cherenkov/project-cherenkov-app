@@ -1,6 +1,5 @@
 {
   "account": {
-    "eyebrow": "account.md",
     "title": "Akun kamu",
     "username": "Nama pengguna",
     "email": "Email",
@@ -66,6 +65,38 @@
       "heading": "Akun kamu telah dihapus",
       "body": "Akun kamu beserta data belajar yang tersimpan telah dihapus. Terima kasih telah menggunakan Project Cherenkov.",
       "home": "Kembali ke beranda"
+    },
+    "calendar": {
+      "title": "Kalender",
+      "langLegend": "Bahasa entri kalender",
+      "langHelp": "Judul entri memakai bahasa ini dan bahasa lainnya ada di deskripsi. Isinya hanya jenis sesi dan topik.",
+      "lang": {
+        "en": "English",
+        "id": "Bahasa Indonesia"
+      },
+      "fileTitle": "Berkas sekali pakai",
+      "fileHelp": "Unduh berkas .ics lalu impor ke kalendermu. Ini hanya salinan sesaat: tidak diperbarui, dan mengimpornya lagi bisa menggandakan acara.",
+      "fileButton": "Unduh .ics",
+      "feedTitle": "Tautan langganan",
+      "feedHelp": "Tautan pribadi yang dilanggan aplikasi kalendermu, sehingga rencanamu selalu terbaru.",
+      "feedDelay": "Aplikasi kalendermu yang menentukan seberapa sering memperbarui, dan ini bisa memakan waktu berjam-jam.",
+      "feedSecret": "Tautan ini rahasia: siapa pun yang memilikinya bisa membaca judul di rencanamu. Buat ulang jika sudah kamu bagikan.",
+      "create": "Buat tautan",
+      "regenerate": "Buat ulang tautan",
+      "regenerateHelp": "Membuat ulang menghasilkan tautan baru dan menghentikan tautan lama.",
+      "turnOff": "Matikan",
+      "turnOffConfirm": "Matikan tautan? Kalender yang memakainya berhenti diperbarui.",
+      "turnOffYes": "Matikan",
+      "cancel": "Batal",
+      "feedActive": "Ada tautan aktif. Demi keamanan, tautan tidak dapat ditampilkan lagi; buat ulang untuk mendapat yang baru.",
+      "linkOnce": "Salin tautanmu sekarang. Tautan hanya ditampilkan sekali.",
+      "linkHttps": "Tautan (https)",
+      "linkWebcal": "Tautan (webcal, terbuka di sebagian besar aplikasi kalender)",
+      "copy": "Salin",
+      "copied": "Tersalin.",
+      "copyFailed": "Tidak dapat menyalin. Pilih tautan lalu salin secara manual.",
+      "error": "Terjadi masalah. Coba lagi.",
+      "addToCalendar": "Tambahkan ke kalender"
     }
   }
 }

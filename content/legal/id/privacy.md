@@ -1,6 +1,6 @@
 # Kebijakan Privasi
 
-Terakhir diperbarui: 14 November 2026. Kebijakan ini menjelaskan apa yang dilakukan Project Cherenkov ("kami") terhadap data pribadi. Dokumen ini disusun oleh tim proyek, bukan nasihat hukum, dan perlu ditinjau oleh ahli hukum sebelum peluncuran. Jika versi Indonesia dan Inggris berbeda, mohon beri tahu kami.
+Terakhir diperbarui: 22 November 2026. Kebijakan ini menjelaskan apa yang dilakukan Project Cherenkov ("kami") terhadap data pribadi. Dokumen ini disusun oleh tim proyek, bukan nasihat hukum, dan perlu ditinjau oleh ahli hukum sebelum peluncuran. Jika versi Indonesia dan Inggris berbeda, mohon beri tahu kami.
 
 ## 1. Siapa yang bertanggung jawab
 
@@ -16,7 +16,11 @@ Kami menggunakan alamat email akun Anda untuk mengirim email tentang akun Anda: 
 
 ## 3. Pendamping obrolan Neutrino (AI pihak ketiga)
 
-Jika Anda memakai obrolan Neutrino, pesan yang Anda ketik dan konteks yang diperlukan untuk menjawabnya dikirim ke Gemini API milik Google untuk menghasilkan balasan. Google memproses data ini berdasarkan ketentuan dan kebijakan privasinya sendiri dan dapat menyimpannya untuk jangka waktu tertentu. Jangan memasukkan data pribadi, kata sandi, atau apa pun yang tidak ingin Anda perlihatkan kepada layanan pihak ketiga. Jika Anda memakai kunci API Google sendiri, permintaan dibuat dengan kunci itu berdasarkan perjanjian Anda sendiri dengan Google. Kami tidak memakai pesan obrolan untuk iklan.
+Jika Anda memakai obrolan Neutrino, pesan yang Anda ketik dan konteks yang diperlukan untuk menjawabnya dikirim ke Gemini API milik Google untuk menghasilkan balasan. Google memproses data ini berdasarkan ketentuan dan kebijakan privasinya sendiri dan dapat menyimpannya untuk jangka waktu tertentu. Jangan memasukkan data pribadi, kata sandi, atau apa pun yang tidak ingin Anda perlihatkan kepada layanan pihak ketiga. Google tetap memproses pesan Anda seperti dijelaskan di atas. Obrolan Anda juga disimpan di akun agar bisa dibuka lagi: hingga 15 obrolan berisi 30 pesan, disimpan sampai Anda menghapusnya satu per satu atau sekaligus (Pengaturan, Data), atau menghapus akun. Jika Anda memakai kunci API Google sendiri, permintaan dibuat dengan kunci itu berdasarkan perjanjian Anda sendiri dengan Google; kami memakainya untuk permintaan itu dan tidak menyimpannya (kunci hanya ada di session storage tab peramban Anda), dan obrolan itu disimpan seperti obrolan lain. Kami tidak memakai pesan obrolan untuk iklan.
+
+### Tautan kalender (perencana)
+
+Jika Anda mengaktifkan umpan kalender perencana, kami membuat tautan rahasia. Kami hanya menyimpan hash-nya, bukan tautannya, dan menampilkannya kepada Anda satu kali. Siapa pun yang memiliki tautan itu dapat membaca judul di rencana Anda (jenis sesi dan topik, serta tanggal ujian Anda) tanpa masuk, jadi jagalah kerahasiaannya; Anda dapat membuatnya ulang, yang menghentikan tautan lama, atau mematikannya kapan saja. Log akses penyedia hosting kami dapat mencatat tautan itu karena merupakan bagian dari alamat web, dan kami sendiri tidak mencatatnya. Berkas kalender sekali pakai berisi judul yang sama dan dibuat hanya saat Anda memintanya.
 
 ## 4. Dasar pemrosesan
 

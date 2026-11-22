@@ -8,7 +8,6 @@
     "help": "Help"
   },
   "progress": {
-    "eyebrow": "progress.md",
     "title": "Your progress",
     "intro": "What you have actually done: study time, quiz results and the topics you marked as understood.",
     "privacyNote": "Only you can see this page.",
@@ -61,7 +60,6 @@
     }
   },
   "review": {
-    "eyebrow": "review.md",
     "title": "Missed questions",
     "intro": "Every quiz question you got wrong, so you can try it again.",
     "practiceNote": "Retrying is practice: it can resolve a miss, but it does not change your plan or your mastery estimate.",
@@ -103,7 +101,6 @@
     }
   },
   "timer": {
-    "eyebrow": "timer.md",
     "title": "Study timer",
     "intro": "Work in focus blocks with short breaks. Only focus time counts as study time.",
     "presetsLabel": "Block length",

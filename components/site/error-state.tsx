@@ -115,14 +115,14 @@ export function ErrorState({
       </div>
 
       <div className="cx-panel">
-        {eyebrow && <p className="label-code mb-2">{eyebrow}</p>}
+        {eyebrow && <p className="label-pixel mb-2" aria-hidden="true">{eyebrow}</p>}
         {code && (
           <p className="cx-code font-heading" data-text={code} aria-hidden="true">
             {code}
           </p>
         )}
         {illustration && <div className="mb-4">{illustration}</div>}
-        <h1 id={titleId} className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        <h1 id={titleId} className="font-pixel text-2xl font-bold text-foreground sm:text-3xl">
           {heading}
         </h1>
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">{body}</p>

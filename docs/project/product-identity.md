@@ -61,7 +61,7 @@ The syllabus pages draw on national and international sources (OSN, plus IPhO, I
 
 ## Voice
 
-The voice borrows from file labels (`readme.md`, `about.md`, `requirements.txt`): plain, precise, no hype. State what a thing is and what it does. Do not use superlatives or promotional phrasing. The code-label eyebrows on the site are part of this voice; see the note about using them as the only heading style in [the design review](../reviews/design-review-2026-10.md).
+The voice borrows from file labels (`readme.md`, `about.md`, `requirements.txt`): plain, precise, no hype. State what a thing is and what it does. Do not use superlatives or promotional phrasing. The file-name eyebrows on the site are part of this voice: each must mean what its file type means, and the registry and rule are in [eyebrows](../design/eyebrows.md). See also the note about using them as the only heading style in [the design review](../reviews/design-review-2026-10.md).
 
 ## Where each element appears
 

@@ -36,8 +36,8 @@ export default async function AboutPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
-      <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
+      <p className="label-pixel" aria-hidden="true">{t("eyebrow")}</p>
+      <h1 className="font-pixel mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
 
       <div className="mt-6 space-y-4 text-foreground/80">
         {t("intro")

@@ -101,6 +101,8 @@ const config: Config = {
           "Arial",
           "sans-serif",
         ],
+        // Short, large text only. Never paragraphs (docs/design/visual-identity.md).
+        pixel: ["var(--font-pixel)", "var(--font-heading)", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
         heading: [
           "var(--font-heading)",
           "var(--font-body)",

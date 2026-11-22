@@ -177,7 +177,7 @@ export default async function EditorialPage({
           metadata above the title, so the first screen was mostly filing
           information. Order now: title, dek, the mistake this fixes, one meta
           row. */}
-      <h1 className="mt-4 text-3xl font-bold text-foreground">{text.title}</h1>
+      <h1 className="font-pixel mt-4 text-3xl font-bold text-foreground">{text.title}</h1>
       <p className="mt-2 text-lg text-foreground/75">{text.hook}</p>
 
       {/* "Filed by the mistake it corrects": the site's differentiator, so it

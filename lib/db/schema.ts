@@ -618,3 +618,22 @@ export const understoodMarks = pgTable(
     check("understood_marks_kind_check", sql`${table.kind} in ('material', 'editorial')`),
   ],
 );
+
+// A student's personal calendar feed (WP6). One per user. Only the SHA-256 hash
+// of the secret link token is stored, never the token, so a database read
+// cannot reveal a usable link. Regenerating replaces the hash; turning it off
+// deletes the row. Cascades from the user.
+export const calendarFeeds = pgTable(
+  "calendar_feeds",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => user.id, { onDelete: "cascade" }),
+    tokenHash: text("token_hash").notNull().unique(),
+    // Language of the event titles; the other language goes in the description.
+    lang: text("lang").notNull().default("en"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    lastFetchedAt: timestamp("last_fetched_at"),
+  },
+  (table) => [check("calendar_feeds_lang_check", sql`${table.lang} IN ('en', 'id')`)],
+);

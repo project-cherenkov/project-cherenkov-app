@@ -25,7 +25,7 @@ export default async function Page() {
   const t = await getTranslations("account.accountDeleted");
   return (
     <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
-      <h1 className="mb-3 text-2xl font-semibold text-foreground">{t("heading")}</h1>
+      <h1 className="font-pixel mb-3 text-2xl font-semibold text-foreground">{t("heading")}</h1>
       <p role="status" className="text-sm text-foreground/75">
         {t("body")}
       </p>

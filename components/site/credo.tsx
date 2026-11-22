@@ -19,7 +19,7 @@ export function Credo({ className }: { className?: string }) {
   return (
     <p
       lang="la"
-      className={["font-mono text-sm font-semibold tracking-wide", className].filter(Boolean).join(" ")}
+      className={["font-pixel text-base font-semibold tracking-wide", className].filter(Boolean).join(" ")}
     >
       <span className="text-cherenkov-blue-800 dark:text-cherenkov-blue-300">Cognitio</span>
       <span aria-hidden="true" className="text-muted-foreground">

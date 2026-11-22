@@ -1,6 +1,6 @@
 # Terms of Use
 
-Last updated: 31 October 2026. These terms cover Project Cherenkov, a student-run educational project. They are not legal advice and should be reviewed by a qualified lawyer before launch. An Indonesian version is at `/id/terms`.
+Last updated: 22 November 2026. These terms cover Project Cherenkov, a student-run educational project. They are not legal advice and should be reviewed by a qualified lawyer before launch. An Indonesian version is at `/id/terms`.
 
 ## 1. Scope
 
@@ -22,7 +22,7 @@ The source code is released under the licence in the LICENSE file. Unless a page
 
 ## 5. AI features
 
-The Neutrino chat uses a third-party AI model, so its answers can be wrong. Check anything important against the editorials and your teachers. Do not rely on it for exam decisions. See the Privacy Policy for how chat data is handled.
+The Neutrino chat uses a third-party AI model, so its answers can be wrong. Check anything important against the editorials and your teachers. Do not rely on it for exam decisions. Your chats are saved in your account until you delete them, and you are responsible for keeping any calendar link you create private. See the Privacy Policy for how chat and calendar data are handled.
 
 ## 6. Accuracy
 

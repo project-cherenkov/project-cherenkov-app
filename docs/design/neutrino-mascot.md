@@ -23,6 +23,7 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 | `rotation` | `auto`, `3d`, `flat` | `companion_settings.rotation` | `localStorage` (`neutrino-prefs-v1`) |
 | `driftSpeed` | 50–150%, 10% steps | `localStorage` (`neutrino-prefs-v1`) | `localStorage` (`neutrino-prefs-v1`) |
 | `ambientMotion` | boolean | `localStorage` (`neutrino-prefs-v1`) | `localStorage` (`neutrino-prefs-v1`) |
+| `style` | `pixel` (default), `smooth` (the original look) | `companion_settings.style` (migration `0011`) | `localStorage` (`neutrino-prefs-v1`) |
 | `aiEnabled` | boolean | `companion_settings.ai_enabled` (migration `0005_neutrino_ai_toggle`) | `localStorage` (`neutrino-prefs-v1`) |
 
 `aiEnabled` switches off only the AI chat. The chat route also refuses (`403 ai_disabled`) for an account whose row says it is off, before the daily budget is touched, so a stale tab or hand-made request cannot bypass it.
@@ -30,6 +31,23 @@ The study companion's mascot ("the algorithmic manifold", M-01) is a draggable, 
 `PATCH /api/companion/settings` takes a partial body and rejects the whole request if any field is invalid. Migration `0004_neutrino_mascot_settings` adds the columns with defaults (existing rows become enabled / medium / auto) and CHECK constraints that must stay in sync with `lib/companion-settings.ts`.
 
 All surfaces stay in sync through one window event (`neutrino-prefs-changed`) wired in `use-companion-prefs.ts`; there is no shared provider.
+
+## Pixel style
+Applies only to Neutrino and only when `style` is `pixel`; `smooth` adds none of it, so it renders as before (a test asserts that). The panel root carries `nt-pixel`; CSS lives at the end of `app/globals.css` under `.nt-pixel` and uses one base unit (`--px: 2px`) and existing colour tokens only. Corners are notched with edge-only box-shadows (not clip-path), so focus rings and text are never clipped.
+- **Header:** the name and a `role="status"` readout (`mode: FAQ · sends nothing` / `mode: AI · text leaves your device`). The amber AI notice stays.
+- **Tabs and mode buttons:** stepped frames, active one inverted. **Bubbles:** notched frames; the text stays in the body face.
+- **Open:** a three-step unfold of about 180 ms (`steps(3)`); none under reduced motion.
+- **Trace:** `CompanionTrail` draws square cells on a 2px grid that fade in three steps over the 1,500 ms lifetime.
+- **Glyphs** (`neutrino-glyph.tsx`, drawn from SVG rectangles, `aria-hidden`), on the corner opposite the hide button: `?` while the AI chat is open and idle, three animated dots while a request is pending, `!` on an error or limit. Static under reduced motion. No new mood was added.
+- **Font:** the pixel face for chrome and labels only (`.nt-font`); see `visual-identity.md`.
+- Not built: a pixel mascot renderer, a "flash" mood, and the optional timer cell ring.
+
+## Chat engine and history
+- Replies are rendered as Markdown with LaTeX (`neutrino-markdown.tsx`, loaded lazily with `katex.css`) for both roles: no raw HTML, no images, https and known internal links only, no tables. `lib/companion-markdown.ts` holds the rules.
+- Reply ceiling `COMPANION_MAX_OUTPUT_TOKENS` (1,500): a ceiling, not a target. A cut-off reply shows a notice and a Continue button.
+- The system prompt is `lib/companion-prompt.ts` (versioned). Page context is resolved on the server from published content; the browser only names the page.
+- Chats persist in `companion_chats` and `companion_chat_messages` (15 chats, 30 messages each, checked on the server before the daily counter). A chat is created only with its first successful reply. The thread shows a divider where Neutrino's 6-message view begins, and meters (cells in pixel, a bar in smooth) show usage.
+- A personal Gemini key lives in `sessionStorage` only (`use-own-key.ts`), is sent with each request, is not counted in the 10-a-day limit and has its own ceiling of 200 a day.
 
 ## Rotation modes
 - **3d:** `manifold-mascot.tsx` runs a `requestAnimationFrame` loop that rotates the 12 icosahedron vertices (`lib/manifold-geometry.ts`), projects them with mild perspective and writes SVG attributes directly (no React re-render per frame). Back edges and nodes are dimmer and thinner (depth cueing).
@@ -72,4 +90,4 @@ Constraints for when it is built: the flash must be a single soft brightening, n
 - Name and "show the companion" for signed-out visitors (they are account features).
 
 ## Files
-`lib/companion-settings.ts` (types, validation) · `lib/companion-position.ts` (drag, panel placement and resize geometry) · `lib/neutrino-faq.ts` (FAQ structure, search) · `components/study/neutrino-faq.tsx` · `lib/manifold-geometry.ts` (3D maths, motion, frame monitor) · `components/study/manifold-mascot.tsx` · `components/study/neutrino-launcher.tsx` · `components/study/companion-preferences.tsx` · `components/study/use-companion-prefs.ts` · `app/api/companion/settings/route.ts` · mascot CSS at the end of `app/globals.css`.
+`lib/companion-settings.ts` (types, validation) · `lib/companion-position.ts` (drag, panel placement and resize geometry) · `lib/neutrino-faq.ts` (FAQ structure, search) · `components/study/neutrino-faq.tsx` · `lib/manifold-geometry.ts` (3D maths, motion, frame monitor) · `components/study/manifold-mascot.tsx` · `components/study/neutrino-launcher.tsx` · `components/study/companion-preferences.tsx` · `components/study/neutrino-markdown.tsx` · `components/study/neutrino-chat-list.tsx` · `components/study/neutrino-glyph.tsx` · `components/study/companion-data.tsx` · `lib/companion-prompt.ts` · `lib/companion-chat-history.ts` · `components/study/use-companion-prefs.ts` · `app/api/companion/settings/route.ts` · mascot CSS at the end of `app/globals.css`.

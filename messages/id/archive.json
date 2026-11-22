@@ -1,6 +1,6 @@
 {
   "archive": {
-    "eyebrow": "archive.log",
+    "eyebrow": "editorials.log",
     "title": "Editorial",
     "description": "Diindeks berdasarkan prinsip dan jenis kesalahan, bukan berdasarkan bab.",
     "filters": {
@@ -60,7 +60,7 @@
   "materials": {
     "draftBadge": "Draf",
     "draftNotice": "Hanya editor yang dapat melihat materi ini. Pengunjung akan melihat halaman 404.",
-    "eyebrow": "materials.md",
+    "eyebrow": "reference.md",
     "title": "Materi",
     "description": "Silabus yang diuraikan topik demi topik. Catatan rujukan tanpa nama penulis, disusun mengikuti silabus.",
     "coverage": "{covered} dari {total} topik tersedia",

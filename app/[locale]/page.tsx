@@ -52,9 +52,11 @@ export default async function HomePage({
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
           <div className="grid gap-y-8 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-8 lg:items-start">
             <div className="lg:col-start-1 lg:row-start-1">
-              <p className="label-code text-cherenkov-blue-800 dark:text-cherenkov-blue-300" aria-hidden="true">{t("eyebrow")}</p>
+              <p className="label-pixel text-cherenkov-blue-800 dark:text-cherenkov-blue-300" aria-hidden="true">{t("eyebrow")}</p>
               {/* The tagline is English in both languages by decision (see
                   docs/project/product-identity.md), so it is marked as such. */}
+              {/* O1 (open): the hero line keeps the heading face. To make it
+                  pixel, add `font-pixel` to this one element. */}
               <h1 lang="en" className="mt-3 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                 {t("heroTitle")}
               </h1>

@@ -3,7 +3,7 @@ title: "Neutrino study companion"
 description: "Open the study companion, find answers in its FAQ, use the study timer, and chat with the optional AI about informatics, physics or astronomy."
 section: reading
 order: 35
-updatedAt: "2026-11-02"
+updatedAt: "2026-11-22"
 ---
 
 Neutrino is a study companion available in two ways: click its glowing mascot (bottom-right by default) to open it in place, then choose **Float** inside the companion to open a separate window above your other windows. The floating window uses Chrome's Document Picture-in-Picture feature, so use a recent desktop version of Chrome and keep the Cherenkov tab open. The in-page companion works without Picture-in-Picture support.
@@ -27,13 +27,15 @@ If AI chat is switched off in Settings, the Ask tab shows only the FAQ.
 
 ## Settings
 
-Open the companion and choose **Settings**, or go to **Account → Study companion**. Both places change the same settings.
+Open the companion and choose **Settings**, or go to **Account → Neutrino**. Settings is grouped into three sections: **Account** (sign-in details and, under Calendar, your plan export), **Neutrino** and **Data**. Both places change the same Neutrino settings.
 
 | Setting | What it does | Saved |
 | --- | --- | --- |
 | Name | The name shown on the companion. | Your account (signed in) |
 | Show the companion | Turn the mascot off on every page. Turn it back on here or under Account. | Your account (signed in) |
 | Use AI chat | Turn off only the AI. The AI chat button disappears, the server refuses chat requests for your account, and the mascot, FAQ and timer carry on. | Your account if signed in, otherwise this device |
+| Style | **Pixel** (the default) gives the panel, tabs, status line, message frames, meters and trace particles a pixel look, like a small detector readout. **Smooth** is Neutrino's original, softer look. The mascot itself does not change. | Your account if signed in, otherwise this device |
+| Use my own Gemini key | See below. | This browser tab only |
 | Size | Small, medium or large. | Your account if signed in, otherwise this device |
 | Rotation style | **Automatic** uses smooth 3D turning and switches to simple turning if your device struggles. **3D** always uses 3D turning. **Simple** uses flat turning that needs less power. | Your account if signed in, otherwise this device |
 
@@ -55,9 +57,17 @@ The companion includes Cherenkov's study timer. It uses the same timer state as 
 
 Study chat is the AI mode of the Ask tab. It is available only when you are signed in and have not switched it off. Neutrino uses Google's Gemini API to answer short questions about learning. It is meant for explanations, examples, checking your reasoning and hints. Avoid sending passwords, private information or anything you do not want sent to an AI service.
 
-Cherenkov applies a limit of **10 chat requests per account per UTC day**. A failed provider request and a retry each count as a request. A request that fails on the provider's side is given back. Requests made with your own Gemini key (Settings, then Neutrino) do not count towards it, but are capped at **200 per UTC day**. Messages are limited to 1,200 characters, only the latest six conversation messages are sent, and replies are capped at 1,500 generated tokens; a reply that hits the cap shows a Continue button. Chats are saved to your account (up to 15 chats of 30 messages each) until you delete them, one by one or under Data in Settings. These caps help keep the feature suitable for a small shared API allowance; Google's own model and project quotas still apply separately.
+Cherenkov applies a limit of **10 chat requests per account per UTC day**. A request that fails on the provider's side is given back. Requests made with your own Gemini key (Settings, then Neutrino) do not count towards it, but are capped at **200 per UTC day**. Messages are limited to 1,200 characters, only the latest six conversation messages are sent, and replies are capped at 1,500 generated tokens; a reply that hits the cap shows a Continue button. Chats are saved to your account (up to 15 chats of 30 messages each) until you delete them, one by one or under Data in Settings. These caps help keep the feature suitable for a small shared API allowance; Google's own model and project quotas still apply separately.
 
 Google applies Gemini API limits by project and model. A `429` can mean a per-minute rate limit or a daily/project quota, and actual available capacity may vary. It does not by itself show that Gemini is down. A `503` indicates temporary service unavailability. Current limits depend on Google's project tier and the selected model; see Google's [Gemini API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) and [API error guide](https://ai.google.dev/gemini-api/docs/api-errors).
+
+## Writing in chat: Markdown and maths
+
+Replies, and your own messages, are shown as Markdown: lists, **bold**, `inline code` and fenced code blocks work. Maths works with dollar signs, `$x^2$` inline and `$$…$$` for a displayed formula; the `\( … \)` and `\[ … \]` forms also work. A dollar sign that is clearly a price, as in "$5 and $6", stays as text. For safety, some things are deliberately not shown: images are never loaded (you see their alt text instead), raw HTML is shown as plain text, and tables are not formatted. Links are limited: only addresses starting with `https://` and links to Cherenkov's own pages are clickable; anything else appears as plain text. Headings are shown as bold lines, not as page headings.
+
+## Saved chats
+
+Chats are saved to your account after Neutrino's first reply, so a chat you abandon before that never takes a slot. You can keep **15 chats**, each up to **30 messages**. Open a chat from **Chats** in AI mode, start another with **New chat**, and delete one after confirming. When you open an old chat, Neutrino still only sees the latest six messages, and a line in the thread marks where its view begins. At 15 chats you must delete one to start a new one, and a full chat asks you to start a new one; neither uses up a daily request. Under **Data** in Settings you can see how many chats and messages are saved and their approximate size, and delete them all at once. Deleting your account deletes your chats.
 
 ## Errors and what to do
 

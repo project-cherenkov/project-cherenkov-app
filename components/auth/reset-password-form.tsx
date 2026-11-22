@@ -27,7 +27,7 @@ export function ResetPasswordForm() {
   if (!token || linkRejected) {
     return (
       <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
-        <h1 className="mb-3 text-2xl font-semibold text-foreground">{t("title")}</h1>
+        <h1 className="font-pixel mb-3 text-2xl font-semibold text-foreground">{t("title")}</h1>
         <p role="alert" className="text-sm text-danger">
           {t("invalidToken")}
         </p>
@@ -58,7 +58,7 @@ export function ResetPasswordForm() {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-12 sm:px-6">
-      <h1 className="mb-6 text-2xl font-semibold text-foreground">{t("title")}</h1>
+      <h1 className="font-pixel mb-6 text-2xl font-semibold text-foreground">{t("title")}</h1>
       {done ? (
         <>
           <p role="status" className="text-sm text-foreground/75">

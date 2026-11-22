@@ -15,6 +15,7 @@ import { DeleteAccount } from "@/components/account/delete-account";
 import { EmailVerification } from "@/components/account/email-verification";
 import { PasswordSettings } from "@/components/account/password-settings";
 import { CompanionPreferences } from "@/components/study/companion-preferences";
+import { CalendarExport } from "@/components/planner/calendar-export";
 import { CompanionData } from "@/components/study/companion-data";
 import { DEFAULT_COMPANION_PREFS, normalizeCompanionPrefs } from "@/lib/companion-settings";
 import { db } from "@/lib/db";
@@ -32,9 +33,10 @@ export async function generateMetadata({
 }
 
 export default async function AccountPage() {
-  const [t, tc, locale, current] = await Promise.all([
+  const [t, tc, tCal, locale, current] = await Promise.all([
     getTranslations("account"),
     getTranslations("companion"),
+    getTranslations("account.calendar"),
     getLocale(),
     getCurrentUser(),
   ]);
@@ -81,8 +83,7 @@ export default async function AccountPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-      <p className="label-code" aria-hidden="true">{t("eyebrow")}</p>
-      <h1 className="mt-2 text-3xl font-bold text-foreground">{t("title")}</h1>
+      <h1 className="font-pixel text-3xl font-bold text-foreground">{t("title")}</h1>
 
       <section className="mt-8" aria-labelledby="settings-account">
         <h2 id="settings-account" className="heading-section">{tc("sectionAccount")}</h2>
@@ -139,6 +140,11 @@ export default async function AccountPage() {
         ) : null}
         <SignOutButton />
       </div>
+
+        <h3 className="heading-section mt-10 text-lg">{tCal("title")}</h3>
+        <div className="mt-3">
+          <CalendarExport variant="settings" />
+        </div>
       </section>
 
       <section className="mt-12" aria-labelledby="settings-neutrino">

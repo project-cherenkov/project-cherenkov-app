@@ -70,6 +70,27 @@ function pointer(el: Element, type: string, x: number, y: number) {
   act(() => { el.dispatchEvent(new MouseEvent(type, { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0 })); });
 }
 
+describe("style", () => {
+  it("is pixel by default: scoped class, status readout, no original subtitle", async () => {
+    await openPanel();
+    const root = panel()!.querySelector(".nt-panel")!;
+    expect(root.classList.contains("nt-pixel")).toBe(true);
+    expect(root.getAttribute("data-style")).toBe("pixel");
+    expect(panel()!.querySelector('[role="status"]')!.textContent).toContain("mode: FAQ");
+    expect(panel()!.textContent).not.toContain("FAQ · pre-written answers");
+  });
+
+  it("smooth renders as it did before: no pixel class, original subtitle, no glyph", async () => {
+    window.localStorage.setItem("neutrino-prefs-v1", JSON.stringify({ style: "smooth" }));
+    await openPanel();
+    const root = panel()!.querySelector(".nt-panel")!;
+    expect(root.classList.contains("nt-pixel")).toBe(false);
+    expect(panel()!.closest("section")!.querySelector(".nt-shell, .nt-unfold")).toBeNull();
+    expect(panel()!.textContent).toContain("FAQ · pre-written answers");
+    expect(document.querySelector("[data-glyph]")).toBeNull();
+  });
+});
+
 describe("answer mode", () => {
   it("opens in the FAQ and says so", async () => {
     await openPanel();
@@ -78,7 +99,7 @@ describe("answer mode", () => {
     expect(faq.getAttribute("aria-pressed")).toBe("true");
     expect(ai.getAttribute("aria-pressed")).toBe("false");
     expect(panel()!.textContent).toContain("You are using the FAQ");
-    expect(panel()!.textContent).toContain("FAQ · pre-written answers");
+    expect(panel()!.textContent).toContain("mode: FAQ · sends nothing");
     expect(panel()!.querySelector("textarea")).toBeNull();
   });
 
@@ -96,7 +117,7 @@ describe("answer mode", () => {
     expect(panel()!.textContent).toContain("You are using AI chat");
     expect(panel()!.textContent).toContain("sent to Google");
     expect(panel()!.textContent).toContain("Sign in to use AI chat");
-    expect(panel()!.textContent).toContain("AI chat · generated replies");
+    expect(panel()!.textContent).toContain("mode: AI · text leaves your device");
     expect(JSON.parse(window.localStorage.getItem("neutrino-prefs-v1")!).aiAcknowledged).toBe(true);
     act(() => byText("FAQ")!.click());
     expect(panel()!.textContent).toContain("You are using the FAQ");

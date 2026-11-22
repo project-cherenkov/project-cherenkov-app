@@ -27,7 +27,9 @@ The mark in components/site/brand-mark.tsx depicts a particle moving to the righ
 
 Keep the current palette: deep ink blue for reading surfaces, Cherenkov cyan for the mark and active emphasis, and pink as a restrained secondary highlight. Colour decisions, roles and contrast rules live in [colour](colour.md). Keep contrast and existing theme tokens authoritative; the mark must not be the only signal for a control state.
 
-The site's type pairing already supports the identity. Use Space Grotesk for the short wordmark and headings, Inter for reading, and the existing monospace face only where the file-note or measurement voice carries meaning.
+The site's type pairing already supports the identity. Use Space Grotesk for the short wordmark and headings, Inter for reading, and the existing monospace face only where the measurement voice carries meaning (labels such as chips, counts and quantities).
+
+A fourth face, **Pixelify Sans** (`--font-pixel`, class `font-pixel`, `.label-pixel` for eyebrows), is a pixel display face for **short, large text only, never paragraphs**, at 14px or larger. It is allowed in exactly these places: the eyebrows (`.label-pixel`; `.label-code` is unchanged elsewhere), the home credo, the main `<h1>` of every page except the home page (the home hero line keeps the heading face; adding `font-pixel` to that one element switches it), and Neutrino's interface chrome (title, tabs, buttons, status line, meters, settings labels, timer digits) in its pixel style. Message bodies, FAQ answers, Markdown, LaTeX and code always stay in the body face. The mono rule above is narrowed accordingly: eyebrows are no longer mono.
 
 ## Reference image
 
