@@ -1,0 +1,16 @@
+questionId: physics.dynamics.basic.1
+topic: dynamics
+difficulty: basic
+status: draft
+archived: false
+prompt: "A net force of 10 N acts on a 2 kg mass. What is its acceleration?"
+choices:
+  - text: "0.2 m/s²"
+    correct: false
+  - text: "12 m/s²"
+    correct: false
+  - text: "20 m/s²"
+    correct: false
+  - text: "5 m/s²"
+    correct: true
+explanation: "a = F/m = 10/2 = 5 m/s²."

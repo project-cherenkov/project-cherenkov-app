@@ -1,0 +1,16 @@
+questionId: physics.dynamics.advanced.1
+topic: dynamics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A 2 kg block on a frictionless 30° incline is pushed by a horizontal force F so that it moves up the incline at constant velocity. What is F?"
+choices:
+  - text: "10 N"
+    correct: false
+  - text: "11.5 N"
+    correct: true
+  - text: "17.3 N"
+    correct: false
+  - text: "20 N"
+    correct: false
+explanation: "Along the incline: F cos 30° = mg sin 30°, so F = mg tan 30° ≈ 11.5 N. (17.3 N is mg cos 30°, the normal component.)"

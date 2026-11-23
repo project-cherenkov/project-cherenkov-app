@@ -1,0 +1,16 @@
+questionId: physics.fluids.advanced.1
+topic: fluids
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A wooden block of volume 1000 cm³ and density 600 kg/m³ is held fully under water by a string tied to the bottom. What is the tension in the string? (ρ_water = 1000 kg/m³, g = 10 m/s²)"
+choices:
+  - text: "4 N"
+    correct: true
+  - text: "6 N"
+    correct: false
+  - text: "10 N"
+    correct: false
+  - text: "16 N"
+    correct: false
+explanation: "Buoyant force = 1000 · 10⁻³ · 10 = 10 N, weight = 600 · 10⁻³ · 10 = 6 N, so T = 10 − 6 = 4 N."

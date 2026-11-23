@@ -1,0 +1,16 @@
+questionId: physics.electrostatics.advanced.1
+topic: electrostatics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A uniformly charged non-conducting solid sphere of radius R has a field of magnitude E_s at its surface. What is the field magnitude at a distance R/2 from the centre?"
+choices:
+  - text: "E_s/4"
+    correct: false
+  - text: "E_s/2"
+    correct: true
+  - text: "E_s"
+    correct: false
+  - text: "2E_s"
+    correct: false
+explanation: "By Gauss's law the enclosed charge scales as r³ while the area scales as r², so E ∝ r inside the sphere: at R/2 the field is E_s/2."

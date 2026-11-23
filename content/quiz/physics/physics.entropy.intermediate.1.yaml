@@ -1,0 +1,16 @@
+questionId: physics.entropy.intermediate.1
+topic: entropy
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A system at a constant 300 K reversibly absorbs 600 J of heat. What is its entropy change?"
+choices:
+  - text: "0.5 J/K"
+    correct: false
+  - text: "180 000 J/K"
+    correct: false
+  - text: "300 J/K"
+    correct: false
+  - text: "2 J/K"
+    correct: true
+explanation: "ΔS = Q_rev/T = 600/300 = 2 J/K."

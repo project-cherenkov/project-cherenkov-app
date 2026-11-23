@@ -1,0 +1,16 @@
+questionId: physics.heat-temperature.advanced.1
+topic: heat-temperature
+difficulty: advanced
+status: draft
+archived: false
+prompt: "100 g of ice at 0 °C is dropped into 400 g of water at 50 °C in an insulated container (c_water = 4.2 J/(g·°C), L_fusion = 334 J/g). What is the final temperature?"
+choices:
+  - text: "≈ 20 °C"
+    correct: false
+  - text: "≈ 24 °C"
+    correct: true
+  - text: "≈ 30 °C"
+    correct: false
+  - text: "≈ 40 °C"
+    correct: false
+explanation: "Cooling the water to 0 °C releases 84 000 J, melting the ice takes 33 400 J, and the remaining 50 600 J warms 500 g by 50 600/(500 · 4.2) ≈ 24 °C. Ignoring the latent heat gives the wrong 40 °C."

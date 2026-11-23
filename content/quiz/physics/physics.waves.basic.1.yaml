@@ -1,0 +1,16 @@
+questionId: physics.waves.basic.1
+topic: waves
+difficulty: basic
+status: draft
+archived: false
+prompt: "A wave has frequency 50 Hz and wavelength 2 m. What is its speed?"
+choices:
+  - text: "25 m/s"
+    correct: false
+  - text: "52 m/s"
+    correct: false
+  - text: "0.04 m/s"
+    correct: false
+  - text: "100 m/s"
+    correct: true
+explanation: "v = fλ = 50 · 2 = 100 m/s."

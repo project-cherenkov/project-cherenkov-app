@@ -1,0 +1,16 @@
+questionId: physics.laws-of-thermodynamics.advanced.1
+topic: laws-of-thermodynamics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A monatomic ideal gas is heated at constant pressure. What fraction of the heat absorbed is converted into work done by the gas?"
+choices:
+  - text: "3/5"
+    correct: false
+  - text: "2/5"
+    correct: true
+  - text: "1"
+    correct: false
+  - text: "2/3"
+    correct: false
+explanation: "W = nRΔT and Q = nC_pΔT = (5/2)nRΔT, so W/Q = 2/5."

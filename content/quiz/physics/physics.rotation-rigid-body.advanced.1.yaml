@@ -1,0 +1,16 @@
+questionId: physics.rotation-rigid-body.advanced.1
+topic: rotation-rigid-body
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A solid disc (I = ½MR²) rolls without slipping from rest down an incline, dropping a height h. What is its speed at the bottom?"
+choices:
+  - text: "√(2gh)"
+    correct: false
+  - text: "√(3gh/2)"
+    correct: false
+  - text: "√(gh)"
+    correct: false
+  - text: "√(4gh/3)"
+    correct: true
+explanation: "mgh = ½mv² + ½(½mR²)(v/R)² = ¾mv², so v = √(4gh/3)."

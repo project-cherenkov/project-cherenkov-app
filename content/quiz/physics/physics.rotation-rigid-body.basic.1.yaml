@@ -1,0 +1,16 @@
+questionId: physics.rotation-rigid-body.basic.1
+topic: rotation-rigid-body
+difficulty: basic
+status: draft
+archived: false
+prompt: "A 20 N force is applied perpendicular to a wrench at 0.5 m from the bolt. What is the torque?"
+choices:
+  - text: "40 N·m"
+    correct: false
+  - text: "10 N·m"
+    correct: true
+  - text: "20 N·m"
+    correct: false
+  - text: "0.025 N·m"
+    correct: false
+explanation: "τ = rF = 0.5 · 20 = 10 N·m."

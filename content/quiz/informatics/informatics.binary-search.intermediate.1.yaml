@@ -1,0 +1,16 @@
+questionId: informatics.binary-search.intermediate.1
+topic: binary-search
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "What property must the predicate have for binary search on the answer to work correctly?"
+choices:
+  - text: "It must be monotonic — it flips from false to true (or vice versa) exactly once"
+    correct: true
+  - text: "The underlying array must be sorted numerically"
+    correct: false
+  - text: "The predicate must be strictly increasing in value, not just in truth"
+    correct: false
+  - text: "It must return true for every candidate answer"
+    correct: false
+explanation: "Binary search on the answer only needs the predicate to flip exactly once across the search space — sortedness of any underlying array is irrelevant."

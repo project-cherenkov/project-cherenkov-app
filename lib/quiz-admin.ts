@@ -1,63 +1,34 @@
-import {
-  QUESTION_DIFFICULTIES,
-  QUESTION_STATUSES,
-  type QuestionDifficulty,
-  type QuestionStatus,
-} from "@/lib/planner-vocab";
+import { isGitManagedKey } from "@/lib/quiz-bank/key";
 
-export interface QuizQuestionInput {
-  subject: "informatics" | "physics" | "astronomy";
-  topicId: string;
-  prompt: string;
-  choices: string[];
-  correctChoiceIndex: number;
-  explanation: string;
-  difficulty: QuestionDifficulty;
-}
+// What /keystatic/quiz-bank may still change. Question CONTENT (prompt,
+// choices, answer, explanation, topic, difficulty, review status) is edited in
+// Keystatic and synced from git, so the database copy is not editable here: an
+// edit would be overwritten by the next `pnpm db:seed:quiz` anyway. What stays
+// is the emergency switch: archive a bad question instantly (no deploy, no
+// sync) and restore it later. See lib/quiz-bank/sync.ts for why only this page
+// can restore.
 
-export interface QuizQuestionPatch extends QuizQuestionInput {
-  status: QuestionStatus;
+export interface QuizArchivePatch {
   archived: boolean;
 }
 
-export function parseQuizQuestionInput(value: unknown):
-  | { ok: true; value: QuizQuestionInput }
+export function parseQuizArchivePatch(value: unknown):
+  | { ok: true; value: QuizArchivePatch }
   | { ok: false; error: string } {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return { ok: false, error: "Question data must be an object." };
+    return { ok: false, error: "Request body must be an object." };
   }
   const row = value as Record<string, unknown>;
-  if (!["informatics", "physics", "astronomy"].includes(String(row.subject))) {
-    return { ok: false, error: "Choose a valid subject." };
+  if (typeof row.archived !== "boolean") {
+    return { ok: false, error: "Archive state must be specified." };
   }
-  if (typeof row.topicId !== "string" || !row.topicId) return { ok: false, error: "Choose a topic." };
-  if (typeof row.prompt !== "string" || !row.prompt.trim()) return { ok: false, error: "Prompt is required." };
-  if (row.prompt.length > 20000) return { ok: false, error: "Prompt must be 20,000 characters or fewer." };
-  if (!Array.isArray(row.choices) || row.choices.length < 2) return { ok: false, error: "Add at least two answer choices." };
-  if (row.choices.some((choice) => typeof choice !== "string" || !choice.trim())) {
-    return { ok: false, error: "Every answer choice must contain text." };
-  }
-  const choices = row.choices.map((choice) => (choice as string).trim());
-  if (new Set(choices).size !== choices.length) return { ok: false, error: "Answer choices must be unique." };
-  if (!Number.isInteger(row.correctChoiceIndex) || (row.correctChoiceIndex as number) < 0 || (row.correctChoiceIndex as number) >= choices.length) {
-    return { ok: false, error: "Select one of the answer choices as correct." };
-  }
-  if (typeof row.explanation !== "string" || !row.explanation.trim()) return { ok: false, error: "Explanation is required." };
-  if (!(QUESTION_DIFFICULTIES as readonly unknown[]).includes(row.difficulty)) return { ok: false, error: "Choose a valid difficulty." };
-  return { ok: true, value: {
-    subject: row.subject as QuizQuestionInput["subject"], topicId: row.topicId,
-    prompt: row.prompt.trim(), choices, correctChoiceIndex: row.correctChoiceIndex as number,
-    explanation: row.explanation.trim(), difficulty: row.difficulty as QuestionDifficulty,
-  } };
+  return { ok: true, value: { archived: row.archived } };
 }
 
-export function parseQuizQuestionPatch(value: unknown):
-  | { ok: true; value: QuizQuestionPatch }
-  | { ok: false; error: string } {
-  const parsed = parseQuizQuestionInput(value);
-  if (!parsed.ok) return parsed;
-  const row = value as Record<string, unknown>;
-  if (!(QUESTION_STATUSES as readonly unknown[]).includes(row.status)) return { ok: false, error: "Choose a valid review status." };
-  if (typeof row.archived !== "boolean") return { ok: false, error: "Archive state must be specified." };
-  return { ok: true, value: { ...parsed.value, status: row.status as QuestionStatus, archived: row.archived } };
+// Where a question's content lives. "git" questions are edited in Keystatic;
+// "database" ones (admin.* or no key) are not in git yet.
+export type QuizQuestionSource = "git" | "database";
+
+export function quizQuestionSource(key: string | null): QuizQuestionSource {
+  return isGitManagedKey(key) ? "git" : "database";
 }

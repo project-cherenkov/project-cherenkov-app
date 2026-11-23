@@ -1,0 +1,16 @@
+questionId: physics.circuits.advanced.1
+topic: circuits
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A 100 µF capacitor, initially uncharged, charges through a 10 kΩ resistor from a source of voltage V₀. What is the capacitor voltage after 1 s?"
+choices:
+  - text: "0.37 V₀"
+    correct: false
+  - text: "0.63 V₀"
+    correct: true
+  - text: "0.86 V₀"
+    correct: false
+  - text: "V₀"
+    correct: false
+explanation: "RC = 10 000 Ω · 100 × 10⁻⁶ F = 1 s, so V = V₀(1 − e⁻¹) ≈ 0.63 V₀."

@@ -1,0 +1,16 @@
+questionId: physics.fluids.intermediate.1
+topic: fluids
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Water flows steadily through a pipe whose diameter halves along its length. By what factor does the flow speed change?"
+choices:
+  - text: "×2"
+    correct: false
+  - text: "×1/2"
+    correct: false
+  - text: "×4"
+    correct: true
+  - text: "×1/4"
+    correct: false
+explanation: "Continuity: Av is constant and A ∝ d², so the speed increases by 4."

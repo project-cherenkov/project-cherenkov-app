@@ -1,0 +1,16 @@
+questionId: physics.gravitation.basic.1
+topic: gravitation
+difficulty: basic
+status: draft
+archived: false
+prompt: "At a height above Earth's surface equal to Earth's radius R (distance 2R from the centre), the gravitational acceleration is…"
+choices:
+  - text: "g/2"
+    correct: false
+  - text: "g/4"
+    correct: true
+  - text: "g"
+    correct: false
+  - text: "g/8"
+    correct: false
+explanation: "g ∝ 1/r², and the distance has doubled, so g/4."

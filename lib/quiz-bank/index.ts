@@ -1,18 +1,14 @@
 import type { Subject } from "../subjects";
 import { getPlannerSyllabi, getPlannerTopicIds } from "../syllabus";
 import { QUESTION_DIFFICULTIES, type QuestionDifficulty } from "../planner-vocab";
-import { astronomyQuestions } from "./astronomy";
-import { informaticsQuestions } from "./informatics";
-import { physicsQuestions } from "./physics";
+import { quizKeyPattern, quizKeyPrefix } from "./key";
 import type { BankQuestion } from "./types";
 
-export type { BankEntry, BankQuestion } from "./types";
+export type { BankQuestion } from "./types";
 
-export const QUIZ_BANK: BankQuestion[] = [
-  ...informaticsQuestions,
-  ...physicsQuestions,
-  ...astronomyQuestions,
-];
+// The bank itself lives in content/quiz/<subject>/*.yaml and is loaded by
+// ./load.ts (server/script side). This module stays free of file access so
+// client code and tests can import the validation and coverage helpers.
 
 // Everything that must hold for a question to be safe to seed. Returns the
 // problems found (empty = fine) instead of throwing, so a test and the seed
@@ -27,7 +23,10 @@ export function validateQuizBank(bank: BankQuestion[]): string[] {
     if (seenKeys.has(q.key)) problems.push(`${where}: duplicate key`);
     seenKeys.add(q.key);
 
-    const expectedKey = `${q.subject}.${q.topicId}.${q.difficulty}.`;
+    if (!quizKeyPattern(q.subject).test(q.key)) {
+      problems.push(`${where}: key is not of the form <subject>.<topic>.<difficulty>.<number>`);
+    }
+    const expectedKey = quizKeyPrefix(q.subject, q.topicId, q.difficulty);
     if (!q.key.startsWith(expectedKey)) {
       problems.push(`${where}: key does not match its subject/topic/difficulty (expected prefix "${expectedKey}")`);
     }
@@ -65,13 +64,15 @@ export interface TopicCoverage {
 // How many questions each syllabus topic has per difficulty. A topic with no
 // questions at all is still listed (all zeros) — "no questions" must be
 // visible, not absent.
-export function getBankCoverage(bank: BankQuestion[] = QUIZ_BANK): TopicCoverage[] {
+// Archived questions are not served, so they do not count.
+export function getBankCoverage(bank: BankQuestion[]): TopicCoverage[] {
   const rows: TopicCoverage[] = [];
   for (const syllabus of getPlannerSyllabi()) {
     for (const section of syllabus.sections) {
       for (const topic of section.topics) {
         const counts = { basic: 0, intermediate: 0, advanced: 0 };
         for (const q of bank) {
+          if (q.archived) continue;
           if (q.subject === syllabus.subject && q.topicId === topic.id) counts[q.difficulty] += 1;
         }
         rows.push({ subject: syllabus.subject, topicId: topic.id, counts });

@@ -1,0 +1,16 @@
+questionId: physics.gravitation.intermediate.1
+topic: gravitation
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Planet X orbits a star at 4 times the orbital radius of planet Y. What is the ratio T_X / T_Y of their periods?"
+choices:
+  - text: "4"
+    correct: false
+  - text: "16"
+    correct: false
+  - text: "8"
+    correct: true
+  - text: "64"
+    correct: false
+explanation: "Kepler's third law: T² ∝ r³, so T ∝ r^(3/2) = 4^(3/2) = 8."

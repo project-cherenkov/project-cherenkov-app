@@ -1,0 +1,16 @@
+questionId: physics.energy-momentum.basic.1
+topic: energy-momentum
+difficulty: basic
+status: draft
+archived: false
+prompt: "What is the kinetic energy of a 2 kg object moving at 3 m/s?"
+choices:
+  - text: "6 J"
+    correct: false
+  - text: "3 J"
+    correct: false
+  - text: "18 J"
+    correct: false
+  - text: "9 J"
+    correct: true
+explanation: "KE = ½mv² = ½ · 2 · 9 = 9 J."

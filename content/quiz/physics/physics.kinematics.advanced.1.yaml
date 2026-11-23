@@ -1,0 +1,16 @@
+questionId: physics.kinematics.advanced.1
+topic: kinematics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A ball is thrown straight up at 20 m/s (g = 10 m/s²). What total distance has it travelled after 3 s?"
+choices:
+  - text: "15 m"
+    correct: false
+  - text: "20 m"
+    correct: false
+  - text: "25 m"
+    correct: true
+  - text: "30 m"
+    correct: false
+explanation: "It rises for 2 s to 20 m, then falls for 1 s through 5 m: 25 m travelled. The displacement is only 15 m."

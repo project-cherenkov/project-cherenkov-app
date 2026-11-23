@@ -1,0 +1,16 @@
+questionId: physics.statics.advanced.1
+topic: statics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A uniform ladder of weight W leans against a frictionless wall at angle θ above the horizontal floor. What is the least coefficient of static friction at the floor that prevents slipping?"
+choices:
+  - text: "tan θ / 2"
+    correct: false
+  - text: "1 / tan θ"
+    correct: false
+  - text: "1 / (2 tan θ)"
+    correct: true
+  - text: "2 tan θ"
+    correct: false
+explanation: "Torques about the foot: N_wall · L sin θ = W · (L/2) cos θ, so N_wall = (W/2) cot θ. Friction must equal N_wall while the normal force is W, so μ ≥ cot θ / 2 = 1/(2 tan θ)."

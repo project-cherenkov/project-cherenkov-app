@@ -1,0 +1,16 @@
+questionId: physics.entropy.advanced.1
+topic: entropy
+difficulty: advanced
+status: draft
+archived: false
+prompt: "n moles of an ideal gas expand freely into a vacuum, doubling their volume (no heat exchanged, no work done). What is the entropy change of the gas?"
+choices:
+  - text: "0"
+    correct: false
+  - text: "nR ln 2"
+    correct: true
+  - text: "−nR ln 2"
+    correct: false
+  - text: "nR/2"
+    correct: false
+explanation: "Entropy is a state function: connect the same end states by a reversible isothermal expansion, giving ΔS = nR ln(V₂/V₁) = nR ln 2, even though Q = 0 in the free expansion."

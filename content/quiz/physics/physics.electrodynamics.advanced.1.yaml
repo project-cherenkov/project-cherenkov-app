@@ -1,0 +1,16 @@
+questionId: physics.electrodynamics.advanced.1
+topic: electrodynamics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A rod of length 0.4 m rotates at 50 rad/s about one end, in a plane perpendicular to a uniform 0.5 T field. What emf is induced between its ends?"
+choices:
+  - text: "0.5 V"
+    correct: false
+  - text: "1.0 V"
+    correct: false
+  - text: "2.0 V"
+    correct: true
+  - text: "4.0 V"
+    correct: false
+explanation: "ε = ½Bωℓ² = ½ · 0.5 · 50 · 0.16 = 2.0 V. (Using Bωℓ² would give 4.0 V; the factor ½ comes from averaging the speed along the rod.)"

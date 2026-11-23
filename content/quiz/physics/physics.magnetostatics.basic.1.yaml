@@ -1,0 +1,16 @@
+questionId: physics.magnetostatics.basic.1
+topic: magnetostatics
+difficulty: basic
+status: draft
+archived: false
+prompt: "A charged particle moves parallel to a uniform magnetic field. The magnetic force on it is…"
+choices:
+  - text: "maximum"
+    correct: false
+  - text: "qvB"
+    correct: false
+  - text: "qB/v"
+    correct: false
+  - text: "zero"
+    correct: true
+explanation: "F = qvB sin θ, and θ = 0 for motion along the field, so the force is zero."

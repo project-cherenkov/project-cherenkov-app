@@ -1,0 +1,16 @@
+questionId: physics.entropy.basic.1
+topic: entropy
+difficulty: basic
+status: draft
+archived: false
+prompt: "Which statement about the entropy of an isolated system is correct?"
+choices:
+  - text: "It always decreases in a spontaneous process"
+    correct: false
+  - text: "It never decreases in a spontaneous process"
+    correct: true
+  - text: "It is always constant"
+    correct: false
+  - text: "It is zero at room temperature"
+    correct: false
+explanation: "The second law: the total entropy of an isolated system does not decrease in a spontaneous process."

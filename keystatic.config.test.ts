@@ -93,3 +93,31 @@ describe("keystatic.config — materials round-trip against real content", () =>
     expect(entry.syllabusTopic).toBe("binary-search");
   });
 });
+
+// Quiz questions: every real file must open in Keystatic's own reader. That
+// also proves each question's `topic` is one of the planner-topic <select>
+// options (the reader rejects a value outside the options), so a typo'd topic
+// cannot hide in a hand-edited file.
+describe("keystatic.config — quiz questions round-trip against real content", () => {
+  it.each([
+    ["astronomyQuestions", "astronomy"],
+    ["physicsQuestions", "physics"],
+    ["informaticsQuestions", "informatics"],
+  ] as const)("%s reads every real question without throwing", async (name, subject) => {
+    const collection = reader.collections[name];
+    const keys = await collection.list();
+    expect(keys.length).toBeGreaterThan(0);
+    for (const key of keys) {
+      const entry = await collection.readOrThrow(key);
+      expect(entry.questionId, key).toBe(key);
+      expect(key.startsWith(`${subject}.`), key).toBe(true);
+    }
+  });
+
+  it("stores each subject's questions under content/quiz/<subject>", () => {
+    for (const subject of ["astronomy", "physics", "informatics"] as const) {
+      const name = `${subject}Questions` as const;
+      expect(keystaticConfig.collections?.[name]?.path).toBe(`content/quiz/${subject}/*`);
+    }
+  });
+});

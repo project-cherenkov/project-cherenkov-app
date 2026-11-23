@@ -1,0 +1,16 @@
+questionId: physics.dynamics.intermediate.1
+topic: dynamics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Masses of 3 kg and 1 kg hang from the two ends of a string over a light, frictionless pulley (Atwood machine). What is the acceleration of the masses?"
+choices:
+  - text: "2.5 m/s²"
+    correct: false
+  - text: "5 m/s²"
+    correct: true
+  - text: "7.5 m/s²"
+    correct: false
+  - text: "10 m/s²"
+    correct: false
+explanation: "a = (m₁ − m₂)g/(m₁ + m₂) = (2/4) · 10 = 5 m/s²."

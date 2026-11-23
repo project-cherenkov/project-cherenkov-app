@@ -1,0 +1,16 @@
+questionId: physics.electrostatics.intermediate.1
+topic: electrostatics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "In a uniform electric field of 200 N/C, what is the potential difference between two points 0.5 m apart along the field direction?"
+choices:
+  - text: "400 V"
+    correct: false
+  - text: "100 V"
+    correct: true
+  - text: "200 V"
+    correct: false
+  - text: "0.0025 V"
+    correct: false
+explanation: "ΔV = Ed = 200 · 0.5 = 100 V."

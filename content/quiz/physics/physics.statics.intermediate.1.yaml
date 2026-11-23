@@ -1,0 +1,16 @@
+questionId: physics.statics.intermediate.1
+topic: statics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A 100 N weight hangs from the midpoint of a light cable whose two halves each make 30° with the horizontal. What is the tension in each half?"
+choices:
+  - text: "50 N"
+    correct: false
+  - text: "86.6 N"
+    correct: false
+  - text: "100 N"
+    correct: true
+  - text: "200 N"
+    correct: false
+explanation: "Vertically, 2T sin 30° = 100 N, so T = 100 N."

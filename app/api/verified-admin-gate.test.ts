@@ -16,7 +16,7 @@ vi.mock("@/lib/db", () => ({
 
 import { GET as editAccess } from "./account/edit-access/route";
 import { POST as teamPhoto } from "./team-photo/route";
-import { GET as quizList, POST as quizCreate } from "./keystatic/quiz-questions/route";
+import { GET as quizList } from "./keystatic/quiz-questions/route";
 import { PATCH as quizPatch } from "./keystatic/quiz-questions/[id]/route";
 import { POST as sceneSave } from "./scene-builder/route";
 import { POST as sceneNew } from "./scene-builder/new/route";
@@ -43,7 +43,6 @@ describe("editor routes deny an unverified admin-email account", () => {
   const cases: Array<[string, () => Promise<Response>]> = [
     ["POST /api/team-photo", () => teamPhoto(post())],
     ["GET /api/keystatic/quiz-questions", () => quizList()],
-    ["POST /api/keystatic/quiz-questions", () => quizCreate(post())],
     ["PATCH /api/keystatic/quiz-questions/[id]", () => quizPatch(post(), { params: Promise.resolve({ id: "x" }) })],
     ["POST /api/scene-builder", () => sceneSave(post())],
     ["POST /api/scene-builder/new", () => sceneNew(post())],

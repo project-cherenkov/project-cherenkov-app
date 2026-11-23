@@ -1,0 +1,16 @@
+questionId: physics.rotation-rigid-body.intermediate.1
+topic: rotation-rigid-body
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A spinning skater pulls in her arms so that her moment of inertia halves. Her angular velocity…"
+choices:
+  - text: "stays the same"
+    correct: false
+  - text: "halves"
+    correct: false
+  - text: "doubles"
+    correct: true
+  - text: "quadruples"
+    correct: false
+explanation: "Angular momentum Iω is conserved, so halving I doubles ω."

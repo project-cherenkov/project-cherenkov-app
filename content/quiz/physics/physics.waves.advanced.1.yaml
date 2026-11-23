@@ -1,0 +1,16 @@
+questionId: physics.waves.advanced.1
+topic: waves
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A source at rest emits sound at 680 Hz. An observer moves toward it at 34 m/s. Taking the speed of sound as 340 m/s, what frequency does the observer hear?"
+choices:
+  - text: "612 Hz"
+    correct: false
+  - text: "680 Hz"
+    correct: false
+  - text: "748 Hz"
+    correct: true
+  - text: "756 Hz"
+    correct: false
+explanation: "f′ = f(v + v_obs)/v = 680 · 374/340 = 748 Hz. (756 Hz would be the case of a moving source.)"

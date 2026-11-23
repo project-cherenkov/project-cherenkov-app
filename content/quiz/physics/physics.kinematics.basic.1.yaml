@@ -1,0 +1,16 @@
+questionId: physics.kinematics.basic.1
+topic: kinematics
+difficulty: basic
+status: draft
+archived: false
+prompt: "A car starts from rest and accelerates uniformly at 2 m/s² for 5 s. How far does it travel?"
+choices:
+  - text: "10 m"
+    correct: false
+  - text: "25 m"
+    correct: true
+  - text: "50 m"
+    correct: false
+  - text: "5 m"
+    correct: false
+explanation: "s = ½at² = ½ · 2 · 5² = 25 m."

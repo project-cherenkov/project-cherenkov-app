@@ -1,0 +1,16 @@
+questionId: physics.laws-of-thermodynamics.basic.1
+topic: laws-of-thermodynamics
+difficulty: basic
+status: draft
+archived: false
+prompt: "The zeroth law of thermodynamics is what justifies…"
+choices:
+  - text: "the conservation of energy"
+    correct: false
+  - text: "the concept of temperature (thermal equilibrium is transitive)"
+    correct: true
+  - text: "the increase of entropy"
+    correct: false
+  - text: "the impossibility of reaching absolute zero"
+    correct: false
+explanation: "If A is in equilibrium with B and B with C, then A is with C — so equilibrium can be labelled by a single quantity, temperature."

@@ -3,9 +3,14 @@
 // to write; this file writes it. It takes the database as a parameter, rather
 // than importing lib/db, so it can be run against any Postgres-backed Drizzle
 // instance.
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import type { PgDatabase } from "drizzle-orm/pg-core";
 import { quizQuestions, topics } from "../db/schema";
+import {
+  planQuizSync,
+  type ExistingQuizRow,
+  type QuizTopicRow,
+} from "../quiz-bank/sync";
 import type { BankQuestion } from "../quiz-bank/types";
 import type { DerivedSyllabusTopic } from "./derive-syllabus-topics";
 
@@ -110,61 +115,85 @@ export async function seedSyllabusTopics(
   return report;
 }
 
-export interface SeedQuizReport {
-  upserted: number;
-  // Keys of bank questions whose syllabus topic has no topics row yet
-  // (run the topic seed first).
+export interface SyncQuizReport {
+  inserted: number;
+  updated: number;
+  unchanged: number;
+  // Keys archived because their file no longer exists (never deleted).
+  archivedMissing: string[];
+  // Keys whose syllabus topic has no topics row yet (run the topic seed first).
   skippedNoTopic: string[];
+  // Archived in the database but not in the file; see lib/quiz-bank/sync.ts.
+  databaseOnlyArchived: string[];
+  // Rows the sync does not manage (admin.* keys and keyless legacy rows).
+  unmanaged: number;
 }
 
-// Idempotent on `key`. The checked-in bank bootstraps missing database rows;
-// after that, the admin editor database values are authoritative. Never
-// reuse a key for a question that means something else.
-export async function seedQuizBank(
+// Syncs content/quiz (the loaded bank) into quiz_questions. Git is the source
+// of truth for a keyed question's content; the rules (never delete, only ever
+// archive, leave admin.* and keyless rows alone) live in
+// lib/quiz-bank/sync.ts, where they are unit-tested. Safe to run repeatedly.
+// Statements run one after another (no transaction): the Neon HTTP driver does
+// not offer one, and every statement is independently idempotent.
+export async function syncQuizBank(
   db: SeedDb,
   bank: BankQuestion[],
-): Promise<SeedQuizReport> {
-  const report: SeedQuizReport = { upserted: 0, skippedNoTopic: [] };
+): Promise<SyncQuizReport> {
+  if (bank.length === 0) {
+    throw new Error(
+      "Refusing to sync an empty quiz bank: that would archive every git-managed question. Check that content/quiz exists and loads.",
+    );
+  }
 
-  for (const q of bank) {
-    const [topic] = await db
-      .select({ id: topics.id })
-      .from(topics)
-      .where(
-        and(
-          eq(topics.subject, q.subject),
-          eq(topics.syllabusTopicId, q.topicId),
-        ),
-      )
-      .limit(1);
+  const topicRows = (await db
+    .select({ id: topics.id, subject: topics.subject, syllabusTopicId: topics.syllabusTopicId })
+    .from(topics)) as QuizTopicRow[];
+  const existing = (await db
+    .select({
+      id: quizQuestions.id,
+      key: quizQuestions.key,
+      topicId: quizQuestions.topicId,
+      prompt: quizQuestions.prompt,
+      choices: quizQuestions.choices,
+      correctChoiceIndex: quizQuestions.correctChoiceIndex,
+      explanation: quizQuestions.explanation,
+      difficulty: quizQuestions.difficulty,
+      status: quizQuestions.status,
+      archived: quizQuestions.archived,
+    })
+    .from(quizQuestions)
+    .where(isNotNull(quizQuestions.key))) as ExistingQuizRow[];
+  // Keyless rows are not selected above (they are not managed); count them
+  // separately so the report can say so.
+  const keyless = await countKeylessQuestions(db);
 
-    if (!topic) {
-      report.skippedNoTopic.push(q.key);
-      continue;
-    }
+  const plan = planQuizSync(bank, existing, topicRows);
 
-    const values = {
-      topicId: topic.id,
-      prompt: q.prompt,
-      choices: q.choices,
-      correctChoiceIndex: q.correctChoiceIndex,
-      explanation: q.explanation,
-      difficulty: q.difficulty,
-      status: q.status,
-    };
-
-    const inserted = await db
+  if (plan.inserts.length > 0) {
+    await db
       .insert(quizQuestions)
-      .values({ key: q.key, ...values })
+      .values(plan.inserts)
       .onConflictDoNothing({
         target: quizQuestions.key,
         where: sql`${quizQuestions.key} is not null`,
-      })
-      .returning({ id: quizQuestions.id });
-    report.upserted += inserted.length;
+      });
+  }
+  for (const update of plan.updates) {
+    await db.update(quizQuestions).set(update.set).where(eq(quizQuestions.id, update.id));
+  }
+  for (const missing of plan.archiveMissing) {
+    await db.update(quizQuestions).set({ archived: true }).where(eq(quizQuestions.id, missing.id));
   }
 
-  return report;
+  return {
+    inserted: plan.inserts.length,
+    updated: plan.updates.length,
+    unchanged: plan.unchanged,
+    archivedMissing: plan.archiveMissing.map((row) => row.key),
+    skippedNoTopic: plan.skippedNoTopic,
+    databaseOnlyArchived: plan.databaseOnlyArchived,
+    unmanaged: plan.unmanaged + keyless,
+  };
 }
 
 // Questions created before the bank existed have no key and so are never

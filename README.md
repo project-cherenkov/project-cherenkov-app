@@ -150,6 +150,7 @@ components/
 content/editorials/<subject>/    the editorial archive (MDX)
 content/materials/<subject>/     materials (MDX), one per syllabus topic at most
 content/team/                    Keystatic-managed team singleton (About page)
+content/quiz/<subject>/          quiz questions, one YAML file per question (Keystatic collections `Quiz: <subject>`)
 content/docs/<locale>/           documentation pages (MDX), English is the source of truth
 lib/content.ts                   all querying/filtering of editorials and materials goes
                                   through here; pages never import Velite's #content directly
@@ -188,7 +189,8 @@ lib/planner-settings.ts,         planner settings validation, vocabulary constan
   lib/planner-actions.ts
 lib/plan-generator.ts,           Phase 2 even-spread generator (deterministic fallback)
   lib/planner.ts                  and topic progress helpers
-lib/quiz-bank/                   typed bootstrap bank; database edits are managed in /keystatic/quiz-bank
+lib/quiz-bank/                   quiz-file loading, validation, and the git-to-database sync rules
+content/quiz/<subject>/          quiz questions (YAML, one file per question), edited in Keystatic
 lib/quiz*.ts                     quiz authoring validation, attempts, scoring, and response recording
 lib/scene-builder-*.ts           frontmatter write-back (write), stub-editorial creation
                                   (create), GitHub API client (github), and the dedicated
@@ -283,7 +285,7 @@ pnpm db:migrate
 pnpm db:seed
 ```
 
-`pnpm db:seed` is additive and idempotent: it restores missing syllabus topic rows and inserts missing quiz-bank questions without overwriting keyed quiz edits. Do not add `--prune-legacy` unless you intentionally want to delete older quiz rows that have no stable bank key. The seed scripts read `DATABASE_URL` from the process environment; setting it in a `.env` file alone does not make it available to direct `tsx` scripts.
+`pnpm db:seed` is idempotent: it restores missing syllabus topic rows and syncs `content/quiz` into `quiz_questions` (`pnpm db:seed:quiz` runs only the quiz sync). Git is the source of truth for quiz content: a keyed question that differs from its file is overwritten from the file; nothing is ever deleted (a question whose file is gone is archived, so students' history is kept); and a question archived in the database stays archived until restored on `/keystatic/quiz-bank`. Rows made in the old database-only editor (`admin.*` keys) are left alone until `pnpm quiz:export-db --apply` moves them into git. Do not add `--prune-legacy` unless you intentionally want to delete older quiz rows that have no key. The sync is not part of `pnpm build` or any deploy hook: after a quiz change merges, run `pnpm db:seed:quiz` against the production database. The seed scripts read `DATABASE_URL` from the process environment; setting it in a `.env` file alone does not make it available to direct `tsx` scripts.
 
 ### Environment variables
 
@@ -650,9 +652,9 @@ The scheduling pipeline is pure and deterministic except for database I/O (`plan
 #### 4. Topic quizzes and question bank
 
 - Topic pages (`/[locale]/planner/[subject]/[chapter]`). Each topic page links to the relevant editorial (if published) and provides an interactive quiz dialog (`components/quiz/quiz-dialog.tsx`).
-- Quiz bank. Admins create and manage multiple-choice questions at `/keystatic/quiz-bank`; they are stored in Postgres, with difficulty, review status, and archive state. `lib/quiz-bank/` remains bootstrap data for initial seeding.
+- Quiz bank. Multiple-choice questions are authored in Keystatic (collections `Quiz: Informatics / Physics / Astronomy`, files in `content/quiz/<subject>/`) with difficulty and review status, and synced into Postgres by `pnpm db:seed:quiz`. `/keystatic/quiz-bank` is the admin view of what the database serves: coverage, filters, and an immediate archive/restore switch. See `docs/engineering/quiz-authoring.md`.
 - Auto-grading & response recording. Quizzes are submitted to `submitQuizAttempt` (`lib/quiz-actions.ts`). The aggregate score is saved in `quiz_attempts`, while individual answers are recorded in `quiz_question_responses` to feed the mastery estimator. Correct answers are never sent to the client before submission.
-- Seeding. `pnpm db:seed` runs `scripts/seed-topics.ts` (populating syllabus topics) and `scripts/seed-quiz-questions.ts` (inserting missing bootstrap questions without overwriting database edits; `--prune-legacy` remains available to clean unkeyed questions). Students receive only active questions marked reviewed.
+- Seeding. `pnpm db:seed` runs `scripts/seed-topics.ts` (populating syllabus topics) and `scripts/seed-quiz-questions.ts` (syncing `content/quiz` into the database, git winning for content; `--prune-legacy` remains available to clean unkeyed questions). Students receive only active questions marked reviewed.
 - Simulation. `scripts/simulate-planner.ts` simulates learning trajectories to evaluate scheduler behaviour across hypothetical learner cohorts.
 
 ### Database schema
@@ -738,7 +740,7 @@ Because Keystatic's own login and the scene builder's own GitHub access are two 
 ## XIII. Current status and open questions
 
 - The repository and deployment URLs recorded here are external project metadata; verify their visibility and availability independently of the tracked code. The default locale is served under a locale prefix, not at the bare site root.
-- Built: the editorial archive with seven visualisation engines (five purpose-built engines plus composed and programmable scenes); the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and an admin-only multiple-choice question editor at `/keystatic/quiz-bank` with review, archive, coverage, and database-backed authoring.
+- Built: the editorial archive with seven visualisation engines (five purpose-built engines plus composed and programmable scenes); the syllabus and materials sections; in-app documentation (`/docs`); Keystatic editing; the scene builder (composed and programmable modes, with save and "New visualization"); user accounts and profile with role resolution (`/account`); the Phase 3 OSN adaptive study planner with onboarding, topic self-ratings, Bayesian mastery estimation, feasibility feedback, spaced reviews, topic quizzes, response tracking, and fallback evenly-spread planning; and multiple-choice quiz authoring in Keystatic (git-backed, with review status) plus an admin view at `/keystatic/quiz-bank` for coverage and the archive/restore switch.
 - Security status: a `Content-Security-Policy-Report-Only` header is shipped, but it does not block requests yet. The checked-in quiz bank is bootstrap data only; seeding inserts missing questions and does not overwrite admin edits. Only reviewed, non-archived questions are served to students.
 - Planner and calibration placeholders: `MASTERY_PARAMS` (`lib/mastery.ts`), `SCHEDULER_PARAMS` (`lib/plan-scheduler.ts`), `STAGES[*].masteryTarget` (`lib/osn-stages.ts`), and 2027 stage dates are sensible starting placeholders awaiting calibration on real student performance. Topic `effort` is currently default-medium for all syllabus topics.
 - Content is thin. There are five real editorials plus one implementation fixture, and two materials (`binary-search` and `sidereal-synodic-periods`). Of the syllabus, informatics and astronomy have materials; physics does not yet. The quiz bank currently has 51 draft questions for physics (one per topic and difficulty), plus one starter question each for informatics and astronomy.

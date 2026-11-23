@@ -1,0 +1,16 @@
+questionId: physics.vectors.intermediate.1
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Vectors A and B have magnitudes 2 and 5, with an angle of 30° between them. What is |A × B|?"
+choices:
+  - text: "10"
+    correct: false
+  - text: "8.66"
+    correct: false
+  - text: "5"
+    correct: true
+  - text: "0"
+    correct: false
+explanation: "|A × B| = AB sin θ = 2 · 5 · sin 30° = 5. The value 8.66 would be AB cos θ, which is the dot product."

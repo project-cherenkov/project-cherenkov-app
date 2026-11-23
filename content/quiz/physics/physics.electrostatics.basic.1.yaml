@@ -1,0 +1,16 @@
+questionId: physics.electrostatics.basic.1
+topic: electrostatics
+difficulty: basic
+status: draft
+archived: false
+prompt: "The distance between two point charges is doubled. The electrostatic force between them becomes…"
+choices:
+  - text: "F/2"
+    correct: false
+  - text: "F/4"
+    correct: true
+  - text: "2F"
+    correct: false
+  - text: "4F"
+    correct: false
+explanation: "Coulomb's law: F ∝ 1/r², so doubling r divides F by 4."

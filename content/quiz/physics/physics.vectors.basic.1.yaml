@@ -1,0 +1,16 @@
+questionId: physics.vectors.basic.1
+topic: vectors
+difficulty: basic
+status: draft
+archived: false
+prompt: "Two perpendicular vectors of magnitudes 3 and 4 are added. What is the magnitude of the resultant?"
+choices:
+  - text: "1"
+    correct: false
+  - text: "5"
+    correct: true
+  - text: "7"
+    correct: false
+  - text: "12"
+    correct: false
+explanation: "For perpendicular vectors the magnitude is √(3² + 4²) = 5."

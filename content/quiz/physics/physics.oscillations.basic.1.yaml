@@ -1,0 +1,16 @@
+questionId: physics.oscillations.basic.1
+topic: oscillations
+difficulty: basic
+status: draft
+archived: false
+prompt: "A mass on a spring oscillates with period T. If the mass is increased to 4 times its value, the period becomes…"
+choices:
+  - text: "T/2"
+    correct: false
+  - text: "T"
+    correct: false
+  - text: "4T"
+    correct: false
+  - text: "2T"
+    correct: true
+explanation: "T = 2π√(m/k), so quadrupling m doubles T."

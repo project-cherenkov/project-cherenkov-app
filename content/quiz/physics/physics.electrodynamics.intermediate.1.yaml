@@ -1,0 +1,16 @@
+questionId: physics.electrodynamics.intermediate.1
+topic: electrodynamics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A straight rod of length 0.4 m moves at 5 m/s perpendicular to a uniform 0.5 T field and to its own length. What emf is induced between its ends?"
+choices:
+  - text: "0.1 V"
+    correct: false
+  - text: "2.0 V"
+    correct: false
+  - text: "1.0 V"
+    correct: true
+  - text: "10 V"
+    correct: false
+explanation: "ε = Bℓv = 0.5 · 0.4 · 5 = 1.0 V."

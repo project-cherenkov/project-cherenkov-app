@@ -1,0 +1,16 @@
+questionId: physics.magnetostatics.advanced.1
+topic: magnetostatics
+difficulty: advanced
+status: draft
+archived: false
+prompt: "Two long parallel wires 0.1 m apart each carry 10 A in the same direction. What is the force per unit length between them? (μ₀ = 4π × 10⁻⁷ T·m/A)"
+choices:
+  - text: "2 × 10⁻⁴ N/m, repulsive"
+    correct: false
+  - text: "2 × 10⁻⁵ N/m, attractive"
+    correct: false
+  - text: "2 × 10⁻⁴ N/m, attractive"
+    correct: true
+  - text: "4 × 10⁻⁴ N/m, repulsive"
+    correct: false
+explanation: "F/L = μ₀I₁I₂/(2πd) = 2 × 10⁻⁷ · 100 / 0.1 = 2 × 10⁻⁴ N/m, and parallel currents attract."

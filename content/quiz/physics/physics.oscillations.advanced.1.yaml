@@ -1,0 +1,16 @@
+questionId: physics.oscillations.advanced.1
+topic: oscillations
+difficulty: advanced
+status: draft
+archived: false
+prompt: "A mass m is attached to two identical springs, each of constant k, joined end to end (in series). What is the angular frequency of small oscillations?"
+choices:
+  - text: "√(k/m)"
+    correct: false
+  - text: "√(2k/m)"
+    correct: false
+  - text: "√(k/(2m))"
+    correct: true
+  - text: "2√(k/m)"
+    correct: false
+explanation: "Two identical springs in series have effective constant k/2, so ω = √(k/(2m))."

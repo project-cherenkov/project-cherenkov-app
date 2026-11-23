@@ -1,0 +1,16 @@
+questionId: physics.laws-of-thermodynamics.intermediate.1
+topic: laws-of-thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A gas absorbs 500 J of heat and does 200 J of work on its surroundings. What is the change in its internal energy?"
+choices:
+  - text: "200 J"
+    correct: false
+  - text: "500 J"
+    correct: false
+  - text: "700 J"
+    correct: false
+  - text: "300 J"
+    correct: true
+explanation: "First law: ΔU = Q − W = 500 − 200 = 300 J."

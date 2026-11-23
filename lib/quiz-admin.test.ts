@@ -1,34 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { parseQuizQuestionInput, parseQuizQuestionPatch } from "./quiz-admin";
+import { parseQuizArchivePatch, quizQuestionSource } from "./quiz-admin";
 
-const valid = {
-  subject: "informatics", topicId: "topic-id", prompt: "What is 2 + 2?",
-  choices: ["3", "4"], correctChoiceIndex: 1, explanation: "Add the two values.", difficulty: "basic",
-};
-
-describe("quiz question authoring validation", () => {
-  it("accepts a valid multiple-choice question and trims values", () => {
-    const parsed = parseQuizQuestionInput({ ...valid, prompt: "  What is 2 + 2?  ", choices: [" 3 ", "4 "] });
-    expect(parsed.ok).toBe(true);
-    if (parsed.ok) expect(parsed.value).toMatchObject({ prompt: "What is 2 + 2?", choices: ["3", "4"] });
+describe("parseQuizArchivePatch", () => {
+  it("accepts an archive state", () => {
+    expect(parseQuizArchivePatch({ archived: true })).toEqual({ ok: true, value: { archived: true } });
+    expect(parseQuizArchivePatch({ archived: false })).toEqual({ ok: true, value: { archived: false } });
   });
 
-  it.each([
-    [{ ...valid, prompt: " " }, "Prompt is required."],
-    [{ ...valid, choices: ["4"] }, "Add at least two answer choices."],
-    [{ ...valid, choices: ["4", "  "] }, "Every answer choice must contain text."],
-    [{ ...valid, choices: ["4", "4"] }, "Answer choices must be unique."],
-    [{ ...valid, correctChoiceIndex: 2 }, "Select one of the answer choices as correct."],
-    [{ ...valid, explanation: " " }, "Explanation is required."],
-    [{ ...valid, difficulty: "expert" }, "Choose a valid difficulty."],
-    [{ ...valid, subject: "biology" }, "Choose a valid subject."],
-  ])("rejects invalid input with a useful error", (input, expected) => {
-    expect(parseQuizQuestionInput(input)).toEqual({ ok: false, error: expected });
+  it("ignores every other field, so content cannot be changed through this endpoint", () => {
+    const parsed = parseQuizArchivePatch({ archived: true, prompt: "x", correctChoiceIndex: 3, status: "reviewed" });
+    expect(parsed).toEqual({ ok: true, value: { archived: true } });
   });
 
-  it("requires explicit valid review and archive state on edits", () => {
-    expect(parseQuizQuestionPatch({ ...valid, status: "draft", archived: true })).toMatchObject({ ok: true, value: { status: "draft", archived: true } });
-    expect(parseQuizQuestionPatch({ ...valid, status: "published", archived: false })).toMatchObject({ ok: false });
-    expect(parseQuizQuestionPatch({ ...valid, status: "reviewed" })).toMatchObject({ ok: false });
+  it("rejects a missing or non-boolean archive state and non-objects", () => {
+    for (const bad of [{}, { archived: "yes" }, { archived: 1 }, null, [], "x"]) {
+      expect(parseQuizArchivePatch(bad).ok).toBe(false);
+    }
+  });
+});
+
+describe("quizQuestionSource", () => {
+  it("reports git for keyed questions and database for admin.* or keyless rows", () => {
+    expect(quizQuestionSource("physics.vectors.basic.1")).toBe("git");
+    expect(quizQuestionSource("admin.0b9f")).toBe("database");
+    expect(quizQuestionSource(null)).toBe("database");
   });
 });

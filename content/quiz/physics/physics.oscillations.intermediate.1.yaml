@@ -1,0 +1,16 @@
+questionId: physics.oscillations.intermediate.1
+topic: oscillations
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A simple pendulum 1 m long swings where g = π² m/s² (≈ 9.87). What is its period?"
+choices:
+  - text: "1 s"
+    correct: false
+  - text: "2 s"
+    correct: true
+  - text: "π s"
+    correct: false
+  - text: "2π s"
+    correct: false
+explanation: "T = 2π√(L/g) = 2π√(1/π²) = 2 s."

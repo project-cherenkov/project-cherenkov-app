@@ -1,0 +1,16 @@
+questionId: physics.waves.intermediate.1
+topic: waves
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A string of length L is fixed at both ends. What is the wavelength of its fundamental standing wave?"
+choices:
+  - text: "L/2"
+    correct: false
+  - text: "L"
+    correct: false
+  - text: "2L"
+    correct: true
+  - text: "4L"
+    correct: false
+explanation: "The fundamental fits half a wavelength between the fixed ends: L = λ/2, so λ = 2L."

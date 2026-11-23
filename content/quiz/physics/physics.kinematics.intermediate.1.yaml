@@ -1,0 +1,16 @@
+questionId: physics.kinematics.intermediate.1
+topic: kinematics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Ignoring air resistance, why do launch angles of 30° and 60° (same speed) produce the same range?"
+choices:
+  - text: "Because both angles give the same maximum height"
+    correct: false
+  - text: "Because sin(2·30°) = sin(2·60°)"
+    correct: true
+  - text: "Because gravity acts differently at each angle"
+    correct: false
+  - text: "Because the speed automatically adjusts to match"
+    correct: false
+explanation: "Range R = v² sin(2θ)/g, and sin 60° = sin 120°, so the ranges are equal even though the trajectories differ."

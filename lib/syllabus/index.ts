@@ -238,6 +238,22 @@ export function getPlannerTopicIds(subject: string): string[] {
   );
 }
 
+// Options for a quiz-question topic <select>. Quizzes attach to PLANNER topics
+// only (the planner, quiz bank and mastery estimates all work at topic level),
+// so unlike topicSelectOptions this lists no subtopics and no IPhO-only topic.
+export function plannerTopicSelectOptions(
+  subject: Subject,
+): { label: string; value: string }[] {
+  return (
+    getPlannerSyllabus(subject)?.sections.flatMap((section) =>
+      section.topics.map((topic) => ({
+        label: `${section.name.en} › ${topic.name.en}`,
+        value: topic.id,
+      })),
+    ) ?? []
+  );
+}
+
 export function getPlannerTopicCount(subject: Subject): number {
   return getPlannerTopicIds(subject).length;
 }

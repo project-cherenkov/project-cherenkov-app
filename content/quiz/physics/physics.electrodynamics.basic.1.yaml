@@ -1,0 +1,16 @@
+questionId: physics.electrodynamics.basic.1
+topic: electrodynamics
+difficulty: basic
+status: draft
+archived: false
+prompt: "The magnetic flux through a loop changes by 0.2 Wb in 0.1 s. What is the average induced emf?"
+choices:
+  - text: "0.02 V"
+    correct: false
+  - text: "2 V"
+    correct: true
+  - text: "20 V"
+    correct: false
+  - text: "0.5 V"
+    correct: false
+explanation: "|ε| = ΔΦ/Δt = 0.2/0.1 = 2 V."

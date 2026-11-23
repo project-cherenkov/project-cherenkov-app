@@ -1,10 +1,10 @@
-import { and, asc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-guard";
 import { isVerifiedAdmin } from "@/lib/admin-guard";
 import { db } from "@/lib/db";
 import { quizQuestions, topics } from "@/lib/db/schema";
-import { parseQuizQuestionInput } from "@/lib/quiz-admin";
+import { quizQuestionSource } from "@/lib/quiz-admin";
 
 async function requireEditor() {
   const user = await getCurrentUser();
@@ -13,6 +13,8 @@ async function requireEditor() {
   return null;
 }
 
+// Read-only list. Questions are no longer created here: author them in
+// Keystatic (Quiz: <subject>) and sync with `pnpm db:seed:quiz`.
 export async function GET() {
   const denied = await requireEditor();
   if (denied) return denied;
@@ -28,24 +30,8 @@ export async function GET() {
     db.select({ id: topics.id, subject: topics.subject, title: topics.title, chapter: topics.chapter, order: topics.order })
       .from(topics).orderBy(asc(topics.subject), asc(topics.order)),
   ]);
-  return NextResponse.json({ questions, topics: topicsList });
-}
-
-export async function POST(request: Request) {
-  const denied = await requireEditor();
-  if (denied) return denied;
-  let body: unknown;
-  try { body = await request.json(); }
-  catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
-  const parsed = parseQuizQuestionInput(body);
-  if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: 400 });
-  const [topic] = await db.select({ id: topics.id }).from(topics)
-    .where(and(eq(topics.id, parsed.value.topicId), eq(topics.subject, parsed.value.subject))).limit(1);
-  if (!topic) return NextResponse.json({ error: "That topic does not belong to the selected subject." }, { status: 400 });
-  const [created] = await db.insert(quizQuestions).values({
-    key: `admin.${crypto.randomUUID()}`, topicId: topic.id, prompt: parsed.value.prompt,
-    choices: parsed.value.choices, correctChoiceIndex: parsed.value.correctChoiceIndex,
-    explanation: parsed.value.explanation, difficulty: parsed.value.difficulty, status: "draft",
-  }).returning({ id: quizQuestions.id });
-  return NextResponse.json({ id: created!.id }, { status: 201 });
+  return NextResponse.json({
+    questions: questions.map((question) => ({ ...question, source: quizQuestionSource(question.key) })),
+    topics: topicsList,
+  });
 }

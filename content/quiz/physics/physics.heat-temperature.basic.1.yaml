@@ -1,0 +1,16 @@
+questionId: physics.heat-temperature.basic.1
+topic: heat-temperature
+difficulty: basic
+status: draft
+archived: false
+prompt: "How much heat is needed to raise the temperature of 0.5 kg of water by 20 °C? (c = 4200 J/(kg·°C))"
+choices:
+  - text: "2100 J"
+    correct: false
+  - text: "4200 J"
+    correct: false
+  - text: "42 000 J"
+    correct: true
+  - text: "210 000 J"
+    correct: false
+explanation: "Q = mcΔT = 0.5 · 4200 · 20 = 42 000 J."

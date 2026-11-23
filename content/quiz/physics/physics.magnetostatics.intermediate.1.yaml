@@ -1,0 +1,16 @@
+questionId: physics.magnetostatics.intermediate.1
+topic: magnetostatics
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A proton moves in a circle of radius r in a uniform magnetic field perpendicular to its velocity. If its speed doubles (same field), the radius becomes…"
+choices:
+  - text: "r/2"
+    correct: false
+  - text: "r"
+    correct: false
+  - text: "2r"
+    correct: true
+  - text: "4r"
+    correct: false
+explanation: "r = mv/(qB) is proportional to v, so doubling the speed doubles the radius."

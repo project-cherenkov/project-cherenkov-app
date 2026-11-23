@@ -1,0 +1,16 @@
+questionId: physics.fluids.basic.1
+topic: fluids
+difficulty: basic
+status: draft
+archived: false
+prompt: "What is the gauge pressure at 10 m depth in water? (ρ = 1000 kg/m³, g = 10 m/s²)"
+choices:
+  - text: "1 × 10³ Pa"
+    correct: false
+  - text: "1 × 10⁴ Pa"
+    correct: false
+  - text: "1 × 10⁶ Pa"
+    correct: false
+  - text: "1 × 10⁵ Pa"
+    correct: true
+explanation: "P = ρgh = 1000 · 10 · 10 = 1 × 10⁵ Pa."

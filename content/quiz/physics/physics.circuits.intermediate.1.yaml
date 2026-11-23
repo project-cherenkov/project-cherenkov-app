@@ -1,0 +1,16 @@
+questionId: physics.circuits.intermediate.1
+topic: circuits
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "Resistors of 6 Ω and 3 Ω are connected in parallel. What is the total resistance?"
+choices:
+  - text: "9 Ω"
+    correct: false
+  - text: "4.5 Ω"
+    correct: false
+  - text: "1.5 Ω"
+    correct: false
+  - text: "2 Ω"
+    correct: true
+explanation: "R = (6 · 3)/(6 + 3) = 2 Ω."

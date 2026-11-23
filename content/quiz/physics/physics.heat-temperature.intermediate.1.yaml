@@ -1,0 +1,16 @@
+questionId: physics.heat-temperature.intermediate.1
+topic: heat-temperature
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "200 g of water at 80 °C is mixed with 300 g of water at 20 °C in an insulated container. What is the final temperature?"
+choices:
+  - text: "40 °C"
+    correct: false
+  - text: "50 °C"
+    correct: false
+  - text: "56 °C"
+    correct: false
+  - text: "44 °C"
+    correct: true
+explanation: "(200 · 80 + 300 · 20)/500 = 44 °C, since both are water with the same specific heat."

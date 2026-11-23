@@ -1,0 +1,16 @@
+questionId: physics.statics.basic.1
+topic: statics
+difficulty: basic
+status: draft
+archived: false
+prompt: "A 40 kg child sits 1.5 m from the pivot of a seesaw. What mass must sit 1.0 m from the pivot on the other side to balance it?"
+choices:
+  - text: "20 kg"
+    correct: false
+  - text: "40 kg"
+    correct: false
+  - text: "60 kg"
+    correct: true
+  - text: "80 kg"
+    correct: false
+explanation: "Torques balance: 40 · 1.5 = m · 1.0, so m = 60 kg."

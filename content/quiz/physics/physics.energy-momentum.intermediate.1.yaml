@@ -1,0 +1,16 @@
+questionId: physics.energy-momentum.intermediate.1
+topic: energy-momentum
+difficulty: intermediate
+status: draft
+archived: false
+prompt: "A ball is dropped from rest from a height of 5 m. What is its speed just before it hits the ground? (g = 10 m/s², no air resistance)"
+choices:
+  - text: "5 m/s"
+    correct: false
+  - text: "7.1 m/s"
+    correct: false
+  - text: "10 m/s"
+    correct: true
+  - text: "50 m/s"
+    correct: false
+explanation: "mgh = ½mv², so v = √(2gh) = √100 = 10 m/s."

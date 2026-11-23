@@ -14,7 +14,8 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { GET, POST } from "./route";
+import * as route from "./route";
+const { GET } = route;
 
 describe("quiz authoring API access control", () => {
   beforeEach(() => {
@@ -36,12 +37,7 @@ describe("quiz authoring API access control", () => {
     expect(fixture.dbCalls).toBe(0);
   });
 
-  it("rejects writes from non-admin accounts before touching the database", async () => {
-    fixture.user = { id: "student", email: "student@example.com" };
-    const response = await POST(new Request("http://localhost/api/keystatic/quiz-questions", {
-      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({}),
-    }));
-    expect(response.status).toBe(403);
-    expect(fixture.dbCalls).toBe(0);
+  it("no longer offers a create endpoint (questions are authored in Keystatic)", () => {
+    expect("POST" in route).toBe(false);
   });
 });

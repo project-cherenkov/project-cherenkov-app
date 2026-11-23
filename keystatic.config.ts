@@ -1,5 +1,7 @@
 import { config, collection, singleton, fields } from "@keystatic/core";
-import { topicSelectOptions } from "./lib/syllabus";
+import { QUESTION_DIFFICULTIES, QUESTION_STATUSES } from "./lib/planner-vocab";
+import { quizKeyPattern } from "./lib/quiz-bank/key";
+import { plannerTopicSelectOptions, topicSelectOptions } from "./lib/syllabus";
 
 // Mirrors velite.config.ts field-for-field (spec §11 CMS-002). If either
 // schema changes, the other must change with it — there is no automated
@@ -468,6 +470,103 @@ function materialSchema(subject: "astronomy" | "physics" | "informatics") {
   };
 }
 
+// Quiz questions: one YAML file per question in content/quiz/<subject>/, one
+// collection per subject (same pattern as editorials and materials). Git is the
+// source of truth; `pnpm db:seed` / `pnpm db:seed:quiz` syncs the files into the
+// quiz_questions table (lib/quiz-bank/sync.ts has the rules). The file name IS
+// the question's stable key — "<subject>.<topic>.<difficulty>.<n>" — which is
+// why the slug is a typed "Question ID" validated against that pattern rather
+// than something derived from a title. Rules Keystatic cannot express (exactly
+// one correct choice, ID prefix agreeing with topic and difficulty, one topic
+// per subject) are checked by lib/quiz-bank/load.ts + validateQuizBank, which
+// run in `pnpm test` and therefore in CI.
+function quizQuestionSchema(subject: "astronomy" | "physics" | "informatics") {
+  const options = plannerTopicSelectOptions(subject);
+  const idPattern = {
+    regex: quizKeyPattern(subject),
+    message: `Use <subject>.<topic>.<difficulty>.<number>, e.g. ${subject}.some-topic.basic.1`,
+  };
+  return {
+    questionId: fields.slug({
+      name: {
+        label: "Question ID",
+        description:
+          `Permanent. Format: ${subject}.<topic>.<difficulty>.<number>, e.g. ${subject}.some-topic.basic.2 ` +
+          "(the number just needs to be unused for that topic and difficulty). It must agree with the Topic and Difficulty below. " +
+          "Never reuse an ID for a different question and never renumber: student history is attached to it.",
+        validation: { isRequired: true, pattern: idPattern },
+      },
+      slug: {
+        label: "File name",
+        generate: (name: string) => name.trim().toLowerCase(),
+        validation: { pattern: idPattern },
+      },
+    }),
+    topic: fields.select({
+      label: "Syllabus topic",
+      description: "The planner topic this question tests. Pick the one the ID names.",
+      options,
+      defaultValue: options[0]?.value ?? "",
+    }),
+    difficulty: fields.select({
+      label: "Difficulty",
+      description: "OSN stages draw from different difficulty ranges.",
+      options: QUESTION_DIFFICULTIES.map((value) => ({ label: value, value })),
+      defaultValue: "basic",
+    }),
+    status: fields.select({
+      label: "Review status",
+      description:
+        "Draft: not yet checked by someone other than the author. Reviewed: the answer key was recomputed by a second person. Only reviewed questions count toward quiz coverage.",
+      options: QUESTION_STATUSES.map((value) => ({ label: value, value })),
+      defaultValue: "draft",
+    }),
+    archived: fields.checkbox({
+      label: "Archived",
+      description:
+        "Hidden from students; history is kept. The sync archives questions marked here but never restores one: to bring an archived question back, use Restore on /keystatic/quiz-bank.",
+      defaultValue: false,
+    }),
+    prompt: fields.text({
+      label: "Question prompt",
+      description: "$inline$ and $$display$$ math render with KaTeX for students.",
+      multiline: true,
+      validation: { isRequired: true, length: { max: 20000 } },
+    }),
+    choices: fields.array(
+      fields.object({
+        text: fields.text({ label: "Choice", validation: { isRequired: true } }),
+        correct: fields.checkbox({
+          label: "This is the correct answer",
+          description: "Tick exactly one choice.",
+          defaultValue: false,
+        }),
+      }),
+      {
+        label: "Answer choices",
+        description: "At least two, all different, with exactly one marked correct.",
+        itemLabel: (props) =>
+          `${props.fields.correct.value ? "✓ " : ""}${props.fields.text.value || "Choice"}`,
+        validation: { length: { min: 2 } },
+      },
+    ),
+    explanation: fields.text({
+      label: "Explanation",
+      description: "Shown after the student answers. Say why the right choice is right and, ideally, which mistake each wrong choice reflects.",
+      multiline: true,
+      validation: { isRequired: true },
+    }),
+    author: fields.text({
+      label: "Author (optional)",
+      description: "Who wrote it. A reviewer should be someone else.",
+    }),
+    source: fields.text({
+      label: "Source (optional)",
+      description: "Original, adapted from something, or from a past paper. Say so, so nothing is copied in by accident.",
+    }),
+  };
+}
+
 // BUGFIX (production edit surface was unreachable — see chat thread): this
 // file is imported by app/keystatic/keystatic.ts, which is a "use client"
 // component, so keystatic.config.ts — including whatever branches the
@@ -600,6 +699,27 @@ export default config({
       path: "content/materials/informatics/*",
       format: { contentField: "content" },
       schema: materialSchema("informatics"),
+    }),
+    astronomyQuestions: collection({
+      label: "Quiz: Astronomy",
+      slugField: "questionId",
+      path: "content/quiz/astronomy/*",
+      format: { data: "yaml" },
+      schema: quizQuestionSchema("astronomy"),
+    }),
+    physicsQuestions: collection({
+      label: "Quiz: Physics",
+      slugField: "questionId",
+      path: "content/quiz/physics/*",
+      format: { data: "yaml" },
+      schema: quizQuestionSchema("physics"),
+    }),
+    informaticsQuestions: collection({
+      label: "Quiz: Informatics",
+      slugField: "questionId",
+      path: "content/quiz/informatics/*",
+      format: { data: "yaml" },
+      schema: quizQuestionSchema("informatics"),
     }),
   },
   singletons: {
