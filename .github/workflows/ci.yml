@@ -32,4 +32,9 @@ jobs:
       # Postgres connection. See docs/history/phase-3-architecture.md for what a
       # future integration-test tier against a real database would need.
       - run: pnpm test
+      # DB-002: migrations must come from `pnpm db:generate`. Fails when
+      # drizzle/ (latest snapshot) does not match lib/db/schema.ts, or two
+      # migrations collide. Needs no database. See
+      # docs/engineering/database-migrations.md.
+      - run: pnpm db:check
       - run: pnpm build

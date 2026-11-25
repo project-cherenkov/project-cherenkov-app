@@ -56,7 +56,7 @@ Google sign-in and the GitHub App callback are registered for the production hos
 - `ON DELETE cascade` (a rule on foreign keys, set in earlier migrations) is not something a migration runs. It is a rule the database applies at the moment ONE user row is deleted: the rows that belong to that user go with it. The only thing that deletes a user in this change is a person confirming "Delete account" from their own Account page, through the emailed link.
 - Migrations are not undone by running them again. Back up (or use a Neon branch) before applying anything to production if you want a way back.
 
-- `drizzle/meta/` snapshots stop at `0005`, while the journal and SQL go on to `0010`. The migrations after `0005` were written by hand. `0010_auth_rate_limit.sql` was compared with what `drizzle-kit generate` emits for the same schema: the `rate_limit` table is identical. Running `drizzle-kit generate` without first bringing the snapshots up to date will re-emit changes from `0006` onward that are already applied. Inspect any generated file before keeping it.
+- `drizzle/meta/` snapshots used to stop at `0005` because `0006`-`0013` were written by hand. `0014_schema_baseline` restored a snapshot of the current schema, so `drizzle-kit generate` now diffs correctly. Create every new migration with `pnpm db:generate`; see [Database migrations](database-migrations.md). `0010_auth_rate_limit.sql` was compared with what `drizzle-kit generate` emits for the same schema: the `rate_limit` table is identical.
 - The `rate_limit` table keeps one row per client address and path and is not cleaned up automatically. Rows older than the longest window (one hour) have no effect, so they can be removed occasionally:
 
 ```sql

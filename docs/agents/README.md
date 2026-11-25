@@ -12,6 +12,7 @@ These documents describe responsibilities and workflows. They do not replace the
 | Create a new material | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
 | Revise an existing editorial or material | [Revision Agent Instructions](CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.1-2026-11-21.md), together with the [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
 | Author, review or validate a quiz question | [Quiz authoring](../engineering/quiz-authoring.md), together with the current [OSN stage calibration](../engineering/osn-stage-calibration.md) |
+| Change the database schema or add a migration | [Database migrations](../engineering/database-migrations.md) |
 
 The Revision Agent Instructions are a companion to the Writer Agent Instructions: the writer document defines the quality and file-format standards; the revision document adds diagnosis, scope and change-control procedures.
 
@@ -25,6 +26,10 @@ Use this order when sources disagree:
 4. **A task prompt** scopes one assignment and may add task-specific constraints, but does not silently change application invariants or durable project policy.
 
 An agent must report a conflict rather than silently choosing whichever instruction is more convenient. In particular, distinguish technical schema capability from an agent's narrower authoring permissions. A field being accepted by the schema does not mean every agent is authorised or expected to set it; an agent restriction does not mean the application schema rejects it.
+
+## Database migrations: never by hand
+
+Every migration is created with `pnpm db:generate`. Do not create or edit files in `drizzle/meta/`, and do not create a `.sql` migration or a journal entry yourself; you may edit the body of a generated `.sql` file when a data backfill is needed. If `drizzle-kit` asks an interactive question (for example whether a column was renamed), stop and ask a human. Run `pnpm db:check` and `pnpm test` before committing; both fail on a hand-written or mismatched migration. See [Database migrations](../engineering/database-migrations.md).
 
 ## Snapshot limitations
 

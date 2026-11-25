@@ -14,6 +14,7 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:check": "drizzle-kit check && tsx scripts/check-migration-drift.ts",
     "db:seed": "pnpm generate && tsx scripts/seed-topics.ts && tsx scripts/seed-quiz-questions.ts",
     "db:seed:quiz": "tsx scripts/seed-quiz-questions.ts",
     "quiz:export-db": "tsx scripts/export-db-quiz-questions.ts"

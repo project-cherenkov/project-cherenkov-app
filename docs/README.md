@@ -52,6 +52,7 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | `engineering/security-headers.md` | The report-only Content-Security-Policy and `security.txt`. | current |
 | `engineering/seo-and-accessibility.md` | How indexing is switched on, what pages declare to search engines, accessibility decisions. | current |
 | `engineering/quiz-authoring.md` | Writing, reviewing and syncing quiz questions: the Keystatic collections, question IDs, review rules, the git-to-database sync and archive switch. | current |
+| `engineering/database-migrations.md` | Creating and applying database migrations: always `pnpm db:generate`, the checks that enforce it, and why the snapshots matter. | current |
 | `engineering/osn-stage-calibration.md` | Owner-approved OSN preparation difficulty bands, 2025 paper evidence, mastery-target interpretation and current stage-filter limitations. | current |
 | `engineering/internationalization.md` | How the UI message files are laid out, loaded and checked; adding a string, a file or a locale. | current |
 | `reviews/audit-2026-10-31.md` | Design, accessibility, SEO and legal audit of 31 October 2026. | review |
@@ -88,4 +89,5 @@ Status: `current` (kept up to date), `review` (dated findings; not edited afterw
 | Security headers | `engineering/security-headers.md` |
 | SEO and accessibility | `engineering/seo-and-accessibility.md` |
 | UI message files and locales | `engineering/internationalization.md` |
+| Database migrations | `engineering/database-migrations.md` |
 | OSN stage preparation bands | `engineering/osn-stage-calibration.md` and `lib/osn-stages.ts` |
