@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { summarizeQuestionForAdmin } from "@/lib/quiz-admin";
+import { QUESTION_TYPES, type QuestionType } from "@/lib/quiz-types";
 
 type Subject = "informatics" | "physics" | "astronomy";
 type Difficulty = "basic" | "intermediate" | "advanced";
@@ -10,7 +12,7 @@ type Status = "draft" | "reviewed";
 interface Topic { id: string; subject: Subject; title: string; chapter: string; order: number }
 interface Question {
   id: string; key: string | null; source: "git" | "database"; topicId: string; subject: Subject; topicTitle: string;
-  chapter: string; topicOrder: number; prompt: string; choices: string[]; correctChoiceIndex: number;
+  chapter: string; topicOrder: number; prompt: string; questionType: QuestionType; content: unknown; answerKey: unknown;
   explanation: string | null; difficulty: Difficulty; status: Status; archived: boolean;
 }
 const subjects: Subject[] = ["informatics", "physics", "astronomy"];
@@ -33,6 +35,7 @@ export function QuizBankManager() {
   const [topicFilter, setTopicFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("active");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -57,8 +60,9 @@ export function QuizBankManager() {
     (subjectFilter === "all" || question.subject === subjectFilter) &&
     (topicFilter === "all" || question.topicId === topicFilter) &&
     (difficultyFilter === "all" || question.difficulty === difficultyFilter) &&
+    (typeFilter === "all" || question.questionType === typeFilter) &&
     (statusFilter === "all" || (statusFilter === "active" ? !question.archived : statusFilter === "archived" ? question.archived : !question.archived && question.status === statusFilter))
-  ), [questions, subjectFilter, topicFilter, statusFilter, difficultyFilter]);
+  ), [questions, subjectFilter, topicFilter, statusFilter, difficultyFilter, typeFilter]);
   const coverage = useMemo(() => {
     const active = questions.filter((question) => !question.archived && question.status === "reviewed");
     return topics.map((topic) => ({
@@ -111,6 +115,7 @@ export function QuizBankManager() {
           <select aria-label="Filter by subject" className="min-h-10 min-w-0 max-w-full rounded-md border border-border-strong bg-background px-2" value={subjectFilter} onChange={(event) => { setSubjectFilter(event.target.value); setTopicFilter("all"); }}><option value="all">All subjects</option>{subjects.map((subject) => <option key={subject} value={subject}>{subject}</option>)}</select>
           <select aria-label="Filter by topic" className="min-h-10 min-w-0 max-w-full rounded-md border border-border-strong bg-background px-2" value={topicFilter} onChange={(event) => setTopicFilter(event.target.value)}><option value="all">All topics</option>{topics.filter((topic) => subjectFilter === "all" || topic.subject === subjectFilter).map((topic) => <option key={topic.id} value={topic.id}>{topic.title}</option>)}</select>
           <select aria-label="Filter by difficulty" className="min-h-10 min-w-0 max-w-full rounded-md border border-border-strong bg-background px-2" value={difficultyFilter} onChange={(event) => setDifficultyFilter(event.target.value)}><option value="all">All difficulties</option>{difficulties.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}</select>
+          <select aria-label="Filter by question type" className="min-h-10 min-w-0 max-w-full rounded-md border border-border-strong bg-background px-2" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)}><option value="all">All types</option>{QUESTION_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select>
           <select aria-label="Filter by status" className="min-h-10 min-w-0 max-w-full rounded-md border border-border-strong bg-background px-2" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="active">All active</option><option value="draft">Draft</option><option value="reviewed">Reviewed</option><option value="archived">Archived</option><option value="all">All</option></select>
         </div>
       </div>
@@ -119,13 +124,16 @@ export function QuizBankManager() {
       {loading ? <p>Loading questions...</p> : filtered.length === 0 ? <p className="text-sm text-muted-foreground">No questions match these filters.</p> : <div className="space-y-3">{filtered.map((question) => <article key={question.id} className="rounded-lg border border-border p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">{question.subject} / {question.topicTitle} / {question.difficulty} / {question.archived ? "archived" : question.status}</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{question.subject} / {question.topicTitle} / {question.difficulty} / {question.questionType} / {question.archived ? "archived" : question.status}</p>
             <p className="mt-1 text-xs text-muted-foreground">
               {question.source === "git"
                 ? <>In git as <code>{question.key}</code>. Edit it in Keystatic, collection {collectionLabel[question.subject]}.</>
                 : <><span className="font-medium">Database only</span>, not in git yet. Run <code>pnpm quiz:export-db</code>.</>}
             </p>
             <p className="mt-2 font-medium">{question.prompt}</p>
+            <ul className="mt-2 space-y-0.5 text-sm text-muted-foreground" aria-label="Answer key (editors only)">
+              {summarizeQuestionForAdmin(question.content, question.answerKey).map((line, index) => <li key={index}>{line}</li>)}
+            </ul>
           </div>
           <Button variant="outline" size="sm" disabled={busyId === question.id} onClick={() => setArchived(question, !question.archived)}>
             {question.archived ? "Restore" : "Archive now"}

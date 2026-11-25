@@ -63,13 +63,13 @@ export default async function ReviewPage({
     return {
       questionId: q.questionId,
       prompt: q.prompt,
-      choices: q.choices,
+      content: q.content,
       difficulty: q.difficulty,
       topicLabel: `${ts(q.subject)} · ${topicName}`,
       resolved: entry.resolved,
       wrongCount: entry.wrongCount,
       retryCount: entry.retryCount,
-      lastWrongChoice: entry.lastWrongChoice,
+      lastWrongResponse: entry.lastWrongResponse,
       materialHref: material ? `/materials/${material.subject}/${material.slug}` : null,
       editorials: q.syllabusTopicId
         ? editorials

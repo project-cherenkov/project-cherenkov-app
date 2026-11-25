@@ -20,40 +20,56 @@ import {
   submitQuizAttemptCore,
   type QuizAttemptDeps,
   type QuizAttemptTxDeps,
+  type QuestionFeedback,
+  type QuizQuestionForScoring,
   type SubmitQuizAttemptInput,
 } from "@/lib/quiz-scoring";
+import { toServerQuestion } from "@/lib/quiz-types";
 
 export type SubmitQuizResult =
   | {
       ok: true;
       score: number;
-      results: { questionId: string; correct: boolean }[];
+      // One entry per ANSWERED question: correctness, the type-appropriate
+      // correct answer and the explanation, revealed only after submission.
+      results: QuestionFeedback[];
     }
   | { ok: false; reason: "unauthenticated" | "no_valid_answers" };
 
-const realDeps: QuizAttemptDeps = {
-  async getAnswerKeys(topicId) {
-    const rows = await db
-      .select({
-        id: quizQuestions.id,
-        correctChoiceIndex: quizQuestions.correctChoiceIndex,
-        choices: quizQuestions.choices,
-      })
-      .from(quizQuestions)
-      .where(
-          and(
-            eq(quizQuestions.topicId, topicId),
-            eq(quizQuestions.status, "reviewed"),
-            eq(quizQuestions.archived, false),
-          ),
-        );
+// The questions served for a topic (reviewed, not archived) WITH their answer
+// keys. This is one of the only server-side reads of quiz_questions.answer_key
+// (the other is the miss-review reveal in lib/misses-db.ts); it is never sent
+// to the client. A row whose jsonb is malformed is skipped, never scored.
+type Selector = Pick<typeof db, "select">;
+async function selectServedQuestions(
+  executor: Selector,
+  topicId: string,
+): Promise<QuizQuestionForScoring[]> {
+  const rows = await executor
+    .select({
+      id: quizQuestions.id,
+      content: quizQuestions.content,
+      answerKey: quizQuestions.answerKey,
+      explanation: quizQuestions.explanation,
+    })
+    .from(quizQuestions)
+    .where(
+      and(
+        eq(quizQuestions.topicId, topicId),
+        eq(quizQuestions.status, "reviewed"),
+        eq(quizQuestions.archived, false),
+      ),
+    );
+  const questions: QuizQuestionForScoring[] = [];
+  for (const row of rows) {
+    const question = toServerQuestion(row.id, row.content, row.answerKey);
+    if (question) questions.push({ ...question, explanation: row.explanation });
+  }
+  return questions;
+}
 
-    return rows.map((r) => ({
-      id: r.id,
-      correctChoiceIndex: r.correctChoiceIndex,
-      choiceCount: r.choices.length,
-    }));
-  },
+const realDeps: QuizAttemptDeps = {
+  getQuestions: (topicId) => selectServedQuestions(db, topicId),
   async insertAttempt(row) {
     const [inserted] = await db
       .insert(quizAttempts)
@@ -73,28 +89,7 @@ const realDeps: QuizAttemptDeps = {
   async transaction(callback) {
     return db.transaction(async (tx) => {
       const txDeps: QuizAttemptTxDeps = {
-        async getAnswerKeys(topicId) {
-          const rows = await tx
-            .select({
-              id: quizQuestions.id,
-              correctChoiceIndex: quizQuestions.correctChoiceIndex,
-              choices: quizQuestions.choices,
-            })
-            .from(quizQuestions)
-            .where(
-              and(
-                eq(quizQuestions.topicId, topicId),
-                eq(quizQuestions.status, "reviewed"),
-                eq(quizQuestions.archived, false),
-              ),
-            );
-
-          return rows.map((r) => ({
-            id: r.id,
-            correctChoiceIndex: r.correctChoiceIndex,
-            choiceCount: r.choices.length,
-          }));
-        },
+        getQuestions: (topicId) => selectServedQuestions(tx, topicId),
         async insertAttempt(row) {
           const [inserted] = await tx
             .insert(quizAttempts)
@@ -187,8 +182,8 @@ const realDeps: QuizAttemptDeps = {
   },
 };
 
-// QUIZ-001. quiz_questions.correct_choice_index is only ever fetched here,
-// server-side, via realDeps.getAnswerKeys — never sent to the client (see
+// QUIZ-001. quiz_questions.answer_key is only ever fetched here,
+// server-side, via selectServedQuestions — never sent to the client (see
 // lib/quiz.ts, the read side used to render the quiz form). The score is
 // always computed from that server-fetched key inside submitQuizAttemptCore
 // (lib/quiz-scoring.ts); nothing in `input`'s type carries a score field at
@@ -206,7 +201,7 @@ export async function submitQuizAttempt(
     return { ok: false, reason: "unauthenticated" };
   }
 
-  const { scoredAnswers, score, rejected } = await submitQuizAttemptCore(
+  const { scoredAnswers, feedback, score, rejected } = await submitQuizAttemptCore(
     realDeps,
     user.id,
     input,
@@ -215,7 +210,7 @@ export async function submitQuizAttempt(
   if (rejected.length > 0) {
     console.warn(
       `submitQuizAttempt: rejected ${rejected.length} invalid answer(s) ` +
-        `(unknown question or out-of-range choice) for topic ${input.topicId}.`,
+        `(unknown question or invalid response for its type) for topic ${input.topicId}.`,
     );
   }
 
@@ -223,5 +218,5 @@ export async function submitQuizAttempt(
     return { ok: false, reason: "no_valid_answers" };
   }
 
-  return { ok: true, score, results: scoredAnswers };
+  return { ok: true, score, results: feedback };
 }

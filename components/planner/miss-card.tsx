@@ -1,29 +1,35 @@
 "use client";
 
-import { useId, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import { retryMissedQuestion, revealMissedAnswer } from "@/lib/misses-actions";
 import { MarkdownText } from "@/components/viz/shared/markdown-text";
+import { QuestionInput } from "@/components/quiz/question-input";
+import { draftToResponse, emptyDraft, type AnswerDraft } from "@/lib/quiz-draft";
+import type { QuestionContent, RevealedAnswer, SubmittedResponse } from "@/lib/quiz-types";
 
 export interface MissCardData {
   questionId: string;
   prompt: string;
-  choices: string[];
+  // Public display data for the question's type; never the answer key.
+  content: QuestionContent;
   difficulty: string;
   topicLabel: string;
   resolved: boolean;
   wrongCount: number;
   retryCount: number;
-  // The choice picked on the latest wrong answer; null if it was not recorded.
-  lastWrongChoice: number | null;
+  // What the student submitted on the latest wrong answer; null if it was not
+  // recorded. Rows from before the four question types are converted by
+  // storedResponse() on the server.
+  lastWrongResponse: SubmittedResponse | null;
   materialHref: string | null;
   editorials: { href: string; title: string }[];
 }
 
-type Answer = { correctChoiceIndex: number; explanation: string | null };
+type Answer = { correctAnswer: RevealedAnswer; explanation: string | null };
 
 // One missed question. The correct answer is NOT in the page's HTML or props:
 // it only arrives after the student retries or explicitly asks to see it
@@ -32,8 +38,8 @@ type Answer = { correctChoiceIndex: number; explanation: string | null };
 // the plan.
 export function MissCard({ data }: { data: MissCardData }) {
   const t = useTranslations("review");
-  const groupId = useId();
-  const [selected, setSelected] = useState<number | null>(null);
+  const [draft, setDraft] = useState<AnswerDraft>(() => emptyDraft(data.content));
+  const response = draftToResponse(draft);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [resolved, setResolved] = useState(data.resolved);
   const [retryResult, setRetryResult] = useState<boolean | null>(null);
@@ -41,15 +47,15 @@ export function MissCard({ data }: { data: MissCardData }) {
   const [pending, startTransition] = useTransition();
 
   function check() {
-    if (selected === null) return;
+    if (response === null) return;
     setError(null);
     startTransition(async () => {
-      const result = await retryMissedQuestion({ questionId: data.questionId, selectedChoiceIndex: selected });
+      const result = await retryMissedQuestion({ questionId: data.questionId, response });
       if (!result.ok) {
         setError(t("error"));
         return;
       }
-      setAnswer({ correctChoiceIndex: result.correctChoiceIndex, explanation: result.explanation });
+      setAnswer({ correctAnswer: result.correctAnswer, explanation: result.explanation });
       setRetryResult(result.correct);
       setResolved(result.correct);
     });
@@ -63,7 +69,7 @@ export function MissCard({ data }: { data: MissCardData }) {
         setError(t("error"));
         return;
       }
-      setAnswer({ correctChoiceIndex: result.correctChoiceIndex, explanation: result.explanation });
+      setAnswer({ correctAnswer: result.correctAnswer, explanation: result.explanation });
     });
   }
 
@@ -91,42 +97,17 @@ export function MissCard({ data }: { data: MissCardData }) {
 
       <MarkdownText text={data.prompt} className="mt-3 text-foreground" />
 
-      <fieldset className="mt-4 space-y-2" disabled={pending || retryResult !== null}>
-        <legend className="sr-only">{t("choices")}</legend>
-        {data.choices.map((choice, index) => {
-          const isCorrect = answer?.correctChoiceIndex === index;
-          const wasMine = data.lastWrongChoice === index;
-          return (
-            <label
-              key={index}
-              className={[
-                "flex cursor-pointer items-start gap-3 rounded-md border p-3 text-sm",
-                isCorrect ? "border-success" : "border-border",
-              ].join(" ")}
-            >
-              <input
-                type="radio"
-                name={`${groupId}-choice`}
-                checked={selected === index}
-                onChange={() => setSelected(index)}
-                className="mt-1"
-              />
-              <span className="min-w-0">
-                <MarkdownText text={choice} inline />
-                {/* Status is always spelled out in words, never colour alone. */}
-                {isCorrect ? (
-                  <span className="ml-2 font-medium text-success">
-                    ({t("correctAnswer")})
-                  </span>
-                ) : null}
-                {wasMine ? (
-                  <span className="ml-2 text-muted-foreground">({t("yourEarlierAnswer")})</span>
-                ) : null}
-              </span>
-            </label>
-          );
-        })}
-      </fieldset>
+      <div className="mt-4">
+        <QuestionInput
+          content={data.content}
+          draft={draft}
+          onChange={setDraft}
+          disabled={pending || retryResult !== null}
+          revealed={answer?.correctAnswer ?? null}
+          submitted={data.lastWrongResponse}
+          submittedMark={t("yourEarlierAnswer")}
+        />
+      </div>
 
       {retryResult !== null ? (
         <p role="status" className="mt-3 text-sm font-medium text-foreground">
@@ -149,7 +130,7 @@ export function MissCard({ data }: { data: MissCardData }) {
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {retryResult === null ? (
-          <Button size="sm" onClick={check} disabled={pending || selected === null}>
+          <Button size="sm" onClick={check} disabled={pending || response === null}>
             {t("check")}
           </Button>
         ) : null}

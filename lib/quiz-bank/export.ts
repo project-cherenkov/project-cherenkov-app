@@ -1,7 +1,8 @@
 import type { QuestionDifficulty, QuestionStatus } from "../planner-vocab";
 import type { Subject } from "../subjects";
 import { nextFreeKey } from "./files";
-import type { BankQuestion } from "./types";
+import { parseQuestionContent, parseAnswerKey } from "../quiz-types";
+import { joinQuestionData, type BankQuestion } from "./types";
 
 // Plans moving database-only questions (admin.<uuid> keys, made in the old
 // admin page) into git. Pure: scripts/export-db-quiz-questions.ts does the
@@ -14,8 +15,9 @@ export interface DbOnlyQuestionRow {
   // topics.syllabus_topic_id; null for a legacy editorial-derived topics row.
   syllabusTopicId: string | null;
   prompt: string;
-  choices: string[];
-  correctChoiceIndex: number;
+  // Raw jsonb columns (public content and server-only answer key).
+  content: unknown;
+  answerKey: unknown;
   explanation: string | null;
   difficulty: QuestionDifficulty;
   status: QuestionStatus;
@@ -60,8 +62,11 @@ export function planDbExport(
       });
       continue;
     }
-    if (row.correctChoiceIndex < 0 || row.correctChoiceIndex >= row.choices.length) {
-      plan.skipped.push({ rowId: row.id, key: row.key, reason: "its correct-choice index is outside its choices" });
+    const content = parseQuestionContent(row.content);
+    const answerKey = content ? parseAnswerKey(row.answerKey, content) : null;
+    const data = content && answerKey ? joinQuestionData(content, answerKey) : null;
+    if (!data) {
+      plan.skipped.push({ rowId: row.id, key: row.key, reason: "its content or answer key is malformed" });
       continue;
     }
     const key = nextFreeKey(row.subject, row.syllabusTopicId, row.difficulty, taken);
@@ -75,13 +80,18 @@ export function planDbExport(
         topicId: row.syllabusTopicId,
         difficulty: row.difficulty,
         prompt: row.prompt,
-        choices: row.choices,
-        correctChoiceIndex: row.correctChoiceIndex,
         explanation: row.explanation ?? "",
         status: row.status,
         archived: row.archived,
         source: "Moved from the database-only admin page",
-      },
+        // The old admin page only made single-choice questions: they are
+        // written as legacy files (no questionType, no author). Any other
+        // type would be new-format and must name an author.
+        ...(data.questionType === "single_choice"
+          ? { legacy: true as const }
+          : { author: "Moved from the database-only admin page" }),
+        ...data,
+      } as BankQuestion,
     });
   }
   return plan;

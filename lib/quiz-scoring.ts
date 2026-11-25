@@ -4,55 +4,87 @@
 // logic with fake in-memory deps — no live database, no mocking Drizzle's
 // query builder.
 
-export interface QuizQuestionAnswerKey {
-  id: string;
-  correctChoiceIndex: number;
-  choiceCount: number;
-}
+import {
+  gradeResponse,
+  revealAnswer,
+  validateResponse,
+  type RevealedAnswer,
+  type ServerQuestion,
+  type SubmittedResponse,
+} from "@/lib/quiz-types";
 
+// A question as the scoring code receives it: public content plus the
+// server-fetched answer key (and the explanation to show afterwards).
+export type QuizQuestionForScoring = ServerQuestion & { explanation?: string | null };
+
+// What the client sends per question. `response` is the type-tagged answer;
+// `selectedChoiceIndex` is the pre-four-types single-choice shape, still
+// accepted so a tab opened before a deploy keeps working. Nothing here carries
+// correctness, a score, an answer key or a user id, so a forged payload has
+// nothing to influence (spec §5, §8, §9 HIGH risk).
 export interface SubmittedAnswer {
   questionId: string;
-  selectedChoiceIndex: number;
+  response?: SubmittedResponse;
+  /** @deprecated single-choice only; use `response`. */
+  selectedChoiceIndex?: number;
 }
 
 export interface ScoredAnswer {
   questionId: string;
   correct: boolean;
+  // The validated, normalised response that was graded (what history stores).
+  response: SubmittedResponse;
+}
+
+// What the student sees per answered question after submission. Built from the
+// server-side key; only ever produced for questions that were answered.
+export interface QuestionFeedback {
+  questionId: string;
+  correct: boolean;
+  correctAnswer: RevealedAnswer;
+  explanation: string | null;
+}
+
+function normalizeSubmitted(answer: SubmittedAnswer): unknown {
+  if (answer.response !== undefined) return answer.response;
+  if (typeof answer.selectedChoiceIndex === "number") {
+    return { type: "single_choice", choiceIndex: answer.selectedChoiceIndex };
+  }
+  return undefined;
 }
 
 // Never receives or trusts anything the client claims about correctness —
-// only answerKeys (server-fetched, real correct_choice_index) and the
-// client's selectedChoiceIndex per question are used (spec §5, §9 HIGH
-// risk). An answer referencing an unknown questionId, or a
-// selectedChoiceIndex outside that question's choices array, is rejected
-// outright (spec §6 validation) rather than silently scored as wrong.
+// only the server-fetched questions (content + answer key) and the client's
+// raw response per question are used. The expected response shape comes from
+// the SERVER's question type: an answer for an unknown questionId, a response
+// whose type differs from the question's, an out-of-range or duplicated index,
+// a wrong-length or non-boolean true/false vector, or a non-finite number is
+// rejected outright (spec §6 validation) rather than silently scored as wrong.
 export function scoreAnswers(
-  answerKeys: QuizQuestionAnswerKey[],
+  questions: QuizQuestionForScoring[],
   submitted: SubmittedAnswer[],
 ): { scored: ScoredAnswer[]; invalid: SubmittedAnswer[] } {
-  const keysById = new Map(answerKeys.map((k) => [k.id, k]));
+  const byId = new Map(questions.map((q) => [q.id, q]));
   const scored: ScoredAnswer[] = [];
   const invalid: SubmittedAnswer[] = [];
   const seenQuestionIds = new Set<string>();
 
   for (const answer of submitted) {
-    if (seenQuestionIds.has(answer.questionId)) {
+    if (!answer || typeof answer.questionId !== "string" || seenQuestionIds.has(answer.questionId)) {
       invalid.push(answer);
       continue;
     }
     seenQuestionIds.add(answer.questionId);
-    const key = keysById.get(answer.questionId);
-    if (
-      !key ||
-      answer.selectedChoiceIndex < 0 ||
-      answer.selectedChoiceIndex >= key.choiceCount
-    ) {
+    const question = byId.get(answer.questionId);
+    const response = question ? validateResponse(question.content, normalizeSubmitted(answer)) : null;
+    if (!question || !response) {
       invalid.push(answer);
       continue;
     }
     scored.push({
       questionId: answer.questionId,
-      correct: answer.selectedChoiceIndex === key.correctChoiceIndex,
+      correct: gradeResponse(question.answerKey, response),
+      response,
     });
   }
 
@@ -85,13 +117,17 @@ export interface QuestionResponseRow {
   attemptId: string;
   questionId: string;
   correct: boolean;
-  // Which choice the student picked (already range-checked by scoreAnswers).
-  // Lets the misses-review page show "your answer".
-  selectedChoiceIndex: number;
+  // Type-neutral record of what the student submitted (already validated by
+  // scoreAnswers). Lets the misses-review page show "your answer".
+  response: SubmittedResponse;
+  // Legacy single-choice mirror: set for single_choice answers only.
+  selectedChoiceIndex: number | null;
 }
 
 export interface QuizAttemptTxDeps {
-  getAnswerKeys: (topicId: string) => Promise<QuizQuestionAnswerKey[]>;
+  // The topic's served questions (reviewed, not archived) with their answer
+  // keys. Server-side only.
+  getQuestions: (topicId: string) => Promise<QuizQuestionForScoring[]>;
   // Returns the new attempt's id so the per-question responses can reference it.
   insertAttempt: (row: {
     userId: string;
@@ -113,6 +149,7 @@ export interface QuizAttemptDeps extends QuizAttemptTxDeps {
 
 export interface SubmitQuizAttemptResult {
   scoredAnswers: ScoredAnswer[];
+  feedback: QuestionFeedback[];
   score: number;
   rejected: SubmittedAnswer[];
 }
@@ -137,43 +174,53 @@ export async function submitQuizAttemptCore(
     );
   }
 
-  const answerKeys = await deps.getAnswerKeys(input.topicId);
-  const { scored, invalid } = scoreAnswers(answerKeys, input.answers);
+  const questions = await deps.getQuestions(input.topicId);
+  const answers = Array.isArray(input.answers) ? input.answers : [];
+  const { scored, invalid } = scoreAnswers(questions, answers);
 
   if (scored.length === 0) {
     // Nothing valid to record — no quiz_attempts row written (spec §6).
-    return { scoredAnswers: [], score: 0, rejected: invalid };
+    return { scoredAnswers: [], feedback: [], score: 0, rejected: invalid };
   }
 
   // Partial answers remain valid for feedback, but mastery must reflect the
-  // complete topic rather than only the questions answered in this request.
-  const score = scored.filter((answer) => answer.correct).length / answerKeys.length;
+  // complete topic rather than only the questions answered in this request:
+  // the denominator is every served question, answered or not. Multiple-select
+  // and true/false are all-or-nothing, so each question is 0 or 1.
+  const score = scored.filter((answer) => answer.correct).length / questions.length;
   const attemptId = await deps.insertAttempt({
     userId,
     topicId: input.topicId,
     score,
   });
   // Only valid, answered questions get a response row. Rejected answers
-  // (unknown question, out-of-range choice, duplicates) never do, and
+  // (unknown question, wrong type/shape, duplicates) never do, and
   // unanswered questions leave no row: the mastery estimate must treat
-  // "not asked" and "answered wrong" differently.
-  // scoreAnswers keeps the FIRST answer for a duplicated question id, so the
-  // recorded choice must too (a plain Map constructor would keep the last).
-  const pickedByQuestion = new Map<string, number>();
-  for (const answer of input.answers) {
-    if (!pickedByQuestion.has(answer.questionId)) {
-      pickedByQuestion.set(answer.questionId, answer.selectedChoiceIndex);
-    }
-  }
+  // "not asked" and "answered wrong" differently. scoreAnswers keeps the
+  // FIRST answer for a duplicated question id, and `scored` carries that
+  // validated response, so history matches what was graded.
   await deps.insertResponses(
     scored.map((answer) => ({
       attemptId,
       questionId: answer.questionId,
       correct: answer.correct,
-      selectedChoiceIndex: pickedByQuestion.get(answer.questionId)!,
+      response: answer.response,
+      selectedChoiceIndex:
+        answer.response.type === "single_choice" ? answer.response.choiceIndex : null,
     })),
   );
   await deps.onAttemptRecorded?.(userId, input.topicId);
 
-  return { scoredAnswers: scored, score, rejected: invalid };
+  const byId = new Map(questions.map((q) => [q.id, q]));
+  const feedback: QuestionFeedback[] = scored.map((answer) => {
+    const question = byId.get(answer.questionId)!;
+    return {
+      questionId: answer.questionId,
+      correct: answer.correct,
+      correctAnswer: revealAnswer(question),
+      explanation: question.explanation ?? null,
+    };
+  });
+
+  return { scoredAnswers: scored, feedback, score, rejected: invalid };
 }

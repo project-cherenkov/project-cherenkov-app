@@ -21,6 +21,7 @@ export async function retryMissedQuestion(
   if (!user) return { ok: false, reason: "unauthenticated" };
   return retryMissedQuestionCore(retryDeps, user.id, {
     questionId: input?.questionId,
+    response: input?.response,
     selectedChoiceIndex: input?.selectedChoiceIndex,
   });
 }

@@ -10,6 +10,7 @@ import {
   topics,
 } from "@/lib/db/schema";
 import type { AnswerEvent, MissQuestion } from "@/lib/misses";
+import { parseQuestionContent, storedResponse, toServerQuestion } from "@/lib/quiz-types";
 import type { RetryDeps } from "@/lib/misses-retry";
 
 export async function loadMissData(
@@ -28,8 +29,7 @@ export async function loadMissData(
       .select({
         questionId: quizQuestions.id,
         prompt: quizQuestions.prompt,
-        choices: quizQuestions.choices,
-        correctChoiceIndex: quizQuestions.correctChoiceIndex,
+        content: quizQuestions.content,
         explanation: quizQuestions.explanation,
         difficulty: quizQuestions.difficulty,
         status: quizQuestions.status,
@@ -49,6 +49,7 @@ export async function loadMissData(
         questionId: quizQuestionResponses.questionId,
         correct: quizQuestionResponses.correct,
         selectedChoiceIndex: quizQuestionResponses.selectedChoiceIndex,
+        response: quizQuestionResponses.response,
         at: quizQuestionResponses.answeredAt,
       })
       .from(quizQuestionResponses)
@@ -59,25 +60,44 @@ export async function loadMissData(
         questionId: questionRetries.questionId,
         correct: questionRetries.correct,
         selectedChoiceIndex: questionRetries.selectedChoiceIndex,
+        response: questionRetries.response,
         at: questionRetries.answeredAt,
       })
       .from(questionRetries)
       .where(and(eq(questionRetries.userId, userId), inArray(questionRetries.questionId, ids))),
   ]);
 
+  const toEvent = (
+    r: (typeof responseRows)[number],
+    source: AnswerEvent["source"],
+  ): AnswerEvent => ({
+    questionId: r.questionId,
+    correct: r.correct,
+    // New rows carry `response`; older ones only selected_choice_index.
+    response: storedResponse(r),
+    at: r.at,
+    source,
+  });
   const events: AnswerEvent[] = [
-    ...responseRows.map((r): AnswerEvent => ({ ...r, source: "quiz" })),
-    ...retryRows.map((r): AnswerEvent => ({ ...r, source: "retry" })),
+    ...responseRows.map((r) => toEvent(r, "quiz")),
+    ...retryRows.map((r) => toEvent(r, "retry")),
   ];
-  return { events, questions: questionRows };
+  // A question whose content column is malformed cannot be shown, so it is left
+  // off the page rather than crashing it.
+  const questions: MissQuestion[] = [];
+  for (const row of questionRows) {
+    const content = parseQuestionContent(row.content);
+    if (content) questions.push({ ...row, content });
+  }
+  return { events, questions };
 }
 
 export const retryDeps: RetryDeps = {
-  async getAnswerKey(questionId) {
+  async getQuestion(questionId) {
     const [row] = await db
       .select({
-        correctChoiceIndex: quizQuestions.correctChoiceIndex,
-        choices: quizQuestions.choices,
+        content: quizQuestions.content,
+        answerKey: quizQuestions.answerKey,
         explanation: quizQuestions.explanation,
       })
       .from(quizQuestions)
@@ -88,11 +108,8 @@ export const retryDeps: RetryDeps = {
       ))
       .limit(1);
     if (!row) return null;
-    return {
-      correctChoiceIndex: row.correctChoiceIndex,
-      choiceCount: row.choices.length,
-      explanation: row.explanation,
-    };
+    const question = toServerQuestion(questionId, row.content, row.answerKey);
+    return question ? { ...question, explanation: row.explanation } : null;
   },
   async hasMissed(userId, questionId) {
     const [row] = await db

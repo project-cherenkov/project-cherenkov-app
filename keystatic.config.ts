@@ -1,6 +1,7 @@
 import { config, collection, singleton, fields } from "@keystatic/core";
 import { QUESTION_DIFFICULTIES, QUESTION_STATUSES } from "./lib/planner-vocab";
 import { quizKeyPattern } from "./lib/quiz-bank/key";
+import { QUESTION_TYPES, MAX_STATEMENTS } from "./lib/quiz-types";
 import { plannerTopicSelectOptions, topicSelectOptions } from "./lib/syllabus";
 
 // Mirrors velite.config.ts field-for-field (spec §11 CMS-002). If either
@@ -527,9 +528,30 @@ function quizQuestionSchema(subject: "astronomy" | "physics" | "informatics") {
         "Hidden from students; history is kept. The sync archives questions marked here but never restores one: to bring an archived question back, use Restore on /keystatic/quiz-bank.",
       defaultValue: false,
     }),
+    // FLAT on purpose. Keystatic's fields.conditional stores
+    // `{ discriminant, value: {...} }`, which can neither read the legacy files
+    // (no `questionType`, top-level `choices`) nor write the flat YAML the
+    // authoring contract specifies. So every type's fields are plain top-level
+    // keys, and lib/quiz-bank/files.ts + validateQuizBank reject a question
+    // that fills in another type's fields. Fill in ONLY the group for the
+    // chosen type; leave the others empty.
+    questionType: fields.select({
+      label: "Question type",
+      description:
+        "Single choice: one correct option. Multiple select: two or more correct options, all-or-nothing. " +
+        "True/false set: 3-5 independent statements, all-or-nothing. Numeric response: one number with a tolerance. " +
+        "Fill in only the matching section below. Older questions without a type are single choice.",
+      options: [
+        { label: "Single choice", value: "single_choice" },
+        { label: "Multiple select", value: "multiple_select" },
+        { label: "True/false set", value: "true_false_set" },
+        { label: "Numeric response", value: "numeric_response" },
+      ] satisfies { label: string; value: (typeof QUESTION_TYPES)[number] }[],
+      defaultValue: "single_choice",
+    }),
     prompt: fields.text({
       label: "Question prompt",
-      description: "$inline$ and $$display$$ math render with KaTeX for students.",
+      description: "$inline$ and $$display$$ math render with KaTeX for students. For numeric questions, say which unit the final value is entered in.",
       multiline: true,
       validation: { isRequired: true, length: { max: 20000 } },
     }),
@@ -537,17 +559,55 @@ function quizQuestionSchema(subject: "astronomy" | "physics" | "informatics") {
       fields.object({
         text: fields.text({ label: "Choice", validation: { isRequired: true } }),
         correct: fields.checkbox({
-          label: "This is the correct answer",
-          description: "Tick exactly one choice.",
+          label: "This is a correct answer",
+          description: "Single choice: tick exactly one. Multiple select: tick at least two, and leave at least one unticked.",
           defaultValue: false,
         }),
       }),
       {
-        label: "Answer choices",
-        description: "At least two, all different, with exactly one marked correct.",
+        label: "Answer choices (single choice and multiple select only)",
+        description:
+          "Single choice: at least two, all different, exactly one correct. Multiple select: at least three, all different, at least two correct and at least one incorrect; no \"all/none of the above\". Leave empty for other types.",
         itemLabel: (props) =>
           `${props.fields.correct.value ? "✓ " : ""}${props.fields.text.value || "Choice"}`,
-        validation: { length: { min: 2 } },
+      },
+    ),
+    statements: fields.array(
+      fields.object({
+        text: fields.text({ label: "Statement", validation: { isRequired: true } }),
+        isTrue: fields.checkbox({
+          label: "This statement is true",
+          description: "The answer key: tick if the statement itself is factually true.",
+          defaultValue: false,
+        }),
+      }),
+      {
+        label: `Statements (true/false set only)`,
+        description: `Three to ${MAX_STATEMENTS} distinct, self-contained, independently judgeable statements. Leave empty for other types.`,
+        itemLabel: (props) =>
+          `${props.fields.isTrue.value ? "True: " : "False: "}${props.fields.text.value || "Statement"}`,
+      },
+    ),
+    numericAnswer: fields.object(
+      {
+        value: fields.number({
+          label: "Expected value",
+          description: "The correct final value, in the unit below.",
+        }),
+        tolerance: fields.number({
+          label: "Absolute tolerance",
+          description:
+            "Accepted when |answer - expected value| <= tolerance, in the same unit. 0 or more. Never use a wide tolerance to hide an ambiguous question.",
+          validation: { min: 0 },
+        }),
+        unit: fields.text({
+          label: "Unit shown next to the input",
+          description: "Students do not type the unit. Example: au",
+        }),
+      },
+      {
+        label: "Numeric answer (numeric response only)",
+        description: "Leave all three empty for other types.",
       },
     ),
     explanation: fields.text({
@@ -556,13 +616,18 @@ function quizQuestionSchema(subject: "astronomy" | "physics" | "informatics") {
       multiline: true,
       validation: { isRequired: true },
     }),
+    // Required for every NEW-format question (one with a questionType), but
+    // NOT marked isRequired here: Keystatic's reader runs field validation on
+    // read, so a required field would make every legacy file (which has no
+    // author or source, and must not be given an invented one) unreadable.
+    // validateQuizBank enforces the requirement in `pnpm test` / CI instead.
     author: fields.text({
-      label: "Author (optional)",
-      description: "Who wrote it. A reviewer should be someone else.",
+      label: "Author (required for every new question)",
+      description: "Who wrote it. A reviewer should be someone else. Legacy questions may leave this empty; never invent an author.",
     }),
     source: fields.text({
-      label: "Source (optional)",
-      description: "Original, adapted from something, or from a past paper. Say so, so nothing is copied in by accident.",
+      label: "Source (required for every new question)",
+      description: "\"original\", or the exact book section and printed pages if adapted. Say so, so nothing is copied in by accident.",
     }),
   };
 }

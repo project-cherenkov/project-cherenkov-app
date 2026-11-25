@@ -12,7 +12,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // a second, diverging copy of this comparison again, this test fails.
 const fixture = vi.hoisted(() => ({
   user: { id: "user-1", email: "user@example.com" } as { id: string; email: string } | null,
-  answerKeys: [] as { id: string; correctChoiceIndex: number; choices: unknown[] }[],
+  answerKeys: [] as { id: string; content: unknown; answerKey: unknown; explanation: string | null }[],
   attempts: [] as { score: number; attemptedAt: Date }[],
   planId: "plan-1" as string | null,
   planItem: { id: "item-1", completedAt: null as Date | null } as
@@ -28,7 +28,8 @@ const fixture = vi.hoisted(() => ({
     attemptId: string;
     questionId: string;
     correct: boolean;
-    selectedChoiceIndex: number;
+    selectedChoiceIndex: number | null;
+    response: unknown;
   }[],
 }));
 
@@ -116,13 +117,12 @@ beforeEach(() => {
   fixture.confirmItem = null;
   fixture.planItemQueries = 0;
   fixture.user = { id: "user-1", email: "user@example.com" };
-  fixture.answerKeys = [
-    { id: "q1", correctChoiceIndex: 0, choices: ["a", "b"] },
-    { id: "q2", correctChoiceIndex: 0, choices: ["a", "b"] },
-    { id: "q3", correctChoiceIndex: 0, choices: ["a", "b"] },
-    { id: "q4", correctChoiceIndex: 0, choices: ["a", "b"] },
-    { id: "q5", correctChoiceIndex: 0, choices: ["a", "b"] },
-  ];
+  fixture.answerKeys = ["q1", "q2", "q3", "q4", "q5"].map((id) => ({
+    id,
+    content: { type: "single_choice", choices: ["a", "b"] },
+    answerKey: { type: "single_choice", correctChoiceIndex: 0 },
+    explanation: null,
+  }));
   fixture.attempts = [];
   fixture.planId = "plan-1";
   fixture.planItem = { id: "item-1", completedAt: null };
@@ -133,7 +133,7 @@ beforeEach(() => {
 function answersWithScore(correctCount: number) {
   return fixture.answerKeys.map((key, index) => ({
     questionId: key.id,
-    selectedChoiceIndex: index < correctCount ? key.correctChoiceIndex : 1,
+    selectedChoiceIndex: index < correctCount ? 0 : 1,
   }));
 }
 
@@ -201,7 +201,7 @@ describe("submitQuizAttempt — per-question responses through the real transact
     });
 
     expect(fixture.responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q2", correct: true, selectedChoiceIndex: 0 },
+      { attemptId: "attempt-1", questionId: "q2", correct: true, response: { type: "single_choice", choiceIndex: 0 }, selectedChoiceIndex: 0 },
     ]);
   });
 
@@ -228,5 +228,70 @@ describe("submitQuizAttempt — Phase 3 confirmation items", () => {
     });
     expect(result.ok).toBe(true);
     expect(fixture.markCompleteCalls).toBe(1);
+  });
+});
+
+// All four types through the real server action, transaction and fake DB.
+describe("submitQuizAttempt — the four question types", () => {
+  beforeEach(() => {
+    fixture.answerKeys = [
+      { id: "s1", content: { type: "single_choice", choices: ["a", "b", "c"] }, answerKey: { type: "single_choice", correctChoiceIndex: 1 }, explanation: "e-s1" },
+      { id: "m1", content: { type: "multiple_select", choices: ["a", "b", "c", "d"] }, answerKey: { type: "multiple_select", correctChoiceIndices: [1, 3] }, explanation: "e-m1" },
+      { id: "t1", content: { type: "true_false_set", statements: ["x", "y", "z"] }, answerKey: { type: "true_false_set", truthValues: [true, true, false] }, explanation: null },
+      { id: "n1", content: { type: "numeric_response", unit: "au" }, answerKey: { type: "numeric_response", value: 5, tolerance: 0.5 }, explanation: "e-n1" },
+    ];
+  });
+
+  it("scores, persists the type-neutral response and returns type-aware feedback", async () => {
+    const result = await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [
+        { questionId: "s1", response: { type: "single_choice", choiceIndex: 1 } },
+        { questionId: "m1", response: { type: "multiple_select", choiceIndices: [3, 1] } },
+        { questionId: "t1", response: { type: "true_false_set", values: [true, false, false] } },
+        { questionId: "n1", response: { type: "numeric_response", value: 5.5 } },
+      ],
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.score).toBe(3 / 4);
+    expect(result.results.map((r) => [r.questionId, r.correct])).toEqual([["s1", true], ["m1", true], ["t1", false], ["n1", true]]);
+    expect(result.results[2]).toEqual({
+      questionId: "t1", correct: false,
+      correctAnswer: { type: "true_false_set", truthValues: [true, true, false] }, explanation: null,
+    });
+    expect(fixture.responses.map((r) => [r.questionId, r.response, r.selectedChoiceIndex])).toEqual([
+      ["s1", { type: "single_choice", choiceIndex: 1 }, 1],
+      ["m1", { type: "multiple_select", choiceIndices: [1, 3] }, null],
+      ["t1", { type: "true_false_set", values: [true, false, false] }, null],
+      ["n1", { type: "numeric_response", value: 5.5 }, null],
+    ]);
+  });
+
+  it("rejects a mismatched or malformed response and stores nothing for it", async () => {
+    const result = await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [
+        { questionId: "m1", response: { type: "single_choice", choiceIndex: 1 } },
+        { questionId: "n1", response: { type: "numeric_response", value: Number.NaN } },
+        { questionId: "t1", response: { type: "true_false_set", values: [true] } },
+      ] as never,
+    });
+    expect(result).toEqual({ ok: false, reason: "no_valid_answers" });
+    expect(fixture.responses).toHaveLength(0);
+    expect(fixture.attempts).toHaveLength(0);
+  });
+
+  it("skips a question whose stored jsonb is corrupt instead of serving or scoring it", async () => {
+    fixture.answerKeys.push({ id: "bad", content: { type: "single_choice", choices: ["a", "b"] }, answerKey: { type: "multiple_select", correctChoiceIndices: [0, 1] }, explanation: null });
+    const result = await submitQuizAttempt({
+      topicId: "topic-1",
+      answers: [
+        { questionId: "bad", response: { type: "single_choice", choiceIndex: 0 } },
+        { questionId: "s1", response: { type: "single_choice", choiceIndex: 1 } },
+      ],
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.score).toBe(1 / 4); // denominator = the 4 valid served questions
   });
 });

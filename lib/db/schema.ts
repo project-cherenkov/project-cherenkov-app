@@ -27,6 +27,12 @@ import {
   SELF_RATING_MAX,
   SELF_RATING_MIN,
 } from "../planner-vocab";
+import {
+  QUESTION_TYPES,
+  type AnswerKey,
+  type QuestionContent,
+  type SubmittedResponse,
+} from "../quiz-types";
 
 // ===========================================================================
 // Better Auth core tables — user, session, account, verification
@@ -212,6 +218,7 @@ export const questionDifficultyEnum = pgEnum(
   QUESTION_DIFFICULTIES,
 );
 export const questionStatusEnum = pgEnum("question_status", QUESTION_STATUSES);
+export const questionTypeEnum = pgEnum("question_type", QUESTION_TYPES);
 export const planItemKindEnum = pgEnum("plan_item_kind", PLAN_ITEM_KINDS);
 
 export const quizQuestions = pgTable("quiz_questions", {
@@ -220,11 +227,25 @@ export const quizQuestions = pgTable("quiz_questions", {
     .notNull()
     .references(() => topics.id, { onDelete: "cascade" }),
   prompt: text("prompt").notNull(),
-  choices: jsonb("choices").$type<string[]>().notNull(),
-  // Server-side only — lib/quiz-actions.ts is the only module allowed to
-  // select this column, and it must never reach the client before
-  // submission (spec §5, §9 HIGH risk, QUIZ-001 constraint).
-  correctChoiceIndex: integer("correct_choice_index").notNull(),
+  // One of the four deterministic types (lib/quiz-types.ts). Rows that predate
+  // the column were backfilled as `single_choice` (migration 0013).
+  questionType: questionTypeEnum("question_type").notNull().default("single_choice"),
+  // PUBLIC display data for the type (choices / statements / unit). This is
+  // all lib/quiz.ts selects for the browser.
+  content: jsonb("content").$type<QuestionContent>().notNull(),
+  // SERVER-SIDE ONLY answer key (correct indices / truth values / expected
+  // value + tolerance). Only the scoring and reveal paths may select this
+  // column, and it must never reach the client before submission (spec §5, §9
+  // HIGH risk, QUIZ-001 constraint). Checked against `content` in the DB and
+  // again at read time (parseAnswerKey).
+  answerKey: jsonb("answer_key").$type<AnswerKey>().notNull(),
+  // DEPRECATED (migration 0013): the single-choice-only representation that
+  // `content` / `answer_key` replace. Backfilled rows still hold their old
+  // values, but nothing in the app reads or writes these any more and they go
+  // stale as soon as a question is re-synced. Kept nullable only so the
+  // migration is forward-only and lossless; a later migration may drop them.
+  choices: jsonb("choices").$type<string[]>(),
+  correctChoiceIndex: integer("correct_choice_index"),
   explanation: text("explanation"),
   // Phase 3. Stable authoring key from lib/quiz-bank (e.g.
   // "physics.vectors.basic.1") so re-running the seed updates a question
@@ -243,6 +264,15 @@ export const quizQuestions = pgTable("quiz_questions", {
   uniqueIndex("quiz_questions_key_unique")
     .on(table.key)
     .where(sql`${table.key} is not null`),
+  // The two jsonb columns must describe the same type as the enum column.
+  check(
+    "quiz_questions_content_type_check",
+    sql`${table.content}->>'type' = ${table.questionType}::text`,
+  ),
+  check(
+    "quiz_questions_answer_key_type_check",
+    sql`${table.answerKey}->>'type' = ${table.questionType}::text`,
+  ),
 ]);
 
 export const quizAttempts = pgTable("quiz_attempts", {
@@ -341,7 +371,13 @@ export const quizQuestionResponses = pgTable(
       .notNull()
       .references(() => quizQuestions.id, { onDelete: "cascade" }),
     correct: boolean("correct").notNull(),
+    // Legacy single-choice column. Still written for single_choice answers
+    // (so old readers keep working) and still the only record on rows from
+    // before `response` existed; readers go through storedResponse().
     selectedChoiceIndex: smallint("selected_choice_index"),
+    // Type-neutral record of what the student submitted (lib/quiz-types.ts
+    // SubmittedResponse). Null on rows written before migration 0013.
+    response: jsonb("response").$type<SubmittedResponse>(),
     answeredAt: timestamp("answered_at").notNull().defaultNow(),
   },
   (table) => [
@@ -440,7 +476,10 @@ export const questionRetries = pgTable(
       .notNull()
       .references(() => quizQuestions.id, { onDelete: "cascade" }),
     correct: boolean("correct").notNull(),
-    selectedChoiceIndex: smallint("selected_choice_index").notNull(),
+    // Nullable since migration 0013: only single_choice retries fill it (see
+    // quiz_question_responses). `response` is the type-neutral record.
+    selectedChoiceIndex: smallint("selected_choice_index"),
+    response: jsonb("response").$type<SubmittedResponse>(),
     answeredAt: timestamp("answered_at").notNull().defaultNow(),
   },
   (table) => [

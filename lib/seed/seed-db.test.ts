@@ -45,13 +45,14 @@ function fakeDb(state: {
 
 const q: BankQuestion = {
   key: "informatics.binary-search.basic.1", subject: "informatics", topicId: "binary-search",
-  difficulty: "basic", prompt: "Prompt", choices: ["A", "B"], correctChoiceIndex: 0,
+  difficulty: "basic", prompt: "Prompt", questionType: "single_choice", choices: ["A", "B"], correctChoiceIndex: 0,
   explanation: "Because", status: "draft", archived: false,
 };
 const topicRows = [{ id: "topic-row", subject: "informatics", syllabusTopicId: "binary-search" }];
 const existingRow = {
-  id: "row-1", key: q.key, topicId: "topic-row", prompt: "Prompt", choices: ["A", "B"],
-  correctChoiceIndex: 0, explanation: "Because", difficulty: "basic", status: "draft", archived: false,
+  id: "row-1", key: q.key, topicId: "topic-row", prompt: "Prompt",
+  questionType: "single_choice", content: { type: "single_choice", choices: ["A", "B"] },
+  answerKey: { type: "single_choice", correctChoiceIndex: 0 }, explanation: "Because", difficulty: "basic", status: "draft", archived: false,
 };
 
 describe("syncQuizBank", () => {

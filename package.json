@@ -48,6 +48,7 @@
     "velite": "^0.2.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.6.0",
     "@eslint/eslintrc": "^3.2.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/d3": "^7.4.3",

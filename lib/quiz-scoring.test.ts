@@ -5,16 +5,23 @@ import {
   submitQuizAttemptCore,
   type QuestionResponseRow,
   type QuizAttemptDeps,
-  type QuizQuestionAnswerKey,
+  type QuizQuestionForScoring,
 } from "./quiz-scoring";
 
-const ANSWER_KEYS: QuizQuestionAnswerKey[] = [
-  { id: "q1", correctChoiceIndex: 2, choiceCount: 4 },
-  { id: "q2", correctChoiceIndex: 0, choiceCount: 3 },
-  { id: "q3", correctChoiceIndex: 1, choiceCount: 4 },
+const single = (id: string, correctChoiceIndex: number, choiceCount: number): QuizQuestionForScoring => ({
+  id,
+  content: { type: "single_choice", choices: Array.from({ length: choiceCount }, (_, i) => `c${i}`) },
+  answerKey: { type: "single_choice", correctChoiceIndex },
+  explanation: `why ${id}`,
+});
+
+const ANSWER_KEYS: QuizQuestionForScoring[] = [
+  single("q1", 2, 4),
+  single("q2", 0, 3),
+  single("q3", 1, 4),
 ];
 
-function makeFakeDeps(answerKeys: QuizQuestionAnswerKey[]) {
+function makeFakeDeps(answerKeys: QuizQuestionForScoring[]) {
   const inserted: { userId: string; topicId: string; score: number }[] = [];
   const responses: QuestionResponseRow[] = [];
   const calls: string[] = [];
@@ -22,7 +29,7 @@ function makeFakeDeps(answerKeys: QuizQuestionAnswerKey[]) {
     calls.push("onAttemptRecorded");
   });
   const deps: QuizAttemptDeps = {
-    getAnswerKeys: vi.fn().mockResolvedValue(answerKeys),
+    getQuestions: vi.fn().mockResolvedValue(answerKeys),
     insertAttempt: vi.fn(async (row) => {
       calls.push("insertAttempt");
       inserted.push(row);
@@ -178,9 +185,9 @@ describe("submitQuizAttemptCore — per-question responses", () => {
     });
 
     expect(responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q1", correct: true, selectedChoiceIndex: 2 },
-      { attemptId: "attempt-1", questionId: "q2", correct: false, selectedChoiceIndex: 1 },
-      { attemptId: "attempt-1", questionId: "q3", correct: true, selectedChoiceIndex: 1 },
+      { attemptId: "attempt-1", questionId: "q1", correct: true, response: { type: "single_choice", choiceIndex: 2 }, selectedChoiceIndex: 2 },
+      { attemptId: "attempt-1", questionId: "q2", correct: false, response: { type: "single_choice", choiceIndex: 1 }, selectedChoiceIndex: 1 },
+      { attemptId: "attempt-1", questionId: "q3", correct: true, response: { type: "single_choice", choiceIndex: 1 }, selectedChoiceIndex: 1 },
     ]);
   });
 
@@ -209,7 +216,7 @@ describe("submitQuizAttemptCore — per-question responses", () => {
     });
 
     expect(responses).toEqual([
-      { attemptId: "attempt-1", questionId: "q1", correct: true, selectedChoiceIndex: 2 },
+      { attemptId: "attempt-1", questionId: "q1", correct: true, response: { type: "single_choice", choiceIndex: 2 }, selectedChoiceIndex: 2 },
     ]);
   });
 
@@ -246,5 +253,139 @@ describe("submitQuizAttemptCore — per-question responses", () => {
 
     expect(inserted).toHaveLength(0);
     expect(responses).toHaveLength(0);
+  });
+});
+
+// ---- the four question types, end to end through the real submission core ----
+
+const MULTI: QuizQuestionForScoring = {
+  id: "m1",
+  content: { type: "multiple_select", choices: ["a", "b", "c", "d"] },
+  answerKey: { type: "multiple_select", correctChoiceIndices: [0, 2] },
+  explanation: "why m1",
+};
+const TF: QuizQuestionForScoring = {
+  id: "t1",
+  content: { type: "true_false_set", statements: ["s1", "s2", "s3"] },
+  answerKey: { type: "true_false_set", truthValues: [true, false, true] },
+  explanation: "why t1",
+};
+const NUM: QuizQuestionForScoring = {
+  id: "n1",
+  content: { type: "numeric_response", unit: "au" },
+  answerKey: { type: "numeric_response", value: 2.35, tolerance: 0.01 },
+  explanation: "why n1",
+};
+const MIXED = [single("q1", 2, 4), MULTI, TF, NUM];
+
+describe("typed responses", () => {
+  const answer = (questionId: string, response: unknown) => ({ questionId, response }) as never;
+
+  it("scores each type from the server key; multiple-select is order-insensitive", () => {
+    const { scored, invalid } = scoreAnswers(MIXED, [
+      answer("q1", { type: "single_choice", choiceIndex: 2 }),
+      answer("m1", { type: "multiple_select", choiceIndices: [2, 0] }),
+      answer("t1", { type: "true_false_set", values: [true, false, true] }),
+      answer("n1", { type: "numeric_response", value: 2.36 }),
+    ]);
+    expect(invalid).toEqual([]);
+    expect(scored.map((s) => s.correct)).toEqual([true, true, true, true]);
+  });
+
+  it("marks each type wrong when it should be wrong (no partial credit)", () => {
+    const { scored } = scoreAnswers(MIXED, [
+      answer("q1", { type: "single_choice", choiceIndex: 0 }),
+      answer("m1", { type: "multiple_select", choiceIndices: [0] }),
+      answer("t1", { type: "true_false_set", values: [true, false, false] }),
+      answer("n1", { type: "numeric_response", value: 2.3601 }),
+    ]);
+    expect(scored.map((s) => s.correct)).toEqual([false, false, false, false]);
+  });
+
+  it("rejects a response whose type is not the question's type (client cannot choose the scoring mode)", () => {
+    const { scored, invalid } = scoreAnswers(MIXED, [
+      answer("m1", { type: "single_choice", choiceIndex: 0 }),
+      answer("t1", { type: "multiple_select", choiceIndices: [0, 2] }),
+      answer("n1", { type: "true_false_set", values: [true, false, true] }),
+      answer("q1", { type: "numeric_response", value: 2 }),
+    ]);
+    expect(scored).toEqual([]);
+    expect(invalid).toHaveLength(4);
+  });
+
+  it.each([
+    ["duplicate multi indices", "m1", { type: "multiple_select", choiceIndices: [0, 0] }],
+    ["out-of-range multi index", "m1", { type: "multiple_select", choiceIndices: [0, 7] }],
+    ["short true/false vector", "t1", { type: "true_false_set", values: [true, false] }],
+    ["non-boolean true/false element", "t1", { type: "true_false_set", values: [true, "false", true] }],
+    ["NaN", "n1", { type: "numeric_response", value: Number.NaN }],
+    ["Infinity", "n1", { type: "numeric_response", value: Infinity }],
+    ["string number", "n1", { type: "numeric_response", value: "2.35" }],
+  ])("rejects %s", (_name, id, response) => {
+    const { scored, invalid } = scoreAnswers(MIXED, [answer(id, response)]);
+    expect(scored).toEqual([]);
+    expect(invalid).toHaveLength(1);
+  });
+
+  it("still accepts the legacy single-choice payload shape", () => {
+    const { scored } = scoreAnswers(MIXED, [{ questionId: "q1", selectedChoiceIndex: 2 }]);
+    expect(scored).toEqual([{ questionId: "q1", correct: true, response: { type: "single_choice", choiceIndex: 2 } }]);
+  });
+
+  it("ignores a legacy selectedChoiceIndex sent for a non-single-choice question", () => {
+    const { scored, invalid } = scoreAnswers(MIXED, [{ questionId: "m1", selectedChoiceIndex: 0 }]);
+    expect(scored).toEqual([]);
+    expect(invalid).toHaveLength(1);
+  });
+
+  it("stores the type-neutral response (single_choice also mirrors selected_choice_index) and reveals feedback only for answered questions", async () => {
+    const { deps, responses, inserted } = makeFakeDeps(MIXED);
+    const result = await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [
+        answer("m1", { type: "multiple_select", choiceIndices: [2, 0] }),
+        answer("t1", { type: "true_false_set", values: [false, false, true] }),
+        answer("n1", { type: "numeric_response", value: 2.35 }),
+      ],
+    });
+    expect(responses).toEqual([
+      { attemptId: "attempt-1", questionId: "m1", correct: true, response: { type: "multiple_select", choiceIndices: [0, 2] }, selectedChoiceIndex: null },
+      { attemptId: "attempt-1", questionId: "t1", correct: false, response: { type: "true_false_set", values: [false, false, true] }, selectedChoiceIndex: null },
+      { attemptId: "attempt-1", questionId: "n1", correct: true, response: { type: "numeric_response", value: 2.35 }, selectedChoiceIndex: null },
+    ]);
+    // Unanswered q1 gets no row and no reveal, but stays in the denominator: 2 correct of 4.
+    expect(inserted[0]?.score).toBe(2 / 4);
+    expect(result.feedback.map((f) => f.questionId)).toEqual(["m1", "t1", "n1"]);
+    expect(result.feedback[1]).toEqual({
+      questionId: "t1",
+      correct: false,
+      correctAnswer: { type: "true_false_set", truthValues: [true, false, true] },
+      explanation: "why t1",
+    });
+    expect(result.feedback[2]?.correctAnswer).toEqual({ type: "numeric_response", value: 2.35, tolerance: 0.01, unit: "au" });
+  });
+
+  it("ignores forged correctness, score and key fields on typed answers", async () => {
+    const { deps, inserted, responses } = makeFakeDeps(MIXED);
+    const forged = {
+      topicId: "topic-1",
+      score: 1,
+      answers: [
+        { questionId: "n1", response: { type: "numeric_response", value: 99 }, correct: true, answerKey: { value: 99, tolerance: 1000 }, tolerance: 1000 },
+        { questionId: "t1", response: { type: "true_false_set", values: [false, true, false] }, correct: true, truthValues: [false, true, false] },
+      ],
+    } as unknown as Parameters<typeof submitQuizAttemptCore>[2];
+    await submitQuizAttemptCore(deps, "user-1", forged);
+    expect(inserted[0]?.score).toBe(0);
+    expect(responses.map((r) => r.correct)).toEqual([false, false]);
+  });
+
+  it("never puts answer-key material into a response row", async () => {
+    const { deps, responses } = makeFakeDeps(MIXED);
+    await submitQuizAttemptCore(deps, "user-1", {
+      topicId: "topic-1",
+      answers: [answer("n1", { type: "numeric_response", value: 2.35, tolerance: 1000 })],
+    });
+    expect(responses[0]?.response).toEqual({ type: "numeric_response", value: 2.35 });
   });
 });

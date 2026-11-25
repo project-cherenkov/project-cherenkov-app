@@ -1,14 +1,15 @@
 import type { QuestionDifficulty, QuestionStatus } from "../planner-vocab";
 import type { Subject } from "../subjects";
 import { isGitManagedKey } from "./key";
-import type { BankQuestion } from "./types";
+import type { AnswerKey, QuestionContent, QuestionType } from "../quiz-types";
+import { splitQuestion, type BankQuestion } from "./types";
 
 // Decides WHAT the quiz sync writes; lib/seed/seed-db.ts (syncQuizBank) runs
 // it. Pure, so every rule below is unit-tested without a database.
 //
 // The rules, in one place:
-//  1. Git wins for content. A keyed question's topic, prompt, choices, correct
-//     answer, explanation, difficulty and review status are overwritten from
+//  1. Git wins for content. A keyed question's topic, prompt, type, choices or
+//     statements, answer key, explanation, difficulty and review status are overwritten from
 //     the file whenever they differ. Editing them in the database is pointless.
 //  2. Rows are never deleted. quiz_question_responses cascades on delete, so a
 //     delete would erase students' answer history. A git-managed question whose
@@ -32,8 +33,11 @@ export interface ExistingQuizRow {
   key: string | null;
   topicId: string;
   prompt: string;
-  choices: string[];
-  correctChoiceIndex: number;
+  questionType: QuestionType;
+  // The raw jsonb columns. Compared structurally, because Postgres does not
+  // preserve key order in jsonb.
+  content: unknown;
+  answerKey: unknown;
   explanation: string | null;
   difficulty: QuestionDifficulty;
   status: QuestionStatus;
@@ -43,8 +47,9 @@ export interface ExistingQuizRow {
 export interface QuizRowValues {
   topicId: string;
   prompt: string;
-  choices: string[];
-  correctChoiceIndex: number;
+  questionType: QuestionType;
+  content: QuestionContent;
+  answerKey: AnswerKey;
   explanation: string;
   difficulty: QuestionDifficulty;
   status: QuestionStatus;
@@ -67,8 +72,22 @@ export interface QuizSyncPlan {
   unmanaged: number;
 }
 
-const sameChoices = (a: string[], b: string[]) =>
-  a.length === b.length && a.every((value, index) => value === b[index]);
+// Structural equality for JSON values (object key order does not matter).
+export function jsonEqual(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((value, index) => jsonEqual(value, b[index]));
+  }
+  const left = a as Record<string, unknown>;
+  const right = b as Record<string, unknown>;
+  const keys = Object.keys(left);
+  return (
+    keys.length === Object.keys(right).length &&
+    keys.every((key) => key in right && jsonEqual(left[key], right[key]))
+  );
+}
 
 export function planQuizSync(
   bank: BankQuestion[],
@@ -108,12 +127,14 @@ export function planQuizSync(
 
     const row = existingByKey.get(q.key);
     if (!row) {
+      const { content, answerKey } = splitQuestion(q);
       plan.inserts.push({
         key: q.key,
         topicId,
         prompt: q.prompt,
-        choices: q.choices,
-        correctChoiceIndex: q.correctChoiceIndex,
+        questionType: q.questionType,
+        content,
+        answerKey,
         explanation: q.explanation,
         difficulty: q.difficulty,
         status: q.status,
@@ -125,11 +146,13 @@ export function planQuizSync(
     const archived = row.archived || q.archived;
     if (row.archived && !q.archived) plan.databaseOnlyArchived.push(q.key);
 
+    const { content, answerKey } = splitQuestion(q);
     const set: Partial<QuizRowValues> = {};
     if (row.topicId !== topicId) set.topicId = topicId;
     if (row.prompt !== q.prompt) set.prompt = q.prompt;
-    if (!sameChoices(row.choices, q.choices)) set.choices = q.choices;
-    if (row.correctChoiceIndex !== q.correctChoiceIndex) set.correctChoiceIndex = q.correctChoiceIndex;
+    if (row.questionType !== q.questionType) set.questionType = q.questionType;
+    if (!jsonEqual(row.content, content)) set.content = content;
+    if (!jsonEqual(row.answerKey, answerKey)) set.answerKey = answerKey;
     if ((row.explanation ?? "") !== q.explanation) set.explanation = q.explanation;
     if (row.difficulty !== q.difficulty) set.difficulty = q.difficulty;
     if (row.status !== q.status) set.status = q.status;

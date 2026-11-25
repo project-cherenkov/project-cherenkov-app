@@ -120,4 +120,53 @@ describe("keystatic.config — quiz questions round-trip against real content", 
       expect(keystaticConfig.collections?.[name]?.path).toBe(`content/quiz/${subject}/*`);
     }
   });
+
+  // The real reader, against files in each of the four new-format layouts and
+  // the legacy layout, for every subject collection (a synthetic content root).
+  it.each(["astronomy", "physics", "informatics"] as const)(
+    "%s: the real reader parses legacy and all four new-format files",
+    async (subject) => {
+      const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import("node:fs");
+      const { tmpdir } = await import("node:os");
+      const { join } = await import("node:path");
+      const { createReader } = await import("@keystatic/core/reader");
+      const topic = ({ astronomy: "celestial-mechanics", physics: "vectors", informatics: "binary-search" } as const)[subject];
+      const root = mkdtempSync(join(tmpdir(), "ks-"));
+      try {
+        const dir = join(root, "content/quiz", subject);
+        mkdirSync(dir, { recursive: true });
+        const head = (n: number, type?: string) =>
+          `questionId: ${subject}.${topic}.basic.${n}\ntopic: ${topic}\ndifficulty: basic\nstatus: draft\narchived: false\n${type ? `questionType: ${type}\n` : ""}prompt: "P"\n`;
+        const tail = '\nexplanation: "E"\nauthor: "A"\nsource: "original"\n';
+        const files: Record<number, string> = {
+          1: head(1).replace(/author.*\n/, "") + 'choices:\n  - text: "a"\n    correct: false\n  - text: "b"\n    correct: true\nexplanation: "E"\n', // legacy
+          2: head(2, "single_choice") + 'choices:\n  - text: "a"\n    correct: true\n  - text: "b"\n    correct: false' + tail,
+          3: head(3, "multiple_select") + 'choices:\n  - text: "a"\n    correct: true\n  - text: "b"\n    correct: true\n  - text: "c"\n    correct: false' + tail,
+          4: head(4, "true_false_set") + 'statements:\n  - text: "s1"\n    isTrue: true\n  - text: "s2"\n    isTrue: false\n  - text: "s3"\n    isTrue: true' + tail,
+          5: head(5, "numeric_response") + "numericAnswer:\n  value: 2.35\n  tolerance: 0.01\n  unit: \"au\"" + tail,
+        };
+        for (const [n, text] of Object.entries(files)) writeFileSync(join(dir, `${subject}.${topic}.basic.${n}.yaml`), text);
+        const collection = createReader(root, keystaticConfig).collections[`${subject}Questions` as const];
+        const read = async (n: number) => collection.readOrThrow(`${subject}.${topic}.basic.${n}`);
+        expect((await read(1)).choices).toHaveLength(2); // legacy file untouched by the new schema
+        expect((await read(3)).choices.filter((c) => c.correct)).toHaveLength(2);
+        expect((await read(4)).statements.map((s) => s.isTrue)).toEqual([true, false, true]);
+        expect((await read(5)).numericAnswer).toEqual({ value: 2.35, tolerance: 0.01, unit: "au" });
+        expect((await read(5)).questionType).toBe("numeric_response");
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    },
+  );
+
+  it("offers exactly the four contract question types, defaulting to single_choice", () => {
+    for (const subject of ["astronomy", "physics", "informatics"] as const) {
+      const schema = keystaticConfig.collections?.[`${subject}Questions` as const]?.schema as Record<string, any>;
+      expect(schema.questionType.options.map((o: { value: string }) => o.value)).toEqual([
+        "single_choice", "multiple_select", "true_false_set", "numeric_response",
+      ]);
+      expect(schema.questionType.defaultValue()).toBe("single_choice");
+      expect(Object.keys(schema)).toEqual(expect.arrayContaining(["choices", "statements", "numericAnswer", "author", "source"]));
+    }
+  });
 });

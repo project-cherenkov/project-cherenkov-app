@@ -2,6 +2,7 @@ import type { Subject } from "../subjects";
 import { getPlannerSyllabi, getPlannerTopicIds } from "../syllabus";
 import { QUESTION_DIFFICULTIES, type QuestionDifficulty } from "../planner-vocab";
 import { quizKeyPattern, quizKeyPrefix } from "./key";
+import { isQuestionType, validateAuthoredShape } from "../quiz-types";
 import type { BankQuestion } from "./types";
 
 export type { BankQuestion } from "./types";
@@ -39,17 +40,17 @@ export function validateQuizBank(bank: BankQuestion[]): string[] {
     }
     if (q.prompt.trim() === "") problems.push(`${where}: empty prompt`);
     if (q.explanation.trim() === "") problems.push(`${where}: empty explanation`);
-    if (q.choices.length < 2) problems.push(`${where}: needs at least 2 choices`);
-    if (new Set(q.choices.map((c) => c.trim())).size !== q.choices.length) {
-      problems.push(`${where}: duplicate choices`);
+    if (!isQuestionType(q.questionType)) {
+      problems.push(`${where}: unknown questionType`);
+    } else {
+      problems.push(...validateAuthoredShape(where, shapeOf(q)));
     }
-    if (q.choices.some((c) => c.trim() === "")) problems.push(`${where}: empty choice`);
-    if (
-      !Number.isInteger(q.correctChoiceIndex) ||
-      q.correctChoiceIndex < 0 ||
-      q.correctChoiceIndex >= q.choices.length
-    ) {
-      problems.push(`${where}: correctChoiceIndex ${q.correctChoiceIndex} is outside the choices`);
+    // New-format questions (an explicit questionType in the file) must say who
+    // wrote them and where they came from. Legacy files are exempt: their
+    // provenance is not invented.
+    if (!q.legacy) {
+      if (!q.author?.trim()) problems.push(`${where}: author is required`);
+      if (!q.source?.trim()) problems.push(`${where}: source is required`);
     }
   }
   return problems;
@@ -80,4 +81,23 @@ export function getBankCoverage(bank: BankQuestion[]): TopicCoverage[] {
     }
   }
   return rows;
+}
+
+function shapeOf(q: BankQuestion): Parameters<typeof validateAuthoredShape>[1] {
+  switch (q.questionType) {
+    case "single_choice":
+      return {
+        type: "single_choice",
+        choices: q.choices.map((text, i) => ({ text, correct: i === q.correctChoiceIndex })),
+      };
+    case "multiple_select":
+      return {
+        type: "multiple_select",
+        choices: q.choices.map((text, i) => ({ text, correct: q.correctChoiceIndices.includes(i) })),
+      };
+    case "true_false_set":
+      return { type: "true_false_set", statements: q.statements };
+    case "numeric_response":
+      return { type: "numeric_response", ...q.numericAnswer };
+  }
 }

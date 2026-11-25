@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { submitQuizAttempt } from "@/lib/quiz-actions";
+import { submitQuizAttempt, type SubmitQuizResult } from "@/lib/quiz-actions";
+import { QuestionInput } from "@/components/quiz/question-input";
+import { draftProgress, draftToResponse, emptyDraft, type AnswerDraft } from "@/lib/quiz-draft";
 import { MarkdownText } from "@/components/viz/shared/markdown-text";
 import type { PublicQuizQuestion } from "@/lib/quiz";
 
@@ -22,7 +24,7 @@ export interface QuizDialogProps {
   questions: PublicQuizQuestion[];
 }
 
-type Feedback = { questionId: string; correct: boolean }[];
+type Feedback = Extract<SubmitQuizResult, { ok: true }>["results"];
 
 // QUIZ-001. First real use of components/ui/dialog.tsx and tabs.tsx
 // (previously imported nowhere — see docs/history/deployment-readiness.md). Tabs
@@ -38,7 +40,8 @@ type Feedback = { questionId: string; correct: boolean }[];
 export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   const t = useTranslations("quiz");
   const router = useRouter();
-  const [answers, setAnswers] = useState<Record<string, number>>({});
+  // One draft per question id; a question with no entry is untouched.
+  const [drafts, setDrafts] = useState<Record<string, AnswerDraft>>({});
   const [activeTab, setActiveTab] = useState("0");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [score, setScore] = useState<number | null>(null);
@@ -49,20 +52,21 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
 
   if (questions.length === 0) return null;
 
-  function selectAnswer(questionId: string, choiceIndex: number) {
-    setAnswers((prev) => ({ ...prev, [questionId]: choiceIndex }));
-  }
+  const draftFor = (question: PublicQuizQuestion): AnswerDraft =>
+    drafts[question.id] ?? emptyDraft(question.content);
+
+  // Only complete, valid answers are submitted: a true/false question with an
+  // unmarked statement, or a numeric field that is not a number, counts as
+  // unanswered (no response row, per the existing partial-submission rules).
+  const answeredResponses = questions.flatMap((question) => {
+    const response = draftToResponse(draftFor(question));
+    return response ? [{ questionId: question.id, response }] : [];
+  });
 
   function handleSubmit() {
     setSubmitError(null);
     startTransition(async () => {
-      const submitted = Object.entries(answers).map(
-        ([questionId, selectedChoiceIndex]) => ({
-          questionId,
-          selectedChoiceIndex,
-        }),
-      );
-      const result = await submitQuizAttempt({ topicId, answers: submitted });
+      const result = await submitQuizAttempt({ topicId, answers: answeredResponses });
       if (result.ok) {
         setFeedback(result.results);
         setScore(result.score);
@@ -80,7 +84,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
   }
 
   function handleRetake() {
-    setAnswers({});
+    setDrafts({});
     setFeedback(null);
     setScore(null);
     setSubmitError(null);
@@ -104,7 +108,8 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
           <TabsList>
             {questions.map((question, index) => {
               const graded = feedback?.find((f) => f.questionId === question.id);
-              const answered = answers[question.id] !== undefined;
+              const progress = draftProgress(draftFor(question));
+              const answered = progress === "answered";
               // Number plus a state mark, so the reader can see which
               // questions are still open before submitting. The mark is
               // decorative; the state is in the accessible name.
@@ -114,7 +119,9 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   : t("tabIncorrect", { n: index + 1 })
                 : answered
                   ? t("tabAnswered", { n: index + 1 })
-                  : t("tabUnanswered", { n: index + 1 });
+                  : progress === "partial"
+                    ? t("tabPartial", { n: index + 1 })
+                    : t("tabUnanswered", { n: index + 1 });
               return (
                 <TabsTrigger key={question.id} value={String(index)} aria-label={label}>
                   {index + 1}
@@ -142,24 +149,14 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   })}
                 </p>
                 <MarkdownText text={question.prompt} className="mb-3 font-medium" />
-                <div className="flex flex-col gap-2">
-                  {question.choices.map((choice, choiceIndex) => (
-                    <label
-                      key={choiceIndex}
-                      className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-transparent px-3 py-2 text-sm hover:bg-muted has-[:checked]:border-border-strong has-[:checked]:bg-muted"
-                    >
-                      <input
-                        className="h-4 w-4 shrink-0"
-                        type="radio"
-                        name={question.id}
-                        checked={answers[question.id] === choiceIndex}
-                        onChange={() => selectAnswer(question.id, choiceIndex)}
-                        disabled={feedback !== null}
-                      />
-                      <MarkdownText text={choice} inline />
-                    </label>
-                  ))}
-                </div>
+                <QuestionInput
+                  content={question.content}
+                  draft={draftFor(question)}
+                  onChange={(draft) => setDrafts((prev) => ({ ...prev, [question.id]: draft }))}
+                  disabled={feedback !== null}
+                  revealed={result?.correctAnswer ?? null}
+                  submitted={result ? draftToResponse(draftFor(question)) : null}
+                />
                 {result ? (
                   <p
                     className={
@@ -170,6 +167,12 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
                   >
                     {result.correct ? t("correct") : t("incorrect")}
                   </p>
+                ) : null}
+                {result?.explanation ? (
+                  <div className="mt-3 rounded-md bg-muted p-3 text-sm">
+                    <p className="label-code mb-1">{t("explanation")}</p>
+                    <MarkdownText text={result.explanation} />
+                  </div>
                 ) : null}
               </TabsContent>
             );
@@ -187,7 +190,7 @@ export function QuizDialog({ topicId, questions }: QuizDialogProps) {
           {feedback === null ? (
             <Button
               onClick={handleSubmit}
-              disabled={isPending || Object.keys(answers).length === 0}
+              disabled={isPending || answeredResponses.length === 0}
             >
               {t("submit")}
             </Button>

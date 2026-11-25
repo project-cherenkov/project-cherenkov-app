@@ -7,8 +7,8 @@ const row = (patch: Partial<DbOnlyQuestionRow> = {}): DbOnlyQuestionRow => ({
   subject: "physics",
   syllabusTopicId: "vectors",
   prompt: "Prompt",
-  choices: ["a", "b"],
-  correctChoiceIndex: 0,
+  content: { type: "single_choice", choices: ["a", "b"] },
+  answerKey: { type: "single_choice", correctChoiceIndex: 0 },
   explanation: "Because",
   difficulty: "basic",
   status: "reviewed",
@@ -29,7 +29,7 @@ describe("planDbExport", () => {
   });
 
   it("keeps status, archived state and the correct answer", () => {
-    const [only] = planDbExport([row({ status: "draft", archived: true, correctChoiceIndex: 1 })], new Set()).exports;
+    const [only] = planDbExport([row({ status: "draft", archived: true, answerKey: { type: "single_choice", correctChoiceIndex: 1 } })], new Set()).exports;
     expect(only?.question).toMatchObject({ status: "draft", archived: true, correctChoiceIndex: 1, explanation: "Because" });
   });
 
@@ -45,12 +45,40 @@ describe("planDbExport", () => {
     ]);
   });
 
-  it("skips a row whose topic has no syllabus id, or whose answer index is invalid", () => {
+  it("skips a row whose topic has no syllabus id, or whose answer key is malformed", () => {
     const plan = planDbExport(
-      [row({ id: "a", syllabusTopicId: null }), row({ id: "b", correctChoiceIndex: 5 })],
+      [row({ id: "a", syllabusTopicId: null }), row({ id: "b", answerKey: { type: "single_choice", correctChoiceIndex: 5 } })],
       new Set(),
     );
     expect(plan.exports).toEqual([]);
     expect(plan.skipped.map((s) => s.rowId)).toEqual(["a", "b"]);
+  });
+
+  it("exports a database-only single-choice row as a legacy file (no questionType, no invented author)", () => {
+    const [only] = planDbExport([row()], new Set()).exports;
+    expect(only?.question).toMatchObject({ questionType: "single_choice", legacy: true });
+    expect(only?.question.author).toBeUndefined();
+  });
+
+  it("exports every other type from its content and answer key", () => {
+    const plan = planDbExport(
+      [
+        row({
+          id: "a",
+          content: { type: "true_false_set", statements: ["x", "y", "z"] },
+          answerKey: { type: "true_false_set", truthValues: [true, false, true] },
+        }),
+        row({
+          id: "b",
+          content: { type: "numeric_response", unit: "au" },
+          answerKey: { type: "numeric_response", value: 2.35, tolerance: 0.01 },
+        }),
+      ],
+      new Set(),
+    );
+    expect(plan.exports.map((e) => e.question)).toMatchObject([
+      { questionType: "true_false_set", statements: [{ text: "x", isTrue: true }, { text: "y", isTrue: false }, { text: "z", isTrue: true }] },
+      { questionType: "numeric_response", numericAnswer: { value: 2.35, tolerance: 0.01, unit: "au" } },
+    ]);
   });
 });

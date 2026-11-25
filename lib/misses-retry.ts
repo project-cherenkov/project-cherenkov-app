@@ -3,36 +3,46 @@
 //
 // Rules, each one deliberate:
 //  - correctness comes from the server-side answer key, never the client;
+//  - the response must have the SERVER's question type and a valid shape for
+//    it (see validateResponse); the client cannot pick the scoring mode;
 //  - only a question the student has ALREADY got wrong can be retried, so this
 //    endpoint cannot be used to read answers for questions they never
-//    attempted (the correct choice is returned after a retry);
+//    attempted (the correct answer is returned after a retry);
 //  - a retry is stored in question_retries, which does NOT feed mastery or
 //    plan completion (see the comment on that table).
+import {
+  gradeResponse,
+  revealAnswer,
+  validateResponse,
+  type RevealedAnswer,
+  type ServerQuestion,
+  type SubmittedResponse,
+} from "./quiz-types";
 
-export interface RetryAnswerKey {
-  correctChoiceIndex: number;
-  choiceCount: number;
-  explanation: string | null;
-}
+export type RetryQuestion = ServerQuestion & { explanation: string | null };
 
 export interface RetryDeps {
-  getAnswerKey: (questionId: string) => Promise<RetryAnswerKey | null>;
+  getQuestion: (questionId: string) => Promise<RetryQuestion | null>;
   hasMissed: (userId: string, questionId: string) => Promise<boolean>;
   insertRetry: (row: {
     userId: string;
     questionId: string;
     correct: boolean;
-    selectedChoiceIndex: number;
+    response: SubmittedResponse;
+    // Legacy single-choice mirror; null for the other types.
+    selectedChoiceIndex: number | null;
   }) => Promise<void>;
 }
 
 export interface RetryInput {
   questionId: string;
-  selectedChoiceIndex: number;
+  response?: unknown;
+  /** @deprecated single-choice only; use `response`. */
+  selectedChoiceIndex?: unknown;
 }
 
 export type RetryResult =
-  | { ok: true; correct: boolean; correctChoiceIndex: number; explanation: string | null }
+  | { ok: true; correct: boolean; correctAnswer: RevealedAnswer; explanation: string | null }
   | { ok: false; reason: "invalid" | "unavailable" };
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -42,35 +52,38 @@ export async function retryMissedQuestionCore(
   userId: string,
   input: RetryInput,
 ): Promise<RetryResult> {
-  if (
-    typeof input?.questionId !== "string" ||
-    !UUID_RE.test(input.questionId) ||
-    !Number.isInteger(input.selectedChoiceIndex)
-  ) {
+  if (typeof input?.questionId !== "string" || !UUID_RE.test(input.questionId)) {
     return { ok: false, reason: "invalid" };
   }
+  const raw =
+    input.response !== undefined
+      ? input.response
+      : Number.isInteger(input.selectedChoiceIndex)
+        ? { type: "single_choice", choiceIndex: input.selectedChoiceIndex }
+        : undefined;
+  if (raw === undefined) return { ok: false, reason: "invalid" };
 
-  const key = await deps.getAnswerKey(input.questionId);
+  const question = await deps.getQuestion(input.questionId);
   // Unknown question and "not one of your misses" look the same on purpose.
-  if (!key || !(await deps.hasMissed(userId, input.questionId))) {
+  if (!question || !(await deps.hasMissed(userId, input.questionId))) {
     return { ok: false, reason: "unavailable" };
   }
-  if (input.selectedChoiceIndex < 0 || input.selectedChoiceIndex >= key.choiceCount) {
-    return { ok: false, reason: "invalid" };
-  }
+  const response = validateResponse(question.content, raw);
+  if (!response) return { ok: false, reason: "invalid" };
 
-  const correct = input.selectedChoiceIndex === key.correctChoiceIndex;
+  const correct = gradeResponse(question.answerKey, response);
   await deps.insertRetry({
     userId,
     questionId: input.questionId,
     correct,
-    selectedChoiceIndex: input.selectedChoiceIndex,
+    response,
+    selectedChoiceIndex: response.type === "single_choice" ? response.choiceIndex : null,
   });
   return {
     ok: true,
     correct,
-    correctChoiceIndex: key.correctChoiceIndex,
-    explanation: key.explanation,
+    correctAnswer: revealAnswer(question),
+    explanation: question.explanation,
   };
 }
 
@@ -80,20 +93,20 @@ export async function retryMissedQuestionCore(
 // question the student has already got wrong. It records nothing, so
 // peeking never resolves a miss.
 export type RevealResult =
-  | { ok: true; correctChoiceIndex: number; explanation: string | null }
+  | { ok: true; correctAnswer: RevealedAnswer; explanation: string | null }
   | { ok: false; reason: "invalid" | "unavailable" };
 
 export async function revealMissedAnswerCore(
-  deps: Pick<RetryDeps, "getAnswerKey" | "hasMissed">,
+  deps: Pick<RetryDeps, "getQuestion" | "hasMissed">,
   userId: string,
   questionId: string,
 ): Promise<RevealResult> {
   if (typeof questionId !== "string" || !UUID_RE.test(questionId)) {
     return { ok: false, reason: "invalid" };
   }
-  const key = await deps.getAnswerKey(questionId);
-  if (!key || !(await deps.hasMissed(userId, questionId))) {
+  const question = await deps.getQuestion(questionId);
+  if (!question || !(await deps.hasMissed(userId, questionId))) {
     return { ok: false, reason: "unavailable" };
   }
-  return { ok: true, correctChoiceIndex: key.correctChoiceIndex, explanation: key.explanation };
+  return { ok: true, correctAnswer: revealAnswer(question), explanation: question.explanation };
 }

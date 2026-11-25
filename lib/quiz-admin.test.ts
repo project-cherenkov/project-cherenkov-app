@@ -26,3 +26,16 @@ describe("quizQuestionSource", () => {
     expect(quizQuestionSource(null)).toBe("database");
   });
 });
+
+import { summarizeQuestionForAdmin } from "./quiz-admin";
+describe("summarizeQuestionForAdmin", () => {
+  it("summarises each type for editors", () => {
+    expect(summarizeQuestionForAdmin({ type: "single_choice", choices: ["a", "b"] }, { type: "single_choice", correctChoiceIndex: 1 })).toEqual(["· a", "✓ b"]);
+    expect(summarizeQuestionForAdmin({ type: "multiple_select", choices: ["a", "b", "c"] }, { type: "multiple_select", correctChoiceIndices: [0, 2] })).toEqual(["✓ a", "· b", "✓ c"]);
+    expect(summarizeQuestionForAdmin({ type: "true_false_set", statements: ["x", "y", "z"] }, { type: "true_false_set", truthValues: [true, false, true] })).toEqual(["True  — x", "False — y", "True  — z"]);
+    expect(summarizeQuestionForAdmin({ type: "numeric_response", unit: "au" }, { type: "numeric_response", value: 2.35, tolerance: 0.01 })).toEqual(["2.35 au (± 0.01 au)"]);
+  });
+  it("reports a malformed row instead of throwing", () => {
+    expect(summarizeQuestionForAdmin({ type: "essay" }, null)[0]).toContain("Malformed");
+  });
+});

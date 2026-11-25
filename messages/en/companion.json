@@ -237,7 +237,7 @@
         },
         "planner-quiz": {
           "q": "How do the topic quizzes work?",
-          "a": "Each topic page in the planner has a multiple-choice quiz. The difficulty follows your target stage: basic to intermediate questions for OSN-K, intermediate to advanced for OSN-P, and advanced for the semifinal and final. Correct answers are not sent to your browser before you submit. Passing a topic’s quiz completes its confirmation item in your plan automatically."
+          "a": "Each topic page in the planner has an auto-graded quiz with four question types: single choice, select all that apply, sets of true/false statements, and numerical answers. The difficulty follows your target stage: basic to intermediate questions for OSN-K, intermediate to advanced for OSN-P, and advanced for the semifinal and final. Correct answers are not sent to your browser before you submit. Passing a topic’s quiz completes its confirmation item in your plan automatically."
         },
         "planner-trust": {
           "q": "How much should I trust the plan?",

@@ -4,32 +4,32 @@ import { QUESTION_DIFFICULTIES } from "../planner-vocab";
 import { getBankCoverage, validateQuizBank } from ".";
 import { loadQuizBank } from "./load";
 import type { BankQuestion } from "./types";
+import { ALL_TYPES, MULTIPLE, NUMERIC, SINGLE, TRUE_FALSE } from "./test-fixtures";
 
-const GOOD: BankQuestion = {
-  key: "physics.vectors.basic.1",
-  subject: "physics",
-  topicId: "vectors",
-  difficulty: "basic",
-  prompt: "p",
-  choices: ["a", "b"],
-  correctChoiceIndex: 1,
-  explanation: "e",
-  status: "draft",
-  archived: false,
-};
+const GOOD: BankQuestion = { ...SINGLE, choices: ["a", "b"], correctChoiceIndex: 1 };
+const LEGACY_GOOD: BankQuestion = (() => {
+  const { author, source, ...rest } = GOOD;
+  void author;
+  void source;
+  return { ...rest, legacy: true } as BankQuestion;
+})();
 
 describe("validateQuizBank", () => {
   it("accepts a well-formed question", () => {
     expect(validateQuizBank([GOOD])).toEqual([]);
   });
 
+  it("accepts a well-formed question of every type", () => {
+    expect(validateQuizBank(ALL_TYPES)).toEqual([]);
+  });
+
   it("flags each kind of defect", () => {
-    const cases: [string, Partial<BankQuestion>][] = [
+    const cases: [string, Record<string, unknown>][] = [
       ["no planner topic", { topicId: "not-a-topic", key: "physics.not-a-topic.basic.1" }],
       ["no planner topic", { subject: "astronomy", topicId: "sidereal-synodic-periods", key: "astronomy.sidereal-synodic-periods.basic.1" }],
       ["unknown difficulty", { difficulty: undefined as unknown as BankQuestion["difficulty"] }],
-      ["correctChoiceIndex", { correctChoiceIndex: 2 }],
-      ["correctChoiceIndex", { correctChoiceIndex: -1 }],
+      ["exactly one choice", { correctChoiceIndex: 2 }],
+      ["exactly one choice", { correctChoiceIndex: -1 }],
       ["duplicate choices", { choices: ["a", "a"] }],
       ["at least 2 choices", { choices: ["a"], correctChoiceIndex: 0 }],
       ["empty prompt", { prompt: " " }],
@@ -38,9 +38,54 @@ describe("validateQuizBank", () => {
       ["key is not of the form", { key: "physics.vectors.basic.one" }],
     ];
     for (const [expected, patch] of cases) {
-      const problems = validateQuizBank([{ ...GOOD, ...patch }]);
+      const problems = validateQuizBank([{ ...GOOD, ...patch } as BankQuestion]);
       expect(problems.join("\n"), JSON.stringify(patch)).toContain(expected);
     }
+  });
+
+  const flag = (q: BankQuestion) => validateQuizBank([q]).join("\n");
+
+  it("enforces the multiple_select rules", () => {
+    const m = (patch: Record<string, unknown>) => flag({ ...MULTIPLE, ...patch } as BankQuestion);
+    expect(m({ choices: ["a", "b"], correctChoiceIndices: [0, 1] })).toContain("at least 3 choices");
+    expect(m({ correctChoiceIndices: [0] })).toContain("at least two correct");
+    expect(m({ correctChoiceIndices: [0, 1, 2, 3, 4] })).toContain("at least one incorrect");
+    expect(m({ correctChoiceIndices: [0, 9] })).toContain("at least two correct");
+    expect(m({ choices: ["a", "b", "c", "All of the above", "e"] })).toContain("all of the above");
+    expect(m({ choices: ["a", "a", "c", "d", "e"] })).toContain("duplicate choices");
+  });
+
+  it("enforces the true_false_set rules", () => {
+    const t = (statements: { text: string; isTrue: boolean }[]) =>
+      flag({ ...TRUE_FALSE, statements } as BankQuestion);
+    const st = (n: number) => Array.from({ length: n }, (_, i) => ({ text: `s${i}`, isTrue: i % 2 === 0 }));
+    expect(t(st(2))).toContain("3-5 statements");
+    expect(t(st(6))).toContain("3-5 statements");
+    expect(t(st(3))).toBe("");
+    expect(t(st(5))).toBe("");
+    expect(t([...st(3), { text: "s0", isTrue: true }])).toContain("duplicate statements");
+    expect(t([...st(2), { text: " ", isTrue: true }])).toContain("empty statement");
+  });
+
+  it("enforces the numeric_response rules", () => {
+    const n = (numericAnswer: Record<string, unknown>) =>
+      flag({ ...NUMERIC, numericAnswer: { ...NUMERIC.numericAnswer, ...numericAnswer } } as BankQuestion);
+    expect(n({ value: Number.NaN })).toContain("finite");
+    expect(n({ value: Infinity })).toContain("finite");
+    expect(n({ tolerance: -0.1 })).toContain("tolerance");
+    expect(n({ tolerance: Number.NaN })).toContain("tolerance");
+    expect(n({ tolerance: 0 })).toBe("");
+    expect(n({ unit: "  " })).toContain("unit");
+  });
+
+  it("requires author and source on new-format questions but not on legacy ones", () => {
+    expect(flag({ ...GOOD, author: undefined })).toContain("author is required");
+    expect(flag({ ...GOOD, source: " " })).toContain("source is required");
+    expect(flag(LEGACY_GOOD)).toBe("");
+  });
+
+  it("rejects an unknown question type", () => {
+    expect(flag({ ...GOOD, questionType: "essay" } as unknown as BankQuestion)).toContain("unknown questionType");
   });
 
   it("flags duplicate keys", () => {
@@ -104,7 +149,7 @@ describe("the shipped quiz content (content/quiz)", () => {
   });
 
   it("keeps the correct answer from always sitting in the same position", () => {
-    const positions = new Set(QUIZ_BANK.map((q) => q.correctChoiceIndex));
+    const positions = new Set(QUIZ_BANK.flatMap((q) => (q.questionType === "single_choice" ? [q.correctChoiceIndex] : [])));
     expect(positions.size).toBeGreaterThanOrEqual(3);
   });
 

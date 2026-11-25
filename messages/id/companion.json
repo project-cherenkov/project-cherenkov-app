@@ -237,7 +237,7 @@
         },
         "planner-quiz": {
           "q": "Bagaimana kuis topik bekerja?",
-          "a": "Setiap halaman topik di perencana punya kuis pilihan ganda. Tingkat kesulitannya mengikuti tahap yang kamu tuju: soal dasar sampai menengah untuk OSN-K, menengah sampai lanjutan untuk OSN-P, dan lanjutan untuk semifinal dan final. Jawaban yang benar tidak dikirim ke browsermu sebelum kamu mengirim jawaban. Lulus kuis suatu topik otomatis menyelesaikan butir konfirmasinya di rencanamu."
+          "a": "Setiap halaman topik di perencana punya kuis yang dinilai otomatis dengan empat jenis soal: pilihan tunggal, pilih semua yang benar, kumpulan pernyataan benar/salah, dan jawaban numerik. Tingkat kesulitannya mengikuti tahap yang kamu tuju: soal dasar sampai menengah untuk OSN-K, menengah sampai lanjutan untuk OSN-P, dan lanjutan untuk semifinal dan final. Jawaban yang benar tidak dikirim ke browsermu sebelum kamu mengirim jawaban. Lulus kuis suatu topik otomatis menyelesaikan butir konfirmasinya di rencanamu."
         },
         "planner-trust": {
           "q": "Seberapa jauh aku boleh memercayai rencana ini?",

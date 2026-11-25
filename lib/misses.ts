@@ -10,6 +10,7 @@
 // either source — is correct. Nothing is inferred beyond that: no automatic
 // "error type" grouping, because quiz questions carry no authored error type.
 import type { QuestionDifficulty, QuestionStatus } from "./planner-vocab";
+import type { QuestionContent, SubmittedResponse } from "./quiz-types";
 import type { Subject } from "./subjects";
 
 export type AnswerSource = "quiz" | "retry";
@@ -17,8 +18,10 @@ export type AnswerSource = "quiz" | "retry";
 export interface AnswerEvent {
   questionId: string;
   correct: boolean;
-  // Null for quiz rows written before the column existed.
-  selectedChoiceIndex: number | null;
+  // What the student submitted, in the type-neutral shape. Null for very old
+  // quiz rows that recorded nothing (lib/quiz-types.ts storedResponse turns
+  // the legacy selected_choice_index into a single_choice response).
+  response: SubmittedResponse | null;
   at: Date;
   source: AnswerSource;
 }
@@ -26,8 +29,9 @@ export interface AnswerEvent {
 export interface MissQuestion {
   questionId: string;
   prompt: string;
-  choices: string[];
-  correctChoiceIndex: number;
+  // Public display data only. The answer key is NOT part of this object: it
+  // is fetched on request by lib/misses-retry.ts after a retry or reveal.
+  content: QuestionContent;
   explanation: string | null;
   difficulty: QuestionDifficulty;
   status: QuestionStatus;
@@ -43,8 +47,8 @@ export interface MissEntry {
   resolved: boolean;
   // When the student most recently got it wrong.
   lastMissedAt: Date;
-  // Which choice they picked on that wrong answer (null if not recorded).
-  lastWrongChoice: number | null;
+  // What they submitted on that wrong answer (null if not recorded).
+  lastWrongResponse: SubmittedResponse | null;
   wrongCount: number;
   // How many times they have retried it from the review page.
   retryCount: number;
@@ -85,7 +89,7 @@ export function buildMissEntries(
       question,
       resolved: history[history.length - 1]!.correct,
       lastMissedAt: lastWrong.at,
-      lastWrongChoice: lastWrong.selectedChoiceIndex,
+      lastWrongResponse: lastWrong.response,
       wrongCount: wrong.length,
       retryCount: history.filter((event) => event.source === "retry").length,
     });

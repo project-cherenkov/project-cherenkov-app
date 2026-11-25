@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { planQuizSync, type ExistingQuizRow, type QuizTopicRow } from "./sync";
 import type { BankQuestion } from "./types";
+import { MULTIPLE, NUMERIC, SINGLE, TRUE_FALSE } from "./test-fixtures";
 
 const topicRows: QuizTopicRow[] = [
   { id: "t-vectors", subject: "physics", syllabusTopicId: "vectors" },
@@ -14,21 +15,23 @@ const q = (patch: Partial<BankQuestion> = {}): BankQuestion => ({
   topicId: "vectors",
   difficulty: "basic",
   prompt: "Prompt",
+  questionType: "single_choice",
   choices: ["a", "b"],
   correctChoiceIndex: 1,
   explanation: "Because",
   status: "draft",
   archived: false,
   ...patch,
-});
+} as BankQuestion);
 
 const row = (patch: Partial<ExistingQuizRow> = {}): ExistingQuizRow => ({
   id: "row-1",
   key: "physics.vectors.basic.1",
   topicId: "t-vectors",
   prompt: "Prompt",
-  choices: ["a", "b"],
-  correctChoiceIndex: 1,
+  questionType: "single_choice",
+  content: { type: "single_choice", choices: ["a", "b"] },
+  answerKey: { type: "single_choice", correctChoiceIndex: 1 },
   explanation: "Because",
   difficulty: "basic",
   status: "draft",
@@ -41,8 +44,9 @@ describe("planQuizSync", () => {
     const plan = planQuizSync([q()], [], topicRows);
     expect(plan.inserts).toEqual([
       {
-        key: "physics.vectors.basic.1", topicId: "t-vectors", prompt: "Prompt", choices: ["a", "b"],
-        correctChoiceIndex: 1, explanation: "Because", difficulty: "basic", status: "draft", archived: false,
+        key: "physics.vectors.basic.1", topicId: "t-vectors", prompt: "Prompt",
+        questionType: "single_choice", content: { type: "single_choice", choices: ["a", "b"] },
+        answerKey: { type: "single_choice", correctChoiceIndex: 1 }, explanation: "Because", difficulty: "basic", status: "draft", archived: false,
       },
     ]);
     expect(plan.updates).toEqual([]);
@@ -60,7 +64,7 @@ describe("planQuizSync", () => {
       topicRows,
     );
     expect(plan.updates).toEqual([
-      { id: "row-1", key: "physics.vectors.basic.1", set: { prompt: "New prompt", choices: ["a", "b", "c"], correctChoiceIndex: 2, status: "reviewed" } },
+      { id: "row-1", key: "physics.vectors.basic.1", set: { prompt: "New prompt", content: { type: "single_choice", choices: ["a", "b", "c"] }, answerKey: { type: "single_choice", correctChoiceIndex: 2 }, status: "reviewed" } },
     ]);
   });
 
@@ -115,5 +119,46 @@ describe("planQuizSync", () => {
 
   it("archives nothing when the bank is empty", () => {
     expect(planQuizSync([], [row()], topicRows).archiveMissing).toEqual([]);
+  });
+
+  it("inserts every question type with its content and server-only answer key", () => {
+    const rows = [SINGLE, MULTIPLE, TRUE_FALSE, NUMERIC];
+    const plan = planQuizSync(rows, [], topicRows);
+    expect(plan.inserts.map((i) => [i.questionType, i.content, i.answerKey])).toEqual([
+      ["single_choice", { type: "single_choice", choices: ["a", "b", "c"] }, { type: "single_choice", correctChoiceIndex: 2 }],
+      ["multiple_select", { type: "multiple_select", choices: ["a", "b", "c", "d", "e"] }, { type: "multiple_select", correctChoiceIndices: [0, 2] }],
+      ["true_false_set", { type: "true_false_set", statements: ["s1", "s2", "s3", "s4"] }, { type: "true_false_set", truthValues: [true, false, true, false] }],
+      ["numeric_response", { type: "numeric_response", unit: "au" }, { type: "numeric_response", value: 2.35, tolerance: 0.01 }],
+    ]);
+  });
+
+  it("is a no-op when the stored jsonb matches but its key order differs (Postgres reorders keys)", () => {
+    const existing = row({
+      key: NUMERIC.key,
+      questionType: "numeric_response",
+      content: { unit: "au", type: "numeric_response" },
+      answerKey: { tolerance: 0.01, value: 2.35, type: "numeric_response" },
+    });
+    const plan = planQuizSync([NUMERIC], [existing], topicRows);
+    expect(plan).toMatchObject({ inserts: [], updates: [], unchanged: 1 });
+  });
+
+  it("updates the answer key when only the tolerance changed, keeping the row id", () => {
+    const existing = row({
+      key: NUMERIC.key,
+      questionType: "numeric_response",
+      content: { type: "numeric_response", unit: "au" },
+      answerKey: { type: "numeric_response", value: 2.35, tolerance: 0.5 },
+    });
+    const plan = planQuizSync([NUMERIC], [existing], topicRows);
+    expect(plan.updates).toEqual([
+      { id: "row-1", key: NUMERIC.key, set: { answerKey: { type: "numeric_response", value: 2.35, tolerance: 0.01 } } },
+    ]);
+  });
+
+  it("updates the type, content and key together when a question changes type", () => {
+    const existing = row({ key: TRUE_FALSE.key });
+    const plan = planQuizSync([TRUE_FALSE], [existing], topicRows);
+    expect(Object.keys(plan.updates[0]!.set).sort()).toEqual(["answerKey", "content", "questionType"]);
   });
 });

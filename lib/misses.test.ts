@@ -7,12 +7,12 @@ import {
   type AnswerEvent,
   type MissQuestion,
 } from "./misses";
+import type { SubmittedResponse } from "./quiz-types";
 
 const q = (id: string, over: Partial<MissQuestion> = {}): MissQuestion => ({
   questionId: id,
   prompt: `prompt ${id}`,
-  choices: ["a", "b", "c"],
-  correctChoiceIndex: 1,
+  content: { type: "single_choice", choices: ["a", "b", "c"] },
   explanation: null,
   difficulty: "basic",
   status: "draft",
@@ -30,7 +30,7 @@ const ev = (
 ): AnswerEvent => ({
   questionId,
   correct,
-  selectedChoiceIndex: correct ? 1 : 0,
+  response: { type: "single_choice", choiceIndex: correct ? 1 : 0 },
   at: new Date(Date.UTC(2026, 9, day)),
   source: "quiz",
   ...over,
@@ -80,15 +80,28 @@ describe("buildMissEntries", () => {
     expect(entry!.resolved).toBe(true);
   });
 
-  it("reports the choice picked on the most recent wrong answer, or null if unrecorded", () => {
+  it("reports the response given on the most recent wrong answer, or null if unrecorded", () => {
     const [entry] = buildMissEntries(
       [
-        ev("a", false, 1, { selectedChoiceIndex: 2 }),
-        ev("a", false, 2, { selectedChoiceIndex: null }),
+        ev("a", false, 1, { response: { type: "single_choice", choiceIndex: 2 } }),
+        ev("a", false, 2, { response: null }),
       ],
       [q("a")],
     );
-    expect(entry!.lastWrongChoice).toBeNull();
+    expect(entry!.lastWrongResponse).toBeNull();
+  });
+
+  it("carries the actual response of every question type for the review card", () => {
+    const responses: SubmittedResponse[] = [
+      { type: "multiple_select", choiceIndices: [0, 2] },
+      { type: "true_false_set", values: [true, false, true] },
+      { type: "numeric_response", value: 2.35 },
+    ];
+    responses.forEach((response, i) => {
+      const id = `x${i}`;
+      const [entry] = buildMissEntries([ev(id, false, 1, { response })], [q(id)]);
+      expect(entry!.lastWrongResponse).toEqual(response);
+    });
   });
 
   it("puts open misses before resolved ones, newest first", () => {
