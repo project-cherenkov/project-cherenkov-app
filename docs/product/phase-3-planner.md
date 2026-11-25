@@ -17,7 +17,8 @@ Research and reasoning: the context-transfer document (`docs/product/planner-con
 `plan-view.ts` builds the page data; `plan-db.ts` holds the real queries.
 
 - Mastery (`mastery.ts`): Beta posterior, self-rating as weak prior, 30-day decay,
-  answers counted only at the stage's difficulty range.
+  answers counted only at the stage's difficulty range. The stage's `masteryTarget`
+  is applied to the 10th-percentile posterior lower bound, not to raw quiz accuracy.
 - Scheduler: confirmation quizzes first (high self-rating first, very low last), then
   study ranked by gain per hour (Region of Proximal Learning), exam-anchored spaced
   reviews, a pre-exam buffer with a final mixed pass, interleaving within a day.
@@ -29,6 +30,12 @@ Research and reasoning: the context-transfer document (`docs/product/planner-con
 - Switching subject: the old plan is replaced after the student rates the new subject's topics.
 - The Phase 2 even-spread generator (`plan-generator.ts`, `generatePlan`) is kept as the
   deterministic fallback; the page no longer calls it.
+
+## Current OSN stage bands
+
+The owner-approved preparation/evidence bands are documented with their 2025 paper basis in [OSN stage calibration](../engineering/osn-stage-calibration.md): OSN-K Basic–Intermediate (0.70), OSN-P Intermediate–Advanced (0.80), Semifinal Basic–Advanced (0.85), and Final Advanced-only (0.85). The Final target is retained at 0.85; it is not a 95% raw-score requirement. These bands are project preparation policy, not official per-question OSN difficulty labels.
+
+The range filters planner answer evidence and confirmation availability; it does not currently filter the live topic quiz list. The quiz dialog and scoring path still use all reviewed, non-archived items for the topic. See the known gap below and the calibration note before describing stage-specific question selection.
 
 ## Everything marked [PLACEHOLDER]
 `MASTERY_PARAMS` (mastery.ts), `SCHEDULER_PARAMS` (plan-scheduler.ts), `STAGES[*].masteryTarget`
@@ -44,6 +51,8 @@ check only, not evidence that students learn more.
 ## Known gaps
 - Topic `effort` is not authored anywhere, so every topic counts as medium.
 - Informatics and astronomy have almost no quiz questions; those topics cannot be confirmed yet.
-- The quiz dialog shows all of a topic's questions, not only the stage's difficulty range
-  (only in-range answers feed the estimate).
+- The quiz dialog and scoring path show/use all reviewed, non-archived questions for a topic,
+  not only the stage's difficulty range (only in-range answers feed the mastery
+  estimate and confirmation availability). Stage-filtered delivery and item
+  sampling remain separate engineering decisions; see the stage-calibration note.
 - Essay/practicum questions cannot be auto-graded and are not modelled.

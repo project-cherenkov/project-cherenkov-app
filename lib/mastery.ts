@@ -10,8 +10,10 @@
 // confirm before relying on the numbers.
 //
 // What this does NOT do: it does not weigh answers by question difficulty
-// (the stage's difficulty range decides which questions are asked, in
-// lib/osn-stages.ts), and it says nothing about WHEN to study — that is the
+// or decide which questions the quiz serves. The planner supplies only answer
+// records within the stage's configured difficulty band; the current topic
+// quiz loader/scorer still uses all reviewed, non-archived questions for that
+// topic. This estimator also says nothing about WHEN to study — that is the
 // scheduler's job.
 import { SELF_RATING_MAX, SELF_RATING_MIN } from "./planner-vocab";
 

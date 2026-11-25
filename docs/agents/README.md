@@ -11,6 +11,7 @@ These documents describe responsibilities and workflows. They do not replace the
 | Create a new editorial | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
 | Create a new material | [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
 | Revise an existing editorial or material | [Revision Agent Instructions](CHERENKOV-REVISION-AGENT-INSTRUCTIONS-v1.1-2026-11-21.md), together with the [Writer Agent Instructions](CHERENKOV-WRITER-AGENT-INSTRUCTIONS-v2.1-2026-11-21.md) |
+| Author, review or validate a quiz question | [Quiz authoring](../engineering/quiz-authoring.md), together with the current [OSN stage calibration](../engineering/osn-stage-calibration.md) |
 
 The Revision Agent Instructions are a companion to the Writer Agent Instructions: the writer document defines the quality and file-format standards; the revision document adds diagnosis, scope and change-control procedures.
 

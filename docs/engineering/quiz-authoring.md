@@ -111,6 +111,14 @@ Graded correct exactly when `|submitted - value| <= tolerance`. The comparison a
 
 A file with **no `questionType` line** is a legacy single-choice question (top-level `choices` with exactly one `correct: true`). It stays valid as it is: no content rewrite is needed, its ID and key never change, and it is written back without a `questionType` line, so loading and re-saving it produces no diff. It is exempt from the `author`/`source` requirement. As soon as it is edited in Keystatic and gains a `questionType`, it is a new-format question and needs both.
 
+## OSN stage difficulty and quiz delivery
+
+The current project preparation/evidence bands are documented in [OSN stage calibration](osn-stage-calibration.md): OSN-K Basic–Intermediate, OSN-P Intermediate–Advanced, Semifinal Basic–Advanced, and Final Advanced only. These are project preparation bands, not official Puspresnas difficulty labels for each exam item.
+
+**Important runtime limitation:** `difficultiesForStage()` is currently used by the planner to filter the answer records included in the stage mastery estimate and to check whether a topic has at least one reviewed, non-archived question in the band for confirmation availability. It does **not** currently filter the questions returned by `lib/quiz.ts` or fetched for scoring in `lib/quiz-actions.ts`; those paths use all reviewed, non-archived questions for the topic. Do not describe the stage range as a live quiz-selection filter until that behaviour is separately implemented and tested.
+
+The stage's `masteryTarget` is a scheduler/mastery input, not the topic quiz's raw-score completion threshold. The mastery estimator uses the lower credible bound of a Beta posterior; see `lib/mastery.ts`. The planner's separate latest-attempt completion threshold remains defined in `lib/planner.ts`. The current mastery parameters are placeholders and have not been calibrated on student outcome data.
+
 ## Writing a question
 
 1. In Keystatic, open the subject's quiz collection and create an entry.

@@ -18,18 +18,17 @@ export { OSN_STAGES, type OsnStage } from "./planner-vocab";
 export interface StageInfo {
   stage: OsnStage;
   label: { id: string; en: string };
-  // [USER-PROVIDED] The owner's stage comparison: OSN-K = "dasar hingga
-  // menengah", OSN-P = "menengah hingga lanjutan", national = the hardest,
-  // university-level material. The topic list is the same for every stage
-  // (the syllabus files carry no per-level marks); only the depth differs, so
-  // the stage selects which question difficulties the confirmation quiz draws
-  // from (inclusive range, in QUESTION_DIFFICULTIES order).
-  //
-  // ASSUMPTION: the semifinal has no description in the owner's comparison,
-  // so it is treated like the final.
+  // Project preparation/evidence band for this examination stage, not an
+  // official OSN per-question difficulty label. The inclusive range is used
+  // by the planner to select answer-history evidence and to determine whether
+  // a topic has a reviewed question available for confirmation. It does NOT
+  // currently filter the questions returned by the topic quiz loader or the
+  // server-side scoring query; those paths use all reviewed, non-archived
+  // questions for the topic. See docs/engineering/osn-stage-calibration.md.
   difficulty: { min: QuestionDifficulty; max: QuestionDifficulty };
-  // [PLACEHOLDER] mastery the plan aims for at the stage. The owner has not
-  // decided these; they are scheduler inputs, not claims about the exam.
+  // Retained owner-approved project targets. The values are still [PLACEHOLDER]
+  // calibration parameters: they are scheduler inputs, not claims about exam
+  // percentages, and have not been calibrated against student outcomes.
   masteryTarget: number;
 }
 
@@ -49,7 +48,7 @@ export const STAGES: Record<OsnStage, StageInfo> = {
   semifinal: {
     stage: "semifinal",
     label: { id: "Semifinal OSN", en: "OSN semifinal" },
-    difficulty: { min: "advanced", max: "advanced" },
+    difficulty: { min: "basic", max: "advanced" },
     masteryTarget: 0.85,
   },
   final: {
@@ -60,9 +59,10 @@ export const STAGES: Record<OsnStage, StageInfo> = {
   },
 };
 
-// The question difficulties a stage draws from, easiest first. Used for the
-// confirmation quiz (which questions are offered AND which count towards the
-// score) and for which quiz answers feed the stage's mastery estimate.
+// The inclusive question-difficulty band associated with a stage, easiest
+// first. The planner uses it to filter answer-history evidence and to check
+// whether a topic has at least one reviewed, non-archived question available
+// for confirmation. It does not filter the topic quiz served/scored today.
 export function difficultiesForStage(stage: OsnStage): QuestionDifficulty[] {
   const { min, max } = STAGES[stage].difficulty;
   return QUESTION_DIFFICULTIES.slice(

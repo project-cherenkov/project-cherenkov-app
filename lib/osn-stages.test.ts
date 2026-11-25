@@ -121,12 +121,33 @@ describe("todayInTimeZone", () => {
   });
 });
 
+describe("approved stage preparation bands and mastery targets", () => {
+  it("keeps the approved inclusive difficulty ranges and existing targets", () => {
+    expect(STAGES.osn_k).toMatchObject({
+      difficulty: { min: "basic", max: "intermediate" },
+      masteryTarget: 0.7,
+    });
+    expect(STAGES.osn_p).toMatchObject({
+      difficulty: { min: "intermediate", max: "advanced" },
+      masteryTarget: 0.8,
+    });
+    expect(STAGES.semifinal).toMatchObject({
+      difficulty: { min: "basic", max: "advanced" },
+      masteryTarget: 0.85,
+    });
+    expect(STAGES.final).toMatchObject({
+      difficulty: { min: "advanced", max: "advanced" },
+      masteryTarget: 0.85,
+    });
+  });
+});
+
 describe("difficultiesForStage", () => {
   it("returns the inclusive difficulty range of each stage, easiest first", async () => {
     const { difficultiesForStage } = await import("./osn-stages");
     expect(difficultiesForStage("osn_k")).toEqual(["basic", "intermediate"]);
     expect(difficultiesForStage("osn_p")).toEqual(["intermediate", "advanced"]);
-    expect(difficultiesForStage("semifinal")).toEqual(["advanced"]);
+    expect(difficultiesForStage("semifinal")).toEqual(["basic", "intermediate", "advanced"]);
     expect(difficultiesForStage("final")).toEqual(["advanced"]);
   });
 });
