@@ -6,8 +6,9 @@
   "members": [
     {
       "name": "Renee",
-      "role": "Initiator, Backend Developer, Astronomy Content Editor",
-      "bioEn": "I am an aspiring astrophysicist. I investigate physical systems through computational modelling, statistical inference and large-scale data analysis, and I want to contribute to observational and computational research on astronomical datasets.\n\nI care about open science and the democratisation of research, so I advocate for accessible scientific data infrastructure, transparent methods and collaborative knowledge-sharing. I also do human rights advocacy, focused on gender equity, LGBTQ+ rights and racial justice.\n\nAlongside this, I work in information architecture. I regularly collect, cross-reference and reconcile disparate qualitative sources into one coherent system, which has sharpened my pattern recognition, systematic literature review and technical documentation.",
+      "role": "Lead Developer, Astronomy & Physics Content Editor, Fullstack Engineer",
+      "bioEn": "I am Renee Astraea, an aspiring astrophysicist and independent developer interested in applying computational methods to astronomical research. My interests include astronomical data analysis, scientific software, statistical methods, and the use of programming to investigate physical phenomena.\n\nMy projects explore ways to make scientific information and technology more accessible. For example, Taraka Sutra is an astronomy application that resolves alternative catalogue identifiers to retrieve information across astronomical databases. \n\nBeyond science and software, I write about philosophy, particularly questions concerning the mind, identity, and the foundations of knowledge. My portfolio brings these interests together through project case studies, technical documentation, and independent writing.\n\nThough I am legally known as Raden Bagus Narendra Tsaqiif Aryasuta Maldini, I operate professionally and academically as Renee Astraea.",
+      "bioId": "Saya Renee Astraea, seorang calon astrofisikawan dan pengembang independen yang tertarik menerapkan metode komputasi dalam penelitian astronomi. Minat saya meliputi analisis data astronomi, perangkat lunak ilmiah, metode statistik, serta penggunaan pemrograman untuk meneliti fenomena fisika.\n\nProyek-proyek saya mengeksplorasi cara agar informasi ilmiah dan teknologi menjadi lebih mudah diakses. Sebagai contoh, Taraka Sutra adalah aplikasi astronomi yang menyelaraskan pengenal katalog alternatif untuk mengambil informasi dari berbagai basis data astronomi. \n\nDi luar sains dan perangkat lunak, saya juga menulis tentang filsafat, khususnya persoalan yang berkaitan dengan pikiran, identitas, dan fondasi pengetahuan. Portofolio saya menyatukan berbagai minat ini melalui studi kasus proyek, dokumentasi teknis, dan tulisan-tulisan independen.\n\nMeskipun secara hukum dikenal sebagai Raden Bagus Narendra Tsaqiif Aryasuta Maldini, saya berkarya secara profesional maupun akademis dengan nama Renee Astraea.",
       "photoUrl": "https://cvdoq7tn2xg9wrme.public.blob.vercel-storage.com/team/1793719796988-logo.png",
       "personalContact": "narendramal4869@gmail.com",
       "personalContacts": [
@@ -29,19 +30,33 @@
       ]
     },
     {
-      "name": "placeholder",
-      "role": "the holder of place",
-      "bioEn": "I am the holder of place, the place of the holder",
-      "personalContacts": []
-    },
-    {
       "name": "A6cenna",
-      "role": "Developer",
-      "personalContacts": []
+      "role": "Informatics Content Editor",
+      "personalContacts": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/a6cenna",
+          "value": "GitHub"
+        }
+      ]
     },
     {
       "name": "MintLen15",
-      "role": "Developer",
+      "role": "Frontend Designer",
+      "personalContacts": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/sy4f1qf1rd4ws",
+          "value": "GitHub"
+        }
+      ]
+    },
+    {
+      "name": "PLACEHOLDER",
+      "role": "The Holder of Place",
+      "bioEn": "I am the holder of place, the place of the holder",
+      "bioId": "Aku adalah pemegang tempat, tempat dari pemegang",
+      "personalContact": "projectcherenkov@gmail.com",
       "personalContacts": []
     }
   ]
