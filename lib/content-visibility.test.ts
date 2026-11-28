@@ -60,7 +60,8 @@ describe("published / draft visibility", () => {
     expect(isIndexableEditorial({ tags: [], author: "Renee", status: "published" })).toBe(true);
   });
 
-  it("the published editorials are authored by Renee", () => {
-    for (const e of getAllEditorials()) expect(e.author).toBe("Renee");
+  it("the binary search editorial is authored by A6cenna", () => {
+    const editorial = getAllEditorials().find((e) => e.slug === "binary-search-on-answer");
+    expect(editorial?.author).toBe("A6cenna");
   });
 });
