@@ -1,0 +1,25 @@
+questionId: astronomy.accretion-processes.basic.2
+topic: accretion-processes
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Why does gas falling onto a neutron star or a black hole emit strongly in X-rays?
+choices:
+- text: Hydrogen in the infalling gas undergoes fusion in the core of the neutron star.
+  correct: false
+- text: The gas falls through a very deep gravitational potential, and the released gravitational energy is converted
+    into heat and radiation.
+  correct: true
+- text: The infalling matter annihilates with antimatter stored in the compact object.
+  correct: false
+- text: The strong magnetic field of the compact object always converts the kinetic energy of the infalling gas
+    into pulsed radio emission.
+  correct: false
+explanation: 'Correct (second choice): matter falling into the deep potential well of a compact object releases
+  gravitational energy, which heats the gas to high temperatures so that it radiates in the X-ray region. Choice
+  1 is wrong because the energy source is not fusion in the core. Choice 3 is wrong because there is no antimatter
+  reservoir. Choice 4 is wrong because the strong radiation from a radio pulsar actually tends to prevent infall,
+  and accretion-powered emission is X-ray, not radio.'
+author: Renee
+source: original

@@ -1,0 +1,19 @@
+questionId: astronomy.multi-wavelength-astronomy.basic.3
+topic: multi-wavelength-astronomy
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Rayleigh scattering by air molecules is inversely proportional to the fourth power of wavelength. How many times more strongly is light of wavelength $400$ nm scattered than light of wavelength $800$ nm?"
+choices:
+  - text: "$2$"
+    correct: false
+  - text: "$16$"
+    correct: true
+  - text: "$4$"
+    correct: false
+  - text: "$8$"
+    correct: false
+explanation: "The ratio is $(800/400)^4=2^4=16$. The values $4$ and $8$ come from using a $\\lambda^{-2}$ or $\\lambda^{-3}$ law, and $2$ is just the wavelength ratio. This strong wavelength dependence explains why the sky is blue and why the setting Sun looks red."
+author: Renee
+source: "original"

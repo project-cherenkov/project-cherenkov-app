@@ -1,0 +1,22 @@
+questionId: astronomy.solar-system-phenomena.basic.2
+topic: solar-system-phenomena
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: When do the highest high tides of the month (spring tides) occur?
+choices:
+- text: When the Sun, Earth and Moon are in line, at new moon and full moon.
+  correct: true
+- text: Only at full moon, when the Moon is opposite the Sun.
+  correct: false
+- text: At first and last quarter, when the Sun's and Moon's pulls are at right angles.
+  correct: false
+- text: When the Moon is at perigee, whatever its phase.
+  correct: false
+explanation: The tide-raising effects of the Sun and Moon add when the two bodies are in the same direction
+  or in opposite directions as seen from the Earth, i.e. at new moon and full moon; this gives spring
+  tides about every 14.8 days. At the quarters the two effects partly cancel, giving the weak neap tides.
+  Perigee raises the lunar tide but does not by itself produce a spring tide.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.4, p. 149

@@ -1,0 +1,25 @@
+questionId: astronomy.solar-system-phenomena.basic.4
+topic: solar-system-phenomena
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The Moon's distance varies from 406,700 km at apogee to 356,400 km at perigee. The tide-raising
+  force of a body of mass $M$ at distance $d$ scales as $M/d^{3}$. By what factor is the Moon's tide-raising
+  force larger at perigee than at apogee?
+choices:
+- text: '1.14'
+  correct: false
+- text: '1.30'
+  correct: false
+- text: '1.49'
+  correct: true
+- text: '1.70'
+  correct: false
+explanation: 'The distance ratio is $406{,}700/356{,}400 = 1.141$. With force $\propto d^{-3}$ the factor
+  is $1.141^3 = 1.49$. The other values correspond to wrong powers: $1.141^1 = 1.14$, $1.141^2 = 1.30$
+  (the inverse-square law of ordinary gravity), and $1.141^4 = 1.70$. The strong $d^{-3}$ dependence arises
+  because the tidal force is the difference of gravitational pulls across the Earth (Box 7.1), which is
+  also why the Sun''s tide is less than half the Moon''s although the Sun is far more massive.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Box 7.1, pp. 174–175 and Sect. 7.4, p. 149

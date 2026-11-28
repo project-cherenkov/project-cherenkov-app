@@ -1,0 +1,14 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.5
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In a star's spectrum the H$\beta$ line (the transition between $n=4$ and $n=2$ of hydrogen) is observed at $486.60$ nm. Use the Rydberg constant $R=1.097\times10^{7}$ m$^{-1}$ to find the rest wavelength, then find the radial velocity from $\Delta\lambda/\lambda_0=v_r/c$ with $c=2.998\times10^{5}$ km/s. Treat receding motion as positive. Enter $v_r$ in km/s, rounded to the nearest km/s.
+numericAnswer:
+  value: 262
+  tolerance: 3
+  unit: km/s
+explanation: The Rydberg relation $1/\lambda=R(1/n_1^{2}-1/n_2^{2})$ with $n_1=2$, $n_2=4$ gives $\lambda_0=1/[R(1/4-1/16)]=486.17$ nm. The shift is $\Delta\lambda=486.60-486.17=0.43$ nm, so $v_r=c\,\Delta\lambda/\lambda_0=262$ km/s (receding). Using $n=3$ instead of $4$ would give the H$\alpha$ wavelength and a nonsensical blueshift. The tolerance of 3 km/s allows for the rounding of the intermediate wavelength.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.2, eq. (5.8), printed p. 107; Doppler relation supplied in the prompt

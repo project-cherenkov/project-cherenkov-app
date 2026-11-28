@@ -1,0 +1,25 @@
+questionId: astronomy.statistics-error-analysis.intermediate.6
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Two independent observing runs measure the same quantity. Run A has $n_A=25$ observations and
+  sample standard deviation $s_A=2.0$ units. Run B has $n_B=100$ observations and $s_B=1.0$ unit. Use
+  $SEM=s/\sqrt n$.
+statements:
+- text: The standard error of the mean for Run A is 0.40 units.
+  isTrue: true
+- text: The standard error of the mean for Run B is 0.10 units.
+  isTrue: true
+- text: Run B has the smaller scatter of individual observations.
+  isTrue: true
+- text: Run B has the smaller standard error of the mean.
+  isTrue: true
+- text: The mean value of Run A must be twice the mean value of Run B.
+  isTrue: false
+explanation: Run A has $SEM_A=2/\sqrt{25}=0.40$. Run B has $SEM_B=1/\sqrt{100}=0.10$. The individual scatter
+  is compared by s, so Run B is less dispersed. Its SEM is also smaller. Standard deviations and sample
+  sizes provide no basis for claiming one run’s mean is twice the other’s.
+author: Renee
+source: "Taylor, An Introduction to Error Analysis, 3e, Chapter 4 (standard error of the mean); OpenStax, Introductory Statistics 2e, Chapter 2 (sample standard deviation)."

@@ -1,0 +1,40 @@
+questionId: astronomy.binary-stars.advanced.1
+topic: binary-stars
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A semidetached Algol-type system consists of a $2.6\,M_\odot$ main-sequence star and a $0.7\,M_\odot$ subgiant
+  that fills its Roche lobe. Select all statements consistent with the standard evolutionary picture of close binaries.
+choices:
+- text: Mass is currently flowing from the subgiant to the main-sequence star.
+  correct: true
+- text: The present mass ratio could not be explained if the two stars had evolved as independent single stars.
+  correct: true
+- text: The lower-mass subgiant evolved first because lower-mass stars have shorter main-sequence lifetimes.
+  correct: false
+- text: The subgiant was originally the more massive star and left the main sequence first.
+  correct: true
+- text: The mass transfer is currently proceeding on the thermal time scale.
+  correct: false
+explanation: 'True:
+
+
+  - The subgiant fills its Roche lobe and loses mass to its companion.
+
+  - Independent evolution would make the more evolved star the more massive one, which contradicts the observed
+  mass ratio (the Algol paradox).
+
+  - The paradox is resolved by mass transfer: the originally more massive star evolved first, filled its Roche lobe
+  and transferred most of its mass, so the roles reversed.
+
+
+  False:
+
+
+  - Lower-mass stars live longer, not shorter.
+
+  - The initial transfer on the thermal time scale is short and has finished; the present transfer proceeds on the
+  much slower nuclear time scale.'
+author: Renee
+source: original

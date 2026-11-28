@@ -1,0 +1,27 @@
+questionId: astronomy.numerical-methods.advanced.1
+topic: numerical-methods
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A planet has a small eccentricity $e\ll1$ and mean anomaly $M$ (in radians). Its eccentric anomaly $E$ satisfies
+  Kepler's equation $E-e\sin E=M$ and its distance from the Sun is $r=a(1-e\cos E)$. Working to first order in $e$
+  only, which statements are correct? Select all that apply.
+choices:
+- text: $r\approx a(1-e)$ for every value of $M$
+  correct: false
+- text: $E\approx M+e\sin M$
+  correct: true
+- text: At $M=0$ the eccentric anomaly differs from $M$ by about $e$ radians
+  correct: false
+- text: $r\approx a(1-e\cos M)$
+  correct: true
+- text: At $M=\pi$ the distance is $r\approx a(1+e)$
+  correct: true
+explanation: 'Since $E=M+e\sin E$ and $E=M+O(e)$, replacing $E$ by $M$ inside the sine (one step of direct iteration)
+  gives $E\approx M+e\sin M$, correct to first order. Then $\cos E=\cos M-e\sin^2M+\cdots$, so $r=a(1-e\cos E)=a(1-e\cos
+  M)+O(e^2)$. At $M=\pi$ this gives $a(1+e)$ (aphelion), consistent with the exact result. False: $r\approx a(1-e)$
+  is the perihelion distance, valid only near $M=0$, not for every $M$. Also false: at $M=0$ we have $E=0$ exactly,
+  so the difference is $e\sin0=0$, not $e$.'
+author: Renee
+source: original

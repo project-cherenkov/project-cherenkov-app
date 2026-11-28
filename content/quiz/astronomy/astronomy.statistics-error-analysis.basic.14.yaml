@@ -1,0 +1,21 @@
+questionId: astronomy.statistics-error-analysis.basic.14
+topic: statistics-error-analysis
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: 'A detector records five background-subtracted counts in equal time intervals: 2, 3, 3, 7 and
+  9. Which value is the mode of this data set?'
+choices:
+- text: '2'
+  correct: false
+- text: '3'
+  correct: true
+- text: '4.8'
+  correct: false
+- text: '9'
+  correct: false
+explanation: The mode is the value that occurs most often. The value 3 occurs twice; every other value
+  occurs once.
+author: Renee
+source: "OpenStax, Introductory Statistics 2e, Chapter 2 (measures of centre; mode)."

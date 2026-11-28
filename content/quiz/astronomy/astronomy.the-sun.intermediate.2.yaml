@@ -1,0 +1,27 @@
+questionId: astronomy.the-sun.intermediate.2
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A flare erupts near the centre of the solar disc. Its X-rays travel at the speed of light. A coronal
+  mass ejection (CME) launched in the same event moves straight towards Earth at a constant 1200 km/s.
+  Take 1 au $= 1.496\times10^{8}$ km and $c = 3.00\times10^{5}$ km/s. About how long after the eruption
+  do the X-rays and the CME reach Earth, respectively?
+choices:
+- text: 8.3 min and 3.5 days
+  correct: false
+- text: 8.3 min and 34.6 hours
+  correct: true
+- text: 8.3 s and 34.6 hours
+  correct: false
+- text: 8.3 min and 69 hours
+  correct: false
+explanation: 'X-rays: $t = d/c = 1.496\times10^{8}/3.00\times10^{5}\ \mathrm{s} = 499\ \mathrm{s} \approx
+  8.3$ min. CME: $t = d/v = 1.496\times10^{8}/1200\ \mathrm{s} = 1.25\times10^{5}\ \mathrm{s} \approx
+  34.6$ h. This is why X-rays disturb the ionosphere (and shortwave radio) almost immediately, while the
+  particle cloud and its shock arrive about a day and a half later. ''8.3 min and 3.5 days'' uses the
+  average solar-wind speed (500 km/s) instead of the CME speed given; ''8.3 s'' is a unit slip (499 s
+  is 8.3 minutes); ''69 hours'' would correspond to a CME speed of only 600 km/s.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, p. 295 and Sect. 13.4, p. 297

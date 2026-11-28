@@ -1,0 +1,27 @@
+questionId: astronomy.milky-way.intermediate.2
+topic: milky-way
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The IAU Oort constants are $A=15$ km s$^{-1}$ kpc$^{-1}$ and $B=-10$ km s$^{-1}$ kpc$^{-1}$. For a Keplerian
+  rotation curve ($V\propto R^{-1/2}$) one would find $(A-B)/(A+B)=2$. What follows for the Milky Way near the Sun?
+choices:
+- text: $(A-B)/(A+B)=5$, greater than 2, so the curve falls more steeply than Keplerian and all the mass lies inside
+    the Sun's orbit
+  correct: false
+- text: $(A-B)/(A+B)=1/5$, less than 2, so the rotation curve is flat at the Sun
+  correct: false
+- text: $(A-B)/(A+B)=5\neq2$, so the rotation curve is not Keplerian and the mass cannot be concentrated near the
+    centre
+  correct: true
+- text: $A+B\neq0$ shows that the Galaxy rotates like a rigid body near the Sun
+  correct: false
+explanation: '**Correct (option 3).** With $A-B=V_0/R_0$ and $A+B=-\mathrm{d}V/\mathrm{d}R$, the ratio is $(A-B)/(A+B)=25/5=5$.
+  For $V\propto R^{-1/2}$ it would be exactly 2, so the Keplerian (point-mass) description fails and the mass is
+  distributed over an extended region. (In fact $\mathrm{d}\ln V/\mathrm{d}\ln R=-1/5$ near the Sun, a shallower
+  fall than Keplerian $-1/2$.) **Option 1** has the right number but the wrong inference: a ratio larger than 2
+  means a *slower* decline than Kepler, not a steeper one. **Option 2** inverts the ratio. **Option 4** is wrong:
+  rigid rotation would give $A=0$, whereas $A=15$ km s$^{-1}$ kpc$^{-1}$ here, and a flat curve would give $A+B=0$.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 377–380

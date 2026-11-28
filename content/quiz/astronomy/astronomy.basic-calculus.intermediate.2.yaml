@@ -1,0 +1,23 @@
+questionId: astronomy.basic-calculus.intermediate.2
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Use the derivatives of $f(x)=\sqrt{1+x}$ at $x=0$ to find the coefficient of $x^3$ in its Taylor series
+  about $x=0$.
+choices:
+- text: $3/8$
+  correct: false
+- text: $-1/16$
+  correct: false
+- text: $1/8$
+  correct: false
+- text: $1/16$
+  correct: true
+explanation: 'The derivatives are $f''=\tfrac12(1+x)^{-1/2}$, $f''''=-\tfrac14(1+x)^{-3/2}$, $f''''''=\tfrac38(1+x)^{-5/2}$,
+  so $f''''''(0)=\tfrac38$. The coefficient of $x^3$ is $f''''''(0)/3!=\tfrac38/6=\tfrac1{16}$. $3/8$ forgets the
+  factor $1/3!$. $1/8$ divides by $3$ instead of $3!=6$. $-1/16$ has the wrong sign: the $x^3$ term of $\sqrt{1+x}$
+  is positive (the series is $1+\tfrac12x-\tfrac18x^2+\tfrac1{16}x^3-\cdots$).'
+author: Renee
+source: original

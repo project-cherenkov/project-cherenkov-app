@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-properties.intermediate.5
+topic: stellar-properties
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A single star has apparent visual magnitude $V=6.40$ and lies at a distance of $125$ pc. Interstellar extinction
+  is negligible. Its bolometric correction is $BC=+0.40$ mag, defined by $m_{\rm bol}=m_V-BC$. Its effective temperature
+  is $T_{\rm eff}=4400$ K. Take $M_{{\rm bol},\odot}=4.74$ and $T_{{\rm eff},\odot}=5772$ K. Find the star's radius
+  in solar radii. Enter your answer in $R_\odot$, rounded to one decimal place.
+numericAnswer:
+  value: 12.0
+  tolerance: 0.1
+  unit: R_sun
+explanation: '1. Absolute visual magnitude: $M_V=V-5\lg(r/10\ \text{pc})=6.40-5\lg 12.5=0.915$.
+
+  2. Absolute bolometric magnitude: $M_{\rm bol}=M_V-BC=0.515$.
+
+  3. Luminosity: $L/L_\odot=10^{-0.4(M_{\rm bol}-4.74)}=10^{1.690}\approx48.96$.
+
+  4. From $L=4\pi R^2\sigma T_{\rm eff}^4$, $R/R_\odot=\sqrt{L/L_\odot}\,(T_\odot/T_{\rm eff})^2=\sqrt{48.96}\times(5772/4400)^2\approx7.00\times1.721\approx12.0$.
+
+
+  Unit: solar radii. The tolerance of $0.1\,R_\odot$ (about $0.8\%$) allows for rounding of intermediate quantities
+  to three significant figures; it does not allow for a different $M_{\rm bol,\odot}$ or temperature scale, which
+  are supplied.'
+author: Renee
+source: original

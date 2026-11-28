@@ -1,0 +1,26 @@
+questionId: astronomy.milky-way.advanced.1
+topic: milky-way
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: The Oort constants are $A=15$ and $B=-10$ (both in km s$^{-1}$ kpc$^{-1}$), with $A-B=V_0/R_0$ and $A+B=-(\mathrm{d}V/\mathrm{d}R)_{R_0}$.
+  Assume circular orbits. Select **all** justified statements.
+choices:
+- text: The ratio $(A-B)/(A+B)=5$ exceeds the Keplerian value 2, so the rotation curve near the Sun falls off more
+    steeply than a Keplerian curve
+  correct: false
+- text: Near the Sun, the local slope is $\mathrm{d}V/\mathrm{d}R=-5$ km s$^{-1}$ kpc$^{-1}$.
+  correct: true
+- text: If the rotation near the Sun were rigid-body, the constants would satisfy $A=-B$
+  correct: false
+- text: With $V_0=220$ km/s, the inferred $R_0$ is 8.8 kpc, which is 0.3 kpc larger than the 8.5 kpc globular-cluster
+    estimate.
+  correct: true
+explanation: '**Options 2 and 4 are correct.** Since $A+B=5$, $\mathrm{d}V/\mathrm{d}R=-(A+B)=-5$ km s$^{-1}$ kpc$^{-1}$,
+  so option 2 states the local derivative directly. Since $A-B=25=V_0/R_0$, $R_0=220/25=8.8$ kpc, 0.3 kpc greater
+  than the book’s approximately 8.5 kpc estimate from globular clusters. **Option 1 is false:** the ratio is 5,
+  compared with 2 for a Keplerian curve, so the decline is shallower, not steeper. **Option 3 is false:** rigid
+  rotation gives $A=0$, not $A=-B$.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 377–380

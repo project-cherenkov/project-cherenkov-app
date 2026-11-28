@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.basic.1
+topic: nuclear-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A nucleus of iron has charge number $Z=26$ and mass number $A=56$. How many neutrons does it contain?
+choices:
+- text: '26'
+  correct: false
+- text: '30'
+  correct: true
+- text: '56'
+  correct: false
+- text: '82'
+  correct: false
+explanation: The mass number is $A=Z+N$, so $N=A-Z=56-26=30$. The value 26 is the number of protons, 56 is the total number of nucleons, and 82 is the sum $Z+A$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.1 (p. 103) and §11.3 (p. 254)

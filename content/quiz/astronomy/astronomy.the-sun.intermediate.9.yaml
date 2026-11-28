@@ -1,0 +1,24 @@
+questionId: astronomy.the-sun.intermediate.9
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Sunspots at latitude $30^\circ$ are used to time the Sun's rotation from Earth. Take the surface
+  angular velocity $\Omega = A - B\sin^2\psi$ with $A = 14.5^\circ$/day and $B = 2.9^\circ$/day, and treat
+  Earth's orbit as circular with sidereal period 365.256 d, in the same sense as the Sun's rotation. How
+  long does a spot at $30^\circ$ latitude take to return to the same apparent position on the disc as
+  seen from Earth (the synodic rotation period)? Enter the value in days, rounded to 0.1 day.
+numericAnswer:
+  value: 28.1
+  tolerance: 0.1
+  unit: d
+explanation: At $\psi=30^\circ$, $\sin^2\psi=0.25$, so $\Omega=14.5-2.9\times0.25=13.775^\circ$/day and
+  the sidereal rotation period is $P_{\rm sid}=360/13.775=26.13$ d. Earth moves in the same direction,
+  so $1/P_{\rm syn}=1/P_{\rm sid}-1/P_\oplus=0.038264-0.002738=0.035526$ d$^{-1}$. Thus $P_{\rm syn}=28.148$
+  d, which rounds to 28.1 d at the requested nearest 0.1 day. The tolerance $\pm0.1$ d is retained; it
+  accepts the correctly rounded value and rejects the sidereal period 26.1 d, the equatorial synodic period
+  26.6 d, and the wrong-sign result 24.4 d.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.1, p. 285 (Eq. 13.1); Sect. 7.2, p.
+  145 (synodic period relation)

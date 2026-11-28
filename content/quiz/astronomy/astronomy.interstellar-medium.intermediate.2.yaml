@@ -1,0 +1,28 @@
+questionId: astronomy.interstellar-medium.intermediate.2
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Assume galaxies are uniformly distributed in space and that interstellar dust forms a homogeneous
+  plane-parallel layer whose extinction towards the galactic pole ($b=90^\circ$) is 0.50 mag. Without
+  extinction, the number of galaxies per square degree brighter than apparent magnitude $m$ would follow
+  $\lg N_0 = 0.6\,m + C$. What is the ratio $N(b=30^\circ)/N(b=90^\circ)$ of the observed counts brighter
+  than the same apparent magnitude?
+choices:
+- text: '0.25'
+  correct: false
+- text: '0.71'
+  correct: false
+- text: '0.50'
+  correct: true
+- text: '0.13'
+  correct: false
+explanation: For a plane-parallel layer the extinction is $A(b)=A_{\rm pole}/\sin b$, which is 0.50 mag
+  at the pole and $0.50/\sin30^\circ=1.00$ mag at $b=30^\circ$. Extinction dims galaxies by $A$, so $\lg
+  N = \lg N_0(m-A)=\text{const}-0.6A$. Hence $\lg[N(30^\circ)/N(90^\circ)]=-0.6(1.00-0.50)=-0.30$, a ratio
+  of 0.50 (third choice). 0.25 is the ratio to an extinction-free sky ($10^{-0.6\times1.0}$), not to the
+  pole. 0.71 comes from using $0.3$ in place of $0.6$ in the slope. 0.13 comes from adding the two extinctions
+  (1.5 mag) before applying the slope.
+author: Renee
+source: original

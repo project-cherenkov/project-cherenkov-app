@@ -1,0 +1,25 @@
+questionId: astronomy.galaxies.basic.2
+topic: galaxies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Gas in the outer part of a spiral galaxy, far beyond the visible disk, is found to orbit at an almost constant
+  speed $v$. Assuming roughly spherical mass distribution so that $M(R)=Rv^2/G$, what follows?
+choices:
+- text: The enclosed mass falls with radius, since the amount of light also falls with radius.
+  correct: false
+- text: The enclosed mass is constant outside the disk, as for a point mass, and the speed should fall as $R^{-1/2}$.
+  correct: false
+- text: The enclosed mass grows as $R^2$, because the speed is constant and the orbit is circular.
+  correct: false
+- text: The enclosed mass keeps growing in proportion to $R$ even though the light does not, so much of the mass
+    is not visible.
+  correct: true
+explanation: 'Correct (fourth choice): with $v$ constant, $M(R)=Rv^2/G\propto R$, so mass keeps increasing outward
+  while the luminosity of the outer galaxy is negligible, which means the mass-to-light ratio rises with radius
+  and unseen (dark) matter is implied. A mass that falls outward (choice 1) is impossible because the enclosed mass
+  cannot decrease. A constant enclosed mass (choice 2) would give a Keplerian decline $v\propto R^{-1/2}$, which
+  is not observed. Choice 3 gives the wrong scaling: with $v$ fixed, $M$ is linear in $R$, not quadratic.'
+author: Renee
+source: original

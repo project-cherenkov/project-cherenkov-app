@@ -1,0 +1,21 @@
+questionId: astronomy.nuclear-physics.advanced.1
+topic: nuclear-physics
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** conclusions about the solar neutrino observations that are supported by the standard stellar-structure discussion (a qualitative treatment of neutrinos is intended).
+choices:
+- text: Because neutrinos interact so weakly, those from the solar core give direct information about conditions near the Sun's centre.
+  correct: true
+- text: Detectors that register all neutrino types found a total flux consistent with solar models, while only about 35 % of it was electron neutrinos, indicating conversion between neutrino types.
+  correct: true
+- text: The deficit demonstrated that the Sun's central temperature is about 20 % lower than in standard models.
+  correct: false
+- text: Conversion between neutrino types requires that neutrinos have a small but non-zero rest mass.
+  correct: true
+- text: Neutrinos from the dominant ppI branch were the first to be detected in the 1970s experiments.
+  correct: false
+explanation: 'Statement 1 is supported: neutrinos escape freely from the core. Statement 2 is supported: the measurements with sensitivity to all neutrino types agreed with the models, with roughly a third of the flux in electron neutrinos. Statement 3 is not supported: a central temperature 20 % lower would conflict with the observed solar luminosity, so the discrepancy was not attributed to the model temperature. Statement 4 is supported: oscillations imply a non-zero rest mass. Statement 5 is not supported: the early experiments could detect only neutrinos from the ppII and ppIII branches, which are energetic enough; the ppI neutrinos were observed later. The key is {1, 2, 4}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §13.1, printed pp. 284–285; §3.6, pp. 86–87; §11.3, p. 255

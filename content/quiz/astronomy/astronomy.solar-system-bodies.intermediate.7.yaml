@@ -1,0 +1,32 @@
+questionId: astronomy.solar-system-bodies.intermediate.7
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: 'Use: sidereal month 27.322 d; Earth''s sidereal year 365.256 d; time between successive passages
+  of the Sun through the same lunar node 346.62 d; synodic month 29.531 d; lunar recession 3 cm per year.
+  Judge each statement independently as true or false.'
+statements:
+- text: The synodic month implied by the sidereal month and Earth's sidereal year is about 29.53 d.
+  isTrue: true
+- text: Nineteen intervals of 346.62 d agree with 223 synodic months to within one day.
+  isTrue: true
+- text: Because the Sun passes a given node every 346.62 d, exactly two eclipse seasons occur in every
+    calendar year.
+  isTrue: false
+- text: Between two successive full moons the Moon completes less than one revolution relative to the
+    stars.
+  isTrue: false
+- text: At its present recession rate the Moon's distance increases by roughly 3000 km in $10^{8}$ years.
+  isTrue: true
+explanation: '(1) True: $1/P_{\rm syn} = 1/27.322 - 1/365.256 = 0.036601 - 0.002738 = 0.033863\ \mathrm{d^{-1}}$,
+  so $P_{\rm syn} = 29.53$ d. (2) True: $19\times346.62 = 6585.78$ d and $223\times29.531 = 6585.4$ d,
+  a difference of 0.4 d; this is the Saros. (3) False: eclipse seasons recur every half of 346.62 d, i.e.
+  about 173 d, so a calendar year contains parts of two or three seasons; ''exactly two'' is wrong. (4)
+  False: the synodic month (29.53 d) is longer than the sidereal month (27.32 d), so between full moons
+  the Moon completes $29.53/27.32 = 1.08$ revolutions relative to the stars. (5) True: $0.03\ \mathrm{m/yr}\times10^{8}\
+  \mathrm{yr} = 3\times10^{6}$ m $= 3000$ km (under 1% of the Earth–Moon distance), assuming the rate
+  stays constant.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.4, pp. 147–149 and Sect. 7.5, p. 150

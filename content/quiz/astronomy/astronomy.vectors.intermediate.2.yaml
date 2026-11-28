@@ -1,0 +1,21 @@
+questionId: astronomy.vectors.intermediate.2
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: What is the angle between the vectors $\mathbf A=\hat\imath+\hat\jmath$ and $\mathbf B=\hat\imath+\hat k$?
+choices:
+- text: $30^\circ$
+  correct: false
+- text: $60^\circ$
+  correct: true
+- text: $45^\circ$
+  correct: false
+- text: $90^\circ$
+  correct: false
+explanation: $\mathbf A\cdot\mathbf B=1$ and $|\mathbf A|=|\mathbf B|=\sqrt2$, so $\cos\theta=1/2$ and $\theta=60^\circ$.
+  $90^\circ$ would need a vanishing scalar product. $45^\circ$ would result from $\cos\theta=1/\sqrt2$, i.e. from
+  forgetting that both magnitudes are $\sqrt2$ (dividing by only one of them). $30^\circ$ would need $\cos\theta=\sqrt3/2$.
+author: Renee
+source: original

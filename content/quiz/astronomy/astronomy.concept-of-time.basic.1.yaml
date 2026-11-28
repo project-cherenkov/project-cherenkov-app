@@ -1,0 +1,19 @@
+questionId: astronomy.concept-of-time.basic.1
+topic: concept-of-time
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "The solar day is about $3^{\\rm m}\\,56.6^{\\rm s}$ longer than the sidereal day. What is the main reason?"
+choices:
+  - text: "Precession of the equinoxes shifts the vernal equinox by about $4$ minutes of time every day."
+    correct: false
+  - text: "The Earth's rotation is slowing, so each successive day is longer than the previous one by about four minutes."
+    correct: false
+  - text: "The Earth moves about $1^\\circ$ along its orbit each day, so it must turn slightly more than one full rotation before the Sun is again on the meridian."
+    correct: true
+  - text: "The Sun's declination changes during the year, so the Sun culminates later each day."
+    correct: false
+explanation: "After one sidereal rotation the stars are back in the same place, but the Earth has moved about $360^\\circ/365.25\\approx0.99^\\circ$ along its orbit, so the Sun appears displaced about $1^\\circ$ eastward and the Earth must rotate by that extra angle ($\\approx 3^{\\rm m}56^{\\rm s}$) for the Sun to culminate again. Precession amounts to only about $50''$ per year, nowhere near four minutes per day. The slowing of the rotation changes the day by milliseconds per century. Declination changes do not accumulate a steady daily delay; the Sun's right-ascension rate (a combination of orbital eccentricity and the tilted ecliptic) causes only the seasonal variation described by the equation of time."
+author: Renee
+source: "original"

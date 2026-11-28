@@ -1,0 +1,32 @@
+questionId: astronomy.solar-system-bodies.intermediate.3
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following statements about the Earth's orbit and its orientation are correct? Select
+  all that apply.
+choices:
+- text: Earth is at aphelion in early January, which is why that is winter in the northern hemisphere.
+  correct: false
+- text: The tropical year (365.2422 d) is shorter than the sidereal year (365.2564 d) because the vernal
+    equinox moves westward along the ecliptic by about 50″ per year, so the Sun meets it slightly early.
+  correct: true
+- text: The obliquity of the ecliptic varies between about $22.1^\circ$ and $24.5^\circ$ with a period
+    of about 41,000 years.
+  correct: true
+- text: The seasons arise mainly because the Earth–Sun distance varies between about 147 and 152 million
+    km.
+  correct: false
+- text: The anomalistic year, measured between successive perihelion passages (365.2596 d), is slightly
+    longer than the sidereal year.
+  correct: true
+explanation: 'Correct: (2) precession makes the Sun return to the equinox after 365.2422 d, before one
+  sidereal year (365.2564 d) has elapsed; (3) the obliquity, now about $23.4^\circ$ and decreasing, oscillates
+  between $22.1^\circ$ and $24.5^\circ$ in 41,000 years; (5) planetary perturbations rotate the line of
+  apsides, so the anomalistic year is a little longer than the sidereal year (about 365.2596 d). Incorrect:
+  (1) Earth is at perihelion in early January, in the middle of northern winter; (4) the variation in
+  the Earth–Sun distance has practically no effect on the seasons, which are due to the obliquity of the
+  ecliptic.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.3, pp. 146–147

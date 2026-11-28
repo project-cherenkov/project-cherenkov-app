@@ -1,0 +1,14 @@
+questionId: astronomy.celestial-sphere.advanced.4
+topic: celestial-sphere
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "A star of declination $+20.0^\\circ$ is observed at altitude $40.0^\\circ$ at the moment its hour angle is $-3^{\\rm h}$ (east of the meridian). Ignoring refraction, and given that the observer is in the northern hemisphere ($\\varphi>0$), find the observer's latitude. Give the answer in degrees, rounded to one decimal place."
+numericAnswer:
+  value: 57.9
+  tolerance: 0.1
+  unit: "degrees"
+explanation: "Use $\\sin a=\\cos h\\cos\\delta\\cos\\varphi+\\sin\\delta\\sin\\varphi$ with $h=-45^\\circ$. This has the form $A\\cos\\varphi+B\\sin\\varphi=C$ with $A=\\cos h\\cos\\delta=0.6645$, $B=\\sin\\delta=0.3420$, $C=\\sin a=0.6428$. Write it as $R\\cos(\\varphi-\\varphi_0)=C$ with $R=\\sqrt{A^2+B^2}=0.7473$ and $\\varphi_0=\\arctan(B/A)=27.24^\\circ$. Then $\\varphi=\\varphi_0\\pm\\arccos(C/R)=27.24^\\circ\\pm30.67^\\circ$, giving $\\varphi=57.9^\\circ$ or $\\varphi=-3.4^\\circ$. The condition $\\varphi>0$ selects $57.9^\\circ$; the other root is a southern-hemisphere site that also satisfies the same observation. The tolerance $0.1^\\circ$ matches the requested rounding."
+author: Renee
+source: "original"

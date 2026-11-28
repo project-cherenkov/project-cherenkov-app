@@ -1,0 +1,20 @@
+questionId: astronomy.interstellar-medium.intermediate.5
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A neutral-hydrogen cloud is observed in the 21 cm line, assumed optically thin. Integrating the profile
+  over the velocities of the cloud gives a column density $N=4.5\times10^{20}\ \mathrm{cm^{-2}}$. The cloud's extent
+  along the line of sight is estimated to be 25 pc, and its density is assumed uniform. Use $1\ \mathrm{pc}=3.086\times10^{18}$
+  cm. Find the mean hydrogen number density. Enter the value in cm$^{-3}$, rounded to two decimal places.
+numericAnswer:
+  value: 5.83
+  tolerance: 0.05
+  unit: cm^-3
+explanation: For uniform gas the column density is the density times the path length, $N=nL$, so $n=N/L$. The path
+  length is $L=25\times3.086\times10^{18}\ \mathrm{cm}=7.715\times10^{19}$ cm, so $n=4.5\times10^{20}/7.715\times10^{19}=5.83\
+  \mathrm{cm^{-3}}$. This is several times the average interstellar value (about 1 cm$^{-3}$), which is reasonable
+  for a denser H I cloud. The tolerance of 0.05 cm$^{-3}$ (under 1%) covers rounding of the intermediate quantities.
+author: Renee
+source: original

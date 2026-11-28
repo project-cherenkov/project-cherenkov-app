@@ -1,0 +1,30 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.4
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about stellar atmospheres and interiors as true or false.
+statements:
+- text: At $10{,}000$ K, Boltzmann's law alone gives a much larger population in the hydrogen ground state than
+    in the $n=2$ level.
+  isTrue: true
+- text: The hydrogen Balmer lines are strongest in the spectral class A2.
+  isTrue: true
+- text: Raising the temperature of an atmosphere always strengthens the hydrogen Balmer lines, because more atoms
+    are excited to $n=2$.
+  isTrue: false
+- text: Radiation pressure, $P_{\rm rad}=aT^4/3$, becomes more important relative to gas pressure as the temperature
+    rises at fixed density.
+  isTrue: true
+explanation: '1. True. The population ratio $n_2/n_1=(g_2/g_1)e^{-\Delta E/kT}$ with $\Delta E=10.2$ eV and $kT\approx0.86$
+  eV is of order $3\times10^{-5}$, so almost all atoms are in the ground state.
+
+  2. True. The Balmer lines of hydrogen are strongest in class A2.
+
+  3. False. Above the maximum, hydrogen becomes ionised and Balmer absorption weakens; the misconception ignores
+  ionisation.
+
+  4. True. $P_{\rm gas}\propto\rho T$ whereas $P_{\rm rad}\propto T^4$, so their ratio grows as $T^3/\rho$.'
+author: Renee
+source: original

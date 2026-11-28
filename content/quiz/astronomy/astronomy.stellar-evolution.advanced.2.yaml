@@ -1,0 +1,34 @@
+questionId: astronomy.stellar-evolution.advanced.2
+topic: stellar-evolution
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about stellar lifetimes and supernovae as true or false.
+statements:
+- text: Using $L\propto M^{3.8}$ and $t\propto M/L$ with $t=10^{10}$ yr for the Sun, a $10\,M_\odot$ star lasts
+    about $1.6\times10^{7}$ yr on the main sequence.
+  isTrue: true
+- text: A $1\,M_\odot$ star never ignites carbon and ends as a carbon–oxygen white dwarf with a planetary nebula.
+  isTrue: true
+- text: A Type Ia supernova results from the iron-core collapse of a single massive star.
+  isTrue: false
+- text: A $0.5\,M_\odot$ star leaves the main sequence sooner than a $5\,M_\odot$ star because it has less hydrogen
+    to burn.
+  isTrue: false
+- text: Type Ib spectra show strong helium lines that Type Ic spectra lack, and both come from core collapse of
+    massive stars that have lost their hydrogen envelopes.
+  isTrue: true
+explanation: '1. True. $t\propto M^{-2.8}$, so $t=10^{10}\times10^{-2.8}=1.6\times10^{7}$ yr.
+
+  2. True. Stars up to about $8\,M_\odot$ never ignite carbon in the core.
+
+  3. False. Type Ia supernovae come from white dwarfs in binaries; iron-core collapse produces the other types.
+
+  4. False. The fuel supply scales with mass but the luminosity scales far faster, so the $0.5\,M_\odot$ star lives
+  much longer.
+
+  5. True. Ib and Ic are both core-collapse events of stripped massive stars; Ib shows helium lines and Ic does
+  not.'
+author: Renee
+source: original

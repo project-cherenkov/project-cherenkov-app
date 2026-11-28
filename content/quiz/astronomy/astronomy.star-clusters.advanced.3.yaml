@@ -1,0 +1,21 @@
+questionId: astronomy.star-clusters.advanced.3
+topic: star-clusters
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A globular cluster of radius $R=8.0$ pc has a measured line-of-sight velocity dispersion $\sigma=6.0$ km/s.
+  Assume the stellar motions are isotropic (so the rms speed satisfies $v^2=3\sigma^2$), that the cluster is in
+  virial equilibrium ($2T+U=0$ with $T=\tfrac12Mv^2$), and that the mean pair separation equals $R$ so that $U=-GM^2/(2R)$.
+  Use $G=6.674\times10^{-11}\ \mathrm{m^3kg^{-1}s^{-2}}$, 1 pc $=3.0857\times10^{16}$ m and $M_\odot=1.989\times10^{30}$
+  kg. Find the cluster's mass. Enter the value in units of $10^{5}\,M_\odot$, rounded to two decimal places.
+numericAnswer:
+  value: 4.02
+  tolerance: 0.01
+  unit: 10^5 solar masses
+explanation: The supplied virial model gives $Mv^2=GM^2/(2R)$ and hence $M=2Rv^2/G$. Isotropy gives $v^2=3\sigma^2$,
+  so $M=6R\sigma^2/G$. Substituting $R=8.0(3.0857\times10^{16})$ m and $\sigma=6.0\times10^3$ m/s gives $M=7.989\times10^{35}$
+  kg $=4.01677\times10^5M_\odot$, which rounds to **4.02** in units of $10^5M_\odot$. The $\pm0.01$ tolerance covers
+  rounding of the computed value without accepting a materially different virial calculation.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.3–17.4, pp. 364–365

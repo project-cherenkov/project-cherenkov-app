@@ -1,0 +1,29 @@
+questionId: astronomy.binary-stars.intermediate.1
+topic: binary-stars
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The angular semimajor axis of a visual binary's relative orbit and its orbital period are measured accurately,
+  but the adopted distance is $20\%$ too small. The orbit is seen with a known inclination. By what factor is the
+  total mass from Kepler's third law wrong?
+choices:
+- text: $0.80$, too small
+  correct: false
+- text: $0.64$, too small
+  correct: false
+- text: $0.51$, too small
+  correct: true
+- text: $0.41$, too small
+  correct: false
+explanation: 'The linear semimajor axis is $a=\theta d$, so $a$ is underestimated by $0.8$. Since $m_1+m_2=a^3/P^2$
+  with fixed $P$, the mass is underestimated by $0.8^3=0.512\approx0.51$.
+
+
+  - $0.80$ treats the mass as proportional to distance.
+
+  - $0.64$ squares rather than cubes the distance factor.
+
+  - $0.41$ uses a fourth power.'
+author: Renee
+source: original

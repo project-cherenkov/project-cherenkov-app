@@ -1,0 +1,34 @@
+questionId: astronomy.stellar-properties.intermediate.1
+topic: stellar-properties
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: At a given pulsation period a W Virginis star is about $1.5$ mag fainter (in absolute magnitude) than a
+  classical Cepheid of the same period. An astronomer wrongly applies the W Virginis period–luminosity relation
+  to a classical Cepheid and neglects extinction. By roughly what factor, and in which direction, is the derived
+  distance wrong?
+choices:
+- text: Too small, by a factor of about 2.
+  correct: true
+- text: Too large, by a factor of about 2.
+  correct: false
+- text: Too small, by a factor of about 4.
+  correct: false
+- text: Too large, by a factor of about 4.
+  correct: false
+explanation: 'The wrong relation assigns an absolute magnitude that is $1.5$ mag too faint, so the derived distance
+  modulus $m-M$ is $1.5$ mag too small. Because $m-M=5\lg(r/10\ \text{pc})$, the distance error factor is $10^{1.5/5}=10^{0.3}\approx2.0$,
+  and the derived distance is too small. (Historically, this mistake made distances to classical Cepheids, and hence
+  to nearby galaxies, too small.)
+
+
+  - Too large by 2 has the correct size but the wrong sign: a star assumed intrinsically fainter must be nearer
+  to look as bright as observed.
+
+  - A factor of 4 is the flux ratio $10^{0.4\times1.5}\approx4$, but distance scales as the square root of the flux
+  ratio.
+
+  - Too large by 4 combines both errors.'
+author: Renee
+source: original

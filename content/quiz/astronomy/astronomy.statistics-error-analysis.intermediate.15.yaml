@@ -1,0 +1,25 @@
+questionId: astronomy.statistics-error-analysis.intermediate.15
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Consider the following statements about descriptive statistics and basic probability.
+statements:
+- text: For a data set with a strong high-value outlier, the mean is generally more affected than the
+    median.
+  isTrue: true
+- text: The standard deviation is expressed in the same units as the original observations.
+  isTrue: true
+- text: If every observation is increased by the same constant, the standard deviation is unchanged.
+  isTrue: true
+- text: A percentile is the percentage of observations that are strictly greater than its value.
+  isTrue: false
+- text: For a fair six-sided die, the probability of rolling an even number is one half.
+  isTrue: true
+explanation: A high outlier pulls the mean more strongly than the median. Standard deviation has the same
+  units as the data and is unchanged by adding a constant to every value. A percentile describes the proportion
+  at or below a value under the stated convention, not strictly above. Three of six die outcomes are even,
+  so the probability is 1/2.
+author: Renee
+source: "OpenStax, Introductory Statistics 2e, Chapters 2–3 (descriptive statistics and basic probability)."

@@ -1,0 +1,34 @@
+questionId: astronomy.accretion-processes.intermediate.8
+topic: accretion-processes
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about mass transfer and accretion in compact-object binaries, using the qualitative
+  descriptions in the cited textbook.
+statements:
+- text: In a high-mass X-ray binary, the compact object can accrete material supplied by the strong stellar
+    wind of its massive companion.
+  isTrue: true
+- text: In a low-mass X-ray binary containing a neutron star, angular momentum carried by the incoming
+    gas can increase the neutron star's rotation rate.
+  isTrue: true
+- text: In a polar, the white dwarf's magnetic field is weak enough for the incoming gas to settle into
+    a normal accretion disc before reaching the surface.
+  isTrue: false
+- text: The outbursts of dwarf novae are caused by thermonuclear ignition of hydrogen on the white-dwarf
+    surface.
+  isTrue: false
+- text: In the high state of a soft X-ray transient, thermal radiation from the accretion disc dominates
+    the emission.
+  isTrue: true
+explanation: The truth sequence is T, T, F, F, T. The textbook identifies stellar winds as the source
+  of material in high-mass X-ray binaries, while low-mass systems are fed by Roche-lobe overflow. It describes
+  spin-up of neutron stars by the angular momentum of incoming gas. In polars, the magnetic field prevents
+  formation of an accretion disc and channels gas along field lines into an accretion column. Dwarf-nova
+  outbursts arise from instabilities in the accretion flow, not a thermonuclear flash. Soft X-ray transients
+  are disc-dominated in their high state.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §15.1 printed p.314 (dwarf-nova disc instability
+  and magnetic polars); §15.4 printed pp.322–324 (HMXB/LMXB mass transfer, X-ray pulsars and spin-up,
+  and soft X-ray transient states).

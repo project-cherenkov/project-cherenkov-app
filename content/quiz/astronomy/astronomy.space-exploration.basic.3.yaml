@@ -1,0 +1,24 @@
+questionId: astronomy.space-exploration.basic.3
+topic: space-exploration
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Planet X has the same mass as planet Y but twice the radius. How does the escape speed from the
+  surface of X compare with that from Y?
+choices:
+- text: It is smaller by a factor of $\sqrt{2}$ (about 0.71 times that of Y).
+  correct: true
+- text: It is half as large.
+  correct: false
+- text: It is larger by a factor of $\sqrt{2}$.
+  correct: false
+- text: It is a quarter as large.
+  correct: false
+explanation: The escape speed from a surface is $v_e = \sqrt{2GM/R}$. With $M$ fixed, $v_e \propto R^{-1/2}$;
+  doubling $R$ reduces $v_e$ by a factor $1/\sqrt{2} \approx 0.71$. Halving ($1/2$) would correspond to
+  $v_e \propto 1/R$, and a quarter would correspond to $1/R^2$ (the dependence of the gravitational acceleration,
+  not of the escape speed). A larger value would hold for a smaller radius, not a larger one.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.7, p. 157 (Eq. 7.13); Sect. 6.9, pp.
+  133–134

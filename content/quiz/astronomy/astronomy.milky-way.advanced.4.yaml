@@ -1,0 +1,23 @@
+questionId: astronomy.milky-way.advanced.4
+topic: milky-way
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Neutral-hydrogen gas on circular orbits is observed in the direction $l=30^\circ$ (inside the solar circle).
+  The Sun is at $R_0=8.5$ kpc with circular speed $V_0=220$ km/s, and the angular velocity increases inward. The
+  maximum radial velocity of the gas along this line of sight (relative to the LSR) is $+90$ km/s. Assuming this
+  maximum arises at the point where the line of sight is tangent to a circle about the Galactic centre, what is
+  the circular speed of the gas at that point? Enter the value in km/s, rounded to the nearest 1 km/s.
+numericAnswer:
+  value: 200
+  tolerance: 1
+  unit: km/s
+explanation: Along a line of sight at longitude $l$, the radial velocity is $v_r=R_0(\omega-\omega_0)\sin l$. Because
+  the angular velocity increases inward, $v_r$ is largest at the tangent point, where the line of sight touches
+  a circle of radius $R_k=R_0\sin l=8.5\times\sin30^\circ=4.25$ kpc. There $v_{r,\max}=R_k(\omega-\omega_0)=V(R_k)-\omega_0R_k=V(R_k)-V_0\sin
+  l$, using $\omega_0R_0=V_0$. Therefore $V(R_k)=v_{r,\max}+V_0\sin l=90+220\times0.5=200$ km/s. This is how the
+  rotation curve inside the solar circle is mapped from 21 cm observations at different longitudes. The tolerance
+  of $\pm1$ km/s corresponds to the requested rounding.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 376–379

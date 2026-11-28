@@ -1,0 +1,23 @@
+questionId: astronomy.basic-calculus.basic.3
+topic: basic-calculus
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The area element in plane polar coordinates is $\mathrm dA=r\,\mathrm dr\,\mathrm d\varphi$. Integrating
+  over $0\le r\le R$ and $0\le\varphi\le\alpha$ (with $\alpha$ in radians), what is the area of the circular sector?
+choices:
+- text: $\tfrac12\alpha R^2$
+  correct: true
+- text: $\alpha R^2$
+  correct: false
+- text: $\tfrac12\alpha R$
+  correct: false
+- text: $\tfrac12\alpha^2R^2$
+  correct: false
+explanation: $A=\int_0^\alpha\!\int_0^R r\,\mathrm dr\,\mathrm d\varphi=\int_0^\alpha\tfrac12R^2\,\mathrm d\varphi=\tfrac12\alpha
+  R^2$. For $\alpha=2\pi$ this gives $\pi R^2$, as it must. $\alpha R^2$ omits the factor $\tfrac12$ from $\int
+  r\,\mathrm dr$ (equivalent to treating the integrand as $1$ instead of $r$). $\tfrac12\alpha R$ has the dimension
+  of length, not area. $\tfrac12\alpha^2R^2$ integrates $\varphi$ twice.
+author: Renee
+source: original

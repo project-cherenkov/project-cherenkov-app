@@ -1,0 +1,29 @@
+questionId: astronomy.stellar-evolution.basic.2
+topic: stellar-evolution
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Compare a $15\,M_\odot$ main-sequence star with a $1\,M_\odot$ star. How does the time each spends on the
+  main sequence compare?
+choices:
+- text: The $15\,M_\odot$ star spends more time, because it contains fifteen times more hydrogen.
+  correct: false
+- text: They spend about the same time, because fuel supply and luminosity both scale with mass.
+  correct: false
+- text: The $15\,M_\odot$ star spends somewhat less time, about half as long.
+  correct: false
+- text: The $15\,M_\odot$ star spends much less time, because its luminosity rises much faster than its mass.
+  correct: true
+explanation: 'The nuclear time scale is roughly the available nuclear energy divided by the luminosity, $t_n\propto
+  M/L$. Because $L$ increases far faster than $M$ on the main sequence, massive stars burn their fuel much faster
+  and live much shorter lives.
+
+
+  - More fuel does not mean a longer life when the burning rate rises much faster than the fuel supply.
+
+  - Luminosity does not scale linearly with mass; the mass–luminosity relation is steep.
+
+  - The difference is a factor of hundreds to thousands, not a factor of two.'
+author: Renee
+source: original

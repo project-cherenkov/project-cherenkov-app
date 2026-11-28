@@ -1,0 +1,21 @@
+questionId: astronomy.vectors.basic.1
+topic: vectors
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: What is the magnitude of the vector $\mathbf A=3\,\hat\imath+4\,\hat\jmath+12\,\hat k$?
+choices:
+- text: '13'
+  correct: true
+- text: '19'
+  correct: false
+- text: '7'
+  correct: false
+- text: $\sqrt{19}$
+  correct: false
+explanation: $|\mathbf A|=\sqrt{3^2+4^2+12^2}=\sqrt{169}=13$. $19$ adds the components without squaring or taking
+  a root. $7$ adds only the first two components, dropping the third. $\sqrt{19}$ takes a root of the plain sum
+  of components.
+author: Renee
+source: original

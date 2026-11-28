@@ -1,0 +1,35 @@
+questionId: astronomy.exoplanets.advanced.1
+topic: exoplanets
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: 'Three independent monitoring programmes report: **Star X** – a regular dip of depth $0.50\,\%$ every 7.2
+  d, each lasting a few hours; **Star Y** – a single brightening of about 3 % lasting about 2 d, with no repeat
+  in three years of observations; **Star Z** – a pulsar whose pulse-arrival times show a regular periodic modulation
+  with period 66 d. Select **all** justified statements.'
+choices:
+- text: 'X: the $0.50\,\%$ depth means the planet''s radius is $0.50\,\%$ of the star''s radius'
+  correct: false
+- text: 'X: if the planet crosses the middle of a uniformly bright stellar disc, its radius is about $0.07$ times
+    the stellar radius'
+  correct: true
+- text: 'Z: the regular timing modulation is the kind of signal produced by a planet pulling the pulsar around the
+    centre of mass, and such a planet may have formed from material ejected by the supernova'
+  correct: true
+- text: 'Y: because a planet repeats its effect each orbit, the next brightening can be predicted and checked'
+  correct: false
+- text: 'X: if the planet really transits, the star cannot show a Doppler motion because an edge-on orbit has no
+    line-of-sight component'
+  correct: false
+explanation: '**Options 2 and 3 are correct.** (2) The dip is proportional to the fraction of the disc that is covered,
+  i.e. $\Delta F/F\approx(R_\mathrm{p}/R_\star)^2$ for a central transit of a uniform disc, so $R_\mathrm{p}/R_\star\approx\sqrt{0.0050}\approx0.07$.
+  (3) A planet moves its parent object around the common centre of mass, which changes the timing of regular pulses
+  periodically; around a pulsar, which is a final stage of stellar evolution, the planet may be a second-generation
+  object condensed from supernova ejecta. **Option 1 is false:** it confuses area ratio with radius ratio. **Option
+  4 is false:** the described brightening occurred once and did not repeat; a non-repeating brief event cannot be
+  checked by later observation, so deciding whether a planet or the star itself caused it is problematic. **Option
+  5 is false:** an edge-on orbit has the *largest* line-of-sight velocity component, so transiting systems are also
+  the best geometry for the Doppler method. Grading is exact-set.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.2, pp. 459–460

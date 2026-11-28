@@ -1,0 +1,26 @@
+questionId: astronomy.basic-calculus.intermediate.1
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: 'A body moves on a circle of radius $R$ with constant angular speed $\omega$: $\mathbf r(t)=R(\cos\omega
+  t\,\hat\imath+\sin\omega t\,\hat\jmath)$. What are its speed $|\dot{\mathbf r}|$ and the magnitude of its acceleration
+  $|\ddot{\mathbf r}|$?'
+choices:
+- text: speed $R\omega^2$, acceleration $R\omega$
+  correct: false
+- text: speed $R\omega$, acceleration $0$ (the speed is constant)
+  correct: false
+- text: speed $R\omega$, acceleration $R\omega^2$
+  correct: true
+- text: speed $R\omega$, acceleration $R\omega$
+  correct: false
+explanation: 'By the chain rule, $\dot{\mathbf r}=R\omega(-\sin\omega t\,\hat\imath+\cos\omega t\,\hat\jmath)$,
+  whose magnitude is $R\omega$. Differentiating again, $\ddot{\mathbf r}=-R\omega^2(\cos\omega t\,\hat\imath+\sin\omega
+  t\,\hat\jmath)=-\omega^2\mathbf r$, of magnitude $R\omega^2$. Swapping the two powers of $\omega$ is a chain-rule
+  bookkeeping error. Acceleration $0$ confuses constant speed with constant velocity: the direction of $\dot{\mathbf
+  r}$ changes, so $\ddot{\mathbf r}\ne\mathbf 0$. Acceleration $R\omega$ forgets that the second derivative brings
+  down a second factor $\omega$.'
+author: Renee
+source: original

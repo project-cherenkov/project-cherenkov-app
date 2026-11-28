@@ -1,0 +1,37 @@
+questionId: astronomy.binary-stars.advanced.2
+topic: binary-stars
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about determining masses in binary stars as true or false. Assume circular orbits unless
+  stated.
+statements:
+- text: For a double-lined spectroscopic binary, the radial velocities alone give both individual masses exactly,
+    whatever the inclination.
+  isTrue: false
+- text: For a double-lined spectroscopic binary the mass ratio $m_1/m_2=K_2/K_1$ does not depend on the inclination.
+  isTrue: true
+- text: The apparent relative orbit of a visual binary is a projection of the true orbit, and the offset of the
+    primary from the focus of the apparent ellipse allows the orbit's orientation to be found.
+  isTrue: true
+- text: Stellar masses can be determined from the light curve of an eclipsing binary alone.
+  isTrue: false
+- text: Once the visual-binary apparent orbit has been deprojected, a known distance converts its angular semimajor
+    axis to a physical semimajor axis; together with the period, this gives the total mass.
+  isTrue: true
+explanation: '1. False. Radial velocities constrain $m_1\sin^3 i$ and $m_2\sin^3 i$; without inclination, the individual
+  masses are not exact.
+
+  2. True. Both velocity semi-amplitudes contain the same $\sin i$ factor, which cancels in their ratio.
+
+  3. True. The offset of the primary from the apparent focus helps recover the orientation of the true relative
+  orbit from its projection.
+
+  4. False. A light curve alone does not establish the physical scale; radial velocities are needed to determine
+  masses.
+
+  5. True. After deprojection, distance gives the physical semimajor axis; Kepler’s third law with the period then
+  gives the total mass.'
+author: Renee
+source: original

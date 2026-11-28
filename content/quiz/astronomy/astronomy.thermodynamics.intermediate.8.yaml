@@ -1,0 +1,29 @@
+questionId: astronomy.thermodynamics.intermediate.8
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Two ideal-gas samples are in separate rigid vessels. Sample A contains 2.0 mol at 450 K in a 4.0
+  L vessel; sample B contains 1.0 mol at 300 K in a 1.0 L vessel. The vessels are placed in thermal contact
+  inside a perfectly insulated enclosure. Both samples have the same constant molar heat capacity. At
+  final thermal equilibrium, each sample remains in its original vessel.
+statements:
+- text: Heat flows from sample A to sample B until their temperatures become equal.
+  isTrue: true
+- text: The final common temperature is 400 K.
+  isTrue: true
+- text: The pressure of sample A decreases from its initial value.
+  isTrue: true
+- text: The pressure of sample B increases from its initial value.
+  isTrue: true
+- text: The two final pressures must be equal because the temperatures are equal.
+  isTrue: false
+explanation: 'Energy conservation with equal molar heat capacities gives $T_f=(n_AT_A+n_BT_B)/(n_A+n_B)=(2×450+1×300)/3=400$
+  K. Heat flows from hotter A to cooler B. At fixed volume, $P\propto nT/V$: A pressure decreases because
+  T falls from 450 to 400 K, while B pressure increases from 300 to 400 K. The final pressures are not
+  equal because their molar densities differ: A has $n/V=0.50$ mol L⁻¹ and B has $n/V=1.00$ mol L⁻¹. At
+  the same final temperature, B''s pressure is twice A''s. The correct truth vector is T,T,T,T,F.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §§11.1–11.2, printed pp. 249–253 (thermodynamic
+  equilibrium, ideal gas and gas-pressure relations).

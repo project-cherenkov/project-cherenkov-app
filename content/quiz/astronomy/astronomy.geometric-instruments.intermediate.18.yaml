@@ -1,0 +1,20 @@
+questionId: astronomy.geometric-instruments.intermediate.18
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A ruler has a known zero offset of +0.02 cm. On a calibrated star chart, the two endpoints of
+  a segment are read at 1.20 cm and 5.45 cm on this same ruler. The chart scale is 0.80° per centimetre.
+  What is the angular separation? Enter the value in degrees to the nearest 0.01°.
+numericAnswer:
+  value: 3.4
+  tolerance: 0.02
+  unit: deg
+explanation: 'The segment length is the difference of the two coordinate readings: 5.45 − 1.20 = 4.25
+  cm. The same +0.02 cm zero offset is present in both readings and cancels in the difference. The angular
+  separation is 4.25 × 0.80° = 3.40°. The ±0.02° tolerance covers the stated rounding.'
+author: Renee
+source: Practical use of a ruler, zero-offset handling and a stated chart scale; IOAA syllabus and Puspresnas
+  OSN 2026 Addendum, practical data-analysis/geometric-aid skills. The calibration and scale are supplied
+  in the prompt.

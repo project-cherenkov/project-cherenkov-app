@@ -1,0 +1,23 @@
+questionId: astronomy.multi-wavelength-astronomy.basic.4
+topic: multi-wavelength-astronomy
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A radio dish has an rms surface irregularity of $0.8$ mm. Coherent operation requires the surface
+  irregularities to be smaller than one tenth of the wavelength. What is the shortest wavelength at which
+  the dish can be used?
+choices:
+- text: $0.8$ mm
+  correct: false
+- text: $1.6$ mm
+  correct: false
+- text: $8$ mm
+  correct: true
+- text: $80$ mm
+  correct: false
+explanation: The criterion $\sigma<\lambda/10$ gives $\lambda>10\sigma=10\times0.8$ mm $=8$ mm. The value
+  $0.8$ mm forgets the factor of ten, $1.6$ mm applies a factor of two, and $80$ mm multiplies by $100$
+  instead of $10$.
+author: Renee
+source: original

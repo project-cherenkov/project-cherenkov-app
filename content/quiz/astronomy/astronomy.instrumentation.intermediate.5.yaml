@@ -1,0 +1,14 @@
+questionId: astronomy.instrumentation.intermediate.5
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "Atmospheric seeing spreads stellar images into discs of $1.0''$. For light of wavelength $550$ nm, use $\\theta\\approx\\lambda/D$ with $1\\,{\\rm rad}=206{,}265''$ and find the telescope aperture $D$ for which the diffraction limit equals $1.0''$ (larger apertures are seeing-limited). Give $D$ in centimetres, to one decimal place."
+numericAnswer:
+  value: 11.3
+  tolerance: 0.1
+  unit: "cm"
+explanation: "Set $\\lambda/D=1.0''=4.848\\times10^{-6}$ rad. Then $D=550\\times10^{-9}/4.848\\times10^{-6}=0.1134$ m $=11.3$ cm. For a larger aperture the diffraction limit is finer than the seeing, so extra aperture adds light-gathering power but does not sharpen long-exposure images. Using the Rayleigh factor $1.22$ would give $13.8$ cm, which is why the rule used is stated. The tolerance $0.1$ cm covers the requested rounding."
+author: Renee
+source: "original"

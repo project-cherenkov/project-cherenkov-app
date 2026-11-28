@@ -1,0 +1,24 @@
+questionId: astronomy.statistics-error-analysis.intermediate.1
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A star's distance is found from $m-M=5\lg(r/10\,\mathrm{pc})$. Its absolute magnitude is uncertain by $\Delta
+  M=0.20$ mag, with $m$ known exactly. Using a first-order (linear) approximation, what is the relative error $\Delta
+  r/r$ of the distance?
+choices:
+- text: $4.0\,\%$
+  correct: false
+- text: $20\,\%$
+  correct: false
+- text: $46\,\%$
+  correct: false
+- text: $9.2\,\%$
+  correct: true
+explanation: Solving, $r=10\,\mathrm{pc}\times10^{(m-M)/5}$, so $\ln r=\text{const}+\tfrac{\ln10}{5}(m-M)$ and $\dfrac{\Delta
+  r}{r}\approx\dfrac{\ln10}{5}\Delta M=0.4605\times0.20=0.092$. $4.0\,\%$ ($0.20/5$) forgets the $\ln10$ that arises
+  from differentiating $10^x$. $20\,\%$ treats the magnitude error directly as a fractional error. $46\,\%$ ($0.20\ln10$)
+  forgets the division by 5.
+author: Renee
+source: original

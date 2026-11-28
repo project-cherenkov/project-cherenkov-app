@@ -1,0 +1,32 @@
+questionId: astronomy.star-clusters.advanced.2
+topic: star-clusters
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Model a cluster as $N$ stars of equal mass $m$ (total mass $M=Nm$) in virial equilibrium. Assume all $N(N-1)/2\approx
+  N^2/2$ pairs are separated by the cluster radius $R$, so that $U=-GM^2/(2R)$, and the kinetic energy is $T=\tfrac12
+  Mv^2$ with $v$ the rms stellar speed. The virial theorem is $2T+U=0$. For the escape-speed statement, use the
+  point-mass expression $v_{\rm esc}=\sqrt{2GM/R}$ at radius $R$. Judge each statement within this model. Mark every
+  statement True or False.
+statements:
+- text: At fixed radius, doubling the total mass doubles the rms stellar speed.
+  isTrue: false
+- text: At fixed mass, doubling the radius reduces the rms stellar speed by a factor $\sqrt2$.
+  isTrue: true
+- text: The escape speed from the edge of the cluster is twice the rms stellar speed.
+  isTrue: true
+- text: Because the rms speed is smaller than the escape speed, this calculation proves independently that the cluster
+    is gravitationally bound and stable.
+  isTrue: false
+- text: Because the number of star pairs grows linearly with $N$, the potential energy $|U|$ is proportional to
+    $N$.
+  isTrue: false
+explanation: From $2T+U=0$, $Mv^2=GM^2/(2R)$ and therefore $v^2=GM/(2R)$. **1 – False.** $v\propto\sqrt{M}$, so
+  doubling $M$ multiplies $v$ by $\sqrt{2}$, not 2. **2 – True.** $v\propto R^{-1/2}$, so doubling $R$ reduces $v$
+  by $\sqrt{2}$. **3 – True under the explicit point-mass escape-speed approximation.** $v_{\rm esc}=\sqrt{2GM/R}=2v$.
+  **4 – False.** Virial equilibrium was assumed to derive the result; the comparison does not independently prove
+  equilibrium or stability. **5 – False.** The number of pairs scales as $N(N-1)/2\approx N^2/2$, so $|U|$ scales
+  as $N^2$ for fixed $m$ and $R$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.3–17.4, pp. 364–365

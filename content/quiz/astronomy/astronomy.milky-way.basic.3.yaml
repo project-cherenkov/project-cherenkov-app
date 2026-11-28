@@ -1,0 +1,25 @@
+questionId: astronomy.milky-way.basic.3
+topic: milky-way
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Differential rotation of the Galaxy shifts the radial velocities (relative to the local standard of rest)
+  of stars that are all at the same distance from the Sun. How do these velocities vary with galactic longitude
+  $l$ over a full circle $0^\circ$–$360^\circ$?
+choices:
+- text: As a single sine wave, with one maximum and one minimum
+  correct: false
+- text: As a double sine wave, $v_r\propto\sin 2l$, with two maxima and two minima
+  correct: true
+- text: They are constant, because the stars are at the same distance
+  correct: false
+- text: They rise linearly with $l$ from $0^\circ$ to $360^\circ$
+  correct: false
+explanation: '**Correct (option 2).** Near the Sun, Oort''s formula $v_r\approx A\,r\sin 2l$ holds, so at fixed
+  $r$ the radial velocity traces a double sine wave: zero at $l=0^\circ,90^\circ,180^\circ,270^\circ$, with maxima
+  and minima in between. **Option 1** would arise for the solar-motion (apex) effect, not for differential rotation.
+  **Option 3** ignores that the relative velocity depends on direction. **Option 4** cannot be correct because longitude
+  is periodic, and the velocity must return to its starting value at $360^\circ$.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 376–377

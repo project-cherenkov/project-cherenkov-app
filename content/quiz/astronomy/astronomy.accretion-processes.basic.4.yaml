@@ -1,0 +1,18 @@
+questionId: astronomy.accretion-processes.basic.4
+topic: accretion-processes
+difficulty: basic
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "For a spherical radiating source, use the Eddington luminosity relation $L_{Edd}=1.3\\times10^{38}(M/M_\\\
+  odot)$ erg s$^{-1}$. What is the Eddington luminosity for an object of mass $10.0\\,M_\\odot$? Enter\
+  \ in units of $10^{38}$ erg s$^{-1}$ to one decimal place."
+numericAnswer:
+  value: 13.0
+  tolerance: 0.05
+  unit: 1e38 erg/s
+explanation: 'Substitute $M/M_\odot=10.0$: $L_{Edd}=1.3×10^{38}×10.0=1.30×10^{39}$ erg s⁻¹. In the requested
+  units this is 13.0. This is the radiative-force/gravity limit; it does not calculate a disc or spherical
+  accretion flow.'
+author: Renee
+source: "Frank, King & Raine, Accretion Power in Astrophysics, 3rd ed., §1.2, “The Eddington limit”. This item uses only the Eddington luminosity relation; it does not assess quantitative spherical or disc accretion."

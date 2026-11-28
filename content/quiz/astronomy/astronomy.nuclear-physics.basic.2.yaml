@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.basic.2
+topic: nuclear-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The nuclear binding energy per nucleon rises with mass number up to iron and then slowly decreases. What does this imply for energy release by fusion in stars?
+choices:
+- text: Fusing nuclei heavier than iron releases the most energy
+  correct: false
+- text: No fusion reaction can release energy
+  correct: false
+- text: Fusion releases energy for any nuclei, provided the temperature is high enough
+  correct: false
+- text: Fusion of light nuclei up to the iron region releases energy, but building nuclei heavier than iron by fusion requires an energy input
+  correct: true
+explanation: Because the binding energy per nucleon increases up to iron, fusing lighter nuclei makes more tightly bound nuclei and releases energy. Beyond iron the binding energy per nucleon decreases, so fusion would need energy rather than release it; heavier elements are formed mainly by neutron capture. The other choices contradict the shape of the curve.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, eq. (11.19) and Fig. 11.4, printed pp. 254–255

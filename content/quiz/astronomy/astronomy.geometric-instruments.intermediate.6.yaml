@@ -1,0 +1,25 @@
+questionId: astronomy.geometric-instruments.intermediate.6
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A printed star chart is measured with a ruler whose zero is displaced by +0.02 cm. The chart scale is 0.80 degrees per centimetre. Which steps are part of a defensible measurement protocol? Select all that apply.
+choices:
+- text: Correct each measured length for the known +0.02 cm zero offset before applying the chart scale
+  correct: true
+- text: Keep the ruler aligned with the straight segment joining the two chart marks
+  correct: true
+- text: Repeat the placement independently to estimate reading and alignment scatter
+  correct: true
+- text: Use the scale belonging to the same chart edition being measured
+  correct: true
+- text: Ignore the zero offset whenever the measured segment is shorter than 1 cm
+  correct: false
+- text: Repeat the reading without moving the ruler; the average will remove any fixed alignment bias
+  correct: false
+explanation: The known zero offset must be corrected before converting the measured length with the chart scale. Alignment with the segment and use of the matching chart scale are necessary for a valid reading. Independent repositioning provides an estimate of repeatability. Repeating an unchanged placement cannot reveal or remove a fixed alignment bias, and a zero offset does not become negligible merely because the measured segment is short. The correct set is the first four options.
+
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

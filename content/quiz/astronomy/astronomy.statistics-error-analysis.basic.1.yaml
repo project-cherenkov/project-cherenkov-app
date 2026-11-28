@@ -1,0 +1,21 @@
+questionId: astronomy.statistics-error-analysis.basic.1
+topic: statistics-error-analysis
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A cluster distance is quoted as $40\pm2$ pc. What is its relative error?
+choices:
+- text: $2\,\%$
+  correct: false
+- text: $20\,\%$
+  correct: false
+- text: $5\,\%$
+  correct: true
+- text: $0.5\,\%$
+  correct: false
+explanation: 'The relative error is the absolute error divided by the value: $\Delta r/r=2/40=0.05=5\,\%$. $2\,\%$
+  treats the absolute error (in pc) as if it were already a percentage. $20\,\%$ inverts the ratio ($40/2$ as a
+  fraction). $0.5\,\%$ is a decimal-place slip ($0.05$ read as $0.5\,\%$).'
+author: Renee
+source: original

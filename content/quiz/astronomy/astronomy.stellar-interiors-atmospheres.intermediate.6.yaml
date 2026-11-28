@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.6
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In a hot, fully ionised stellar core of density $\rho=1.5\times10^{5}$ kg m$^{-3}$ and mean molecular weight
+  $\mu=0.61$, the total pressure is the sum of the gas pressure $P_{\rm gas}=\rho kT/(\mu m_{\rm H})$ and the radiation
+  pressure $P_{\rm rad}=aT^4/3$. At what temperature would the two be equal, with the density held fixed? Use $k=1.3807\times10^{-23}$
+  J K$^{-1}$, $m_{\rm H}=1.6735\times10^{-27}$ kg and the radiation constant $a=7.566\times10^{-16}$ J m$^{-3}$
+  K$^{-4}$. Enter your answer in units of $10^{8}$ K, rounded to two decimal places.
+numericAnswer:
+  value: 2.0
+  tolerance: 0.03
+  unit: 10^8 K
+explanation: 'Setting $P_{\rm gas}=P_{\rm rad}$ gives $\rho kT/(\mu m_{\rm H})=aT^4/3$, so
+
+
+  $$T^3=\frac{3\rho k}{\mu m_{\rm H}\,a}=\frac{3(1.5\times10^{5})(1.3807\times10^{-23})}{(0.61)(1.6735\times10^{-27})(7.566\times10^{-16})}=8.04\times10^{24}\
+  \text{K}^3,$$
+
+
+  so $T=2.00\times10^{8}$ K. The gas pressure grows as $T$ while the radiation pressure grows as $T^4$, so radiation
+  pressure only becomes comparable far above the actual solar-core temperature ($\sim1.6\times10^{7}$ K, where $P_{\rm
+  rad}/P_{\rm gas}$ is of order $10^{-3}$). Unit: $10^{8}$ K. The tolerance of $0.03$ allows for rounding of the
+  constants and of the cube root.'
+author: Renee
+source: original

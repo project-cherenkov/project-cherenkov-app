@@ -1,0 +1,30 @@
+questionId: astronomy.galaxies.advanced.2
+topic: galaxies
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about estimates of galaxy masses and distances.
+statements:
+- text: The mass-to-light ratio $M/L\approx3$ measured near the Sun can be used to turn the light of any galaxy
+    into a mass.
+  isTrue: false
+- text: The virial estimate $M=2v^2R/G$ remains reliable for a cluster of galaxies in the middle of a major merger.
+  isTrue: false
+- text: The estimate $M(R)=Rv^2/G$ assumes an approximately spherical mass distribution, so for a flat disk it is
+    only approximate.
+  isTrue: true
+- text: Gravitational lensing gives a mass estimate that does not rely on the assumption that the system is in dynamical
+    equilibrium.
+  isTrue: true
+- text: The Tully–Fisher relation is useful as a distance indicator because the 21 cm line width does not depend
+    on the distance of the galaxy.
+  isTrue: true
+explanation: '1 is false: there is no universally valid $M/L$; values range from about 3 near the Sun to about 10
+  in ellipticals and about 200 in clusters. 2 is false: the virial theorem $2T+U=0$ applies to a system in equilibrium;
+  during a merger the kinetic energy is not in equilibrium with the potential energy. 3 is true: the relation comes
+  from Kepler''s third law with most mass assumed to be concentrated roughly spherically. 4 is true: the bending
+  of light depends on the mass causing it, and lensing is described as the most accurate method. 5 is true: the
+  rotation velocity is measured from the 21 cm width, independent of distance, and is correlated with luminosity.'
+author: Renee
+source: original

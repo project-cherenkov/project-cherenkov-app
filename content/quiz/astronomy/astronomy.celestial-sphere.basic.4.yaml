@@ -1,0 +1,23 @@
+questionId: astronomy.celestial-sphere.basic.4
+topic: celestial-sphere
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: An observer at latitude $+40^\circ$ (northern hemisphere) watches a star of declination $\delta=-20^\circ$.
+  What is the greatest altitude the star reaches above the horizon? Ignore refraction.
+choices:
+- text: $50^\circ$
+  correct: false
+- text: $70^\circ$
+  correct: false
+- text: $30^\circ$
+  correct: true
+- text: $60^\circ$
+  correct: false
+explanation: Because $\delta<\varphi$ the star culminates south of the zenith, where $a_{\max}=90^\circ-\varphi+\delta
+  = 90^\circ-40^\circ-20^\circ=30^\circ$. $50^\circ$ is the altitude of the celestial equator at culmination
+  (it ignores $\delta$). $70^\circ$ comes from adding $|\delta|$ instead of subtracting it. $60^\circ$
+  is $\varphi-\delta$, which is not a culmination altitude.
+author: Renee
+source: original

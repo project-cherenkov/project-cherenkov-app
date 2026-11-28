@@ -1,0 +1,25 @@
+questionId: astronomy.star-clusters.intermediate.2
+topic: star-clusters
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: After correcting for interstellar extinction and reddening, the main sequence of a cluster plotted as $m_{V0}$
+  against $(B-V)_0$ lies $9.0$ mag fainter than a calibrated main sequence plotted as $M_V$ against $(B-V)_0$ at
+  the same colours. What is the cluster's distance?
+choices:
+- text: $\approx 6.3\times10^{2}$ pc
+  correct: true
+- text: $\approx 63$ pc
+  correct: false
+- text: $\approx 6.3$ kpc
+  correct: false
+- text: $\approx 90$ pc
+  correct: false
+explanation: '**Correct (option 1).** Main-sequence fitting gives the distance modulus $m_{V0}-M_V=9.0$, and $m_{V0}-M_V=5\log_{10}(r/10\,\mathrm{pc})$,
+  so $r=10\,\mathrm{pc}\times10^{9.0/5}=10\times63.1\approx6.3\times10^{2}$ pc. **Option 2** drops the reference
+  distance of 10 pc ($r=10^{9.0/5}$ pc instead of $10\times10^{9.0/5}$). **Option 3** applies the exponent $(m-M+10)/5$,
+  i.e. an extra factor of 10 in distance. **Option 4** treats the modulus as a linear quantity ($10\times9.0$ pc)
+  instead of a logarithmic one.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2, pp. 362–363

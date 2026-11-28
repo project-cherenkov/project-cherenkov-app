@@ -1,0 +1,29 @@
+questionId: astronomy.vectors.intermediate.6
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: A body moves under the central attraction $\ddot{\mathbf r}=-\mu\mathbf r/r^3$. Let $\mathbf k=\mathbf
+  r\times\dot{\mathbf r}$ and let $\mathbf e$ be defined by $\mathbf k\times\dot{\mathbf r}+\mu\mathbf
+  r/r=-\mu\mathbf e$. Decide whether each statement is true or false.
+statements:
+- text: The speed $v$ is constant, because $\mathbf k$ is constant.
+  isTrue: false
+- text: $\mathbf k$ is a constant vector.
+  isTrue: true
+- text: $\mathbf e$ is a constant vector.
+  isTrue: true
+- text: $\mathbf k$ lies in the orbital plane.
+  isTrue: false
+- text: $\mathbf k\cdot\mathbf e=0$, so $\mathbf e$ lies in the orbital plane.
+  isTrue: true
+explanation: '(1) False: constant $\mathbf k$ fixes $r^2\dot f$ (and the plane), not the speed; the speed
+  varies with $r$ (largest at perihelion). (2) True: $\dot{\mathbf k}=\mathbf r\times\ddot{\mathbf r}+\dot{\mathbf
+  r}\times\dot{\mathbf r}=\mathbf 0$. (3) True: the time derivative of $\mathbf k\times\dot{\mathbf r}+\mu\mathbf
+  r/r$ vanishes, so the combination is constant. (4) False: $\mathbf k=\mathbf r\times\dot{\mathbf r}$
+  is perpendicular to both $\mathbf r$ and $\dot{\mathbf r}$, hence perpendicular to the orbital plane;
+  it defines that plane. (5) True: $\mathbf k\perp(\mathbf k\times\dot{\mathbf r})$ and $\mathbf k\perp\mathbf
+  r$, so $\mathbf k\cdot\mathbf e=0$; $\mathbf e$ points to the pericentre.'
+author: Renee
+source: original

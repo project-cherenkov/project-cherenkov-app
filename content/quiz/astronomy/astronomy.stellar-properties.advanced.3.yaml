@@ -1,0 +1,30 @@
+questionId: astronomy.stellar-properties.advanced.3
+topic: stellar-properties
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A star has apparent magnitude $m=12.00$ and absolute magnitude $M=0.00$. The interstellar medium along the
+  line of sight is uniform, so the extinction increases linearly with distance, $A=a\,r$, with $a=1.0\times10^{-3}$
+  mag per parsec. The relation between the quantities is $m-M=5\lg(r/10\ \text{pc})+a\,r$. Find the distance $r$.
+  Enter your answer in parsecs, rounded to the nearest whole parsec.
+numericAnswer:
+  value: 1349
+  tolerance: 1
+  unit: pc
+explanation: 'The relation is transcendental in $r$, so it has no closed-form solution; solve $f(r)=5\lg(r/10)+10^{-3}r-12=0$
+  numerically.
+
+
+  - Without extinction: $r=10\times10^{12/5}\approx2512$ pc, which is much too large.
+
+  - Trial values: $r=1300$ pc gives $f\approx-0.13$; $r=1400$ pc gives $f\approx+0.13$; interpolating and refining
+  gives $r\approx1349$ pc.
+
+  - Check: $5\lg134.9=10.65$ and $a r=1.35$ give $12.00$ mag.
+
+
+  Unit: parsecs. The tolerance of $1$ pc (under $0.4\%$) covers rounding and stopping a bisection or iteration within
+  one parsec; the exact root is $1349.4$ pc.'
+author: Renee
+source: original

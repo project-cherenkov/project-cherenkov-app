@@ -1,0 +1,27 @@
+questionId: astronomy.space-exploration.intermediate.4
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Neglect air drag and the gravity of other bodies. Judge each statement about escape from a planet
+  independently as true or false.
+statements:
+- text: The escape speed from a planet's surface is larger for a more massive probe.
+  isTrue: false
+- text: A probe launched at exactly the escape speed has zero speed when it is infinitely far from the
+    planet.
+  isTrue: true
+- text: At a given distance from the planet's centre, the escape speed is $\sqrt{2}$ times the circular
+    orbital speed.
+  isTrue: true
+- text: A probe launched at exactly the escape speed moves along an elliptical orbit.
+  isTrue: false
+explanation: '(1) False: $v_e = \sqrt{2GM/R}$ does not contain the probe''s mass; the kinetic energy per
+  unit mass needed to escape is the same for every probe. (2) True: at $v_e$ the total energy per unit
+  mass, $\tfrac12 v^2 - GM/r$, is zero, so the speed tends to zero as $r\to\infty$ (a parabolic path).
+  (3) True: $v_c = \sqrt{GM/r}$ and $v_e = \sqrt{2GM/r} = \sqrt2\, v_c$; an orbiter in a circular orbit
+  needs a 41% speed increase to escape. (4) False: the orbit is a parabola; ellipses correspond to speeds
+  below $v_e$ (bound orbits), and hyperbolas to speeds above it.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 6.9, pp. 133–134; Sect. 7.7, p. 157

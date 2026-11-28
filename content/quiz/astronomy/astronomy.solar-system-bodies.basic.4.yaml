@@ -1,0 +1,24 @@
+questionId: astronomy.solar-system-bodies.basic.4
+topic: solar-system-bodies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Venus has a sidereal period of 224.7 d and Earth's is 365.26 d. Treating both orbits as circular
+  and coplanar, what is the interval between two successive inferior conjunctions of Venus?
+choices:
+- text: 139 d
+  correct: false
+- text: 584 d
+  correct: true
+- text: 141 d
+  correct: false
+- text: 590 d
+  correct: false
+explanation: 'For an inner planet with period $P_1$ and an outer one with $P_2$, the synodic period satisfies
+  $1/P_{1,2} = 1/P_1 - 1/P_2$, because the inner planet gains one full revolution on the outer one in
+  each synodic period. Here $1/P_{\rm syn} = 1/224.7 - 1/365.26 = 1.712\times10^{-3}\ \mathrm{d^{-1}}$,
+  so $P_{\rm syn} = 584$ d. The other values come from typical slips: 139 d from adding the rates ($1/P_1
+  + 1/P_2$), 141 d from subtracting the periods, and 590 d from adding the periods.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.2, p. 145 (Eq. 7.1)

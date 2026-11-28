@@ -1,0 +1,21 @@
+questionId: astronomy.electromagnetic-theory.advanced.1
+topic: electromagnetic-theory
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: The Planck function can be written per unit frequency, $B_\nu(T)$, or per unit wavelength, $B_\lambda(T)$, with $B_\nu\,d\nu=-B_\lambda\,d\lambda$. Select **all** correct statements for a blackbody of temperature $T$.
+choices:
+- text: The frequency $\nu_{\max}$ at which $B_\nu$ peaks satisfies $c/\nu_{\max}=\lambda_{\max}$, where $\lambda_{\max}$ is the wavelength at which $B_\lambda$ peaks.
+  correct: false
+- text: The wavelength $c/\nu_{\max}$ is longer than $\lambda_{\max}$ at the same temperature.
+  correct: true
+- text: The total intensity $\int_0^\infty B_\nu\,d\nu$ equals $\int_0^\infty B_\lambda\,d\lambda$.
+  correct: true
+- text: At any wavelength, the numerical value of $B_\lambda$ equals that of $B_\nu$ at the corresponding frequency.
+  correct: false
+- text: As $T$ increases, the peak of $B_\lambda$ moves to longer wavelength while the total intensity falls.
+  correct: false
+explanation: 'Because $B_\lambda=B_\nu\,c/\lambda^{2}$, the peaks of the two functions do not coincide, so statement 1 is false. Writing $x=h\nu/kT$, the peak of $B_\nu\propto x^{3}/(e^{x}-1)$ is at $x\approx2.82$, while the peak of $B_\lambda\propto x^{5}/(e^{x}-1)$ with $x=hc/\lambda kT$ is at $x\approx4.97$. Hence $c/\nu_{\max}=hc/(2.82kT)$ exceeds $\lambda_{\max}=hc/(4.97kT)$ by a factor of about 1.76, so statement 2 is true. Statement 3 is true by construction of the transformation. Statement 4 is false because of the factor $c/\lambda^{2}$ (and the different units). Statement 5 is false: both the Wien law and the Stefan–Boltzmann law say the peak moves to shorter wavelength and the total intensity rises, as $T^{4}$. The key is {2, 3}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7, eqs. (5.12)–(5.16), (5.22), printed pp. 111–113

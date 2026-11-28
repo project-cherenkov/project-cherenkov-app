@@ -1,0 +1,27 @@
+questionId: astronomy.accretion-processes.basic.3
+topic: accretion-processes
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A white dwarf in a binary has a magnetic field so strong that the accreted gas cannot settle into an accretion
+  disk. What accretion geometry results, and what is a characteristic observational result?
+choices:
+- text: The gas is forced to follow the field lines in an accretion column onto the surface, producing bright X-ray
+    emission where it lands.
+  correct: true
+- text: A thin disk extends all the way to the stellar surface, producing the same emission as a non-magnetic system.
+  correct: false
+- text: The gas falls in spherically symmetrically from all directions, so no particular region of the surface is
+    heated.
+  correct: false
+- text: The field expels all gas from the system, so accretion stops and the system becomes a faint isolated white
+    dwarf.
+  correct: false
+explanation: 'Correct (first choice): in the strongly magnetised cataclysmic variables called polars the gas is
+  channelled along the magnetic field lines into an accretion column and is strongly heated where it hits the white
+  dwarf''s surface, giving bright X-ray emission. A normal disk reaching the surface (choice 2) is exactly what
+  the strong field prevents. Spherical infall (choice 3) ignores the guiding effect of the field. The field redirects
+  the gas rather than stopping accretion (choice 4).'
+author: Renee
+source: original

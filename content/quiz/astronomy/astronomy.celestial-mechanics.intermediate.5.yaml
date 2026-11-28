@@ -1,0 +1,14 @@
+questionId: astronomy.celestial-mechanics.intermediate.5
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A fluid moon with no internal strength orbits a planet of radius $S=8.0\times10^{3}$ km and mean density $5500$ kg m$^{-3}$. The moon's mean density is $2700$ kg m$^{-3}$. Model the moon as two touching identical spheres, each of radius $r$ and mass $m$, held together only by their mutual gravity. Let $R\gg r$ be the distance from the planet's centre to the midpoint of the two spheres, with the line joining them pointing at the planet. The difference between the planet's pull on the two sphere centres is $\Delta F\approx 4GMm\,r/R^{3}$, where $M$ is the planet's mass. The spheres separate when $\Delta F$ exceeds their mutual attraction $Gm^{2}/(4r^{2})$. Find the Roche-limit distance $R$ at which these two are equal. Enter $R$ in units of $10^{3}$ km, rounded to two decimal places.
+numericAnswer:
+  value: 25.55
+  tolerance: 0.05
+  unit: 10^3 km
+explanation: Setting $4GMm\,r/R^{3}=Gm^{2}/(4r^{2})$ gives $R^{3}=16\,r^{3}M/m$. Both bodies are spheres, so $M/m=(S^{3}\rho_p)/(r^{3}\rho_m)$ and therefore $R=S\,(16\rho_p/\rho_m)^{1/3}$. Here $16\times5500/2700=32.59$, whose cube root is 3.194, so $R=8.0\times10^{3}\times3.194\approx25554$ km $=25.55\times10^{3}$ km. Equal densities would give the textbook value $R\approx2.5\,S$; the lower moon density pushes the limit outward. The tolerance of 0.05 (about 50 km) covers rounding of the cube root and of intermediate steps. The model applies only to a body without internal strength.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Example 8.1, printed pp. 224–225

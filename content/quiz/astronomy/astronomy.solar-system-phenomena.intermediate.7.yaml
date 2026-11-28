@@ -1,0 +1,32 @@
+questionId: astronomy.solar-system-phenomena.intermediate.7
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Take the tide-raising force as proportional to $M/d^{3}$. Use $M_\odot = 1.989\times10^{30}$ kg,
+  $M_{\rm Moon} = 7.342\times10^{22}$ kg, mean distances $1.496\times10^{8}$ km (Sun) and $3.844\times10^{5}$
+  km (Moon), and a lunar perigee distance of $3.564\times10^{5}$ km. Judge each statement independently
+  as true or false.
+statements:
+- text: At mean distances the Sun's tide-raising force is smaller than the Moon's.
+  isTrue: true
+- text: At perigee the Moon's tide-raising force exceeds its value at the mean distance by only about
+    8%.
+  isTrue: false
+- text: Spring tides occur at both new moon and full moon, so they recur about every 14.8 days.
+  isTrue: true
+- text: Most meteors are seen between sunset and midnight, when the evening side of the Earth leads in
+    its orbital motion.
+  isTrue: false
+- text: Tidal friction makes the Earth rotate faster, so the day is shortening, while the Moon moves inwards.
+  isTrue: false
+explanation: '(1) True: comparing the supplied $M/d^3$ values gives a ratio below one, so the Sun''s tide-raising
+  effect is smaller than the Moon''s. (2) False: $(384{,}400/356{,}400)^3=1.255$, a 25% increase; an 8%
+  increase would follow from wrongly assuming linear dependence on distance. (3) True: spring tides occur
+  at new and full moon, $29.53/2\approx14.8$ d apart. (4) False: the leading side of Earth is the morning
+  side, which meets meteoroids head-on, so more meteors are seen after midnight. (5) False: tidal friction
+  slows Earth''s rotation and the Moon moves away, by conservation of angular momentum.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Box 7.1, pp. 174–175; Sect. 7.4, pp. 148–149;
+  Sect. 8.13, pp. 222–224

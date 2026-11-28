@@ -1,0 +1,23 @@
+questionId: astronomy.basic-calculus.basic.1
+topic: basic-calculus
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A spacecraft moves in a plane with position components $x(t)=2t$ and $y(t)=t^2$, where $x$ and $y$ are in
+  metres and $t$ is in seconds. What is its velocity vector at $t=3$ s?
+choices:
+- text: $6\,\hat\imath+9\,\hat\jmath$ m s$^{-1}$
+  correct: false
+- text: $2\,\hat\imath+9\,\hat\jmath$ m s$^{-1}$
+  correct: false
+- text: $0\,\hat\imath+2\,\hat\jmath$ m s$^{-1}$
+  correct: false
+- text: $2\,\hat\imath+6\,\hat\jmath$ m s$^{-1}$
+  correct: true
+explanation: The velocity is the time derivative of the position vector, $\dot{\mathbf r}=\dot x\,\hat\imath+\dot
+  y\,\hat\jmath=2\,\hat\imath+2t\,\hat\jmath$, which at $t=3$ s is $2\,\hat\imath+6\,\hat\jmath$ m s$^{-1}$. $6\,\hat\imath+9\,\hat\jmath$
+  is the position at $t=3$ s (nothing was differentiated). $2\,\hat\imath+9\,\hat\jmath$ differentiates $x$ but
+  not $y$. $0\,\hat\imath+2\,\hat\jmath$ is the acceleration $\ddot{\mathbf r}$, a second derivative.
+author: Renee
+source: original

@@ -1,0 +1,32 @@
+questionId: astronomy.celestial-mechanics.intermediate.7
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A comet is observed at a distance $r=2.00$ au from the Sun with a speed of $25.0$ km/s relative
+  to the Sun, directed exactly perpendicular to the Sun–comet line. Use $GM_\odot=1.327\times10^{20}$
+  m$^{3}$ s$^{-2}$, $1\ \mathrm{au}=1.496\times10^{11}$ m, and neglect planetary perturbations. Select
+  **all** correct statements.
+choices:
+- text: The comet is at aphelion at the moment of observation.
+  correct: false
+- text: The comet's orbit around the Sun is bound.
+  correct: true
+- text: The orbital period is about 3.4 years.
+  correct: false
+- text: The semi-major axis of the orbit is about 3.4 au.
+  correct: true
+- text: The aphelion distance is about 4.8 au.
+  correct: true
+explanation: 'At $r=2.00$ au the circular speed is $\sqrt{GM_\odot/r}=21.06$ km/s and the escape speed
+  is $29.78$ km/s. The observed 25.0 km/s lies between them, so the orbit is a bound ellipse. When the
+  velocity is perpendicular to the radius vector the comet is at an apsis, and a speed above the circular
+  value means it is at **perihelion** (statement 1 is false). The vis-viva relation $v^{2}/2-\mu/r=-\mu/2a$
+  gives $1/a=2/r-v^{2}/\mu$, so $a=3.39$ au (statement 4 true). The period follows from $P^{2}=a^{3}$:
+  $P=6.23$ yr, not 3.4 yr; the value 3.4 comes from confusing $a$ in au with $P$ in years (statement 3
+  false). With perihelion $2.00$ au, aphelion $=2a-2.00=4.77$ au (statement 5 true), and $e=0.41$. The
+  correct set is {2, 4, 5}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.4 eq. (6.16), §6.5, §6.9; Example 6.2, printed pp. 127–134
+  (original numbers)

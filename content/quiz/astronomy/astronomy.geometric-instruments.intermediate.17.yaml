@@ -1,0 +1,25 @@
+questionId: astronomy.geometric-instruments.intermediate.17
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A point P lies above a straight reference line AB. You must draw a line through P parallel to AB using a ruler and
+  a set-square. Which procedure maintains the required parallelism?
+choices:
+- text: Place one edge of the set-square along AB and hold a ruler against another edge as a fixed guide. Slide the set-square
+    along the ruler until the AB-parallel edge passes through P, then draw along that edge.
+  correct: true
+- text: Place the set-square along AB, rotate it freely until a corner reaches P, and draw along whichever edge points closest
+    to P.
+  correct: false
+- text: Place the hypotenuse of the set-square along AB and draw through P along the perpendicular edge.
+  correct: false
+- text: Measure the distance from P to AB with a ruler, then draw a line of that length at any angle to AB.
+  correct: false
+explanation: The ruler acts as a fixed guide while the set-square translates along it without rotating. The edge initially
+  aligned with AB therefore remains parallel to AB; when it reaches P, drawing along that edge constructs the required parallel.
+  Rotating the set-square changes the edge direction, and the perpendicular edge constructs a normal rather than a parallel.
+author: Renee
+source: 'Use of a ruler and set-square in practical data analysis; IOAA syllabus, Practical: Data Analysis (familiarity with
+  basic geometric instruments). This item tests parallel-line construction with the specified tools.'

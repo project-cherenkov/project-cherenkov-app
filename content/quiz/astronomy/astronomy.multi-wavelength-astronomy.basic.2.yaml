@@ -1,0 +1,19 @@
+questionId: astronomy.multi-wavelength-astronomy.basic.2
+topic: multi-wavelength-astronomy
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Which of the following radiation can be observed from the ground at sea level through a clear atmosphere?"
+choices:
+  - text: "Radio waves of wavelength $100$ m"
+    correct: false
+  - text: "Infrared radiation of wavelength $50\\ \\mu$m"
+    correct: false
+  - text: "Extreme ultraviolet radiation of wavelength $100$ nm"
+    correct: false
+  - text: "The hydrogen line at $\\lambda=21$ cm"
+    correct: true
+explanation: "The radio window spans roughly $1$ mm to $20$ m, so the $21$ cm line passes. Waves of about $100$ m are reflected by the ionosphere. All radiation between about $20\\ \\mu$m and $1$ mm is absorbed by the atmosphere, so $50\\ \\mu$m does not reach the ground. Ultraviolet at $100$ nm is absorbed far above the surface."
+author: Renee
+source: "original"

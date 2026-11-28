@@ -1,0 +1,30 @@
+questionId: astronomy.stellar-interiors-atmospheres.basic.1
+topic: stellar-interiors-atmospheres
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A thin spherical shell of gas inside a star is in hydrostatic equilibrium. Which balance describes the forces
+  on the shell?
+choices:
+- text: Inward gravity is balanced by an outward centrifugal force from the orbital motion of the gas around the
+    centre.
+  correct: false
+- text: Inward gravity is balanced by the strong nuclear force acting on the gas in the shell.
+  correct: false
+- text: Inward gravity is balanced by the net outward force from the pressure decreasing outward.
+  correct: true
+- text: The outward radiative energy flux exactly cancels the gas pressure at every radius.
+  correct: false
+explanation: 'Hydrostatic equilibrium means $dP/dr=-GM_r\rho/r^2$: pressure must fall outward so that the pressure
+  difference across the shell pushes outward with the same magnitude as gravity pulls inward.
+
+
+  - Orbital centrifugal support is not how a star of gas supports itself; rotation is usually a small correction.
+
+  - The strong nuclear force acts only on nuclear scales and is not a bulk support mechanism; nuclear reactions
+  supply energy, not a force on the shell.
+
+  - Radiation can contribute to the pressure, but the balance is between forces, not between a flux and a pressure.'
+author: Renee
+source: original

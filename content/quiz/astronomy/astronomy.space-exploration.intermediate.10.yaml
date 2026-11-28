@@ -1,0 +1,23 @@
+questionId: astronomy.space-exploration.intermediate.10
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The Huygens probe was carried to Saturn by the Cassini mission and later released to descend through
+  Titan’s atmosphere. Which description best distinguishes the roles of the two spacecraft?
+choices:
+- text: Cassini was the Titan atmospheric probe; Huygens remained in Saturn orbit
+  correct: false
+- text: Cassini was the Saturn orbiter, while Huygens was the probe designed to make in-situ measurements
+    during descent through Titan’s atmosphere
+  correct: true
+- text: Both spacecraft were designed to land on Saturn’s rings
+  correct: false
+- text: Huygens was a flyby spacecraft that never entered Titan’s atmosphere
+  correct: false
+explanation: The NSSDCA records describe Cassini as the Saturn orbiter that delivered Huygens, and Huygens
+  as an atmospheric probe designed for in-situ observations of Titan. The distinction is between orbital
+  remote observations and a dedicated descent probe.
+author: Renee
+source: "NASA/NSSDCA, “Cassini Information” (https://nssdc.gsfc.nasa.gov/planetary/cassini.html) and “Huygens Information” (https://nssdc.gsfc.nasa.gov/planetary/huygens.html), distinguishing the Saturn orbiter and Titan atmospheric probe."

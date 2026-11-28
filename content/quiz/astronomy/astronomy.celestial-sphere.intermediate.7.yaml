@@ -1,0 +1,30 @@
+questionId: astronomy.celestial-sphere.intermediate.7
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement independently. Use $c=299{,}792$ km/s and the conversion 1 rad = 206265 arcsec;
+  the Earth equatorial radius is $6378$ km. For tangential velocity, use v_t = 4.74 × mu × d, with v_t
+  in km/s, mu in arcsec/yr and d in pc. Approximate the Earth orbit as a circle with speed $29.8$ km/s.
+statements:
+- text: The maximum annual aberration, $v/c$ for the Earth's orbital speed, is about $20.5''$.
+  isTrue: true
+- text: A star with proper motion $0.10''$/yr at a distance of $20$ pc has a tangential velocity of about
+    $95$ km/s.
+  isTrue: false
+- text: For a star at the ecliptic pole the annual aberration displacement has the same magnitude all
+    year, because the Earth's velocity is always perpendicular to the line of sight.
+  isTrue: true
+- text: A lunar horizontal parallax of $57'$ implies a Moon distance of about $3.8\times10^{5}$ km.
+  isTrue: true
+- text: The mean places listed in star catalogues already include the effect of annual aberration.
+  isTrue: false
+explanation: '(1) True: $v/c=29.8/299792=9.94\times10^{-5}$ rad $=20.5''''$. (2) False: $v_t=4.74\mu r=4.74\times0.10\times20=9.5$
+  km/s, ten times smaller than claimed. (3) True: the aberration is $a=(v/c)\sin\theta$ with $\theta$
+  the angle between the true direction and the velocity; for a star at the ecliptic pole $\theta=90^\circ$
+  at all times. (4) True: $d=R_\oplus/\sin\pi=6378/\sin 57''\approx3.85\times10^5$ km. (5) False: mean
+  places have had parallax, aberration and nutation removed; aberration is added back to obtain an apparent
+  place.'
+author: Renee
+source: original

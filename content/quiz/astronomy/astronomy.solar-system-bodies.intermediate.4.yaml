@@ -1,0 +1,32 @@
+questionId: astronomy.solar-system-bodies.intermediate.4
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about planetary configurations and Solar System classification independently
+  as true or false.
+statements:
+- text: Mercury can be at opposition when Earth lies between it and the Sun.
+  isTrue: false
+- text: A superior planet is in the middle of its retrograde loop at opposition, when its ecliptic longitude
+    differs from the Sun's by $180^\circ$.
+  isTrue: true
+- text: Seen from Earth, Jupiter can reach a larger phase angle than Mars can.
+  isTrue: false
+- text: Venus can show every phase from crescent to full because its phase angle can range from $0^\circ$
+    to $180^\circ$.
+  isTrue: true
+- text: The Earth–Moon system is a binary system under the barycentre criterion, because its barycentre
+    lies outside Earth's surface.
+  isTrue: false
+explanation: '(1) False: inferior planets (Mercury, Venus) are never in opposition; with the planet between
+  Earth and Sun the configuration is called inferior conjunction. (2) True: opposition occurs in the middle
+  of the retrograde loop. (3) False: the maximum phase angle is about $41^\circ$ for Mars but only about
+  $11^\circ$ for Jupiter, since distant outer planets are always seen almost fully illuminated. (4) True:
+  an inner planet can lie anywhere between Earth–Sun and behind the Sun, so the phase angle covers $0^\circ$–$180^\circ$.
+  (5) False: A binary under the stated criterion requires the system barycentre to lie outside the primary.
+  The Earth–Moon barycentre lies inside Earth, so this statement is false and the Moon is classed as a
+  satellite; Pluto–Charon is the contrasting binary example.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.1, p. 142 and Sect. 7.2, pp. 143–145

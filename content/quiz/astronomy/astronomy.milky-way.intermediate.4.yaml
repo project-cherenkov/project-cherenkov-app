@@ -1,0 +1,30 @@
+questionId: astronomy.milky-way.intermediate.4
+topic: milky-way
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the Milky Way. Mark every statement True or False.
+statements:
+- text: Near the Sun, the Galactic disc rotates like a rigid body, with the same angular velocity at all radii.
+  isTrue: false
+- text: In density-wave theory, gas compressed as it passes through a spiral-arm density wave collapses to form
+    stars, so young objects trace the arms.
+  isTrue: true
+- text: Velocity measurements of neutral hydrogen that were incompatible with circular orbits gave the first indication
+    of a central bar in the Galaxy.
+  isTrue: true
+- text: The orbits of stars near the Galactic centre indicate a supermassive black hole of a few million solar masses.
+  isTrue: true
+- text: The thick disc is younger than the old thin disc.
+  isTrue: false
+explanation: '**1 – False.** Observations show that the rotation is *differential*: the angular velocity depends
+  on the distance from the centre, and near the Sun the rotational velocity decreases with radius. **2 – True.**
+  The spiral pattern is a density wave; gas is strongly compressed as it passes through, its self-gravity becomes
+  important and stars form. **3 – True.** The 1971 analysis of H I gas motions showed that a central bar could explain
+  the non-circular motions. **4 – True.** Orbital periods and sizes of the innermost stars give the mass of the
+  central body, about $5\times10^{6}\,M_\odot$ within the uncertainties. **5 – False.** The thick disc has an age
+  of about 10–12 Ga, older than the thin disc, whose stars are younger than about 10 Ga. Grading is exact boolean
+  vector.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, p. 375; Sect. 18.4, pp. 381–383; Sect. 18.5, p. 384

@@ -1,0 +1,23 @@
+questionId: astronomy.numerical-methods.basic.2
+topic: numerical-methods
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: An equation has been rewritten as $x=f(x)$ and is being solved by direct iteration, $x_{n+1}=f(x_n)$. When
+  is it normal to stop iterating and accept the latest iterate as the solution?
+choices:
+- text: When the difference between two successive iterates falls below a preset limit
+  correct: true
+- text: As soon as one iterate turns out to be larger than the one before it
+  correct: false
+- text: After exactly one step, because $x_1=f(x_0)$ is already the exact root
+  correct: false
+- text: When an iterate first coincides with the starting guess $x_0$ once again
+  correct: false
+explanation: Direct iteration is stopped once successive values differ by less than the accuracy wanted; the last
+  iterate is then taken as the solution. A single comparison $x_{n+1}>x_n$ says nothing about accuracy, and a convergent
+  sequence may even alternate about the root. $x_1=f(x_0)$ is generally only a slightly improved guess, not the
+  root. Returning exactly to $x_0$ would signal a cycle, not convergence to a root.
+author: Renee
+source: original

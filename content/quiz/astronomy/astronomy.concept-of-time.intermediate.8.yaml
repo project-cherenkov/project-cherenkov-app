@@ -1,0 +1,14 @@
+questionId: astronomy.concept-of-time.intermediate.8
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "In the Gregorian calendar, $97$ leap years occur in every $400$ years. Taking the tropical year to be $365.24219$ d, after about how many years does the Gregorian calendar accumulate an error of one day relative to the tropical year? Give the answer in years, to the nearest year."
+numericAnswer:
+  value: 3226
+  tolerance: 1
+  unit: "years"
+explanation: "The mean Gregorian year is $365+97/400=365.2425$ d. It exceeds the tropical year by $365.2425-365.24219=0.00031$ d per year, so one day accumulates after $1/0.00031=3225.8\\approx3226$ years. The result is very sensitive to the difference of two nearly equal numbers: using $365.242190$ versus $365.242189$ changes the answer by roughly $10$ years, so textbooks quote roughly 3000–3300 years depending on the adopted year lengths; with the stated input, the answer is $3226$ years. The tolerance of one year covers rounding to the nearest year only."
+author: Renee
+source: "original"

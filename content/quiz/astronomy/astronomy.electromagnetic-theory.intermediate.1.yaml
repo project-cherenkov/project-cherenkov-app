@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.intermediate.1
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Star A has twice the effective temperature of star B and half its radius. Both radiate as blackbodies. What is the luminosity ratio $L_A/L_B$?
+choices:
+- text: '4'
+  correct: true
+- text: '8'
+  correct: false
+- text: '16'
+  correct: false
+- text: '1'
+  correct: false
+explanation: With $L=4\pi\sigma R^{2}T^{4}$, $L_A/L_B=(1/2)^{2}\times 2^{4}=\tfrac14\times16=4$. The value 8 forgets to square the radius ratio ($\tfrac12\times16$). The value 16 includes only the temperature. The value 1 wrongly assumes the changes cancel.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7, eq. (5.19), printed p. 113

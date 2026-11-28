@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-sphere.basic.3
+topic: celestial-sphere
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "At a certain moment the local sidereal time is $14^{\\rm h}\\,20^{\\rm m}$. A star has right ascension $\\alpha = 16^{\\rm h}\\,05^{\\rm m}$. Which statement describes the star's position relative to the observer's meridian?"
+choices:
+  - text: "It is $1^{\\rm h}\\,45^{\\rm m}$ east of the meridian and will reach upper culmination in $1^{\\rm h}\\,45^{\\rm m}$ of sidereal time."
+    correct: true
+  - text: "It reached upper culmination $1^{\\rm h}\\,45^{\\rm m}$ ago and is now west of the meridian."
+    correct: false
+  - text: "It is exactly on the meridian at upper culmination."
+    correct: false
+  - text: "Its hour angle is $6^{\\rm h}\\,25^{\\rm m}$, so it culminated $6^{\\rm h}\\,25^{\\rm m}$ ago."
+    correct: false
+explanation: "Sidereal time is $\\Theta = h+\\alpha$, so $h=\\Theta-\\alpha = 14^{\\rm h}20^{\\rm m}-16^{\\rm h}05^{\\rm m}=-1^{\\rm h}45^{\\rm m}$ (equivalently $22^{\\rm h}15^{\\rm m}$). A negative hour angle means the star has not yet reached the meridian: it is east of it and culminates after $1^{\\rm h}45^{\\rm m}$. The 'culminated 1h45m ago' option reverses the sign of $h$. The $6^{\\rm h}25^{\\rm m}$ option comes from adding $\\Theta+\\alpha$ instead of subtracting."
+author: Renee
+source: "original"

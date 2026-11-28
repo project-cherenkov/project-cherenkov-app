@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-evolution.basic.1
+topic: stellar-evolution
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A protostar has finished its rapid collapse and is in hydrostatic equilibrium, but hydrogen fusion has not
+  yet started in its core. What mainly powers its luminosity as it slowly contracts towards the main sequence?
+choices:
+- text: Hydrogen fusion in the core.
+  correct: false
+- text: The release of gravitational potential energy during contraction.
+  correct: true
+- text: The helium flash.
+  correct: false
+- text: Radioactive decay of heavy elements in the core.
+  correct: false
+explanation: 'A pre-main-sequence star radiates energy that comes from gravitational contraction, on the thermal
+  time scale. Half of the gravitational energy released heats the gas (virial theorem) and half is radiated.
+
+
+  - Hydrogen fusion begins only when the core temperature is high enough, which marks the start of the main sequence.
+
+  - The helium flash occurs much later, in the degenerate core of an evolved low-mass star.
+
+  - Radioactive decay is not a significant energy source in a normal star.'
+author: Renee
+source: original

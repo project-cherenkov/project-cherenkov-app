@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.basic.4
+topic: celestial-mechanics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+author: "Project Cherenkov Remediation"
+source: "Original replacement wording derived from Kepler’s second law in Fundamental Astronomy, Sixth Edition, §6.5, printed pp. 128–129; original legacy draft provenance is unavailable."
+prompt: "Why is it wrong to assume constant orbital speed when estimating an eccentric planet's transit duration?"
+choices:
+  - text: "Kepler's second law means the planet sweeps equal areas in equal time, so its speed varies with orbital position"
+    correct: true
+  - text: "Transit duration depends only on the orbital period, never on speed"
+    correct: false
+  - text: "The star's brightness changes the planet's velocity during transit"
+    correct: false
+  - text: "Eccentricity affects orbit shape but never orbital speed"
+    correct: false
+explanation: "For an eccentric orbit, Kepler's second law means the planet moves fastest near periapsis and slowest near apoapsis — transit duration has to account for where in the orbit the transit occurs."

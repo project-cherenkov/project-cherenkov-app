@@ -1,0 +1,22 @@
+questionId: astronomy.solar-system-bodies.intermediate.5
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A main-belt asteroid whose orbit may be treated as circular and coplanar with Earth's is observed
+  at opposition every 1.40 years. Take Earth's sidereal period as exactly 1 year and Kepler's third law
+  in the form $P^2 = a^3$ ($P$ in years, $a$ in au, mass of the asteroid negligible). Find the semimajor
+  axis of the asteroid's orbit. Enter the value in au, rounded to 2 decimal places.
+numericAnswer:
+  value: 2.31
+  tolerance: 0.01
+  unit: au
+explanation: 'For a superior body the synodic period satisfies $1/P_{\rm syn}=1/P_\oplus-1/P$. With $P_{\rm
+  syn}=1.40$ yr and $P_\oplus=1$ yr: $1/P=1-1/1.40=0.2857$, so $P=3.50$ yr. Kepler’s third law gives $a=P^{2/3}=3.50^{2/3}=2.3052$
+  au, which rounds to $2.31$ au at the requested two decimal places. The absolute tolerance of 0.01 au
+  includes the neighbouring rounded value at this boundary while excluding the inner-planet formula, which
+  gives $a\approx0.70$ au, and omission of the exponent, which gives 3.50 au.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.2, p. 145 (Eq. 7.1); Example 7.1, pp.
+  175–176 (method)

@@ -1,0 +1,33 @@
+questionId: astronomy.milky-way.advanced.2
+topic: milky-way
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the Milky Way's components and history. Mark every statement True or False.
+statements:
+- text: The component once called intermediate population II is now regarded as a distinct thick disc, with abundances
+    and stellar motions that separate it from the old thin disc.
+  isTrue: true
+- text: In the simple point-mass approximation, $v_{\rm esc}=\sqrt{2}V_0\approx310$ km/s; a prograde star moving
+    more than about 90 km/s faster than the LSR would then exceed the local escape speed.
+  isTrue: true
+- text: The central hole of radius about 3 kpc in the Galactic gas disc means that the Galactic nucleus contains
+    essentially no gas.
+  isTrue: false
+- text: The “G dwarf problem” (too few old, metal-poor disc stars compared with simple models) can be avoided if
+    much of the interstellar gas was accreted after the oldest stars formed.
+  isTrue: true
+- text: The halo's stars are the most metal-rich of the Galactic stars because, being the oldest, they have had
+    the longest time to be enriched.
+  isTrue: false
+explanation: '**1 – True.** The book describes the intermediate Population II component as a distinct thick-disc
+  population with different kinematics and abundances. **2 – True within the explicitly stated point-mass approximation.**
+  With $V_0\approx220$ km/s, $v_{\rm esc}=\sqrt{2}V_0\approx311$ km/s; a prograde star more than roughly 90 km/s
+  faster than the LSR would exceed that model escape speed. The book notes that the actual Galactic mass distribution
+  is not a central point mass, so the model condition matters. **3 – False.** Although the gas disc has a central
+  hole near 3 kpc, a dense gas disc remains near the nucleus. **4 – True.** Late gas accretion is one way to resolve
+  the G-dwarf problem. **5 – False.** Halo stars are among the most metal-poor Galactic populations, not the most
+  metal-rich.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, p. 380; Sect. 18.4, pp. 381–383; Sect. 18.5, pp. 383–385

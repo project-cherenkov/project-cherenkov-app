@@ -1,0 +1,38 @@
+questionId: astronomy.solar-system-bodies.intermediate.6
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: At a specified epoch the Moon's declination at its extremes reaches about $\pm28.4^\circ$. Take
+  the obliquity of the ecliptic as $23.4^\circ$, the inclination of the lunar orbit to the ecliptic as
+  $5^\circ$ and the period of rotation of the nodal line as 18.6 years. Which of the following statements
+  are correct? Select all that apply.
+choices:
+- text: The Moon's orbit keeps a fixed $5^\circ$ inclination to the celestial equator, so its declination
+    range never changes.
+  correct: false
+- text: At the specified epoch, the ascending node of the lunar orbit is close to the vernal equinox.
+  correct: true
+- text: After half a nodal cycle (about 9.3 years), the Moon’s declination extremes will have shrunk to
+    about $\pm18.4^\circ$.
+  correct: true
+- text: Longitude libration occurs because the Moon's rotation rate varies while its orbital motion around
+    Earth is uniform.
+  correct: false
+- text: The nodical (draconic) month is about 2.6 hours shorter than the sidereal month because the line
+    of nodes is itself rotating.
+  correct: true
+- text: When the Moon is near perigee, its orbital angular speed exceeds its mean value while its spin
+    remains nearly uniform; this lets us see slightly more of one lunar limb than on average.
+  correct: true
+explanation: 'Correct: (2) at the specified epoch, the declination range is $23.4^\circ+5^\circ=28.4^\circ$
+  when the ascending node is near the vernal equinox. (3) Half a 18.6-year nodal cycle later, the descending
+  node is near the vernal equinox and the range is $23.4^\circ-5^\circ=18.4^\circ$. (5) The nodical month
+  is about 27.212 d, compared with a sidereal month of 27.322 d; the difference is about 0.110 d, or 2.6
+  h. (6) Near perigee the Moon moves faster than its mean orbital rate while its rotation remains nearly
+  uniform, producing libration in longitude and a view of more of one limb. Incorrect: (1) the $5^\circ$
+  inclination is to the ecliptic, not the celestial equator, and nodal precession changes the declination
+  range; (4) it reverses the cause, since the spin is nearly uniform while orbital angular speed varies.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.4, pp. 147–148

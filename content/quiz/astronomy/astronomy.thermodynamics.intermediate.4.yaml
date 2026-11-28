@@ -1,0 +1,19 @@
+questionId: astronomy.thermodynamics.intermediate.4
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the equilibrium temperature of a planet heated only by sunlight and radiating as a blackbody.
+statements:
+- text: Doubling the planet's distance from the Sun halves its equilibrium temperature.
+  isTrue: false
+- text: For the same distance and Bond albedo, a slowly rotating body that radiates mainly from its sunlit hemisphere has a lower equilibrium temperature than a rapidly rotating one.
+  isTrue: false
+- text: Increasing the Bond albedo lowers the equilibrium temperature.
+  isTrue: true
+- text: Venus's observed surface temperature far exceeds its simple equilibrium value because of the greenhouse effect.
+  isTrue: true
+explanation: 'Statement 1 is false: balancing absorbed and emitted flux gives $T\propto r^{-1/2}$, so doubling $r$ lowers $T$ by $\sqrt2$, not 2. Statement 2 is false: a slow rotator emits from one hemisphere, giving $T\propto[(1-A)/2]^{1/4}$, which is higher than the fast-rotator value $[(1-A)/4]^{1/4}$ by $2^{1/4}$. Statement 3 is true: a larger $A$ means less absorbed sunlight. Statement 4 is true: the greenhouse effect lets radiation in but impedes its exit, so the surface is far warmer than the simple estimate.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §7.10, printed pp. 166–167

@@ -1,0 +1,34 @@
+questionId: astronomy.solar-system-phenomena.intermediate.3
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following statements about aurorae and space weather are correct? Select all that
+  apply.
+choices:
+- text: Charged particles from flares and coronal mass ejections are guided by the Earth's magnetic field
+    and produce strong aurorae when they arrive, typically a few days after the outburst.
+  correct: true
+- text: Aurorae are produced when X-rays from a flare strike the upper atmosphere a few minutes after
+    the flare.
+  correct: false
+- text: Flare X-rays alter the ionosphere and can disturb shortwave radio communication.
+  correct: true
+- text: Currents induced by particle storms can damage satellites and electric power networks, as in the
+    Quebec blackout of 1989.
+  correct: true
+- text: Space weather is established science for predicting Earth's tropospheric weather and climate from
+    solar activity.
+  correct: false
+explanation: 'Correct: (1) the particle cloud of a CME or flare takes a day or more to reach Earth and
+  then follows magnetic field lines to the polar regions, exciting the atmosphere to emit the aurora;
+  (3) flare X-rays arrive after 8 minutes and enhance the ionosphere''s ionisation, affecting shortwave
+  communication; (4) particle storms can damage satellite electronics and induce currents in power grids.
+  Incorrect: (2) the aurora is excited by charged particles, not directly by X-rays, and on a timescale
+  of days rather than minutes; (5) space weather refers to the interaction of the solar wind and solar
+  events with the Earth''s magnetic and ionised environment; a link between solar activity and tropospheric
+  weather or climate is not established.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, pp. 295–296; Sect. 13.4, p. 297;
+  Sect. 7.7, p. 158

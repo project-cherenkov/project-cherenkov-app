@@ -1,0 +1,39 @@
+questionId: astronomy.stellar-evolution.advanced.1
+topic: stellar-evolution
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Take the Chandrasekhar mass as $1.4\,M_\odot$ and the maximum mass of a cold neutron star as $2.0\,M_\odot$.
+  Select all statements that follow for cold, non-rotating remnants.
+choices:
+- text: A cold $1.6\,M_\odot$ remnant can be a stable white dwarf if it is compact enough.
+  correct: false
+- text: A cold $1.6\,M_\odot$ remnant can be a stable neutron star.
+  correct: true
+- text: A cold $1.1\,M_\odot$ remnant can be a stable white dwarf.
+  correct: true
+- text: No stable cold configuration is known for a $3\,M_\odot$ remnant, which therefore must collapse (or be disrupted).
+  correct: true
+- text: A $1.2\,M_\odot$ white dwarf that accretes $0.3\,M_\odot$ settles as a stable $1.5\,M_\odot$ white dwarf.
+  correct: false
+explanation: 'True:
+
+
+  - A $1.1\,M_\odot$ remnant lies below $1.4\,M_\odot$, so electron degeneracy can support it.
+
+  - A $1.6\,M_\odot$ remnant lies above the white dwarf limit but below $2.0\,M_\odot$, so a neutron star is allowed.
+
+  - A $3\,M_\odot$ remnant exceeds both limits; no stable cold configuration is known, so it must collapse or be
+  disrupted.
+
+
+  False:
+
+
+  - Electron degeneracy cannot support $1.6\,M_\odot$, however compact the star, because the limit is a mass limit.
+
+  - The accreting white dwarf would reach $1.5\,M_\odot>1.4\,M_\odot$; it cannot settle stably and instead collapses
+  or explodes (Type Ia scenario).'
+author: Renee
+source: original

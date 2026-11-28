@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-properties.intermediate.4
+topic: stellar-properties
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about pulsating variable stars and the period–luminosity relation as true or false.
+statements:
+- text: A W Virginis star and a classical Cepheid of the same period have the same absolute magnitude.
+  isTrue: false
+- text: At a given period, a W Virginis star has roughly one quarter of the visual luminosity of a classical Cepheid,
+    since its absolute visual magnitude is about $1.5$ mag fainter.
+  isTrue: true
+- text: RR Lyrae stars, like W Virginis stars, are old population II stars.
+  isTrue: true
+- text: A Mira-type variable with a period of $8$ days is within the usual period range for Mira variables ($80$–$1000$
+    days).
+  isTrue: false
+explanation: '1. False. At the same period the W Virginis star is about $1.5$ mag fainter in absolute visual magnitude
+  than the classical Cepheid; they follow different period–luminosity relations.
+
+  2. True. A $1.5$ mag difference in absolute visual magnitude corresponds to $L_{V,\rm WVir}/L_{V,\rm Cep}=10^{-0.4(1.5)}\approx0.25$.
+
+  3. True. W Virginis and RR Lyrae stars are old population II objects.
+
+  4. False. Mira variables normally have periods of roughly $80$–$1000$ days; 8 days is outside that range.'
+author: Renee
+source: original

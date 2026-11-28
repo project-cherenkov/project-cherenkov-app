@@ -1,0 +1,23 @@
+questionId: astronomy.numerical-methods.basic.3
+topic: numerical-methods
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The function $f(x)=x^2-2$ has $f(1)=-1$ and $f(2)=2$. After one step of interval halving applied to $[1,2]$,
+  which interval is known to contain the root of $f(x)=0$?
+choices:
+- text: $(1.5,\;2)$
+  correct: false
+- text: $(1.25,\;1.75)$
+  correct: false
+- text: $(1,\;2)$
+  correct: false
+- text: $(1,\;1.5)$
+  correct: true
+explanation: 'The midpoint is $1.5$ and $f(1.5)=0.25>0$. Since $f(1)<0$ and $f(1.5)>0$, the sign change, and so
+  the root, lies in $(1,1.5)$. $(1.5,2)$ would be correct only if $f(1.5)$ were negative. $(1.25,1.75)$ is a window
+  centred on the midpoint, which is not what interval halving does: it keeps the half where the sign changes. $(1,2)$
+  is the starting interval, which the step has just halved.'
+author: Renee
+source: original

@@ -1,0 +1,21 @@
+questionId: astronomy.basic-calculus.advanced.3
+topic: basic-calculus
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'A planet has semi-major axis $a=2.50$ au and eccentricity $e=0.400$. Its distance is $r=a(1-e\cos E)$,
+  where the eccentric anomaly $E$ is related to the time $t$ since perihelion by Kepler''s equation $E-e\sin E=2\pi
+  t/P$, with period $P$. Find the time-averaged distance $\langle r\rangle=\frac1P\int_0^P r\,\mathrm dt$ over one
+  full orbit, in au, to three significant figures. (Hint: change the integration variable from $t$ to $E$.)'
+numericAnswer:
+  value: 2.7
+  tolerance: 0.005
+  unit: au
+explanation: 'Differentiating Kepler''s equation, $(1-e\cos E)\,\mathrm dE=(2\pi/P)\,\mathrm dt$, so $\mathrm dt=\tfrac{P}{2\pi}(1-e\cos
+  E)\,\mathrm dE$. Hence $\langle r\rangle=\tfrac1{2\pi}\int_0^{2\pi}a(1-e\cos E)^2\,\mathrm dE=\tfrac a{2\pi}\int_0^{2\pi}(1-2e\cos
+  E+e^2\cos^2E)\,\mathrm dE=a\left(1+\tfrac12e^2\right)$. With the given values, $2.50\times(1+0.08)=2.70$ au. Tolerance
+  $\pm0.005$ au matches the three significant figures requested. Two tempting wrong answers: $a=2.50$ au (averaging
+  over $E$ instead of over time) and $a\sqrt{1-e^2}=2.29$ au (the semi-minor axis, not a time average).'
+author: Renee
+source: original

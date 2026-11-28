@@ -1,0 +1,21 @@
+questionId: astronomy.statistics-error-analysis.basic.13
+topic: statistics-error-analysis
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Seven nightly estimates of an object’s apparent magnitude are sorted as 12.1, 12.4, 12.4, 12.7,
+  12.9, 13.0 and 13.6. What is the median value?
+choices:
+- text: '12.4'
+  correct: false
+- text: '12.7'
+  correct: true
+- text: '12.73'
+  correct: false
+- text: '12.9'
+  correct: false
+explanation: For seven sorted values, the median is the fourth observation. The fourth value is 12.7.
+  The arithmetic mean is approximately 12.73, which is not the median.
+author: Renee
+source: "OpenStax, Introductory Statistics 2e, Chapter 2 (measures of centre; median and quartiles)."

@@ -1,0 +1,25 @@
+questionId: astronomy.elementary-cosmology.intermediate.1
+topic: elementary-cosmology
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The critical density is $\rho_c=3H^2/(8\pi G)$. Take $H=70\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$, $1\ \mathrm{Mpc}=3.086\times10^{19}$
+  km and $G=6.674\times10^{-11}$ SI. For reference, the value for $H=100\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$ is about
+  $1.9\times10^{-26}\ \mathrm{kg\,m^{-3}}$. What is $\rho_c$ for $H=70$?
+choices:
+- text: $3.1\times10^{-27}\ \mathrm{kg\,m^{-3}}$
+  correct: false
+- text: $1.9\times10^{-26}\ \mathrm{kg\,m^{-3}}$
+  correct: false
+- text: $9.2\times10^{-27}\ \mathrm{kg\,m^{-3}}$
+  correct: true
+- text: $1.8\times10^{-26}\ \mathrm{kg\,m^{-3}}$
+  correct: false
+explanation: 'Convert: $H=70/3.086\times10^{19}=2.268\times10^{-18}\ \mathrm{s^{-1}}$. Then $\rho_c=3H^2/(8\pi G)=3\times5.14\times10^{-36}/(1.677\times10^{-9})=9.2\times10^{-27}\
+  \mathrm{kg\,m^{-3}}$ (third choice). Since $\rho_c\propto H^2$, this equals $1.9\times10^{-26}\times(0.7)^2=9.3\times10^{-27}$,
+  in agreement within rounding. $1.9\times10^{-26}$ is the value for $H=100$, not rescaled. $1.8\times10^{-26}$
+  comes from using $4\pi G$ in the denominator instead of $8\pi G$. $3.1\times10^{-27}$ comes from omitting the
+  factor 3 in the numerator.'
+author: Renee
+source: original

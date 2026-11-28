@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.basic.1
+topic: spectroscopy-atomic-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A cool, low-density gas cloud lies in front of a hot source that emits a continuous spectrum. What does an observer see at the wavelengths the gas is able to absorb?
+choices:
+- text: Dark absorption lines at the same wavelengths at which the gas would emit if it were hot and seen against a dark background
+  correct: true
+- text: Bright emission lines at those wavelengths
+  correct: false
+- text: A smooth continuum with no lines, because the background source is brighter than the gas
+  correct: false
+- text: Dark lines only at the ionisation limit
+  correct: false
+explanation: Atoms in the cool gas absorb photons whose energies match differences between their energy levels, so those wavelengths are removed from the continuum and appear dark. They are the same wavelengths at which the gas would emit when hot. Bright lines would require the gas to be hotter than the background, as in a hot low-pressure gas seen on its own. The continuum does not hide the lines, and the lines are not confined to the ionisation limit.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.1, printed pp. 103–104

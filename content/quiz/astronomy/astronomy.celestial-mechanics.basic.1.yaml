@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.basic.1
+topic: celestial-mechanics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: In the two-body problem, the motion of a planet relative to the Sun stays in one fixed plane. Which quantity, defined per unit mass as $\mathbf{r}\times\dot{\mathbf{r}}$ and constant in time, is responsible for this?
+choices:
+- text: The kinetic energy per unit mass, $v^2/2$
+  correct: false
+- text: The distance $r$ between the two bodies
+  correct: false
+- text: The specific angular momentum vector $\mathbf{k}$
+  correct: true
+- text: The speed $v$ of the planet
+  correct: false
+explanation: The vector $\mathbf{k}=\mathbf{r}\times\dot{\mathbf{r}}$ is perpendicular to both the position and velocity vectors, and for a central force its time derivative vanishes, so $\mathbf{k}$ is a constant vector. Because $\mathbf{r}$ must always be perpendicular to a fixed $\mathbf{k}$, the orbit lies in the plane perpendicular to $\mathbf{k}$. The kinetic energy, the distance and the speed are scalars that change along any non-circular orbit, and none of them defines a plane at all.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.2, printed pp. 124–125

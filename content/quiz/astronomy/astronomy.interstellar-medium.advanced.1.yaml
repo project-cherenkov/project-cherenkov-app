@@ -1,0 +1,27 @@
+questionId: astronomy.interstellar-medium.advanced.1
+topic: interstellar-medium
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Stars P and Q have the same spectral class and luminosity class, so both have intrinsic colour $(B-V)_0=-0.15$
+  and absolute magnitude $M_V=-1.00$. Star P is observed with $B-V=+0.25$ and $V=10.00$; star Q with $B-V=+0.10$
+  and $V=9.50$. Take $A_V=3.0\,E_{B-V}$ and assume extinction is the only dimming. Select all statements that follow.
+choices:
+- text: Q is nearer than P by more than 10%.
+  correct: false
+- text: P suffers about 0.45 mag more visual extinction than Q.
+  correct: true
+- text: The ratio $A_V/E_{B-V}$ can only be used if the distances to the stars are already known.
+  correct: false
+- text: If extinction were ignored, P would appear about 26% farther than Q, whereas the extinction-corrected distances
+    differ by only about 2%.
+  correct: true
+explanation: 'Colour excesses: $E_P=0.25+0.15=0.40$ and $E_Q=0.10+0.15=0.25$ mag, so $A_P=1.20$ and $A_Q=0.75$ mag,
+  a difference of 0.45 mag (option 2 true). Corrected distance moduli: P: $10.00+1.00-1.20=9.80$, so $d_P=10^{(9.80+5)/5}=912$
+  pc; Q: $9.50+1.00-0.75=9.75$, so $d_Q=891$ pc. The distances differ by only about 2.4%, so option 1 is false.
+  Without correction the moduli are 11.00 and 10.50, giving 1585 pc and 1259 pc, a ratio of about 1.26 (option 4
+  true). Option 3 is false: the colour-excess method needs only observed and intrinsic colours, and $R\approx3.0$
+  is independent of the star and of the amount of extinction, which is why the method gives distances.'
+author: Renee
+source: original

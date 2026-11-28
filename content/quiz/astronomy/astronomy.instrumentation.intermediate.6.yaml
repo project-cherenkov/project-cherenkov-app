@@ -1,0 +1,30 @@
+questionId: astronomy.instrumentation.intermediate.6
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A telescope has aperture $D=250$ mm and focal length $f=2000$ mm. Use $\omega_{\max}\approx D/(1\
+  {\rm mm})$, a dark-adapted pupil of $d=6$ mm, the exit pupil $L=D/\omega$, $\theta\approx\lambda/D$
+  with $\lambda=550$ nm, and $1\,{\rm rad}=206{,}265''$. Which statements are correct?
+choices:
+- text: A $10$ mm eyepiece gives a magnification of $200$ and an exit pupil of $1.25$ mm.
+  correct: true
+- text: A $6$ mm eyepiece (magnification about $333$) is still within the useful magnification range.
+  correct: false
+- text: A $48$ mm eyepiece gives an exit pupil of about $6$ mm, so a magnification of about $42$ is the
+    minimum useful value for a dark-adapted eye.
+  correct: true
+- text: The diffraction-limited resolution at $550$ nm is about $0.45''$.
+  correct: true
+- text: Under typical seeing of $1.0''$, this telescope delivers an image resolution of about $0.45''$.
+  correct: false
+- text: A $1''$ angle on the sky corresponds to about $9.7\ \mu$m in the focal plane.
+  correct: true
+explanation: '(1) True: $\omega=2000/10=200$, $L=250/200=1.25$ mm. (2) False: $\omega=2000/6=333$ exceeds
+  $\omega_{\max}\approx250$, so details are not gained. (3) True: $\omega=2000/48=41.7$ and $L=250/41.7=6.0$
+  mm $=d$; this is the minimum $\omega\ge D/d$. (4) True: $\theta=550\times10^{-9}/0.25=2.2\times10^{-6}$
+  rad $=0.45''''$. (5) False: with $1.0''''$ seeing the long-exposure resolution is about $1''''$, not
+  $0.45''''$. (6) True: $s=f\theta=2.0\ {\rm m}\times4.85\times10^{-6}=9.7\ \mu$m.'
+author: Renee
+source: original

@@ -1,0 +1,19 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.1
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Gamma rays are absorbed high in the atmosphere, yet certain ground-based instruments can still detect individual gamma-ray photons from space. What do these instruments actually record?"
+choices:
+  - text: "Visible Cherenkov light emitted by secondary particles that a primary photon created in the atmosphere, which move faster than the local speed of light."
+    correct: true
+  - text: "The gamma-ray photon itself, which passes unattenuated through the lower atmosphere and is counted in the detector."
+    correct: false
+  - text: "Fluorescence of the ozone layer excited by gamma rays, seen as a faint glow of the sky."
+    correct: false
+  - text: "Radio emission produced when gamma rays heat the ionosphere."
+    correct: false
+explanation: "A high-energy photon entering the atmosphere can create particle–antiparticle pairs. These particles can be so energetic that they travel faster than light does in air and radiate Cherenkov radiation, which is visible light that ground telescopes can detect. The primary photon itself does not reach the ground, and the other options describe phenomena not used for this purpose."
+author: Renee
+source: "original"

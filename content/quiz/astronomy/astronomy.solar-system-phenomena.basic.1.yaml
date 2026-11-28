@@ -1,0 +1,26 @@
+questionId: astronomy.solar-system-phenomena.basic.1
+topic: solar-system-phenomena
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The Earth is at perihelion in early January, in the middle of northern winter. What is therefore
+  the principal cause of the seasons?
+choices:
+- text: The change of the Earth–Sun distance between about 147 and 152 million km.
+  correct: false
+- text: A seasonal change in the Sun's luminosity.
+  correct: false
+- text: The tilt of the Earth's rotation axis to the ecliptic, which changes the Sun's noon altitude and
+    the length of the day.
+  correct: true
+- text: The variation of the Earth's orbital speed around the year.
+  correct: false
+explanation: The obliquity of the ecliptic ($\approx23.4^\circ$) makes the Sun's altitude and the length
+  of daylight change through the year, so the energy received per unit horizontal area changes. The variation
+  in Earth–Sun distance has practically no effect on the seasons (and the Earth is nearest the Sun in
+  northern winter, which contradicts the first option). The Sun's luminosity does not vary seasonally.
+  The orbital speed varies with Kepler's second law, but this only changes the lengths of the seasons
+  slightly and not their existence.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.3, p. 146

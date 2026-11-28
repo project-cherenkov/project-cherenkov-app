@@ -1,0 +1,25 @@
+questionId: astronomy.the-sun.intermediate.1
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: At the solar surface the angular velocity depends on heliographic latitude $\psi$ as $\Omega =
+  A - B\sin^2\psi$, with $A = 14.5^\circ$/day and $B = 2.9^\circ$/day. At roughly which latitude is the
+  sidereal rotation period equal to 27.0 days?
+choices:
+- text: $24^\circ$
+  correct: false
+- text: $30^\circ$
+  correct: false
+- text: $39^\circ$
+  correct: true
+- text: $45^\circ$
+  correct: false
+explanation: 'A period of 27.0 d means $\Omega = 360^\circ/27.0\ \mathrm{d} = 13.33^\circ$/day. Then $\sin^2\psi
+  = (A-\Omega)/B = (14.5-13.33)/2.9 = 0.402$, so $\sin\psi = 0.634$ and $\psi \approx 39^\circ$. Check
+  of the other options: at $30^\circ$, $\Omega = 13.78^\circ$/day and $P = 26.1$ d; at $45^\circ$, $\Omega
+  = 13.05^\circ$/day and $P = 27.6$ d. The value $24^\circ$ comes from solving $\sin\psi = 0.402$, i.e.
+  forgetting that the law contains $\sin^2\psi$ (the correct period at $24^\circ$ is 25.7 d).'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.1, p. 285 (Eq. 13.1)

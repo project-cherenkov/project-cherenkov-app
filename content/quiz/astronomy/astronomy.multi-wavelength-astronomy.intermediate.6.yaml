@@ -1,0 +1,31 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.6
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement independently. For this question, use the approximate ground-based radio
+  window $1$ mm to $20$ m.
+statements:
+- text: Observations at $100\ \mu$m can routinely be made from the summit of a $4000$ m mountain.
+  isTrue: false
+- text: A radio dish with rms surface error $0.25$ mm satisfies the one-tenth-wavelength criterion for
+    coherent operation at $\lambda=3$ mm.
+  isTrue: true
+- text: Using the stated $20$ m upper limit for the ground-based radio window, a $30$ m radio wave is
+    reflected by the ionosphere and cannot be observed from the ground.
+  isTrue: true
+- text: Adding more antennas to an aperture-synthesis array, while keeping the largest separation unchanged,
+    improves the finest angular resolution.
+  isTrue: false
+- text: Extreme ultraviolet radiation from objects in any direction travels freely across the Galaxy,
+    because interstellar hydrogen is transparent at these wavelengths.
+  isTrue: false
+explanation: '(1) False: radiation between about $20\ \mu$m and $1$ mm is totally absorbed; even high
+  mountains do not suffice and far-infrared work uses aircraft, balloons or satellites. (2) True: $\lambda/10=0.3$
+  mm $>0.25$ mm. (3) True: the radio window ends at roughly $20$ m, with the limit varying with the ionosphere.
+  (4) False: finest resolution is set by the maximum spacing ($\theta\approx\lambda/D_{\max}$); more antennas
+  fill in the coverage but do not change it. (5) False: interstellar hydrogen absorbs strongly at EUV
+  wavelengths, limiting visibility to a few hundred light years in most directions.'
+author: Renee
+source: original

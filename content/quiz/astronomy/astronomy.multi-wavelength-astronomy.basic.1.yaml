@@ -1,0 +1,19 @@
+questionId: astronomy.multi-wavelength-astronomy.basic.1
+topic: multi-wavelength-astronomy
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Why can ground-based telescopes not observe celestial sources at a wavelength of $200$ nm?"
+choices:
+  - text: "The ionosphere reflects radiation of this wavelength back into space."
+    correct: false
+  - text: "Water vapour in the lower atmosphere absorbs all radiation between $100$ and $400$ nm."
+    correct: false
+  - text: "Ozone in the upper atmosphere absorbs nearly all radiation shorter than about $300$ nm."
+    correct: true
+  - text: "Scattering by dust makes the sky too bright at this wavelength."
+    correct: false
+explanation: "The ultraviolet below about $300$ nm is absorbed by the ozone layer (at roughly $20$–$30$ km) and, at still shorter wavelengths, by O$_2$, N$_2$ and free atoms. Ionospheric reflection concerns long radio waves, not ultraviolet. Water vapour matters mainly in the infrared and millimetre range. Scattering and dust affect optical extinction but do not block the ultraviolet as a whole."
+author: Renee
+source: "original"

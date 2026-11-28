@@ -1,0 +1,19 @@
+questionId: astronomy.concept-of-time.basic.3
+topic: concept-of-time
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "The Julian date (JD) of the epoch J2000.0 is $2{,}451{,}545.0$. To which instant does this value correspond?"
+choices:
+  - text: "$00{:}00$ UT on 1 January 2000"
+    correct: false
+  - text: "$12{:}00$ UT on 31 December 1999"
+    correct: false
+  - text: "$00{:}00$ UT on 1 January 1900"
+    correct: false
+  - text: "$12{:}00$ UT on 1 January 2000"
+    correct: true
+explanation: "Julian day numbers change at noon UT, and the Julian day beginning at noon on 1 January 2000 is number $2{,}451{,}545$; this is the standard epoch J2000.0. Midnight on that date would be $2{,}451{,}544.5$. The Julian date is a running day count, not related to the Julian calendar's dates, so a 1900 origin is wrong."
+author: Renee
+source: "original"

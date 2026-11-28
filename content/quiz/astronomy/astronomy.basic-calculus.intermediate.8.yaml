@@ -1,0 +1,22 @@
+questionId: astronomy.basic-calculus.intermediate.8
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A body orbits the Sun with semi-major axis $a=2.00$ au and eccentricity $e=0.500$. Take the Sun's
+  mass as $1\,M_\odot$ so that $P^2=a^3$ with $P$ in years and $a$ in au. At the instant when its eccentric
+  anomaly is $E=1.200$ rad, find the rate of change of its distance from the Sun, $\dot r=\mathrm dr/\mathrm
+  dt$, in au per year, to three significant figures. Use $r=a(1-e\cos E)$ and Kepler's equation $E-e\sin
+  E=2\pi(t-\tau)/P$.
+numericAnswer:
+  value: 2.528599
+  tolerance: 0.01
+  unit: au/yr
+explanation: 'Kepler''s third law gives $P=2.00^{3/2}=2.8284$ yr, so $n=2\pi/P=2.2214$ rad/yr. Differentiating
+  Kepler''s equation, $(1-e\cos E)\dot E=n$, so $\dot E=n/(1-e\cos E)$. Differentiating $r=a(1-e\cos E)$
+  by the chain rule, $\dot r=ae\sin E\,\dot E=\dfrac{aen\sin E}{1-e\cos E}$. Numerically $\dot r=\dfrac{2.00\times0.500\times2.2214\times0.9320}{1-0.500\cos1.200}=2.529$
+  au/yr (positive: the body is receding from the Sun). Tolerance $\pm0.01$ au/yr corresponds to three
+  significant figures.'
+author: Renee
+source: original

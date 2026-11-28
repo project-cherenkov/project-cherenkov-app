@@ -1,0 +1,27 @@
+questionId: astronomy.concept-of-time.intermediate.6
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement independently. Zonal time $=$ UT $+7$ h applies at a site on longitude $110^\circ$
+  E. Use $1\,{\rm h}=15^\circ$ of longitude and $P_{\rm tropical}=365.2422$ d.
+statements:
+- text: Local mean time at $110^\circ$ E is exactly UT $+\,7$ h $00$ min.
+  isTrue: false
+- text: At $110^\circ$ E, a clock on zonal time UT $+7$ h is $20$ minutes behind local mean time.
+  isTrue: true
+- text: A sidereal clock loses about $3$ min $56.6$ s per solar day relative to a solar clock.
+  isTrue: false
+- text: A tropical year contains about $366.24$ sidereal days.
+  isTrue: true
+- text: For a planet in retrograde rotation, the solar day is longer than its sidereal rotation period.
+  isTrue: false
+explanation: '(1) False: $110^\circ/15^\circ\,{\rm h}^{-1}=7^{\rm h}20^{\rm m}$. (2) True: zonal time
+  $=$ UT$+7$ h, local mean time $=$ UT$+7^{\rm h}20^{\rm m}$, so the clock is $20$ min behind. (3) False:
+  stars cross the meridian earlier each solar day, so a sidereal clock gains $3^{\rm m}56.56^{\rm s}$
+  per day. (4) True: sidereal time follows the vernal equinox, and the number of sidereal days in a tropical
+  year is one more than the number of solar days: $365.2422+1=366.2422$. (5) False: for retrograde rotation
+  $1/\tau=1/\tau_*+1/P$, so $\tau<\tau_*$: the solar day is shorter.'
+author: Renee
+source: original

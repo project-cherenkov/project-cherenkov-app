@@ -1,0 +1,24 @@
+questionId: astronomy.geometric-instruments.intermediate.4
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Consider the correct handling of basic geometric instruments in chart measurement.
+statements:
+- text: A protractor’s centre should be placed on the vertex of the angle being measured.
+  isTrue: true
+- text: A ruler reading should be taken from the zero mark, not automatically from the physical end of
+    a worn ruler.
+  isTrue: true
+- text: A geometric compass preserves a length only if its opening is kept fixed during transfer.
+  isTrue: true
+- text: A set-square can be used to construct a line perpendicular to a reference edge.
+  isTrue: true
+- text: A protractor’s outer and inner scales always give the same reading for a given ray.
+  isTrue: false
+explanation: The first four statements describe correct instrument use. The two protractor scales run
+  in opposite directions; the scale whose zero is aligned with the initial ray must be read.
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

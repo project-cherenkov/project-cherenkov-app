@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.basic.3
+topic: instrumentation
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Which calibration frame is used to correct the differences in sensitivity between individual pixels of a CCD?"
+choices:
+  - text: "A flat-field exposure of an evenly illuminated field, such as the twilight sky"
+    correct: true
+  - text: "A dark frame taken with the shutter closed"
+    correct: false
+  - text: "A bias frame taken with zero exposure time"
+    correct: false
+  - text: "The sum of several short exposures of the target"
+    correct: false
+explanation: "Dividing the data by a flat-field image removes pixel-to-pixel sensitivity differences. A dark frame measures the signal from thermal noise (dark current) and is subtracted, and the bias is the dark current registered at zero exposure time. Combining several short exposures helps to remove cosmic-ray hits but does not calibrate sensitivity."
+author: Renee
+source: "original"

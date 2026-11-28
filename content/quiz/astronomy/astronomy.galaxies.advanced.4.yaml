@@ -1,0 +1,24 @@
+questionId: astronomy.galaxies.advanced.4
+topic: galaxies
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: The galaxies of a cluster have a line-of-sight velocity dispersion $\sigma=900\ \mathrm{km\,s^{-1}}$. Assume
+  the cluster is in virial equilibrium with $2T+U=0$, $T=\tfrac12 M\langle v^2\rangle$ and $U=-GM^2/(2R)$, with
+  $R=1.0$ Mpc, and that the velocities are isotropic so that the three-dimensional mean square speed is $\langle
+  v^2\rangle=3\sigma^2$. The total luminosity of the cluster galaxies within this radius is $5.0\times10^{12}\ L_\odot$.
+  Use $G=4.30\times10^{-6}\ \mathrm{kpc\,(km/s)^2\,M_\odot^{-1}}$. Find the mass-to-light ratio. Enter $M/L$ in
+  solar units, rounded to the nearest whole number.
+numericAnswer:
+  value: 226
+  tolerance: 3
+  unit: M_sun/L_sun
+explanation: 'From $2T+U=0$: $M\langle v^2\rangle=GM^2/(2R)$, so $M=2R\langle v^2\rangle/G$. With isotropy $\langle
+  v^2\rangle=3\sigma^2$, giving $M=6\sigma^2R/G=6\times900^2\times1000/(4.30\times10^{-6})=1.13\times10^{15}\ M_\odot$
+  (using $R=1000$ kpc). Then $M/L=1.13\times10^{15}/5.0\times10^{12}=226$. This is the same order as the cluster
+  value of about 200 within 1 Mpc, far above the stellar value of about 3, which shows the presence of dark matter.
+  Using $\sigma^2$ instead of $3\sigma^2$ would give the wrong value of about 75. The tolerance of 3 (about 1%)
+  covers rounding.'
+author: Renee
+source: original

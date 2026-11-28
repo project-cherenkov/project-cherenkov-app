@@ -1,0 +1,14 @@
+questionId: astronomy.thermodynamics.advanced.3
+topic: thermodynamics
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model a star of mass $1.60\,M_\odot$ and radius $1.50\,R_\odot$ as a sphere of **uniform** density in hydrostatic equilibrium. Its composition is $X=0.70$, $Y=0.28$, $Z=0.02$ and the gas is completely ionised and perfect. Ignore radiation pressure and degeneracy. Use $M_\odot=1.989\times10^{30}$ kg, $R_\odot=6.957\times10^{8}$ m, $G=6.674\times10^{-11}$ N m$^{2}$ kg$^{-2}$, $k=1.381\times10^{-23}$ J K$^{-1}$ and $m_{\rm H}=1.673\times10^{-27}$ kg. Estimate the central temperature. Enter it in units of $10^{6}$ K, rounded to two decimal places.
+numericAnswer:
+  value: 7.61
+  tolerance: 0.1
+  unit: 10^6 K
+explanation: For uniform density $\rho$, $M_r=\tfrac43\pi\rho r^{3}$ and $dP/dr=-\tfrac43\pi G\rho^{2}r$. Integrating from the centre to the surface, where $P=0$, gives $P_c=\tfrac23\pi G\rho^{2}R^{2}=3GM^{2}/(8\pi R^{4})$. The mean molecular weight for complete ionisation is $\mu=1/(2X+\tfrac34Y+\tfrac12Z)=0.617$. The perfect gas law $P=\rho kT/(\mu m_{\rm H})$ with $\rho=3M/(4\pi R^{3})$ then gives $T_c=P_c\mu m_{\rm H}/(\rho k)=GM\mu m_{\rm H}/(2kR)=7.61\times10^{6}$ K. The result is only a rough estimate because real stars are centrally condensed, which is why actual central temperatures are higher; the tolerance of 0.1 covers rounding of constants only.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.1–§11.2, eqs. (11.1), (11.8)–(11.10); Examples 11.3–11.5, printed pp. 249–253, 260–261 (original model)

@@ -1,0 +1,24 @@
+questionId: astronomy.accretion-processes.intermediate.2
+topic: accretion-processes
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which row correctly describes a typical low-mass X-ray binary (LMXB)?
+choices:
+- text: 'LMXB: companion under about 1.2 $M_\odot$, gas supplied by a wind, lifetime about $10^5$–$10^7$ yr.'
+  correct: false
+- text: 'LMXB: companion under about 1.2 $M_\odot$, gas supplied by Roche-lobe overflow, lifetime about $10^7$–$10^{10}$
+    yr.'
+  correct: true
+- text: 'LMXB: companion over 10 $M_\odot$, gas supplied by a wind, lifetime about $10^5$–$10^7$ yr.'
+  correct: false
+- text: 'LMXB: companion over 10 $M_\odot$, gas supplied by Roche-lobe overflow, lifetime about $10^7$–$10^{10}$
+    yr.'
+  correct: false
+explanation: 'Correct (second choice): LMXBs have companions of mass below about 1.2 $M_\odot$, are fed by Roche-lobe
+  overflow, and their lifetime is set by the mass-transfer process, which may last $10^7$–$10^{10}$ yr. The third
+  row describes a high-mass X-ray binary (companion above about 10 $M_\odot$, strong wind, young and short-lived
+  because the massive star evolves quickly). The first and fourth rows each mix properties of the two classes.'
+author: Renee
+source: original

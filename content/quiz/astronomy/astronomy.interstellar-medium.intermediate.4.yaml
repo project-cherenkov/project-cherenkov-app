@@ -1,0 +1,29 @@
+questionId: astronomy.interstellar-medium.intermediate.4
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the 21 cm line of neutral hydrogen.
+statements:
+- text: Because hydrogen is so abundant, 21 cm emission can be detected in practically every direction on the sky.
+  isTrue: true
+- text: Dust extinction at 21 cm is so large that the line can only probe gas in the solar neighbourhood.
+  isTrue: false
+- text: For optically thin gas, the brightness temperature at a given radial velocity is proportional to the column
+    density of H atoms with that velocity.
+  isTrue: true
+- text: The distance to an H I cloud can be read directly from the observed line frequency, without any model of
+    the Galaxy's motions.
+  isTrue: false
+- text: The profile is usually plotted against radial velocity because the line broadening is caused by the gas
+    motions.
+  isTrue: true
+explanation: '1 is true: hydrogen is everywhere, so the line is seen in all directions. 2 is false: radio waves
+  are essentially unaffected by dust, which is why 21 cm observations map the whole Galactic plane. 3 is true: in
+  the optically thin limit $T_b\propto N(v)$. 4 is false: the Doppler shift gives a radial velocity; converting
+  it to distance needs a rotation model of the Galaxy, and the profile alone does not give distance. 5 is true:
+  the broadening is due to gas motions (turbulence or bulk motion), so the Doppler-velocity axis is the natural
+  one.'
+author: Renee
+source: original

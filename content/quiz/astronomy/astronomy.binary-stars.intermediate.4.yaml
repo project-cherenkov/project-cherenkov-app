@@ -1,0 +1,32 @@
+questionId: astronomy.binary-stars.intermediate.4
+topic: binary-stars
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about binary stars as true or false.
+statements:
+- text: For a circular spectroscopic binary, the radial-velocity semi-amplitude of each component equals its true
+    orbital speed multiplied by $\sin i$.
+  isTrue: true
+- text: If the spectral lines of both stars show Doppler shifts, the orbital inclination can be derived from the
+    spectra alone.
+  isTrue: false
+- text: In an astrometric binary, once the mass of the visible star is estimated, the mass of the invisible companion
+    can also be estimated.
+  isTrue: true
+- text: W Ursae Majoris stars are contact binaries in which both components overfill their Roche lobes.
+  isTrue: true
+explanation: '1. True. For a circular orbit, the radial-velocity curve is sinusoidal and its semi-amplitude is $K=v_0\sin
+  i$, where $v_0$ is the component’s true orbital speed and $i$ is the inclination. The instantaneous radial velocity
+  also depends on orbital phase.
+
+  2. False. Radial velocities give projected quantities; without additional information, the inclination cannot
+  be separated from the masses.
+
+  3. True. The visible component’s orbit about the centre of mass constrains the unseen companion’s mass when the
+  visible mass is estimated.
+
+  4. True. W UMa systems are contact binaries in which both components overfill their Roche lobes.'
+author: Renee
+source: original

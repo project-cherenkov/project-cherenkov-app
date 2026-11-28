@@ -1,0 +1,28 @@
+questionId: astronomy.vectors.intermediate.3
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following identities hold for arbitrary three-dimensional vectors? Select all that apply.
+choices:
+- text: $\mathbf A\times(\mathbf B\times\mathbf C)=(\mathbf A\times\mathbf B)\times\mathbf C$
+  correct: false
+- text: $\mathbf A\times\mathbf B=\mathbf 0$ whenever $\mathbf A$ and $\mathbf B$ are parallel
+  correct: true
+- text: $\mathbf A\cdot\mathbf B$ is a vector perpendicular to both $\mathbf A$ and $\mathbf B$
+  correct: false
+- text: $\mathbf A\times\mathbf B=-\,\mathbf B\times\mathbf A$
+  correct: true
+- text: $|\mathbf A\times\mathbf B|=\mathbf A\cdot\mathbf B$
+  correct: false
+- text: $\mathbf A\cdot(\mathbf B\times\mathbf C)=\mathbf B\cdot(\mathbf C\times\mathbf A)$
+  correct: true
+explanation: 'True: the vector product of parallel vectors is the null vector; the vector product is anticommutative;
+  and the scalar triple product is unchanged by cyclic permutation of its factors. False: the vector product is
+  not associative (the two bracketings of the triple product give different results, related by the expansion $\mathbf
+  A\times(\mathbf B\times\mathbf C)=\mathbf B(\mathbf A\cdot\mathbf C)-\mathbf C(\mathbf A\cdot\mathbf B)$). $\mathbf
+  A\cdot\mathbf B$ is a scalar, not a vector. $|\mathbf A\times\mathbf B|=|\mathbf A||\mathbf B|\sin\theta$ whereas
+  $\mathbf A\cdot\mathbf B=|\mathbf A||\mathbf B|\cos\theta$; they agree only at $\theta=45^\circ$.'
+author: Renee
+source: original

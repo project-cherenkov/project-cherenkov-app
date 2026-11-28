@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-properties.basic.2
+topic: stellar-properties
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Star P has apparent magnitude $m_P=2.0$ and star Q has apparent magnitude $m_Q=7.0$, both measured in the
+  same photometric band. Which statement about their flux densities is correct?
+choices:
+- text: Star P delivers 5 times the flux density of star Q.
+  correct: false
+- text: Star Q delivers 100 times the flux density of star P.
+  correct: false
+- text: Star P delivers 100 times the flux density of star Q.
+  correct: true
+- text: Star P delivers 10 times the flux density of star Q.
+  correct: false
+explanation: 'Pogson''s relation is $m_1-m_2=-2.5\lg(F_1/F_2)$. Here $m_P-m_Q=-5.0$, so $\lg(F_P/F_Q)=2$ and $F_P/F_Q=100$.
+  A difference of five magnitudes is a factor of exactly $100$, and the smaller magnitude is the brighter star.
+
+
+  - A factor of 5 confuses a magnitude difference with a flux ratio.
+
+  - Star Q being 100 times brighter reverses the sign: larger magnitude means fainter.
+
+  - A factor of 10 uses $\lg$ of the ratio as if the scale were $2.5\,\lg$ per two magnitudes.'
+author: Renee
+source: original

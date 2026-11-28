@@ -1,0 +1,21 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.4
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: "Judge each statement independently. Use the practical resolution rule $\\theta\\approx\\lambda/D$ where relevant."
+statements:
+  - text: "A radio telescope and an optical telescope of the same diameter have the same diffraction-limited angular resolution."
+    isTrue: false
+  - text: "A $100$ m radio dish observing at $21$ cm has a diffraction-limited resolution of about $7$ arcminutes."
+    isTrue: true
+  - text: "The arrival directions of cosmic rays point back to their sources, because they are not affected by magnetic fields."
+    isTrue: false
+  - text: "Neutrino detectors are placed deep underground to shield them from secondary radiation produced by cosmic rays."
+    isTrue: true
+  - text: "An infrared telescope must continually measure the background and subtract it, because the sky and the telescope itself also radiate in the infrared."
+    isTrue: true
+explanation: "(1) False: $\\theta\\approx\\lambda/D$ depends on wavelength, and radio wavelengths are of order $10^4$ times longer than optical ones. (2) True: $\\theta=0.21/100=2.1\\times10^{-3}$ rad $\\approx7.2'$. (3) False: cosmic rays are charged and are deflected by Galactic magnetic fields, so their directions do not reveal their origin. (4) True: rock overburden screens out cosmic-ray secondaries. (5) True: this is why the secondary mirror chops between source and background and why the detectors are cooled."
+author: Renee
+source: "original"

@@ -1,0 +1,30 @@
+questionId: astronomy.elementary-cosmology.advanced.1
+topic: elementary-cosmology
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A concordance-type model has $H_0=68\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$, total matter density parameter $\Omega_m=0.31$
+  (of which ordinary baryonic matter is $\Omega_b=0.05$ and cold dark matter 0.26) and $\Omega_\Lambda=0.69$. Select
+  all statements that are justified.
+choices:
+- text: Since $\Omega_m+\Omega_\Lambda=1.00$, the model describes a spatially flat universe ($k=0$).
+  correct: true
+- text: Since $\Omega_m<1$, the geometry is open ($k=-1$) and the expansion must be decelerating.
+  correct: false
+- text: Baryons make up about half of all the matter.
+  correct: false
+- text: Cluster virial masses indicate $\Omega\approx0.3$, well above the baryon density of about 0.04 allowed by
+    the deuterium and helium abundances, so most matter must be non-baryonic.
+  correct: true
+- text: The measured angular size of the strongest CMB fluctuation, used as a standard measuring rod, supports $\Omega_0+\Omega_\Lambda=1$.
+  correct: true
+explanation: 'Option 1 true: in the Friedmann equation with $\Lambda\neq0$ the flatness condition is $\Omega_0+\Omega_\Lambda=1$
+  (it is not $\Omega_m=1$). Option 2 false: with $\Lambda\neq0$ the geometry is set by the sum $\Omega_m+\Omega_\Lambda$,
+  and positive $\Lambda$ leads to accelerating expansion, which supernova data require. Option 3 false: $0.05/0.31\approx16\%$,
+  about one sixth, matching the lensing result that about one sixth of the mass is ordinary matter. Option 4 true:
+  primordial nucleosynthesis fixes the baryon density, while virial masses of X-ray clusters give $\Omega_0\approx0.3$,
+  which motivates cold dark matter. Option 5 true: the size of the first acoustic peak depends only weakly on the
+  model, so its observed angular size provides strong evidence for flatness.'
+author: Renee
+source: original

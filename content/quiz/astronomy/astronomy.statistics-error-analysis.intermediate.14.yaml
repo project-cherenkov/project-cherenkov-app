@@ -1,0 +1,24 @@
+questionId: astronomy.statistics-error-analysis.intermediate.14
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: 'A data set of stellar magnitudes has the five-number summary: minimum 2, lower quartile $Q_1=4$,
+  median 6, upper quartile $Q_3=9$, maximum 20. Use $IQR=Q_3-Q_1$ and the 1.5-IQR rule to identify the
+  correct interpretations.'
+choices:
+- text: The interquartile range is 5 magnitude units
+  correct: true
+- text: The median is 6 magnitude units
+  correct: true
+- text: The upper outlier fence is 16.5 magnitude units
+  correct: true
+- text: A value of 15 magnitude units is above the upper outlier fence
+  correct: false
+- text: The middle 50% of the observations lie between 4 and 9 magnitude units
+  correct: true
+explanation: The IQR is 9−4=5. The median is 6. The upper fence is $Q_3+1.5IQR=9+7.5=16.5$, so 15 is not
+  above it. By definition, the middle 50% lies between the two quartiles.
+author: Renee
+source: "OpenStax, Introductory Statistics 2e, Chapter 2 (five-number summaries, box plots, interquartile range and outlier fences)."

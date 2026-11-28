@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-properties.basic.1
+topic: stellar-properties
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Two stars have the same luminosity, and the space between each star and the observer is transparent. Star
+  B is three times farther away than star A. What is the ratio of the flux densities received from them, $F_B/F_A$?
+choices:
+- text: $1/3$
+  correct: false
+- text: $1/9$
+  correct: true
+- text: $1/\sqrt{3}$
+  correct: false
+- text: $3$
+  correct: false
+explanation: 'The luminosity of an isotropic source is $L=4\pi r^{2}F$, so for a fixed $L$ the flux density obeys
+  $F\propto r^{-2}$. Tripling the distance therefore gives $F_B/F_A=(1/3)^2=1/9$.
+
+
+  - $1/3$ treats the flux density as falling off linearly with distance.
+
+  - $1/\sqrt{3}$ inverts the exponent (flux density falling as $r^{-1/2}$).
+
+  - $3$ has the wrong direction: the farther star is fainter, not brighter.'
+author: Renee
+source: original

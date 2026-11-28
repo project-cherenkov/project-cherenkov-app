@@ -1,0 +1,27 @@
+questionId: astronomy.numerical-methods.intermediate.6
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: The equation $x=\cos x$ ($x$ in radians) is written as $f(x)=x-\cos x=0$. Its root is near $0.739$.
+  Decide whether each statement is true or false.
+statements:
+- text: Because $f(0)<0<f(1)$ and $f$ is continuous, the equation has a root in $(0,1)$.
+  isTrue: true
+- text: After one halving step starting from $(0,1)$ the root is known to lie in $(0,\,0.5)$.
+  isTrue: false
+- text: The worst-case bisection bound on the midpoint error after 12 halvings of the initial interval
+    $(0,1)$ is less than $1\times10^{-4}$.
+  isTrue: false
+- text: Direct iteration $x_{n+1}=\cos x_n$ started from $x_0=1$ gives iterates that alternate above and
+    below the root.
+  isTrue: true
+- text: After ten halving steps starting from $(0,1)$ the bracket is narrower than $10^{-3}$.
+  isTrue: true
+explanation: '(1) True by continuity and the sign change. (2) False: $f(0.5)<0$, so the root remains in
+  $(0.5,1)$. (3) False: in the worst case, after 12 halvings the bracket width is $2^{-12}$ and the midpoint
+  error bound is $2^{-13}=1.2207\times10^{-4}$, which exceeds $10^{-4}$. (4) True: the fixed-point iterates
+  alternate around the root. (5) True because after ten halvings the bracket width is $2^{-10}<10^{-3}$.'
+author: Renee
+source: original

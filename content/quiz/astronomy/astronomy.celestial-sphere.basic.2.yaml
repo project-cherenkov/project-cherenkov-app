@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-sphere.basic.2
+topic: celestial-sphere
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "At latitude $+35^\\circ$ N, which of the following stars never sets? Ignore refraction."
+choices:
+  - text: "A star with declination $+30^\\circ$"
+    correct: false
+  - text: "A star with declination $+50^\\circ$"
+    correct: false
+  - text: "A star with declination $-60^\\circ$"
+    correct: false
+  - text: "A star with declination $+60^\\circ$"
+    correct: true
+explanation: "A star is circumpolar when $\\delta > 90^\\circ-\\varphi = 55^\\circ$. Only $+60^\\circ$ satisfies this. $+50^\\circ$ comes close but its lower culmination is at $\\delta+\\varphi-90^\\circ=-5^\\circ$, below the horizon, so it does set. $+30^\\circ$ rises and sets. $-60^\\circ$ lies below $\\varphi-90^\\circ=-55^\\circ$, so it never rises at all."
+author: Renee
+source: "original"

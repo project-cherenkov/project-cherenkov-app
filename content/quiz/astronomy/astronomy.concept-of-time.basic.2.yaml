@@ -1,0 +1,19 @@
+questionId: astronomy.concept-of-time.basic.2
+topic: concept-of-time
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "A town lies at geographic longitude $45^\\circ$ E. By how much does its local mean time differ from Universal Time (UT)?"
+choices:
+  - text: "Local mean time is $3$ hours ahead of UT."
+    correct: true
+  - text: "Local mean time is $3$ hours behind UT."
+    correct: false
+  - text: "Local mean time is $45$ minutes ahead of UT."
+    correct: false
+  - text: "Local mean time is $6$ hours ahead of UT."
+    correct: false
+explanation: "The Earth turns $15^\\circ$ per hour, so $45^\\circ/15^\\circ\\,{\\rm h}^{-1}=3$ h. Places east of Greenwich have the Sun on their meridian earlier, so their local time is ahead. 'Behind' is the sign error for west longitude. '45 minutes' wrongly treats degrees as minutes (it would apply if $1^\\circ$ equalled $1$ minute of time), and '6 hours' uses $7.5^\\circ$ per hour."
+author: Renee
+source: "original"

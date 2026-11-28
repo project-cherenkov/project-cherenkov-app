@@ -1,0 +1,18 @@
+questionId: astronomy.vectors.intermediate.5
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: At some instant a comet has position $\mathbf r=(1.00,\,0.50,\,0.20)$ au and velocity $\mathbf v=(-2.0,\,5.0,\,1.0)$
+  au/yr relative to the Sun. Find its areal velocity $\dot A$ (the area swept by the radius vector per unit time),
+  in au$^2$/yr, to three significant figures. Use $\dot A=\tfrac12|\mathbf r\times\dot{\mathbf r}|$.
+numericAnswer:
+  value: 3.090712
+  tolerance: 0.01
+  unit: au^2/yr
+explanation: $\mathbf r\times\mathbf v=(0.5\cdot1.0-0.2\cdot5.0,\;0.2\cdot(-2.0)-1.0\cdot1.0,\;1.0\cdot5.0-0.5\cdot(-2.0))=(-0.50,\,-1.40,\,6.00)$
+  au$^2$/yr, with magnitude $6.1814$. Half of this is $\dot A=3.091$ au$^2$/yr. Tolerance $\pm0.01$ matches the
+  three significant figures requested. Forgetting the factor $\tfrac12$ would give $6.18$.
+author: Renee
+source: original

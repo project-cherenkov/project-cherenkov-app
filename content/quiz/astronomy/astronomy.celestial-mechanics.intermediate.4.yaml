@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.intermediate.4
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about orbital motion in Newtonian gravity.
+statements:
+- text: For two bodies, the position $\mathbf{r}$ of one relative to the other obeys $\ddot{\mathbf{r}}=-\mu\,\mathbf{r}/r^{3}$ with $\mu=G(m_1+m_2)$.
+  isTrue: true
+- text: The specific angular momentum $\mathbf{k}=\mathbf{r}\times\dot{\mathbf{r}}$ is constant in a two-body orbit only when the orbit is circular.
+  isTrue: false
+- text: According to Kepler's first law, the Sun lies at the centre of a planet's elliptical orbit.
+  isTrue: false
+- text: In the restricted three-body problem, Jupiter's Trojan asteroids cluster around the two Lagrangian points that form equilateral triangles with the Sun and Jupiter, and those two points are stable.
+  isTrue: true
+explanation: 'Statement 1 is true: subtracting the equations of motion of the two bodies gives exactly this relative equation with $\mu=G(m_1+m_2)$. Statement 2 is false: $\dot{\mathbf{k}}=\mathbf{r}\times\ddot{\mathbf{r}}=0$ for any central force, so $\mathbf{k}$ is constant for every conic orbit; the misconception is to tie conservation to circular motion. Statement 3 is false: the Sun is at one focus of the ellipse, not at the centre. Statement 4 is true: of the five Lagrangian points, the three on the line through the two massive bodies are unstable, while the two forming equilateral triangles with them are stable, and Jupiter''s Trojans move around those two. (Statement 4 draws on the book''s qualitative description of Lagrangian points in §6.6.)'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.1–§6.3 (printed pp. 123–127) and §6.6 (printed pp. 130–131)

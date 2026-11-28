@@ -1,0 +1,32 @@
+questionId: astronomy.stellar-evolution.intermediate.6
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A $15\,M_\odot$ star has main-sequence luminosity $L=15^{3.8}L_\odot$ and lifetime $t=10^{10}\,\text{yr}\times(M/M_\odot)/(L/L_\odot)$.
+  At the end of its life its iron core of $1.4\,M_\odot$ collapses to a neutron star of radius $12$ km. Model the
+  energy released as the gravitational binding energy $E=\tfrac35GM_c^2/R_{\rm ns}$ of a uniform sphere (the initial
+  binding energy is negligible). By what factor does this energy exceed the total energy radiated by the star during
+  its entire main-sequence lifetime? Use $L_\odot=3.828\times10^{26}$ W, $M_\odot=1.989\times10^{30}$ kg, $G=6.674\times10^{-11}$
+  SI and $1\,\text{yr}=3.156\times10^{7}$ s. Enter the dimensionless ratio rounded to one decimal place.
+numericAnswer:
+  value: 14.3
+  tolerance: 0.3
+  unit: dimensionless
+explanation: '1. Luminosity: $L=15^{3.8}L_\odot=2.945\times10^{4}L_\odot$.
+
+  2. Lifetime: $t=10^{10}\times15/2.945\times10^{4}=5.09\times10^{6}$ yr.
+
+  3. Main-sequence radiated energy: $Lt=2.945\times10^{4}\times3.828\times10^{26}\times5.09\times10^{6}\times3.156\times10^{7}=1.81\times10^{45}$
+  J.
+
+  4. Collapse energy: $E=0.6GM_c^2/R=0.6\times6.674\times10^{-11}\times(2.785\times10^{30})^2/(1.2\times10^{4})=2.59\times10^{46}$
+  J.
+
+
+  The ratio is $2.59\times10^{46}/1.81\times10^{45}\approx14.3$: a core collapse releases more than ten times the
+  energy the star radiated during its whole main-sequence life (mostly carried away by neutrinos). The ratio is
+  dimensionless; the tolerance of $0.3$ ($\approx2\%$) covers rounding of the intermediate values.'
+author: Renee
+source: original

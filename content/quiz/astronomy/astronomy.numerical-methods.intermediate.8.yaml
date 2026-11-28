@@ -1,0 +1,20 @@
+questionId: astronomy.numerical-methods.intermediate.8
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: The orbital speed on a circular orbit varies as $R^{-1/2}$. The orbital radius is increased by
+  $12.0\,\%$. Use the second-order Taylor expansion of $(1+x)^{-1/2}$ about $x=0$ to estimate the fractional
+  change in speed, and compare it with the exact value. Find the magnitude of the difference between the
+  exact fractional change and the second-order estimate, in percentage points, to three decimal places.
+numericAnswer:
+  value: 0.049
+  tolerance: 0.0005
+  unit: percentage points
+explanation: With $x=0.120$, the second-order estimate is $-x/2+3x^2/8=-0.0546$. The exact fractional
+  change is $(1.12)^{-1/2}-1=-0.0550888175$. Their absolute difference is $0.0004888175$ as a fraction
+  of the original speed, or $0.0488817$ percentage points. To three decimal places the expected answer
+  is $0.049$ percentage points; the tolerance is $0.0005$ percentage points.
+author: Renee
+source: original

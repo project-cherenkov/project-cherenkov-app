@@ -1,0 +1,26 @@
+questionId: astronomy.vectors.intermediate.4
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: A particle moves on the circle $\mathbf r(t)=R(\cos\omega t\,\hat\imath+\sin\omega t\,\hat\jmath)$, where
+  $R$ and $\omega$ are positive constants. Decide whether each statement is true or false.
+statements:
+- text: $\dot{\mathbf r}$ is parallel to $\mathbf r$ at all times.
+  isTrue: false
+- text: $\mathbf r\cdot\dot{\mathbf r}=0$ at all times.
+  isTrue: true
+- text: $\ddot{\mathbf r}$ is parallel to $\dot{\mathbf r}$ at all times.
+  isTrue: false
+- text: $\mathbf r\times\dot{\mathbf r}=R^2\omega\,\hat k$, which is a constant vector.
+  isTrue: true
+- text: The speed $|\dot{\mathbf r}|$ equals $R\omega$ at all times.
+  isTrue: true
+explanation: 'With $\dot{\mathbf r}=R\omega(-\sin\omega t,\cos\omega t,0)$ and $\ddot{\mathbf r}=-\omega^2\mathbf
+  r$: (1) False: $\dot{\mathbf r}$ is perpendicular to $\mathbf r$ (tangent to the circle). (2) True: $\mathbf r\cdot\dot{\mathbf
+  r}=R^2\omega(-\cos\sin+\sin\cos)=0$. (3) False: $\ddot{\mathbf r}=-\omega^2\mathbf r$ is antiparallel to $\mathbf
+  r$, hence perpendicular to $\dot{\mathbf r}$. (4) True: $z$-component $R^2\omega(\cos^2\omega t+\sin^2\omega t)=R^2\omega$.
+  (5) True: $|\dot{\mathbf r}|=R\omega\sqrt{\sin^2+\cos^2}=R\omega$.'
+author: Renee
+source: original

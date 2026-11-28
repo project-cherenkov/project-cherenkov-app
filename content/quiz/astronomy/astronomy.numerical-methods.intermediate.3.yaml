@@ -1,0 +1,29 @@
+questionId: astronomy.numerical-methods.intermediate.3
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following statements about solving an equation numerically by interval halving and by direct
+  iteration are correct? Select all that apply.
+choices:
+- text: Each halving step reduces the width of the bracketing interval by a factor of 2, gaining one binary digit
+    of accuracy
+  correct: true
+- text: Direct iteration $x_{n+1}=f(x_n)$ converges, whichever way the equation is rearranged, provided the starting
+    value is close enough to the root
+  correct: false
+- text: Interval halving needs a continuous function that has opposite signs at the two ends of the starting interval
+  correct: true
+- text: Interval halving is still guaranteed to find a root of a function that jumps discontinuously between the
+    two ends, provided the signs at the ends differ
+  correct: false
+- text: If direct iteration for $x=f(x)$ diverges, one may try the rearranged form $f^{-1}(x)=x$ instead
+  correct: true
+explanation: 'Correct: halving the bracket each step gives one binary digit per step; the method requires continuity
+  plus a sign change; and, if iteration on $x=f(x)$ diverges, rewriting the equation with the inverse function is
+  a standard remedy. Incorrect: direct iteration does not converge for every rearrangement, even from a good starting
+  value (some rearrangements diverge, which is why the choice of form matters). Also incorrect: continuity is essential
+  to interval halving, because a function can change sign by jumping and have no root in the interval.'
+author: Renee
+source: original

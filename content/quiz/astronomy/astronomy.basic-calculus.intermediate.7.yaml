@@ -1,0 +1,29 @@
+questionId: astronomy.basic-calculus.intermediate.7
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: For a Keplerian ellipse with semi-major axis $a$, semi-minor axis $b$, eccentricity $e$, gravitational
+  parameter $\mu$, and specific angular momentum magnitude $k=|\mathbf r\times\dot{\mathbf r}|$, use $b=a\sqrt{1-e^2}$
+  and $k=\sqrt{\mu a(1-e^2)}$. Which statements are true? Answer True or False for each.
+statements:
+- text: Integrating $\mathrm dA=\tfrac12k\,\mathrm dt$ over one period gives $\pi ab=\tfrac12kP$.
+  isTrue: true
+- text: At fixed $a$, the area $\pi a^2\sqrt{1-e^2}$ of the ellipse increases as $e$ increases.
+  isTrue: false
+- text: Substituting $k=\sqrt{\mu a(1-e^2)}$ into $\pi a^2\sqrt{1-e^2}=\tfrac12kP$ gives $P^2=4\pi^2a^3/\mu$,
+    independent of $e$.
+  isTrue: true
+- text: The areal velocity $\mathrm dA/\mathrm dt$ is larger at perihelion than at aphelion.
+  isTrue: false
+- text: At fixed $a$ and $\mu$, the areal velocity $\mathrm dA/\mathrm dt$ tends to zero as $e\to1$.
+  isTrue: true
+explanation: '(1) True: integrate the constant areal rate $k/2$ over one period to obtain the ellipse
+  area $\pi ab$. (2) False: at fixed $a$, $b=a\sqrt{1-e^2}$ decreases as $e$ increases, so the area does
+  not increase. (3) True: substituting $k=\sqrt{\mu a(1-e^2)}$ into $\pi ab=\tfrac12kP$ cancels the eccentricity
+  factor and gives $P^2=4\pi^2a^3/\mu$. (4) False: the areal velocity is constant by Kepler''s second
+  law, so it is not larger at perihelion. (5) True: $k/2=\tfrac12\sqrt{\mu a(1-e^2)}$ tends to zero as
+  $e\to1$ at fixed $a$ and $\mu$.'
+author: Renee
+source: original

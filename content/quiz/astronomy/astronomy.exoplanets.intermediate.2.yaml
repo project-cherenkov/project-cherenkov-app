@@ -1,0 +1,24 @@
+questionId: astronomy.exoplanets.intermediate.2
+topic: exoplanets
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: An infrared spectrum of a rocky exoplanet's atmosphere shows strong methane features but no ozone. How should
+  this be interpreted?
+choices:
+- text: Methane by itself proves life, because no non-biological process can produce it.
+  correct: false
+- text: Methane alone is not conclusive, because non-biological processes can also supply it.
+  correct: true
+- text: Methane is evidence against life, because organisms remove all methane from atmospheres.
+  correct: false
+- text: Methane is a direct signature of photosynthesis, so it identifies oxygen production.
+  correct: false
+explanation: '**Correct (option 2).** Methane can have non-biological sources, so its presence alone is not proof
+  of life. The book discusses ozone and the red-edge reflectance as additional possible spectral indicators; no
+  single feature by itself guarantees a biological origin. **Option 1** treats methane as uniquely biological. **Option
+  3** incorrectly assumes organisms remove all atmospheric methane. **Option 4** confuses the spectral interpretation
+  of methane with oxygenic photosynthesis.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 21.8, pp. 454–455

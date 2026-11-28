@@ -1,0 +1,23 @@
+questionId: astronomy.numerical-methods.basic.1
+topic: numerical-methods
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: For $|x|\ll 1$, which expression is the first-order (linear) approximation of $1/\sqrt{1+x}$?
+choices:
+- text: $1 + x/2$
+  correct: false
+- text: $1 - x$
+  correct: false
+- text: $1 - x/2$
+  correct: true
+- text: $1 - x^2/2$
+  correct: false
+explanation: Write $f(x)=(1+x)^{-1/2}$. Then $f(0)=1$ and $f'(x)=-\tfrac12(1+x)^{-3/2}$, so $f'(0)=-\tfrac12$, and
+  the tangent-line approximation $f(x)\approx f(0)+f'(0)x$ gives $1-x/2$. $1+x/2$ is the expansion of $\sqrt{1+x}$
+  (the sign of the exponent has been lost). $1-x$ is the expansion of $1/(1+x)$, i.e. the exponent $-1$ has been
+  used instead of $-\tfrac12$. $1-x^2/2$ has no linear term at all, so it is not a first-order approximation in
+  $x$ (it would also be wrong in the quadratic term).
+author: Renee
+source: original

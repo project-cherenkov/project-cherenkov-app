@@ -1,0 +1,22 @@
+questionId: astronomy.interstellar-medium.basic.3
+topic: interstellar-medium
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The observed colour index of a star exceeds its intrinsic colour index by the colour excess $E_{B-V}=0.40$
+  mag. Using the usual ratio $A_V/E_{B-V}\approx 3.0$, what is the visual extinction $A_V$?
+choices:
+- text: 0.13 mag
+  correct: false
+- text: 0.40 mag
+  correct: false
+- text: 3.4 mag
+  correct: false
+- text: 1.2 mag
+  correct: true
+explanation: 'Correct (fourth choice): $A_V = R\,E_{B-V} \approx 3.0\times0.40 = 1.2$ mag. The value 0.13 mag comes
+  from dividing instead of multiplying ($0.40/3.0$). The value 0.40 mag wrongly equates the extinction with the
+  colour excess, ignoring the factor $R$. The value 3.4 mag adds the ratio to the excess instead of multiplying.'
+author: Renee
+source: original

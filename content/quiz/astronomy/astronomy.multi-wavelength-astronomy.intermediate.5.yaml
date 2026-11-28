@@ -1,0 +1,14 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.5
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "An aperture-synthesis radio array has a maximum baseline equivalent to a single aperture of diameter $D=35$ km and observes at $\\lambda=1.3$ cm. Use $\\theta\\approx\\lambda/D$ and $1\\,{\\rm rad}=206{,}265''$. By what factor is its angular resolution finer than a typical ground-based optical seeing disc of $1.0''$? Give the answer to two decimal places."
+numericAnswer:
+  value: 13.05
+  tolerance: 0.1
+  unit: "dimensionless"
+explanation: "The resolution is $\\theta=\\lambda/D=0.013/35{,}000=3.714\\times10^{-7}$ rad $=0.0766''$. The ratio to the $1.0''$ seeing disc is $1.0/0.0766=13.05$. The array's resolution is set by its largest spacing, not by the size of the individual antennas. The tolerance $0.1$ allows for rounding of the intermediate angle."
+author: Renee
+source: "original"

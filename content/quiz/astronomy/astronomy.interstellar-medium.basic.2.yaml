@@ -1,0 +1,26 @@
+questionId: astronomy.interstellar-medium.basic.2
+topic: interstellar-medium
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: What physical process produces the 21 cm radio line of neutral hydrogen?
+choices:
+- text: A transition between the two hyperfine levels of the ground state, in which the electron and proton spins
+    change from parallel to antiparallel.
+  correct: true
+- text: A recombination transition between very high principal quantum levels, such as $n=110\to109$, in ionised
+    gas.
+  correct: false
+- text: The $n=3\to2$ (H$\alpha$) transition of hydrogen, redshifted into the radio band by the motion of the gas.
+  correct: false
+- text: A rotational transition of the H$_2$ molecule in dense molecular clouds.
+  correct: false
+explanation: 'Correct (first choice): when the spins of the electron and proton in a ground-state hydrogen atom
+  flip between parallel and antiparallel, a photon of frequency about 1420.4 MHz (wavelength about 21 cm) is emitted.
+  Choice 2 describes the radio recombination lines of H II regions (for example near 5 GHz), a different process
+  in ionised gas. Choice 3 is wrong because H$\alpha$ is an optical line (656 nm); gas motions of Galactic size
+  shift lines by only tiny fractions of the wavelength. Choice 4 is wrong because the 21 cm line comes from atomic,
+  not molecular, hydrogen.'
+author: Renee
+source: original

@@ -1,0 +1,22 @@
+questionId: astronomy.statistics-error-analysis.intermediate.2
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Ten measured angular separations, sorted from smallest to largest, are 4, 5, 6, 6, 7, 8, 9, 10,\
+  \ 12 and 20 arcmin. Define the 80th percentile using the nearest-rank rule $r=\\lceil0.80n\\rceil$. What\
+  \ is the 80th-percentile value?"
+choices:
+- text: 9 arcmin
+  correct: false
+- text: 10 arcmin
+  correct: true
+- text: 12 arcmin
+  correct: false
+- text: 20 arcmin
+  correct: false
+explanation: "With n=10, the nearest-rank index is $r=\\lceil8\\rceil=8$. The eighth sorted value is 10\
+  \ arcmin. Stating the percentile convention removes ambiguity among competing interpolation definitions."
+author: Renee
+source: "OpenStax, Introductory Statistics 2e, Chapter 2 (percentiles and quartiles; stated nearest-rank convention is supplied in the prompt)."

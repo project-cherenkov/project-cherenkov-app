@@ -1,0 +1,23 @@
+questionId: astronomy.geometric-instruments.basic.15
+topic: geometric-instruments
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Two points A and B are marked on a chart. You must transfer the distance AB to a second line without
+  using a numerical ruler reading. Which geometric-compass operation correctly preserves that distance?
+choices:
+- text: Set the compass points at A and B, then keep the opening fixed while placing one point at the
+    new line’s origin
+  correct: true
+- text: Move the compass hinge until its legs are parallel to the chart edge
+  correct: false
+- text: Use the compass to estimate the angle between AB and the chart edge
+  correct: false
+- text: Close the compass, then reopen it by eye at the second line
+  correct: false
+explanation: A compass transfers a length by preserving the opening set by the two endpoints. Reopening
+  by eye or changing the hinge position does not preserve the measured separation.
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

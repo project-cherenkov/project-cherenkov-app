@@ -1,0 +1,29 @@
+questionId: astronomy.geometric-instruments.intermediate.9
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: On a printed star chart, two plotted points A and B are 6.0 cm apart. You need to construct the
+  perpendicular bisector of AB using a geometric compass and ruler. Which procedure is valid?
+choices:
+- text: Set the compass opening to more than 3.0 cm. With the same opening, draw arcs centred at A and
+    B so that the arcs intersect above and below AB; use a ruler to join the two intersection points.
+  correct: true
+- text: Set the compass opening to exactly 3.0 cm, draw one arc centred at A and one at B, and join whichever
+    endpoints appear closest.
+  correct: false
+- text: Use a different compass opening at A and B so that the arcs meet at two convenient points, then
+    join those points.
+  correct: false
+- text: Draw AB again with the ruler and use the compass only to mark its midpoint; the line AB is the
+    perpendicular bisector.
+  correct: false
+explanation: The compass opening must be greater than half of AB so that arcs centred at A and B intersect
+  on both sides of the segment. Keeping the opening unchanged makes each intersection equidistant from
+  A and B. The line through the two intersections is therefore the perpendicular bisector of AB. Changing
+  the opening destroys that equal-distance construction.
+author: Renee
+source: 'Use of a geometric compass and ruler in practical data analysis; IOAA syllabus, Practical: Data
+  Analysis (familiarity with basic geometric instruments). The construction and all measurements are defined
+  in the prompt.'

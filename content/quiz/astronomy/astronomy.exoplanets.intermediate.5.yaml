@@ -1,0 +1,22 @@
+questionId: astronomy.exoplanets.intermediate.5
+topic: exoplanets
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Treat the Sun and Jupiter as an isolated two-body system with circular orbits, viewed exactly edge-on. Jupiter
+  orbits at $a=5.20$ au with period $P=11.86$ yr, and $M_\mathrm{J}/M_\odot = 9.55\times10^{-4}$. Take 1 au $=1.496\times10^{11}$
+  m and 1 yr $=3.156\times10^{7}$ s. What is the amplitude of the Sun's reflex speed along the line of sight? Enter
+  the value in m/s, rounded to one decimal place.
+numericAnswer:
+  value: 12.5
+  tolerance: 0.15
+  unit: m/s
+explanation: Jupiter's orbital speed is $v_\mathrm{J}=2\pi a/P=2\pi(5.20\times1.496\times10^{11}\,\mathrm{m})/(11.86\times3.156\times10^{7}\,\mathrm{s})\approx1.306\times10^{4}$
+  m/s. In the centre-of-mass frame the momenta of the two bodies are equal and opposite, $M_\odot v_\odot=M_\mathrm{J}v_\mathrm{J}$,
+  so $v_\odot=(M_\mathrm{J}/M_\odot)\,v_\mathrm{J}=9.55\times10^{-4}\times1.306\times10^{4}\approx12.47$ m/s, i.e.
+  $12.5$ m/s to one decimal place (the exact reduced-mass treatment changes this by only about 0.1 %). Edge-on viewing
+  means the whole velocity lies along the line of sight. The tolerance of $\pm0.15$ m/s covers the rounding of the
+  supplied constants and the requested one-decimal rounding; it is not a licence for a different method.
+author: Renee
+source: original

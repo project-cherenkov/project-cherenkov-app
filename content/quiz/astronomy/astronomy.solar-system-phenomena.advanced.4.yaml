@@ -1,0 +1,31 @@
+questionId: astronomy.solar-system-phenomena.advanced.4
+topic: solar-system-phenomena
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model the Sun and Moon as spheres with radii $6.960\times10^{5}$ km and 1737.4 km, with the Sun–Moon
+  distance fixed at $1.496\times10^{8}$ km, and the Earth as a sphere of radius 6378 km. The Moon's umbral
+  shadow is the cone behind the Moon in which the whole solar disc is hidden. Find the largest Earth-centre
+  to Moon-centre distance at which the tip of the umbra still reaches the Earth's surface at the sub-lunar
+  point (Sun, Moon and Earth's centre collinear). Enter the distance in km, rounded to the nearest 10
+  km.
+numericAnswer:
+  value: 380750
+  tolerance: 50
+  unit: km
+explanation: By similar triangles formed by the common external tangent lines of the Sun and the Moon,
+  the umbra tip is at a distance $\ell$ behind the Moon's centre where $R_{\rm Moon}/\ell = R_\odot/(\ell
+  + D)$, so $\ell = D\,R_{\rm Moon}/(R_\odot - R_{\rm Moon}) = 1.496\times10^{8}\times1737.4/(6.960\times10^{5}
+  - 1737.4) = 3.7438\times10^{5}$ km. The sub-lunar point lies at distance $d - R_\oplus$ from the Moon's
+  centre, and totality there requires $d - R_\oplus \le \ell$, so $d_{\max} = \ell + R_\oplus = 374{,}376
+  + 6378 = 380{,}754$ km. Tolerance $\pm50$ km covers the requested rounding to 10 km. The result is below
+  the mean lunar distance (384,400 km), so at mean distance the umbra falls short and the eclipse would
+  be annular; it lies between perigee (356,400 km) and apogee (406,700 km), as it must for both total
+  and annular eclipses to occur. Typical errors are using the Moon's radius in place of the radius ratio,
+  or measuring the distance to the Earth's surface rather than its centre. The book states qualitatively
+  that the shadow does not reach the Earth when the Moon is near apogee; the numerical shadow length is
+  derived here from the given radii.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.5, pp. 149–150 (eclipse geometry; the
+  shadow length is derived)

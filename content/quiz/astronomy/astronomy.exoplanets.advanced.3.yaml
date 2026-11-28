@@ -1,0 +1,25 @@
+questionId: astronomy.exoplanets.advanced.3
+topic: exoplanets
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A planet is a fast-rotating, uniform-temperature body with Bond albedo $A=0.30$, so its equilibrium temperature
+  obeys $\sigma T^4=L(1-A)/(16\pi d^2)$. Liquid water is possible for $273\ \mathrm{K}\le T\le373\ \mathrm{K}$.
+  Over its main-sequence lifetime the luminosity of the host star rises from $0.80\,L_\odot$ to $1.20\,L_\odot$.
+  A planet must stay in the liquid-water range for the entire time. Using $L_\odot=3.828\times10^{26}$ W, $\sigma=5.670\times10^{-8}\
+  \mathrm{W\,m^{-2}K^{-4}}$ and 1 au $=1.496\times10^{11}$ m, find the width of this continuously habitable zone.
+  Enter the value in au, rounded to three decimal places.
+numericAnswer:
+  value: 0.268
+  tolerance: 0.0005
+  unit: au
+explanation: 'The supplied equilibrium model gives $d=\sqrt{L(1-A)/(16\pi\sigma T^4)}$. For a planet to remain in
+  the water-temperature range throughout the star’s brightening, the inner boundary is set by the final luminosity
+  at 373 K: $d_{\rm in}=0.5103286$ au. The outer boundary is set by the initial luminosity at 273 K: $d_{\rm out}=0.7778514$
+  au. The continuous-zone width is $0.7778514-0.5103286=0.2675228$ au, which rounds to **0.268 au** at three decimal
+  places. The absolute tolerance 0.0005 au accepts the unrounded value while not also accepting 0.267 as a differently
+  rounded result. The formula is a prompt-supplied equilibrium model consistent with the book’s discussion on p.
+  448.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 21.3, pp. 448–449

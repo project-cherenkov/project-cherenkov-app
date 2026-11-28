@@ -1,0 +1,23 @@
+questionId: astronomy.thermodynamics.basic.4
+topic: thermodynamics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A fixed-volume container holds an ideal gas. Its absolute temperature is raised from 300 K to
+  450 K while the amount of gas and volume remain constant. If its initial pressure is 100 kPa, what is
+  the final pressure?
+choices:
+- text: 67 kPa
+  correct: false
+- text: 100 kPa
+  correct: false
+- text: 150 kPa
+  correct: true
+- text: 225 kPa
+  correct: false
+explanation: "At fixed amount and volume, the ideal-gas law gives $P/T=\\text{constant}$. Thus $P_2=P_1(T_2/T_1)=100(450/300)=150$\
+  \ kPa."
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §11.2, printed pp. 252–253 (ideal-gas relation
+  and stellar gas pressure).

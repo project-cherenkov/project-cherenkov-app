@@ -1,0 +1,28 @@
+questionId: astronomy.interstellar-medium.intermediate.6
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: true
+questionType: true_false_set
+prompt: Judge the following statements about the 21 cm line of neutral interstellar hydrogen.
+statements:
+- text: The 21 cm line is produced by a transition between the two hyperfine levels of the ground state
+    of neutral hydrogen.
+  isTrue: true
+- text: The frequency of this transition is approximately 1420.4 MHz.
+  isTrue: true
+- text: The distribution and Doppler-shifted profiles of the line can be used to study the structure and
+    rotation of the Milky Way.
+  isTrue: true
+- text: The 21 cm line is the electronic transition of hydrogen from principal quantum number n = 1 to
+    n = 2.
+  isTrue: false
+- text: The 21 cm line traces ionised hydrogen (H II) rather than neutral hydrogen (H I).
+  isTrue: false
+explanation: The 21 cm transition is the hyperfine spin-state transition of neutral hydrogen in its ground
+  electronic state, with frequency about 1420.4 MHz and wavelength about 21.049 cm. Its line profiles
+  are Doppler shifted by gas motions, allowing the distribution and kinematics of Galactic H I to be studied.
+  The n = 1 to n = 2 electronic transition is Lyman-alpha, not the 21 cm line; H II is ionised hydrogen.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §16.2, printed pp. 341–342 (neutral hydrogen,
+  the 21 cm hyperfine transition, Galactic H I mapping and Doppler-shifted line profiles).

@@ -1,0 +1,29 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.5
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'A gas is completely ionised and obeys the perfect gas law $P=\rho kT/(\mu m_{\rm H})$, where $\mu$ is the
+  mean molecular weight. For this question, use the book’s fully-ionised mixture approximation $1/\mu=2X+\tfrac34Y+\tfrac12Z$,
+  including the $Z/2$ contribution for heavier elements. Compare two compositions at the same density $\rho$ and
+  temperature $T$: (i) a mixture with hydrogen mass fraction $X=0.71$, helium $Y=0.27$ and heavier elements $Z=0.02$;
+  (ii) pure helium ($Y=1$). Find the ratio of the gas pressures, $P_{\rm He}/P_{\rm mix}$. Enter the dimensionless
+  ratio rounded to three decimal places.'
+numericAnswer:
+  value: 0.459
+  tolerance: 0.001
+  unit: dimensionless
+explanation: 'Using the stated fully-ionised approximation, $\mu=1/(2X+\tfrac34Y+\tfrac12Z)$.
+
+
+  - Mixture: $\mu_{\rm mix}=1/(1.42+0.2025+0.01)=0.6126$.
+
+  - Pure helium: $\mu_{\rm He}=1/0.75=1.3333$.
+
+
+  At fixed $\rho$ and $T$, $P\propto1/\mu$, so $P_{\rm He}/P_{\rm mix}=\mu_{\rm mix}/\mu_{\rm He}=0.4594$, which
+  rounds to $0.459$. The absolute tolerance $0.001$ accepts the correctly rounded answer while distinguishing the
+  nearby alternative conventions.'
+author: Renee
+source: original

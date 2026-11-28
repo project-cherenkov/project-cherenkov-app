@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.basic.3
+topic: nuclear-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which statement about neutrinos produced in the solar core is correct?
+choices:
+- text: They interact only weakly with matter, so most escape directly from the interior
+  correct: true
+- text: They carry a large electric charge and are trapped by the solar magnetic field
+  correct: false
+- text: They are absorbed within the Sun's radiative zone after a few collisions
+  correct: false
+- text: They are produced only in the CNO cycle and never in the proton–proton chain
+  correct: false
+explanation: Neutrinos are electrically neutral and interact only through the weak force, so they pass almost freely through the stellar material and carry direct information about the core. They are produced in several steps of the pp chain as well as in the CNO cycle.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §3.6, printed pp. 86–87; §13.1, p. 284

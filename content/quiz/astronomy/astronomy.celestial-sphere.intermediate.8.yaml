@@ -1,0 +1,22 @@
+questionId: astronomy.celestial-sphere.intermediate.8
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: At latitude $+60.0^\circ$ on the day of the northern summer solstice, the Sun's declination is
+  $+23.4^\circ$. Sunrise and sunset are defined as the moments when the Sun's upper limb touches the horizon,
+  which (including standard refraction and the Sun's semidiameter) corresponds to a geometric altitude
+  of the Sun's centre of $a=-50'$. Treat the declination as constant during the day and neglect the equation
+  of time. How long is the interval between sunrise and sunset? Give the answer in solar hours, rounded
+  to two decimal places (treat $15^\circ$ of hour angle as one hour).
+numericAnswer:
+  value: 18.85
+  tolerance: 0.02
+  unit: hours
+explanation: 'From $\sin a=\cos h\cos\delta\cos\varphi+\sin\delta\sin\varphi$: $\cos h=(\sin a-\sin\delta\sin\varphi)/(\cos\delta\cos\varphi)=(-0.01454-0.34394)/0.45888=-0.78122$,
+  so $h=141.37^\circ$ at sunset and $-h$ at sunrise. The day length is $2h/15^\circ\,{\rm h}^{-1}=18.850$
+  h $\approx 18.85$ h. Using $a=0$ instead would give a visibly shorter day (the $-50''$ value matters).
+  The tolerance $0.02$ h allows for rounding of the given declination and intermediate values.'
+author: Renee
+source: original

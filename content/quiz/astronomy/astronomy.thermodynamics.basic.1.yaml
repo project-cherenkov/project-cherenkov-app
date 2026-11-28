@@ -1,0 +1,19 @@
+questionId: astronomy.thermodynamics.basic.1
+topic: thermodynamics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The kinetic temperature of an ideal gas is $T_k=mv^{2}/(3k)$, where $v$ is the root-mean-square speed of molecules of mass $m$. If the gas temperature is increased by a factor of four, by what factor does the rms speed change?
+choices:
+- text: $16$
+  correct: false
+- text: $4$
+  correct: false
+- text: $\sqrt{2}$
+  correct: false
+- text: $2$
+  correct: true
+explanation: From $T_k=mv^{2}/(3k)$ we get $v\propto\sqrt{T_k}$, so quadrupling $T_k$ doubles $v$. A factor of 4 treats $v$ as proportional to $T_k$, 16 treats it as $T_k^{2}$, and $\sqrt2$ would follow from doubling, not quadrupling, the temperature.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.8, eq. (5.33), printed pp. 115–116

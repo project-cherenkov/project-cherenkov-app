@@ -1,0 +1,24 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.9
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'A spectrograph is calibrated with three laboratory lines measured in air: 500.00 nm at pixel 100, 520.00 nm at pixel
+  300, and 540.00 nm at pixel 500. The calibration is linear over this interval. A stellar absorption line has rest wavelength
+  542.00 nm (same air-wavelength convention) and is measured at pixel 526. The pixel-reading standard uncertainty is 0.5 pixel;
+  the fitted wavelength zero-point has independent standard uncertainty 0.02 nm; treat the dispersion slope as exact. Using
+  the non-relativistic Doppler relation $v/c=\Delta\lambda/\lambda_0$, calculate the 1σ uncertainty in the radial velocity
+  due to these measurement uncertainties. Enter in km/s to the nearest 1 km/s.'
+numericAnswer:
+  value: 30.0
+  tolerance: 1.0
+  unit: km/s
+explanation: The calibration slope is (540−500)/(500−100)=0.100 nm per pixel. The wavelength uncertainty from pixel reading
+  is 0.100×0.5=0.050 nm. Combining this independently with the 0.020 nm zero-point uncertainty gives $\sigma_\lambda=\sqrt{0.050^2+0.020^2}=0.0539$
+  nm. From the small-velocity Doppler relation, $\sigma_v=(c/\lambda_0)\sigma_\lambda=(299792.458/542.00)×0.0539=29.8$ km/s,
+  which rounds to 30 km/s. The rest wavelength is supplied, so no external atomic wavelength table or Rydberg constant is
+  needed. The non-relativistic formula is valid at the resulting few-hundred-km/s scale ($v\ll c$).
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §2.3 (radial velocity and Doppler effect), printed pp. 28–29; all
+  laboratory wavelengths, calibration measurements and uncertainties are supplied in the prompt.

@@ -1,0 +1,23 @@
+questionId: astronomy.concept-of-time.intermediate.3
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: "Which of the following time scales are built from the SI second so that they all advance at the same rate, differing from one another only by a constant offset or by whole leap seconds?"
+choices:
+  - text: "International atomic time (TAI)"
+    correct: true
+  - text: "Universal time UT1"
+    correct: false
+  - text: "Terrestrial time (TT)"
+    correct: true
+  - text: "Greenwich mean sidereal time"
+    correct: false
+  - text: "Coordinated universal time (UTC)"
+    correct: true
+  - text: "Apparent solar time"
+    correct: false
+explanation: "TAI is the average of atomic clocks; TT $=$ TAI $+32.184$ s (constant offset); UTC runs at the TAI rate but is shifted by an integer number of leap seconds. UT1, sidereal time and apparent solar time are tied to the Earth's rotation (or the Sun's apparent motion), whose rate is irregular and slowly decreasing, and they are not defined by the SI second."
+author: Renee
+source: "original"

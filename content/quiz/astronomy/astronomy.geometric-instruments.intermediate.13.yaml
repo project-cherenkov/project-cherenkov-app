@@ -1,0 +1,24 @@
+questionId: astronomy.geometric-instruments.intermediate.13
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: true
+questionType: single_choice
+prompt: A ruler has a known zero offset of +0.02 cm. On a calibrated star chart, the two endpoints of
+  a segment are read at 1.20 cm and 5.45 cm on this same ruler. The chart scale is 0.80° per centimetre.
+  What is the true angular separation of the endpoints?
+choices:
+- text: 3.40°
+  correct: true
+- text: 3.38°
+  correct: false
+- text: 3.42°
+  correct: false
+- text: 4.25°
+  correct: false
+explanation: 'The measured distance is the difference between the two position readings: 5.45−1.20=4.25
+  cm. Because the same ruler zero offset is added to both endpoint coordinates, it cancels when the difference
+  is taken; it must not be subtracted twice. The angular separation is 4.25×0.80=3.40°.'
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

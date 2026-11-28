@@ -1,0 +1,18 @@
+questionId: astronomy.numerical-methods.intermediate.5
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Solve Kepler's equation $E-e\sin E=M$ for $e=0.300$ and $M=1.000$ rad by the fixed-point iteration $E_{n+1}=M+e\sin
+  E_n$, starting from $E_0=M$. Find $E_3$ in radians to three decimal places.
+numericAnswer:
+  value: 1.287825
+  tolerance: 0.0005
+  unit: rad
+explanation: 'Rearranging gives $E=M+e\sin E$, so $E_{n+1}=M+e\sin E_n$. With $E_0=1.000$: $E_1=1+0.3\sin1.000=1.2524$,
+  $E_2=1.2849$, $E_3=1.2878$ rad. The tolerance of $\pm0.0005$ rad is half a unit in the requested third decimal
+  place, so a correctly rounded $E_3$ is accepted. Note that further iterations would move the value only slightly
+  (the converged solution is $1.2881$ rad), but the question asks specifically for $E_3$.'
+author: Renee
+source: original

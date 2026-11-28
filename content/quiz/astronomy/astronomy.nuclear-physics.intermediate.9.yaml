@@ -1,0 +1,18 @@
+questionId: astronomy.nuclear-physics.intermediate.9
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "A radioactive sample initially contains $8.00\\times10^6$ undecayed nuclei. Its half-life is 6.00\
+  \ days. Assuming the simple exponential decay law and no replenishment, how many nuclei remain after\
+  \ 15.0 days? Enter in units of $10^6$ nuclei to two decimal places."
+numericAnswer:
+  value: 1.41
+  tolerance: 0.02
+  unit: 1e6 nuclei
+explanation: The number of half-lives elapsed is $t/T_{1/2}=15.0/6.00=2.50$. The remaining number is $N=N_0
+  2^{-t/T_{1/2}}=8.00×10^6×2^{-2.50}=1.414×10^6$. In the requested units this rounds to 1.41. The half-life
+  is supplied; the calculation does not infer an age or a decay mode.
+author: Renee
+source: "OpenStax, University Physics, Volume 3, §10.3 (radioactive decay law and half-life)."

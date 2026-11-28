@@ -1,0 +1,30 @@
+questionId: astronomy.stellar-evolution.advanced.3
+topic: stellar-evolution
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A $1\,M_\odot$ protostar contracts quasi-statically along a Hayashi-like track at constant effective temperature
+  $T_{\rm eff}=4000$ K, from $R_1=10\,R_\odot$ to $R_2=2.0\,R_\odot$. Model it as a uniform sphere with $\Omega=-\tfrac35GM^2/R$,
+  assume half of the energy released by contraction is radiated (virial theorem) and the luminosity is $L=4\pi R^2\sigma
+  T_{\rm eff}^4$. Find the contraction time. Use $M=1.989\times10^{30}$ kg, $R_\odot=6.957\times10^{8}$ m, $G=6.674\times10^{-11}$
+  SI, $\sigma=5.670\times10^{-8}$ SI and $1\,\text{yr}=3.156\times10^{7}$ s. Enter your answer in millions of years
+  (Myr), rounded to two decimal places.
+numericAnswer:
+  value: 1.69
+  tolerance: 0.03
+  unit: Myr
+explanation: 'The energy radiated while the radius shrinks by $dR$ is $dE=\tfrac12\cdot\tfrac35GM^2\,dR/R^2$ and
+  the luminosity is $L=4\pi\sigma T_{\rm eff}^4R^2$ (constant $T_{\rm eff}$). Hence
+
+
+  $$dt=\frac{0.3\,GM^2}{4\pi\sigma T_{\rm eff}^4}\frac{dR}{R^4}\ \Rightarrow\ t=\frac{0.1\,GM^2}{4\pi\sigma T_{\rm
+  eff}^4}\left(\frac1{R_2^3}-\frac1{R_1^3}\right).$$
+
+
+  With $GM^2=2.640\times10^{50}$ J m, $4\pi\sigma T_{\rm eff}^4=1.824\times10^{8}$ W m$^{-2}$, and $1/R_2^3-1/R_1^3=3.683\times10^{-28}$
+  m$^{-3}$, the time is $5.33\times10^{13}$ s $=1.69$ Myr. A constant-luminosity assumption would give a different
+  answer, since $L$ falls steeply as $R^2$ during the contraction. Unit: Myr. The tolerance of $0.03$ Myr ($\approx2\%$)
+  covers rounding of the constants.'
+author: Renee
+source: original

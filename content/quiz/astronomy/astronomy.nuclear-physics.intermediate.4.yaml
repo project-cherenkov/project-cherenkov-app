@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.intermediate.4
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about nuclear binding and stellar fusion.
+statements:
+- text: The mass of a stable nucleus is smaller than the sum of the masses of its separate protons and neutrons, and the difference corresponds to its binding energy.
+  isTrue: true
+- text: In the first step of the pp chain a positron is emitted, which quickly annihilates with an electron to give gamma-ray photons.
+  isTrue: true
+- text: The neutrinos produced in the pp chain deposit their energy in the stellar interior.
+  isTrue: false
+- text: Fusing two iron nuclei would release more energy per nucleon than fusing hydrogen into helium.
+  isTrue: false
+explanation: 'Statement 1 is true: $Q=\frac1A\left[Zm_p+Nm_n-m(Z,N)\right]c^{2}$ is positive. Statement 2 is true: the annihilation produces two gamma quanta. Statement 3 is false: neutrinos escape freely and carry part of the energy away. Statement 4 is false: iron sits at the peak of binding energy per nucleon, so fusing it releases no energy at all.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 254–255

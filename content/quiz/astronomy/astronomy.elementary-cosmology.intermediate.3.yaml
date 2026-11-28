@@ -1,0 +1,25 @@
+questionId: astronomy.elementary-cosmology.intermediate.3
+topic: elementary-cosmology
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following are observations that support the idea that the Universe was once hot and dense (the
+  big bang)? Select all that apply.
+choices:
+- text: The cosmic microwave background, whose spectrum is a near-perfect blackbody at 2.725 K.
+  correct: true
+- text: About 25% helium by mass in the oldest objects, matching the amount produced in the standard model.
+  correct: true
+- text: The observed dark night sky, which shows that the Universe is infinite, static and eternal.
+  correct: false
+- text: The presence of dark matter in clusters of galaxies, which by itself demonstrates a hot, dense origin.
+  correct: false
+explanation: 'Correct set: options 1 and 2. The CMB blackbody spectrum is the relic of radiation that was once in
+  thermal equilibrium in a hot, dense Universe and has cooled as space expanded. The helium abundance of about 25%
+  by mass agrees with the calculation based on the proton-to-neutron ratio at the time deuterium formed. Option
+  3 is false: a static, infinite and eternal universe would, by the Olbers paradox, have a very bright sky; the
+  dark sky argues against it. Option 4 is false: dark matter is inferred from dynamics and says nothing by itself
+  about the thermal history, although it matters for structure formation.'
+author: Renee
+source: original

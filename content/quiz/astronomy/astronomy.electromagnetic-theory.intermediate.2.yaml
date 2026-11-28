@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.intermediate.2
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A dust cloud at $300$ K is observed at wavelength $\lambda=3.0$ mm. Use $hc/k=1.439\times10^{-2}$ m K. Which statement best describes the appropriate approximation to Planck's law here?
+choices:
+- text: The Wien approximation, because the wavelength is far longer than $\lambda_{\max}$
+  correct: false
+- text: The Wien approximation, because $hc/(\lambda kT)$ is much larger than 1
+  correct: false
+- text: The Rayleigh–Jeans approximation, because $hc/(\lambda kT)\approx0.016\ll1$
+  correct: true
+- text: Neither; Planck's law can be simplified only when $\lambda\approx\lambda_{\max}$
+  correct: false
+explanation: Here $hc/(\lambda kT)=1.439\times10^{-2}/(3.0\times10^{-3}\times300)\approx0.016\ll1$, so $e^{hc/\lambda kT}\approx1+hc/(\lambda kT)$ and Planck's law reduces to the Rayleigh–Jeans form $B_\lambda\approx2ckT/\lambda^{4}$. The wavelength is indeed much longer than $\lambda_{\max}\approx9.7\ \mu$m, but that is exactly the Rayleigh–Jeans regime, not the Wien one. The Wien form needs $hc/(\lambda kT)\gg1$, i.e. short wavelengths. Planck's law simplifies in both limits, not only near the peak.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7, eqs. (5.23)–(5.24), printed p. 113

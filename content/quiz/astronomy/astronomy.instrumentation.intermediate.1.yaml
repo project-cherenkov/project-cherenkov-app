@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.intermediate.1
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: "A telescope has an objective of diameter $D=150$ mm and focal length $f=1200$ mm. Use the rule that the largest useful magnification is $\\omega_{\\max}\\approx D/(1\\ {\\rm mm})$. Which eyepiece focal length gives this maximum useful magnification?"
+choices:
+  - text: "$150$ mm"
+    correct: false
+  - text: "$8$ mm"
+    correct: true
+  - text: "$1.0$ mm"
+    correct: false
+  - text: "$48$ mm"
+    correct: false
+explanation: "$\\omega_{\\max}\\approx150$, and $\\omega=f/f'$ gives $f'=f/\\omega=1200/150=8$ mm. A $150$ mm eyepiece would give only $\\omega=8$. A $1.0$ mm eyepiece gives $\\omega=1200$, far beyond the useful range, where the image only gets larger without additional detail. A $48$ mm eyepiece gives $\\omega=25$, which equals the minimum useful magnification for a $6$ mm pupil ($D/d=150/6$), the other end of the range."
+author: Renee
+source: "original"

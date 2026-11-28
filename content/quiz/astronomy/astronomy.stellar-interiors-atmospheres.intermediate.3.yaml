@@ -1,0 +1,37 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.3
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A star is modelled as a spherically symmetric body in equilibrium, with mass $M$ and radius $R$. Which of
+  the following are boundary conditions used when the stellar structure equations are solved? Select all that apply.
+choices:
+- text: The central temperature is fixed at $10^{7}$ K for every star.
+  correct: false
+- text: 'No mass or luminosity lies inside the centre: $M_r\to0$ and $L_r\to0$ as $r\to0$.'
+  correct: true
+- text: The luminosity is zero at the surface, since no energy escapes.
+  correct: false
+- text: 'The mass enclosed within the stellar radius equals the total mass: $M_R=M$.'
+  correct: true
+- text: The surface temperature and pressure are very small compared with interior values and may be taken as zero.
+  correct: true
+explanation: 'The boundary conditions are:
+
+
+  - $M_0=0$ and $L_0=0$ at the centre (there are no sources of mass or energy inside $r=0$). True.
+
+  - $M_R=M$ at the surface (the total mass is fixed). True.
+
+  - $T_R$ and $P_R$ at the surface are tiny and may be set to zero. True.
+
+
+  False options:
+
+
+  - A universal central temperature is not imposed; it is a result of the solution for given $M$ and composition.
+
+  - The surface luminosity is not zero: it is the star''s luminosity $L$, an output of the model.'
+author: Renee
+source: original

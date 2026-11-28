@@ -1,0 +1,28 @@
+questionId: astronomy.thermodynamics.intermediate.9
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: true
+questionType: true_false_set
+prompt: Use the descriptions of energy transport inside a normal star to judge each statement.
+statements:
+- text: In radiative energy transport, photons emitted in hotter regions can be absorbed in cooler regions,
+    transferring energy outwards.
+  isTrue: true
+- text: Radiative transport moves bulk gas from one layer to another and therefore mixes the chemical
+    composition.
+  isTrue: false
+- text: In convective energy transport, hotter gas rises and cooler gas sinks.
+  isTrue: true
+- text: Convective motions can mix the material in the convective region of a star.
+  isTrue: true
+- text: Conduction is generally the dominant energy-transport mechanism in the interiors of normal stars.
+  isTrue: false
+explanation: Radiative transport carries energy through photons that are emitted and absorbed, without
+  bulk transport of matter. Convection carries energy through rising hot gas and sinking cooler gas; those
+  motions also mix the stellar material. The textbook states that conduction is inefficient in normal
+  stellar interiors and is more important in compact objects such as white dwarfs and neutron stars. The
+  truth vector is T,F,T,T,F.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §11.1, printed pp. 250–251 (radiative and convective
+  energy transport, mixing of stellar material, and the limited role of conduction in normal stellar interiors).

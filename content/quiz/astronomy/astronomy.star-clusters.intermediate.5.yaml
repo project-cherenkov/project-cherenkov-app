@@ -1,0 +1,21 @@
+questionId: astronomy.star-clusters.intermediate.5
+topic: star-clusters
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: All members of a nearby cluster have the same space-velocity vector. For one member, seen at an angular
+  distance $\theta=30.0^\circ$ from the cluster's convergence point, the radial velocity is $v_r=39.0$ km/s and
+  the proper motion is $\mu=0.100''$/yr. Use $v_t=4.74\,\mu\,r$ with $\mu$ in arcsec per year, $r$ in pc and $v_t$
+  in km/s. Find the distance of the star. Enter the value in pc, rounded to one decimal place.
+numericAnswer:
+  value: 47.5
+  tolerance: 0.3
+  unit: pc
+explanation: For a common space velocity $v$, the angle between the velocity and the line of sight equals the angular
+  distance $\theta$ from the convergence point, so $v_r=v\cos\theta$ and $v_t=v\sin\theta$. Hence $v_t=v_r\tan\theta=39.0\times\tan30.0^\circ=22.5$
+  km/s. Combining with $v_t=4.74\,\mu\,r$ gives $r=v_t/(4.74\,\mu)=22.5/(4.74\times0.100)\approx47.5$ pc. This is
+  the moving-cluster method, equivalent to $r=v_r\tan\theta/\mu$ with the unit conversion factor made explicit.
+  The tolerance $\pm0.3$ pc allows for rounding of the intermediate $v_t$ and the supplied 4.74 factor.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2, p. 362

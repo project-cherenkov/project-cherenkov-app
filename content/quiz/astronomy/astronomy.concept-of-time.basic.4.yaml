@@ -1,0 +1,22 @@
+questionId: astronomy.concept-of-time.basic.4
+topic: concept-of-time
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A correctly installed sundial reads $12{:}00$ true local solar time on a day when the equation
+  of time, defined as $E.T.=T-T_M$ (true solar time minus local mean time), is $+14$ minutes. What is
+  the local mean time $T_M$ at that instant?
+choices:
+- text: $12{:}14$
+  correct: false
+- text: $12{:}00$
+  correct: false
+- text: $11{:}46$
+  correct: true
+- text: $11{:}30$
+  correct: false
+explanation: From $E.T.=T-T_M$ we get $T_M=T-E.T.=12{:}00-0{:}14=11{:}46$. The $12{:}14$ answer adds the
+  equation of time instead of subtracting it. $12{:}00$ ignores it. $11{:}30$ halves it without justification.
+author: Renee
+source: original

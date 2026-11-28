@@ -1,0 +1,24 @@
+questionId: astronomy.geometric-instruments.intermediate.16
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: You must construct the bisector of angle XQY using a geometric compass and ruler. Which procedure is correct?
+explanation: The first arc marks equal-radius points A and B on the two rays. Arcs of the same compass opening centred at
+  A and B intersect at a point P equidistant from A and B. Since QA = QB and PA = PB, QP is the symmetry axis of the angle
+  and therefore its bisector. Changing the compass opening between A and B destroys the equal-distance construction.
+author: Renee
+source: 'Use of a geometric compass and ruler in practical data analysis; IOAA syllabus, Practical: Data Analysis (familiarity
+  with basic geometric instruments). This item tests a standard compass construction, not an abstract conic-section calculation.'
+choices:
+- text: With centre Q, draw an arc cutting the two rays at A and B. Without changing the compass opening, draw arcs centred
+    at A and B that intersect at P inside the angle. Use a ruler to draw ray QP.
+  correct: true
+- text: Draw an arc centred at Q, then change the compass opening separately at A and B until the two arcs meet; join their
+    intersection to Q.
+  correct: false
+- text: Measure the two ray lengths from Q with a ruler and draw a line parallel to the longer ray.
+  correct: false
+- text: Place the compass point at Q and draw a circle; any radius of that circle is the angle bisector.
+  correct: false

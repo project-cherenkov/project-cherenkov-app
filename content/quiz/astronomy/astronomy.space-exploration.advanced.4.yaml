@@ -1,0 +1,27 @@
+questionId: astronomy.space-exploration.advanced.4
+topic: space-exploration
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A probe is placed at rest relative to the Sun at 1 au (all of Earth's orbital speed has been removed)
+  and then falls radially towards the Sun. Treat the Sun as a point mass, ignore planets, and use Earth's
+  sidereal period of 365.25 d and Kepler's third law. How many days does the fall to the Sun's centre
+  take? Enter the time in days, rounded to 0.1 d.
+numericAnswer:
+  value: 64.6
+  tolerance: 0.2
+  unit: d
+explanation: 'A radial fall from rest is the limiting case of an ellipse with eccentricity $e\to1$: the
+  probe starts at aphelion $r = 1$ au and its perihelion lies at the Sun''s centre, so the major axis
+  is $2a = r$, i.e. $a = r/2 = 0.5$ au. Kepler''s third law applies to the full orbit: $P = a^{3/2} =
+  0.5^{3/2} = 0.3536$ yr, and the fall from aphelion to perihelion takes half of that period: $t = P/2
+  = 0.1768$ yr $= 64.6$ d. Equivalently $t = P_\oplus/(4\sqrt2)$. Tolerance 0.2 d covers the requested
+  rounding (the exact value with 365.25 d is 64.57 d). A fall to the Sun''s actual surface rather than
+  to its centre changes the time by only about 0.01 d, which is why the point-mass assumption is acceptable.
+  Typical errors: using $a = 1$ au (which gives 182.6 d, half a year) or using $a = r/2$ but forgetting
+  to halve the period (129 d). This answers the book''s remark that removing Earth''s orbital speed sends
+  a probe towards the Sun; the calculation of the fall time uses only Kepler''s third law.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Example 6.8, p. 139 (context); Example 7.1,
+  pp. 175–176 (Kepler's third law)

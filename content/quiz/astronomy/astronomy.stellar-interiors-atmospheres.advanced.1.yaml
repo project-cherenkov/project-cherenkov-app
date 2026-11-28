@@ -1,0 +1,54 @@
+questionId: astronomy.stellar-interiors-atmospheres.advanced.1
+topic: stellar-interiors-atmospheres
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: 'A star of mass $M$ and radius $R$ is in hydrostatic equilibrium and has uniform composition. Use order-of-magnitude
+  scaling: $\rho\sim M/R^3$, $P\sim GM^2/R^4$ from hydrostatic equilibrium, and the perfect gas law $P\sim\rho kT/(\mu
+  m_{\rm H})$ with radiation pressure negligible. For statement 6, also assume the star is in quasi-static virial
+  equilibrium, $2U+\Omega=0$, where $U$ is its thermal kinetic energy and $\Omega<0$ its gravitational potential
+  energy; radiative losses decrease the total energy $E=U+\Omega$. Select all statements that follow from these
+  assumptions and scalings.'
+choices:
+- text: The characteristic pressure scales as $P\propto M^2/R^2$.
+  correct: false
+- text: The characteristic internal temperature scales as $T\propto\mu M/R$.
+  correct: true
+- text: The characteristic density scales as $\rho\propto M/R^2$.
+  correct: false
+- text: If the radius is halved at fixed mass, the characteristic pressure increases by a factor of $16$.
+  correct: true
+- text: At fixed $M$ and $R$, doubling $\mu$ halves the characteristic temperature.
+  correct: false
+- text: A star that loses energy by radiation while remaining in this equilibrium contracts and its internal temperature
+    rises.
+  correct: true
+explanation: 'From $P\sim GM^2/R^4$ and $P\sim\rho kT/(\mu m_{\rm H})$ with $\rho\sim M/R^3$, we obtain $T\sim G\mu
+  m_{\rm H}M/(kR)$.
+
+
+  True:
+
+
+  - $T\propto\mu M/R$ follows directly.
+
+  - $P\propto M^2/R^4$, so halving $R$ at fixed mass increases the characteristic pressure by $2^4=16$.
+
+  - For a virialised ideal-gas star, $2U+\Omega=0$ implies $E=U+\Omega=-U=\Omega/2$. Losing energy makes $E$ more
+  negative, so $U$ and the characteristic temperature rise while the star contracts.
+
+
+  False:
+
+
+  - $P\propto M^2/R^2$ has the wrong radius exponent.
+
+  - $\rho\propto M/R^2$ confuses volume density with surface density; $\rho\propto M/R^3$.
+
+  - At fixed $M$ and $R$, doubling $\mu$ doubles, rather than halves, $T$ in the perfect-gas scaling.
+
+
+  These are order-of-magnitude relations; they do not determine exact central values or detailed stellar structure.'
+author: Renee
+source: original

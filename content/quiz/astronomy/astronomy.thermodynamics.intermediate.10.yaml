@@ -1,0 +1,22 @@
+questionId: astronomy.thermodynamics.intermediate.10
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A fully ionised stellar gas has temperature T = 3.00 × 10^7 K and mass density ρ = 2.00 × 10^3
+  kg m⁻³. Take mean molecular weight μ = 0.62, radiation constant a = 7.5657 × 10⁻¹⁶ J m⁻³ K⁻⁴, Boltzmann
+  constant k_B = 1.380649 × 10⁻²³ J K⁻¹ and hydrogen-atom mass m_H = 1.6735575 × 10⁻²⁷ kg. Use P_rad =
+  aT⁴/3 and P_gas = ρk_BT/(μm_H). Calculate P_rad/P_gas. Enter a dimensionless value to three significant
+  figures.
+numericAnswer:
+  value: 0.256
+  tolerance: 0.002
+  unit: dimensionless
+explanation: The ratio is (aT⁴/3) / [ρk_BT/(μm_H)] = a μ m_H T³/(3ρk_B). Substitution gives 0.2558649,
+  which rounds to 0.256 at three significant figures. The ±0.002 tolerance permits the stated rounding
+  and rejects materially different ratios.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §11.2, printed pp. 252–253 (ideal-gas and radiation-pressure
+  relations in stellar interiors). Constants, physical state and equations needed for the calculation
+  are explicitly supplied in the prompt.

@@ -1,0 +1,30 @@
+questionId: astronomy.space-exploration.intermediate.9
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about NASA’s Juno mission to Jupiter, using the NASA/JPL mission records
+  cited below.
+statements:
+- text: Juno was the first solar-powered spacecraft designed to operate at Jupiter.
+  isTrue: true
+- text: Juno operates in a polar orbit around Jupiter, allowing repeated passes over a range of planetary
+    latitudes.
+  isTrue: true
+- text: Jupiter receives about the same solar energy per unit area as Earth, so Juno required only small
+    solar panels.
+  isTrue: false
+- text: Juno’s three large solar arrays were designed to generate useful electrical power despite the
+    much lower sunlight available at Jupiter.
+  isTrue: true
+- text: Juno was designed to descend through Jupiter’s atmosphere and make measurements from a lander
+    on the planet’s surface.
+  isTrue: false
+explanation: The truth sequence is T,T,F,T,F. NASA/JPL describes Juno as the first solar-powered spacecraft
+  to operate at Jupiter and as an orbiter in a polar trajectory. Jupiter receives only about four percent
+  of the sunlight per unit area received at Earth, so Juno uses three large solar arrays. Juno is an orbiter;
+  it does not descend to a planetary surface.
+author: Renee
+source: NASA/JPL, “Juno Quick Facts” (https://www.jpl.nasa.gov/news/press_kits/juno/facts/) and NASA Science,
+  “Juno” (https://science.nasa.gov/mission/juno/), mission type, polar orbit and solar-power design.

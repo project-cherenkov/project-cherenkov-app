@@ -1,0 +1,19 @@
+questionId: astronomy.stellar-evolution.intermediate.5
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Assume a main-sequence star obeys $L/L_\odot=(M/M_\odot)^{3.8}$, and that its main-sequence lifetime is
+  $t=10^{10}\,\text{yr}\times(M/M_\odot)/(L/L_\odot)$. Find the main-sequence lifetime of a $4\,M_\odot$ star. Enter
+  your answer in millions of years (Myr), rounded to the nearest whole number.
+numericAnswer:
+  value: 206
+  tolerance: 2
+  unit: Myr
+explanation: 'Substituting $L/L_\odot=4^{3.8}=194.0$ gives $t=10^{10}\times4/194.0=2.06\times10^{8}$ yr, which equals
+  $206$ Myr. Equivalently, $t\propto M^{-2.8}$ and $4^{-2.8}=0.0206$. Unit: Myr. The tolerance of $2$ Myr ($\approx1\%$)
+  covers rounding of the intermediate value $4^{3.8}$; the stated relations are approximations, so the answer is
+  not a precise stellar-model lifetime.'
+author: Renee
+source: original

@@ -1,0 +1,14 @@
+questionId: astronomy.electromagnetic-theory.advanced.4
+topic: electromagnetic-theory
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'At $\nu=1.42$ GHz a uniform interstellar cloud with excitation temperature $T_{\rm exc}=80$ K and optical depth $\tau=0.40$ lies in front of a smooth background whose brightness temperature is $3.0$ K. Use the total emergent brightness temperature, including the attenuated background (do not subtract the background continuum): $T_b=T_{\rm bg}e^{-\tau}+T_{\rm exc}(1-e^{-\tau})$, and define $T_A=\eta T_b$. The cloud is larger than the telescope beam, so it fills the beam, and the telescope''s beam efficiency is $\eta=0.70$. Use $hc/k=1.4388\times10^{-2}$ m K, and check that the Rayleigh–Jeans form of Planck''s law is valid for all the temperatures involved. Find the antenna temperature $T_A$. Enter it in K, rounded to one decimal place.'
+numericAnswer:
+  value: 19.9
+  tolerance: 0.1
+  unit: K
+explanation: 'At 1.42 GHz, $h\nu/k=0.068$ K, far below every temperature involved, so the Rayleigh–Jeans limit holds and intensity is proportional to brightness temperature. The prompt defines the requested quantity as the antenna temperature based on total emergent brightness, including the attenuated background: $T_b=T_{\rm bg}e^{-\tau}+T_{\rm exc}(1-e^{-\tau})=3.0\times0.6703+80\times0.3297=28.39$ K. Since the source fills the beam, $T_A=\eta T_b=0.70\times28.39=19.9$ K. The continuum-subtracted line excess is a different observable and is not requested.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.8 eqs. (5.28)–(5.30) and §5.10 eqs. (5.39)–(5.42), printed pp. 114–118

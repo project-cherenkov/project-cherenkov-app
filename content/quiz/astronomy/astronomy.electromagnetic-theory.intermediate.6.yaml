@@ -1,0 +1,30 @@
+questionId: astronomy.electromagnetic-theory.intermediate.6
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: A uniform cloud has constant source function $S_\nu$ and optical depth $\tau_\nu$ along the line
+  of sight, and the transfer equation is $dI_\nu/d\tau_\nu=-I_\nu+S_\nu$. Judge each statement.
+statements:
+- text: An optically thick cloud in thermodynamic equilibrium at temperature $T$ emits an intensity that
+    depends on its physical size as well as on $T$.
+  isTrue: false
+- text: With no background radiation, the emergent intensity is $I_\nu=S_\nu\left(1-e^{-\tau_\nu}\right)$.
+  isTrue: true
+- text: With no background radiation and $\tau_\nu=0.05$, the emergent intensity is close to $0.5\,S_\nu$.
+  isTrue: false
+- text: If the intensity entering the cloud is larger than $S_\nu$, the cloud reduces it, moving it toward
+    $S_\nu$.
+  isTrue: true
+- text: If the cloud does not emit ($S_\nu=0$), it reduces the background intensity by exactly the factor
+    $e^{-\tau_\nu}$.
+  isTrue: true
+explanation: 'Statement 1 is false: for $\tau_\nu\gg1$ in equilibrium $I_\nu=S_\nu=B_\nu(T)$, which depends
+  on temperature only, not on size. Statement 2 is true: integrating the transfer equation with $I_\nu(0)=0$
+  gives $S_\nu(1-e^{-\tau_\nu})$. Statement 3 is false: for small $\tau_\nu$, $1-e^{-\tau_\nu}\approx\tau_\nu=0.05$,
+  so $I_\nu\approx0.05\,S_\nu$, not $0.5\,S_\nu$. Statement 4 is true: $dI_\nu/d\tau_\nu<0$ when $I_\nu>S_\nu$.
+  Statement 5 is true: the general solution $I_\nu(0)e^{-\tau_\nu}+S_\nu(1-e^{-\tau_\nu})$ reduces to
+  $I_\nu(0)e^{-\tau_\nu}$.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.10, eqs. (5.39)–(5.43), printed pp. 117–118

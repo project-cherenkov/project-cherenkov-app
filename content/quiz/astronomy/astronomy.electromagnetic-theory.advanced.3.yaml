@@ -1,0 +1,14 @@
+questionId: astronomy.electromagnetic-theory.advanced.3
+topic: electromagnetic-theory
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: The flux density per unit wavelength of a star is measured at two wavelengths and the ratio is $F_\lambda(400\ \mathrm{nm})/F_\lambda(700\ \mathrm{nm})=2.71$. Assume the spectrum between these wavelengths follows Planck's law $B_\lambda\propto\lambda^{-5}/(e^{hc/\lambda kT}-1)$ and use $hc/k=1.4388\times10^{-2}$ m K. Do **not** use the Wien approximation. Find the colour temperature. Enter it in K, rounded to the nearest 100 K.
+numericAnswer:
+  value: 9000.0
+  tolerance: 100
+  unit: K
+explanation: 'The ratio of the Planck functions is $\dfrac{F_{400}}{F_{700}}=\left(\dfrac{700}{400}\right)^{5}\dfrac{e^{hc/(700\,\mathrm{nm}\,kT)}-1}{e^{hc/(400\,\mathrm{nm}\,kT)}-1}$. This cannot be inverted algebraically, so solve it numerically for $T$ (bisection or trial and improvement): the ratio increases monotonically with $T$, and $T\approx9004$ K reproduces the given value. The Wien approximation drops the $-1$ terms and shifts the answer by a few per cent, which is outside the tolerance''s intent. The tolerance of 100 K reflects the sensitivity of $T$ to the three-figure rounding of the ratio.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.8, eqs. (5.12)–(5.15), (5.31), printed pp. 111–115

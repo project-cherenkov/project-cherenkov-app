@@ -1,0 +1,23 @@
+questionId: astronomy.geometric-instruments.intermediate.14
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A point P lies above a straight reference line AB on a chart. You need to draw the shortest line
+  from P to AB. Which use of a set-square correctly constructs this line?
+choices:
+- text: Place one set-square edge along AB, slide it while keeping that edge parallel to AB until the
+    perpendicular edge passes through P, then draw along the perpendicular edge
+  correct: true
+- text: Place the hypotenuse on AB and draw along the longest edge
+  correct: false
+- text: Rotate the set-square until one edge points toward the page corner
+  correct: false
+- text: Use the ruler alone and draw any line from P to AB
+  correct: false
+explanation: The set-square must maintain an edge parallel to AB while its perpendicular edge passes through
+  P. The resulting line meets AB at 90°, which is the shortest distance from a point to a line.
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

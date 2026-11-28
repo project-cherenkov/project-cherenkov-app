@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-sphere.basic.1
+topic: celestial-sphere
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "An observer stands at geographic latitude $+35^\\circ$ (northern hemisphere). Ignoring refraction, what is the altitude of the north celestial pole above the horizon?"
+choices:
+  - text: "$55^\\circ$"
+    correct: false
+  - text: "$35^\\circ$"
+    correct: true
+  - text: "$90^\\circ$"
+    correct: false
+  - text: "$0^\\circ$ (the pole lies on the horizon)"
+    correct: false
+explanation: "The altitude of the celestial pole equals the observer's geographic latitude, so it is $35^\\circ$. $55^\\circ = 90^\\circ-35^\\circ$ is the altitude of the celestial equator at its highest point (the zenith distance of the pole), a common mix-up. $90^\\circ$ would hold only at the North Pole, and $0^\\circ$ only at the equator."
+author: Renee
+source: "original"

@@ -1,0 +1,31 @@
+questionId: astronomy.stellar-evolution.intermediate.4
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about stellar evolution as true or false.
+statements:
+- text: A star of $0.05\,M_\odot$ never reaches the central temperature needed for hydrogen burning and ends as
+    a brown dwarf.
+  isTrue: true
+- text: For the Sun, the nuclear time scale (about $10^{10}$ yr) is much shorter than the thermal time scale (about
+    $2\times10^{7}$ yr).
+  isTrue: false
+- text: Planetary nebulae are produced by the explosions of massive stars.
+  isTrue: false
+- text: The contraction of a protostar on the thermal time scale is much slower than its earlier free-fall collapse.
+  isTrue: true
+explanation: '1. True. Below about $0.08\,M_\odot$ the core never becomes hot enough for hydrogen burning, and the
+  object contracts to a brown dwarf.
+
+  2. False. The two time scales are swapped: the thermal time scale of the Sun is about $2\times10^{7}$ yr, roughly
+  $1/500$ of its nuclear time scale of $10^{10}$ yr.
+
+  3. False. Planetary nebulae are the expelled outer layers of low- and intermediate-mass stars; massive stars explode
+  as supernovae.
+
+  4. True. After the rapid dynamical collapse the star settles near hydrostatic equilibrium and evolves much more
+  slowly on the thermal time scale.'
+author: Renee
+source: original

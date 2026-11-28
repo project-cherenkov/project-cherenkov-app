@@ -1,0 +1,32 @@
+questionId: astronomy.instrumentation.intermediate.7
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement independently. Use $1\,{\rm rad}=206{,}265''$.
+statements:
+- text: For an east–west two-element interferometer observing at $\lambda=21$ cm with a baseline $D=1.4$
+    km, successive fringe maxima correspond to a turn of the baseline direction by about $31''$ ($\theta
+    D=\lambda$).
+  isTrue: true
+- text: If the maximum of the interference pattern is $P_{\max}=1.0$ and the minimum is $P_{\min}=0.4$,
+    the fringe visibility $(P_{\max}-P_{\min})/(P_{\max}+P_{\min})$ equals $0.6$.
+  isTrue: false
+- text: In an aperture-synthesis array, placing an extra antenna between two existing antennas increases
+    the maximum baseline, and hence the finest resolution.
+  isTrue: false
+- text: Adaptive optics monitors a reference star (or an artificial beam) to follow the shape of the seeing
+    disc, and adjusts a small mirror many times per second to keep the image concentrated.
+  isTrue: true
+- text: A two-element interferometer with baseline $D$ collects as much light as a single dish of diameter
+    $D$.
+  isTrue: false
+explanation: '(1) True: $\theta=\lambda/D=0.21/1400=1.5\times10^{-4}$ rad $=30.9''''$. (2) False: $V=(1.0-0.4)/(1.0+0.4)=0.43$;
+  the value $0.6$ comes from computing $P_{\max}-P_{\min}$ without the normalisation. (3) False: resolution
+  depends on the largest spacing; an extra antenna in between adds new baselines but not a longer one.
+  (4) True: this describes adaptive optics as used on large telescopes. (5) False: the interferometer''s
+  angular resolution equals that of a dish of size $D$, but its light-gathering area is only that of its
+  two small antennas.'
+author: Renee
+source: original

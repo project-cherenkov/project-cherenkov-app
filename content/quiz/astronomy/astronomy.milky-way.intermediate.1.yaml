@@ -1,0 +1,25 @@
+questionId: astronomy.milky-way.intermediate.1
+topic: milky-way
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Use Oort's near-Sun approximation $v_r\approx A\,r\sin2l$ with $A=15$ km s$^{-1}$ kpc$^{-1}$. A disc object
+  at galactic longitude $l=30^\circ$ has a radial velocity of $13.0$ km/s relative to the local standard of rest.
+  Assuming circular orbits and ignoring peculiar velocities, what is its distance?
+choices:
+- text: $1.0$ kpc
+  correct: true
+- text: $1.7$ kpc
+  correct: false
+- text: $0.75$ kpc
+  correct: false
+- text: $0.87$ kpc
+  correct: false
+explanation: '**Correct (option 1).** Solving $v_r=A r\sin2l$ for $r$: $r=v_r/(A\sin2l)=13.0/(15\times\sin60^\circ)=13.0/12.99\approx1.0$
+  kpc. **Option 2** uses $\sin l$ instead of $\sin2l$ ($13.0/(15\times0.5)=1.73$ kpc). **Option 3** multiplies by
+  $\sin 2l$ instead of dividing ($13.0\times0.866/15=0.75$ kpc). **Option 4** omits the angular factor altogether
+  ($13.0/15=0.87$ kpc). In practice peculiar velocities of individual stars are so large that this method is useful
+  only statistically.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 376–377; Sect. 18.6, pp. 385–386

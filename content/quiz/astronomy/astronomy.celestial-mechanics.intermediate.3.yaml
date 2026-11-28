@@ -1,0 +1,21 @@
+questionId: astronomy.celestial-mechanics.intermediate.3
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Two stars of masses $m_1$ and $m_2$ move about their common barycentre. The relative orbit has semi-major axis $a$ and period $P$, and these obey $P^2=\dfrac{4\pi^2a^3}{G(m_1+m_2)}$. Select **all** correct statements.
+choices:
+- text: Measuring $a$ and $P$ gives the sum $m_1+m_2$, but not the two masses separately.
+  correct: true
+- text: With $a$ held fixed, doubling both masses shortens the period by a factor $\sqrt{2}$.
+  correct: true
+- text: The period depends only on $a$, so every pair of stars with the same $a$ has the same period.
+  correct: false
+- text: With the masses held fixed, doubling $a$ makes the period four times as long.
+  correct: false
+- text: For planets orbiting the Sun, the simplified form $P^2=a^3$ (years, au, solar masses) ignores the planet's mass, which causes only a very small error.
+  correct: true
+explanation: 'Statement 1 is correct: $a$ and $P$ fix the combination $G(m_1+m_2)$, so only the total mass follows. Statement 2 is correct: $P\propto (m_1+m_2)^{-1/2}$ at fixed $a$, so doubling the masses divides $P$ by $\sqrt{2}$. Statement 3 is wrong: $P$ also depends on the total mass. Statement 4 is wrong: at fixed mass $P\propto a^{3/2}$, so doubling $a$ multiplies $P$ by $2^{3/2}\approx 2.83$, not 4 (4 would be $P\propto a^2$). Statement 5 is correct: the planet''s mass is tiny compared with the solar mass, so $m_1+m_2\approx 1$ solar mass. The key is the exact set {1, 2, 5}; grading is all-or-nothing.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.5, eqs. (6.31)–(6.32), printed pp. 129–130

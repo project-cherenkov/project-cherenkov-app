@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-evolution.intermediate.1
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A star evolves from the main sequence to the red giant branch. Its luminosity rises from $1\,L_\odot$ to
+  $50\,L_\odot$ while its effective temperature falls from $5800$ K to $4500$ K. By what factor does its radius
+  increase?
+choices:
+- text: About 7
+  correct: false
+- text: About 1.7
+  correct: false
+- text: About 12
+  correct: true
+- text: About 50
+  correct: false
+explanation: 'From $L=4\pi R^2\sigma T_{\rm eff}^4$ we get $R\propto L^{1/2}T_{\rm eff}^{-2}$, so $R_2/R_1=\sqrt{50}\,(5800/4500)^2=7.07\times1.66\approx11.7\approx12$.
+
+
+  - About 7 uses only the luminosity increase and forgets the cooling, which also enlarges the radius.
+
+  - About 1.7 uses only the temperature factor.
+
+  - About 50 equates the radius ratio with the luminosity ratio.'
+author: Renee
+source: original

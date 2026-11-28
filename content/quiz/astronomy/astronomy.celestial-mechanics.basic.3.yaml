@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.basic.3
+topic: celestial-mechanics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A comet's orbit relative to the Sun has eccentricity $e=1.35$. What kind of orbit is this, and what does it imply?
+choices:
+- text: A bound ellipse with a very long period, so the comet returns eventually
+  correct: false
+- text: A circle, because the Sun lies at the centre of the orbit
+  correct: false
+- text: A parabola, so the comet is moving at exactly the escape speed
+  correct: false
+- text: A hyperbola, so the comet is unbound and recedes without limit
+  correct: true
+explanation: The orbit equation $r=(k^2/\mu)/(1+e\cos f)$ describes a circle for $e=0$, an ellipse for $0<e<1$, a parabola for $e=1$ and a hyperbola for $e>1$. With $e=1.35$ the orbit is a hyperbola, which corresponds to a positive energy integral $h$, so the comet is not bound to the Sun. A long-period ellipse still needs $e<1$. A circle needs $e=0$. A parabola needs exactly $e=1$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.3 and §6.4, eq. (6.14), printed pp. 126–127

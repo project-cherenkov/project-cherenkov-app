@@ -1,0 +1,23 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.8
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model the extinction of sunlight as pure Rayleigh scattering, with optical depth proportional
+  to $\lambda^{-4}$, so that the transmitted intensity is $I=I_0e^{-\tau}$. Along the vertical path the
+  optical depth at $450$ nm (blue) is $0.30$. When the Sun is on the horizon, assume the path through
+  the atmosphere is $10$ times as long as the vertical one. Find the ratio of the transmitted intensity
+  at $650$ nm (red) to that at $450$ nm (blue), relative to their values outside the atmosphere. Give
+  the answer to one decimal place.
+numericAnswer:
+  value: 10.1
+  tolerance: 0.1
+  unit: dimensionless
+explanation: 'At $650$ nm the vertical optical depth is $\tau_r=0.30\,(450/650)^4=0.0689$. For a path
+  $10$ times longer, $\tau_b=3.00$ and $\tau_r=0.689$. The transmitted ratio is $e^{-\tau_r}/e^{-\tau_b}=e^{\tau_b-\tau_r}=e^{2.311}=10.08$.
+  So red light is transmitted about ten times better than blue, which is why the setting Sun looks red.
+  The plane-parallel factor of $10$ is a stated approximation: real air mass near the horizon depends
+  on curvature and refraction. The tolerance $0.1$ matches the requested rounding.'
+author: Renee
+source: original

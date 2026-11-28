@@ -1,0 +1,22 @@
+questionId: astronomy.numerical-methods.intermediate.7
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A body moves on an elliptical orbit with eccentricity $e=0.550$ and semi-major axis $a$. At a
+  certain moment its mean anomaly is $M=2.000$ rad. Solve Kepler's equation $E-e\sin E=M$ numerically
+  (by direct iteration or interval halving) and use $r=a(1-e\cos E)$ to find the ratio $r/a$ of the distance
+  from the focus to the semi-major axis. Give the dimensionless result to three decimal places.
+numericAnswer:
+  value: 1.397931
+  tolerance: 0.002
+  unit: dimensionless (r/a)
+explanation: 'Direct iteration $E_{n+1}=M+e\sin E_n$ from $E_0=M$ converges to $E=2.3797$ rad (the contraction
+  factor $|e\cos E|\approx0.4$ is below 1, so the iteration converges, though it needs several steps).
+  Then $r/a=1-0.55\cos(2.3797)=1.3979$. Tolerance: $\pm0.002$ allows for stopping the hand iteration when
+  successive values of $E$ differ by about $2\times10^{-3}$ rad (which changes $r/a$ by at most $e\sin
+  E\cdot\Delta E\approx10^{-3}$) as well as the rounding to three decimals. A common error is to use $E=M$
+  directly, which gives a visibly different result ($r/a=1.229$).'
+author: Renee
+source: original

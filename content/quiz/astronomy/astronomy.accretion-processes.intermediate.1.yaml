@@ -1,0 +1,27 @@
+questionId: astronomy.accretion-processes.intermediate.1
+topic: accretion-processes
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A neutron star with $M=1.4\ M_\odot$ and $R=12$ km accretes gas. Assume the gas starts essentially at rest
+  far away and that all the kinetic energy gained in falling to the surface is radiated, so the energy per unit
+  mass is $GM/R$. Hydrogen fusion releases about 0.7% of the rest-mass energy. Use $G=6.674\times10^{-11}$ SI, $M_\odot=1.989\times10^{30}$
+  kg, $c=2.998\times10^{8}$ m s$^{-1}$. About how many times more energy per kilogram does this accretion release
+  than hydrogen fusion?
+choices:
+- text: About the same
+  correct: false
+- text: About 3 times
+  correct: false
+- text: About 25 times
+  correct: true
+- text: About 250 times
+  correct: false
+explanation: The energy per kilogram from accretion is $GM/R=6.674\times10^{-11}\times1.4\times1.989\times10^{30}/(1.2\times10^{4})=1.55\times10^{16}\
+  \mathrm{J\,kg^{-1}}$, which is $GM/(Rc^2)=0.17$ of the rest-mass energy. Hydrogen fusion gives $0.007\,c^2=6.3\times10^{14}\
+  \mathrm{J\,kg^{-1}}$. The ratio is $0.172/0.007\approx25$ (third choice). 'About the same' and 'about 3 times'
+  would hold only for accretors far larger than a neutron star. 'About 250 times' overshoots by a factor of ten,
+  for example by an arithmetic slip in the radius.
+author: Renee
+source: original

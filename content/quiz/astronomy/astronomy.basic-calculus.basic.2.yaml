@@ -1,0 +1,24 @@
+questionId: astronomy.basic-calculus.basic.2
+topic: basic-calculus
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A probe has constant acceleration $a$ along a straight line and speed $v_0$ at $t=0$. Using the fact that
+  integration is the inverse of differentiation ($\mathrm dv/\mathrm dt=a$), which expression gives its speed at
+  time $t$?
+choices:
+- text: $v_0+\tfrac12at^2$
+  correct: false
+- text: $v_0+at$
+  correct: true
+- text: $at$
+  correct: false
+- text: $v_0+a$
+  correct: false
+explanation: Integrating $\mathrm dv/\mathrm dt=a$ gives $v=at+C$, and the condition $v(0)=v_0$ fixes $C=v_0$, so
+  $v=v_0+at$. $v_0+\tfrac12at^2$ integrates twice, which gives a distance (displacement), not a speed. $at$ forgets
+  the constant of integration. $v_0+a$ has inconsistent units ($a$ has units of speed per time) and ignores the
+  dependence on $t$.
+author: Renee
+source: original

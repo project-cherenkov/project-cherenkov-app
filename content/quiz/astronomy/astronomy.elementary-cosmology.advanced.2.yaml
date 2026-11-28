@@ -1,0 +1,30 @@
+questionId: astronomy.elementary-cosmology.advanced.2
+topic: elementary-cosmology
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the formation of structure in the Universe.
+statements:
+- text: Before decoupling, perturbations of ordinary baryonic matter could not grow, because radiation pressure
+    made the Jeans mass enormous; the gas oscillated like sound waves.
+  isTrue: true
+- text: In the cold dark matter picture the most massive systems form first and later fragment into smaller ones.
+  isTrue: false
+- text: Because galaxy separations are about 100 times galaxy diameters, galaxies in their present form cannot have
+    existed at redshifts much larger than about 100.
+  isTrue: true
+- text: The bump seen at large separations in the galaxy correlation function corresponds to the same acoustic scale
+    as the first peak of the CMB power spectrum.
+  isTrue: true
+- text: The reionisation of the Universe at $z\approx5$–10 shows that the Universe was never neutral.
+  isTrue: false
+explanation: '1 is true: the Jeans mass was about $10^{18}\ M_\odot$ before decoupling and about $10^{5}\ M_\odot$
+  afterwards; dark matter perturbations could grow earlier and the gas then fell into their potential wells. 2 is
+  false: CDM leads to hierarchical formation in which small systems form first (at $z\sim20$). 3 is true: at $R_0/R=100$
+  typical galaxies would be almost in contact, so structures could not exist in present form earlier. 4 is true:
+  the acoustic oscillations imprinted at $z\approx1000$ remain visible in the distribution of galaxies. 5 is false:
+  matter and radiation decoupled when protons and electrons combined into neutral hydrogen at $z\sim1000$, and the
+  gas was later reionised by the first sources, so the Universe was neutral in between (the dark ages).'
+author: Renee
+source: original

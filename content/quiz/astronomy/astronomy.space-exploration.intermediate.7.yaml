@@ -1,0 +1,30 @@
+questionId: astronomy.space-exploration.intermediate.7
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: true
+questionType: true_false_set
+prompt: The Galileo mission used a sequence of planetary encounters before reaching Jupiter. The NSSDCA
+  record describes the route as a Venus–Earth–Earth gravity-assist sequence, with additional asteroid
+  encounters. Consider the documented timeline and the distinction between a flyby and orbital insertion.
+statements:
+- text: The Venus encounter occurred before the first Earth–Moon encounter.
+  isTrue: true
+- text: The two Earth–Moon encounters occurred in the same calendar year.
+  isTrue: false
+- text: The mission’s use of gravity assists was intended to change the spacecraft’s heliocentric trajectory
+    without requiring all of the velocity change to come from onboard propulsion.
+  isTrue: true
+- text: The Galileo spacecraft entered orbit around Venus as its first mission phase.
+  isTrue: false
+- text: The spacecraft arrived at Jupiter after the second Earth–Moon encounter and after the asteroid
+    flybys listed in the record.
+  isTrue: true
+explanation: The NSSDCA timeline gives Venus in 1990, Earth/Moon in 1990, Gaspra in 1991, Earth/Moon in
+  1992, Ida in 1993 and Jupiter arrival in 1995. The encounters are flybys, not insertion into Venus orbit.
+  A gravity assist uses the planet’s motion to alter the spacecraft’s heliocentric velocity; the flyby
+  is not an engine burn. The reasoning is qualitative and uses the source-record chronology.
+author: Renee
+source: NASA/NSSDCA, “Galileo Project Information” (https://nssdc.gsfc.nasa.gov/planetary/galileo.html)
+  and “Galileo (1990, 1992)” flyby chronology (https://nssdc.gsfc.nasa.gov/planetary/lunar/lunargal.html),
+  supporting VEEGA and flyby sequence.

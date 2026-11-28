@@ -1,0 +1,29 @@
+questionId: astronomy.exoplanets.basic.1
+topic: exoplanets
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A survey monitors the brightness of many stars, looking for regular brief dimming caused by a planet crossing
+  the stellar disc. Why will such a survey find planets in only a small fraction of the planetary systems that really
+  exist?
+choices:
+- text: Planets can dim a star only if they are more massive than Jupiter, and such planets are rare
+  correct: false
+- text: A transit is seen only if the orbital plane is almost edge-on to our line of sight, so most systems never
+    show one
+  correct: true
+- text: Transit dimming can be measured only for stars within about 30 pc, the range of ground-based trigonometric
+    parallaxes
+  correct: false
+- text: A planet crosses the stellar disc only once in its history, so most transits have already happened
+  correct: false
+explanation: '**Correct (option 2).** A planet blocks starlight only when it passes between the star and the observer,
+  which requires the orbital plane to lie very close to the line of sight. Orbit orientations are random, so most
+  systems are never seen edge-on and show no transit even though their planets exist. **Option 1** confuses transit
+  depth with transit occurrence: a small planet still produces a (shallower) dip when the geometry is right, and
+  the problem here is geometry, not mass. **Option 3** mixes up two different techniques: the 30 pc limit belongs
+  to trigonometric parallax, not to photometry of transits. **Option 4** is wrong because a bound planet transits
+  once every orbital period, which is why a transit signal is a very regular, repeating dimming.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.2, p. 460

@@ -1,0 +1,27 @@
+questionId: astronomy.binary-stars.basic.3
+topic: binary-stars
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A visual binary has a true relative-orbit semimajor axis of $a=4$ au and an orbital period of $P=2$ yr.
+  Use Kepler's third law in solar units. What is the total mass of the system?
+choices:
+- text: $32\,M_\odot$
+  correct: false
+- text: $16\,M_\odot$
+  correct: true
+- text: $8\,M_\odot$
+  correct: false
+- text: $2\,M_\odot$
+  correct: false
+explanation: 'Kepler''s third law in solar units is $m_1+m_2=a^3/P^2=4^3/2^2=16\,M_\odot$.
+
+
+  - $32$ uses $a^3/P$.
+
+  - $8$ uses $a^2/P$.
+
+  - $2$ uses $a/P^2$ or $a/P$.'
+author: Renee
+source: original

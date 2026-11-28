@@ -1,0 +1,23 @@
+questionId: astronomy.celestial-mechanics.intermediate.6
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: The five Lagrange points are equilibrium locations in the circular restricted three-body model.
+  Use the qualitative descriptions of their positions and stability.
+statements:
+- text: L1 lies between the two primary bodies on the line joining them.
+  isTrue: true
+- text: L2 lies beyond the smaller primary, on the side away from the larger primary.
+  isTrue: true
+- text: L3 lies between the two primary bodies.
+  isTrue: false
+- text: L4 and L5 form triangular configurations, leading and trailing the smaller body by 60° in its
+    orbit.
+  isTrue: true
+- text: All five Lagrange points are stable against small perturbations in the Sun–Jupiter system.
+  isTrue: false
+explanation: 'L1 lies between the primaries, L2 is beyond the smaller primary, and L3 lies beyond the larger primary rather than between the bodies. L4 and L5 are the two triangular points, approximately 60° ahead of and behind the smaller body. In the Sun–Jupiter system L4 and L5 can be stable for small perturbations and host Trojan asteroids, but L1–L3 are unstable. The ordered truth vector is T,T,F,T,F. This does not license quantitative Lagrange-point calculations.'
+author: Renee
+source: "Karttunen et al., Fundamental Astronomy, 6th ed., §6.6, printed pp. 130–131 (Lagrange points L1–L5, qualitative L4/L5 stability and Trojan association)."

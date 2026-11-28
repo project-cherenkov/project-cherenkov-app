@@ -1,0 +1,24 @@
+questionId: astronomy.nuclear-physics.intermediate.7
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In the triple-alpha reaction, three helium-4 nuclei form one carbon-12 nucleus, $3\,{}^{4}\mathrm{He}\to{}^{12}\mathrm{C}+\gamma$.
+  Use the atomic masses $m({}^{4}\mathrm{He})=4.002603$ u and $m({}^{12}\mathrm{C})=12.000000$ u (the
+  electron masses cancel in the mass difference), $1\ \mathrm{u}=1.66054\times10^{-27}$ kg, $1\ \mathrm{u}\,c^{2}=931.494$
+  MeV and $1\ \mathrm{MeV}=1.602177\times10^{-13}$ J. How much energy is released per kilogram of helium
+  consumed? Enter the value in units of $10^{13}$ J/kg, rounded to two decimal places.
+numericAnswer:
+  value: 5.84
+  tolerance: 0.05
+  unit: 10^13 J/kg
+explanation: The mass defect is $3\times4.002603-12.000000=0.007809$ u, equal to $7.274$ MeV per reaction.
+  One kilogram of helium contains $1/(4.002603\,\mathrm{u})=1.505\times10^{26}$ nuclei, which supply $5.015\times10^{25}$
+  reactions because each reaction uses three nuclei. The energy per kilogram is $5.015\times10^{25}\times7.274\
+  \mathrm{MeV}\times1.602\times10^{-13}\ \mathrm{J/MeV}=5.845\times10^{13}$ J/kg. Forgetting that each
+  reaction consumes three nuclei triples the answer. This is about a tenth of the energy per kilogram
+  from hydrogen fusion. The tolerance of 0.05 covers rounding.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3 (triple-alpha reaction and mass–energy relation), printed
+  pp. 254–256

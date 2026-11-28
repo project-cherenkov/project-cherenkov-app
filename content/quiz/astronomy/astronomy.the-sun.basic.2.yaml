@@ -1,0 +1,27 @@
+questionId: astronomy.the-sun.basic.2
+topic: the-sun
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The umbra of a sunspot is only about 1500 K cooler than the surrounding photosphere, yet it looks
+  dark. What keeps the spot cooler than its surroundings?
+choices:
+- text: The spot is a hole in the photosphere through which the cool interior of the Sun is seen.
+  correct: false
+- text: Nuclear fusion switches off in the layers directly below the spot.
+  correct: false
+- text: A cloud of dust above the spot absorbs photospheric light and re-emits it at a lower temperature.
+  correct: false
+- text: Its strong magnetic field hinders the convective transport of energy up to the surface at that
+    place.
+  correct: true
+explanation: 'Magnetic fields in sunspots reach several tenths of a tesla (measured through the Zeeman
+  effect). Such a field inhibits convective energy transport, so less energy reaches the surface there
+  and the gas is cooler. Because radiated flux per unit area scales as $T^4$, even a 1500 K deficit makes
+  the spot look dark by contrast. Spots are slightly depressed relative to the surface, but they are not
+  holes into a cool interior (the interior is hotter, not cooler). Fusion takes place in a small central
+  region within a quarter of the solar radius and is not switched off locally under spots. No dust cloud
+  is involved: the effect is a property of the photosphere itself.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, pp. 290–291

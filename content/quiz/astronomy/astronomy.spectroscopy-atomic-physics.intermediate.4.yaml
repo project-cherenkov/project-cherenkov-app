@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.4
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about hydrogen-like atoms (electric dipole selection rule $\Delta l=\pm1$).
+statements:
+- text: For principal quantum number $n=3$ the allowed orbital quantum numbers are $l=0$, 1 and 2.
+  isTrue: true
+- text: A $3d\to3s$ transition is an allowed electric dipole transition.
+  isTrue: false
+- text: A $2p\to1s$ transition is an allowed electric dipole transition.
+  isTrue: true
+- text: For $l=1$, the total angular momentum quantum number $j$ can be $1/2$ or $3/2$.
+  isTrue: true
+explanation: 'Statement 1 is true: $l$ runs from 0 to $n-1$. Statement 2 is false: $3d\to3s$ has $\Delta l=-2$, which violates $\Delta l=\pm1$, so it is a forbidden transition. Statement 3 is true: $2p\to1s$ has $\Delta l=-1$. Statement 4 is true: $j=l\pm\tfrac12$ combines orbital and spin angular momentum.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.4, printed pp. 108–110

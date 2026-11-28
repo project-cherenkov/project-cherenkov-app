@@ -1,0 +1,21 @@
+questionId: astronomy.statistics-error-analysis.intermediate.7
+topic: statistics-error-analysis
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A star's absolute magnitude is estimated as $M=-0.35\pm0.25$ mag (maximum error), with the apparent magnitude
+  $m$ known exactly. The distance is $r=10\,\mathrm{pc}\times10^{(m-M)/5}$. Without linearising, by what percentage
+  does the distance computed with the extreme value of $M$ that gives the largest distance exceed the distance computed
+  with the central value? Give the answer in per cent, to three significant figures.
+numericAnswer:
+  value: 12.201845
+  tolerance: 0.05
+  unit: '%'
+explanation: 'A smaller $M$ (more luminous) gives a larger $m-M$ and a larger distance, so the extreme is $M=-0.35-0.25=-0.60$.
+  The distance ratio is $10^{0.25/5}=10^{0.05}=1.1220$, so the distance is larger by $12.20\,\%$. The linearised
+  estimate $\tfrac{\ln10}{5}\times0.25=11.51\,\%$ differs by $0.69$ percentage points, which is why the question
+  forbids linearising and why the tolerance is only $\pm0.05$: it is tight enough to reject the linear estimate
+  but allows for rounding to three significant figures.'
+author: Renee
+source: "Taylor, An Introduction to Error Analysis, 3e, Chapter 3 (nonlinear propagation/relative uncertainty in a power-law relation)."

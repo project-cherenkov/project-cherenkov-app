@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.basic.2
+topic: celestial-mechanics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A small asteroid orbits the Sun with semi-major axis $a=4.00$ au. Use Kepler's third law in solar units (period in years, distance in au, masses small compared with the Sun). What is its orbital period?
+choices:
+- text: 8.00 yr
+  correct: true
+- text: 16.0 yr
+  correct: false
+- text: 4.00 yr
+  correct: false
+- text: 2.00 yr
+  correct: false
+explanation: In these units $P^2=a^3$, so $P=a^{3/2}=4.00^{3/2}=8.00$ yr. The value 16.0 yr comes from squaring $a$ instead of cubing it ($P=a^2$). The value 4.00 yr assumes $P=a$, which is true only for $a=1$ au. The value 2.00 yr takes the square root of $a$ instead of raising it to the power $3/2$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.5, eq. (6.32), printed p. 130

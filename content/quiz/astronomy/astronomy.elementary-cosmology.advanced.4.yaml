@@ -1,0 +1,23 @@
+questionId: astronomy.elementary-cosmology.advanced.4
+topic: elementary-cosmology
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A matter-only universe with $\Lambda=0$ has $H_0=65\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$ and mean density $\rho_0=1.5\times10^{-26}\
+  \mathrm{kg\,m^{-3}}$. For $\Lambda=0$ the expansion obeys $\dot R^2/(H_0^2R_0^2)=\Omega_0R_0/R-\Omega_0+1$, with
+  $\Omega_0=\rho_0/\rho_c$ and $\rho_c=3H_0^2/(8\pi G)$. If $\Omega_0>1$ the expansion stops at a maximum scale
+  factor $R_{\max}$ ($\dot R=0$). Use $1\ \mathrm{Mpc}=3.086\times10^{19}$ km and $G=6.674\times10^{-11}$ SI. Find
+  $R_{\max}/R_0$, rounded to two decimal places.
+numericAnswer:
+  value: 2.12
+  tolerance: 0.02
+  unit: ratio R_max/R_0 (dimensionless)
+explanation: 'First the critical density: $H_0=65/3.086\times10^{19}=2.106\times10^{-18}\ \mathrm{s^{-1}}$, so $\rho_c=3H_0^2/(8\pi
+  G)=7.93\times10^{-27}\ \mathrm{kg\,m^{-3}}$. Then $\Omega_0=1.5\times10^{-26}/7.93\times10^{-27}=1.89>1$, so the
+  model is closed ($k=+1$). Setting $\dot R=0$ gives $\Omega_0R_0/R=\Omega_0-1$, so $R_{\max}/R_0=\Omega_0/(\Omega_0-1)=1.89/0.89=2.12$.
+  The answer is sensitive to $\Omega_0$ because it lies close to 1: a 1% change in $\Omega_0$ changes the result
+  by about 0.02, hence the tolerance of 0.02 is tied to the requested rounding and the stated constants. The result
+  applies only to $\Lambda=0$; with a positive cosmological constant the expansion need not stop.'
+author: Renee
+source: original

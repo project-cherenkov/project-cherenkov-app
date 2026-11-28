@@ -1,0 +1,24 @@
+questionId: astronomy.exoplanets.basic.2
+topic: exoplanets
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A planet is inferred from the radial-velocity (Doppler) method. What is actually measured?
+choices:
+- text: Periodic shifts in the wavelengths of the star's spectral lines, caused by the star's motion around the
+    star–planet centre of mass
+  correct: true
+- text: A regular, brief dimming of the star each time the planet crosses its disc
+  correct: false
+- text: A short brightening of a background star as the planetary system's gravity bends its light
+  correct: false
+- text: A slow drift of the star's pulsation period caused by the changing light-travel distance
+  correct: false
+explanation: '**Correct (option 1).** The star and planet both orbit their common centre of mass, so the star''s
+  velocity along the line of sight varies periodically; the Doppler effect turns this into periodic shifts of its
+  spectral lines. **Option 2** describes the transit method. **Option 3** describes gravitational lensing (microlensing).
+  **Option 4** describes the timing method, which works for stars with regular pulsations such as pulsars. These
+  are distinct techniques with distinct observables.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.2, pp. 459–460

@@ -1,0 +1,28 @@
+questionId: astronomy.star-clusters.intermediate.3
+topic: star-clusters
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** correct statements about star clusters and associations.
+choices:
+- text: OB associations must be young, because their massive stars leave the main sequence after only a few million
+    years
+  correct: true
+- text: The globular clusters of the Milky Way are all old, and the halo clusters are among the oldest known astronomical
+    objects
+  correct: true
+- text: The converging proper motions of the Hyades stars show that the stars are physically falling toward one
+    point in space
+  correct: false
+- text: Main-sequence fitting can be used only for clusters within the range of ground-based trigonometric parallaxes,
+    about 30 pc
+  correct: false
+explanation: '**Options 1 and 2 are correct.** (1) Massive O and B stars have lifetimes of only a few million years,
+  so associations containing them are young. (2) All globular clusters are old; ages of about $13\times10^{9}$ years
+  are obtained for the oldest. **Option 3 is false:** the convergence is a perspective effect: if all stars share
+  the same space velocity vector, their proper motions appear to point to one convergence point, just as parallel
+  lines appear to meet at a vanishing point. **Option 4 is false:** main-sequence fitting works out to many kiloparsecs,
+  and indeed it is needed precisely because trigonometric parallaxes do not reach that far. Grading is exact-set.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.1–17.3, pp. 360–364

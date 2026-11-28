@@ -1,0 +1,41 @@
+questionId: astronomy.the-sun.intermediate.6
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: In the qualitative Babcock description of the solar cycle, the field of a dipolar minimum Sun
+  is frozen into the conducting gas, which is stirred by the observed differential rotation. Consider
+  the observed facts that spots of a new cycle first appear near $\pm 40^\circ$ latitude and then drift
+  towards the equator, and that the polarity pattern reverses from one cycle to the next. Which of the
+  following statements are consistent with that description? Select all that apply.
+choices:
+- text: If the convection zone rotated rigidly, the field would be wound up even faster than it is now.
+  correct: false
+- text: Differential rotation drags the frozen-in field lines into a tight spiral, amplifying the subsurface
+    field by an amount that depends on latitude.
+  correct: true
+- text: The model is a complete quantitative dynamo theory that shows the field is generated throughout
+    the convection zone.
+  correct: false
+- text: Magnetic buoyancy lifts flux ropes first at about $40^\circ$ latitude and later at lower latitudes,
+    matching the early high-latitude spots and the drift towards the equator.
+  correct: true
+- text: At cycle maximum the Sun has no spots, because the emerging loops have cancelled the surface field
+    completely.
+  correct: false
+- text: Expanding loops reconnect with the polar dipolar field, neutralising it and leaving a dipolar
+    field of opposite polarity, which explains the 22-year magnetic period.
+  correct: true
+explanation: 'Correct: (2) the winding by differential rotation (faster at the equator than at the poles)
+  tightens the field spiral and amplifies it; (4) once the subsurface field is strong enough, buoyant
+  flux ropes emerge first near $40^\circ$ and later nearer the equator, reproducing the butterfly diagram;
+  (6) reconnection with the polar field neutralises it and leaves the reversed dipole, so two 11-year
+  cycles make one 22-year magnetic cycle. Incorrect: (1) winding requires differential rotation; a rigidly
+  rotating medium would not shear the field into a spiral at all. (3) The Babcock model is phenomenological;
+  the book states that a completely satisfactory dynamo model has not been found and that it is not even
+  known whether the field is produced everywhere in the convection zone or only at its base. (5) The sunspot
+  number is largest at maximum; a complete absence of spots is characteristic of minimum (and of historical
+  episodes such as the Maunder minimum). This is a qualitative topic, so no numerical derivation is required.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, pp. 291–293

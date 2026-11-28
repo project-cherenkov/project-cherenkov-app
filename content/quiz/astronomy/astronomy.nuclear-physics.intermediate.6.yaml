@@ -1,0 +1,28 @@
+questionId: astronomy.nuclear-physics.intermediate.6
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the energetics and products of stellar nuclear burning.
+statements:
+- text: A star radiating $4\times10^{26}$ W for $5\times10^{9}$ yr emits about $6\times10^{43}$ J. Hydrogen
+    fusion converts about 0.7 % of the fused mass to energy, so roughly $10^{29}$ kg of hydrogen (a few
+    per cent of a solar mass) is enough to supply this.
+  isTrue: true
+- text: In a star with the mass of the Sun, the CNO cycle supplies most of the energy.
+  isTrue: false
+- text: Above about $10^{9}$ K photons are energetic enough to destroy some nuclei by photodisintegration.
+  isTrue: true
+- text: The ppI branch supplies only about 9 % of the Sun's energy production.
+  isTrue: false
+- text: Producing nuclei heavier than iron by fusion consumes energy, so they are formed mainly by neutron
+    capture in the late violent stages of stellar evolution.
+  isTrue: true
+explanation: 'Statement 1 is true: $4\times10^{26}\times5\times10^{9}\times3.16\times10^{7}\approx6\times10^{43}$
+  J, and with $fc^{2}\approx6\times10^{14}$ J/kg this requires about $10^{29}$ kg, around 5 % of $2\times10^{30}$
+  kg. Statement 2 is false: for stars up to about $1.5\,M_\odot$ the pp chain dominates. Statement 3 is
+  true: the photodissociation temperature is about $10^{9}$ K. Statement 4 is false: ppI supplies about
+  91 % in the Sun. Statement 5 is true: iron is the end of exothermic fusion.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 254–257

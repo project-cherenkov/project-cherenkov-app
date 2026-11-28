@@ -1,0 +1,28 @@
+questionId: astronomy.binary-stars.basic.2
+topic: binary-stars
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Two stars orbit their common centre of mass in circular orbits. The true orbit radius of star A is $2.0$
+  au and that of star B is $6.0$ au. Which statement about the masses is correct?
+choices:
+- text: Star A is three times as massive as star B.
+  correct: true
+- text: Star B is three times as massive as star A.
+  correct: false
+- text: The stars have equal masses, because they have the same orbital period.
+  correct: false
+- text: The mass ratio cannot be found without knowing the orbital period.
+  correct: false
+explanation: 'The centre of mass condition is $m_Aa_A=m_Ba_B$, so $m_A/m_B=a_B/a_A=6.0/2.0=3$. The more massive
+  star lies closer to the centre of mass.
+
+
+  - Star B being more massive reverses the ratio.
+
+  - The common period does not imply equal masses.
+
+  - The ratio depends only on the orbit radii, not on the period.'
+author: Renee
+source: original

@@ -1,0 +1,23 @@
+questionId: astronomy.numerical-methods.intermediate.2
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The approximation $\sin x\approx x$ is used for $x=0.30$ rad. Using the next term of the Taylor series of
+  $\sin x$ to judge the size of the error, what is the error $x-\sin x$ approximately?
+choices:
+- text: about $1.5\times10^{-2}$
+  correct: false
+- text: about $4.5\times10^{-3}$
+  correct: true
+- text: about $4.5\times10^{-2}$
+  correct: false
+- text: about $2.0\times10^{-5}$
+  correct: false
+explanation: The series is $\sin x=x-x^3/3!+x^5/5!-\cdots$, so the leading error of $\sin x\approx x$ is $x^3/6=0.027/6=4.5\times10^{-3}$
+  (the true difference is $4.48\times10^{-3}$). $1.5\times10^{-2}$ would be $x^2/6$ and $4.5\times10^{-2}$ would
+  be $x^2/2$; both use the wrong power of $x$ (the latter is the leading correction of $\cos x$, not of $\sin x$).
+  $2.0\times10^{-5}$ is the size of the term after the one that matters, $x^5/120$.
+author: Renee
+source: original

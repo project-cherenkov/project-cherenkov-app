@@ -1,0 +1,32 @@
+questionId: astronomy.celestial-sphere.intermediate.6
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: From a northern-hemisphere site, a star crosses the meridian twice per sidereal day. At upper
+  culmination it is at altitude $70^\circ$ above the southern horizon; at lower culmination it is at altitude
+  $10^\circ$ above the northern horizon. Both positions are above the horizon. Ignore refraction. Which
+  statements follow?
+choices:
+- text: The observer's latitude is $+60^\circ$.
+  correct: true
+- text: The star's declination is $+40^\circ$.
+  correct: true
+- text: At upper culmination, the star lies north of the zenith.
+  correct: false
+- text: A star of declination $+25^\circ$ would also be circumpolar at this site.
+  correct: false
+- text: The mean of the two culmination altitudes equals the star's declination.
+  correct: true
+- text: The star sets for part of each sidereal day.
+  correct: false
+explanation: 'With $a_{\max}=90^\circ-\varphi+\delta=70^\circ$ and $a_{\min}=\delta+\varphi-90^\circ=10^\circ$:
+  subtracting gives $180^\circ-2\varphi=60^\circ$, so $\varphi=60^\circ$ (true); adding gives $2\delta=80^\circ$,
+  so $\delta=40^\circ$ (true), which is the same as $(a_{\min}+a_{\max})/2=\delta$ (true, and independent
+  of latitude). Since $\delta<\varphi$, the star is south of the zenith at upper culmination, so the revised
+  option C is false. At lower culmination it is north of the zenith, as specified in the stem. The circumpolar
+  limit is $90^\circ-60^\circ=30^\circ$, so $\delta=+25^\circ$ is not circumpolar. The observed star has
+  $a_{\min}=10^\circ>0$, so it never sets; the last option is false.'
+author: Renee
+source: original

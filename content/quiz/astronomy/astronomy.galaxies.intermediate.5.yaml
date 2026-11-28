@@ -1,0 +1,20 @@
+questionId: astronomy.galaxies.intermediate.5
+topic: galaxies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: The rotation speed of a spiral galaxy is $200\ \mathrm{km\,s^{-1}}$ at $R=12$ kpc. The total luminosity
+  inside this radius is $2.0\times10^{10}\ L_\odot$. Assume a roughly spherical mass distribution so that $M(R)=Rv^2/G$,
+  with $G=4.30\times10^{-6}\ \mathrm{kpc\,(km/s)^2\,M_\odot^{-1}}$. Find the mass-to-light ratio inside 12 kpc.
+  Enter $M/L$ in solar units ($M_\odot/L_\odot$), rounded to two decimal places.
+numericAnswer:
+  value: 5.58
+  tolerance: 0.05
+  unit: M_sun/L_sun
+explanation: 'First the enclosed mass: $M=Rv^2/G=12\times200^2/(4.30\times10^{-6})=1.12\times10^{11}\ M_\odot$.
+  Then $M/L=1.12\times10^{11}/2.0\times10^{10}=5.58$ in solar units. This is of the order of the values quoted for
+  spiral disks (about 4–8), and it is only a lower limit for the full galaxy since the mass beyond 12 kpc is not
+  included. The tolerance of 0.05 (under 1%) covers rounding of the constant and intermediate results.'
+author: Renee
+source: original

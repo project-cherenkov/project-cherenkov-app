@@ -1,0 +1,23 @@
+questionId: astronomy.numerical-methods.intermediate.4
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Decide whether each statement about linear and Taylor-series approximations is true or false.
+statements:
+- text: The approximation $\sin x\approx x$ can be used with $x$ measured in degrees as well as in radians.
+  isTrue: false
+- text: For small $x$, $\sqrt{1-x}\approx 1-x/2$.
+  isTrue: true
+- text: The Taylor series $e^x=1+x+x^2/2!+x^3/3!+\cdots$ converges only for $|x|<1$.
+  isTrue: false
+- text: For $x=0.10$, the approximation $\ln(1+x)\approx x$ overestimates the exact value of $\ln(1.10)$.
+  isTrue: true
+explanation: '(1) False: the series $x-x^3/6+\cdots$ is derived with $x$ in radians; a value of $x$ in degrees is
+  $\pi/180$ times too large to be the angle in radians, so the approximation fails (for $30^\circ$, $\sin x=0.5$
+  but $x=30$). (2) True: $\sqrt{1-x}=1-\tfrac12x-\tfrac18x^2-\cdots$. (3) False: the exponential series converges
+  for every $x$; the restriction $|x|<1$ belongs to series such as $1/(1\pm x)$. (4) True: $\ln(1+x)=x-x^2/2+\cdots$
+  so the exact value ($0.0953$) is below $x=0.10$.'
+author: Renee
+source: original

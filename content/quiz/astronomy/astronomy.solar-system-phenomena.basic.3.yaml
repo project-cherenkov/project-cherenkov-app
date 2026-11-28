@@ -1,0 +1,26 @@
+questionId: astronomy.solar-system-phenomena.basic.3
+topic: solar-system-phenomena
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Meteors belonging to one meteor shower seem to diverge from a single point in the sky, the radiant.
+  Why?
+choices:
+- text: The meteoroids are ejected from the star or constellation at the radiant.
+  correct: false
+- text: The meteoroids move along nearly parallel paths, so perspective makes their trails appear to radiate
+    from one point.
+  correct: true
+- text: Earth's magnetic field bends the paths of the charged meteoroids towards one point.
+  correct: false
+- text: Atmospheric refraction bends all trails towards the same direction.
+  correct: false
+explanation: A shower is produced when the Earth crosses a stream of particles from a comet's orbit; the
+  particles move on nearly parallel paths. As parallel lines appear to diverge from a vanishing point
+  (like railway tracks), the trails appear to radiate from the radiant, whose direction is the direction
+  from which the stream approaches. The radiant's constellation is only a naming convention; the meteoroids
+  do not come from the stars. Magnetic fields do not noticeably deflect massive neutral meteoroids, and
+  refraction is far too small an effect.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 8.13, pp. 222–224

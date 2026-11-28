@@ -1,0 +1,23 @@
+questionId: astronomy.concept-of-time.intermediate.7
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: "Use $\\mathrm{MJD}=\\mathrm{JD}-2{,}400{,}000.5$ and $T=(J-2{,}451{,}545.0)/36{,}525$ for $T$ in Julian centuries. Also use $TT=UTC+32.184\\,{\\rm s}+(TAI-UTC)$, where $TAI-UTC=29$ s throughout 1995. Which statements are correct?"
+choices:
+  - text: "JD $2{,}451{,}545.0$ corresponds to $00{:}00$ UT on 1 January 2000."
+    correct: false
+  - text: "The Julian date at $00{:}00$ UT on 1 January 2000 is $2{,}451{,}544.5$."
+    correct: true
+  - text: "For $J=2{,}461{,}545.0$ the time $T$ is about $0.274$ Julian centuries."
+    correct: true
+  - text: "TAI$-$UTC is generally not an integer number of seconds, because UTC is steered continuously towards UT1."
+    correct: false
+  - text: "The modified Julian date corresponding to JD $2{,}461{,}545.0$ is $61{,}544.5$."
+    correct: true
+  - text: "Throughout 1995, TT$-$UTC was $61.184$ s."
+    correct: true
+explanation: "(1) False: JD numbers change at noon, so noon on 1 January 2000 is $2{,}451{,}545.0$. (2) True: midnight is half a day earlier. (3) True: $T=10{,}000/36{,}525=0.2738$. (4) False: UTC differs from TAI by an integer number of seconds; leap seconds, not continuous steering, keep $|UT1-UTC|<0.9$ s. (5) True: $2{,}461{,}545.0-2{,}400{,}000.5=61{,}544.5$. (6) True: $32.184+29=61.184$ s (Table of $TT-UTC$ for 1 July 1994–31 December 1995)."
+author: Renee
+source: "original"

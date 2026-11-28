@@ -1,0 +1,24 @@
+questionId: astronomy.nuclear-physics.intermediate.8
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A main-sequence star of mass $2.5\,M_\odot$ has a luminosity of $40\,L_\odot$ and a hydrogen mass
+  fraction $X=0.70$. Assume that only the central 10 % of its hydrogen is ever fused to helium during
+  the main sequence, that each kilogram of hydrogen releases the fraction $f=0.685\%$ of its rest mass
+  as energy, and that the luminosity stays constant. Use $M_\odot=1.989\times10^{30}$ kg, $L_\odot=3.83\times10^{26}$
+  W, $c=2.998\times10^{8}$ m s$^{-1}$ and $1\ \mathrm{yr}=3.156\times10^{7}$ s. Estimate the main-sequence
+  lifetime. Enter it in units of $10^{8}$ yr, rounded to one decimal place.
+numericAnswer:
+  value: 4.4
+  tolerance: 0.1
+  unit: 10^8 yr
+explanation: The hydrogen available is $0.10\times0.70\times2.5\,M_\odot=3.481\times10^{29}$ kg. Fusing
+  it releases $E=0.00685\,c^{2}\times$ that mass $=2.143\times10^{44}$ J. Dividing by $L=40L_\odot=1.532\times10^{28}$
+  W gives $t=1.399\times10^{16}$ s $=4.4\times10^{8}$ yr. Using the whole stellar mass instead of the
+  fused hydrogen fraction would overestimate the lifetime by a factor of about 14. The tolerance of 0.1
+  covers rounding of $f$ and the constants. The result is an order-of-magnitude estimate because the real
+  fused fraction depends on mixing and structure.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 254–255 (original model)

@@ -1,0 +1,21 @@
+questionId: astronomy.concept-of-time.intermediate.9
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "For a heliocentric correction, use $\\Delta t=(\\mathbf r\\cdot\\hat{\\mathbf n})/c$ and $HJD_{UTC}=JD_{UTC}+\\\
+  Delta t$. The observer’s heliocentric position is $\\mathbf r=(1.000,0,0)$ au and the target unit direction\
+  \ is $\\hat{\\mathbf n}=(0.600,0.800,0)$. Use $1\\,au=1.495978707\\times10^{11}$ m and $c=299792458$\
+  \ m s$^{-1}$. What is the heliocentric light-time correction in seconds? Enter to the nearest second.\
+  \ This is only the geometric HJD correction, not a BJD$_{TDB}$ conversion. HJD is not accurate to better than about 8 s because the Sun’s acceleration is neglected; do not interpret the rounded geometric correction as sub-8-second absolute timing accuracy."
+numericAnswer:
+  value: 299.0
+  tolerance: 1.0
+  unit: s
+explanation: The dot product is $\mathbf r\cdot\hat{\mathbf n}=0.600$ au. Thus $\Delta t=0.600(1.495978707×10^{11})/(299792458)=299.20$
+  s, which rounds to 299 s. The correction is added to JD in the stated convention. HJD and BJD are not
+  interchangeable, and the supplied result is only the geometric heliocentric correction; no precision
+  better than the model/time-scale assumptions is implied.
+author: Renee
+source: "Eastman, Siverd & Gaudi (2010), “Achieving Better Than 1 Minute Accuracy in the Heliocentric and Barycentric Julian Dates”, PASP 122, 935–946, §II.1 (heliocentric Rømer correction) and §II.2 (time standards). HJD is not a substitute for BJD_TDB in high-precision work."

@@ -1,0 +1,23 @@
+questionId: astronomy.elementary-cosmology.basic.2
+topic: elementary-cosmology
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Light from a quasar has a cosmological redshift $z=3$. How did the distances between galaxies compare with
+  their present values when the light was emitted?
+choices:
+- text: Three times larger than today
+  correct: false
+- text: Three times smaller than today (one third of today's)
+  correct: false
+- text: One quarter of today's
+  correct: true
+- text: One half of today's
+  correct: false
+explanation: 'Correct (third choice): $1+z=R_0/R$, so $R/R_0=1/(1+z)=1/4$ for $z=3$. All distances, including those
+  between galaxies, scale with $R$, so they were one quarter of their present values. ''Three times larger'' has
+  the wrong direction, since the Universe has expanded. ''One third'' uses $z$ instead of $1+z$. ''One half'' is
+  the result for $z=1$.'
+author: Renee
+source: original

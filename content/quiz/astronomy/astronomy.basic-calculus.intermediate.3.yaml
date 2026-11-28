@@ -1,0 +1,25 @@
+questionId: astronomy.basic-calculus.intermediate.3
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: For motion under a central attraction the vector $\mathbf k=\mathbf r\times\dot{\mathbf r}$ is constant,
+  and in polar coordinates $k=r^2\dot f$, where $f$ is the true anomaly. Which of the following statements follow
+  from this? Select all that apply.
+choices:
+- text: The area swept out by the radius vector in a given time interval does not depend on where on the orbit that
+    interval occurs
+  correct: true
+- text: The speed of the body is the same at all points of the orbit
+  correct: false
+- text: The angular rate $\dot f$ is larger where the distance $r$ is smaller
+  correct: true
+- text: On an eccentric orbit, the true anomaly $f$ increases at a constant rate with time
+  correct: false
+explanation: Since $\mathrm dA=\tfrac12r^2\dot f\,\mathrm dt=\tfrac12k\,\mathrm dt$ and $k$ is constant, equal areas
+  are swept in equal times; the areal rate is constant. From $r^2\dot f=k$, the angular rate is larger at smaller
+  $r$. The speed is not constant on an eccentric orbit, and the true anomaly does not increase uniformly. The duplicated
+  equal-areas choice has been removed so the question tests distinct consequences rather than the same law twice.
+author: Renee
+source: original

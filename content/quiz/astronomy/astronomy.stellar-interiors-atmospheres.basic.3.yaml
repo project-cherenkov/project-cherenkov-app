@@ -1,0 +1,32 @@
+questionId: astronomy.stellar-interiors-atmospheres.basic.3
+topic: stellar-interiors-atmospheres
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Hydrogen is the most abundant element in stars of every spectral class, yet the hydrogen Balmer absorption
+  lines are strongest in class A (about $9000$–$10{,}000$ K) and weaker in both hotter and cooler stars. Which explanation
+  is correct?
+choices:
+- text: Hydrogen is only abundant in class A atmospheres.
+  correct: false
+- text: In hotter atmospheres most hydrogen is ionised, and in cooler ones too few atoms are excited to the $n=2$
+    level.
+  correct: true
+- text: Balmer lines are produced only by molecules, which exist only in class A atmospheres.
+  correct: false
+- text: In the hottest stars radiation pressure blows all the hydrogen out of the atmosphere.
+  correct: false
+explanation: 'Balmer absorption needs hydrogen atoms in the $n=2$ level. Excitation grows with temperature through
+  the Boltzmann factor, so cool atmospheres have too few $n=2$ atoms. In still hotter atmospheres hydrogen is increasingly
+  ionised, leaving few neutral atoms. The competition peaks in class A.
+
+
+  - Hydrogen abundance is similar across stars; it does not fall in hotter or cooler stars.
+
+  - Balmer lines come from atomic transitions, not molecules.
+
+  - Radiation pressure does not strip the hydrogen from ordinary O-type atmospheres; the lines are weak because
+  of ionisation.'
+author: Renee
+source: original

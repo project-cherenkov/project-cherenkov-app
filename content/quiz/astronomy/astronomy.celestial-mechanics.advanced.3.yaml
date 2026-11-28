@@ -1,0 +1,14 @@
+questionId: astronomy.celestial-mechanics.advanced.3
+topic: celestial-mechanics
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A binary consists of stars of $3.0\,M_\odot$ and $1.0\,M_\odot$. Their relative orbit is an ellipse with semi-major axis $a=8.0$ au and eccentricity $e=0.50$. Use $GM_\odot=1.327\times10^{20}$ m$^{3}$ s$^{-2}$ and $1\ \mathrm{au}=1.496\times10^{11}$ m. In the frame of the barycentre, what is the speed of the $1.0\,M_\odot$ star at periastron (closest approach)? Enter the speed in km/s, rounded to one decimal place.
+numericAnswer:
+  value: 27.4
+  tolerance: 0.2
+  unit: km/s
+explanation: 'The relative orbit obeys $v_{\rm rel}^{2}=G(m_1+m_2)\left(\dfrac{2}{r}-\dfrac{1}{a}\right)$. At periastron $r=a(1-e)$, giving $v_{\rm rel,p}=\sqrt{\dfrac{G(m_1+m_2)}{a}\dfrac{1+e}{1-e}}=36.48$ km/s. In the barycentre frame the bodies move opposite to each other with speeds in inverse proportion to their masses, so the lighter star carries the fraction $m_1/(m_1+m_2)=3/4$ of the relative speed: $27.36$ km/s. A common error is to quote the relative speed $36.5$ km/s, or the heavier star''s share $9.1$ km/s. The tolerance of 0.2 km/s covers rounding of the constants.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.1, §6.4–§6.5, eqs. (6.16), (6.22)–(6.32), printed pp. 123–130

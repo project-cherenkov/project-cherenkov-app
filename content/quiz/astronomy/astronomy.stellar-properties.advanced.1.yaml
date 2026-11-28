@@ -1,0 +1,40 @@
+questionId: astronomy.stellar-properties.advanced.1
+topic: stellar-properties
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A single main-sequence star has luminosity $L=40\,L_\odot$ and effective temperature $T_{\rm eff}=8200$
+  K. Assume the mass–luminosity relation $L\propto M^{3.8}$ calibrated on the Sun, blackbody surface emission $L=4\pi
+  R^2\sigma T_{\rm eff}^4$ and $T_{{\rm eff},\odot}=5772$ K. Select all statements that follow.
+choices:
+- text: If the exponent in the mass–luminosity relation were $3.0$ instead of $3.8$, the inferred mass would be
+    smaller.
+  correct: false
+- text: The radius of the star is about $3.1\,R_\odot$.
+  correct: true
+- text: The mass of the star is about $2.6\,M_\odot$.
+  correct: true
+- text: The mean density of the star is higher than the mean density of the Sun.
+  correct: false
+- text: The surface gravity $g=GM/R^2$ is about $0.27$ times the solar value.
+  correct: true
+explanation: 'Mass: $M/M_\odot=40^{1/3.8}\approx2.64$. Radius: $R/R_\odot=\sqrt{40}\,(5772/8200)^2\approx3.13$.
+
+
+  - Radius about $3.1\,R_\odot$: true.
+
+  - Mass about $2.6\,M_\odot$: true.
+
+  - Surface gravity: $g/g_\odot=M/R^2=2.64/3.13^2\approx0.27$: true.
+
+  - Mean density: $\rho/\rho_\odot=M/R^3=2.64/3.13^3\approx0.086$, far lower than solar, so the statement is false.
+
+  - Exponent $3.0$: $M/M_\odot=40^{1/3}\approx3.42$, so a smaller exponent (luminosity rising less steeply with
+  mass) requires a larger mass to reach $40\,L_\odot$; the statement is false.
+
+
+  The item coordinates a calibrated empirical relation (an approximation, as the exponent is only approximate) with
+  the Stefan–Boltzmann law, and tests how a changed assumption propagates.'
+author: Renee
+source: original

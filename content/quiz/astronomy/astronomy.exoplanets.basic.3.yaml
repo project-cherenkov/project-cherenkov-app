@@ -1,0 +1,25 @@
+questionId: astronomy.exoplanets.basic.3
+topic: exoplanets
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Many of the exoplanets found in early surveys are massive planets orbiting very close to their stars (“hot
+  Jupiters”). What is the best interpretation of this?
+choices:
+- text: The close orbits prove that planetary systems cannot also contain distant planets.
+  correct: false
+- text: The early discoveries directly measure the true abundance of hot Jupiters around other stars.
+  correct: false
+- text: Small planets cannot survive close to stars, so they are intrinsically absent from short-period orbits.
+  correct: false
+- text: Hot Jupiters produce larger and more frequent signals, so surveys detect them more readily than smaller
+    or distant planets.
+  correct: true
+explanation: '**Correct (option 4).** This is a selection effect: a massive planet close to its star produces a
+  relatively large radial-velocity signal and/or a deep transit, while its short period makes repeat observations
+  easier. The observed sample is therefore not a direct census of the intrinsic planet population. **Option 1**
+  wrongly infers that close-in planets exclude distant companions. **Option 2** confuses detection bias with the
+  true abundance. **Option 3** treats a detection limitation as a formation prohibition.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.3, p. 461

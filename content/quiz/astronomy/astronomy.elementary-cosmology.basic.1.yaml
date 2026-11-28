@@ -1,0 +1,22 @@
+questionId: astronomy.elementary-cosmology.basic.1
+topic: elementary-cosmology
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A galaxy has a cosmological redshift $z=0.014$. Using Hubble's law in the form $z=Hr/c$ with $H=70\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$
+  and $c=3.0\times10^{5}\ \mathrm{km\,s^{-1}}$, what is its distance?
+choices:
+- text: $1.0$ Mpc
+  correct: false
+- text: $60$ Mpc
+  correct: true
+- text: $86$ Mpc
+  correct: false
+- text: $4.2\times10^{3}$ Mpc
+  correct: false
+explanation: 'Correct (second choice): $r=cz/H=3.0\times10^{5}\times0.014/70=60$ Mpc. 1.0 Mpc results from multiplying
+  $H$ by $z$ instead of dividing $cz$ by $H$. 86 Mpc results from wrongly dividing by 0.7 after already using $H=70$.
+  $4.2\times10^{3}$ is the recession velocity $cz$ in km s$^{-1}$, which was not divided by $H$.'
+author: Renee
+source: original

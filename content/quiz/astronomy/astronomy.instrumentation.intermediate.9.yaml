@@ -1,0 +1,24 @@
+questionId: astronomy.instrumentation.intermediate.9
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A two-element radio interferometer has an exactly east–west baseline of $D=2.0$ km and observes
+  at $\lambda=6.0$ cm. The source lies on the celestial equator and is observed close to the meridian,
+  so that the angle by which the baseline direction turns relative to the source equals the Earth's rotation
+  angle. Using $\theta D=\lambda$ for the turn angle between successive fringe maxima and a sidereal day
+  of $86{,}164.1$ s, find the time between successive maxima of the interference pattern. Give the answer
+  in seconds, to three decimal places.
+numericAnswer:
+  value: 0.411
+  tolerance: 0.001
+  unit: s
+explanation: Successive maxima occur when the baseline has turned by $\theta=\lambda/D=0.060/2000=3.0\times10^{-5}$
+  rad. The Earth rotates at $\omega=2\pi/86164.1\ {\rm s}=7.2921e-05$ rad/s, so $t=\theta/\omega=0.4114$
+  s. For sources away from the celestial equator or the meridian the projected baseline changes more slowly
+  and the fringes are slower, so the stated geometry is an essential assumption. The tolerance $0.001$
+  s covers rounding to three decimal places and rejects the $0.4125$ s result obtained by using a 86,400
+  s solar day instead of the supplied sidereal day.
+author: Renee
+source: original

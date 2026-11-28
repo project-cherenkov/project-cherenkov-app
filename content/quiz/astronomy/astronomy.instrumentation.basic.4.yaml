@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.basic.4
+topic: instrumentation
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "A slit spectrograph has a dispersion of $0.5$ nm/mm at the detector, and the CCD pixels are $15\\ \\mu$m wide. Two spectral lines are $0.15$ nm apart. How many pixels separate them on the detector?"
+choices:
+  - text: "$0.02$ pixels"
+    correct: false
+  - text: "$200$ pixels"
+    correct: false
+  - text: "$20$ pixels"
+    correct: true
+  - text: "$0.3$ pixels"
+    correct: false
+explanation: "The line separation on the detector is $0.15\\ {\\rm nm}/(0.5\\ {\\rm nm/mm})=0.30$ mm $=300\\ \\mu$m, which is $300/15=20$ pixels. $0.3$ pixels quotes the separation in mm without converting to pixels; $0.02$ divides $0.3$ by $15$ without converting mm to $\\mu$m; $200$ is an error of a factor of ten in the unit conversion."
+author: Renee
+source: "original"

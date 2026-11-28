@@ -1,0 +1,30 @@
+questionId: astronomy.galaxies.advanced.1
+topic: galaxies
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: 'The rotation curve of a spiral galaxy is measured at four radii: $v=180,\ 200,\ 200,\ 198\ \mathrm{km\,s^{-1}}$
+  at $R=5,\ 10,\ 20,\ 40$ kpc respectively. Assume spherical symmetry so that $M(R)=Rv^2/G$, with $G=4.30\times10^{-6}\
+  \mathrm{kpc\,(km/s)^2\,M_\odot^{-1}}$. Select all statements that follow.'
+choices:
+- text: A Keplerian decline normalised to the 10 kpc point would give about $100\ \mathrm{km\,s^{-1}}$ at 40 kpc,
+    so the observed speed there requires mass beyond the inner region.
+  correct: true
+- text: The enclosed mass is almost the same at 20 kpc and at 40 kpc, so the mass outside 20 kpc is negligible.
+  correct: false
+- text: The mass between 20 kpc and 40 kpc is about $1.8\times10^{11}\ M_\odot$.
+  correct: true
+- text: Since the formula is exact for any mass distribution, the result is equally valid for a thin disk.
+  correct: false
+- text: The mass within 40 kpc is about 3.9 times that within 10 kpc, close to the factor 4 by which the radius
+    increases.
+  correct: true
+explanation: 'Masses: $M(10)=9.3\times10^{10}$, $M(20)=1.86\times10^{11}$, $M(40)=3.65\times10^{11}\ M_\odot$. Option
+  1 true: $200\times(10/40)^{1/2}=100\ \mathrm{km\,s^{-1}}$ for a point-mass-like decline. Option 2 false: $M(40)\approx1.96\,M(20)$,
+  so about half of the mass within 40 kpc lies outside 20 kpc. Option 3 true: $3.65\times10^{11}-1.86\times10^{11}=1.79\times10^{11}\
+  M_\odot$. Option 4 false: the formula assumes a roughly spherical distribution (it is an estimate based on Kepler''s
+  third law); for a thin disk it is only approximate. Option 5 true: $3.65/0.93=3.92$. The near-proportionality
+  $M\propto R$ for a flat rotation curve is the signature of an extended unseen mass distribution.'
+author: Renee
+source: original

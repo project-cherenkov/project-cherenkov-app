@@ -1,0 +1,26 @@
+questionId: astronomy.star-clusters.basic.1
+topic: star-clusters
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A group of stars contains many O-type main-sequence stars. Why does this show that the group must be very
+  young?
+choices:
+- text: O stars can form only in the discs of galaxies, which are themselves young
+  correct: false
+- text: O stars have not yet had time to move away from the place where they were born
+  correct: false
+- text: O stars stay on the main sequence for only a few million years, so any that are still there were formed
+    recently
+  correct: true
+- text: O stars are so hot that they quickly lose their heavy elements, so only young groups contain them
+  correct: false
+explanation: '**Correct (option 3).** The most massive stars (spectral class O) are extremely luminous and exhaust
+  their fuel within a few million years. If such stars are still on the main sequence, the group they belong to
+  cannot be older than that; this is how OB associations are recognised as very young. **Option 1** has no basis
+  in the argument; the issue is stellar lifetime, not galaxy age. **Option 2** is about dispersal, which is a different
+  property, and many associations are in fact dispersing. **Option 4** invents a heavy-element-loss process; the
+  heavy-element content of a star is not what limits its main-sequence lifetime.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.1, pp. 359–360

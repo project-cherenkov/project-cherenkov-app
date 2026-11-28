@@ -1,0 +1,19 @@
+questionId: astronomy.thermodynamics.intermediate.2
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: 'Two samples of completely ionised gas have the same density and temperature: one is pure hydrogen, the other pure helium. Treat both as perfect gases. What is the ratio of the pressure of the helium sample to that of the hydrogen sample?'
+choices:
+- text: '0.25'
+  correct: false
+- text: '0.375'
+  correct: true
+- text: '0.50'
+  correct: false
+- text: '2.7'
+  correct: false
+explanation: For a perfect gas $P=\rho kT/(\mu m_{\rm H})$. Complete ionisation gives two particles per hydrogen mass unit ($\mu=1/2$) and three particles per four mass units for helium ($\mu=4/3$). Hence $P_{\rm He}/P_{\rm H}=\mu_{\rm H}/\mu_{\rm He}=0.5/1.333=0.375$. The value 0.25 is simply the inverse of the mass ratio 4. The value 0.50 uses only $\mu_{\rm H}$ and ignores the helium particle count. The value 2.7 inverts the ratio.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.2, eqs. (11.8)–(11.10), printed p. 252

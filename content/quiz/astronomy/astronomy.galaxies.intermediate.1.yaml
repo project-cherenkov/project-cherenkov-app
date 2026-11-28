@@ -1,0 +1,28 @@
+questionId: astronomy.galaxies.intermediate.1
+topic: galaxies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which sequence of steps correctly gives the distance to a spiral galaxy with the Tully–Fisher method?
+choices:
+- text: Measure the redshift, convert it to a recession velocity, and divide by the apparent brightness to obtain
+    the luminosity.
+  correct: false
+- text: Measure the apparent magnitude, assume all spirals have the same absolute magnitude, and use the Hubble
+    law to read off the distance.
+  correct: false
+- text: Measure the width of the 21 cm line to obtain the rotation velocity, use the velocity–luminosity relation
+    to infer the absolute luminosity, then compare with the apparent brightness to get the distance.
+  correct: true
+- text: Measure the angular size of the disk, assume a standard linear size for all spirals, and divide to get the
+    distance.
+  correct: false
+explanation: 'Correct (third choice): the rotation velocity can be measured very accurately from the width of the
+  21 cm line and does not depend on the distance. The luminosity–rotation-velocity (Tully–Fisher) relation turns
+  this into an absolute luminosity; comparison with the apparent brightness through the inverse-square law gives
+  the distance. Choice 1 reverses the logic (a redshift gives a velocity, not a luminosity) and treats brightness
+  incorrectly. Choice 2 assumes a constant absolute magnitude, ignoring the wide range of luminosities of a given
+  type. Choice 4 assumes a universal size, which fails for the same reason.'
+author: Renee
+source: original

@@ -1,0 +1,24 @@
+questionId: astronomy.space-exploration.intermediate.5
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A spacecraft is in a circular orbit 400 km above the surface of Mars. Take Mars's radius as $3.390\times10^{6}$
+  m and $GM_{\rm Mars} = 4.2828\times10^{13}\ \mathrm{m^3\,s^{-2}}$. Neglect the atmosphere and the gravity
+  of other bodies. What is the minimum increase in speed that lets the spacecraft escape from Mars? Enter
+  the value in km/s, rounded to 2 decimal places.
+numericAnswer:
+  value: 1.39
+  tolerance: 0.01
+  unit: km/s
+explanation: The orbital radius is $r = 3.390\times10^{6} + 4.00\times10^{5} = 3.790\times10^{6}$ m. The
+  circular speed is $v_c = \sqrt{GM/r} = \sqrt{4.2828\times10^{13}/3.790\times10^{6}} = 3.362$ km/s, and
+  the escape speed at the same radius is $v_e = \sqrt2\,v_c = 4.754$ km/s. The required speed increase
+  (applied along the direction of motion) is $\Delta v = (\sqrt2 - 1)\,v_c = 1.392$ km/s. Tolerance 0.01
+  km/s is the requested rounding. It rejects the standard error of using the surface escape speed from
+  Mars (5.03 km/s) as the increase, or of using the full $v_e$ (4.75 km/s) instead of the difference from
+  the circular speed.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 6.9, pp. 133–134 (escape velocity); Sect.
+  7.7, p. 157

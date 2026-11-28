@@ -1,0 +1,25 @@
+questionId: astronomy.interstellar-medium.intermediate.1
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A star of known spectral type has intrinsic colour $(B-V)_0=-0.20$ and absolute magnitude $M_V=-1.50$. It
+  is observed with $B-V=+0.25$ and apparent magnitude $V=11.00$. Take $A_V=3.0\,E_{B-V}$ and assume interstellar
+  extinction is the only dimming between the star and the observer. What is the distance to the star?
+choices:
+- text: 3.2 kpc
+  correct: false
+- text: 1.7 kpc
+  correct: true
+- text: 2.6 kpc
+  correct: false
+- text: 0.91 kpc
+  correct: false
+explanation: 'Colour excess: $E_{B-V}=0.25-(-0.20)=0.45$ mag, so $A_V=3.0\times0.45=1.35$ mag. The extinction-corrected
+  distance modulus is $V-M_V-A_V=11.00+1.50-1.35=11.15$, giving $d=10^{(11.15+5)/5}$ pc $\approx1.70\times10^3$
+  pc = 1.7 kpc (second choice). 3.2 kpc results from ignoring extinction ($m-M=12.5$). 2.6 kpc results from subtracting
+  the colour excess 0.45 instead of $A_V$ (forgetting the factor 3). 0.91 kpc results from subtracting the extinction
+  twice (2.70 mag).'
+author: Renee
+source: original

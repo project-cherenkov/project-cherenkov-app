@@ -1,0 +1,29 @@
+questionId: astronomy.accretion-processes.intermediate.3
+topic: accretion-processes
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following are consequences of accretion onto neutron stars in binary systems? Select all that
+  apply.
+choices:
+- text: The pulsed X-ray emission of X-ray pulsars, because the gas is channelled to the magnetic polar caps.
+  correct: true
+- text: Type I X-ray bursts, produced when accreted gas builds up a layer in which helium ignites in a rapid flash.
+  correct: true
+- text: Gas falling freely onto the star at any time, even while it is a young, fast radio pulsar, because the pulsar's
+    radiation has no effect on the gas.
+  correct: false
+- text: Emission of X-rays from a lone white dwarf as it cools, with no companion present.
+  correct: false
+- text: Spin-up of the neutron star towards millisecond periods as the incoming gas delivers angular momentum.
+  correct: true
+explanation: 'Correct set: options 1, 2 and 5. 1: the strongly magnetised neutron star channels the gas onto its
+  polar caps, where it emits X-rays, giving pulses as it rotates. 2: hydrogen burns steadily to helium on the surface;
+  when the helium layer reaches a critical temperature it burns in a helium flash, seen as a burst. 5: the angular
+  momentum of the accreted gas can spin the star up; millisecond pulsars are thought to be members, or former members,
+  of binaries. Option 3 is false: initially the strong radiation of the pulsar prevents gas from falling onto it,
+  and accretion starts only as the pulsar slows. Option 4 is false: a cooling lone white dwarf has no accretion,
+  and its radiation is the leftover heat.'
+author: Renee
+source: original

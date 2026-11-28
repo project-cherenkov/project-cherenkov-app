@@ -1,0 +1,29 @@
+questionId: astronomy.thermodynamics.intermediate.6
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A stellar layer is in radiative equilibrium and just below the threshold for convection, where
+  convection begins if $|dT/dr|_{\rm rad}>|dT/dr|_{\rm ad}$. Here $|dT/dr|_{\rm rad}=\dfrac{3}{4ac}\dfrac{\kappa\rho}{T^{3}}\dfrac{L_r}{4\pi
+  r^{2}}$ and $|dT/dr|_{\rm ad}=\left(1-\dfrac1\gamma\right)\dfrac{T}{P}\left|\dfrac{dP}{dr}\right|$.
+  Treat $\kappa,\rho,T,L_r,r,\gamma,P$ and $dP/dr$ as independently adjustable and change only **one**
+  at a time. Select **all** changes that push the layer toward convection.
+choices:
+- text: Raising the temperature $T$
+  correct: false
+- text: Raising the mass absorption coefficient $\kappa$
+  correct: true
+- text: Increasing the radius $r$ of the layer
+  correct: false
+- text: Lowering $\gamma$ toward 1
+  correct: true
+- text: Raising $\gamma$
+  correct: false
+explanation: Raising $\kappa$ steepens the radiative gradient, so convection becomes more likely (true).
+  Lowering $\gamma$ toward 1 shrinks $(1-1/\gamma)$ and flattens the adiabatic gradient, again favouring
+  convection (true). Raising $T$ lowers the radiative gradient as $T^{-3}$ while raising the adiabatic
+  gradient as $T$, so it stabilises the layer (false). Increasing $r$ lowers the radiative gradient through
+  $r^{-2}$ (false). Raising $\gamma$ steepens the adiabatic gradient (false). The key is {2, 4}.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.1, eqs. (11.4)–(11.7), printed pp. 250–252

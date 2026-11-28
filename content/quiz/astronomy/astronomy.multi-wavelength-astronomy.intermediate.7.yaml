@@ -1,0 +1,21 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.7
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'A hydrogen cloud has its $21.00$ cm line observed at $23.10$ cm. Take $c=299{,}792.458$ km/s.
+  Compute the recession speed twice: once with the small-velocity Doppler formula $\Delta\lambda/\lambda_0=v/c$
+  and once with the relativistic formula $\Delta\lambda/\lambda_0=\sqrt{(1+v/c)/(1-v/c)}-1$. By how much
+  do the two results differ? Give the difference (non-relativistic minus relativistic) in km/s, rounded
+  to the nearest km/s.'
+numericAnswer:
+  value: 1492
+  tolerance: 2
+  unit: km/s
+explanation: Here $\Delta\lambda/\lambda_0=2.10/21.00=0.100$. The small-velocity formula gives $v=0.100c=29979.2$
+  km/s. For the relativistic formula, $(1.1)^2=(1+\beta)/(1-\beta)$, so $\beta=(1.21-1)/(1.21+1)=0.09502$
+  and $v=28487.1$ km/s. The difference is $1492.2$ km/s, about $5\%$ of $v$, showing that the approximation
+  is no longer adequate at $v\sim0.1c$. The tolerance of $2$ km/s allows for rounding.
+author: Renee
+source: original

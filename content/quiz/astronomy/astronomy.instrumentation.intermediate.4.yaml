@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.intermediate.4
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: "Judge each statement independently."
+statements:
+  - text: "A classical paraboloidal reflector suffers from coma, which affects images displaced from the optical axis and limits the useful field of view."
+    isTrue: true
+  - text: "A Schmidt camera uses a thin correcting lens at the centre of curvature of a spherical mirror to remove spherical aberration and give a wide, nearly faultless field."
+    isTrue: true
+  - text: "For a fixed objective, using an eyepiece of longer focal length gives a higher magnification."
+    isTrue: false
+  - text: "For a ground-based telescope limited by $1''$ seeing, increasing the aperture from $1$ m to $2$ m halves the width of a stellar image."
+    isTrue: false
+explanation: "(1) True: coma limits the field of a paraboloid to a few arcminutes unless correcting optics are used. (2) True: the Schmidt design removes the spherical aberration of its spherical mirror. (3) False: $\\omega=f/f'$, so a longer eyepiece focal length lowers the magnification. (4) False: the diffraction limit $\\lambda/D$ improves, but the image is spread into a seeing disc of about $1''$ regardless of aperture, so the width does not halve."
+author: Renee
+source: "original"

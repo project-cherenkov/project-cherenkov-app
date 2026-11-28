@@ -1,0 +1,19 @@
+questionId: astronomy.geometric-instruments.basic.16
+topic: geometric-instruments
+difficulty: basic
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A protractor is centred exactly on the vertex of an angle, and its 0° baseline is aligned with
+  the first ray. The second ray crosses the marked 40° division in the supplied protractor diagram. Read
+  the angle to the nearest degree and enter the value in degrees. ![Protractor reading diagram](/quiz/astronomy/geometry/protractor-reading.svg)
+numericAnswer:
+  value: 40
+  tolerance: 0.5
+  unit: deg
+explanation: The protractor centre is placed at the vertex and the zero line is aligned with the first
+  ray. The second ray therefore reads 40°. The opposite scale is not used. The answer is already to the
+  nearest degree.
+author: Renee
+source: Practical use of a protractor for angle measurement; IOAA syllabus and Puspresnas OSN 2026 Addendum,
+  practical data-analysis/geometric-aid skills. The scale and alignment are supplied in the prompt.

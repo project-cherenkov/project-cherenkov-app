@@ -1,0 +1,25 @@
+questionId: astronomy.stellar-evolution.basic.3
+topic: stellar-evolution
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A single $1\,M_\odot$ star reaches the end of its nuclear burning. Which end state is expected?
+choices:
+- text: A white dwarf surrounded by an expanding planetary nebula.
+  correct: true
+- text: A neutron star left behind by a core-collapse supernova.
+  correct: false
+- text: A black hole.
+  correct: false
+- text: A brown dwarf.
+  correct: false
+explanation: 'A star of about solar mass ejects its outer layers as a planetary nebula and leaves a degenerate carbon–oxygen
+  white dwarf. It never becomes hot enough to ignite carbon in its core.
+
+
+  - Neutron stars and black holes come from much more massive stars.
+
+  - A brown dwarf is an object that never ignited hydrogen (below about $0.08\,M_\odot$), not a remnant.'
+author: Renee
+source: original

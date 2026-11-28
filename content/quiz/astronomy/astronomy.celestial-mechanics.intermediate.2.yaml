@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-mechanics.intermediate.2
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A spacecraft moves on a circular orbit around a planet with orbital speed $v_c=6.0$ km/s. Neglect all other bodies and any atmosphere. By how much must the spacecraft increase its speed, in its direction of motion at that point, to reach exactly the escape speed from that distance?
+choices:
+- text: 6.0 km/s
+  correct: false
+- text: 2.5 km/s
+  correct: true
+- text: 8.5 km/s
+  correct: false
+- text: 12 km/s
+  correct: false
+explanation: For a circular orbit $v_c=\sqrt{\mu/R}$, and the escape speed from the same distance is $v_e=\sqrt{2\mu/R}=\sqrt{2}\,v_c$. Hence $v_e=\sqrt{2}\times 6.0=8.49$ km/s, and the required increase is $8.49-6.0\approx 2.5$ km/s. The value 8.5 km/s is the escape speed itself, which forgets that the craft already moves at 6.0 km/s. The value 6.0 km/s would double the speed to 12 km/s, which is more than needed. The value 12 km/s is that doubled speed, not the increase needed.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.9, eqs. (6.41)–(6.42), printed pp. 133–134

@@ -1,0 +1,25 @@
+questionId: astronomy.solar-system-bodies.basic.3
+topic: solar-system-bodies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: According to the 2006 IAU definitions, a body that orbits the Sun and is massive enough to be
+  nearly round is a dwarf planet rather than a planet if it fails which criterion?
+choices:
+- text: It has no moons orbiting it.
+  correct: false
+- text: It orbits the Sun rather than another planet.
+  correct: false
+- text: Its mass is below the limit needed for a nearly round (hydrostatic-equilibrium) shape.
+  correct: false
+- text: It has cleared other objects away from the neighbourhood of its orbit.
+  correct: true
+explanation: A planet must (1) orbit the Sun, (2) have enough self-gravity to be nearly round, and (3)
+  have cleared the neighbourhood of its orbit. A body that satisfies (1) and (2) but not (3) is a dwarf
+  planet (for example Pluto, Ceres, Eris, Haumea, Makemake). Having moons is not part of the definition,
+  orbiting the Sun is required of both categories, and a nearly round shape is also required of dwarf
+  planets (failing it would make the object a small Solar System body instead). Since the answer is about
+  which criterion a dwarf planet fails, only the cleared-neighbourhood criterion fits.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.1, p. 141

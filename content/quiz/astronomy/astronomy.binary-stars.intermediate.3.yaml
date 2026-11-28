@@ -1,0 +1,39 @@
+questionId: astronomy.binary-stars.intermediate.3
+topic: binary-stars
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: An eclipsing binary has a circular orbit. Its light curve shows eclipses, and the spectral lines of both
+  stars show radial-velocity variations. Which of the following can be determined or concluded from these observations,
+  without an independent distance measurement? Select all that apply.
+choices:
+- text: The ratio of each stellar radius to the orbital separation can be inferred from the shape of the complete
+    eclipse light curve.
+  correct: true
+- text: The distance to the system.
+  correct: false
+- text: The stellar radii in kilometres.
+  correct: true
+- text: The orbital inclination must be high enough for the projected stellar discs to overlap during conjunction.
+  correct: true
+- text: Both stellar masses.
+  correct: true
+explanation: 'True:
+
+
+  - The shape of the complete eclipse light curve constrains the stellar radii relative to the orbital separation.
+
+  - Eclipses require a sufficiently high inclination for the projected stellar discs to overlap at conjunction.
+
+  - With both radial-velocity curves, the circular-orbit period and the inclination constraint from eclipses, the
+  physical orbital scale, component masses and stellar radii can be determined without an independent distance measurement.
+
+
+  False:
+
+
+  - Neither the light curve nor the velocity curves determine the system distance; that requires an independent
+  method.'
+author: Renee
+source: original

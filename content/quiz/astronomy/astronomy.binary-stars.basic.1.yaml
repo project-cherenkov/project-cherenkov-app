@@ -1,0 +1,28 @@
+questionId: astronomy.binary-stars.basic.1
+topic: binary-stars
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The position of a star on the sky shows a regular periodic wobble superimposed on its steady proper motion,
+  but no companion can be seen in any telescope. Which kind of binary does this describe?
+choices:
+- text: A visual binary.
+  correct: false
+- text: An eclipsing (photometric) binary.
+  correct: false
+- text: An astrometric binary.
+  correct: true
+- text: A spectroscopic binary.
+  correct: false
+explanation: 'In an astrometric binary only one component is seen, and its variable proper motion reveals an unseen
+  companion. The first example was Sirius, whose companion was discovered later.
+
+
+  - In a visual binary both stars are seen and followed in their orbits.
+
+  - In an eclipsing binary the total brightness varies periodically.
+
+  - In a spectroscopic binary the line Doppler shifts vary; positions need not.'
+author: Renee
+source: original

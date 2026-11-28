@@ -1,0 +1,24 @@
+questionId: astronomy.star-clusters.intermediate.1
+topic: star-clusters
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: In the colour–magnitude diagram of a nearby open cluster, a few stars lie about $0.75$ mag above the main
+  sequence **at the same colour index** as the main-sequence stars beside them. Which explanation is best?
+choices:
+- text: They are single stars twice as massive at the same main-sequence colour.
+  correct: false
+- text: They are foreground stars at half the cluster distance, brightened by about 1.5 mag.
+  correct: false
+- text: They are cluster stars reddened by dust, which changes their colour and dims them.
+  correct: false
+- text: They are unresolved near-equal binaries, brightened by about 0.75 mag at unchanged colour.
+  correct: true
+explanation: '**Correct (option 4).** Two nearly equal stars have about twice the flux of one component, making
+  the unresolved pair $2.5\log_{10}2\approx0.753$ mag brighter while leaving its colour nearly unchanged. **Option
+  1** is not consistent with the single-star main sequence at the same colour. **Option 2** would produce about
+  1.5 mag of brightening and would not be a cluster member. **Option 3** would change the colour through reddening
+  and make the source fainter through extinction.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2, p. 362

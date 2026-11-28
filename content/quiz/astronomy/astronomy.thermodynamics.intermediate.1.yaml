@@ -1,0 +1,19 @@
+questionId: astronomy.thermodynamics.intermediate.1
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A stellar layer is just stable against convection, meaning its radiative temperature gradient is slightly smaller in magnitude than the adiabatic gradient. Which single change makes convection more likely? Use $|dT/dr|_{\rm rad}\propto\kappa\rho L_r/(T^{3}r^{2})$ and $|dT/dr|_{\rm ad}=(1-1/\gamma)(T/P)|dP/dr|$.
+choices:
+- text: A decrease in the opacity of the gas
+  correct: false
+- text: A decrease in the energy flux carried through the layer
+  correct: false
+- text: An increase in the mass absorption coefficient $\kappa$
+  correct: true
+- text: An increase in the adiabatic exponent $\gamma$, which steepens the adiabatic gradient
+  correct: false
+explanation: Convection sets in when the radiative gradient exceeds the adiabatic gradient in magnitude. A larger $\kappa$ steepens the radiative gradient, pushing the layer toward convection. Lowering opacity or energy flux flattens the radiative gradient, which stabilises the layer. Raising $\gamma$ makes $(1-1/\gamma)$ larger and the adiabatic gradient steeper, which makes convection less likely, not more; convection is favoured when $\gamma$ approaches 1.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.1, eqs. (11.4)–(11.7), printed pp. 250–252

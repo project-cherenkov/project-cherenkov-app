@@ -1,0 +1,30 @@
+questionId: astronomy.stellar-evolution.intermediate.2
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A supernova spectrum near maximum light shows no hydrogen lines but a strong silicon absorption line near
+  $615$ nm. The supernova occurred in an old stellar population with no recent star formation. Which progenitor
+  best fits these observations?
+choices:
+- text: A white dwarf in a close binary that accreted matter until it reached the Chandrasekhar limit.
+  correct: true
+- text: The collapsing iron core of a very massive star in a young stellar population.
+  correct: false
+- text: A massive star stripped of its hydrogen envelope, whose spectrum would show strong helium lines.
+  correct: false
+- text: The nucleus of a planetary nebula cooling to a white dwarf.
+  correct: false
+explanation: 'Type Ia supernovae are recognised by the silicon absorption line and the absence of hydrogen, and
+  they occur in old populations. They are thought to be thermonuclear explosions of white dwarfs in binaries that
+  approach the Chandrasekhar limit through accretion.
+
+
+  - Core-collapse supernovae come from short-lived massive stars and so occur in young populations.
+
+  - A stripped massive star would give a Type Ib spectrum, with helium lines, and again is a young-population event.
+
+  - A cooling planetary-nebula nucleus is not an explosion.'
+author: Renee
+source: original

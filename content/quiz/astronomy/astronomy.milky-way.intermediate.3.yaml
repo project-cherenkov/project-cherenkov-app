@@ -1,0 +1,32 @@
+questionId: astronomy.milky-way.intermediate.3
+topic: milky-way
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** correct statements about the structure of the Milky Way.
+choices:
+- text: Young objects such as H II regions and OB associations are concentrated in the Galactic plane and trace
+    spiral arms
+  correct: true
+- text: Population II stars show large velocities relative to the local standard of rest because they rotate around
+    the Galactic centre much faster than the LSR does
+  correct: false
+- text: Old objects, particularly globular clusters, are distributed almost spherically about the Galactic centre,
+    with density increasing inward
+  correct: true
+- text: The Sun lies within a few hundred parsecs of the Galactic centre
+  correct: false
+- text: In the optical, dust blocks the view of the Galactic centre, so radio and infrared observations are used
+    to study it
+  correct: true
+explanation: '**Options 1, 3 and 5 are correct.** (1) The young optical objects are strongly concentrated in the
+  plane and lie in drawn-out bands interpreted as spiral arms. (3) Globular clusters form an almost spherical system
+  centred on the Galactic centre, with density rising toward it; this is how the Sun''s distance (about 8–8.5 kpc)
+  can be found. (5) Dark clouds in the Sagittarius arm block optical light, so knowledge of the centre comes mostly
+  from radio and infrared observations. **Option 2 is false:** the large velocities relative to the LSR only reflect
+  that the LSR itself moves at about 220 km/s around the centre; the population II stars'' actual velocities at
+  the solar distance are quite small. **Option 4 is false:** the Sun is about 8–8.5 kpc from the centre. Grading
+  is exact-set.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.2, pp. 373–375; Sect. 18.4, pp. 382–383

@@ -1,0 +1,23 @@
+questionId: astronomy.instrumentation.intermediate.3
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: "Which statements about reducing CCD observations are correct?"
+choices:
+  - text: "The CCD's response is strongly nonlinear in the number of photons, like that of a photographic plate."
+    correct: false
+  - text: "An exposure taken with the shutter closed is used to measure the dark current, which is then subtracted."
+    correct: true
+  - text: "Dividing by a flat-field image corrects the differences in sensitivity between pixels."
+    correct: true
+  - text: "Cooling the CCD as far as possible always gives the best sensitivity."
+    correct: false
+  - text: "Taking several short exposures, removing cosmic-ray hits from each and then adding them is often better than one long exposure."
+    correct: true
+  - text: "A signal weaker than the readout noise is easily separated from the noise in a single read-out."
+    correct: false
+explanation: "The CCD response is nearly linear (electrons proportional to photons), unlike the plate, which saturates and is nonlinear. Dark-frame subtraction and flat-fielding are the standard corrections. Cosmic rays produce one- or two-pixel hits that are easily identified, so several short exposures can be cleaned and summed. Cooling reduces dark current but also reduces sensitivity, so too cold is not good. A signal smaller than the readout noise is indistinguishable from it, which sets a limit to the faintest detectable signal."
+author: Renee
+source: "original"

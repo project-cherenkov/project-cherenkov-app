@@ -1,0 +1,27 @@
+questionId: astronomy.galaxies.intermediate.4
+topic: galaxies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about active galaxies and quasars.
+statements:
+- text: The difference between Seyfert 1 and Seyfert 2 galaxies can be largely explained by the orientation of an
+    obscuring disk around the nucleus.
+  isTrue: true
+- text: The energy of every active nucleus is produced by thermonuclear burning in a dense central star cluster.
+  isTrue: false
+- text: Apparent superluminal motion in radio jets shows that the plasma really travels faster than the speed of
+    light.
+  isTrue: false
+- text: The double radio lobes of strong radio galaxies emit non-thermal synchrotron radiation.
+  isTrue: true
+- text: In the unified picture, a radio-quiet quasar differs from a Seyfert 1 galaxy mainly in having a larger luminosity.
+  isTrue: true
+explanation: '1 is true: if the disk is seen edge-on the broad-line region is hidden (type 2). 2 is false: for many
+  nuclei the radiation cannot come from stars, and the most plausible source is gravitational energy released by
+  gas accreting onto a supermassive black hole. 3 is false: the velocities are only apparent, and relativistic jets
+  pointing nearly at us can explain them. 4 is true: the radio emission of radio galaxies is synchrotron radiation.
+  5 is true: in the unified model the main difference between Seyfert 1 galaxies and radio-quiet quasars is luminosity.'
+author: Renee
+source: original

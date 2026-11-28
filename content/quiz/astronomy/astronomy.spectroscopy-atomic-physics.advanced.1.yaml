@@ -1,0 +1,21 @@
+questionId: astronomy.spectroscopy-atomic-physics.advanced.1
+topic: spectroscopy-atomic-physics
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A star's spectrum shows very strong TiO bands, a very strong neutral calcium line at 422.7 nm, many neutral-metal lines, weak hydrogen Balmer lines, no helium lines, a strong cyanogen (CN) band. Select **all** conclusions that these observations support.
+choices:
+- text: The star has a late (cool) spectral type, of the M kind.
+  correct: true
+- text: Its surface temperature is above 10 000 K, because the Balmer lines are weak.
+  correct: false
+- text: The star is a giant rather than a main-sequence dwarf.
+  correct: true
+- text: The gas density in its atmosphere is higher than in a dwarf of the same spectral type.
+  correct: false
+- text: Strong neutral helium lines should be expected in its spectrum.
+  correct: false
+explanation: 'Strong TiO bands, a very strong Ca I 422.7 nm line and many neutral-metal lines mark a cool M-type star. Weak Balmer lines do not imply a high temperature here: TiO molecular bands are incompatible with a very hot atmosphere. The strong CN band supports a giant rather than a dwarf; the book describes this band as strong in giants and nearly absent in dwarfs of comparable spectral type (printed p.233). Giants have lower surface gravity and lower atmospheric density than dwarfs of the same spectral type. Neutral helium lines require hot atmospheres and are not expected in an M star. The supported conclusions are 1 and 3.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §9.2–§9.3, printed pp. 229–233

@@ -1,0 +1,28 @@
+questionId: astronomy.celestial-sphere.basic.5
+topic: celestial-sphere
+difficulty: basic
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Over the course of one night, consider a single fixed star. Neglect precession, nutation and proper
+  motion. Which of the following coordinates of the star stay constant during the night and are also identical
+  for observers at different places on Earth?
+choices:
+- text: Altitude
+  correct: false
+- text: Hour angle
+  correct: false
+- text: Declination
+  correct: true
+- text: Ecliptic longitude
+  correct: true
+- text: Galactic latitude
+  correct: true
+- text: Azimuth
+  correct: false
+explanation: Altitude, azimuth and hour angle are tied to the observer's horizon or meridian, so they
+  change as the Earth rotates and differ from place to place. Declination, ecliptic longitude and galactic
+  latitude are measured in frames fixed relative to the stars (equator, ecliptic and galactic plane of
+  a chosen epoch), so with precession neglected they are constant in time and independent of the observer.
+author: Renee
+source: original

@@ -1,0 +1,33 @@
+questionId: astronomy.stellar-interiors-atmospheres.advanced.3
+topic: stellar-interiors-atmospheres
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Estimate the mean internal temperature of the Sun as follows. Model the Sun as a uniform sphere of mass
+  $M=1.989\times10^{30}$ kg and radius $R=6.957\times10^{8}$ m, made of a completely ionised perfect gas with mean
+  molecular weight $\mu=0.61$. Its gravitational potential energy is $\Omega=-\tfrac35GM^2/R$ and its thermal kinetic
+  energy is that of $N=M/(\mu m_{\rm H})$ free particles at a single temperature $\bar T$. Impose the virial theorem
+  $2K+\Omega=0$. Use $G=6.674\times10^{-11}$ N m$^2$ kg$^{-2}$, $m_{\rm H}=1.6735\times10^{-27}$ kg and $k=1.3807\times10^{-23}$
+  J K$^{-1}$. Enter your answer in millions of kelvin (MK), rounded to two decimal places.
+numericAnswer:
+  value: 2.82
+  tolerance: 0.03
+  unit: MK
+explanation: 'The thermal kinetic energy is $K=\tfrac32NkT$ with $N=M/(\mu m_{\rm H})$. The virial theorem $2K+\Omega=0$
+  gives
+
+
+  $$3\,\frac{M}{\mu m_{\rm H}}\,k\bar T=\frac35\,\frac{GM^2}{R}\quad\Rightarrow\quad\bar T=\frac15\,\frac{G M\mu
+  m_{\rm H}}{kR}.$$
+
+
+  Numerically, $GM=1.327\times10^{20}$ m$^3$ s$^{-2}$, so $GM\mu m_{\rm H}=1.355\times10^{-7}$ and $kR=9.606\times10^{-15}$;
+  the ratio is $1.411\times10^{7}$ K, and one fifth of this is $\bar T\approx2.82\times10^{6}$ K.
+
+
+  Unit: MK. The result is a mean over a model Sun; the real centre is much hotter ($\sim1.5\times10^{7}$ K) because
+  the real Sun is centrally condensed. The tolerance of $0.03$ MK ($\approx1\%$) covers rounding of the supplied
+  constants.'
+author: Renee
+source: original

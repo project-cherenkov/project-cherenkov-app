@@ -1,0 +1,26 @@
+questionId: astronomy.interstellar-medium.intermediate.12
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Two nearby radio-pulsar sightlines pass through the same foreground interstellar material. Sightline
+  A ends just before a uniform magnetised cloud; sightline B passes through the cloud. The measured rotation
+  measures are RM_A = +6.10 rad m⁻² and RM_B = +22.34 rad m⁻². Their dispersion measures are DM_A = 2.00
+  pc cm⁻³ and DM_B = 6.00 pc cm⁻³. Assume the foreground contribution is identical and cancels on subtraction.
+  For the cloud, use the supplied uniform-screen relation ΔRM = 0.812 B_parallel ΔDM, where RM is in rad
+  m⁻², DM is in pc cm⁻³, and B_parallel is in μG. Under the stated sign convention, calculate the signed
+  average line-of-sight magnetic field B_parallel in μG to two significant figures.
+numericAnswer:
+  value: 5.0
+  tolerance: 0.05
+  unit: microgauss
+explanation: 'Subtract the common foreground contribution: ΔRM = 22.34 − 6.10 = 16.24 rad m⁻² and ΔDM
+  = 6.00 − 2.00 = 4.00 pc cm⁻³. The cloud field is B_parallel = ΔRM/(0.812 ΔDM) = 16.24/(0.812 × 4.00)
+  = 5.00 μG. The positive sign follows from the sign convention stated in the prompt. The ±0.05 μG tolerance
+  covers rounding to two significant figures.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), §16.8, printed pp. 355–356 (Faraday rotation
+  of radio polarisation as a method for inferring the interstellar magnetic field). The uniform-screen
+  RM–DM relation and coefficient are supplied explicitly as a simplified model in the prompt; they are
+  not attributed to the textbook.

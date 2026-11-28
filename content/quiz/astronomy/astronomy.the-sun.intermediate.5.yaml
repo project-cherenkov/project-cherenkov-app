@@ -1,0 +1,24 @@
+questionId: astronomy.the-sun.intermediate.5
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Treat the Sun as a blackbody sphere. The solar constant (flux density at 1 au) is $1370\ \mathrm{W\,m^{-2}}$,
+  the solar radius is $6.960\times10^{8}$ m, 1 au $= 1.496\times10^{11}$ m and $\sigma = 5.670\times10^{-8}\
+  \mathrm{W\,m^{-2}\,K^{-4}}$. Find the effective temperature of the Sun. Enter the value in kelvin, rounded
+  to the nearest 10 K.
+numericAnswer:
+  value: 5780
+  tolerance: 10
+  unit: K
+explanation: 'The luminosity follows from the inverse-square law, $L = 4\pi d^2 S_0$, and the Stefan–Boltzmann
+  law gives $L = 4\pi R^2\sigma T_e^4$. Eliminating $L$: $T_e = \left[ S_0 (d/R)^2 / \sigma \right]^{1/4}$.
+  With $d/R = 1.496\times10^{11}/6.960\times10^{8} = 214.9$, $S_0(d/R)^2 = 6.328\times10^{7}\ \mathrm{W\,m^{-2}}$,
+  and dividing by $\sigma$ gives $1.116\times10^{15}\ \mathrm{K^4}$, so $T_e = 5780$ K (the textbook value
+  is 5785 K). Tolerance: $\pm 10$ K covers the requested rounding and intermediate rounding of the four-figure
+  constants (the exact result is 5780.2 K); it is narrow enough to reject a common error such as forgetting
+  the fourth root or using $d$ in place of $d/R$.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.1, p. 283; Sect. 5.7 (Stefan–Boltzmann
+  law) and Sect. 7.10, pp. 166–167

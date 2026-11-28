@@ -1,0 +1,14 @@
+questionId: astronomy.concept-of-time.advanced.3
+topic: concept-of-time
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "A star of right ascension $5^{\\rm h}\\,30^{\\rm m}$ crosses the observer's meridian at upper culmination exactly when the local mean time is $21^{\\rm h}\\,00^{\\rm m}$. Model the mean sun as moving uniformly along the celestial equator, with right ascension $0^{\\rm h}$ at the March equinox and one full $24^{\\rm h}$ revolution in a tropical year of $365.2422$ d. How many days after the March equinox is the date of this observation? Give the answer to the nearest whole day."
+numericAnswer:
+  value: 312
+  tolerance: 1
+  unit: "days"
+explanation: "Local mean time is $T_M=h_M+12^{\\rm h}$, where $h_M$ is the hour angle of the mean sun. The sidereal time is $\\Theta=h+\\alpha$ for any object, so for the mean sun $\\Theta=h_M+\\alpha_M$, and for the star at culmination ($h=0$) $\\Theta=\\alpha_\\star$. Hence $\\alpha_M=\\alpha_\\star-h_M=\\alpha_\\star-(T_M-12^{\\rm h})=5.5-9.0=-3.5^{\\rm h}\\equiv20.5^{\\rm h}$. The mean sun advances $24^{\\rm h}$ in $365.2422$ d, so the elapsed time is $(20.5/24)\\times365.2422=311.98$ d $\\approx312$ d after the March equinox (late January). Using $\\alpha_M=+3.5^{\\rm h}$ (sign error) would give about $53$ d. The tolerance of one day covers rounding to the nearest day."
+author: Renee
+source: "original"

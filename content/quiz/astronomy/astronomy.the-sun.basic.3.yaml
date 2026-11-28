@@ -1,0 +1,27 @@
+questionId: astronomy.the-sun.basic.3
+topic: the-sun
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The sunspot number rises and falls with a period of about 11 years, but the complete period of
+  solar magnetic activity is said to be about 22 years. Why?
+choices:
+- text: Spots of consecutive cycles have opposite magnetic polarity, so the whole magnetic pattern repeats
+    only after two sunspot cycles.
+  correct: true
+- text: The Sun's core rotates once in about 22 years, and this sets the length of the magnetic cycle.
+  correct: false
+- text: Sunspots take 11 years to drift from the equator to the poles and another 11 years to drift back.
+  correct: false
+- text: The sunspot number really peaks only every 22 years; the 11-year figure is an observational artefact.
+  correct: false
+explanation: 'Sunspots of a new cycle have a polarity opposite to that of the old cycle (and spots in
+  the two hemispheres have opposite polarity), so the general field is reversed between consecutive 11-year
+  cycles. The magnetic configuration therefore returns to its starting state only after two cycles, about
+  22 years. The core does not rotate once in 22 years; the surface equatorial period is about 25 days.
+  Spots do not drift to the poles: each cycle''s spots first appear at about $\pm 40^\circ$ latitude and
+  move towards the equator (the butterfly diagram). The ~11-year periodicity in the sunspot number is
+  a measured feature (Schwabe, 1843), not an artefact.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, pp. 291–292

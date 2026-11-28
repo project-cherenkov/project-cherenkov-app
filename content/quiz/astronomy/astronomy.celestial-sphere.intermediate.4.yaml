@@ -1,0 +1,21 @@
+questionId: astronomy.celestial-sphere.intermediate.4
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: "An observer is at latitude $+50^\\circ$ (northern hemisphere). Ignore refraction. Judge each statement independently."
+statements:
+  - text: "A star of declination $+35^\\circ$ never sets."
+    isTrue: false
+  - text: "A star of declination $+45^\\circ$ never sets."
+    isTrue: true
+  - text: "A star of declination $+20^\\circ$ reaches an upper-culmination altitude of $60^\\circ$, south of the zenith."
+    isTrue: true
+  - text: "A star of declination $+60^\\circ$ has a lower-culmination altitude of $30^\\circ$."
+    isTrue: false
+  - text: "A star of declination $-35^\\circ$ rises and sets, reaching a maximum altitude of only $5^\\circ$."
+    isTrue: true
+explanation: "The circumpolar limit is $\\delta>90^\\circ-\\varphi=40^\\circ$. (1) False: $35^\\circ<40^\\circ$, its lower culmination is $\\delta+\\varphi-90^\\circ=-5^\\circ$. (2) True: $45^\\circ>40^\\circ$. (3) True: $a_{\\max}=90^\\circ-50^\\circ+20^\\circ=60^\\circ$, and $\\delta<\\varphi$ puts it south of the zenith. (4) False: $a_{\\min}=\\delta+\\varphi-90^\\circ=60^\\circ+50^\\circ-90^\\circ=20^\\circ$, not $30^\\circ$. (5) True: $a_{\\max}=90^\\circ-50^\\circ-35^\\circ=5^\\circ>0$, so it appears briefly and sets."
+author: Renee
+source: "original"

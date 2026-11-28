@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.basic.3
+topic: electromagnetic-theory
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which of these kinds of radiation are produced by changes in the energy states of the electron envelopes of atoms?
+choices:
+- text: Gamma rays and hard X-rays
+  correct: false
+- text: Gamma rays and ultraviolet radiation
+  correct: false
+- text: Ultraviolet, visible and infrared radiation
+  correct: true
+- text: Visible light only
+  correct: false
+explanation: Ultraviolet, visible and infrared radiation all arise from changes in the energy states of atomic electrons. Gamma rays and hard X-rays come instead from transitions in atomic nuclei or interactions of elementary particles, so any option pairing them with electron-envelope radiation is wrong. Visible light alone is too narrow, since ultraviolet and infrared photons arise in the same way.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §3.5, printed p. 80

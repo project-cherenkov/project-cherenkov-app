@@ -1,0 +1,35 @@
+questionId: astronomy.solar-system-phenomena.intermediate.6
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: 'Use: the Sun passes the same lunar node every 346.62 d; synodic month 29.531 d; 223 synodic months
+  equal 19 such intervals; for a total lunar eclipse the Moon must lie within $4.6^\circ$ of a node, and
+  for a total solar eclipse within $10.3^\circ$. Which of the following statements are correct? Select
+  all that apply.'
+choices:
+- text: Successive eclipse seasons, when the Sun is near one node or the other, are about 173 days apart.
+  correct: true
+- text: One Saros period is exactly 18 years.
+  correct: false
+- text: A total solar eclipse allows the new moon to lie farther from the node ($10.3^\circ$) than a total
+    lunar eclipse allows for the full moon ($4.6^\circ$).
+  correct: true
+- text: After one Saros the Sun–Moon–node configuration almost repeats, because 19 eclipse years are almost
+    equal to 223 synodic months.
+  correct: true
+- text: Every eclipse season contains exactly one solar and exactly one lunar eclipse.
+  correct: false
+- text: A single calendar year can contain parts of three separate eclipse seasons.
+  correct: true
+explanation: 'Correct: (1) the Sun meets alternate nodes half an ''eclipse year'' apart, $346.62/2 = 173.3$
+  d. (3) The book gives the node limits as $10.3^\circ$ for total solar and $4.6^\circ$ for total lunar
+  eclipses. (4) $19\times346.62 = 6585.78$ d and $223\times29.531 = 6585.4$ d, so the geometry repeats
+  almost exactly (with a shift of about $0.4$ d). (6) Seasons are 173.3 d apart, so three of them fit
+  into one 365-day year if the first starts early enough (three seasons need centres at $t_0$, $t_0+173.3$,
+  $t_0+346.6$ all within 365.25 d, i.e. $t_0 \le 18.6$ d). Incorrect: (2) the Saros is about 6585.3 d,
+  i.e. 18 years plus 10 or 11 days; (5) an eclipse set may contain one to three eclipses, not always one
+  of each kind.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.5, pp. 149–150

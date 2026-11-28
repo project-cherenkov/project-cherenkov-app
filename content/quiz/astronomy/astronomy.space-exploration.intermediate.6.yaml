@@ -1,0 +1,38 @@
+questionId: astronomy.space-exploration.intermediate.6
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Treat the Sun as the only attractor, planets as massless, and a probe as moving on a circular
+  heliocentric orbit equal to that of the planet it starts from. Earth's orbital speed is 29.8 km/s at
+  1.000 au. A probe at a given distance receives an instantaneous change of speed $\Delta v$ along its
+  direction of motion. Which of the following statements are correct? Select all that apply.
+choices:
+- text: At 1 au, the escape speed from the Sun is about 42 km/s.
+  correct: true
+- text: From Earth's orbit, escaping the Solar System needs a larger speed change than cancelling the
+    orbital speed to drop towards the Sun.
+  correct: false
+- text: From Earth's orbit, the extra speed needed to leave the Solar System is about 12 km/s.
+  correct: true
+- text: The ratio of the speed change needed to drop into the Sun to that needed to escape is larger for
+    a probe at Mars's orbit than at Earth's.
+  correct: false
+- text: From a circular orbit at 4 au, the extra speed needed to escape is half of that needed from 1
+    au.
+  correct: true
+- text: From Earth's orbit, the extra speed needed to escape is about 42 km/s.
+  correct: false
+explanation: 'Circular speed scales as $v_c \propto r^{-1/2}$ and the escape speed is $\sqrt2\,v_c$. At
+  1 au, $v_e = 1.414\times29.8 = 42.1$ km/s, and the extra speed is $\Delta v_{\rm esc} = (\sqrt2-1)v_c
+  = 12.3$ km/s. Cancelling the orbital speed to fall towards the Sun requires $\Delta v_{\rm fall} = v_c
+  = 29.8$ km/s. Correct: (3) 12 km/s; (5) at 4 au, $v_c = 14.9$ km/s and $\Delta v_{\rm esc} = 6.2$ km/s,
+  which is half of 12.3 km/s because $v_c \propto 4^{-1/2} = 1/2$; (1) 42 km/s. Incorrect: (2) 12.3 km/s
+  is less than 29.8 km/s, so escaping is easier than falling into the Sun, which is the point of Example
+  6.8 of the book; (4) the ratio is $v_c/[(\sqrt2-1)v_c] = 1/(\sqrt2-1) = 2.41$ for any circular orbit,
+  independent of the radius; (6) 42 km/s is the total heliocentric speed needed, not the extra speed beyond
+  the orbital speed. Planetary gravity and the launch from Earth''s surface are neglected on purpose;
+  the book treats the combination only roughly.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Example 6.8, p. 139; Sect. 6.9, pp. 133–134

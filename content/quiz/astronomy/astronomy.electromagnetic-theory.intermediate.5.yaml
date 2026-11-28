@@ -1,0 +1,14 @@
+questionId: astronomy.electromagnetic-theory.intermediate.5
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A star radiating as a blackbody has a measured bolometric flux density at Earth of $2.0\times10^{-8}$ W m$^{-2}$ and an angular diameter of $1.0$ milliarcsecond (use $1\ \mathrm{mas}=4.848\times10^{-9}$ rad). Take $\sigma=5.670\times10^{-8}$ W m$^{-2}$ K$^{-4}$. Find its effective temperature. Enter the value in K, rounded to the nearest 100 K.
+numericAnswer:
+  value: 15700.0
+  tolerance: 100
+  unit: K
+explanation: The flux at distance $d$ is $F=\sigma T_e^{4}(R/d)^{2}=\sigma T_e^{4}(\alpha/2)^{2}$, where $\alpha=2R/d$ is the angular diameter. With $\alpha/2=2.424\times10^{-9}$ rad, $T_e=\left[F/(\sigma(\alpha/2)^{2})\right]^{1/4}=15653$ K. Forgetting the factor 1/2 (using $\alpha$ instead of $\alpha/2$) would give a temperature lower by a factor $\sqrt2$. The tolerance of 100 K matches the requested rounding.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.8, eqs. (5.25)–(5.26), printed p. 114

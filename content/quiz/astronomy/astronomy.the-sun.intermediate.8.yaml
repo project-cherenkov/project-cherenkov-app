@@ -1,0 +1,28 @@
+questionId: astronomy.the-sun.intermediate.8
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model the solar wind as a spherically symmetric outflow of protons only (ignore electrons' mass
+  and helium nuclei), with number density $7.5\ \mathrm{cm^{-3}}$ and speed 500 km/s at 1 au. Use 1 au
+  $= 1.496\times10^{11}$ m, $m_p = 1.673\times10^{-27}$ kg, $L_\odot = 3.9\times10^{26}$ W and $c = 2.998\times10^{8}$
+  m/s. Compare the mass lost to the wind, $\dot M_{\rm wind}$, with the mass converted to radiation, $\dot
+  M_{\rm rad} = L_\odot/c^2$. Enter the ratio $\dot M_{\rm wind}/\dot M_{\rm rad}$ as a dimensionless
+  number, rounded to 2 decimal places.
+numericAnswer:
+  value: 0.41
+  tolerance: 0.01
+  unit: dimensionless
+explanation: By mass continuity the outflow through a sphere of radius $r = 1$ au is $\dot M_{\rm wind}
+  = 4\pi r^2 n\,m_p\,v$. Converting the density, $n = 7.5\times10^{6}\ \mathrm{m^{-3}}$, so $n m_p v =
+  7.5\times10^{6}\times1.673\times10^{-27}\times5.0\times10^{5} = 6.27\times10^{-15}\ \mathrm{kg\,m^{-2}\,s^{-1}}$,
+  and $4\pi r^2 = 2.81\times10^{23}\ \mathrm{m^2}$, so $\dot M_{\rm wind} = 1.76\times10^{9}$ kg/s. (This
+  corresponds to $2.8\times10^{-14}\,M_\odot$ per year, consistent with the $2\text{–}3\times10^{-14}\,M_\odot$/yr
+  quoted for the Sun.) The radiative loss is $\dot M_{\rm rad} = 3.9\times10^{26}/(2.998\times10^{8})^2
+  = 4.34\times10^{9}$ kg/s, about 4.3 million tonnes per second. The ratio is $1.76/4.34 = 0.41$. Tolerance
+  0.01 is the requested rounding (the unrounded value is 0.4066); a student who forgets the $4\pi$, uses
+  km instead of m, or omits $c^2$ is off by orders of magnitude, so a narrow tolerance does not hide ambiguity.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.4, p. 297; Sect. 13.1, pp. 283–284;
+  Example 13.1, p. 297

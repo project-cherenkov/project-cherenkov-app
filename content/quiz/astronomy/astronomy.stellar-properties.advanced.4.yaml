@@ -1,0 +1,27 @@
+questionId: astronomy.stellar-properties.advanced.4
+topic: stellar-properties
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A pulsating star is modelled as a blackbody sphere. At maximum light its radius is $38\,R_\odot$ and its
+  effective temperature is $6600$ K. At minimum light its radius is $43\,R_\odot$ and its effective temperature
+  is $5400$ K. Treat the observed brightness as the bolometric brightness and neglect any variation of distance
+  or extinction. Find the bolometric amplitude of the light variation, $\Delta m_{\rm bol}=m_{\rm bol,min}-m_{\rm
+  bol,max}$. Enter your answer in magnitudes, rounded to two decimal places.
+numericAnswer:
+  value: 0.6
+  tolerance: 0.01
+  unit: mag
+explanation: 'With $L=4\pi R^2\sigma T_{\rm eff}^4$, the luminosity ratio is
+
+
+  $$\frac{L_{\max}}{L_{\min}}=\left(\frac{R_{\max}}{R_{\min}}\right)^2\left(\frac{T_{\max}}{T_{\min}}\right)^4=\left(\frac{38}{43}\right)^2\left(\frac{6600}{5400}\right)^4=0.781\times2.232\approx1.743.$$
+
+
+  Then $\Delta m_{\rm bol}=2.5\lg(1.743)\approx0.603$ mag. The cooler surface at minimum dims the star by $2.5\lg[(6600/5400)^4]\approx0.871$
+  mag, while the larger radius brightens it by $2.5\lg[(43/38)^2]\approx0.268$ mag; the net amplitude is $0.871-0.268\approx0.60$
+  mag, so the radius change partly compensates the temperature change. Unit: magnitudes. The tolerance of $0.01$
+  mag matches the stated rounding to two decimals.'
+author: Renee
+source: original

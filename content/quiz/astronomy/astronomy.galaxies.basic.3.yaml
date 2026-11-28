@@ -1,0 +1,24 @@
+questionId: astronomy.galaxies.basic.3
+topic: galaxies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The rotation speed of a spiral galaxy is $220\ \mathrm{km\,s^{-1}}$ at a radius of 10 kpc. Assume most of
+  the mass inside this radius is distributed roughly spherically, so $M(R)=Rv^2/G$. Use $G=4.30\times10^{-6}\ \mathrm{kpc\,(km/s)^2\,M_\odot^{-1}}$.
+  What is the mass inside 10 kpc?
+choices:
+- text: $1.1\times10^{11}\ M_\odot$
+  correct: true
+- text: $5.6\times10^{10}\ M_\odot$
+  correct: false
+- text: $2.3\times10^{11}\ M_\odot$
+  correct: false
+- text: $1.1\times10^{12}\ M_\odot$
+  correct: false
+explanation: 'Correct (first choice): $M=Rv^2/G=10\times220^2/(4.30\times10^{-6})=1.13\times10^{11}\ M_\odot$. $5.6\times10^{10}$
+  would result from an extra factor $1/2$ ($v^2R/2G$). $2.3\times10^{11}$ would result from using the virial formula
+  for ellipticals, $2v^2R/G$, which is not the relation stated for a rotating disk here. $1.1\times10^{12}$ is an
+  order-of-magnitude slip.'
+author: Renee
+source: original

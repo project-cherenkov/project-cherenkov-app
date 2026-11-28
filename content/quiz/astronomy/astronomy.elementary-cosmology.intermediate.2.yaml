@@ -1,0 +1,24 @@
+questionId: astronomy.elementary-cosmology.intermediate.2
+topic: elementary-cosmology
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: For small redshifts, standard candles of absolute magnitude $M_0$ obey Hubble's law, so that $m=5\lg z+C$.
+  Two type Ia supernovae with the same $M_0$ have redshifts $z=0.02$ and $z=0.08$, both small enough for Hubble's
+  law. By how many magnitudes is the more distant one fainter?
+choices:
+- text: 3.0 mag
+  correct: true
+- text: 1.5 mag
+  correct: false
+- text: 6.0 mag
+  correct: false
+- text: 0.60 mag
+  correct: false
+explanation: The magnitude difference is $\Delta m=5\lg(0.08/0.02)=5\lg4=3.0$ mag (first choice), because for Hubble
+  flow the distance is proportional to $z$ and $m=M_0+5\lg(r/10\,\mathrm{pc})$. 1.5 mag comes from using $2.5\lg4$
+  instead of $5\lg4$. 6.0 mag comes from treating the distance as proportional to $z^2$. 0.60 mag is just $\lg4$
+  without the factor 5.
+author: Renee
+source: original

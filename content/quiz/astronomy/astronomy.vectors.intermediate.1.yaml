@@ -1,0 +1,24 @@
+questionId: astronomy.vectors.intermediate.1
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A planet at $\mathbf r=3\,\hat\imath$ (au) has velocity $\mathbf v=\hat\jmath+\hat k$ (au/yr). Which unit
+  vector gives the direction of its angular momentum per unit mass $\mathbf k=\mathbf r\times\mathbf v$?
+choices:
+- text: $(0,\,1,\,-1)/\sqrt2$
+  correct: false
+- text: $(0,\,1,\,1)/\sqrt2$
+  correct: false
+- text: $(0,\,-1,\,1)/\sqrt2$
+  correct: true
+- text: $(1,\,0,\,0)$
+  correct: false
+explanation: $\mathbf r\times\mathbf v=(3,0,0)\times(0,1,1)=(0\cdot1-0\cdot1,\;0\cdot0-3\cdot1,\;3\cdot1-0\cdot0)=(0,-3,3)$,
+  direction $(0,-1,1)/\sqrt2$. $(0,1,-1)/\sqrt2$ is the direction of $\mathbf v\times\mathbf r$, i.e. the factors
+  have been taken in the wrong order (the vector product is anticommutative). $(0,1,1)/\sqrt2$ is just the direction
+  of $\mathbf v$; $\mathbf k$ must be perpendicular to $\mathbf v$. $(1,0,0)$ is the direction of $\mathbf r$, also
+  not perpendicular to $\mathbf k$.
+author: Renee
+source: original

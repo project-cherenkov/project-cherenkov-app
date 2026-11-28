@@ -1,0 +1,26 @@
+questionId: astronomy.solar-system-bodies.intermediate.2
+topic: solar-system-bodies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Assume Venus moves on a circular orbit in Earth's orbital plane. At the moment of its greatest
+  eastern elongation (about $47^\circ$ from the Sun), which description of its appearance is correct?
+choices:
+- text: In the morning sky before sunrise, appearing fully illuminated.
+  correct: false
+- text: In the evening sky after sunset, appearing as a thin crescent.
+  correct: false
+- text: In the evening sky after sunset, with half of its disc illuminated.
+  correct: true
+- text: In the morning sky before sunrise, with half of its disc illuminated.
+  correct: false
+explanation: Eastern elongation means the planet is east of the Sun, so it sets after the Sun and is an
+  'evening star'; western elongation gives a 'morning star'. At greatest elongation, the line of sight
+  from Earth is tangent to Venus's orbit and therefore perpendicular to the Sun–Venus line, so the Sun–Venus–Earth
+  angle (the phase angle $\alpha$) is $90^\circ$ and half of the visible disc is lit. A thin crescent
+  occurs near inferior conjunction ($\alpha$ near $180^\circ$) and a full disc near superior conjunction
+  ($\alpha$ near $0^\circ$), when Venus is lost in the Sun's glare. The two morning-sky options describe
+  western elongation or are incompatible with the geometry.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.2, p. 145

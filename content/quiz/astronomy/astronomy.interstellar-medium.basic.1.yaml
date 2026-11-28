@@ -1,0 +1,28 @@
+questionId: astronomy.interstellar-medium.basic.1
+topic: interstellar-medium
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Two stars of the same spectral class are observed. The one seen through much more interstellar dust looks
+  redder than the other. What is the main reason?
+choices:
+- text: Dust grains absorb starlight and re-emit it at red wavelengths, converting blue photons into red ones in
+    the line of sight.
+  correct: false
+- text: The dust moves with the stars, so Doppler shifts move all the star's spectral lines towards longer wavelengths.
+  correct: false
+- text: Interstellar extinction is stronger at short wavelengths, so blue light is removed more than red light and
+    the colour becomes redder.
+  correct: true
+- text: Dust dims all wavelengths by the same amount, so only the brightness changes and the colour is unaffected.
+  correct: false
+explanation: 'Correct (third choice): in the optical and ultraviolet the extinction rises roughly in proportion
+  to 1/wavelength, so blue light is removed more than red and a star looks redder than its spectral class predicts
+  (interstellar reddening). Choice 1 confuses extinction with fluorescence: the absorbed energy is re-radiated by
+  cool grains in the infrared, not as red starlight. Choice 2 mixes up reddening with the Doppler effect; the dust
+  is not a source of a velocity shift of the star''s lines, and the spectral class is judged from line strengths,
+  which extinction does not change. Choice 4 describes grey (neutral) extinction, which would dim without reddening
+  and so cannot create a colour excess.'
+author: Renee
+source: original

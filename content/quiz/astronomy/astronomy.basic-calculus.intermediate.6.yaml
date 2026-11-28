@@ -1,0 +1,34 @@
+questionId: astronomy.basic-calculus.intermediate.6
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A body moves under $\ddot{\mathbf r}=-\mu\mathbf r/r^3$, with $r=|\mathbf r|$, $v=|\dot{\mathbf
+  r}|$, and scalar radial velocity $\dot r=\mathrm d r/\mathrm dt=(\mathbf r\cdot\dot{\mathbf r})/r$.
+  Which of the following steps or results are valid for general motion? Select all that apply.
+choices:
+- text: $\dot{\mathbf r}\times\dot{\mathbf r}=\mathbf 0$, so for $\mathbf k=\mathbf r\times\dot{\mathbf
+    r}$ we have $\dot{\mathbf k}=\mathbf r\times\ddot{\mathbf r}$
+  correct: true
+- text: $\mathbf r\times\ddot{\mathbf r}=\mathbf 0$, because $\ddot{\mathbf r}$ is parallel to $\mathbf
+    r$
+  correct: true
+- text: $\mathbf r\cdot\dot{\mathbf r}=rv$ for every trajectory.
+  correct: false
+- text: $\mathbf r\cdot\dot{\mathbf r}=r\dot r$, and therefore $\dot{\mathbf r}\cdot\ddot{\mathbf r}=-\mu\dot
+    r/r^2$
+  correct: true
+- text: Since $\dot{\mathbf r}\cdot\ddot{\mathbf r}=\tfrac{\mathrm d}{\mathrm dt}(\tfrac12v^2)$ and $-\mu\dot
+    r/r^2=\tfrac{\mathrm d}{\mathrm dt}(\mu/r)$, the quantity $\tfrac12v^2-\mu/r$ is constant
+  correct: true
+- text: The direction of $\mathbf k$ rotates once per orbit while its magnitude stays constant
+  correct: false
+explanation: 'The first two steps imply $\dot{\mathbf k}=\mathbf 0$ because $\mathbf r$ and $\ddot{\mathbf
+  r}$ are parallel. By the explicitly defined radial velocity, $\mathbf r\cdot\dot{\mathbf r}=r\dot r$,
+  which gives $\dot{\mathbf r}\cdot\ddot{\mathbf r}=-\mu\dot r/r^2$ and hence conservation of $\tfrac12v^2-\mu/r$.
+  The claim $\mathbf r\cdot\dot{\mathbf r}=rv$ is false for general motion: it would require the full
+  speed to equal the radial speed, which is true only for purely radial motion. The angular-momentum vector
+  is constant in both magnitude and direction.'
+author: Renee
+source: original

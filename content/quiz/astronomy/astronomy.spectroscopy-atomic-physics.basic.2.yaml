@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.basic.2
+topic: spectroscopy-atomic-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Between which two hydrogen energy levels does the transition producing the H$\alpha$ line, the lowest-energy line of the Balmer series, occur?
+choices:
+- text: Between $n=1$ and $n=2$
+  correct: false
+- text: Between $n=1$ and $n=3$
+  correct: false
+- text: Between $n=2$ and $n=4$
+  correct: false
+- text: Between $n=2$ and $n=3$
+  correct: true
+explanation: Balmer lines involve the level $n=2$. H$\alpha$ is the line with the smallest energy difference, between $n=2$ and $n=3$ (emitted for $3\to2$, absorbed for $2\to3$). The $1\leftrightarrow2$ transition is Lyman-$\alpha$ in the ultraviolet, $1\leftrightarrow3$ belongs to the Lyman series, and $2\leftrightarrow4$ is H$\beta$, which has a higher energy than H$\alpha$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.2, eqs. (5.7)–(5.8), printed p. 107

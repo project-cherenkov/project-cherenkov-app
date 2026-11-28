@@ -1,0 +1,35 @@
+questionId: astronomy.the-sun.intermediate.4
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the solar atmosphere independently as true or false.
+statements:
+- text: The continuous emission of the inner (K) corona is sunlight scattered by interplanetary dust,
+    while the F corona is light scattered by free electrons.
+  isTrue: false
+- text: During a total eclipse, the flash spectrum seen just before and after totality is an emission-line
+    spectrum from the chromosphere.
+  isTrue: true
+- text: Emission lines of iron ionised thirteen times in the coronal spectrum show that the corona has
+    a temperature of about a million kelvin.
+  isTrue: true
+- text: Because its temperature is about $10^6$ K, the corona stores far more thermal energy than the
+    photosphere does.
+  isTrue: false
+- text: Solar radio emission at about 1 m wavelength comes from higher layers (the corona) than millimetre-wavelength
+    emission.
+  isTrue: true
+explanation: '(1) False: the roles are swapped. The K corona''s continuum is photospheric light scattered
+  by electrons; the F corona (a few solar radii out) is sunlight scattered by dust and shows Fraunhofer
+  lines. (2) True: the chromosphere appears as a thin reddish sickle and gives an emission-line spectrum
+  with more than 3000 lines. (3) True: removing so many electrons takes a great deal of energy, which
+  requires a gas temperature of about $10^6$ K; this is the resolution of the ''coronium'' puzzle. (4)
+  False: the coronal gas is so diffuse that the total energy stored in it is small, despite the high temperature.
+  (5) True: free electrons obstruct radio waves, so longer wavelengths only escape from higher, thinner
+  layers (about 10 cm from the upper chromosphere, 1 m from the corona), whereas millimetre waves show
+  deeper layers.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.2, pp. 286–289 and Sect. 13.3, pp.
+  295–296

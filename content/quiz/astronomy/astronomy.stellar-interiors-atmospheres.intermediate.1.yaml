@@ -1,0 +1,34 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.1
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Main-sequence stars above about $1.5\,M_\odot$ have convective cores, whereas the Sun's core is radiative.
+  Which qualitative explanation is consistent with the structure of such stars?
+choices:
+- text: Their cores rotate faster, and rotation alone drives convection.
+  correct: false
+- text: Their cores are cooler, so radiation cannot escape and convection is forced.
+  correct: false
+- text: Hydrogen burning in them occurs in a shell, and shell burning always produces convection in the core.
+  correct: false
+- text: Their energy comes mainly from the CNO cycle, which is so strongly temperature dependent and centrally concentrated
+    that the required energy flux makes the radiative temperature gradient steeper than the convective one.
+  correct: true
+explanation: 'In stars above about $1.5\,M_\odot$ the CNO cycle dominates because its rate rises much more steeply
+  with temperature than that of the proton–proton chain. The energy generation is therefore concentrated near the
+  centre, so a large flux must be carried outward. A radiative temperature gradient that carries such a flux would
+  exceed the adiabatic (convective) gradient, so the core becomes convective while the outer layers remain radiative.
+
+
+  - Rotation is not the cause; the structure follows from energy generation and opacity.
+
+  - Their cores are hotter, not cooler.
+
+  - Main-sequence hydrogen burning occurs in the core; shell burning belongs to later evolutionary stages.
+
+
+  This is a qualitative understanding item; no quantitative derivation of the convective criterion is needed.'
+author: Renee
+source: original

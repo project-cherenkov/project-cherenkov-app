@@ -1,0 +1,22 @@
+questionId: astronomy.star-clusters.advanced.4
+topic: star-clusters
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: The standard single-star main sequence has $M_V=4.85$ at colour $(B-V)_0=0.65$. In a distant cluster, two
+  identical component stars each lie on that single-star main sequence at $(B-V)_0=0.65$. They are unresolved and
+  have a combined apparent magnitude $m_V=18.50$. Interstellar extinction towards the cluster is $A_V=1.50$ mag.
+  Using main-sequence fitting for the single-star sequence (take $2.5\log_{10}2=0.753$), find the cluster’s distance.
+  Enter the value in kpc, rounded to two decimal places.
+numericAnswer:
+  value: 3.81
+  tolerance: 0.02
+  unit: kpc
+explanation: The two equal components each lie on the calibrated single-star sequence. Their unresolved combined
+  light is $0.753$ mag brighter, so the single-component apparent magnitude is $18.50+0.753=19.253$. Removing extinction
+  gives $m_{V0}=19.253-1.50=17.753$. The distance modulus is $17.753-4.85=12.903$, so $r=10\,\mathrm{pc}\times10^{12.903/5}=3.807\times10^3$
+  pc $=3.81$ kpc. The wording now distinguishes the positions of the individual components from the combined binary,
+  which lies above the single-star sequence.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2, pp. 362–363

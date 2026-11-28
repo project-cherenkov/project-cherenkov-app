@@ -1,0 +1,23 @@
+questionId: astronomy.nuclear-physics.intermediate.3
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** correct statements about stellar nuclear reactions.
+choices:
+- text: The triple-alpha reaction requires temperatures above about $10^{8}$ K.
+  correct: true
+- text: The first step of the pp chain is very fast, so the deuteron abundance inside stars is large.
+  correct: false
+- text: The CNO cycle permanently consumes the carbon, nitrogen and oxygen nuclei it uses.
+  correct: false
+- text: $^{8}$Be is unstable and splits into two helium nuclei within about $10^{-16}$ s, so making carbon requires an almost simultaneous three-particle collision.
+  correct: true
+- text: Fusing iron nuclei is the main energy source in the cores of massive stars.
+  correct: false
+- text: Nuclei heavier than iron are formed mainly by neutron capture in the late violent stages of stellar evolution.
+  correct: true
+explanation: 'Statement 1 is correct. Statement 2 is wrong: the first step has an extremely small probability (a proton waits about $10^{10}$ yr on average), which keeps the deuteron abundance very small and the Sun shining steadily. Statement 3 is wrong: C, N and O act as catalysts and are regenerated. Statement 4 is correct. Statement 5 is wrong: fusion beyond iron needs energy, so iron is an end point for energy release. Statement 6 is correct. The key is {1, 4, 6}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 254–257

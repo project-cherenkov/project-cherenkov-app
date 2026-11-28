@@ -1,0 +1,31 @@
+questionId: astronomy.stellar-properties.basic.3
+topic: stellar-properties
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Star P has colour index $B-V=-0.20$ and star Q has $B-V=+1.40$. For reference, an A0 star (effective temperature
+  about $10{,}000$ K) has $B-V=0.00$ and the Sun has $B-V=0.64$. Which conclusion about the effective temperatures
+  is best supported?
+choices:
+- text: Star P is cooler than the Sun, because a negative colour index means a deficit of blue light.
+  correct: false
+- text: Star Q is hotter than the Sun, because a larger colour index means more flux in the $B$ band.
+  correct: false
+- text: The two stars have the same temperature, because a colour index is only a difference of zero points.
+  correct: false
+- text: Star P is hotter than an A0 star, and star Q is cooler than the Sun.
+  correct: true
+explanation: 'The zero points of $B$ and $V$ are chosen so that $B-V=0$ for an A0 star. A smaller $B-V$ means relatively
+  more blue light and a hotter blackbody-like spectrum; a larger $B-V$ means a redder, cooler star. The Sun ($B-V=0.64$,
+  about $5800$ K) lies between the A0 star and star Q. So $B-V=-0.20<0$ means star P is hotter than $\approx10{,}000$
+  K, and $B-V=1.40>0.64$ means star Q is cooler than the Sun.
+
+
+  - A negative index is not a blue deficit: $B$ is the smaller (brighter) magnitude, so it signals excess blue light.
+
+  - A larger $B-V$ means the star is fainter in $B$ relative to $V$, i.e. redder, not more blue flux.
+
+  - The colour index is a magnitude difference, which is a flux ratio, and it varies with temperature.'
+author: Renee
+source: original

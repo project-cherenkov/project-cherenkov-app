@@ -1,0 +1,28 @@
+questionId: astronomy.stellar-interiors-atmospheres.basic.2
+topic: stellar-interiors-atmospheres
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Treat two stars as blackbodies. Star P has its spectral peak at $290$ nm, and star Q has its spectral peak
+  at $870$ nm. What is the ratio of their surface temperatures, $T_P/T_Q$?
+choices:
+- text: $3$
+  correct: true
+- text: $1/3$
+  correct: false
+- text: $9$
+  correct: false
+- text: $\sqrt{3}$
+  correct: false
+explanation: 'Wien''s displacement law is $\lambda_{\max}T=\text{constant}$, so $T_P/T_Q=\lambda_Q/\lambda_P=870/290=3$.
+  The star with the shorter peak wavelength is hotter.
+
+
+  - $1/3$ inverts the ratio.
+
+  - $9$ squares the ratio, mixing in a different power law.
+
+  - $\sqrt{3}$ takes a square root; the law is linear in $1/\lambda_{\max}$.'
+author: Renee
+source: original

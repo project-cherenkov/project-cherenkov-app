@@ -1,0 +1,19 @@
+questionId: astronomy.celestial-sphere.intermediate.2
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: "At latitude $+40^\\circ$, a star of declination $+20^\\circ$ rises. Ignoring refraction, what is its azimuth at the moment of rising? Azimuth is measured from $0^\\circ$ at north, increasing towards east (so due east is $90^\\circ$)."
+choices:
+  - text: "$26.5^\\circ$"
+    correct: false
+  - text: "$63.5^\\circ$"
+    correct: true
+  - text: "$116.5^\\circ$"
+    correct: false
+  - text: "$90.0^\\circ$"
+    correct: false
+explanation: "At rising the altitude is $a=0$. The horizontal–equatorial transformation (nautical triangle) gives $\\sin\\delta=\\sin a\\sin\\varphi+\\cos a\\cos\\varphi\\cos A$ for azimuth $A$ measured from north, which reduces to $\\cos A=\\sin\\delta/\\cos\\varphi=\\sin 20^\\circ/\\cos 40^\\circ=0.4465$, so $A=63.5^\\circ$ (east side, $0^\\circ$–$180^\\circ$). A positive declination makes the star rise north of due east. $26.5^\\circ$ swaps sine and cosine; $116.5^\\circ$ would describe a star of declination $-20^\\circ$ (rising south of east); $90^\\circ$ holds only for $\\delta=0$."
+author: Renee
+source: "original"

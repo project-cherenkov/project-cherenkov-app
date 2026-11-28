@@ -1,0 +1,21 @@
+questionId: astronomy.electromagnetic-theory.intermediate.3
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Radiation crosses a medium with source function $S_\nu=j_\nu/\alpha_\nu$ and optical depth $\tau_\nu$ along the ray, obeying $dI_\nu/d\tau_\nu=-I_\nu+S_\nu$. Select **all** correct statements.
+choices:
+- text: Where $I_\nu>S_\nu$, the intensity decreases along the ray.
+  correct: true
+- text: A medium with $S_\nu$ larger than the incoming intensity always dims the incoming radiation.
+  correct: false
+- text: Where $I_\nu=S_\nu$, emission and absorption balance and $I_\nu$ does not change with $\tau_\nu$.
+  correct: true
+- text: The emission coefficient $j_\nu$ is the optical thickness per unit length.
+  correct: false
+- text: For a uniform cloud with $\tau_\nu\gg1$, the emergent intensity approaches $S_\nu$.
+  correct: true
+explanation: 'Statement 1 is correct: $dI_\nu/d\tau_\nu<0$ when $I_\nu>S_\nu$. Statement 2 is wrong: if $S_\nu$ exceeds the incoming intensity, $dI_\nu/d\tau_\nu>0$ and the medium adds intensity. Statement 3 is correct: $dI_\nu/d\tau_\nu=0$ at $I_\nu=S_\nu$. Statement 4 is wrong: $j_\nu$ is the energy emitted per unit volume, time, frequency and solid angle; $\alpha_\nu$ per unit length gives optical depth. Statement 5 is correct: $I_\nu=I_\nu(0)e^{-\tau_\nu}+S_\nu(1-e^{-\tau_\nu})\to S_\nu$. The key is {1, 3, 5}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.10, eqs. (5.36)–(5.43), printed pp. 117–118

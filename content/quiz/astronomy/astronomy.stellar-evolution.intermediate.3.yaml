@@ -1,0 +1,38 @@
+questionId: astronomy.stellar-evolution.intermediate.3
+topic: stellar-evolution
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Consider a single star of $1\,M_\odot$ after it leaves the main sequence. Which of the following events
+  or end states occur? Select all that apply.
+choices:
+- text: The star's core collapses to form a neutron star.
+  correct: false
+- text: Hydrogen continues to burn in a shell around an inert helium core.
+  correct: true
+- text: The star ends as a carbon–oxygen white dwarf.
+  correct: true
+- text: The star ignites carbon burning in its core.
+  correct: false
+- text: Helium ignites in a degenerate core in a helium flash.
+  correct: true
+- text: The outer layers are expelled as a planetary nebula.
+  correct: true
+explanation: 'For a $1\,M_\odot$ star:
+
+
+  - After core hydrogen exhaustion, hydrogen burns in a shell around the helium core and the star expands as a red
+  giant. True.
+
+  - Helium ignites in the degenerate core in a helium flash. True.
+
+  - The outer layers are expelled as a planetary nebula. True.
+
+  - The remnant is a carbon–oxygen white dwarf. True.
+
+
+  False: the star never becomes hot enough to ignite carbon, and it has too little mass for core collapse to a neutron
+  star.'
+author: Renee
+source: original

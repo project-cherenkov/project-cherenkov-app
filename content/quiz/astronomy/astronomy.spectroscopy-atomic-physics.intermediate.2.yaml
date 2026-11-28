@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.2
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Consider an electric-dipole transition from a lower $p$ state ($l=1$) to an upper $d$ state ($l=2$) in a strong magnetic field. Each state splits into its allowed $m_l$ sublevels, and adjacent sublevels in both states have the same energy spacing $\Delta E$. A transition is allowed only when $\Delta m_l=0,\pm1$. How many distinct photon energies can these transitions produce?
+choices:
+- text: '9'
+  correct: false
+- text: '5'
+  correct: false
+- text: '2'
+  correct: false
+- text: '3'
+  correct: true
+explanation: The $p$ state has three $m_l$ sublevels and the $d$ state has five, giving nine allowed transitions under $\Delta m_l=0,\pm1$. Because adjacent sublevels in both states have the same spacing, transitions with the same $\Delta m_l$ have the same energy difference. There are therefore three distinct photon energies, corresponding to $\Delta m_l=-1,0,+1$. Nine counts the allowed transitions rather than the distinct energies.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.4, Fig. 5.7 and accompanying text, printed pp. 109–110 (Zeeman sublevels, selection rules and equal transition-energy differences).

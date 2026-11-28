@@ -1,0 +1,14 @@
+questionId: astronomy.celestial-sphere.intermediate.5
+topic: celestial-sphere
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: "A star has declination $\\delta=+20.0^\\circ$ and is observed from latitude $\\varphi=-7.8^\\circ$ (southern hemisphere). Ignoring refraction, how long after rising does the star reach upper culmination? Give the answer in hours of sidereal time, rounded to two decimal places."
+numericAnswer:
+  value: 5.81
+  tolerance: 0.01
+  unit: "sidereal hours"
+explanation: "At rising $a=0$, so $\\cos h=-\\tan\\delta\\tan\\varphi=-\\tan 20.0^\\circ\\tan(-7.8^\\circ)=0.04986$, giving $|h|=87.142^\\circ$. The rising hour angle is $-|h|$ and culmination is at $h=0$, so the interval is $|h|/15^\\circ\\,{\\rm h}^{-1}=5.809$ h of sidereal time $\\approx 5.81$ h. Because $\\tan\\delta\\tan\\varphi<0$ here, $\\cos h>0$ and $|h|<90^\\circ$: the star is above the horizon for slightly less than half of the sidereal day. The tolerance $0.01$ h covers the requested two-decimal rounding."
+author: Renee
+source: "original"

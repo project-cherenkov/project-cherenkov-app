@@ -1,0 +1,14 @@
+questionId: astronomy.thermodynamics.intermediate.5
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A rapidly rotating planet with Bond albedo $0.25$ orbits the Sun at $1.52$ au on a circular path. It absorbs sunlight and re-emits it as a blackbody from its whole surface, with no atmosphere and no internal heat. Take the Sun's effective temperature $5772$ K, its radius $6.957\times10^{8}$ m and $1\ \mathrm{au}=1.496\times10^{11}$ m. Find the planet's equilibrium temperature. Enter it in K, rounded to the nearest kelvin.
+numericAnswer:
+  value: 210
+  tolerance: 2
+  unit: K
+explanation: The absorbed power is $(1-A)\pi R_p^{2}\,\sigma T_\odot^{4}(R_\odot/r)^{2}$ and the emitted power is $4\pi R_p^{2}\sigma T^{4}$. Equating them gives $T=T_\odot\left[(1-A)/4\right]^{1/4}(R_\odot/r)^{1/2}$. Here $[(1-A)/4]^{1/4}=0.1875^{1/4}=0.658$ and $(R_\odot/r)^{1/2}=(3.06\times10^{-3})^{1/2}=0.0553$, so $T=210.1$ K. Using the factor 2 of a slow rotator instead of 4 gives about 250 K. The tolerance of 2 K covers rounding.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §7.10, eqs. (7.45)–(7.48), printed pp. 166–167

@@ -1,0 +1,25 @@
+questionId: astronomy.milky-way.basic.2
+topic: milky-way
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: In the 1920s, Harlow Shapley showed that the Sun is far from the centre of the Milky Way. Which observations
+  did he use?
+choices:
+- text: Star counts in different directions, as William Herschel had done
+  correct: false
+- text: The distribution of open clusters in the Galactic plane
+  correct: false
+- text: The spatial distribution of globular clusters
+  correct: true
+- text: 21 cm radio maps of neutral hydrogen
+  correct: false
+explanation: '**Correct (option 3).** Globular clusters are bright, old and nearly spherically distributed about
+  the Galactic centre, so their space distribution reveals the centre''s location and the Sun''s off-centre position.
+  **Option 1** is the earlier approach of Herschel and Kapteyn, which could not reveal the true size of the Galaxy
+  (star counts only probe the neighbourhood of the Sun). **Option 2** is unsuitable because open clusters are concentrated
+  in the plane and so cannot trace the centre of a spherical distribution. **Option 4** is wrong historically: 21
+  cm mapping of the Galaxy was a later development.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18 (introduction), p. 367; Sect. 18.2, p. 374

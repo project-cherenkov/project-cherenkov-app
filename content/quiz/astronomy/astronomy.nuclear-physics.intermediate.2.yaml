@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.intermediate.2
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: In stars more massive than about $1.5\,M_\odot$, the CNO cycle replaces the proton–proton chain as the dominant hydrogen-burning process. What is the best explanation?
+choices:
+- text: The CNO reaction rate rises much more steeply with temperature, and the cores of more massive stars are hotter
+  correct: true
+- text: The CNO cycle releases far more energy per helium nucleus produced
+  correct: false
+- text: The CNO cycle consumes carbon, nitrogen and oxygen, which massive stars have in large amounts
+  correct: false
+- text: The first step of the pp chain becomes impossible at high temperature
+  correct: false
+explanation: The CNO rate increases more rapidly with temperature, so above roughly $2\times10^{7}$ K it overtakes the pp chain, and more massive stars have hotter cores. The net outcome of both processes is four protons becoming one helium nucleus. Carbon, nitrogen and oxygen act only as catalysts and are not consumed. The pp chain still operates in hot cores, only less competitively.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 255–256

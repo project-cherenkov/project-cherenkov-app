@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.basic.3
+topic: spectroscopy-atomic-physics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The spectral type of the Sun is G2 V. What does the Roman numeral V indicate in this system?
+choices:
+- text: A supergiant
+  correct: false
+- text: A normal giant
+  correct: false
+- text: A main-sequence star (dwarf)
+  correct: true
+- text: A white dwarf
+  correct: false
+explanation: 'The Yerkes (MKK) system adds a luminosity class after the spectral class: Ia and Ib are supergiants, II luminous giants, III normal giants, IV subgiants and V main-sequence dwarfs. The Sun is a main-sequence star. White dwarfs are not one of the six luminosity classes.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §9.3, printed p. 232

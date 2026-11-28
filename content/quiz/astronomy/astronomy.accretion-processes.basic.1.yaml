@@ -1,0 +1,23 @@
+questionId: astronomy.accretion-processes.basic.1
+topic: accretion-processes
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: In a low-mass X-ray binary (LMXB), by what mechanism does the compact object normally obtain its gas?
+choices:
+- text: Capture of gas from the interstellar medium as the system moves through space.
+  correct: false
+- text: A strong stellar wind from a companion of more than 10 solar masses.
+  correct: false
+- text: Debris thrown out when the compact object itself formed in a supernova explosion.
+  correct: false
+- text: Roche-lobe overflow of the low-mass companion star.
+  correct: true
+explanation: 'Correct (fourth choice): in LMXBs the companion (below about 1.2 $M_\odot$) overfills its Roche lobe,
+  for example because the orbit shrinks or the star expands, and gas flows through the inner Lagrangian point onto
+  the compact object. A strong wind from a massive companion (choice 2) is the supply in high-mass X-ray binaries.
+  Capture from the interstellar medium (choice 1) is not the mechanism for these binaries. Supernova debris (choice
+  3) is not a continuing gas supply; the supernova would normally tend to disrupt a binary.'
+author: Renee
+source: original

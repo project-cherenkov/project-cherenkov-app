@@ -1,0 +1,34 @@
+questionId: astronomy.stellar-interiors-atmospheres.advanced.2
+topic: stellar-interiors-atmospheres
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about stellar atmospheres and radiation as true or false.
+statements:
+- text: At fixed radius, doubling the effective temperature doubles the wavelength at which the emission peaks.
+  isTrue: false
+- text: A giant and a dwarf with the same effective temperature differ in surface gravity, $g=GM/R^2$, and some
+    spectral lines depend strongly on this difference.
+  isTrue: true
+- text: The sequence O, B, A, F, G, K, M is mainly a sequence in surface gravity.
+  isTrue: false
+- text: A star whose radius triples while its effective temperature halves radiates about $56\%$ of its original
+    luminosity.
+  isTrue: true
+- text: Balmer absorption weakens in the hottest stars even though hydrogen is abundant there, because hydrogen
+    is largely ionised.
+  isTrue: true
+explanation: '1. False. Wien''s law gives $\lambda_{\max}\propto1/T$, so doubling $T$ halves the peak wavelength.
+
+  2. True. Giants have larger radii and much lower surface gravity than dwarfs of similar mass; gravity-sensitive
+  lines are used to determine the luminosity class.
+
+  3. False. The Harvard sequence is mainly a temperature sequence (with composition playing a smaller role), not
+  a gravity sequence.
+
+  4. True. $L\propto R^2T^4$, so $L''/L=3^2\times(1/2)^4=9/16\approx0.56$.
+
+  5. True. Balmer absorption needs neutral hydrogen in $n=2$; at very high temperatures the gas is mostly ionised.'
+author: Renee
+source: original

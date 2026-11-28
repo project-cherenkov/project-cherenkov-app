@@ -1,0 +1,21 @@
+questionId: astronomy.concept-of-time.intermediate.4
+topic: concept-of-time
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: "Judge each statement independently. Use the equation-of-time convention $E.T.=T-T_M$, where $T$ is apparent (true) solar time and $T_M$ is local mean solar time."
+statements:
+  - text: "The Julian day number changes at $12{:}00$ UT, so JD $2{,}451{,}545.0$ refers to noon on 1 January 2000."
+    isTrue: true
+  - text: "The Julian date counts the days elapsed since the Julian calendar was introduced by Julius Caesar."
+    isTrue: false
+  - text: "Under the Gregorian calendar rules, the year 2100 is a leap year."
+    isTrue: false
+  - text: "The 'mean sun' moves along the celestial equator at a constant rate, making one revolution in a tropical year."
+    isTrue: true
+  - text: "Over a year, the equation of time varies roughly between $-14$ minutes and $+16$ minutes."
+    isTrue: true
+explanation: "(1) True: Julian days start at noon UT. (2) False: Julian day $0$ dawned in 4713 BC; the system is only named after the Julian calendar and shares its $36{,}525$-day century. (3) False: years divisible by $100$ are leap years only if divisible by $400$, so 2100 is not. (4) True: this is the definition that makes mean solar time flow evenly. (5) True: the extremes of $E.T.$ are about $+16$ min and $-14$ min."
+author: Renee
+source: "original"

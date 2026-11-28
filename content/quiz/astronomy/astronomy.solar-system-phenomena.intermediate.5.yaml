@@ -1,0 +1,21 @@
+questionId: astronomy.solar-system-phenomena.intermediate.5
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Find the length of the day (time between sunrise and sunset) at latitude $60^\circ$ N on the June
+  solstice. Take the Sun's declination as $\delta = +23.44^\circ$ and treat the Sun as a point source,
+  ignoring atmospheric refraction. Enter the value in hours, rounded to 0.01 h.
+numericAnswer:
+  value: 18.49
+  tolerance: 0.05
+  unit: h
+explanation: At sunrise and sunset the zenith distance is $90^\circ$, so $0 = \sin\phi\sin\delta + \cos\phi\cos\delta\cos
+  h_0$, giving $\cos h_0 = -\tan\phi\tan\delta = -\tan60^\circ\tan23.44^\circ = -1.7321\times0.4339 =
+  -0.7515$. Then $h_0 = 138.7^\circ$ and the day lasts $2h_0$ in hour angle, i.e. $2\times138.7^\circ/(15^\circ/\mathrm{h})
+  = 18.49$ h. Tolerance $\pm0.05$ h absorbs the choice $\delta = 23.4^\circ$–$23.5^\circ$ (which gives
+  18.48–18.51 h) and rounding, while rejecting errors such as using $h_0$ itself as the day (9.2 h) or
+  using $\cos h_0 = +\tan\phi\tan\delta$ (5.5 h).
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Example 7.2, pp. 176–177; Sect. 7.3, p. 146

@@ -2,7 +2,7 @@ questionId: astronomy.celestial-mechanics.intermediate.1
 topic: celestial-mechanics
 difficulty: intermediate
 status: draft
-archived: false
+archived: true
 prompt: "Why is it wrong to assume constant orbital speed when estimating an eccentric planet's transit duration?"
 choices:
   - text: "Kepler's second law means the planet sweeps equal areas in equal time, so its speed varies with orbital position"

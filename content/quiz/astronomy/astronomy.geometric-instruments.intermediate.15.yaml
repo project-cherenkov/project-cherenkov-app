@@ -1,0 +1,26 @@
+questionId: astronomy.geometric-instruments.intermediate.15
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A student measures an angular separation on a printed star chart using a ruler and the chart scale,
+  checks a perpendicular offset with a set-square, and transfers a comparison length with a geometric
+  compass. Which procedures are valid?
+choices:
+- text: Align the ruler’s zero mark with the first endpoint before reading the second endpoint
+  correct: true
+- text: Convert the measured chart length using the scale printed on that same chart
+  correct: true
+- text: Use a set-square edge to check that an offset is perpendicular to the reference line
+  correct: true
+- text: Change the compass opening between the two endpoints so the second length looks similar
+  correct: false
+- text: Read the ruler from an oblique viewing angle to avoid covering the scale
+  correct: false
+explanation: The correct procedures are to align zero, apply the chart’s own calibration, and use the
+  set-square’s right-angle edge. Changing the compass opening loses the transferred length. Viewing a
+  scale obliquely introduces parallax.
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

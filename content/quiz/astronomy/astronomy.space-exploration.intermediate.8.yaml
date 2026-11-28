@@ -1,0 +1,31 @@
+questionId: astronomy.space-exploration.intermediate.8
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Assume an ideal coplanar Hohmann transfer. A coasting spacecraft follows the heliocentric transfer
+  ellipse whose perihelion is at Earth's orbit (1.000 au) and whose aphelion is at Mars's orbit (1.524
+  au); it leaves Earth at perihelion and arrives at aphelion. Treat Earth's and Mars's orbits as circular,
+  coplanar, with radii 1.000 au and 1.524 au, ignore planetary gravity, and use Kepler's third law $P^2
+  = a^3$. For the spacecraft to meet Mars at arrival, by how many degrees must Mars be ahead of Earth
+  in heliocentric longitude (in the direction of motion) at departure? Enter the angle in degrees, rounded
+  to 0.1°.
+numericAnswer:
+  value: 44.4
+  tolerance: 0.1
+  unit: deg
+explanation: 'The transfer ellipse has semimajor axis $a_t = (1.000 + 1.524)/2 = 1.262$ au, so its period
+  is $P_t = a_t^{3/2} = 1.418$ yr, and the trip from perihelion to aphelion takes half of it, $t = 0.709$
+  yr (259 d). Mars''s period is $P_M = 1.524^{3/2} = 1.881$ yr. In time $t$ Mars moves through $360^\circ\,t/P_M
+  = 135.6^\circ$. Since the spacecraft arrives $180^\circ$ from its departure point (aphelion is opposite
+  perihelion), Mars must start $180^\circ - 135.6^\circ = 44.4^\circ$ ahead of Earth. In compact form:
+  lead angle $=180^\circ\left[1 - \left(\frac{1+a}{2a}\right)^{3/2}\right] = 44.4^\circ$ for $a = 1.524$.
+  Tolerance $\pm0.1^\circ$ covers rounding of the stated three-significant-figure orbital radius; the
+  3-digit value of $a$ changes the result by only $\pm0.03^\circ$. It rejects the usual errors: forgetting
+  that the spacecraft covers $180^\circ$ (giving $135.6^\circ$), or using the full period instead of half
+  (which gives a negative angle). The book teaches Kepler''s third law for elliptical orbits but does
+  not develop transfer orbits; this item only applies Kepler''s third law to a defined orbit and is not
+  a derivation from mission descriptions.'
+author: Renee
+source: "Curtis, Orbital Mechanics for Engineering Students, 4th ed., Chapters 6 (orbital maneuvers) and 8 (interplanetary trajectories). The ideal coplanar two-body Hohmann-transfer assumptions are supplied in the prompt; Fundamental Astronomy is not cited as covering transfer-orbit mechanics."

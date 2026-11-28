@@ -1,0 +1,30 @@
+questionId: astronomy.exoplanets.intermediate.3
+topic: exoplanets
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** correct statements about methods for detecting exoplanets.
+choices:
+- text: A microlensing planet signal repeats every orbital period, so waiting for the next brightening confirms
+    the planet
+  correct: false
+- text: Planets lighter than Jupiter are hard to find by radial velocities because they cause only very small velocity
+    variations of the star
+  correct: true
+- text: Direct imaging gave the first convincing exoplanet detections in 1992
+  correct: false
+- text: For a pulsar, a planet can reveal itself through a regular modulation of the pulse timing as the pulsar
+    moves around the centre of mass
+  correct: true
+- text: A transiting planet produces a very regular, repeating dimming of its star
+  correct: true
+explanation: '**Options 2, 4 and 5 are correct.** (2) A light planet moves its star too little to produce a detectable
+  Doppler variation, which is why most planets found by this method are heavier than Jupiter. (4) The periodic change
+  of the star''s distance changes the timing of its regular pulses; this timing method gave the first convincing
+  evidence, around the pulsar PSR B1257+12. (5) Each transit repeats once per orbital period. **Option 1 is false:**
+  the brightening in a lensing event happens once and does not repeat on an orbital timescale, which is exactly
+  why interpreting such events is difficult. **Option 3 is false:** the 1992 detections came from pulsar timing,
+  and direct imaging at that time only confirmed objects already found by other methods. Grading is exact-set.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.2, pp. 459–460

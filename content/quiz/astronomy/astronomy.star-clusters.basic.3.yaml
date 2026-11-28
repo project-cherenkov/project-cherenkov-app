@@ -1,0 +1,23 @@
+questionId: astronomy.star-clusters.basic.3
+topic: star-clusters
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which feature of a star cluster's colour–magnitude diagram is the standard indicator of the cluster's age?
+choices:
+- text: The vertical thickness of the main sequence
+  correct: false
+- text: The point where the main sequence turns off toward the giant branch
+  correct: true
+- text: The apparent magnitude of the faintest star that can be measured
+  correct: false
+- text: The number of stars in the cluster
+  correct: false
+explanation: '**Correct (option 2).** The most massive stars leave the main sequence first, so the turn-off point
+  moves down the main sequence as a cluster ages; its position depends very strongly on age. **Option 1** reflects
+  scatter from effects such as unresolved binaries, not age. **Option 3** is set by the telescope and the cluster''s
+  distance, not by the cluster''s age. **Option 4** has no direct connection with age: clusters of very different
+  ages can contain similar numbers of stars.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2, pp. 362–363

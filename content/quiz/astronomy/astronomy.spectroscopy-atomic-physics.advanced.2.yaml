@@ -1,0 +1,21 @@
+questionId: astronomy.spectroscopy-atomic-physics.advanced.2
+topic: spectroscopy-atomic-physics
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the formation and interpretation of spectral features.
+statements:
+- text: The Ca II H and K lines grow steadily stronger from class O through class M.
+  isTrue: false
+- text: The equivalent width of a line is proportional to the number of absorbing atoms for lines of every strength.
+  isTrue: false
+- text: The Balmer lines peak near class A2 because hotter gas ionises hydrogen, while cooler gas has too few atoms excited to $n=2$.
+  isTrue: true
+- text: An absorption line looks dark because, where the absorbing level is highly populated, the line forms higher in the atmosphere where the temperature is lower than at the continuum depth.
+  isTrue: true
+- text: Because the Faraday rotation angle of linearly polarised light is proportional to the square of the wavelength, a longer-wavelength observation of the same path shows a larger rotation.
+  isTrue: true
+explanation: 'Statement 1 is false: Ca II H and K do not strengthen monotonically from O to M; their strength is temperature-dependent and peaks around G0. Statement 2 is false: equivalent width is proportional to the number of absorbers only on the weak-line part of the curve of growth; strong lines saturate. Statement 3 is true: the Balmer lines reach their maximum near A2 because excitation and ionisation compete. Statement 4 is true: the book states that absorption-line light comes from higher photospheric layers and therefore the lines appear dark (printed p.286). Statement 5 is true: Faraday rotation is proportional to the square of wavelength for a fixed line-of-sight magnetic field, electron column and path length (printed p.105).'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.1, printed p.105 (Faraday rotation); §9.1–§9.2, printed pp.228–232 (spectral-line strengths, curve of growth and Balmer/Ca II behaviour); §13.2, printed p.286 (photospheric absorption-line formation).

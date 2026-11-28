@@ -1,0 +1,35 @@
+questionId: astronomy.stellar-properties.advanced.2
+topic: stellar-properties
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about magnitudes, extinction and bolometric corrections as true or false. The convention
+  is $m_{\rm bol}=m_V-BC$, with $BC=0$ for a solar-type (F5) star.
+statements:
+- text: In transparent space, doubling a star's distance increases its apparent magnitude by about $1.5$ mag.
+  isTrue: true
+- text: Interstellar reddening makes the observed $B-V$ of a star smaller than its intrinsic colour index.
+  isTrue: false
+- text: In this convention, the bolometric correction is positive for stars both hotter and cooler than a solar-type
+    star.
+  isTrue: true
+- text: Because $L=4\pi r^2F$ does not depend on the distance $r$, the flux density $F$ of a star also does not
+    depend on $r$ in transparent space.
+  isTrue: false
+- text: In a uniform medium, the extinction in magnitudes is proportional to $\lg r$.
+  isTrue: false
+explanation: '1. True. $\Delta m=5\lg 2\approx1.51$ mag, because $m-M=5\lg(r/10\ \text{pc})$.
+
+  2. False. Blue light is scattered and absorbed more than red, so the observed $B-V$ increases; the misconception
+  reverses the sign of the colour excess.
+
+  3. True. $BC$ is zero by definition near F5 and grows as the spectral energy distribution departs from the solar
+  one on either side, so $m_{\rm bol}\le m_V$.
+
+  4. False. $L$ is distance independent, but this means $F=L/(4\pi r^2)$ must fall as $r^{-2}$.
+
+  5. False. For constant opacity, $\tau=\alpha r$, so the extinction $A=ar$ (mag) is linear in $r$, not logarithmic;
+  the distance modulus term $5\lg r$ is a different, logarithmic contribution.'
+author: Renee
+source: original

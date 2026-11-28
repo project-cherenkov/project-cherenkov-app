@@ -1,0 +1,23 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.6
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Atomic hydrogen is in thermal equilibrium at temperature $T$. The energy of level $n$ is $E_n=-13.6/n^{2}$
+  eV. Count the number of distinct electron states (including all $l$, $m_l$ and spin states) belonging
+  to each level $n$ to find its statistical weight $g_n$, and use the Boltzmann distribution. At what
+  temperature is the ratio of the population of the $n=2$ level to that of the $n=1$ level equal to $1.0\times10^{-4}$?
+  Use $k=8.617\times10^{-5}$ eV K$^{-1}$. Enter the temperature in K, rounded to the nearest 10 K.
+numericAnswer:
+  value: 11170.0
+  tolerance: 60
+  unit: K
+explanation: The number of states in level $n$ is $\sum_{l=0}^{n-1}2(2l+1)=2n^{2}$, so $g_1=2$ and $g_2=8$.
+  The Boltzmann distribution gives $n_2/n_1=(g_2/g_1)\,e^{-\Delta E/kT}=4\,e^{-\Delta E/kT}$ with $\Delta
+  E=13.6(1-\tfrac14)=10.2$ eV. Setting this equal to $10^{-4}$ gives $\Delta E/kT=\ln(4\times10^{4})=10.597$,
+  so $T=10.2/(8.617\times10^{-5}\times10.597)=11171$ K. Omitting the statistical weights (using $g_2/g_1=1$)
+  gives $\ln(10^{4})=9.21$ and $T\approx12852$ K, which is outside the tolerance. The tolerance of 60
+  K covers rounding of the constants.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.2, §5.4 eq. (5.11), printed pp. 105–111

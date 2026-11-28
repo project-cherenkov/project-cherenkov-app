@@ -1,0 +1,23 @@
+questionId: astronomy.geometric-instruments.intermediate.7
+topic: geometric-instruments
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: A chart measurement uses a ruler, protractor and set-square. Each instrument has been checked against a reference before use. Decide whether each statement is true or false.
+statements:
+- text: Repeating readings with the same uncorrected zero offset removes that systematic error.
+  isTrue: false
+- text: A set-square can be used to check whether a constructed offset is perpendicular to its baseline.
+  isTrue: true
+- text: Reading the wrong protractor scale can give the supplementary angle even when the ray is correctly drawn.
+  isTrue: true
+- text: Averaging independent readings can remove a multiplicative scale-factor error without recalibration.
+  isTrue: false
+- text: A known zero correction should be applied consistently before converting a ruler reading with the chart scale.
+  isTrue: true
+explanation: A fixed zero offset and a scale-factor error are systematic; averaging alone does not remove either. A set-square checks perpendicularity. A semicircular protractor has two number scales, and choosing the scale inconsistent with the baseline produces the supplementary angle. The ordered truth vector is F,T,T,F,T.
+
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

@@ -1,0 +1,27 @@
+questionId: astronomy.solar-system-bodies.basic.2
+topic: solar-system-bodies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The Moon's synodic month (about 29.5 d) is longer than its sidereal month (about 27.3 d). Why?
+choices:
+- text: During one sidereal month Earth has moved about 1/12 of its way around the Sun, so the Moon needs
+    about two more days to restore the Sun–Earth–Moon geometry.
+  correct: true
+- text: Sunlight pressure slows the Moon's motion relative to the Sun, lengthening the time between phases.
+  correct: false
+- text: The 5° tilt of the Moon's orbit adds about two days to every revolution.
+  correct: false
+- text: The Moon's distance increases by about 3 cm per year, so each month is slightly longer than the
+    last.
+  correct: false
+explanation: A sidereal month is one revolution relative to the stars (27.322 d). By then Earth has advanced
+  almost $1/12$ of its orbit, so the Sun lies in a different direction and the Moon still has about $1/12$
+  of a revolution to go before the phase repeats. That takes roughly two more days, giving the synodic
+  month of 29.531 d (the full-moon-to-full-moon interval). The tilt of the lunar orbit decides where eclipses
+  can happen, not the length of the phase cycle. Radiation pressure on the Moon is negligible. The 3 cm/yr
+  recession is real but changes the period by a negligible amount per month, and it does not explain a
+  2-day difference that is always present.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.4, p. 147

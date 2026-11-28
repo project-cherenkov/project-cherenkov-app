@@ -1,0 +1,26 @@
+questionId: astronomy.solar-system-phenomena.intermediate.1
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: At the instant of an exact new moon on a lunar node, an observer on the central line of the Moon's
+  shadow on Earth's surface is 400,300 km from the centre of the Moon. The Moon's radius is 1737 km, and
+  the Sun's angular diameter is $31.6'$ at that time. What does the observer see?
+choices:
+- text: A total solar eclipse, since the Moon is exactly between Sun and Earth.
+  correct: false
+- text: A partial eclipse, since the Moon covers about half of the Sun.
+  correct: false
+- text: No eclipse, since the Moon's disc is smaller than the Sun's.
+  correct: false
+- text: An annular eclipse, with a ring of the Sun visible around the Moon.
+  correct: true
+explanation: 'The Moon''s angular diameter is $2R/d = 2\times1737/400300 = 8.68\times10^{-3}$ rad $= 29.8''$,
+  which is smaller than the Sun''s $31.6''$. On the central line the Moon is therefore centred on the
+  solar disc but cannot cover it, leaving a bright ring: an annular eclipse. A total eclipse needs the
+  Moon''s apparent diameter to exceed the Sun''s (the Moon''s apparent diameter ranges between $29.4''$
+  and $33.5''$ over its orbit). The alignment guarantees an eclipse, so ''no eclipse'' is wrong, and a
+  partial eclipse is seen only away from the central line.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.5, pp. 149–150

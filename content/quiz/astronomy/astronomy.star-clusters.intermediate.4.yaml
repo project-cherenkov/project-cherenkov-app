@@ -1,0 +1,28 @@
+questionId: astronomy.star-clusters.intermediate.4
+topic: star-clusters
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about star clusters. Mark every statement True or False.
+statements:
+- text: Disk and halo globular clusters of the Milky Way have similar heavy-element abundances, about 30 % of the
+    solar value.
+  isTrue: false
+- text: If the members of a nearby cluster share about the same space velocity, their proper-motion vectors appear
+    to converge on a single point on the sky because of perspective.
+  isTrue: true
+- text: The main sequence of a globular cluster lies lower in the colour–magnitude diagram than that of an open
+    cluster, because the globular cluster has a much lower metal abundance.
+  isTrue: true
+- text: Stellar associations are older than open clusters, since they have had time to spread over large regions
+    of the sky.
+  isTrue: false
+explanation: '**1 – False.** Only the disk globular clusters have about 30 % of the solar value; for the halo clusters
+  it is typically only about 1 %. **2 – True.** This is the basis of the moving-cluster (kinematic-parallax) method.
+  **3 – True.** Lower metal abundance puts the main sequence of a globular cluster lower than that of open clusters.
+  **4 – False.** Associations are groups of very young stars; they are dispersing rapidly (the stars are not held
+  together by their weak gravity), which is why they are spread out, not because they are old. Grading is exact
+  boolean vector.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.1–17.3, pp. 359–364

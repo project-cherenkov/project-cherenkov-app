@@ -1,0 +1,26 @@
+questionId: astronomy.basic-calculus.intermediate.4
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Decide whether each statement about derivatives and integrals in orbital mechanics is true or false.
+statements:
+- text: For a particle moving along a curve, the velocity vector $\dot{\mathbf r}$ is tangent to the trajectory.
+  isTrue: true
+- text: $\dfrac{\mathrm d}{\mathrm dt}(\mathbf A\times\mathbf B)=\dot{\mathbf A}\times\mathbf B+\dot{\mathbf B}\times\mathbf
+    A$.
+  isTrue: false
+- text: In plane polar coordinates the area element is $\mathrm dA=\mathrm dr\,\mathrm d\varphi$.
+  isTrue: false
+- text: If $\ddot{\mathbf r}=-\mu\mathbf r/r^3$, then $\dfrac{\mathrm d}{\mathrm dt}\!\left(\tfrac12v^2-\mu/r\right)=0$.
+  isTrue: true
+explanation: '(1) True: the derivative of the position vector points along the direction of motion. (2) False: the
+  product rule for a vector product must keep the order of the factors, giving $\dot{\mathbf A}\times\mathbf B+\mathbf
+  A\times\dot{\mathbf B}$; $\dot{\mathbf B}\times\mathbf A$ is the negative of $\mathbf A\times\dot{\mathbf B}$.
+  (3) False: the area element is $r\,\mathrm dr\,\mathrm d\varphi$; the factor $r$ is essential (it is the Jacobian
+  of the polar coordinates). (4) True: $\tfrac{\mathrm d}{\mathrm dt}(\tfrac12v^2)=\dot{\mathbf r}\cdot\ddot{\mathbf
+  r}=-\mu\dot r/r^2$ and $\tfrac{\mathrm d}{\mathrm dt}(\mu/r)=-\mu\dot r/r^2$, so the two terms cancel (energy
+  conservation).'
+author: Renee
+source: original

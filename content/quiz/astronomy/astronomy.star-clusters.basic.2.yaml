@@ -1,0 +1,24 @@
+questionId: astronomy.star-clusters.basic.2
+topic: star-clusters
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which description fits a typical globular cluster of the Milky Way?
+choices:
+- text: About $10^{5}$ stars in a dense, spherically symmetric system, among the oldest objects in the Galaxy
+  correct: true
+- text: A few tens to a few hundred stars in a loose group that is gradually dispersing, mostly in the Galactic
+    disc
+  correct: false
+- text: A few tens of young O and B stars scattered over a large region of sky and dispersing within a few million
+    years
+  correct: false
+- text: Several hundred thousand young stars forming in a flat rotating disc inside a gas cloud
+  correct: false
+explanation: '**Correct (option 1).** Globular clusters usually hold about $10^{5}$ stars, are spherically symmetric,
+  have central densities roughly ten times those of open clusters, and are very old (about $13\times10^{9}$ years
+  for the oldest). **Option 2** describes an open cluster. **Option 3** describes an OB association. **Option 4**
+  has no counterpart among the classes of clusters: globular clusters are old, and they contain no active star formation.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2–17.3, pp. 361–364

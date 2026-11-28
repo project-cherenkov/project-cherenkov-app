@@ -1,0 +1,23 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.3
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Select **all** correct statements about the shapes and widths of spectral lines.
+choices:
+- text: The natural width of a line is a consequence of the uncertainty relation between energy and time.
+  correct: true
+- text: A longer-lived excited state produces a broader natural line.
+  correct: false
+- text: Thermal motions of the atoms broaden a line through the Doppler effect.
+  correct: true
+- text: The equivalent width of a line is always exactly equal to its full width at half maximum.
+  correct: false
+- text: At higher gas pressure the lines become narrower because collisions are less frequent.
+  correct: false
+- text: Electric fields from neighbouring particles can broaden lines through the Stark effect.
+  correct: true
+explanation: 'Statement 1 is correct: $\Delta E\,\Delta t\approx\hbar$ gives a natural width. Statement 2 is wrong: a longer lifetime gives a smaller energy uncertainty, hence a narrower natural line. Statement 3 is correct: atoms moving at different speeds give Doppler-shifted contributions. Statement 4 is wrong: equivalent width is the width of a rectangle of equal area that is totally dark, and the two measures are generally different, though often close. Statement 5 is wrong: higher pressure causes more collisions and broadens lines. Statement 6 is correct: the Stark effect broadens lines in dense gas. The key is {1, 3, 6}.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.3 and §5.5, printed pp. 107–108, 111; §9.1, p. 228

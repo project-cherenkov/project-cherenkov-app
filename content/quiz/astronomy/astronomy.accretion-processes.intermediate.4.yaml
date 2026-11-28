@@ -1,0 +1,30 @@
+questionId: astronomy.accretion-processes.intermediate.4
+topic: accretion-processes
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about accretion discs and compact objects.
+statements:
+- text: Microquasars are X-ray binaries with a stellar-mass black hole, an accretion disc and jets, and are analogues
+    of active galactic nuclei.
+  isTrue: true
+- text: Accretion discs around supermassive black holes of $10^6$–$10^{10}\ M_\odot$ are invoked as the energy source
+    of active galactic nuclei.
+  isTrue: true
+- text: In the high state of a soft X-ray transient the X-rays are mainly produced by Compton scattering in a hot
+    corona.
+  isTrue: false
+- text: A soft X-ray transient brightens in outburst by a much larger factor (about $10^6$) than a dwarf nova (about
+    100).
+  isTrue: true
+- text: Because a black hole has no solid surface, gas falling into it cannot radiate.
+  isTrue: false
+explanation: '1 is true: the book highlights the analogy between microquasars and AGN. 2 is true: the nuclei are
+  modelled as a supermassive black hole with a surrounding disc, which also drives jets. 3 is false: in the high
+  state thermal radiation from the disc dominates; the harder Compton-scattered X-rays dominate in the low state.
+  4 is true: dwarf novae brighten by a factor of about 100 and soft X-ray transients by about $10^6$. 5 is false:
+  gas losing energy in the disc and near the inner edge radiates a large part of its rest-mass energy (up to about
+  40% is quoted) before it falls in.'
+author: Renee
+source: original

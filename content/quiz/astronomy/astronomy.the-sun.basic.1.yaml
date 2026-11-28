@@ -1,0 +1,31 @@
+questionId: astronomy.the-sun.basic.1
+topic: the-sun
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: In white-light images of the Sun, the disc looks darker near its edge (the limb) than at its centre.
+  What is the main reason?
+choices:
+- text: Near the limb the Sun is covered by a thick, cool chromosphere that absorbs most of the continuum
+    light.
+  correct: false
+- text: Near the limb the line of sight enters the photosphere at a very shallow angle, so it only reaches
+    cooler, higher layers.
+  correct: true
+- text: The Sun rotates fastest at its limb, and the Doppler shift moves the light out of the visible
+    band.
+  correct: false
+- text: Most sunspots, which are dark, are concentrated along the limb.
+  correct: false
+explanation: 'The photosphere is the layer in which the density rises so quickly inwards that the interior
+  is hidden from view. At the disc centre we look straight down and see deep, hot gas (about 8000 K at
+  the inner boundary). Near the limb our line of sight crosses the photosphere obliquely and never penetrates
+  deeply, so we only see light from cooler, higher gas (about 4500 K at the outer boundary), which radiates
+  less per unit area: limb darkening. The chromosphere is far fainter than the photosphere and is normally
+  invisible, so it cannot be what darkens the limb. Rotation (and its Doppler shift) is the same effect
+  everywhere on the disc as far as the continuum brightness is concerned and is not what produces the
+  gradient. Sunspots are scattered over the surface at mid and low latitudes and cover only a tiny fraction
+  of the disc.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.2, p. 286

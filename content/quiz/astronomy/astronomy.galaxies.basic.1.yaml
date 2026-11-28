@@ -1,0 +1,23 @@
+questionId: astronomy.galaxies.basic.1
+topic: galaxies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A galaxy has a central bulge and a flat stellar disk, but no spiral pattern and very little cool gas or
+  star formation. Which Hubble type best describes it?
+choices:
+- text: E5 (elliptical)
+  correct: false
+- text: S0 (lenticular)
+  correct: true
+- text: Sc (late-type spiral)
+  correct: false
+- text: Irr (irregular)
+  correct: false
+explanation: 'Correct (second choice): lenticular (S0) galaxies lie between ellipticals and spirals in the Hubble
+  sequence. They have a bulge like an elliptical and a stellar disk like a spiral, but no spiral arms and little
+  interstellar matter. An E5 galaxy has no disk. An Sc spiral has a prominent gas disk with a spiral pattern and
+  young stars. Irregular galaxies show no regular bulge-plus-disk structure.'
+author: Renee
+source: original

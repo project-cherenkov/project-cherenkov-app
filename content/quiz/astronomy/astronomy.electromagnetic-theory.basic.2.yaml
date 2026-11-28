@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.basic.2
+topic: electromagnetic-theory
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: A star radiates as a blackbody. If its surface temperature doubles while its radius stays the same, by what factor does the energy flux density at its surface increase?
+choices:
+- text: $2$
+  correct: false
+- text: $4$
+  correct: false
+- text: $8$
+  correct: false
+- text: $16$
+  correct: true
+explanation: The Stefan–Boltzmann law gives $F=\sigma T^{4}$, so doubling $T$ multiplies $F$ by $2^{4}=16$. A factor of 2 treats the flux as linear in $T$, 4 uses $T^{2}$, and 8 uses $T^{3}$.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7, eq. (5.18), printed p. 112

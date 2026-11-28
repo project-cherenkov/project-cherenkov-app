@@ -1,0 +1,27 @@
+questionId: astronomy.galaxies.intermediate.3
+topic: galaxies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which observations are interpreted as evidence for mass in galaxies or clusters that is not seen in starlight?
+  Select all that apply.
+choices:
+- text: Rotation speeds that decline as $R^{-1/2}$ beyond the optical disk.
+  correct: false
+- text: Rotation curves that stay flat out to radii where the starlight has become very faint.
+  correct: true
+- text: A Schechter luminosity function whose faint-end slope is about $-1.1$.
+  correct: false
+- text: Hot X-ray emitting gas at $10^7$–$10^8$ K that is retained by a cluster of galaxies.
+  correct: true
+- text: The finding that spiral galaxies are on average bluer than elliptical galaxies.
+  correct: false
+explanation: 'Correct set: options 2 and 4. A flat rotation curve means $M(R)\propto R$ far outside the visible
+  disk, implying unseen mass. Gas at about $4\times10^7$ K would escape a cluster unless a deep gravitational well,
+  much deeper than visible matter provides, holds it; the hotter the gas, the more mass. Option 1 would be the Keplerian
+  expectation if the mass were concentrated in the centre, and it is not observed. Option 3 describes the relative
+  number of faint galaxies, not mass. Option 5 concerns colour and stellar population (the red and blue sequences)
+  and carries no information about unseen mass.'
+author: Renee
+source: original

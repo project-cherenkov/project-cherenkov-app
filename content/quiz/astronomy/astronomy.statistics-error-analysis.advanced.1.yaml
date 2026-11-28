@@ -1,0 +1,29 @@
+questionId: astronomy.statistics-error-analysis.advanced.1
+topic: statistics-error-analysis
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A star's absolute magnitude is estimated as $M=-0.35\pm0.30$ mag (taken as a maximum error), with the apparent
+  magnitude $m$ measured exactly. The distance follows from $m-M=5\lg(r/10\,\mathrm{pc})$. Which statements are
+  correct? Select all that apply.
+choices:
+- text: The error interval for the distance is exactly symmetric about the central value
+  correct: false
+- text: To first order, the relative distance error is about $14\,\%$
+  correct: true
+- text: The relative distance error doubles if the star is twice as far away, for the same magnitude error
+  correct: false
+- text: Without linearising, the largest possible distance is about $15\,\%$ above the central value and the smallest
+    about $13\,\%$ below it
+  correct: true
+- text: For the same magnitude error, the relative distance error is the same for a star at $100$ pc as for one
+    at $1$ kpc
+  correct: true
+explanation: 'Since $r\propto10^{-M/5}$, a magnitude error $\Delta M$ multiplies $r$ by $10^{\pm\Delta M/5}=10^{\pm0.06}$,
+  i.e. by $1.148$ or $0.871$. This gives $+14.8\,\%$ and $-12.9\,\%$: the interval is not symmetric, though the
+  linear estimate $\tfrac{\ln10}{5}\Delta M=13.8\,\%$ lies between them. The relative error depends only on $\Delta
+  M$ and not on the distance itself, so it is unchanged between $100$ pc and $1$ kpc, and it does not double with
+  distance. (The absolute error in parsecs, however, grows in proportion to $r$.)'
+author: Renee
+source: "Taylor, An Introduction to Error Analysis, 3e, Chapter 3 (propagation of uncertainty through a nonlinear magnitude–distance relation); OpenStax, Introductory Statistics 2e, Chapter 2 (relative/percentage interpretation)."

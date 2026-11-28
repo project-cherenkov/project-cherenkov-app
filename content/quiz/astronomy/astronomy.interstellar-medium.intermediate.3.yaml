@@ -1,0 +1,27 @@
+questionId: astronomy.interstellar-medium.intermediate.3
+topic: interstellar-medium
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following are actually used to detect or measure the interstellar magnetic field? Select all
+  that apply.
+choices:
+- text: The polarisation of starlight, produced by non-spherical dust grains that are aligned by the field.
+  correct: true
+- text: The rotation of the plane of polarisation (Faraday rotation) of radio waves from distant sources.
+  correct: true
+- text: The shape of the extinction curve, since the reddening law fixes the field strength directly.
+  correct: false
+- text: The Zeeman splitting of the 21 cm hydrogen line.
+  correct: true
+- text: The width of the 21 cm line, interpreted as pure thermal Doppler broadening.
+  correct: false
+explanation: 'Correct set: options 1, 2 and 4. Starlight is polarised only if elongated grains share a common alignment,
+  which requires a general magnetic field, so polarisation maps trace field direction. Faraday rotation grows with
+  both field strength and electron density, so combined with the electron density it gives the field. Zeeman splitting
+  of the 21 cm line has given field strengths of about $10^{-10}$ to $10^{-9}$ T. Option 3 is false: the extinction
+  curve describes grain properties and carries no direct field measurement. Option 5 is false: line widths are set
+  by gas motions (turbulence and bulk flow) and say nothing directly about the field.'
+author: Renee
+source: original

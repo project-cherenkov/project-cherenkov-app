@@ -1,0 +1,22 @@
+questionId: astronomy.interstellar-medium.advanced.4
+topic: interstellar-medium
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A 21 cm line has antenna temperature $T_A=52.5$ K measured with beam efficiency $\eta_B=0.75$. Assume the
+  background is negligible, the spin (excitation) temperature is $T_{\rm exc}=100$ K because collisions keep it
+  equal to the kinetic temperature, and the radiative transfer relation $T_b=T_{\rm exc}(1-e^{-\tau})$ holds. The
+  column density is proportional to the optical depth $\tau$. An observer using the optically thin approximation
+  takes $\tau\approx T_b/T_{\rm exc}$. By what factor does the optically thin approximation underestimate the true
+  column density? Enter the dimensionless ratio $N_{\rm true}/N_{\rm thin}$, rounded to two decimal places.
+numericAnswer:
+  value: 1.72
+  tolerance: 0.02
+  unit: factor (dimensionless)
+explanation: 'Brightness temperature: $T_b=T_A/\eta_B=52.5/0.75=70$ K. True optical depth: $\tau=-\ln(1-T_b/T_{\rm
+  exc})=-\ln(0.30)=1.204$. The thin approximation gives $\tau_{\rm thin}=T_b/T_{\rm exc}=0.70$. Because $N\propto\tau$,
+  $N_{\rm true}/N_{\rm thin}=1.204/0.70=1.72$. The thin estimate therefore misses about 40% of the gas. The tolerance
+  of 0.02 covers rounding of $\tau$ and the ratio.'
+author: Renee
+source: original

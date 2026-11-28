@@ -1,0 +1,23 @@
+questionId: astronomy.geometric-instruments.basic.14
+topic: geometric-instruments
+difficulty: basic
+status: draft
+archived: true
+questionType: single_choice
+prompt: On the calibrated ruler diagram, a star-chart segment begins at 0.0 cm and ends at 3.5 cm. The
+  chart scale is 1.0 cm = 2.0 arcmin. ![Calibrated ruler](/quiz/astronomy/geometry/ruler-scale.svg) What
+  angular separation does the measured segment represent?
+choices:
+- text: 1.75 arcmin
+  correct: false
+- text: 5.5 arcmin
+  correct: false
+- text: 7.0 arcmin
+  correct: true
+- text: 70 arcmin
+  correct: false
+explanation: The ruler reading is 3.5 cm. Multiplying by 2.0 arcmin per centimetre gives 7.0 arcmin. The
+  scale conversion is applied after reading the physical length.
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

@@ -1,0 +1,23 @@
+questionId: astronomy.galaxies.intermediate.2
+topic: galaxies
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A galaxy has a recession velocity of $3000\ \mathrm{km\,s^{-1}}$ (already corrected for the Sun's motion
+  and assumed to be pure Hubble flow) and apparent magnitude $m=13.4$ (extinction-free). Take $H=70\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$.
+  What is its absolute magnitude?
+choices:
+- text: $-29.0$
+  correct: false
+- text: $-19.8$
+  correct: true
+- text: $-4.8$
+  correct: false
+- text: $-3.2$
+  correct: false
+explanation: Hubble's law gives $d=V/H=3000/70=42.9$ Mpc $=4.29\times10^{7}$ pc. Then $M=m-5\lg(d/10\,\mathrm{pc})=13.4-5\lg(4.29\times10^{6})=13.4-33.2=-19.8$
+  (second choice). $-29.0$ results from using the velocity 3000 as the distance in Mpc. $-4.8$ results from taking
+  $d=42.9$ kpc instead of Mpc. $-3.2$ results from using $2.5\lg$ in place of $5\lg$ in the distance modulus.
+author: Renee
+source: original

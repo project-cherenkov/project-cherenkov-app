@@ -1,0 +1,27 @@
+questionId: astronomy.space-exploration.basic.2
+topic: space-exploration
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: An orbiter circling a planet shows small, repeating departures from the orbit it would follow
+  around a perfectly spherical, uniform planet. What can scientists infer from these departures?
+choices:
+- text: Only the planet's total mass; any other departure must be instrumental error.
+  correct: false
+- text: That the planet's shape and internal mass distribution depart from spherical symmetry, which gives
+    clues to its interior.
+  correct: true
+- text: The strength of the solar wind at that planet.
+  correct: false
+- text: The planet's rotation period, but nothing about its structure.
+  correct: false
+explanation: A spherically symmetric body attracts an orbiter as if all its mass were at its centre. Systematic
+  perturbations of the spacecraft's orbit therefore reveal deviations from spherical symmetry in the gravitational
+  field, which are related to the planet's shape and the distribution of mass inside it; this is how spacecraft
+  tracking constrains the internal structure of planets. The orbit gives the total mass but also much
+  more, so the first option is too narrow. The solar wind has no such repeating effect. Rotation is not
+  what produces perturbations of this kind, and the claim that nothing is learned about the structure
+  contradicts the method.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.6, p. 151

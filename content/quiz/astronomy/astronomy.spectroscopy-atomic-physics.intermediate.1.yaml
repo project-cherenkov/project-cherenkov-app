@@ -1,0 +1,19 @@
+questionId: astronomy.spectroscopy-atomic-physics.intermediate.1
+topic: spectroscopy-atomic-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Neutral helium lines need excited atoms, so they strengthen with temperature, but they weaken again in the hottest stars. What is the best explanation?
+choices:
+- text: Helium nuclei are destroyed by fusion in hotter atmospheres
+  correct: false
+- text: At still higher temperatures helium becomes ionised, so fewer neutral atoms remain to form the lines
+  correct: true
+- text: Hotter stars have weaker gravity, so the lines are smeared out
+  correct: false
+- text: The lines move out of the visible range as temperature rises
+  correct: false
+explanation: 'Two effects compete: high temperature is needed to excite the atoms, but when it is higher still, helium is ionised and the neutral He I lines weaken; ionised He II lines then appear. Fusion operates in the core, not in the atmosphere. Gravity and Doppler smearing do not explain the temperature behaviour, and the line wavelengths are fixed by atomic structure, not by temperature.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §9.2, printed pp. 231–232

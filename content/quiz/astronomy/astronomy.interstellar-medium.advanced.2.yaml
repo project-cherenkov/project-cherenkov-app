@@ -1,0 +1,28 @@
+questionId: astronomy.interstellar-medium.advanced.2
+topic: interstellar-medium
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about H II regions and their dust.
+statements:
+- text: In a homogeneous medium, an A0 V star and a B0 V star produce Strömgren spheres of about the same size.
+  isTrue: false
+- text: Radio recombination lines of hydrogen, such as the $n=110\to109$ line near 5 GHz, can be used to study H
+    II regions across the Galactic plane because dust extinction is negligible at radio wavelengths.
+  isTrue: true
+- text: The strong nebular lines of O$^+$, O$^{++}$ and N$^+$ are forbidden lines, which can be emitted because
+    the gas is so diffuse that collisional de-excitation is rare.
+  isTrue: true
+- text: The radio continuum of an H II region is mainly synchrotron radiation from relativistic electrons.
+  isTrue: false
+- text: Dust at 70–100 K inside an H II region should emit most strongly near 3.4 $\mu$m.
+  isTrue: false
+explanation: '1 is false: the Strömgren radius depends strongly on the star''s ionising flux; about 50 pc for a
+  B0 V star but only about 1 pc for an A0 V star. 2 is true: radio recombination lines are not dimmed by dust, and
+  their Doppler velocities give distances via Galactic rotation. 3 is true: at laboratory densities these transitions
+  would be collisionally quenched, but not in diffuse nebulae. 4 is false: the continuum is free–free (bremsstrahlung)
+  emission from electrons, proportional to the emission measure. 5 is false: Wien''s law, $\lambda_{\max}=2.898\times10^{-3}\
+  \mathrm{m\,K}/T$, gives about 29–41 $\mu$m for 70–100 K, so the peak is about ten times longer than 3.4 $\mu$m.'
+author: Renee
+source: original

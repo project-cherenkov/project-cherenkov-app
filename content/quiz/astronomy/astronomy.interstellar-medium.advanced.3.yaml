@@ -1,0 +1,25 @@
+questionId: astronomy.interstellar-medium.advanced.3
+topic: interstellar-medium
+difficulty: advanced
+status: draft
+archived: true
+questionType: numeric_response
+prompt: Galaxy counts are used to measure the extinction of the Milky Way's dust layer. Assume galaxies
+  are uniformly distributed in space, the dust forms a homogeneous plane-parallel layer with extinction
+  $\Delta m$ (mag) towards the galactic pole, and the extinction at latitude $b$ is $\Delta m/\sin b$.
+  Counts brighter than a fixed apparent magnitude then obey $\lg N(b)=C'-0.6\,\Delta m/\sin b$. The observed
+  counts brighter than the same limiting magnitude are $N=34.8$ per square degree at $b=90^\circ$ and
+  $N=20.0$ per square degree at $b=30^\circ$. Find the extinction $\Delta m$ towards the pole. Enter the
+  value in magnitudes, rounded to two decimal places.
+numericAnswer:
+  value: 0.4
+  tolerance: 0.02
+  unit: mag
+explanation: 'Subtract the model at the two latitudes: $\lg N(90^\circ)-\lg N(30^\circ)=0.6\,\Delta m\,(1/\sin30^\circ-1/\sin90^\circ)=0.6\,\Delta
+  m\,(2-1)=0.6\,\Delta m$. The left side is $\lg(34.8/20.0)=0.2405$, so $\Delta m=0.2405/0.6=0.401$ mag.
+  The constant $C''$ cancels, which is why only the ratio of counts matters. The tolerance of 0.02 mag
+  corresponds to the roughly 3-significant-figure precision of the counts and the rounding requested.
+  Note the inherent model assumptions: a homogeneous slab and uniform galaxy distribution; real dust is
+  clumpy.'
+author: Renee
+source: original

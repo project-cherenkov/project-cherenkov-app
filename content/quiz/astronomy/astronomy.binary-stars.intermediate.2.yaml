@@ -1,0 +1,28 @@
+questionId: astronomy.binary-stars.intermediate.2
+topic: binary-stars
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: In a single-lined spectroscopic binary with a circular orbit, only the orbital period $P$ and the radial-velocity
+  semi-amplitude $K_1$ of star 1 are measured. Which quantity is fixed directly by these two measurements?
+choices:
+- text: The total mass $m_1+m_2$.
+  correct: false
+- text: The mass ratio $m_2/m_1$.
+  correct: false
+- text: The mass $m_2\sin i$ of the companion.
+  correct: false
+- text: The mass function $m_2^3\sin^3 i/(m_1+m_2)^2$.
+  correct: true
+explanation: 'For a circular orbit $K_1=2\pi a_1\sin i/P$. Combining this with Kepler''s third law and the centre
+  of mass condition gives $m_2^3\sin^3i/(m_1+m_2)^2=K_1^3P/(2\pi G)$: only $K_1$ and $P$ enter the right-hand side.
+
+
+  - The total mass would need the full orbit size and inclination.
+
+  - The mass ratio needs the velocity amplitude of the second star.
+
+  - $m_2\sin i$ needs an independent estimate of $m_1$.'
+author: Renee
+source: original

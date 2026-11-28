@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.basic.1
+topic: instrumentation
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "A refracting telescope has an objective of focal length $1200$ mm and is used with an eyepiece of focal length $25$ mm. What is its magnification?"
+choices:
+  - text: "$30$"
+    correct: false
+  - text: "$48$"
+    correct: true
+  - text: "$0.021$"
+    correct: false
+  - text: "$1225$"
+    correct: false
+explanation: "The magnification is $\\omega=f/f'=1200/25=48$. $0.021$ inverts the ratio, $1225$ adds the focal lengths, and $30$ has no basis in the relation."
+author: Renee
+source: "original"

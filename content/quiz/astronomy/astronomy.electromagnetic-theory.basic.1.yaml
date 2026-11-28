@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.basic.1
+topic: electromagnetic-theory
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The temperature of a blackbody is doubled. How does the wavelength at which its $B_\lambda$ is greatest change?
+choices:
+- text: It doubles
+  correct: false
+- text: It is halved
+  correct: true
+- text: It is multiplied by $2^{4}=16$
+  correct: false
+- text: It is unchanged; only the intensity changes
+  correct: false
+explanation: Wien's displacement law states $\lambda_{\max}T=b=\text{const}$, so doubling $T$ halves $\lambda_{\max}$. Doubling the wavelength reverses the dependence. A factor of 16 belongs to the Stefan–Boltzmann law for the total flux, not to the peak wavelength. The peak does shift with temperature; it is the shape family of the curves that is fixed.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7, eq. (5.22), printed p. 113

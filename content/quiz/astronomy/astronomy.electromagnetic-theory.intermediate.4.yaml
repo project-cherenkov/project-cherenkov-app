@@ -1,0 +1,19 @@
+questionId: astronomy.electromagnetic-theory.intermediate.4
+topic: electromagnetic-theory
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about the temperatures used to describe stars and other radiating objects.
+statements:
+- text: A star's colour temperature can be found only if its angular diameter is known.
+  isTrue: false
+- text: A star's brightness temperature depends on the wavelength used, because a real star does not radiate exactly like a blackbody.
+  isTrue: true
+- text: The effective temperature is the temperature of a blackbody that radiates the same total flux density as the star.
+  isTrue: true
+- text: The Rayleigh–Jeans law describes blackbody radiation correctly at all wavelengths, so no ultraviolet catastrophe arises.
+  isTrue: false
+explanation: 'Statement 1 is false: the colour temperature uses only the relative energy distribution over a wavelength range (for example a flux ratio), so no angular diameter is needed. Statement 2 is true: $F_\lambda=\pi B_\lambda(T_b)$ gives a different $T_b$ at each wavelength for a non-Planckian spectrum. Statement 3 is true: this is the definition via $F=\sigma T_{e}^{4}$. Statement 4 is false: the Rayleigh–Jeans form diverges as $\lambda\to0$; this contradiction with observation was the ultraviolet catastrophe, resolved by Planck''s law.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §5.7–§5.8, printed pp. 113–115

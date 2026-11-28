@@ -1,0 +1,23 @@
+questionId: astronomy.galaxies.advanced.3
+topic: galaxies
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: An elliptical galaxy has a recession velocity of $2100\ \mathrm{km\,s^{-1}}$ (pure Hubble flow; take $H=70\
+  \mathrm{km\,s^{-1}\,Mpc^{-1}}$). Its effective angular radius is $15.0''$ and the spectral-line velocity width
+  is $v=260\ \mathrm{km\,s^{-1}}$. Take the characteristic radius $R$ to be the linear radius that subtends $15.0''$,
+  use $1\ \mathrm{rad}=206265''$ and the virial result for a slowly rotating elliptical, $M=2v^2R/G$, with $G=4.30\times10^{-6}\
+  \mathrm{kpc\,(km/s)^2\,M_\odot^{-1}}$. Find the mass of the galaxy. Enter the value in units of $10^{10}\ M_\odot$,
+  rounded to two decimal places.
+numericAnswer:
+  value: 6.86
+  tolerance: 0.07
+  unit: 1e10 M_sun
+explanation: 'Distance from Hubble''s law: $d=V/H=2100/70=30.0$ Mpc $=3.00\times10^{4}$ kpc. Linear radius: $R=d\,\theta=3.00\times10^{4}\times15.0/206265=2.18$
+  kpc. Virial mass: $M=2v^2R/G=2\times260^2\times2.18/(4.30\times10^{-6})=6.86\times10^{10}\ M_\odot$. The calculation
+  assumes the line width represents the typical stellar speeds, that the system is in equilibrium, and that the
+  chosen $R$ is a suitable average radius, so the result is an estimate. The tolerance of 0.07 (about 1%) covers
+  rounding of the intermediate quantities and the constant.'
+author: Renee
+source: original

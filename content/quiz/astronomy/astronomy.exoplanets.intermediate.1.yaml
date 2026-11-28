@@ -1,0 +1,28 @@
+questionId: astronomy.exoplanets.intermediate.1
+topic: exoplanets
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: The habitable zone of the Sun at a single moment is wider than the zone that remains habitable for the Sun's
+  entire main-sequence lifetime (the *continuously* habitable zone). What is the main reason?
+choices:
+- text: The Sun's luminosity falls during the main sequence, so the zone drifts inward and planets on the outer
+    side freeze
+  correct: false
+- text: The freezing and boiling points of water change as a planet ages
+  correct: false
+- text: The Sun's luminosity slowly rises, so the zone drifts outward and only the region common to all epochs stays
+    habitable throughout
+  correct: true
+- text: The greenhouse effect of every planet disappears after a few hundred million years
+  correct: false
+explanation: '**Correct (option 3).** During the main sequence a star becomes slightly brighter, pushing the zone
+  where liquid water is possible outward. A planet that must stay habitable for the whole main-sequence phase has
+  to lie in the overlap of the zones at all epochs, which is narrower than the zone at any one moment. **Option
+  1** has the wrong sign: the luminosity increases, not decreases. **Option 2** is wrong because water''s freezing
+  and boiling points are fixed by the chosen conditions and do not drift with planetary age. **Option 4** is an
+  unsupported claim; atmospheric and albedo effects are uncertain over long times, but they are not the reason the
+  continuously habitable zone is narrower.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 21.3, pp. 448–449

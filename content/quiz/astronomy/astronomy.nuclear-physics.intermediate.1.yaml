@@ -1,0 +1,19 @@
+questionId: astronomy.nuclear-physics.intermediate.1
+topic: nuclear-physics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Four hydrogen atoms initially contain four protons (nuclear mass $m_p=1.007276$ u each) and four electrons. In the net proton–proton-chain bookkeeping, two electrons annihilate with the two positrons produced, leaving two electrons with the helium-4 nucleus (nuclear mass $m_\alpha=4.001506$ u). Use $m_e=5.486\times10^{-4}$ u for the electron mass and neglect electronic binding energies and energy carried away by neutrinos. Which percentage of the initial rest mass is converted into energy?
+choices:
+- text: 0.07 %
+  correct: false
+- text: 7 %
+  correct: false
+- text: 0.7 %
+  correct: true
+- text: 70 %
+  correct: false
+explanation: The initial matter mass is $M_i=4(m_p+m_e)$, while the final rest mass is $M_f=m_\alpha+2m_e$ because two initial electrons annihilate with the two positrons and two remain with helium. Thus $\Delta m=M_i-M_f=4m_p+2m_e-m_\alpha=0.028695$ u. The fraction is $\Delta m/M_i=0.007118$, or $0.7118\%$, which rounds to $0.7\%$. The other choices differ by factors of ten.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.3, printed pp. 254–255 (proton–proton chain and positron annihilation); electron mass and explicit net mass bookkeeping supplied in the prompt.

@@ -1,0 +1,33 @@
+questionId: astronomy.solar-system-bodies.advanced.3
+topic: solar-system-bodies
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model Earth and Mars as moving on circular, coplanar orbits about the Sun, with semimajor axes
+  1.000 au and 1.524 au and Earth's sidereal period 365.256 d. Use Kepler's third law for Mars's period.
+  Mars appears to move retrograde (its geocentric ecliptic longitude decreases) between two stationary
+  points that are symmetric about opposition. How long does the retrograde motion last? Enter the total
+  duration in days, rounded to the nearest day.
+numericAnswer:
+  value: 73
+  tolerance: 1
+  unit: d
+explanation: 'Let the heliocentric positions be $\mathbf{E}$ and $\mathbf{P}$ (Earth and Mars) with radii
+  $r_E = 1$, $r_P = 1.524$ and angular rates $n_E$, $n_P = n_E\,r_P^{-3/2}$ (Kepler''s third law). The
+  geocentric longitude of Mars is stationary when the geocentric position vector $\boldsymbol\rho = \mathbf{P}-\mathbf{E}$
+  is parallel to its velocity relative to Earth, i.e. $(\boldsymbol\rho\times\dot{\boldsymbol\rho})_z
+  = 0$. Expanding with $\Delta = \theta_P - \theta_E$: $r_P^2 n_P + r_E^2 n_E = r_E r_P (n_P + n_E)\cos\Delta$.
+  Numerically $n_P/n_E = 0.5315$, so $\cos\Delta = (2.3226\times0.5315 + 1)/(1.524\times1.5315) = 0.9574$
+  and $\Delta = 16.8^\circ$. Earth gains on Mars at $n_E - n_P$, i.e. $360^\circ$ per synodic period $P_{\rm
+  syn} = 779.7$ d, so $\Delta$ is covered in $16.8/360\times779.7 = 36.4$ d. The retrograde interval is
+  twice that, $72.7$ d, i.e. 73 days. Tolerance $\pm1$ d covers the rounding to the nearest day and the
+  three-significant-figure input $a = 1.524$ au (shifting $a$ by 0.0005 au changes the result by about
+  0.02 d); it is narrow enough to reject the common qualitative estimate of ''a month'' and the cruder
+  estimate that retrograde motion lasts one third of a synodic period (260 d). The book describes retrograde
+  motion qualitatively (and its Fig. 7.3 shows a little over a month on each side of opposition); the
+  quantitative stationary-point condition here is a derivation from the book''s circular-orbit and synodic-period
+  premises.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.2, pp. 143–145; Example 7.1, pp. 175–176
+  (Kepler's third law)

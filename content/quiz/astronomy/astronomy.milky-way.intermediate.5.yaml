@@ -1,0 +1,20 @@
+questionId: astronomy.milky-way.intermediate.5
+topic: milky-way
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Using $A=15$ km s$^{-1}$ kpc$^{-1}$ and $B=-10$ km s$^{-1}$ kpc$^{-1}$, find the orbital period of the local
+  standard of rest around the Galactic centre, assuming a circular orbit. Use 1 kpc $=3.086\times10^{16}$ km and
+  1 yr $=3.156\times10^{7}$ s. Enter the value in units of $10^{8}$ yr, rounded to two decimal places.
+numericAnswer:
+  value: 2.46
+  tolerance: 0.03
+  unit: 10^8 yr
+explanation: The Oort constants give the angular velocity of the LSR as $\omega_0=A-B=15-(-10)=25$ km s$^{-1}$ kpc$^{-1}$.
+  The period is $T=2\pi/\omega_0$. Converting, $\omega_0=25\ \mathrm{km\,s^{-1}}/(3.086\times10^{16}\ \mathrm{km})=8.10\times10^{-16}\
+  \mathrm{s^{-1}}$, so $T=2\pi/8.10\times10^{-16}=7.76\times10^{15}$ s $=2.46\times10^{8}$ yr. This agrees with
+  the quoted orbital period of the Sun of roughly $2.5\times10^{8}$ yr. The tolerance of $\pm0.03$ (about 1 %) allows
+  for the rounding of the unit conversions.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 377–378

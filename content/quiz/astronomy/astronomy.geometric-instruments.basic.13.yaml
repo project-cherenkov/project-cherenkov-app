@@ -1,0 +1,24 @@
+questionId: astronomy.geometric-instruments.basic.13
+topic: geometric-instruments
+difficulty: basic
+status: draft
+archived: true
+questionType: single_choice
+prompt: A protractor is placed with its centre exactly on the vertex of an angle. Its 0° baseline is aligned
+  with the right-hand ray. The second ray crosses the scale at the marked 40° division in the diagram.
+  ![Protractor reading diagram](/quiz/astronomy/geometry/protractor-reading.svg) What is the angle?
+choices:
+- text: 40°
+  correct: true
+- text: 50°
+  correct: false
+- text: 140°
+  correct: false
+- text: 320°
+  correct: false
+explanation: 'The centre is at the vertex and the zero line is aligned with the first ray, so the scale
+  is read directly at the second ray: 40°. The supplementary 140° is the common error from reading the
+  opposite protractor scale.'
+author: Renee
+source: Use of a ruler, geometric compass, protractor and set-square; official IOAA syllabus / Puspresnas
+  OSN 2026 Addendum (practical data analysis). All diagrams and scales are defined in the prompt.

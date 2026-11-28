@@ -1,0 +1,30 @@
+questionId: astronomy.exoplanets.advanced.2
+topic: exoplanets
+difficulty: advanced
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about habitable zones and life detection. Mark every statement True or False.
+statements:
+- text: For a blackbody-like planet, raising the Bond albedo while everything else stays fixed moves the boundaries
+    of the habitable zone outward.
+  isTrue: false
+- text: Stars not too different from the Sun are usually considered the best candidates for habitable planets.
+  isTrue: true
+- text: For a star that brightens during the main sequence, the continuously habitable zone is narrower than the
+    habitable zone at any one moment.
+  isTrue: true
+- text: A planet that lies inside the calculated habitable zone is guaranteed to have liquid water on its surface.
+  isTrue: false
+- text: A strong greenhouse effect can raise a planet's temperature enough that liquid water is possible farther
+    from the star than a no-atmosphere blackbody estimate suggests.
+  isTrue: true
+explanation: '**1 – False.** Higher albedo lowers the equilibrium temperature at a fixed distance, so the same temperature
+  boundaries occur closer to the star, not farther away. **2 – True.** The book identifies stars not too different
+  from the Sun as the best habitable-planet candidates. **3 – True.** As a star brightens, the habitable zone shifts
+  outward; the region habitable throughout the main-sequence phase is the overlap of the successive zones and is
+  narrower. **4 – False.** The simple habitable-zone estimate does not guarantee surface liquid water because real
+  atmospheres, clouds and albedo complicate the temperature. **5 – True.** Greenhouse warming can make liquid water
+  possible farther from the star than a no-atmosphere blackbody estimate suggests.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 21.3, pp. 448–449

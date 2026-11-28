@@ -1,0 +1,21 @@
+questionId: astronomy.space-exploration.basic.4
+topic: space-exploration
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: The NSSDCA Voyager Project Information record lists the electrical power system carried by Voyager
+  1 and Voyager 2. Which system did the spacecraft use?
+choices:
+- text: Solar photovoltaic arrays
+  correct: false
+- text: Radioisotope thermoelectric generators
+  correct: true
+- text: A nuclear fission reactor
+  correct: false
+- text: Fuel cells supplied by liquid hydrogen
+  correct: false
+explanation: The NSSDCA Voyager record identifies radioisotope thermoelectric generators (RTGs) as the
+  spacecraft power system. This item checks a basic mission-system fact, not atmospheric wavelength transmission.
+author: Renee
+source: "NASA/NSSDCA, “Voyager Project Information” (https://nssdc.gsfc.nasa.gov/planetary/voyager.html), describing the Voyager 1/2 RTG power system and outer-Solar-System mission."

@@ -1,0 +1,22 @@
+questionId: astronomy.vectors.basic.3
+topic: vectors
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Two vectors have magnitudes $|\mathbf A|=4$ and $|\mathbf B|=3$, and the angle between them is $30^\circ$.
+  What is the area of the parallelogram spanned by $\mathbf A$ and $\mathbf B$?
+choices:
+- text: '12'
+  correct: false
+- text: '6'
+  correct: true
+- text: '10.4'
+  correct: false
+- text: '3'
+  correct: false
+explanation: 'The length of the vector product is the area of the parallelogram: $|\mathbf A\times\mathbf B|=|\mathbf
+  A||\mathbf B|\sin30^\circ=4\times3\times0.5=6$. $12$ ignores the angle. $10.4\approx12\cos30^\circ$ uses the cosine,
+  which belongs to the scalar product. $3$ is the area of the triangle formed by the vectors, half of the parallelogram.'
+author: Renee
+source: original

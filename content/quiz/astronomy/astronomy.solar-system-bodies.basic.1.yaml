@@ -1,0 +1,27 @@
+questionId: astronomy.solar-system-bodies.basic.1
+topic: solar-system-bodies
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: For several weeks around opposition, Mars appears to drift westward (retrograde) among the stars,
+  although it always revolves around the Sun in the same direction. What causes this?
+choices:
+- text: Mars itself reverses its direction of revolution for a few weeks.
+  correct: false
+- text: Refraction in Earth's atmosphere displaces the image of Mars towards the west at opposition.
+  correct: false
+- text: Earth, on a smaller and faster orbit, overtakes Mars, so the line of sight to Mars sweeps backwards
+    against the stars.
+  correct: true
+- text: The Sun's gravity slows Mars down whenever it is closest to Earth.
+  correct: false
+explanation: Retrograde motion is a projection effect. Near opposition, Earth passes Mars on the inside
+  track; as seen from the moving Earth, the direction to the slower Mars shifts backwards against the
+  distant stars. The planet therefore reverses its apparent direction at a stationary point, moves retrograde
+  through opposition (which lies in the middle of the loop), and reverses again at the second stationary
+  point. Mars's own orbital motion never reverses, atmospheric refraction does not shift planets by many
+  degrees over weeks, and there is no mechanism by which the Sun slows Mars specifically when it is near
+  Earth.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 7.2, pp. 143–144

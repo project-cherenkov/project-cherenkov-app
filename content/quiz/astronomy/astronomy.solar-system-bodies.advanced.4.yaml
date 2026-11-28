@@ -1,0 +1,28 @@
+questionId: astronomy.solar-system-bodies.advanced.4
+topic: solar-system-bodies
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Model the Moon as moving with constant angular speed along the celestial equator in the same sense
+  as Earth's rotation, with sidereal orbital period 27.3217 d, and take Earth's sidereal rotation period
+  as 0.99727 d (23 h 56 min 4 s) of mean solar time. Find the average delay of the Moon's rising from
+  one day to the next, relative to a 24 h solar day. Enter the delay in minutes, rounded to 0.1 minute.
+numericAnswer:
+  value: 50.5
+  tolerance: 0.2
+  unit: min
+explanation: 'The Moon moves eastward among the stars, so a given point on Earth must rotate a little
+  more than once relative to the stars to bring the Moon back to the same position in its sky. The recurrence
+  interval $T$ is the synodic period of two bodies that revolve in the same sense with sidereal periods
+  $T_E = 0.99727$ d (Earth''s rotation) and $T_M = 27.3217$ d (Moon''s orbit): $1/T = 1/T_E - 1/T_M =
+  1.002738 - 0.036601 = 0.966137\ \mathrm{d^{-1}}$, so $T = 1.03505$ d. The delay relative to 1 mean solar
+  day is $0.03505\ \mathrm{d} \times 1440\ \mathrm{min/d} = 50.5$ min. Using the solar day (1 d) as the
+  Earth''s reference period instead of the sidereal rotation period is the typical mistake and gives 54.7
+  min; it is rejected by the tolerance of $\pm0.2$ min, which only covers rounding of the data (using
+  27.32 d or 27.322 d changes the result by less than 0.01 min). The simplification of uniform motion
+  on the equator ignores the lunar orbit''s eccentricity and inclination, so real delays vary from day
+  to day.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 2.13, pp. 34–35 (Eq. 2.43, sidereal and
+  synodic day); Sect. 7.4, p. 147

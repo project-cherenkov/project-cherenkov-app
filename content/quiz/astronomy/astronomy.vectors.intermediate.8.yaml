@@ -1,0 +1,21 @@
+questionId: astronomy.vectors.intermediate.8
+topic: vectors
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Relative to the Sun, an asteroid has $\mathbf r=(0.80,\,1.20,\,0.60)$ au and $\mathbf v=(-4.0,\,2.5,\,1.5)$
+  au/yr. With $\mu=4\pi^2=39.478$ au$^3$yr$^{-2}$, find its perihelion distance $q$ in au, to two decimal
+  places. You may use $p=k^2/\mu$ for the semilatus rectum (where $\mathbf k=\mathbf r\times\mathbf v$),
+  $\tfrac12v^2-\mu/r=h$, $\mu^2(e^2-1)=2hk^2$ and $q=p/(1+e)$.
+numericAnswer:
+  value: 1.37
+  tolerance: 0.01
+  unit: au
+explanation: $\mathbf k=\mathbf r\times\mathbf v=(0.300,-3.600,6.800)$ au$^2$/yr, so $k^2=59.290$ and
+  $p=k^2/\mu=1.5018$ au. With $r=1.5620$ au and $v^2=24.50$, $h=\tfrac12v^2-\mu/r=-13.023<0$. Then $e^2=1+2hk^2/\mu^2$
+  gives $e=0.0955$, and $q=p/(1+e)=1.3709$ au. To two decimal places the expected entry is $1.37$ au.
+  Since $e^2$ is obtained by subtracting close quantities, legitimate intermediate rounding can shift
+  the last hundredth; the absolute tolerance $\pm0.01$ au accommodates that sensitivity.
+author: Renee
+source: original

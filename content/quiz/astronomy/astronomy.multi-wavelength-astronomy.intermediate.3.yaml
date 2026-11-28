@@ -1,0 +1,23 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.3
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: "A sea-level observatory under a clear sky wants to observe the following radiation. Which of these can be done from the ground, i.e. lies in a transparent atmospheric window?"
+choices:
+  - text: "Extreme ultraviolet at $100$ nm"
+    correct: false
+  - text: "The $21$ cm hydrogen line"
+    correct: true
+  - text: "Far-infrared radiation at $100\\ \\mu$m"
+    correct: false
+  - text: "Near-infrared radiation at $1.0\\ \\mu$m"
+    correct: true
+  - text: "X-rays at $0.5$ nm"
+    correct: false
+  - text: "Visible light at $550$ nm"
+    correct: true
+explanation: "The optical window ($\\approx300$–$800$ nm) transmits $550$ nm. The atmosphere is fairly transparent in the near-infrared up to about $1.3\\ \\mu$m, so $1.0\\ \\mu$m is observable. The radio window ($\\approx1$ mm–$20$ m) contains $21$ cm. Everything between about $20\\ \\mu$m and $1$ mm is totally absorbed, which excludes $100\\ \\mu$m. Ultraviolet below $300$ nm and X-rays are absorbed high in the atmosphere."
+author: Renee
+source: "original"

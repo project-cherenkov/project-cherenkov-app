@@ -1,0 +1,21 @@
+questionId: astronomy.thermodynamics.intermediate.3
+topic: thermodynamics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Inside a star the gas pressure is $P_{\rm gas}=\rho kT/(\mu m_{\rm H})$ and the radiation pressure is $P_{\rm rad}=aT^{4}/3$. Select **all** correct statements.
+choices:
+- text: Doubling $T$ at fixed $\rho$ raises $P_{\rm gas}$ by a factor of 16.
+  correct: false
+- text: Doubling $T$ at fixed $\rho$ raises $P_{\rm rad}$ by a factor of 16.
+  correct: true
+- text: At fixed $\rho$ and composition, $P_{\rm rad}/P_{\rm gas}$ grows in proportion to $T^{3}$.
+  correct: true
+- text: Radiation pressure depends on the mean molecular weight $\mu$ of the gas.
+  correct: false
+- text: At fixed $T$, raising $\rho$ increases $P_{\rm gas}$ but leaves $P_{\rm rad}$ unchanged.
+  correct: true
+explanation: Doubling $T$ raises $P_{\rm gas}\propto T$ by 2 (statement 1 false) and $P_{\rm rad}\propto T^{4}$ by 16 (statement 2 true). At fixed $\rho$ the ratio $P_{\rm rad}/P_{\rm gas}\propto T^{4}/T=T^{3}$ (statement 3 true). $P_{\rm rad}$ depends only on $T$, not on $\mu$ (statement 4 false), and does not depend on $\rho$ (statement 5 true). The key is {2, 3, 5}.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.2, eqs. (11.8), (11.11)–(11.12), and Box 11.1, printed pp. 252, 259

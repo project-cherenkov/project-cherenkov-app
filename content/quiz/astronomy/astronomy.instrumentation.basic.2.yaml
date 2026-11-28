@@ -1,0 +1,19 @@
+questionId: astronomy.instrumentation.basic.2
+topic: instrumentation
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: "Telescope A has an objective diameter of $100$ mm and telescope B has $200$ mm. Other things being equal, how many times more light does B collect from a point source?"
+choices:
+  - text: "$2$ times"
+    correct: false
+  - text: "$8$ times"
+    correct: false
+  - text: "$16$ times"
+    correct: false
+  - text: "$4$ times"
+    correct: true
+explanation: "Light-collecting power is proportional to collecting area, hence to $D^2$: $(200/100)^2=4$. Doubling the diameter does not merely double the light ($2$), and the cube or fourth power ($8$, $16$) has no physical basis."
+author: Renee
+source: "original"

@@ -1,0 +1,21 @@
+questionId: astronomy.milky-way.advanced.3
+topic: milky-way
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: Take $A=15$ and $B=-10$ (in km s$^{-1}$ kpc$^{-1}$) and $R_0=8.5$ kpc. Use $V_0=(A-B)R_0$ for the circular
+  speed of the LSR. Model the mass inside the Sun's orbit as a point mass, so the local escape speed is $\sqrt2$
+  times the circular speed. A star near the Sun moves in the direction of Galactic rotation. What is the largest
+  speed it can have relative to the local standard of rest and still remain bound to the Galaxy? Enter the value
+  in km/s, rounded to one decimal place.
+numericAnswer:
+  value: 88.0
+  tolerance: 0.05
+  unit: km/s
+explanation: The Oort constants give $V_0=(A-B)R_0=[15-(-10)](8.5)=212.5$ km/s. In the stated point-mass model,
+  $v_{\rm esc}=\sqrt{2}V_0=300.520$ km/s. A prograde star has Galactic-frame speed $V_0+v_{\rm rel}$, so the largest
+  bound relative speed is $v_{\rm rel,max}=v_{\rm esc}-V_0=(\sqrt{2}-1)V_0=88.0204$ km/s, which rounds to **88.0
+  km/s**. The $\pm0.05$ km/s tolerance matches rounding to one decimal place.
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.3, pp. 377–380

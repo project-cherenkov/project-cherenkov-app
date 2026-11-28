@@ -1,0 +1,28 @@
+questionId: astronomy.elementary-cosmology.basic.3
+topic: elementary-cosmology
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: All distant galaxies appear to recede from us with speeds proportional to their distances (Hubble's law).
+  Why does this not mean that the Milky Way is at the centre of the expansion?
+choices:
+- text: Because the Milky Way is moving through space faster than any other galaxy, so the other galaxies appear
+    to move away from it.
+  correct: false
+- text: Because Hubble's law only holds for galaxies observed from the Milky Way, and observers in other galaxies
+    see no regular pattern.
+  correct: false
+- text: Because the expansion has a centre, but it lies in the Virgo Cluster, not in the Milky Way.
+  correct: false
+- text: Because in a uniformly expanding universe an observer in any other galaxy would see the same Hubble law,
+    so no point is a special centre of expansion.
+  correct: true
+explanation: 'Correct (fourth choice): in a homogeneous, uniformly expanding universe the velocity difference between
+  any two points is proportional to their separation, so every observer sees the same pattern and the Milky Way
+  has no special position, consistent with the Copernican principle. Choice 1 gets the situation backwards, since
+  the effect is the same for every observer and does not arise from our own motion. Choice 2 is wrong because the
+  same Hubble law applies from any galaxy. Choice 3 is wrong because there is no centre of expansion; the Virgo
+  Cluster causes local peculiar velocities (about 250 km s$^{-1}$), not the Hubble flow.'
+author: Renee
+source: original

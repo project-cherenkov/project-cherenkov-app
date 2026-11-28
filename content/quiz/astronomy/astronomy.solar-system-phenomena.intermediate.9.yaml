@@ -1,0 +1,29 @@
+questionId: astronomy.solar-system-phenomena.intermediate.9
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Consider the qualitative effects of axial tilt and the Sun’s apparent position on seasonal energy
+  input. Do not calculate a daily insolation integral.
+statements:
+- text: A planet with a larger axial tilt can have a larger seasonal contrast in the distribution of sunlight
+    between hemispheres.
+  isTrue: true
+- text: A longer daylight duration can increase the daily energy received when the mean incoming solar
+    flux is otherwise comparable.
+  isTrue: true
+- text: A lower solar elevation spreads the same incoming beam over a larger horizontal area.
+  isTrue: true
+- text: Changing the solar elevation cannot affect the energy received per unit horizontal area.
+  isTrue: false
+- text: Seasons are caused solely by the changing Earth–Sun distance, not by axial tilt.
+  isTrue: false
+explanation: A larger obliquity changes the seasonal distribution of sunlight between hemispheres. Day
+  length affects the duration of illumination. A low Sun angle spreads the incoming beam over a larger
+  horizontal area, reducing the energy per unit area. Solar elevation therefore matters, and Earth’s seasons
+  are primarily associated with axial tilt rather than Earth–Sun distance alone. The textbook’s Example
+  7.2 supports the insolation geometry, but the question stays qualitative because the syllabus marks
+  climate factors (Q).
+author: Renee
+source: "Karttunen et al., Fundamental Astronomy, 6th ed., §7.2, Example 7.2, printed p. 176 (daily-insolation geometry; used only for qualitative solar-elevation and day-length principles because climate factors are marked qualitative in the syllabus)."

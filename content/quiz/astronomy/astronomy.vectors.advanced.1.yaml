@@ -1,0 +1,31 @@
+questionId: astronomy.vectors.advanced.1
+topic: vectors
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: In the Sun-centred test-particle approximation, with the Sun held fixed at the origin and perturbations
+  from other bodies neglected, a comet is at $\mathbf r=(1.00,0,0)$ au with velocity $\mathbf v=(0,\,7.00,\,0)$
+  au/yr. Take $\mu=GM_\odot=4\pi^2=39.48$ au$^3$yr$^{-2}$ and use the energy integral $h=\tfrac12v^2-\mu/r$, the
+  angular momentum $\mathbf k=\mathbf r\times\mathbf v$ and the eccentricity vector $\mathbf e=-\left(\mathbf k\times\mathbf
+  v+\mu\,\mathbf r/r\right)/\mu$. Which statements are correct? Select all that apply.
+choices:
+- text: The orbit is a bound ellipse
+  correct: true
+- text: The semi-major axis is about $1.0$ au, because $r=1.0$ au at this instant
+  correct: false
+- text: The comet is at perihelion at this instant
+  correct: true
+- text: The eccentricity is zero, because $\mathbf r\perp\mathbf v$
+  correct: false
+- text: The aphelion distance is about $1.64$ au
+  correct: true
+explanation: 'Here $\mathbf k=(0,0,7)$ au$^2$/yr and $h=24.5-39.48=-14.98<0$, so the orbit is a bound ellipse with
+  $a=-\mu/2h=1.318$ au. $\mathbf k\times\mathbf v=(-49,0,0)$, so $\mathbf e=-(-49+39.48,0,0)/39.48=(0.2412,0,0)$:
+  $e=0.241$, and $\mathbf e$ points along $+\hat\imath$, the direction of $\mathbf r$, so the comet is at perihelion
+  ($q=a(1-e)=1.000$ au, equal to $r$). The aphelion distance is $a(1+e)=1.64$ au. Incorrect: $a\ne r$ in general;
+  $r$ equals $a$ only on a circular orbit. $\mathbf r\perp\mathbf v$ means $\dot r=0$, i.e. a turning point (perihelion
+  or aphelion), not zero eccentricity: here $v=7.00$ exceeds the circular speed $\sqrt{\mu/r}=6.28$ au/yr, so the
+  orbit is eccentric.'
+author: Renee
+source: original

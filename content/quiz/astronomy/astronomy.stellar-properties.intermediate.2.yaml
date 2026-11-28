@@ -1,0 +1,31 @@
+questionId: astronomy.stellar-properties.intermediate.2
+topic: stellar-properties
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A classical Cepheid has mean apparent magnitude $V=14.0$. Its period–luminosity relation gives $M_V=-4.0$.
+  Interstellar dust between the star and the observer dims it by $A_V=1.2$ mag. Which distance follows when the
+  extinction is treated correctly?
+choices:
+- text: About 40 kpc
+  correct: false
+- text: About 69 kpc
+  correct: false
+- text: About 2.3 kpc
+  correct: false
+- text: About 23 kpc
+  correct: true
+explanation: 'With extinction, $m-M=5\lg(r/10\ \text{pc})+A_V$. Therefore $5\lg(r/10\ \text{pc})=14.0-(-4.0)-1.2=16.8$,
+  so $r/10\ \text{pc}=10^{3.36}\approx2.29\times10^{3}$ and $r\approx2.3\times10^{4}$ pc $\approx23$ kpc.
+
+
+  - About 40 kpc ignores the extinction ($m-M=18.0$) and so overestimates the distance: dust makes the star look
+  fainter, but the star is not as far as that.
+
+  - About 69 kpc adds the extinction to the modulus instead of subtracting it.
+
+  - About 2.3 kpc drops the 10 pc reference distance, i.e. it evaluates $10^{3.36}$ pc instead of $10\times10^{3.36}$
+  pc.'
+author: Renee
+source: original

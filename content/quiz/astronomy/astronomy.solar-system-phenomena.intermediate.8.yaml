@@ -1,0 +1,27 @@
+questionId: astronomy.solar-system-phenomena.intermediate.8
+topic: solar-system-phenomena
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In an equilibrium-tide model, the semidiurnal tidal range at an equatorial site is the sum of
+  a lunar and a solar term, each proportional to $M/d^{3}$ for the body concerned. At spring tide (Sun
+  and Moon in line with Earth) the two terms add; at neap tide (Sun and Moon $90^\circ$ apart as seen
+  from Earth) the two semidiurnal terms are exactly out of phase and subtract. Use $M_\odot = 1.989\times10^{30}$
+  kg, $M_{\rm Moon} = 7.342\times10^{22}$ kg, Sun distance $1.496\times10^{11}$ m and Moon distance $3.844\times10^{8}$
+  m (both at their mean values). Find the ratio of the spring-tide range to the neap-tide range. Enter
+  the dimensionless ratio rounded to 2 decimal places.
+numericAnswer:
+  value: 2.7
+  tolerance: 0.05
+  unit: dimensionless
+explanation: 'The solar-to-lunar ratio of tidal amplitudes is $r = (M_\odot/M_{\rm Moon})(d_{\rm Moon}/d_\odot)^3
+  = 0.4596$ (Box 7.1: the tidal force falls as $1/d^3$; the semidiurnal term varies as $\cos 2h$, so a
+  $90^\circ$ separation of the bodies shifts the two terms by $180^\circ$ relative to each other). In
+  units of the lunar amplitude, spring $= 1 + r = 1.4596$ and neap $= 1 - r = 0.5404$, so the ratio is
+  $1.4596/0.5404 = 2.70$. Tolerance 0.05 covers the rounding and the sensitivity of the ratio to $r$:
+  values of $r$ between 0.453 and 0.467 (e.g. from rounding the constants) still give a ratio within the
+  tolerance. It rejects the typical error of forgetting the sign change at neap, which gives $1 + r =
+  1.46$, and the error of using $r$ itself (0.46) as the answer.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Box 7.1, pp. 174–175; Sect. 7.4, p. 149

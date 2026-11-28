@@ -1,0 +1,22 @@
+questionId: astronomy.celestial-mechanics.intermediate.8
+topic: celestial-mechanics
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A minor planet has semi-major axis $a=2.50$ au and eccentricity $e=0.30$. At a certain moment
+  its mean anomaly is $M=1.2000$ rad. Solve Kepler's equation for the eccentric anomaly $E$ (in radians)
+  and then find the planet's distance from the Sun. Enter the distance in au, rounded to three decimal
+  places.
+numericAnswer:
+  value: 2.446
+  tolerance: 0.003
+  unit: au
+explanation: 'Kepler''s equation is $E-e\sin E=M$. It has no closed-form solution, so iterate $E_{n+1}=M+e\sin
+  E_n$ starting from $E_0=M$: $E_1=1.4796$, $E_2=1.4988$ and so on, converging to $E=1.4992$ rad. (All
+  angles must be in radians.) Then $r=a(1-e\cos E)=2.50\,(1-0.30\cos 1.4992)=2.446$ au. Using $E=M$ gives
+  $r=2.228$ au, and returning $a$ itself gives $2.500$ au; both are wrong. The tolerance of 0.003 au allows
+  for stopping the iteration at four-figure accuracy.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), §6.8, eqs. (6.35)–(6.38), and the iteration method of Example
+  6.6, printed pp. 132–138

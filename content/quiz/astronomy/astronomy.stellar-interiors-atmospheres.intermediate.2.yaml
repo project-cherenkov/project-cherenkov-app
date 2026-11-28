@@ -1,0 +1,31 @@
+questionId: astronomy.stellar-interiors-atmospheres.intermediate.2
+topic: stellar-interiors-atmospheres
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: Near the limb of the solar disc the intensity is lower than at the centre of the disc. Which explanation
+  is consistent with the structure of the photosphere?
+choices:
+- text: The limb is farther from the observer than the disc centre, so its flux density falls as $1/r^2$.
+  correct: false
+- text: Along a line of sight near the limb the optical depth reaches about one in higher, cooler layers than at
+    disc centre, so the emitted light is fainter.
+  correct: true
+- text: The gas at the limb has a higher temperature, so its spectrum is shifted out of the visual band.
+  correct: false
+- text: A larger magnetic field at the limb absorbs a fixed fraction of the light there.
+  correct: false
+explanation: 'The photospheric temperature decreases outward. At disc centre one sees to a relatively deep, hot
+  layer; near the limb the slanted line of sight reaches optical depth near one at a smaller geometric depth, i.e.
+  in a higher, cooler layer that radiates less. This limb darkening also gives an empirical way to determine the
+  temperature distribution in the atmosphere.
+
+
+  - The extra distance across the solar disc is negligible compared with $1$ au, so the inverse-square law is irrelevant.
+
+  - The limb layer is cooler, not hotter.
+
+  - Magnetic absorption is not the cause of the smooth centre-to-limb variation.'
+author: Renee
+source: original

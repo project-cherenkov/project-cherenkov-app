@@ -1,0 +1,27 @@
+questionId: astronomy.space-exploration.intermediate.11
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: The Galileo mission used a sequence of planetary encounters before reaching Jupiter. According
+  to the NASA/NSSDCA mission records, select all statements that are correct.
+choices:
+- text: The Venus encounter occurred before the first Earth–Moon encounter.
+  correct: true
+- text: The two Earth–Moon encounters occurred in the same calendar year.
+  correct: false
+- text: Gravity assists changed the spacecraft’s heliocentric trajectory using the motion of the encountered
+    planet.
+  correct: true
+- text: The spacecraft entered orbit around Venus as its first mission phase.
+  correct: false
+- text: Galileo arrived at Jupiter after the second Earth–Moon encounter and the listed asteroid flybys.
+  correct: true
+explanation: The NSSDCA chronology lists the Venus encounter in 1990, the first Earth–Moon encounter in
+  1990, Gaspra in 1991, the second Earth–Moon encounter in 1992, Ida in 1993 and Jupiter arrival in 1995.
+  Thus the two Earth encounters were not in the same year. They were flybys, not Venus orbital insertion.
+  A gravity assist uses the planet’s motion to alter the spacecraft’s heliocentric velocity.
+author: Renee
+source: NASA/NSSDCA, “Galileo Project Information” (https://nssdc.gsfc.nasa.gov/planetary/galileo.html)
+  and “Galileo (1990, 1992)” flyby chronology (https://nssdc.gsfc.nasa.gov/planetary/lunar/lunargal.html).

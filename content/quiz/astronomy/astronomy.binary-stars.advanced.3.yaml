@@ -1,0 +1,29 @@
+questionId: astronomy.binary-stars.advanced.3
+topic: binary-stars
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: A double-lined eclipsing binary has a circular orbit seen exactly edge-on ($i=90^\circ$) with period $P=3.00$
+  d. The radial-velocity semi-amplitudes are $K_1=60$ km/s and $K_2=90$ km/s. The time between first and fourth
+  contact (external contacts) of one central eclipse is $0.400$ d. Treat the stars as uniform discs and use the
+  exact circular-orbit geometry, not a straight-line or small-angle approximation. Find $R_1+R_2$. Use $R_\odot=6.957\times10^{5}$
+  km. Enter your answer in solar radii, rounded to two decimal places.
+numericAnswer:
+  value: 3.62
+  tolerance: 0.02
+  unit: R_sun
+explanation: 'The relative orbit has radius $a=(K_1+K_2)P/2\pi=150\times259{,}200/2\pi=6.19\times10^{6}$ km $=8.89\,R_\odot$.
+  For an edge-on circular orbit the projected separation is $a|\sin\phi|$, with $\phi=2\pi t/P$ measured from mid-eclipse.
+  External contact occurs when this equals $R_1+R_2$, at $\phi=\pi(\Delta t)/P$ where $\Delta t=0.400$ d is the
+  full duration. Thus
+
+
+  $$R_1+R_2=a\sin\!\left(\frac{\pi\Delta t}{P}\right)=8.89\,R_\odot\times\sin(0.419)=3.62\,R_\odot.$$
+
+
+  A straight-line approximation would give $3.73\,R_\odot$, about $3\%$ too large because the eclipse spans a large
+  fraction of the orbit. Unit: $R_\odot$. The tolerance of $0.02\,R_\odot$ ($\approx0.6\%$) allows for rounding
+  but is smaller than the straight-line error.'
+author: Renee
+source: original

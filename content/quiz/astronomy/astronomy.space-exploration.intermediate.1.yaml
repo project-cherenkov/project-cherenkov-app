@@ -1,0 +1,26 @@
+questionId: astronomy.space-exploration.intermediate.1
+topic: space-exploration
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: In 2014 the Rosetta mission measured the water vapour released by comet 67P/Churyumov–Gerasimenko
+  and found a deuterium-to-hydrogen (D/H) ratio about three times the terrestrial value. What is the most
+  defensible conclusion?
+choices:
+- text: All comets must have a D/H ratio three times that of Earth's water.
+  correct: false
+- text: The comet's ice is not ordinary water.
+  correct: false
+- text: Earth's water is unlikely to have been delivered mainly by comets like this one.
+  correct: true
+- text: Earth's oceans must therefore have been delivered entirely by asteroids.
+  correct: false
+explanation: If Earth's oceans had been brought mainly by comets with the composition of 67P, their D/H
+  ratio would be about three times higher than it is. The measurement therefore argues against 67P-like
+  comets as the dominant source of Earth's water. One comet cannot establish a property of all comets,
+  so the first option over-generalises. The molecules are ordinary water ($\mathrm{H_2O}$ with some $\mathrm{HDO}$);
+  the ratio refers to the isotopes. The measurement does not by itself prove an exclusive asteroid origin,
+  so 'entirely by asteroids' goes beyond the evidence.
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 8.12, p. 222

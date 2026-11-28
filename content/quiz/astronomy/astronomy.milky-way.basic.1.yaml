@@ -1,0 +1,24 @@
+questionId: astronomy.milky-way.basic.1
+topic: milky-way
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which description best fits typical stars of the Milky Way's halo (population II)?
+choices:
+- text: Young, metal-rich stars on nearly circular orbits in the Galactic plane
+  correct: false
+- text: Old, metal-rich stars confined to the spiral arms
+  correct: false
+- text: Young, metal-poor stars forming from the halo's dense gas
+  correct: false
+- text: Old, metal-poor stars whose orbits may be very eccentric and show no preference for the Galactic plane
+  correct: true
+explanation: '**Correct (option 4).** Halo stars are old (up to about $13\times10^{9}$ years), have very low heavy-element
+  abundances, and move on orbits that may be very eccentric with no preference for the Galactic plane; typical objects
+  are globular clusters and RR Lyrae stars. **Option 1** describes population I (the youngest stars and the interstellar
+  gas in the disc). **Option 2** is wrong on metallicity: old halo stars are metal-poor, and spiral-arm confinement
+  characterises young objects. **Option 3** is wrong because the halo contains very little interstellar matter,
+  so it has essentially no ongoing star formation.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 18.2, pp. 374–375

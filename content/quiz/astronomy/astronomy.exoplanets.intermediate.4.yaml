@@ -1,0 +1,30 @@
+questionId: astronomy.exoplanets.intermediate.4
+topic: exoplanets
+difficulty: intermediate
+status: draft
+archived: false
+questionType: true_false_set
+prompt: Judge each statement about exoplanet populations and the temperature of planets. Mark every statement True
+  or False.
+statements:
+- text: Because massive, close-in planets are the easiest to detect, the known sample over-represents such planets
+    relative to the true population.
+  isTrue: true
+- text: Every planetary orbit in the Solar System except Mercury’s has eccentricity below 0.1.
+  isTrue: true
+- text: The nearly circular orbits in the Solar System imply that known exoplanet orbits must also be nearly circular.
+  isTrue: false
+- text: For a given star and orbital distance, a planet with a higher Bond albedo has a lower equilibrium temperature
+    than a planet with a lower albedo.
+  isTrue: true
+- text: Greenhouse gases are transparent to the infrared radiation emitted by a planet, so they lower its surface
+    temperature.
+  isTrue: false
+explanation: '**1 – True.** The book notes that the Solar-System planetary orbits are nearly circular, with Mercury
+  as the exception to the e<0.1 statement. **2 – True.** This is the Solar-System fact itself. **3 – False.** It
+  does not follow that exoplanet orbits must share the same eccentricity distribution; the book shows that some
+  known exoplanet orbits are substantially eccentric. **4 – True.** At fixed stellar luminosity and orbital distance,
+  higher Bond albedo means less absorbed energy and a lower equilibrium temperature. **5 – False.** Greenhouse gases
+  absorb outgoing infrared radiation; they are not transparent to it and do not lower the surface temperature.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 22.3, pp. 461–462; Sect. 21.3, pp. 448–449

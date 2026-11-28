@@ -1,0 +1,39 @@
+questionId: astronomy.stellar-properties.intermediate.3
+topic: stellar-properties
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following statements about magnitudes and colours are correct? Select all that apply.
+choices:
+- text: Interstellar dust makes a star's observed $B-V$ larger (redder) than its intrinsic colour index.
+  correct: true
+- text: A star with a positive bolometric correction must have been observed through interstellar dust.
+  correct: false
+- text: In transparent space, a star's absolute magnitude does not depend on how far away the star actually is.
+  correct: true
+- text: Two stars with the same $B-V$ must have the same luminosity.
+  correct: false
+- text: If the colour excess is known, the visual extinction can be estimated using $A_V\approx3.0\,E_{B-V}$.
+  correct: true
+explanation: 'Correct statements:
+
+
+  - Dust scatters and absorbs blue light more than red, so $B-V$ increases (reddening). True.
+
+  - The absolute magnitude is defined as the apparent magnitude the star would have at $10$ pc, so it depends on
+  luminosity, not on actual distance (when extinction is absent). True.
+
+  - The ratio $A_V/E_{B-V}\approx3.0$ converts a colour excess into visual extinction. True.
+
+
+  Incorrect statements:
+
+
+  - The bolometric correction measures how far the star''s spectral energy distribution departs from that of a solar-type
+  (F5) star. It is non-zero for cooler or hotter stars regardless of dust. False.
+
+  - Colour index fixes temperature, not luminosity: a giant and a dwarf can share $B-V$ while differing in luminosity
+  by orders of magnitude. False.'
+author: Renee
+source: original

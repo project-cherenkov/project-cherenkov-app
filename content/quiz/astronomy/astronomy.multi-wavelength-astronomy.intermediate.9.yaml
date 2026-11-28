@@ -1,0 +1,23 @@
+questionId: astronomy.multi-wavelength-astronomy.intermediate.9
+topic: multi-wavelength-astronomy
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: "Use $hc=1239.84$ eV nm. Take the bands as: soft X-rays $10$–$0.1$ nm; extreme ultraviolet (EUV) $10$–$91.2$ nm; gamma rays above $10^5$ eV. Which statements are correct?"
+choices:
+  - text: "A photon of wavelength $0.5$ nm has an energy of about $2.5$ keV and lies in the soft X-ray band."
+    correct: true
+  - text: "A photon of energy $10^6$ eV is a gamma-ray photon with a wavelength of about $1.2\\times10^{-12}$ m."
+    correct: true
+  - text: "A photon of wavelength $100$ nm (about $12$ eV) lies in the EUV band."
+    correct: false
+  - text: "A $21$ cm radio photon has an energy of about $6\\ \\mu$eV."
+    correct: true
+  - text: "Gamma rays and visible light are both produced by transitions in the electron shells of atoms."
+    correct: false
+  - text: "Because infrared radiation passes easily through glass, infrared telescopes are best built as refractors."
+    correct: false
+explanation: "(1) True: $E=1239.84/0.5=2480$ eV, and $0.5$ nm lies between $10$ and $0.1$ nm. (2) True: $\\lambda=1239.84\\ {\\rm eV\\,nm}/10^6\\ {\\rm eV}=1.24\\times10^{-3}$ nm $=1.24\\times10^{-12}$ m, and $10^6>10^5$ eV. (3) False: $100$ nm is above $91.2$ nm, so it is far ultraviolet, not EUV ($E=12.4$ eV). (4) True: $E=1239.84\\times10^{-9}\\ {\\rm eV\\,m}/0.21\\ {\\rm m}=5.9\\times10^{-6}$ eV. (5) False: visible light comes from electron-shell transitions, whereas gamma rays and hard X-rays come from nuclear transitions or interactions of elementary particles. (6) False: infrared cannot penetrate glass, so infrared telescopes are reflectors."
+author: Renee
+source: "original"

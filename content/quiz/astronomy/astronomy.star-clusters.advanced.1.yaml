@@ -1,0 +1,35 @@
+questionId: astronomy.star-clusters.advanced.1
+topic: star-clusters
+difficulty: advanced
+status: draft
+archived: false
+questionType: multiple_select
+prompt: A student wants to find the distance of an open cluster by main-sequence fitting to a calibrated reference
+  main sequence. Select **all** statements that are correct.
+choices:
+- text: All cluster members must be at nearly the same distance, so that one distance modulus applies to them and
+    a clear main sequence appears
+  correct: true
+- text: Interstellar extinction and reddening must first be determined, for example from multicolour photometry,
+    and removed; otherwise the stars look fainter and the distance is overestimated
+  correct: true
+- text: The reference main sequence must itself have been calibrated in absolute magnitude by an independent distance
+    determination
+  correct: true
+- text: The cluster and the reference must have the same age, otherwise their turn-off points cannot be matched
+    and the fitting fails
+  correct: false
+- text: Fitting a solar-metallicity reference sequence to a very metal-poor globular cluster can introduce a systematic
+    error, because the globular cluster's main sequence lies lower
+  correct: true
+explanation: '**Options 1, 2, 3 and 5 are correct.** (1) The method relies on a common distance for all members;
+  if distances varied too much no sharp main sequence would be seen. (2) With $m_{V0}=m_V-A_V$ the extinction must
+  be removed to compare with the standard; ignoring it makes the stars look fainter, i.e. a larger apparent distance
+  modulus, hence an overestimated distance. (3) The vertical offset gives only $m-M$ if the reference''s absolute
+  magnitudes are known, so the whole chain rests on a calibrated nearby cluster such as the Hyades. (5) The main
+  sequences of open clusters fall in nearly the same place because their initial composition is similar; a very
+  metal-poor globular cluster''s main sequence is lower, so a template of different composition is mismatched. **Option
+  4 is false:** age determines where the stars *leave* the main sequence (the turn-off), not where the main sequence
+  itself lies; clusters of different ages can be fitted along their unevolved main sequences. Grading is exact-set.'
+author: Renee
+source: Fundamental Astronomy (6th ed.), Sect. 17.2–17.3, pp. 362–364

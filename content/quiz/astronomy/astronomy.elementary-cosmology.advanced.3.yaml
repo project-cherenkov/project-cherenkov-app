@@ -1,0 +1,22 @@
+questionId: astronomy.elementary-cosmology.advanced.3
+topic: elementary-cosmology
+difficulty: advanced
+status: draft
+archived: false
+questionType: numeric_response
+prompt: 'Four galaxies have Cepheid-calibrated distances $r$ (Mpc) and recession velocities $V$ (km s$^{-1}$), the
+  latter already corrected for the Sun''s motion: $(r,V)=(8,\ 640),\ (15,\ 1130),\ (22,\ 1480),\ (30,\ 2290)$. Estimate
+  the Hubble constant by fitting $V=Hr$ through the origin, choosing $H$ to minimise the sum of squared velocity
+  residuals $\sum(V_i-Hr_i)^2$. Enter $H$ in km s$^{-1}$ Mpc$^{-1}$, rounded to one decimal place.'
+numericAnswer:
+  value: 73.7
+  tolerance: 0.1
+  unit: km/s/Mpc
+explanation: Minimising $\sum(V_i-Hr_i)^2$ with respect to $H$ gives $H=\sum r_iV_i/\sum r_i^2$. The sums are $\sum
+  r_iV_i=8\cdot640+15\cdot1130+22\cdot1480+30\cdot2290=123\,330$ and $\sum r_i^2=64+225+484+900=1673$. Then $H=123\,330/1673=73.7\
+  \mathrm{km\,s^{-1}\,Mpc^{-1}}$. The individual ratios $V/r$ are 80.0, 75.3, 67.3 and 76.3, scattering by about
+  $\pm5$; the scatter reflects peculiar velocities of order a few hundred km s$^{-1}$ (about 250 km s$^{-1}$ is
+  quoted near the Virgo Cluster), which matter most for the nearest galaxies. The tolerance of 0.1 corresponds to
+  the requested rounding.
+author: Renee
+source: original

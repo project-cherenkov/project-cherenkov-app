@@ -1,0 +1,30 @@
+questionId: astronomy.the-sun.intermediate.3
+topic: the-sun
+difficulty: intermediate
+status: draft
+archived: false
+questionType: multiple_select
+prompt: Which of the following statements about magnetic fields in sunspot groups are correct? Select
+  all that apply.
+choices:
+- text: In the same activity cycle, the leading spots in the northern and southern hemispheres have the
+    same magnetic polarity.
+  correct: false
+- text: The strong field suppresses convective energy transport, so the surface of the spot is cooler
+    than its surroundings.
+  correct: true
+- text: The magnetic field in a large spot is about 0.03 mT, comparable with the Earth's equatorial field.
+  correct: false
+- text: The field strength in spots can be measured from the Zeeman effect.
+  correct: true
+- text: The two components of a bipolar group have opposite polarity because field lines loop above the
+    surface from one to the other.
+  correct: true
+explanation: 'Correct: (2) inhibited convection lowers the surface temperature by about 1500 K; (4) the
+  Zeeman splitting of spectral lines gives the field, up to about 0.45 T; (5) pairs of spots with opposite
+  polarity are explained by a field loop rising above the surface; gas streaming along such loops is seen
+  as loop prominences. Incorrect: (1) spots in opposite hemispheres have opposite polarity; (3) the Earth''s
+  equatorial field is 0.03 mT, but a sunspot field can be as large as 0.45 T, more than ten thousand times
+  stronger.'
+author: Renee
+source: Karttunen et al., Fundamental Astronomy (6th ed.), Sect. 13.3, pp. 290–292

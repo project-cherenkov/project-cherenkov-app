@@ -1,0 +1,17 @@
+questionId: astronomy.thermodynamics.basic.3
+topic: thermodynamics
+difficulty: basic
+status: draft
+archived: false
+questionType: single_choice
+prompt: Which energy-transport mechanism is usually negligible in the interiors of normal stars?
+choices:
+- text: Radiative transport by photons
+  correct: false
+- text: Conduction by electrons
+  correct: true
+- text: Convection of hot gas
+  correct: false
+explanation: In normal stars electrons collide after only a short free path, so conduction is very inefficient. It matters only in compact stars such as white dwarfs and neutron stars. Radiation carries energy where the temperature gradient allows it, and convection takes over where radiative transport becomes inefficient.
+author: Renee
+source: Fundamental Astronomy (6th ed.), §11.1, printed pp. 250–251

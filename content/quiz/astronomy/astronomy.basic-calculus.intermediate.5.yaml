@@ -1,0 +1,19 @@
+questionId: astronomy.basic-calculus.intermediate.5
+topic: basic-calculus
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In spherical coordinates with $\theta$ measured from the $xy$-plane, the volume element is $\mathrm dV=r^2\cos\theta\,\mathrm
+  dr\,\mathrm d\varphi\,\mathrm d\theta$. A model halo occupies the part of a spherical shell $2.0\le r\le5.0$ kpc
+  that lies above the $xy$-plane ($0\le\theta\le\pi/2$, $0\le\varphi\le2\pi$). Evaluate the volume of this region
+  in kpc$^3$, to three significant figures.
+numericAnswer:
+  value: 245.044227
+  tolerance: 0.5
+  unit: kpc^3
+explanation: $V=\int_{2}^{5}r^2\,\mathrm dr\int_0^{2\pi}\mathrm d\varphi\int_0^{\pi/2}\cos\theta\,\mathrm d\theta=\dfrac{5^3-2^3}{3}\times2\pi\times1=39\times2\pi=245.04$
+  kpc$^3$. The tolerance of $\pm0.5$ kpc$^3$ corresponds to the requested three significant figures ($245$) with
+  a little room for rounding of $\pi$.
+author: Renee
+source: original

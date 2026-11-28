@@ -1,0 +1,22 @@
+questionId: astronomy.instrumentation.intermediate.8
+topic: instrumentation
+difficulty: intermediate
+status: draft
+archived: false
+questionType: numeric_response
+prompt: In a slit-spectrograph CCD spectrum with dispersion $0.40$ nm/mm and pixel width $13.5\ \mu$m,
+  the stellar H$\alpha$ absorption line (laboratory wavelength $656.28$ nm) is measured $3.2$ pixels redward
+  of the laboratory comparison line. Take $c=299{,}792.458$ km/s and use the small-velocity Doppler formula.
+  What is the star's radial velocity (positive means receding)? Give the answer in km/s, to two significant
+  figures.
+numericAnswer:
+  value: 7.9
+  tolerance: 0.05
+  unit: km/s
+explanation: 'Pixel to wavelength: $3.2\times0.0135\ {\rm mm}\times0.40\ {\rm nm/mm}=0.01728$ nm. Doppler:
+  $v=c\,\Delta\lambda/\lambda_0=299792.458\times0.01728/656.28=7.894$ km/s, positive because the shift
+  is towards longer wavelengths (receding). The small-velocity formula is justified because $v/c\sim3\times10^{-5}$.
+  Using $13.5$ mm instead of $13.5\ \mu$m, or forgetting to convert pixels to mm, are the typical unit
+  errors. The tolerance $0.05$ km/s is half the final place for a two-significant-figure answer.'
+author: Renee
+source: original

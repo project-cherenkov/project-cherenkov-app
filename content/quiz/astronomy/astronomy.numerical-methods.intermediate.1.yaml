@@ -1,0 +1,24 @@
+questionId: astronomy.numerical-methods.intermediate.1
+topic: numerical-methods
+difficulty: intermediate
+status: draft
+archived: false
+questionType: single_choice
+prompt: A planet's semi-major axis is increased by $2.0\,\%$, with everything else in Kepler's third law $P^2\propto
+  a^3$ unchanged. Using a first-order (linear) approximation, by what percentage does the orbital period change?
+choices:
+- text: $+3.0\,\%$
+  correct: true
+- text: $+1.3\,\%$
+  correct: false
+- text: $+4.0\,\%$
+  correct: false
+- text: $+6.0\,\%$
+  correct: false
+explanation: 'From $P^2\propto a^3$ we get $P\propto a^{3/2}$. Put $a\to a(1+x)$ with $x=0.020$: $P\to P(1+x)^{3/2}\approx
+  P(1+\tfrac32x)$, so the period rises by about $3.0\,\%$. $+1.3\,\%$ comes from using $a\propto P^{2/3}$ the wrong
+  way round ($2.0/1.5$). $+4.0\,\%$ is $2x$, i.e. the exponent $2$ of $P^2$ has been used. $+6.0\,\%$ is $3x$, the
+  exponent of $a^3$ applied directly to $P$ instead of $P^2$. (The exact result $1.02^{1.5}-1=3.01\,\%$ agrees with
+  the linear estimate to the precision of the options.)'
+author: Renee
+source: original
